@@ -10,6 +10,8 @@ import groovy.transform.CompileStatic
 class TestUtilities extends AndroidTestCase {
 
     static final long TEST_DATE = 1471042800385 //2016-08-13
+    static int TEST_MOVIE_ID = 100
+    static final String TEST_MOVIE_CATEGORY = 'popular'
 
     static void validateCursor(String error, Cursor valueCursor, ContentValues expectedValues) {
         assertTrue("Empty cursor returned. " + error, valueCursor.moveToFirst());
@@ -32,7 +34,7 @@ class TestUtilities extends AndroidTestCase {
 
     static ContentValues createMovieValues() {
         ContentValues movieInfoValues = new ContentValues();
-        movieInfoValues.put(MovieMagicContract.MovieBasicInfo.COLUMN_MOVIE_ID,1)
+        movieInfoValues.put(MovieMagicContract.MovieBasicInfo.COLUMN_MOVIE_ID,TEST_MOVIE_ID)
         movieInfoValues.put(MovieMagicContract.MovieBasicInfo.COLUMN_ORIGINAL_TITLE,'Troy')
         movieInfoValues.put(MovieMagicContract.MovieBasicInfo.COLUMN_OVERVIEW,'Troy is a good movie')
         movieInfoValues.put(MovieMagicContract.MovieBasicInfo.COLUMN_BACKDROP_PATH,'/troy.jpg')
@@ -42,7 +44,7 @@ class TestUtilities extends AndroidTestCase {
         movieInfoValues.put(MovieMagicContract.MovieBasicInfo.COLUMN_POPULARITY,5.6f)
         movieInfoValues.put(MovieMagicContract.MovieBasicInfo.COLUMN_POSTER_PATH,'troyposter.jpg')
         movieInfoValues.put(MovieMagicContract.MovieBasicInfo.COLUMN_RELEASE_DATE,TEST_DATE)
-        movieInfoValues.put(MovieMagicContract.MovieBasicInfo.COLUMN_MOVIE_CATEGORY,'popular')
+        movieInfoValues.put(MovieMagicContract.MovieBasicInfo.COLUMN_MOVIE_CATEGORY,TEST_MOVIE_CATEGORY)
         movieInfoValues.put(MovieMagicContract.MovieBasicInfo.COLUMN_TITLE,'Helen of Troy')
         movieInfoValues
     }

@@ -1,13 +1,13 @@
 package com.moviemagic.dpaul.android.app.contentprovider
 
 import android.net.Uri
-import android.test.AndroidTestCase;
+import android.test.AndroidTestCase
 import groovy.transform.CompileStatic
 
 @CompileStatic
 class TestMovieMagicContract extends AndroidTestCase {
 
-    public void testBuildWeatherLocation() {
+    public void testBuildMovieMagicContract() {
         final String TEST_BASE_URI = 'content://com.moviemagic.dpaul.android.app/movie_basic_info'
         final long TEST_MOVIE_ID = 12
   // intentionally includes a slash to make sure Uri is getting quoted correctly (i.e. getting %2F or '/' & %20 for space)

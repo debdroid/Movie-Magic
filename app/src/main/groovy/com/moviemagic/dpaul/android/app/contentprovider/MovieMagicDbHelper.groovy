@@ -14,18 +14,18 @@ import com.moviemagic.dpaul.android.app.contentprovider.MovieMagicContract.Movie
 class MovieMagicDbHelper extends SQLiteOpenHelper {
 
     // If you change the database schema, you must increment the database version.
-    private static final int DATABASE_VERSION = 1;
+    private static final int DATABASE_VERSION = 1
 
-    static final String DATABASE_NAME = "movie.db";
+    static final String DATABASE_NAME = 'movie.db'
 
     public MovieMagicDbHelper(Context context) {
-        super(context, DATABASE_NAME, null, DATABASE_VERSION);
+        super(context, DATABASE_NAME, null, DATABASE_VERSION)
     }
 
     @Override
     public void onCreate(SQLiteDatabase sqLiteDatabase) {
 
-        //Create the SQL to create location table
+        //Create the SQL to create MovieMagic table
         final  String SQL_CREATE_MOVIE_TABLE = """
                 CREATE TABLE $MovieBasicInfo.TABLE_NAME (
                 $MovieBasicInfo._ID INTEGER PRIMARY KEY,
@@ -40,7 +40,7 @@ class MovieMagicDbHelper extends SQLiteOpenHelper {
                 $MovieBasicInfo.COLUMN_VIDEO_FLAG TEXT NOT NULL,
                 $MovieBasicInfo.COLUMN_VOTE_AVG REAL NOT NULL,
                 $MovieBasicInfo.COLUMN_VOTE_COUNT INTEGER NOT NULL,
-                $MovieBasicInfo.COLUMN_MOVIE_CATEGORY TEXT NOT NULL);
+                $MovieBasicInfo.COLUMN_MOVIE_CATEGORY TEXT NOT NULL)
                 """
         sqLiteDatabase.execSQL(SQL_CREATE_MOVIE_TABLE)
     }
@@ -54,6 +54,6 @@ class MovieMagicDbHelper extends SQLiteOpenHelper {
         // If you want to update the schema without wiping data, commenting out the next 2 lines
         // should be your top priority before modifying this method.
         sqLiteDatabase.execSQL("DROP TABLE IF EXISTS $MovieBasicInfo.TABLE_NAME")
-        onCreate(sqLiteDatabase);
+        onCreate(sqLiteDatabase)
     }
 }

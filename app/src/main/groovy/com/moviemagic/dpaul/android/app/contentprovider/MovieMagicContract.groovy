@@ -32,8 +32,7 @@ class MovieMagicContract {
     static final String PATH_MOVIE_BASIC_INFO = 'movie_basic_info'
 
     /*
-        Inner class that defines the table contents of the location table
-        Students: This is where you will add the strings.
+        Inner class that defines the table contents of the MovieMagic table
      */
     public static final class MovieBasicInfo implements BaseColumns {
         static final String TABLE_NAME = 'movie_basic_info'
@@ -73,7 +72,7 @@ class MovieMagicContract {
                 "$ContentResolver.CURSOR_ITEM_BASE_TYPE/$CONTENT_AUTHORITY/$PATH_MOVIE_BASIC_INFO"
 
         static Uri buildMovieUri(long id) {
-            ContentUris.withAppendedId(CONTENT_URI, id);
+            ContentUris.withAppendedId(CONTENT_URI, id)
         }
 
         static Uri buildMovieWithMovieId (int movieId) {

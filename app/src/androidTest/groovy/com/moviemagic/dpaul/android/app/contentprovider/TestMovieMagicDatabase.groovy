@@ -8,7 +8,7 @@ import com.moviemagic.dpaul.android.app.TestUtilities
 import groovy.transform.CompileStatic
 
 @CompileStatic
-class TestDatabase extends AndroidTestCase {
+class TestMovieMagicDatabase extends AndroidTestCase {
 
     //public static final String LOG_TAG = TestDb.class.getSimpleName()
 
@@ -67,9 +67,9 @@ class TestDatabase extends AndroidTestCase {
             c.moveToNext()
         }
 
-        // if this fails, it means that your database doesn't contain all of the required location
+        // if this fails, it means that your database doesn't contain all of the required MovieMagic
         // entry columns
-        assertTrue("Error: The database doesn't contain all of the required location entry columns",columeList.isEmpty())
+        assertTrue("Error: The database doesn't contain all of the required MovieMagic entry columns",columeList.isEmpty())
         db.close()
     }
 
@@ -78,7 +78,6 @@ class TestDatabase extends AndroidTestCase {
         SQLiteDatabase sqLiteDatabase = new MovieMagicDbHelper(mContext).getWritableDatabase()
 
         // Create ContentValues of what you want to insert
-        // (you can use the createWeatherValues TestUtilities function if you wish)
         ContentValues contentValues = TestUtilities.createMovieValues()
 
         // Insert ContentValues into database and get a row ID back
@@ -91,15 +90,15 @@ class TestDatabase extends AndroidTestCase {
         Cursor cursor = sqLiteDatabase.query(MovieMagicContract.MovieBasicInfo.TABLE_NAME,null,null,null,null,null,null)
 
         // Move the cursor to a valid database row
-        assertTrue('Error: No record returned from the weather insert query',cursor.moveToFirst())
+        assertTrue('Error: No record returned from the MovieMagic insert query',cursor.moveToFirst())
 
         // Validate data in resulting Cursor with the original ContentValues
         // (you can use the validateCurrentRecord function in TestUtilities to validate the
         // query if you like)
-        TestUtilities.validateCurrentRecord('Error: Weather query data verification failed',cursor,contentValues)
+        TestUtilities.validateCurrentRecord('Error: MovieMagic query data verification failed',cursor,contentValues)
 
         //Move the cursor to ensure there is only once record returned
-        assertFalse('Error: more than one record returned by the weather query',cursor.moveToNext())
+        assertFalse('Error: more than one record returned by the MovieMagic query',cursor.moveToNext())
         // Finally, close the cursor and database
         cursor.close()
         sqLiteDatabase.close()

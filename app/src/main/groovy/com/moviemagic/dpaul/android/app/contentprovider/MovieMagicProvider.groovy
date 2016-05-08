@@ -39,7 +39,6 @@ class MovieMagicProvider extends ContentProvider {
     private Cursor getMovieById(
             Uri uri, String[] projection, String sortOrder) {
         String[] movieId = [Integer.toString(MovieBasicInfo.getMovieIdFromUri(uri))]
-
         return sMovieMagicQueryBuilder.query(mOpenHelper.getReadableDatabase(),
                 projection,
                 sMovieWithIdSelection,
@@ -84,7 +83,7 @@ class MovieMagicProvider extends ContentProvider {
 
     @Override
     boolean onCreate() {
-        mOpenHelper = new MovieMagicDbHelper(getContext());
+        mOpenHelper = new MovieMagicDbHelper(getContext())
         return true
     }
 
@@ -123,15 +122,15 @@ class MovieMagicProvider extends ContentProvider {
     @Override
     String getType(Uri uri) {
         // Use the Uri Matcher to determine what kind of URI this is.
-        final int match = sUriMatcher.match(uri);
+        final int match = sUriMatcher.match(uri)
 
         switch (match) {
             case MOVIE:
-                MovieBasicInfo.CONTENT_TYPE
+                return MovieBasicInfo.CONTENT_TYPE
             case MOVIE_WITH_ID:
-                MovieBasicInfo.CONTENT_ITEM_TYPE
+                return MovieBasicInfo.CONTENT_ITEM_TYPE
             case MOVIE_WITH_CATEGORY:
-                MovieBasicInfo.CONTENT_TYPE
+                return MovieBasicInfo.CONTENT_TYPE
             default:
                 throw new UnsupportedOperationException("Unknown uri: " + uri)
         }
@@ -166,13 +165,13 @@ class MovieMagicProvider extends ContentProvider {
         final int match = sUriMatcher.match(uri)
         int count
         //this makes delete all rows return the number of rows deleted
-        if(selection == null) selection = "1";
+        if(selection == null) selection = "1"
         switch (match) {
             case MOVIE:
-                count = db.delete(MovieBasicInfo.TABLE_NAME, selection, selectionArgs);
+                count = db.delete(MovieBasicInfo.TABLE_NAME, selection, selectionArgs)
                 break
             default:
-                throw new UnsupportedOperationException("Unknown uri: " + uri);
+                throw new UnsupportedOperationException("Unknown uri: " + uri)
         }
         if (count !=0 ) {
             getContext().getContentResolver().notifyChange(uri, null)
@@ -184,16 +183,16 @@ class MovieMagicProvider extends ContentProvider {
 
     @Override
     int update(Uri uri, ContentValues values, String selection, String[] selectionArgs) {
-        final SQLiteDatabase db = mOpenHelper.getWritableDatabase();
-        final int match = sUriMatcher.match(uri);
-        int count;
+        final SQLiteDatabase db = mOpenHelper.getWritableDatabase()
+        final int match = sUriMatcher.match(uri)
+        int count
         switch (match) {
             case MOVIE:
-                convertDate(values);
-                count = db.update(MovieBasicInfo.TABLE_NAME,values,selection,selectionArgs);
+                convertDate(values)
+                count = db.update(MovieBasicInfo.TABLE_NAME,values,selection,selectionArgs)
                 break
             default:
-                throw new UnsupportedOperationException("Unknown uri: " + uri);
+                throw new UnsupportedOperationException("Unknown uri: " + uri)
         }
         if (count !=0 ) {
             getContext().getContentResolver().notifyChange(uri, null)
@@ -204,28 +203,28 @@ class MovieMagicProvider extends ContentProvider {
 
     @Override
     int bulkInsert(Uri uri, ContentValues[] values) {
-        final SQLiteDatabase db = mOpenHelper.getWritableDatabase();
-        final int match = sUriMatcher.match(uri);
+        final SQLiteDatabase db = mOpenHelper.getWritableDatabase()
+        final int match = sUriMatcher.match(uri)
         switch (match) {
             case MOVIE:
-                db.beginTransaction();
-                int returnCount = 0;
+                db.beginTransaction()
+                int returnCount = 0
                 try {
                     for (ContentValues value : values) {
-                        convertDate(value);
-                        long _id = db.insert(MovieBasicInfo.TABLE_NAME, null, value);
+                        convertDate(value)
+                        long _id = db.insert(MovieBasicInfo.TABLE_NAME, null, value)
                         if (_id != -1) {
-                            returnCount++;
+                            returnCount++
                         }
                     }
-                    db.setTransactionSuccessful();
+                    db.setTransactionSuccessful()
                 } finally {
-                    db.endTransaction();
+                    db.endTransaction()
                 }
-                getContext().getContentResolver().notifyChange(uri, null);
-                return returnCount;
+                getContext().getContentResolver().notifyChange(uri, null)
+                return returnCount
             default:
-                return super.bulkInsert(uri, values);
+                return super.bulkInsert(uri, values)
         }
     }
     /*
@@ -235,7 +234,7 @@ class MovieMagicProvider extends ContentProvider {
         // Covert the movie release date
         if (values.containsKey(MovieBasicInfo.COLUMN_RELEASE_DATE)) {
             String movieReleaseDate = values.getAsString(MovieBasicInfo.COLUMN_RELEASE_DATE)
-            values.put(MovieBasicInfo.COLUMN_RELEASE_DATE, MovieMagicContract.covertMovieReleaseDate(movieReleaseDate));
+            values.put(MovieBasicInfo.COLUMN_RELEASE_DATE, MovieMagicContract.covertMovieReleaseDate(movieReleaseDate))
         }
     }
 }

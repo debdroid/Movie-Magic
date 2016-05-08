@@ -2,11 +2,11 @@ package com.moviemagic.dpaul.android.app.contentprovider
 
 import android.content.UriMatcher
 import android.net.Uri
-import android.test.AndroidTestCase;
+import android.test.AndroidTestCase
 import groovy.transform.CompileStatic
 
 @CompileStatic
-class TestUriMatcher extends AndroidTestCase {
+class TestMovieMagicUriMatcher extends AndroidTestCase {
     private static final int TEST_MOVIE_ID = 123
     private static final String TEST_MOVIE_CATEGORY = 'popular'
     private static final long TEST_RELEASE_DATE = 1471042800385L //2016-08-13
@@ -21,7 +21,7 @@ class TestUriMatcher extends AndroidTestCase {
         for each of the Uri types that the ContentProvider can handle.
      */
     public void testUriMatcher() {
-        UriMatcher testMatcher = MovieMagicProvider.buildUriMatcher();
+        UriMatcher testMatcher = MovieMagicProvider.buildUriMatcher()
 
         assertEquals('Error: The MOVIE URI was matched incorrectly.',
                 testMatcher.match(TEST_MOVIE_DIR), MovieMagicProvider.MOVIE)
