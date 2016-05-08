@@ -1,0 +1,62 @@
+apply plugin: 'com.android.application'
+//android groovy plugin
+apply plugin: 'groovyx.grooid.groovy-android'
+
+android {
+    compileSdkVersion 23
+    buildToolsVersion "23.0.2"
+
+    defaultConfig {
+        applicationId "com.moviemagic.dpaul.android.moviemagic"
+        minSdkVersion 15
+        targetSdkVersion 23
+        versionCode 1
+        versionName "1.0"
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+    //Needed for groovy
+    packagingOptions {
+        exclude 'META-INF/services/org.codehaus.groovy.transform.ASTTransformation'
+        exclude 'META-INF/services/org.codehaus.groovy.runtime.ExtensionModule'
+    }
+}
+
+dependencies {
+    compile fileTree(dir: 'libs', include: ['*.jar'])
+    testCompile 'junit:junit:4.12'
+    compile 'com.android.support:appcompat-v7:23.3.0'
+    //add compile dependency for groovy
+    compile 'org.codehaus.groovy:groovy:2.4.6:grooid'
+    // the following dependency is necessary if you want JSON support
+    //Getting compile erroer :(. So commented out
+    //compile ('org.codehaus.groovy:groovy-json:2.4.6') {
+    //    transitive = false
+    //}
+}
+
+//Some more additional groovy stuffs
+androidGroovy {
+    //Options as recommended in https://github.com/groovy/groovy-android-gradle-plugin
+    options {
+        configure(groovyOptions) {
+            encoding = 'UTF-8'
+            forkOptions.jvmArgs = ['-noverify'] // maybe necessary if you use Google Play Services
+        }
+        sourceCompatibility = '1.7' // as of 0.3.9 these are automatically set based off the android plugin's
+        targetCompatibility = '1.7'
+    }
+    sourceSets {
+        main {
+            groovy {
+                srcDirs += 'src/main/java'
+            }
+        }
+    }
+    //Only use groovyC
+    skipJavaC = true
+}
