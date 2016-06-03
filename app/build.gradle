@@ -12,6 +12,7 @@ android {
         targetSdkVersion 23
         versionCode 1
         versionName "1.0"
+        //multiDexEnabled true
     }
     buildTypes {
         release {
@@ -23,15 +24,26 @@ android {
     packagingOptions {
         exclude 'META-INF/services/org.codehaus.groovy.transform.ASTTransformation'
         exclude 'META-INF/services/org.codehaus.groovy.runtime.ExtensionModule'
+        exclude 'META-INF/groovy-release-info.properties'
+    }
+
+    buildTypes.each {
+        it.buildConfigField 'String', 'TMDB_API_KEY', TmdbApiKey
     }
 }
 
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     testCompile 'junit:junit:4.12'
-    compile 'com.android.support:appcompat-v7:23.3.0'
+    compile 'com.android.support:appcompat-v7:23.4.0'
+    compile 'com.android.support:design:23.4.0'
     //add compile dependency for groovy
+    //compile 'org.codehaus.groovy.modules.http-builder:http-builder:0.7.2'
     compile 'org.codehaus.groovy:groovy:2.4.6:grooid'
+    compile ('org.codehaus.groovy:groovy-json:2.4.6') {
+        transitive = false
+    }
+    compile 'com.squareup.picasso:picasso:2.5.2'
     // the following dependency is necessary if you want JSON support
     //Getting compile erroer :(. So commented out
     //compile ('org.codehaus.groovy:groovy-json:2.4.6') {

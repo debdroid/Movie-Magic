@@ -1,4 +1,25 @@
 <resources>
     <string name="app_name">Movie Magic</string>
+    <string name="movie_name">Movie Name</string>
     <string name="content_authority">com.moviemagic.dpaul.android.app</string>
+    <!-- Account type (for sync-adapter authenticator) -->
+    <!-- SyncAdapter related -->
+    <string name="sync_account_type">moviemagic.dpaul.com</string>
+    <!-- drawer related -->
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="action_settings">Settings</string>
+
+    <!-- Drawer menu items -->
+    <string name="drawer_menu_home">Home</string>
+    <string name="drawer_menu_tmdb_popular">Popular</string>
+    <string name="drawer_menu_tmdb_toprated">Top Rated</string>
+    <string name="drawer_menu_tmdb_nowplaying">Now playing</string>
+    <string name="drawer_menu_tmdb_upcoming">Upcoming</string>
+    <string name="drawer_menu_user_header">My Movie List</string>
+    <string name="drawer_menu_user_favourite">Favourite</string>
+    <string name="drawer_menu_user_watched">Watched</string>
+    <string name="drawer_menu_user_wishlist">Wish List</string>
+    <string name="drawer_menu_user_collection">Collection</string>
+
 </resources>

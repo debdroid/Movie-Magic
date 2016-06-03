@@ -3,4 +3,7 @@
     <color name="colorPrimary">#3F51B5</color>
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
+    <color name="movie_text">#FFFFFF</color>
+    <color name="grid_movie_background">#616161</color>
+    <color name="grid_background">#212121</color>
 </resources>
