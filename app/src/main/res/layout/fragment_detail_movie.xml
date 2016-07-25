@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+    <include
+        layout="@layout/movie_detail_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="?android:attr/listDivider" />
+    <include
+        layout="@layout/movie_detail_poster"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+    <include
+        layout="@layout/movie_detail_tmdb_rating"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+    <include
+        layout="@layout/movie_detail_user_rating"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+    <include
+        layout="@layout/movie_detail_synopsis"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="?android:attr/listDivider" />
+    <include
+        layout="@layout/movie_detail_trailer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="?android:attr/listDivider" />
+    <include
+        layout="@layout/movie_detail_production_info"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="?android:attr/listDivider" />
+    <include
+        layout="@layout/movie_detail_cast_header"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+    <include
+        layout="@layout/movie_detail_cast_grid"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+    <include
+        layout="@layout/movie_detail_crew_header"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+    <include
+        layout="@layout/movie_detail_crew_grid"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="?android:attr/listDivider" />
+    <include
+        layout="@layout/movie_detail_similar_movie_header"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+    <include
+        layout="@layout/movie_detail_similar_movie_grid"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="?android:attr/listDivider" />
+    <include
+        layout="@layout/movie_detail_collection"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="?android:attr/listDivider" />
+    <include
+        layout="@layout/movie_detail_web_links"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="?android:attr/listDivider" />
+    <include
+        layout="@layout/movie_detail_review_header"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+    <include
+        layout="@layout/movie_detail_review_list_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+</LinearLayout>

@@ -1,0 +1,36 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/movie_detail_web_links_layout"
+    android:orientation="horizontal"
+    android:background="@color/primary"
+    android:paddingLeft="@dimen/m_design_screen_edge_left_right_margin"
+    android:paddingStart="@dimen/m_design_screen_edge_left_right_margin"
+    android:paddingRight="@dimen/m_design_screen_edge_left_right_margin"
+    android:paddingEnd="@dimen/m_design_screen_edge_left_right_margin"
+    android:paddingTop="@dimen/m_design_space_between_content_area"
+    android:paddingBottom="@dimen/m_design_space_between_content_area"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+    <TextView
+        android:id="@+id/movie_detail_web_links_home_page"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:gravity="center"
+        android:text="@string/movie_detail_web_links_home_page"
+        android:fontFamily="sans-serif-condensed"
+        android:textColor="@color/white_color"
+        android:clickable="true"
+        android:textAppearance="@style/TextAppearance.AppCompat.Title"/>
+    <TextView
+        android:id="@+id/movie_detail_web_links_imdb_link"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:gravity="center"
+        android:text="@string/movie_detail_web_links_imdb_link"
+        android:fontFamily="sans-serif-condensed"
+        android:textColor="@color/white_color"
+        android:linksClickable="true"
+        android:textAppearance="@style/TextAppearance.AppCompat.Title"/>
+
+</LinearLayout>

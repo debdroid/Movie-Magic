@@ -21,6 +21,7 @@ class MovieMagicProvider extends ContentProvider {
     private MovieMagicDbHelper mOpenHelper
 
     static final int MOVIE_BASIC_INFO = 101
+    //To access a single item we shall use the primary key (_ID) of movie_basic_info
     static final int MOVIE_BASIC_INFO_WITH_MOVIE_ID = 102
     static final int MOVIE_BASIC_INFO_WITH_CATEGORY = 103
     static final int MOVIE_CAST = 104
@@ -117,7 +118,7 @@ class MovieMagicProvider extends ContentProvider {
     private static final String sMoviePersonCrewWithPersonIdSelection =
             "$MovieMagicContract.MoviePersonCrew.TABLE_NAME.$MovieMagicContract.MoviePersonCrew.COLUMN_PERSON_CREW_ORIG_PERSON_ID = ? "
 
-    //To get data from movie_basic_info where movie_basic_info.movie_id = ?
+    //To get data from movie_basic_info where movie_basic_info._id = ?
     private Cursor getMovieBasicInfoByMovieId(Uri uri, String[] projection, String sortOrder) {
         sMovieMagicQueryBuilder.setTables("$MovieMagicContract.MovieBasicInfo.TABLE_NAME")
         String[] movieId = [Integer.toString(MovieMagicContract.MovieBasicInfo.getMovieIdFromUri(uri))]
@@ -628,7 +629,7 @@ class MovieMagicProvider extends ContentProvider {
                 throw new UnsupportedOperationException("Unknown uri: $uri")
         }
         getContext().getContentResolver().notifyChange(uri, null)
-        db.close()
+        //db.close()
         return returnUri
     }
 
@@ -678,7 +679,7 @@ class MovieMagicProvider extends ContentProvider {
         }
         if (count !=0 ) {
             getContext().getContentResolver().notifyChange(uri, null)
-            db.close()
+            //db.close()
         }
         //return the actual rows deleted
         return count
@@ -729,7 +730,7 @@ class MovieMagicProvider extends ContentProvider {
         }
         if (count !=0 ) {
             getContext().getContentResolver().notifyChange(uri, null)
-            db.close()
+            //db.close()
         }
         return count
     }

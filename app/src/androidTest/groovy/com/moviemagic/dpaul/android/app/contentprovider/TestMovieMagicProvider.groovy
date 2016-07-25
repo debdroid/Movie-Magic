@@ -371,7 +371,7 @@ class TestMovieMagicProvider extends AndroidTestCase {
         testCursor = mContext.getContentResolver().query(MovieMagicContract.MovieBasicInfo.CONTENT_URI,null,null,null,null)
         // Make sure we get the correct cursor out of the database
         TestUtilities.validateCursor('testBasicMovieMagicQuery: movie_basic_info', testCursor, testValues)
-        // Test the movie id content provider query for movie_basic_info
+        // Test the rowId id content provider query for movie_basic_info
         testCursor = mContext.getContentResolver().query(MovieMagicContract.MovieBasicInfo.buildMovieUriWithMovieId(testMovieId),null,null,null,null)
         // Make sure we get the correct cursor out of the database
         TestUtilities.validateCursor('testBasicMovieMagicQuery: movie_basic_info', testCursor, testValues)

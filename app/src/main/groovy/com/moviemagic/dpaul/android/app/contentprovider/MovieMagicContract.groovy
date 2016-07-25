@@ -16,12 +16,12 @@ class MovieMagicContract {
     private static final String LOG_TAG = MovieMagicContract.class.getSimpleName()
     // To make it easy to sort the list by movie release date, we store the date
     // in the database in milliseconds format using SimpleDateFormat and Date
-    //The value is the number of milliseconds since Jan. 1, 1970, midnight GMT.
+    // The value is the number of milliseconds since Jan. 1, 1970, midnight GMT.
     static long covertMovieReleaseDate(String releaseDate) {
         //Split the date string which is of format yyyy-mm-dd
         try {
-            Date simpleReleaseDate = new SimpleDateFormat("yyyy-MM-dd").parse(releaseDate)
-            long timeInMilliSeconds = simpleReleaseDate.getTime()
+            final Date simpleReleaseDate = new SimpleDateFormat("yyyy-MM-dd").parse(releaseDate)
+            final long timeInMilliSeconds = simpleReleaseDate.getTime()
         } catch (ParseException e) {
             Log.e(LOG_TAG,"Release date ->$releaseDate")
             Log.e(LOG_TAG, e.message, e)
@@ -164,6 +164,10 @@ class MovieMagicContract {
 
         static Uri buildMovieUriWithMovieCategory (String movieCategory) {
             CONTENT_URI.buildUpon().appendPath(movieCategory).build()
+        }
+
+        static long getRowIdFromUri (Uri uri) {
+            uri.getPathSegments().get(1).toLong()
         }
 
         static int getMovieIdFromUri (Uri uri) {

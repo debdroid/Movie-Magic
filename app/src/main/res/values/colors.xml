@@ -1,9 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#3F51B5</color>
-    <color name="colorPrimaryDark">#303F9F</color>
-    <color name="colorAccent">#FF4081</color>
-    <color name="movie_text">#FFFFFF</color>
-    <color name="grid_movie_background">#616161</color>
-    <color name="grid_background">#212121</color>
+    <!-- Material theme color - added for material design -->
+    <color name="primary_light">#CFD8DC</color> <!-- 100 -->
+    <color name="primary">#607D8B</color>       <!-- 500 -->
+    <color name="primary_dark">#455A64</color>  <!-- 700 -->
+    <color name="accent">#FF5252</color>        <!-- 200 -->
+    <color name="text_color">#FFFFFF</color>
+    <color name="primary_text">#212121</color>
+    <color name="secondary_text">#727272</color>
+    <color name="devider_color">#B6B6B6</color>
+
+    <color name="white_color">#FFFFFF</color>
+    <color name="grey_color">#cccccc</color>
+    <color name="grey_600_color">#757575</color>
+    <color name="grey_700_color">#646464</color>
+    <color name="grey_800_color">#424242</color>
+    <color name="black_color">#000000</color>
+
 </resources>

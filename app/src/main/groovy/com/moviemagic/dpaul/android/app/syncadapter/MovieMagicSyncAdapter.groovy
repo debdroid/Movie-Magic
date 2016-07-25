@@ -30,10 +30,10 @@ class MovieMagicSyncAdapter extends AbstractThreadedSyncAdapter {
     //Define a variable for api page count
     private static int totalPage = 0
     // Define a variable to contain a content resolver instance
-    ContentResolver mContentResolver
-    Context mContext
+    private ContentResolver mContentResolver
+    private Context mContext
 
-    //Define a flag to control the records
+    //Define a flag to control the record insertion / deletion
     private boolean deleteRecords = true
 
     MovieMagicSyncAdapter(Context context, boolean autoInitialize) {
@@ -57,7 +57,7 @@ class MovieMagicSyncAdapter extends AbstractThreadedSyncAdapter {
 
     @Override
     void onPerformSync(Account account, Bundle extras, String authority, ContentProviderClient provider, SyncResult syncResult) {
-        LogDisplay.callLog(LOG_TAG,"onPerformSync is called",LogDisplay.MOVIE_MAGIC_SYNC_ADAPTER_LOG_FLAG)
+        LogDisplay.callLog(LOG_TAG,'onPerformSync is called',LogDisplay.MOVIE_MAGIC_SYNC_ADAPTER_LOG_FLAG)
         final String POPULAR_PATH = 'popular'
         final String TOP_RATED_PATH = 'top_rated'
         final String UPCOMING_PATH = 'upcoming'
@@ -74,13 +74,13 @@ class MovieMagicSyncAdapter extends AbstractThreadedSyncAdapter {
         }
         totalPage = 1
         for(i in 1..MAX_PAGE_DOWNLOAD) {
-            contentValues += downloadMovieList(TOP_RATED_PATH, i)
+            contentValues = downloadMovieList(TOP_RATED_PATH, i)
             insertBulkRecords(contentValues, TOP_RATED_PATH)
             contentValues = []
         }
         totalPage = 1
         for(i in 1..MAX_PAGE_DOWNLOAD) {
-            contentValues += downloadMovieList(UPCOMING_PATH, i)
+            contentValues = downloadMovieList(UPCOMING_PATH, i)
             insertBulkRecords(contentValues, UPCOMING_PATH)
             contentValues = []
         }
@@ -123,7 +123,7 @@ class MovieMagicSyncAdapter extends AbstractThreadedSyncAdapter {
             LogDisplay.callLog(LOG_TAG,"Movie url-> ${uri.toString()}",LogDisplay.MOVIE_MAGIC_SYNC_ADAPTER_LOG_FLAG)
 
             //This is intentional so that at lest one page is not loaded in order to make sure
-            //at least one (i.e. first )LoadMoreData call is always successful
+            //at least one (i.e. first) LoadMoreData call is always successful
             if (page <= totalPage) {
                 def jsonData = new JsonSlurper(type: JsonParserType.INDEX_OVERLAY).parse(url)
                 LogDisplay.callLog(LOG_TAG, "JSON DATA for $category -> $jsonData",LogDisplay.MOVIE_MAGIC_SYNC_ADAPTER_LOG_FLAG)

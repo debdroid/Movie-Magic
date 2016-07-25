@@ -6,7 +6,36 @@
     <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>
     <dimen name="fab_margin">16dp</dimen>
-    <!-- Grid controllers-->
-    <dimen name="grid_vertical_spacing">4dp</dimen>
-    <dimen name="grid_horizontal_spacing">4dp</dimen>
+ 
+    
+    <!-- Material Design Specification -->
+    <dimen name="m_design_toolbar_elevation">4dp</dimen>
+    <dimen name="m_design_screen_edge_left_right_margin">16dp</dimen>
+    <dimen name="m_design_space_between_content_area">8dp</dimen>
+    <dimen name="m_design_content_left_margin_from_edge">72dp</dimen>
+    <dimen name="m_design_grid_list_padding">4dp</dimen>
+    <dimen name="m_design_grid_list_single_line_header">48dp</dimen>
+    <dimen name="m_design_grid_list_text_padding">16dp</dimen>
+    <dimen name="m_design_grid_list_text_size">16sp</dimen>
+    <dimen name="m_design_icon_size">48dp</dimen>
+
+
+    <!-- Movie Detail Layout parameters -->
+    <dimen name="movie_detail_poster_width">180dp</dimen>
+    <dimen name="movie_detail_poster_height">210dp</dimen>
+    <dimen name="movie_detail_poster_fields_margin">16dp</dimen>
+    <dimen name="movie_detail_backdrop_height">280dp</dimen>
+
+    <dimen name="gridview_horizontal_vertical_spacing">2dp</dimen>
+    <dimen name="gridview_column_width">120dp</dimen>
+    <dimen name="backdrop_image_height_detail_view">280dp</dimen>
+    <dimen name="grid_image_height">160dp</dimen>
+    <dimen name="grid_image_width">120dp</dimen>
+    <dimen name="grid_text_padding">8dp</dimen>
+    <dimen name="card_view_elevation">2dp</dimen>
+    <dimen name="card_view_corner_radius">2dp</dimen>
+    <dimen name="detail_today_layout_mpga_image_size">24dp</dimen>
+    <dimen name="movie_detail_collection_backdrop_height">240dp</dimen>
+    <dimen name="grid_overlapping_text_padding">4dp</dimen>
+
 </resources>

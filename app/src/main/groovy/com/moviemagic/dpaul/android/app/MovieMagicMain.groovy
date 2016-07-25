@@ -1,12 +1,16 @@
 package com.moviemagic.dpaul.android.app
 
-import android.os.PersistableBundle
+import android.content.Intent
+import android.net.Uri
 import android.support.annotation.IdRes
 import android.support.design.widget.FloatingActionButton
 import android.support.design.widget.NavigationView
 import android.support.design.widget.Snackbar
+import android.support.v4.app.ActivityCompat
+import android.support.v4.app.ActivityOptionsCompat
 import android.support.v4.app.FragmentManager
 import android.support.v4.app.FragmentTransaction
+import android.support.v4.util.Pair
 import android.support.v4.view.GravityCompat
 import android.support.v4.widget.DrawerLayout
 import android.support.v7.app.ActionBarDrawerToggle
@@ -18,13 +22,15 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.widget.TextView
+import com.google.android.youtube.player.YouTubeApiServiceUtil
+import com.google.android.youtube.player.YouTubeInitializationResult
 import com.moviemagic.dpaul.android.app.syncadapter.MovieMagicSyncAdapterUtility
 import com.moviemagic.dpaul.android.app.utility.LogDisplay
 import groovy.transform.CompileStatic
 
 @CompileStatic
 public class MovieMagicMain extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
+        implements NavigationView.OnNavigationItemSelectedListener, GridFragment.Callback {
     private static final String LOG_TAG = MovieMagicMain.class.getSimpleName()
     private static final String STATE_APP_TITLE = 'app_title'
    // private static final String LOG_TAG = 'DEB'
@@ -43,7 +49,7 @@ public class MovieMagicMain extends AppCompatActivity
         //*** Comment before release **********************
         //MovieMagicSyncAdapterUtility.syncImmediately(this)
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar)
+        Toolbar toolbar = (Toolbar) findViewById(R.id.main_activity_toolbar)
         setSupportActionBar(toolbar)
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
@@ -65,6 +71,12 @@ public class MovieMagicMain extends AppCompatActivity
         navigationView.setNavigationItemSelectedListener(this);
         setMenuCounter(R.id.nav_home,4)
 
+        //Check to ensure Youtube exists on the device
+        final YouTubeInitializationResult result = YouTubeApiServiceUtil.isYouTubeApiServiceAvailable(this)
+        if (result != YouTubeInitializationResult.SUCCESS) {
+            //If there are any issues we can show an error dialog.
+            result.getErrorDialog(this, 0).show()
+        }
     }
 
     @Override
@@ -216,5 +228,13 @@ public class MovieMagicMain extends AppCompatActivity
     private showSnackBar(String menuItem) {
         Snackbar.make(findViewById(R.id.main_content_layout), menuItem + " is clicked", Snackbar.LENGTH_LONG)
                 .setAction("Action", null).show()
+    }
+
+    //Override the callback method of GridFragment
+    @Override
+    public void onItemSelected(Uri movieIdUri) {
+        Intent mIntent = new Intent(this, DetailMovieActivity.class)
+                .setData(movieIdUri)
+        startActivity(mIntent)
     }
 }

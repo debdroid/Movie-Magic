@@ -1,4 +1,4 @@
-<resources>
+<resources xmlns:xliff="http://schemas.android.com/tools">
     <string name="app_name">Movie Magic</string>
     <string name="movie_name">Movie Name</string>
     <string name="content_authority">com.moviemagic.dpaul.android.app</string>
@@ -21,5 +21,49 @@
     <string name="drawer_menu_user_watched">Watched</string>
     <string name="drawer_menu_user_wishlist">Wish List</string>
     <string name="drawer_menu_user_collection">Collection</string>
+
+    <!-- Misc strings -->
+    <string name="title_activity_detail_movie">Movie Detail</string>
+    <string name="movie_detail_title_text">Movie Title</string>
+    <string name="movie_detail_genre">Action | Drama | Comedy</string>
+    <string name="movie_detail_runtime">1hr 20 mins</string>
+    <string name="movie_detail_release_date">Release Date</string>
+    <string name="movie_detail_release_date_data">13 Jan 2016</string>
+    <string name="movie_detail_revenue_data">$123,44,555</string>
+    <string name="movie_detail_revenue">Revenue</string>
+    <string name="movie_detail_budget">Budget</string>
+    <string name="movie_detail_budget_data">$234,444,567</string>
+    <string name="tmdb_rating_text">TMDb Rating</string>
+    <string name="user_rating_text">Your Rating</string>
+    <string name="movie_detail_trailer_text">Movie Trailer</string>
+    <string name="youtube_initialization_error">Youtube Initialization failed: Unable to play video</string>
+    <string name="movie_detail_prod_cmpy_text">Production Company</string>
+    <string name="movie_detail_production_cmpy_data"><![CDATA[Disney & Universal Studio]]></string>
+    <string name="movie_detail_production_country_text">Production Country</string>
+    <string name="movie_detail_production_country_data"><![CDATA[USA & UK]]></string>
+    <string name="movie_detail_cast_header_text">Movie Cast</string>
+    <string name="movie_detail_crew_header_text">Movie Crew</string>
+    <string name="movie_detail_similar_movie_header_text">Similar Movies</string>
+    <string name="movie_detail_review_header_text">Reviews</string>
+    <string name="movie_detail_synopsis_tagline">Tagline</string>
+    <string name="movie_detail_synopsis">Synopsis</string>
+    <string name="movie_detail_collection_header_text">Collection</string>
+    <string name="movie_detail_collection_name_data">God Father Collection</string>
+    <string name="movie_detail_web_links_home_page">Home Page</string>
+    <string name="movie_detail_web_links_imdb_link">IMDB Link</string>
+    <string name="cast_name">Lionardo Dicaprio</string>
+    <string name="char_name">Jack</string>
+    <string name="as_text_value">as</string>
+    <string name="job_name">Director</string>
+    <string name="crew_name">Anurag Kashyap</string>
+    <string name="tmdb_rating_vote_count_text"> (Total Vote:</string>
+    <string name="tmdb_rating_vote_count_closing_brace">)</string>
+    <string name="tmdb_rating_vote_count_val">68</string>
+    <string name="movie_detail_popularity">Popularity</string>
+    <string name="movie_detail_popularity_data">24.654</string>
+    
+    <!-- formatted string for display -->
+    <string name="movie_run_time"><xliff:g id="hour">%d</xliff:g> hr <xliff:g id="min">%d</xliff:g> min</string>
+
 
 </resources>

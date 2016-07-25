@@ -1,0 +1,78 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:cardview="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/single_movie_crew_grid_view"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content">
+
+    <android.support.v7.widget.CardView
+        android:id="@+id/single_movie_crew_grid_card_view_element"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        cardview:cardBackgroundColor="@color/accent"
+        cardview:cardCornerRadius="@dimen/card_view_corner_radius"
+        cardview:cardElevation="@dimen/card_view_elevation"
+        cardview:cardUseCompatPadding="true">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:orientation="vertical">
+        <FrameLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+            <ImageView
+                android:id="@+id/single_movie_crew_grid_image"
+                android:layout_width="@dimen/grid_image_width"
+                android:layout_height="@dimen/grid_image_height"
+                android:scaleType="centerCrop"
+                android:src="@mipmap/ic_launcher" />
+            <TextView
+                android:id="@+id/single_movie_crew_grid_crew_name"
+                android:layout_width="@dimen/grid_image_width"
+                android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:fontFamily="sans-serif"
+                android:layout_gravity="bottom"
+                android:gravity="center"
+                android:singleLine="true"
+                android:text="@string/crew_name"
+                android:paddingBottom="@dimen/grid_overlapping_text_padding"
+                android:background="@color/primary_dark"
+                android:alpha="0.7"
+                android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+                android:textColor="@color/white_color"
+                android:textStyle="italic" />
+        </FrameLayout>
+            <!--<TextView-->
+                <!--android:id="@+id/single_movie_crew_grid_crew_as"-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:background="@color/primary_dark"-->
+                <!--android:ellipsize="end"-->
+                <!--android:fontFamily="sans-serif"-->
+                <!--android:gravity="center"-->
+                <!--android:singleLine="true"-->
+                <!--android:text="@string/as_text_value"-->
+                <!--android:textAppearance="@style/TextAppearance.AppCompat.Body1"-->
+                <!--android:textColor="@color/white_color"-->
+                <!--android:textStyle="italic" />-->
+            <TextView
+                android:id="@+id/single_movie_crew_grid_job_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingTop="@dimen/grid_overlapping_text_padding"
+                android:paddingBottom="@dimen/grid_overlapping_text_padding"
+                android:background="@color/primary_dark"
+                android:ellipsize="end"
+                android:fontFamily="sans-serif"
+                android:gravity="center"
+                android:singleLine="true"
+                android:text="@string/job_name"
+                android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+                android:textColor="@color/white_color"
+                android:textStyle="italic" />
+        </LinearLayout>
+    </android.support.v7.widget.CardView>
+</FrameLayout>

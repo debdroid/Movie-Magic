@@ -1,4 +1,4 @@
-package com.moviemagic.dpaul.android.app
+package com.moviemagic.dpaul.android.app.utility
 
 import android.content.ContentResolver
 import android.content.ContentValues
@@ -6,11 +6,10 @@ import android.content.Context
 import android.net.Uri
 import android.os.AsyncTask
 import android.util.Log
-import android.widget.GridView
+import com.moviemagic.dpaul.android.app.BuildConfig
+import com.moviemagic.dpaul.android.app.GridFragment
 import com.moviemagic.dpaul.android.app.contentprovider.MovieMagicContract
 import com.moviemagic.dpaul.android.app.syncadapter.MovieMagicSyncAdapter
-import com.moviemagic.dpaul.android.app.utility.JsonParse
-import com.moviemagic.dpaul.android.app.utility.LogDisplay
 import groovy.json.JsonException
 import groovy.json.JsonParserType
 import groovy.json.JsonSlurper;
