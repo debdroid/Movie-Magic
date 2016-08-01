@@ -8,12 +8,9 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
-import com.moviemagic.dpaul.android.app.DetailMovieActivity
 import com.moviemagic.dpaul.android.app.DetailMovieFragment
 import com.moviemagic.dpaul.android.app.R
 import com.moviemagic.dpaul.android.app.utility.LogDisplay
-import com.squareup.picasso.MemoryPolicy
-import com.squareup.picasso.NetworkPolicy
 import com.squareup.picasso.Picasso
 import groovy.transform.CompileStatic
 
@@ -26,8 +23,12 @@ class MovieCastAdapter extends RecyclerView.Adapter<MovieCastAdapter.MovieCastAd
     public static int mPrimaryDarkColor, mBodyTextColor
 
     //Empty constructor
-    public MovieCastAdapter(Context ctx){
+    public MovieCastAdapter(){
         LogDisplay.callLog(LOG_TAG,'MovieCastAdapter empty constructor is called',LogDisplay.MOVIE_CAST_ADAPTER_FLAG)
+    }
+
+    public MovieCastAdapter(Context ctx){
+        LogDisplay.callLog(LOG_TAG,'MovieCastAdapter non-empty constructor is called',LogDisplay.MOVIE_CAST_ADAPTER_FLAG)
         mContext = ctx
     }
 
@@ -50,18 +51,12 @@ class MovieCastAdapter extends RecyclerView.Adapter<MovieCastAdapter.MovieCastAd
         public void onClick(View v) {
             LogDisplay.callLog(LOG_TAG,"onClick is called.LayoutPos=${getLayoutPosition()}.AdapterPos=${getAdapterPosition()}",LogDisplay.MOVIE_CAST_ADAPTER_FLAG)
             mCursor.moveToPosition(getAdapterPosition())
-//            int movieId = mCursor.getInt(DetailMovieFragment.COL_MOVIE_BASIC_MOVIE_ID)
-//            LogDisplay.callLog(LOG_TAG,"Movie id is $movieId",LogDisplay.MOVIE_CAST_ADAPTER_FLAG)
-//            //Create an intent for DetailMovieActivity
-//            Uri movieIdUri = MovieMagicContract.MovieBasicInfo.buildMovieUriWithMovieId(movieId)
-//            Intent mIntent = new Intent(mContext, DetailMovieActivity.class)
-//                    .setData(movieIdUri)
-//            mContext.startActivity(mIntent)
         }
     }
+
     @Override
     MovieCastAdapterViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-//        LogDisplay.callLog(LOG_TAG,'onCreateViewHolder is called',LogDisplay.MOVIE_CAST_ADAPTER_FLAG)
+        LogDisplay.callLog(LOG_TAG,'onCreateViewHolder is called',LogDisplay.MOVIE_CAST_ADAPTER_FLAG)
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.single_movie_cast_grid,parent,false)
         view.setFocusable(true)
         return new MovieCastAdapterViewHolder(view)
@@ -73,12 +68,9 @@ class MovieCastAdapter extends RecyclerView.Adapter<MovieCastAdapter.MovieCastAd
         mCursor.moveToPosition(position)
         LogDisplay.callLog(LOG_TAG,'onBindViewHolder is called',LogDisplay.MOVIE_CAST_ADAPTER_FLAG)
         String profilePath = "http://image.tmdb.org/t/p/w185${mCursor.getString(DetailMovieFragment.COL_MOVIE_CAST_PROFILE_PATH)}"
-        //gridViewHolder.movieImageView.setImageResource(mThumbIds[position])
         Picasso.with(mContext)
                 .load(profilePath)
                 .fit()
-                .memoryPolicy(MemoryPolicy.NO_STORE, MemoryPolicy.NO_CACHE)
-//                .networkPolicy(NetworkPolicy.NO_CACHE, NetworkPolicy.NO_STORE)
                 .placeholder(R.drawable.grid_image_placeholder)
                 .error(R.drawable.na_person_icon)
                 .into(holder.movieCastImageView)
@@ -94,8 +86,7 @@ class MovieCastAdapter extends RecyclerView.Adapter<MovieCastAdapter.MovieCastAd
 
     @Override
     int getItemCount() {
-//        LogDisplay.callLog(LOG_TAG,"Cursor item count = ${mCursor.getCount()}",LogDisplay.MOVIE_CAST_ADAPTER_FLAG)
-//        LogDisplay.callLog(LOG_TAG,'getItemCount is called',LogDisplay.MOVIE_CAST_ADAPTER_FLAG)
+        LogDisplay.callLog(LOG_TAG,'Cursor item count is called',LogDisplay.MOVIE_CAST_ADAPTER_FLAG)
         if ( null == mCursor ) return 0
         return mCursor.getCount()
     }

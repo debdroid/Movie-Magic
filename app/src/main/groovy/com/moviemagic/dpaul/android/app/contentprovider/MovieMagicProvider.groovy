@@ -7,10 +7,7 @@ import android.database.Cursor
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteQueryBuilder
 import android.net.Uri
-
 import groovy.transform.CompileStatic
-
-import java.lang.reflect.Array
 
 @CompileStatic
 class MovieMagicProvider extends ContentProvider {
@@ -50,19 +47,6 @@ class MovieMagicProvider extends ContentProvider {
 
     static{
         sMovieMagicQueryBuilder = new SQLiteQueryBuilder()
-//        sMovieMagicQueryBuilder.setTables("$MovieMagicContract.MovieBasicInfo.TABLE_NAME")
-//        sMovieMagicQueryBuilder.setTables("$MovieMagicContract.MovieCast.TABLE_NAME")
-//        sMovieMagicQueryBuilder.setTables("""$MovieMagicContract.MovieBasicInfo.TABLE_NAME,
-//                                             $MovieMagicContract.MovieCast.TABLE_NAME
-//                                             $MovieMagicContract.MovieCrew.TABLE_NAME
-//                                             $MovieMagicContract.MovieImage.TABLE_NAME
-//                                             $MovieMagicContract.MovieVideo.TABLE_NAME
-//                                             $MovieMagicContract.MovieCollection.TABLE_NAME
-//                                             $MovieMagicContract.MovieReview.TABLE_NAME
-//                                             $MovieMagicContract.MovieReleaseDate.TABLE_NAME
-//                                             $MovieMagicContract.MoviePersonInfo.TABLE_NAME
-//                                             $MovieMagicContract.MoviePersonCast.TABLE_NAME
-//                                             $MovieMagicContract.MoviePersonCrew.TABLE_NAME""")
     }
 
     //movie_basic_info.movie_id = ?
@@ -629,6 +613,9 @@ class MovieMagicProvider extends ContentProvider {
                 throw new UnsupportedOperationException("Unknown uri: $uri")
         }
         getContext().getContentResolver().notifyChange(uri, null)
+        //Was facing issues while accessing database during inserting data into different tables,
+        //found in one Stackoverflow that db.close shouldn't be used as content provider handles that
+        //automatically, so commenting this here in other places!!
         //db.close()
         return returnUri
     }
@@ -921,7 +908,7 @@ class MovieMagicProvider extends ContentProvider {
                 return super.bulkInsert(uri, values)
         }
     }
-    /*
+    /**
         Covert the movie release date string to numeric value
      */
     private void convertDate(ContentValues values) {

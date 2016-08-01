@@ -3,8 +3,7 @@ package com.moviemagic.dpaul.android.app.syncadapter
 import android.app.Service
 import android.content.Intent
 import android.os.IBinder
-import android.util.Log
-import com.moviemagic.dpaul.android.app.utility.LogDisplay;
+import com.moviemagic.dpaul.android.app.utility.LogDisplay
 import groovy.transform.CompileStatic
 
 /**
@@ -26,7 +25,7 @@ class MovieMagicSyncService extends Service {
      */
     @Override
     public void onCreate() {
-        /*
+        /**
          * Create the sync adapter as a singleton.
          * Set the sync adapter as syncable
          * Disallow parallel syncs

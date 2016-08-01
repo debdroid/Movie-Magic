@@ -4,7 +4,6 @@ import android.content.ContentValues
 import android.database.Cursor
 import android.database.sqlite.SQLiteDatabase
 import android.test.AndroidTestCase
-import android.util.Log
 import com.moviemagic.dpaul.android.app.TestUtilities
 import groovy.transform.CompileStatic
 

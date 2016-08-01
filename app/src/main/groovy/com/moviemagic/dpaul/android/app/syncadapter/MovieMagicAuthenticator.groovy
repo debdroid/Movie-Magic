@@ -28,7 +28,7 @@ class MovieMagicAuthenticator extends AbstractAccountAuthenticator {
     @Override
     public Bundle editProperties(
             AccountAuthenticatorResponse r, String s) {
-        throw new UnsupportedOperationException();
+        throw new UnsupportedOperationException()
     }
 
     // Because we're not actually adding an account to the device, just return null.
@@ -39,7 +39,7 @@ class MovieMagicAuthenticator extends AbstractAccountAuthenticator {
             String s2,
             String[] strings,
             Bundle bundle) throws NetworkErrorException {
-        return null;
+        return null
     }
 
     // Ignore attempts to confirm credentials
@@ -48,7 +48,7 @@ class MovieMagicAuthenticator extends AbstractAccountAuthenticator {
             AccountAuthenticatorResponse r,
             Account account,
             Bundle bundle) throws NetworkErrorException {
-        return null;
+        return null
     }
 
     // Getting an authentication token is not supported
@@ -58,13 +58,13 @@ class MovieMagicAuthenticator extends AbstractAccountAuthenticator {
             Account account,
             String s,
             Bundle bundle) throws NetworkErrorException {
-        throw new UnsupportedOperationException();
+        throw new UnsupportedOperationException()
     }
 
     // Getting a label for the auth token is not supported
     @Override
     public String getAuthTokenLabel(String s) {
-        throw new UnsupportedOperationException();
+        throw new UnsupportedOperationException()
     }
 
     // Updating user credentials is not supported
@@ -73,7 +73,7 @@ class MovieMagicAuthenticator extends AbstractAccountAuthenticator {
             AccountAuthenticatorResponse r,
             Account account,
             String s, Bundle bundle) throws NetworkErrorException {
-        throw new UnsupportedOperationException();
+        throw new UnsupportedOperationException()
     }
 
     // Checking features for the account is not supported
@@ -81,6 +81,6 @@ class MovieMagicAuthenticator extends AbstractAccountAuthenticator {
     public Bundle hasFeatures(
             AccountAuthenticatorResponse r,
             Account account, String[] strings) throws NetworkErrorException {
-        throw new UnsupportedOperationException();
+        throw new UnsupportedOperationException()
     }
 }

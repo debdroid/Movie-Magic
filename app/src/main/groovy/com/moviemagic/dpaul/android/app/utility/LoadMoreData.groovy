@@ -12,7 +12,7 @@ import com.moviemagic.dpaul.android.app.contentprovider.MovieMagicContract
 import com.moviemagic.dpaul.android.app.syncadapter.MovieMagicSyncAdapter
 import groovy.json.JsonException
 import groovy.json.JsonParserType
-import groovy.json.JsonSlurper;
+import groovy.json.JsonSlurper
 import groovy.transform.CompileStatic
 
 @CompileStatic
@@ -33,7 +33,7 @@ class LoadMoreData extends AsyncTask<String, Void, Void>{
         String movieCategory = params[0]
         int totalPage
         List<ContentValues> movieList
-        //TBDB api example
+        //TMDB api example
         //https://api.themoviedb.org/3/movie/popular?api_key=key&page=1
         final String TMDB_MOVIE_BASE_URL = 'https://api.themoviedb.org/3/'
         final String MOVIE_PATH = 'movie'
@@ -73,10 +73,6 @@ class LoadMoreData extends AsyncTask<String, Void, Void>{
             //Set the boolean to true to indicate API call failed
             GridFragment.isDataLoadFailed = true
             Log.e(LOG_TAG, "Error:", e)
-        } finally {
-//            //Occassionally the api call may fail, So all we are doing here
-//            //is reset the flag, so that it can enter to the below if condition and try again
-//            GridFragment.isMoreDataToLoad = false
         }
         return null
     }

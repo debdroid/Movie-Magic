@@ -12,10 +12,6 @@ import android.test.AndroidTestCase
 import com.moviemagic.dpaul.android.app.TestUtilities
 import com.moviemagic.dpaul.android.app.javamodule.TestContentObserverUtilities
 import groovy.transform.CompileStatic
-import junit.framework.Test
-
-import java.lang.reflect.Array
-
 
 @CompileStatic
 class TestMovieMagicProvider extends AndroidTestCase {

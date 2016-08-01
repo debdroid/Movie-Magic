@@ -4,9 +4,7 @@ import android.content.Context
 import android.content.Intent
 import android.database.Cursor
 import android.net.Uri
-import android.os.Bundle
 import android.support.v7.widget.RecyclerView
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -14,13 +12,10 @@ import android.widget.ImageView
 import android.widget.TextView
 import com.moviemagic.dpaul.android.app.DetailMovieActivity
 import com.moviemagic.dpaul.android.app.DetailMovieFragment
-import com.moviemagic.dpaul.android.app.GridFragment
 import com.moviemagic.dpaul.android.app.R
 import com.moviemagic.dpaul.android.app.contentprovider.MovieMagicContract
 import com.moviemagic.dpaul.android.app.utility.LogDisplay
-import com.squareup.picasso.MemoryPolicy
-import com.squareup.picasso.NetworkPolicy
-import com.squareup.picasso.Picasso;
+import com.squareup.picasso.Picasso
 import groovy.transform.CompileStatic
 
 @CompileStatic
@@ -32,8 +27,12 @@ class SimilarMovieAdapter extends RecyclerView.Adapter<SimilarMovieAdapter.Simil
     public static int mPrimaryDarkColor, mBodyTextColor
 
     //Empty constructor
-    public SimilarMovieAdapter(Context ctx){
+    public SimilarMovieAdapter(){
         LogDisplay.callLog(LOG_TAG,'SimilarMovieAdapter empty constructor is called',LogDisplay.SIMILAR_MOVIE_ADAPTER_FLAG)
+    }
+
+    public SimilarMovieAdapter(Context ctx){
+        LogDisplay.callLog(LOG_TAG,'SimilarMovieAdapter non-empty constructor is called',LogDisplay.SIMILAR_MOVIE_ADAPTER_FLAG)
         mContext = ctx
     }
 
@@ -73,7 +72,7 @@ class SimilarMovieAdapter extends RecyclerView.Adapter<SimilarMovieAdapter.Simil
     }
     @Override
     SimilarMovieAdapterViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-//        LogDisplay.callLog(LOG_TAG,'onCreateViewHolder is called',LogDisplay.SIMILAR_MOVIE_ADAPTER_FLAG)
+        LogDisplay.callLog(LOG_TAG,'onCreateViewHolder is called',LogDisplay.SIMILAR_MOVIE_ADAPTER_FLAG)
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.single_similar_movie_grid,parent,false)
         view.setFocusable(true)
         return new SimilarMovieAdapterViewHolder(view)
@@ -85,12 +84,9 @@ class SimilarMovieAdapter extends RecyclerView.Adapter<SimilarMovieAdapter.Simil
         mCursor.moveToPosition(position)
         LogDisplay.callLog(LOG_TAG,'onBindViewHolder is called',LogDisplay.SIMILAR_MOVIE_ADAPTER_FLAG)
         String posterPath = "http://image.tmdb.org/t/p/w185${mCursor.getString(DetailMovieFragment.COL_SIMILAR_MOVIE_POSTER_PATH)}"
-        //gridViewHolder.movieImageView.setImageResource(mThumbIds[position])
         Picasso.with(mContext)
                 .load(posterPath)
                 .fit()
-//                .memoryPolicy(MemoryPolicy.NO_STORE, MemoryPolicy.NO_CACHE)
-//                .networkPolicy(NetworkPolicy.NO_CACHE, NetworkPolicy.NO_STORE)
                 .placeholder(R.drawable.grid_image_placeholder)
                 .error(R.drawable.grid_image_error)
                 .into(holder.similarMovieImageView)
@@ -101,8 +97,7 @@ class SimilarMovieAdapter extends RecyclerView.Adapter<SimilarMovieAdapter.Simil
 
     @Override
     int getItemCount() {
-//        LogDisplay.callLog(LOG_TAG,"Cursor item count = ${mCursor.getCount()}",LogDisplay.SIMILAR_MOVIE_ADAPTER_FLAG)
-//        LogDisplay.callLog(LOG_TAG,'getItemCount is called',LogDisplay.SIMILAR_MOVIE_ADAPTER_FLAG)
+        LogDisplay.callLog(LOG_TAG,'Cursor item count is called',LogDisplay.SIMILAR_MOVIE_ADAPTER_FLAG)
         if ( null == mCursor ) return 0
         return mCursor.getCount()
     }

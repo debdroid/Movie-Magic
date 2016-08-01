@@ -2,7 +2,7 @@ package com.moviemagic.dpaul.android.app.utility
 
 import android.content.Context
 import android.graphics.Bitmap
-import com.moviemagic.dpaul.android.app.R;
+import com.moviemagic.dpaul.android.app.R
 import groovy.transform.CompileStatic
 
 import java.text.NumberFormat

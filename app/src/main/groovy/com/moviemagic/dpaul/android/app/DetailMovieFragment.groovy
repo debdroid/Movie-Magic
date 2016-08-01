@@ -22,7 +22,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
-import android.widget.HorizontalScrollView
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.RatingBar
@@ -44,8 +43,8 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
     private static final String LOG_TAG = DetailMovieFragment.class.getSimpleName()
 
     private TextView mMovieTitleTextView, mGenreTextView, mRunTimeTextView, mReleaseDateTextView, mBudgetTextView,
-            mRevenueTextView, mPopularityTextView, mTotalVoteCountTextView, mTaglineTextView, mSynopsisTextView,
-            mProdCompanyTextView, mProdCountryTextView, mCollectionNameTextView, mHomePageTextView, mImdbLinkTextView
+                     mRevenueTextView, mPopularityTextView, mTotalVoteCountTextView, mTaglineTextView, mSynopsisTextView,
+                     mProdCompanyTextView, mProdCountryTextView, mCollectionNameTextView, mHomePageTextView, mImdbLinkTextView
     private TextView mReleaseDateHeaderTextView, mBudgetHeaderTextView, mRevenueHeaderTextView, mPopularityHeaderTextView,
             mTmdbRatingHeaderTextView, mTmdbTotalVoteCountHeaderTextView, mTmdbTotalVoteCountTrailerTextView,
             mUserRatingHeaderTextView, mTaglineHeaderTextView, mSynopsisHeaderTextView, mMovieTrailerHeaderTextView,
@@ -53,10 +52,10 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
             mSimilarMovieHeaderTextView, mCollectionNameHeaderTextView, mReviewHeaderTextView
     private ImageView mMpaaRatingImageView, mPosterImageView, mCollectionBackdropImageView
     private LinearLayout mDetailTitleLayout, mDetailPosterLayout, mDetailTmdbRatingLayout, mDetailUserRatingLayout,
-            mDetailSynopsisLayout, mDetailTrailerLayout, mDetailProductionInfoLayout, mDetailCastHeaderLayout,
-            mDetailCrewHeaderLayout, mDetailSimilarMovieHeaderLayout,
-            mDetailCollectionLayout, mDetailWebLinkLayout, mDetailReviewHeaderLayout,
-            mDetailReviewListViewLayout
+                         mDetailSynopsisLayout, mDetailTrailerLayout, mDetailProductionInfoLayout, mDetailCastHeaderLayout,
+                         mDetailCrewHeaderLayout, mDetailSimilarMovieHeaderLayout,
+                         mDetailCollectionLayout, mDetailWebLinkLayout, mDetailReviewHeaderLayout,
+                         mDetailReviewListViewLayout
     private RatingBar mTmdbRatingBar, mUserRatingBar
     private FrameLayout mDetailsCastGridLayout, mDetailCrewGridLayout, mDetailSimilarMovieGridLayout
     private Uri mMovieIdUri
@@ -67,14 +66,11 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
     private String[] mMovieImageArg
     private String mMovieTitle
     private String mOriginalBackdropPath
-    private int mProminentColor
     private SimilarMovieAdapter mSimilarMovieAdapter
     private MovieCastAdapter mMovieCastAdapter
     private MovieCrewAdapter mMovieCrewAdapter
-//    private BackdropPagerAdapter mBackdropPagerAdapter
     private HorizontalGridView mHorizontalSimilarMovieGridView, mHorizontalMovieCastGridView, mHorizontalMovieCrewGridView
     private RecyclerView.LayoutManager mSimilarMovieLayoutManager, mMovieCastLayoutManager, mMovieCrewLayoutManager
-//    MovieMagicYoutubeFragment movieMagicYoutubeFragment
     private MovieTitleAndColorCallback mMovieTitleAndColorCallback
     private BackdropCallback mBackdropCallback
     private String mLocale
@@ -311,13 +307,9 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
         mCollectionBackdropImageView = mRootView.findViewById(R.id.movie_detail_collection_image) as ImageView
         mHomePageTextView = mRootView.findViewById(R.id.movie_detail_web_links_home_page) as TextView
         mImdbLinkTextView = mRootView.findViewById(R.id.movie_detail_web_links_imdb_link) as TextView
-//        movieMagicYoutubeFragment = getActivity().getSupportFragmentManager()
-//                .findFragmentById(R.id.fragment_youtube) as MovieMagicYoutubeFragment
         mHorizontalSimilarMovieGridView = mRootView.findViewById(R.id.movie_detail_similar_movie_grid) as HorizontalGridView
-        //Create an instance of linear layout manager
-//        mSimilarMovieLayoutManager = new LinearLayoutManager(getActivity())
+
         mSimilarMovieLayoutManager = new GridLayoutManager(getActivity(),1,GridLayoutManager.HORIZONTAL,false)
-        // Set the layout manager
         mHorizontalSimilarMovieGridView.setLayoutManager(mSimilarMovieLayoutManager)
         mSimilarMovieAdapter = new SimilarMovieAdapter(getActivity())
         mHorizontalSimilarMovieGridView.setAdapter(mSimilarMovieAdapter)
@@ -346,7 +338,6 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
         mMovieCrewAdapter = new MovieCrewAdapter(getActivity())
         mHorizontalMovieCrewGridView.setAdapter(mMovieCrewAdapter)
 
-//        mBackdropPagerAdapter = new BackdropPagerAdapter(getActivity().getSupportFragmentManager())
         return mRootView
     }
 
@@ -388,6 +379,7 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
                         null,                       //Selection Clause, null->will return all data
                         null,                       //Selection Arg, null-> will return all data
                         null)                       //Only a single row is expected, so not sorted
+
             case MOVIE_DETAIL_FRAGMENT_SIMILAR_MOVIE_LOADER_ID:
                 return new CursorLoader(
                         getActivity(),                                  //Parent Activity Context
@@ -397,6 +389,7 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
                         mMovieIdArg,                                    //Selection Arg
 //                        null,null,
                         null)                                           //Not bother on sorting
+
             case MOVIE_DETAIL_FRAGMENT_MOVIE_VIDEO_LOADER_ID:
                 return new CursorLoader(
                         getActivity(),                                  //Parent Activity Context
@@ -407,6 +400,7 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
                             $MovieMagicContract.MovieVideo.COLUMN_VIDEO_TYPE = ? """, //Selection Clause
                         mVideoArg,                                     //Selection Arg
                         null)                                           //Not bother on sorting
+
             case MOVIE_DETAIL_FRAGMENT_MOVIE_CAST_LOADER_ID:
                 return new CursorLoader(
                         getActivity(),                                  //Parent Activity Context
@@ -415,6 +409,7 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
                         MovieMagicContract.MovieCast.COLUMN_CAST_ORIG_MOVIE_ID + "= ?", //Selection Clause
                         mMovieIdArg,                                    //Selection Arg
                         MovieMagicContract.MovieCast.COLUMN_CAST_ORDER) //Sorted on the order
+
             case MOVIE_DETAIL_FRAGMENT_MOVIE_CREW_LOADER_ID:
                 return new CursorLoader(
                         getActivity(),                                  //Parent Activity Context
@@ -423,6 +418,7 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
                         MovieMagicContract.MovieCrew.COLUMN_CREW_ORIG_MOVIE_ID + "= ?", //Selection Clause
                         mMovieIdArg,                                    //Selection Arg
                         MovieMagicContract.MovieCrew.COLUMN_CREW_JOB)   //Sorted on the job
+
             case MOVIE_DETAIL_FRAGMENT_MOVIE_RELEASE_INFO_LOADER_ID:
                 return new CursorLoader(
                         getActivity(),                                    //Parent Activity Context
@@ -432,6 +428,7 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
                             $MovieMagicContract.MovieReleaseDate.COLUMN_RELEASE_ISO_COUNTRY = ? """, //Selection Clause
                         mReleaseInfoArg,                                     //Selection Arg
                         null)                                             //Sorting not used
+
             case MOVIE_DETAIL_FRAGMENT_MOVIE_IMAGE_LOADER_ID:
                 return new CursorLoader(
                         getActivity(),                                    //Parent Activity Context
@@ -453,7 +450,6 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
         switch (loaderId) {
             case MOVIE_DETAIL_FRAGMENT_BASIC_DATA_LOADER_ID:
                 handleMovieBasicOnLoadFinished(data)
-//                startOtherLoaders()
                 break
             case MOVIE_DETAIL_FRAGMENT_SIMILAR_MOVIE_LOADER_ID:
                 handleSimilarMovieOnLoadFinished(data)
@@ -480,11 +476,10 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
 
     @Override
     void onLoaderReset(Loader<Cursor> loader) {
-        //Do nothing
+        //Reset the adapters
         mSimilarMovieAdapter.swapCursor(null)
         mMovieCastAdapter.swapCursor(null)
         mMovieCrewAdapter.swapCursor(null)
-//        mBackdropPagerAdapter.swapCursor(null)
     }
 
     void handleMovieBasicOnLoadFinished(Cursor data) {
@@ -609,8 +604,6 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
             }
             else {
                 LogDisplay.callLog(LOG_TAG,'Additional movie data already present',LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
-                //Now it's make sense to start all other loaders
-//                startOtherLoaders()
             }
         }
         else {
@@ -687,30 +680,7 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
             LogDisplay.callLog(LOG_TAG,"backdropImageArray-> $backdropList",LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
             mBackdropCallback.initializeActivityHostedBackdrop(backdropList)
         }
-//        mBackdropPagerAdapter.swapCursor(data)
-//        mCallback.initializeActivityHostedFields(mMovieTitle, mBackdropPagerAdapter)
-
     }
-
-//    public void startOtherLoaders() {
-//        mLocale = context.getResources().getConfiguration().locale.getCountry()
-//        LogDisplay.callLog(LOG_TAG,"Locale: $mLocale",LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
-//        if(mMovieId) {
-//            mMovieIdArg = [Integer.toString(mMovieId)] as String[]
-//            mVideoArg = [Integer.toString(mMovieId),MOVIE_VIDEO_SITE_YOUTUBE, MOVIE_VIDEO_SITE_TYPE] as String[]
-//            mReleaseInfoArg = [Integer.toString(mMovieId), mLocale] as String[]
-//        } else {
-//            //this is to safeguard any unwanted data fetch
-//            mMovieIdArg = ['ZZZZZZ'] as String[]
-//            mVideoArg = ['XXXXXX','YYYYY','ZZZZZZ'] as String[]
-//            mReleaseInfoArg = ['YYYYY','ZZZZZZ'] as String[]
-//        }
-//        getLoaderManager().initLoader(MOVIE_DETAIL_FRAGMENT_SIMILAR_MOVIE_LOADER_ID, null, this)
-//        getLoaderManager().initLoader(MOVIE_DETAIL_FRAGMENT_MOVIE_VIDEO_LOADER_ID, null, this)
-//        getLoaderManager().initLoader(MOVIE_DETAIL_FRAGMENT_MOVIE_CAST_LOADER_ID, null, this)
-//        getLoaderManager().initLoader(MOVIE_DETAIL_FRAGMENT_MOVIE_CREW_LOADER_ID, null, this)
-//        getLoaderManager().initLoader(MOVIE_DETAIL_FRAGMENT_MOVIE_RELEASE_INFO_LOADER_ID, null, this)
-//    }
 
     @Override
     public void onAttach(Activity activity) {

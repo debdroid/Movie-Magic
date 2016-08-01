@@ -19,55 +19,46 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:orientation="vertical">
-        <FrameLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
-            <ImageView
-                android:id="@+id/single_movie_crew_grid_image"
-                android:layout_width="@dimen/grid_image_width"
-                android:layout_height="@dimen/grid_image_height"
-                android:scaleType="centerCrop"
-                android:src="@mipmap/ic_launcher" />
-            <TextView
-                android:id="@+id/single_movie_crew_grid_crew_name"
-                android:layout_width="@dimen/grid_image_width"
-                android:layout_height="wrap_content"
-                android:ellipsize="end"
-                android:fontFamily="sans-serif"
-                android:layout_gravity="bottom"
-                android:gravity="center"
-                android:singleLine="true"
-                android:text="@string/crew_name"
-                android:paddingBottom="@dimen/grid_overlapping_text_padding"
-                android:background="@color/primary_dark"
-                android:alpha="@string/movie_detail_crew_name_background_alpha"
-                android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-                android:textColor="@color/white_color"
-                android:textStyle="italic" />
-        </FrameLayout>
-            <!--<TextView-->
-                <!--android:id="@+id/single_movie_crew_grid_crew_as"-->
-                <!--android:layout_width="match_parent"-->
-                <!--android:layout_height="wrap_content"-->
-                <!--android:background="@color/primary_dark"-->
-                <!--android:ellipsize="end"-->
-                <!--android:fontFamily="sans-serif"-->
-                <!--android:gravity="center"-->
-                <!--android:singleLine="true"-->
-                <!--android:text="@string/as_text_value"-->
-                <!--android:textAppearance="@style/TextAppearance.AppCompat.Body1"-->
-                <!--android:textColor="@color/white_color"-->
-                <!--android:textStyle="italic" />-->
+
+            <FrameLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+                <ImageView
+                    android:id="@+id/single_movie_crew_grid_image"
+                    android:layout_width="@dimen/grid_image_width"
+                    android:layout_height="@dimen/grid_image_height"
+                    android:scaleType="centerCrop"
+                    android:src="@mipmap/ic_launcher" />
+
+                <TextView
+                    android:id="@+id/single_movie_crew_grid_crew_name"
+                    android:layout_width="@dimen/grid_image_width"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="bottom"
+                    android:alpha="@string/movie_detail_crew_name_background_alpha"
+                    android:background="@color/primary_dark"
+                    android:ellipsize="end"
+                    android:fontFamily="sans-serif"
+                    android:gravity="center"
+                    android:paddingBottom="@dimen/grid_overlapping_text_padding"
+                    android:singleLine="true"
+                    android:text="@string/crew_name"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+                    android:textColor="@color/white_color"
+                    android:textStyle="italic" />
+            </FrameLayout>
+
             <TextView
                 android:id="@+id/single_movie_crew_grid_job_name"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:paddingTop="@dimen/grid_overlapping_text_padding"
-                android:paddingBottom="@dimen/grid_overlapping_text_padding"
                 android:background="@color/primary_dark"
                 android:ellipsize="end"
                 android:fontFamily="sans-serif"
                 android:gravity="center"
+                android:paddingBottom="@dimen/grid_overlapping_text_padding"
+                android:paddingTop="@dimen/grid_overlapping_text_padding"
                 android:singleLine="true"
                 android:text="@string/job_name"
                 android:textAppearance="@style/TextAppearance.AppCompat.Body1"

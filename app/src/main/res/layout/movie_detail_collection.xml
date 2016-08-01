@@ -1,40 +1,43 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/movie_detail_collection_layout"
-    android:orientation="vertical"
-    android:background="@color/primary"
-    android:paddingLeft="@dimen/m_design_screen_edge_left_right_margin"
-    android:paddingStart="@dimen/m_design_screen_edge_left_right_margin"
-    android:paddingRight="@dimen/m_design_screen_edge_left_right_margin"
-    android:paddingEnd="@dimen/m_design_screen_edge_left_right_margin"
-    android:paddingTop="@dimen/m_design_space_between_content_area"
-    android:paddingBottom="@dimen/m_design_space_between_content_area"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:background="@color/primary"
+    android:orientation="vertical"
+    android:paddingBottom="@dimen/m_design_space_between_content_area"
+    android:paddingEnd="@dimen/m_design_screen_edge_left_right_margin"
+    android:paddingLeft="@dimen/m_design_screen_edge_left_right_margin"
+    android:paddingRight="@dimen/m_design_screen_edge_left_right_margin"
+    android:paddingStart="@dimen/m_design_screen_edge_left_right_margin"
+    android:paddingTop="@dimen/m_design_space_between_content_area">
+
     <TextView
         android:id="@+id/movie_detail_collection_header"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
+        android:fontFamily="sans-serif-condensed"
         android:gravity="left"
         android:text="@string/movie_detail_collection_header_text"
-        android:fontFamily="sans-serif-condensed"
-        android:textColor="@color/white_color"
-        android:textAppearance="@style/TextAppearance.AppCompat.Title"/>
+        android:textAppearance="@style/TextAppearance.AppCompat.Title"
+        android:textColor="@color/white_color" />
+
     <TextView
         android:id="@+id/movie_detail_collection_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/movie_detail_collection_name_data"
         android:fontFamily="sans-serif-condensed"
-        android:textColor="@color/grey_color"
-        android:textAppearance="@style/TextAppearance.AppCompat.Medium"/>
+        android:text="@string/movie_detail_collection_name_data"
+        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+        android:textColor="@color/grey_color" />
+
     <ImageView
         android:id="@+id/movie_detail_collection_image"
         android:layout_width="match_parent"
         android:layout_height="@dimen/movie_detail_collection_backdrop_height"
-        android:scaleType="centerCrop"
         android:layout_gravity="center"
         android:elevation="@dimen/m_design_toolbar_elevation"
-        android:src="@drawable/grid_image_placeholder"/>
+        android:scaleType="centerCrop"
+        android:src="@drawable/grid_image_placeholder" />
 
 </LinearLayout>

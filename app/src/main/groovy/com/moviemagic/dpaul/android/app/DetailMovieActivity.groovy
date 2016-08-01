@@ -3,7 +3,6 @@ package com.moviemagic.dpaul.android.app
 import android.os.Bundle
 import android.support.design.widget.AppBarLayout
 import android.support.design.widget.CollapsingToolbarLayout
-import android.support.v4.view.ViewPager
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.Toolbar
 import android.view.Menu
@@ -26,12 +25,8 @@ class DetailMovieActivity extends AppCompatActivity implements DetailMovieFragme
     Toolbar mToolbar
     AppBarLayout mAppBarLayout
     ImageView mBackdrop
-    ViewPager mViewPager
-    final static int MAX_WIDTH = 1024
-    final static int MAX_HEIGHT = 768
     final android.os.Handler mHandler = new android.os.Handler()
 
-    public static int mPrimaryDarkColor
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState)
@@ -59,14 +54,6 @@ class DetailMovieActivity extends AppCompatActivity implements DetailMovieFragme
         }
 
         mBackdrop = findViewById(R.id.movie_detail_backdrop_image) as ImageView
-//        mViewPager = findViewById(R.id.movie_detail_backdrop_view_pager) as ViewPager
-
-//        BitmapFactory.Options options = new BitmapFactory.Options()
-//        options.inJustDecodeBounds = true;
-//        BitmapFactory.decodeResource(getResources(), R.id.movie_detail_backdrop_image, options)
-//        int imageHeight = options.outHeight
-//        int imageWidth = options.outWidth
-//        String imageType = options.outMimeType
     }
 
     @Override
@@ -122,22 +109,13 @@ class DetailMovieActivity extends AppCompatActivity implements DetailMovieFragme
 
     @Override
     public void initializeActivityHostedBackdrop(List<String> backdropImagePathList) {
-//    public void initializeActivityHostedFields(String movieTitle, BackdropPagerAdapter backdropPagerAdapter) {
-//        mCollapsingToolbar.setTitle(movieTitle)
-//        mCollapsingToolbar.setBackgroundColor(prominentColor)
-//        mAppBarLayout.setBackgroundColor(prominentColor)
-//        mToolbar.setBackgroundColor(prominentColor)
-//        final Animation animation = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.backdrop_slide_anim)
         Animation animation = new TranslateAnimation(1000, 0,0, 0)
         animation.setDuration(200)
         animation.setFillAfter(true)
-//        mViewPager.setAdapter(backdropPagerAdapter)
         int counter = 0
-//        final android.os.Handler handler = new android.os.Handler()
         final Runnable runnable = new Runnable() {
             @Override
             void run() {
-//                mBackdrop.clearAnimation()
                 String backdropPath = "http://image.tmdb.org/t/p/w500${backdropImagePathList[counter]}"
                 loadBackdropImage(backdropPath, animation)
                 counter++
@@ -151,89 +129,16 @@ class DetailMovieActivity extends AppCompatActivity implements DetailMovieFragme
             }
         }
         mHandler.postDelayed(runnable, 1000) //Initial delay is 1 seconds
-
-//        String backdropImagePath = "http://image.tmdb.org/t/p/w500${backdropImagePathList[counter]}"
-//        Picasso.with(this)
-//                .load(backdropImagePath)
-//                .placeholder(R.drawable.grid_image_placeholder)
-//                .error(R.drawable.grid_image_error)
-//                .into(mBackdrop, new Callback() {
-//            @Override
-//            void onSuccess() {
-//                final android.os.Handler handler = new android.os.Handler()
-//                Runnable runnable = new Runnable() {
-//                    @Override
-//                    void run() {
-//                        String backdropPath = "http://image.tmdb.org/t/p/w500${backdropImagePathList[counter+1]}"
-//                        loadBackdropImage(backdropPath)
-//                        counter++
-//                        if (counter >= backdropImagePathList.size()) {
-//                            counter = 0
-//                        }
-//                        handler.postDelayed(this, 5000) //Interval time is 5 seconds
-//                    }
-//                }
-//                handler.postDelayed(runnable, 3000) //Initial delay is 3 seconds
-//            }
-//
-//            @Override
-//            void onError() {
-//
-//            }
-//        })
-
-//        Runnable runnable = new Runnable() {
-//            @Override
-//            void run() {
-//                String backdropPath = "http://image.tmdb.org/t/p/w500${backdropImagePathList[counter]}"
-//                loadBackdropImage(backdropPath)
-//                counter++
-//                if(counter >= backdropImagePathList.size()) {
-//                    counter = 0
-//                }
-//                mBackdrop.postDelayed(this,5000) //Interval time is 5 seconds
-//            }
-//        }
-//        mBackdrop.postDelayed(runnable,3000) //Initial delay is 3 seconds
     }
 
     void loadBackdropImage(String backdropPath, Animation animation) {
-//        LogDisplay.callLog(LOG_TAG,"backfropPath -> $backdropPath",LogDisplay.DETAIL_MOVIE_ACTIVITY_LOG_FLAG)
-//        Target target = new Target() {
-//            @Override
-//            void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
-//               // mBackdrop.clearAnimation()
-////                mBackdrop.setImageBitmap(bitmap)
-//                Resources resources = getResources()
-//                mBackdrop.setImageBitmap(
-//                        BackdropBitmapTransform.decodeSampledBitmapFromResource(resources, R.id.movie_detail_backdrop_image, 100, 100))
-//            }
-//
-//            @Override
-//            void onBitmapFailed(Drawable errorDrawable) {
-//
-//            }
-//
-//            @Override
-//            void onPrepareLoad(Drawable placeHolderDrawable) {
-////                mBackdrop.startAnimation(animation)
-//            }
-//        }
-
-//        int size = (int) Math.ceil(Math.sqrt(MAX_WIDTH * MAX_HEIGHT))
         Picasso.with(this)
                 .load(backdropPath)
                 .noPlaceholder()
-//                .transform(new BitmapTransform(MAX_WIDTH, MAX_HEIGHT))
                 .centerInside()
-//                .noFade()
                 .fit()
                 .memoryPolicy(MemoryPolicy.NO_STORE, MemoryPolicy.NO_CACHE)
                 .networkPolicy(NetworkPolicy.NO_CACHE, NetworkPolicy.NO_STORE)
-//                .resize(size,size)
-//                .placeholder(R.drawable.grid_image_placeholder)
-//                .error(R.drawable.grid_image_error)
-//                .into(target)
                 .into(mBackdrop, new Callback() {
             @Override
             void onSuccess() {

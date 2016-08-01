@@ -11,7 +11,7 @@ import com.moviemagic.dpaul.android.app.GridFragment
 import com.moviemagic.dpaul.android.app.contentprovider.MovieMagicContract
 import groovy.json.JsonException
 import groovy.json.JsonParserType
-import groovy.json.JsonSlurper;
+import groovy.json.JsonSlurper
 import groovy.transform.CompileStatic
 
 @CompileStatic
@@ -33,9 +33,7 @@ class LoadMovieBasicAddlInfo extends AsyncTask<Integer, Void, Void> {
     protected Void doInBackground(Integer... params) {
         int movieId = params[0]
         int movieBasicRowId = params[1]
-//        int totalPage
-//        List<ContentValues> movieList
-        //TBDB api example
+        //TMDB api example
         //https://api.themoviedb.org/3/movie/240?api_key=key&append_to_response=similar,credits,images,videos,release_dates,reviews
         final String TMDB_MOVIE_BASE_URL = 'https://api.themoviedb.org/3/'
         final String MOVIE_PATH = 'movie'

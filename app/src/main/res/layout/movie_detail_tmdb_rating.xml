@@ -29,28 +29,30 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="left"
-            android:paddingLeft="@dimen/m_design_space_between_content_area"
             android:fontFamily="sans-serif-condensed"
+            android:paddingLeft="@dimen/m_design_space_between_content_area"
             android:text="@string/tmdb_rating_vote_count_text"
             android:textAppearance="@style/TextAppearance.AppCompat.Title"
             android:textColor="@color/white_color" />
+
         <TextView
             android:id="@+id/movie_detail_tmdb_rating_vote_count_val"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="left"
-            android:paddingLeft="@dimen/m_design_space_between_content_area"
             android:fontFamily="sans-serif-condensed"
+            android:paddingLeft="@dimen/m_design_space_between_content_area"
             android:text="@string/tmdb_rating_vote_count_val"
             android:textAppearance="@style/TextAppearance.AppCompat.Title"
             android:textColor="@color/white_color" />
+
         <TextView
             android:id="@+id/movie_detail_tmdb_rating_vote_count_trailer"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="left"
-            android:paddingLeft="@dimen/m_design_space_between_content_area"
             android:fontFamily="sans-serif-condensed"
+            android:paddingLeft="@dimen/m_design_space_between_content_area"
             android:text="@string/tmdb_rating_vote_count_closing_brace"
             android:textAppearance="@style/TextAppearance.AppCompat.Title"
             android:textColor="@color/white_color" />

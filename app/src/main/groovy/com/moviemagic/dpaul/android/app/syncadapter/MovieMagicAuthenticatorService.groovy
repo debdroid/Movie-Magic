@@ -22,7 +22,7 @@ class MovieMagicAuthenticatorService extends Service {
         mAuthenticator = new MovieMagicAuthenticator(this)
     }
 
-    /*
+    /**
      * When the system binds to this Service to make the RPC call
      * return the authenticator's IBinder.
      */

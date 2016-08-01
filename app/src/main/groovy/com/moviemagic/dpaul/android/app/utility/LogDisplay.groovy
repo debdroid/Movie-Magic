@@ -1,6 +1,6 @@
 package com.moviemagic.dpaul.android.app.utility
 
-import android.util.Log;
+import android.util.Log
 import groovy.transform.CompileStatic
 
 @CompileStatic

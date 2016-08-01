@@ -3,7 +3,7 @@ package com.moviemagic.dpaul.android.app
 import android.content.ContentValues
 import android.database.Cursor
 import android.test.AndroidTestCase
-import com.moviemagic.dpaul.android.app.contentprovider.MovieMagicContract;
+import com.moviemagic.dpaul.android.app.contentprovider.MovieMagicContract
 import groovy.transform.CompileStatic
 
 @CompileStatic

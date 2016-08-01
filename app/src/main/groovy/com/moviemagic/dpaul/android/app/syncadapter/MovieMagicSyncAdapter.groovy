@@ -1,7 +1,12 @@
 package com.moviemagic.dpaul.android.app.syncadapter
 
 import android.accounts.Account
-import android.content.*
+import android.content.AbstractThreadedSyncAdapter
+import android.content.ContentProviderClient
+import android.content.ContentResolver
+import android.content.ContentValues
+import android.content.Context
+import android.content.SyncResult
 import android.net.Uri
 import android.os.Bundle
 import android.util.Log
@@ -14,11 +19,7 @@ import groovy.json.JsonParserType
 import groovy.json.JsonSlurper
 import groovy.transform.CompileStatic
 
-//import groovyx.net.http.RESTClient
-//import groovyx.net.http.HttpResponseException
-
 @CompileStatic
-//@Grab('org.codehaus.groovy.modules.http-builder:http-builder:0.7.2')
 class MovieMagicSyncAdapter extends AbstractThreadedSyncAdapter {
     private static final String LOG_TAG = MovieMagicSyncAdapter.class.getSimpleName()
     //Movie list type for tmdb public movies
@@ -94,23 +95,16 @@ class MovieMagicSyncAdapter extends AbstractThreadedSyncAdapter {
     }
 
     private List<ContentValues> downloadMovieList (String category, int page) {
-        //TBDB api example
+        //TMDB api example
         //https://api.themoviedb.org/3/movie/popular?api_key=key&page=1
         final String TMDB_MOVIE_BASE_URL = 'https://api.themoviedb.org/3/'
         final String MOVIE_PATH = 'movie'
         final String API_KEY = 'api_key'
         final String PAGE = 'page'
 
-//        def emptyHeaders = [Accept : 'application/json']
-//        def data = [api_key: BuildConfig.TMDB_API_KEY]
         List<ContentValues> movieList
 
         try {
-//            def restClient = new RESTClient(TMDB_MOVIE_BASE_URL)
-//            def response = restClient.get(path: MOVIE_PATH + POPULAR_PATH, query : data, headers : emptyHeaders)
-//            if (response.status == 200 && response.data) {
-//                def jsonSlurper = new JsonSlurper(type: JsonParserType.LAX)
-//                def jsonData = jsonSlurper.parseText(JsonOutput.prettyPrint(JsonOutput.toJson(response.data)))
             Uri.Builder uriBuilder = Uri.parse(TMDB_MOVIE_BASE_URL).buildUpon()
 
             Uri uri = uriBuilder.appendPath(MOVIE_PATH)

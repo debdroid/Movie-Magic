@@ -5,7 +5,6 @@ import android.content.ContentUris
 import android.net.Uri
 import android.provider.BaseColumns
 import android.util.Log
-import com.moviemagic.dpaul.android.app.syncadapter.MovieMagicSyncAdapter
 import groovy.transform.CompileStatic
 
 import java.text.ParseException

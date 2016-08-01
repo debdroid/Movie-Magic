@@ -4,16 +4,10 @@ import android.content.ContentValues
 import com.moviemagic.dpaul.android.app.contentprovider.MovieMagicContract.MovieBasicInfo
 import com.moviemagic.dpaul.android.app.contentprovider.MovieMagicContract.MovieCast
 import com.moviemagic.dpaul.android.app.contentprovider.MovieMagicContract.MovieCrew
-import com.moviemagic.dpaul.android.app.contentprovider.MovieMagicContract.MovieReleaseDate
-import com.moviemagic.dpaul.android.app.contentprovider.MovieMagicContract.MovieCollection
 import com.moviemagic.dpaul.android.app.contentprovider.MovieMagicContract.MovieImage
-import com.moviemagic.dpaul.android.app.contentprovider.MovieMagicContract.MovieVideo
+import com.moviemagic.dpaul.android.app.contentprovider.MovieMagicContract.MovieReleaseDate
 import com.moviemagic.dpaul.android.app.contentprovider.MovieMagicContract.MovieReview
-import com.moviemagic.dpaul.android.app.contentprovider.MovieMagicContract.MoviePersonCast
-import com.moviemagic.dpaul.android.app.contentprovider.MovieMagicContract.MoviePersonCrew
-import com.moviemagic.dpaul.android.app.contentprovider.MovieMagicContract.MoviePersonInfo
-import com.moviemagic.dpaul.android.app.syncadapter.MovieMagicSyncAdapter
-import groovy.transform.CompileStatic
+import com.moviemagic.dpaul.android.app.contentprovider.MovieMagicContract.MovieVideo
 
 //Since the json field is used dynamically, so this class is not compiled as CompileStatic
 //@CompileStatic

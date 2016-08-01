@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_home"
+            android:icon="@drawable/home_variant"
+            android:title="@string/drawer_menu_home"
+            app:actionLayout="@layout/menu_counter" />
+        <item
+            android:id="@+id/nav_tmdb_popular"
+            android:icon="@drawable/popcorn"
+            android:title="@string/drawer_menu_tmdb_popular"
+            app:actionLayout="@layout/menu_counter" />
+        <item
+            android:id="@+id/nav_tmdb_toprated"
+            android:icon="@drawable/star"
+            android:title="@string/drawer_menu_tmdb_toprated" />
+        <item
+            android:id="@+id/nav_tmdb_nowplaying"
+            android:icon="@drawable/video"
+            android:title="@string/drawer_menu_tmdb_nowplaying" />
+        <item
+            android:id="@+id/nav_tmdb_upcoming"
+            android:icon="@drawable/bullhorn"
+            android:title="@string/drawer_menu_tmdb_upcoming" />
+    </group>
+
+    <item android:title="@string/drawer_menu_user_header">
+        <menu>
+            <item
+                android:id="@+id/nav_user_favourite"
+                android:icon="@drawable/heart"
+                android:title="@string/drawer_menu_user_favourite" />
+            <item
+                android:id="@+id/nav_user_watched"
+                android:icon="@drawable/check_all"
+                android:title="@string/drawer_menu_user_watched" />
+            <item
+                android:id="@+id/nav_user_wishlist"
+                android:icon="@drawable/eye"
+                android:title="@string/drawer_menu_user_wishlist" />
+            <item
+                android:id="@+id/nav_user_collection"
+                android:icon="@drawable/folder_multiple"
+                android:title="@string/drawer_menu_user_collection" />
+        </menu>
+    </item>
+
+</menu>
