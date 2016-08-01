@@ -16,17 +16,18 @@
         <android.support.design.widget.CollapsingToolbarLayout
             android:id="@+id/movie_detail_collapsing_toolbar"
             android:layout_width="match_parent"
-            android:layout_height="200dp"
+            android:layout_height="@dimen/movie_detail_backdrop_height"
             app:contentScrim="?attr/colorPrimary"
             app:layout_scrollFlags="scroll|exitUntilCollapsed"
             android:fitsSystemWindows="true">
 
-            <android.support.v4.view.ViewPager
-                android:id="@+id/movie_detail_backdrop_view_pager"
-                android:layout_width="match_parent"
-                android:layout_height="200dp"
-                app:layout_collapseMode="parallax"
-                android:fitsSystemWindows="true"/>
+            <!--<android.support.v4.view.ViewPager-->
+                <!--android:id="@+id/movie_detail_backdrop_view_pager"-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="200dp"-->
+                <!--app:layout_collapseMode="parallax"-->
+                <!--android:fitsSystemWindows="true"/>-->
+
             <!--<android.support.v7.widget.RecyclerView-->
                 <!--android:id="@+id/recommendedFoodItemsHolder_part1"-->
                 <!--android:layout_width="match_parent"-->
@@ -34,14 +35,14 @@
                 <!--android:nestedScrollingEnabled="false"-->
                 <!--app:layout_collapseMode="parallax" />-->
 
-            <!--<ImageView-->
-                <!--android:id="@+id/movie_detail_backdrop_image"-->
-                <!--android:layout_width="match_parent"-->
-                <!--android:layout_height="@dimen/backdrop_image_height_detail_view"-->
-                <!--android:scaleType="centerCrop"-->
-                <!--app:layout_collapseMode="parallax"-->
-                <!--android:src="@drawable/grid_image_error"-->
-                <!--android:fitsSystemWindows="true"/>-->
+            <ImageView
+                android:id="@+id/movie_detail_backdrop_image"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/backdrop_image_height_detail_view"
+                android:scaleType="centerCrop"
+                app:layout_collapseMode="parallax"
+                android:src="@drawable/grid_image_placeholder"
+                android:fitsSystemWindows="true"/>
 
             <android.support.v7.widget.Toolbar
                 android:id="@+id/movie_detail_toolbar"

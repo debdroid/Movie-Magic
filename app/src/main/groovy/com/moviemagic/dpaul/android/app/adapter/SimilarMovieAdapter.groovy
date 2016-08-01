@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.Intent
 import android.database.Cursor
 import android.net.Uri
+import android.os.Bundle
 import android.support.v7.widget.RecyclerView
 import android.util.Log
 import android.view.LayoutInflater
@@ -17,6 +18,8 @@ import com.moviemagic.dpaul.android.app.GridFragment
 import com.moviemagic.dpaul.android.app.R
 import com.moviemagic.dpaul.android.app.contentprovider.MovieMagicContract
 import com.moviemagic.dpaul.android.app.utility.LogDisplay
+import com.squareup.picasso.MemoryPolicy
+import com.squareup.picasso.NetworkPolicy
 import com.squareup.picasso.Picasso;
 import groovy.transform.CompileStatic
 
@@ -26,6 +29,7 @@ class SimilarMovieAdapter extends RecyclerView.Adapter<SimilarMovieAdapter.Simil
 
     private Cursor mCursor
     private Context mContext
+    public static int mPrimaryDarkColor, mBodyTextColor
 
     //Empty constructor
     public SimilarMovieAdapter(Context ctx){
@@ -54,7 +58,17 @@ class SimilarMovieAdapter extends RecyclerView.Adapter<SimilarMovieAdapter.Simil
             Uri movieIdUri = MovieMagicContract.MovieBasicInfo.buildMovieUriWithMovieId(movieId)
             Intent mIntent = new Intent(mContext, DetailMovieActivity.class)
                     .setData(movieIdUri)
+//                    .setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY)
             mContext.startActivity(mIntent)
+
+//            //Create a Bundle to pass the data to Fragment
+//            Bundle args = new Bundle()
+//            //Get the data from the intent and put that to Bundle
+//            args.putParcelable(DetailMovieFragment.MOVIE_BASIC_INFO_MOVIE_ID_URI, movieIdUri)
+//            //Create a movie detail fragment
+//            DetailMovieFragment movieDetailFragment = new DetailMovieFragment()
+//            movieDetailFragment.setArguments(args)
+//            ((DetailMovieActivity)mContext).getSupportFragmentManager().beginTransaction().add(R.id.movie_detail_container,movieDetailFragment).commit()
         }
     }
     @Override
@@ -69,15 +83,20 @@ class SimilarMovieAdapter extends RecyclerView.Adapter<SimilarMovieAdapter.Simil
     void onBindViewHolder(SimilarMovieAdapterViewHolder holder, int position) {
         // move the cursor to correct position
         mCursor.moveToPosition(position)
-//        LogDisplay.callLog(LOG_TAG,'onBindViewHolder is called',LogDisplay.SIMILAR_MOVIE_ADAPTER_FLAG)
+        LogDisplay.callLog(LOG_TAG,'onBindViewHolder is called',LogDisplay.SIMILAR_MOVIE_ADAPTER_FLAG)
         String posterPath = "http://image.tmdb.org/t/p/w185${mCursor.getString(DetailMovieFragment.COL_SIMILAR_MOVIE_POSTER_PATH)}"
         //gridViewHolder.movieImageView.setImageResource(mThumbIds[position])
         Picasso.with(mContext)
                 .load(posterPath)
+                .fit()
+//                .memoryPolicy(MemoryPolicy.NO_STORE, MemoryPolicy.NO_CACHE)
+//                .networkPolicy(NetworkPolicy.NO_CACHE, NetworkPolicy.NO_STORE)
                 .placeholder(R.drawable.grid_image_placeholder)
                 .error(R.drawable.grid_image_error)
                 .into(holder.similarMovieImageView)
         holder.similarMovieTextView.setText(mCursor.getString(DetailMovieFragment.COL_SIMILAR_MOVIE_TITLE))
+        holder.similarMovieTextView.setBackgroundColor(mPrimaryDarkColor)
+        holder.similarMovieTextView.setTextColor(mBodyTextColor)
     }
 
     @Override
@@ -90,6 +109,13 @@ class SimilarMovieAdapter extends RecyclerView.Adapter<SimilarMovieAdapter.Simil
 
     public void swapCursor(Cursor newCursor) {
         mCursor = newCursor
+        notifyDataSetChanged()
+    }
+
+    //Since the color is decided once the poster is downloaded by Picasso
+    //but by then adapter might got loaded with data. Hence call notifyDataSetChanged
+    //so that it get's recreated with correct color
+    public void changeColor() {
         notifyDataSetChanged()
     }
 }

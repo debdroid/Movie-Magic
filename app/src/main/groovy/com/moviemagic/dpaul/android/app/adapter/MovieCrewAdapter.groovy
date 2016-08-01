@@ -11,6 +11,8 @@ import android.widget.TextView
 import com.moviemagic.dpaul.android.app.DetailMovieFragment
 import com.moviemagic.dpaul.android.app.R
 import com.moviemagic.dpaul.android.app.utility.LogDisplay
+import com.squareup.picasso.MemoryPolicy
+import com.squareup.picasso.NetworkPolicy
 import com.squareup.picasso.Picasso;
 import groovy.transform.CompileStatic
 
@@ -20,6 +22,8 @@ class MovieCrewAdapter extends RecyclerView.Adapter<MovieCrewAdapter.MovieCrewAd
 
     private Cursor mCursor
     private Context mContext
+    public static int mPrimaryDarkColor, mBodyTextColor
+
 
     //Empty constructor
     public MovieCrewAdapter(Context ctx){
@@ -65,16 +69,24 @@ class MovieCrewAdapter extends RecyclerView.Adapter<MovieCrewAdapter.MovieCrewAd
     void onBindViewHolder(MovieCrewAdapterViewHolder holder, int position) {
         // move the cursor to correct position
         mCursor.moveToPosition(position)
-//        LogDisplay.callLog(LOG_TAG,'onBindViewHolder is called',LogDisplay.MOVIE_CREW_ADAPTER_FLAG)
+        LogDisplay.callLog(LOG_TAG,'onBindViewHolder is called',LogDisplay.MOVIE_CREW_ADAPTER_FLAG)
         String profilePath = "http://image.tmdb.org/t/p/w185${mCursor.getString(DetailMovieFragment.COL_MOVIE_CREW_PROFILE_PATH)}"
         //gridViewHolder.movieImageView.setImageResource(mThumbIds[position])
         Picasso.with(mContext)
                 .load(profilePath)
+                .fit()
+//                .memoryPolicy(MemoryPolicy.NO_STORE, MemoryPolicy.NO_CACHE)
+//                .networkPolicy(NetworkPolicy.NO_CACHE, NetworkPolicy.NO_STORE)
                 .placeholder(R.drawable.grid_image_placeholder)
                 .error(R.drawable.na_person_icon)
                 .into(holder.movieCrewImageView)
         holder.movieCrewJobName.setText(mCursor.getString(DetailMovieFragment.COL_MOVIE_CREW_CREW_JOB))
         holder.movieCrewName.setText(mCursor.getString(DetailMovieFragment.COL_MOVIE_CREW_PERSON_NAME))
+        holder.movieCrewJobName.setBackgroundColor(mPrimaryDarkColor)
+        holder.movieCrewJobName.setTextColor(mBodyTextColor)
+        holder.movieCrewName.setBackgroundColor(mPrimaryDarkColor)
+        holder.movieCrewName.setTextColor(mBodyTextColor)
+
     }
 
     @Override
@@ -87,6 +99,13 @@ class MovieCrewAdapter extends RecyclerView.Adapter<MovieCrewAdapter.MovieCrewAd
 
     public void swapCursor(Cursor newCursor) {
         mCursor = newCursor
+        notifyDataSetChanged()
+    }
+
+    //Since the color is decided once the poster is downloaded by Picasso
+    //but by then adapter might got loaded with data. Hence call notifyDataSetChanged
+    //so that it get's recreated with correct color
+    public void changeColor() {
         notifyDataSetChanged()
     }
 }

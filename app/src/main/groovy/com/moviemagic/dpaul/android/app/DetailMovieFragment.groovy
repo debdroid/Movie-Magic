@@ -1,24 +1,32 @@
 package com.moviemagic.dpaul.android.app
 
 import android.app.Activity
-import android.content.Context
 import android.database.Cursor
+import android.graphics.Bitmap
+import android.graphics.Color
+import android.graphics.drawable.BitmapDrawable
+import android.graphics.drawable.Drawable
 import android.net.Uri
 import android.os.Bundle
 import android.support.v17.leanback.widget.HorizontalGridView
 import android.support.v4.app.Fragment
 import android.support.v4.app.LoaderManager
+import android.support.v4.content.ContextCompat
 import android.support.v4.content.CursorLoader
 import android.support.v4.content.Loader
+import android.support.v4.graphics.drawable.DrawableCompat
+import android.support.v7.graphics.Palette
 import android.support.v7.widget.GridLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.FrameLayout
+import android.widget.HorizontalScrollView
 import android.widget.ImageView
+import android.widget.LinearLayout
 import android.widget.RatingBar
 import android.widget.TextView
-import com.moviemagic.dpaul.android.app.adapter.BackdropPagerAdapter
 import com.moviemagic.dpaul.android.app.adapter.MovieCastAdapter
 import com.moviemagic.dpaul.android.app.adapter.MovieCrewAdapter
 import com.moviemagic.dpaul.android.app.adapter.SimilarMovieAdapter
@@ -38,8 +46,19 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
     private TextView mMovieTitleTextView, mGenreTextView, mRunTimeTextView, mReleaseDateTextView, mBudgetTextView,
             mRevenueTextView, mPopularityTextView, mTotalVoteCountTextView, mTaglineTextView, mSynopsisTextView,
             mProdCompanyTextView, mProdCountryTextView, mCollectionNameTextView, mHomePageTextView, mImdbLinkTextView
+    private TextView mReleaseDateHeaderTextView, mBudgetHeaderTextView, mRevenueHeaderTextView, mPopularityHeaderTextView,
+            mTmdbRatingHeaderTextView, mTmdbTotalVoteCountHeaderTextView, mTmdbTotalVoteCountTrailerTextView,
+            mUserRatingHeaderTextView, mTaglineHeaderTextView, mSynopsisHeaderTextView, mMovieTrailerHeaderTextView,
+            mProdCompanyHeaderTextView, mProdCountryHeaderTextView, mCastHeaderTextView, mCrewHeaderTextView,
+            mSimilarMovieHeaderTextView, mCollectionNameHeaderTextView, mReviewHeaderTextView
     private ImageView mMpaaRatingImageView, mPosterImageView, mCollectionBackdropImageView
-    private RatingBar mTmdbRatingBar
+    private LinearLayout mDetailTitleLayout, mDetailPosterLayout, mDetailTmdbRatingLayout, mDetailUserRatingLayout,
+            mDetailSynopsisLayout, mDetailTrailerLayout, mDetailProductionInfoLayout, mDetailCastHeaderLayout,
+            mDetailCrewHeaderLayout, mDetailSimilarMovieHeaderLayout,
+            mDetailCollectionLayout, mDetailWebLinkLayout, mDetailReviewHeaderLayout,
+            mDetailReviewListViewLayout
+    private RatingBar mTmdbRatingBar, mUserRatingBar
+    private FrameLayout mDetailsCastGridLayout, mDetailCrewGridLayout, mDetailSimilarMovieGridLayout
     private Uri mMovieIdUri
     private int mMovieId
     private String[] mMovieIdArg
@@ -47,16 +66,23 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
     private String[] mReleaseInfoArg
     private String[] mMovieImageArg
     private String mMovieTitle
-    String mOriginalBackdropPath
+    private String mOriginalBackdropPath
+    private int mProminentColor
     private SimilarMovieAdapter mSimilarMovieAdapter
     private MovieCastAdapter mMovieCastAdapter
     private MovieCrewAdapter mMovieCrewAdapter
-    private BackdropPagerAdapter mBackdropPagerAdapter
+//    private BackdropPagerAdapter mBackdropPagerAdapter
     private HorizontalGridView mHorizontalSimilarMovieGridView, mHorizontalMovieCastGridView, mHorizontalMovieCrewGridView
     private RecyclerView.LayoutManager mSimilarMovieLayoutManager, mMovieCastLayoutManager, mMovieCrewLayoutManager
 //    MovieMagicYoutubeFragment movieMagicYoutubeFragment
-    private Callback mCallback
+    private MovieTitleAndColorCallback mMovieTitleAndColorCallback
+    private BackdropCallback mBackdropCallback
     private String mLocale
+    private int mPalletePrimaryColor
+    private int mPalletePrimaryDarkColor
+    private int mPalleteTitleColor
+    private int mPalleteBodyTextColor
+    private int mPalleteAccentColor
 
     public static final String MOVIE_BASIC_INFO_MOVIE_ID_URI = 'movie_basic_info_movie_id_uri'
     private static final String MOVIE_VIDEO_SITE_YOUTUBE = 'YouTube'
@@ -223,7 +249,48 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
         }
         //inflate the view before referring any view using id
         View mRootView = inflater.inflate(R.layout.fragment_detail_movie, container, false)
-//        mBackdrop = container.findViewById(R.id.movie_detail_backdrop_image) as ImageView
+
+        //All the layouts
+        mDetailTitleLayout = mRootView.findViewById(R.id.movie_detail_title_layout) as LinearLayout
+        mDetailPosterLayout = mRootView.findViewById(R.id.movie_detail_poster_layout) as LinearLayout
+        mDetailTmdbRatingLayout = mRootView.findViewById(R.id.movie_detail_tmdb_rating_layout) as LinearLayout
+        mDetailUserRatingLayout = mRootView.findViewById(R.id.movie_detail_user_rating_layout) as LinearLayout
+        mDetailSynopsisLayout = mRootView.findViewById(R.id.movie_detail_synopsis_layout) as LinearLayout
+        mDetailTrailerLayout = mRootView.findViewById(R.id.movie_detail_trailer_layout) as LinearLayout
+        mDetailProductionInfoLayout = mRootView.findViewById(R.id.movie_detail_production_info_layout) as LinearLayout
+        mDetailCastHeaderLayout = mRootView.findViewById(R.id.movie_detail_cast_header_layout) as LinearLayout
+        mDetailsCastGridLayout = mRootView.findViewById(R.id.movie_detail_cast_grid_layout) as FrameLayout
+        mDetailCrewHeaderLayout = mRootView.findViewById(R.id.movie_detail_crew_header_layout) as LinearLayout
+        mDetailCrewGridLayout = mRootView.findViewById(R.id.movie_detail_crew_grid_layout) as FrameLayout
+        mDetailSimilarMovieHeaderLayout = mRootView.findViewById(R.id.movie_detail_similar_movie_header_layout) as LinearLayout
+        mDetailSimilarMovieGridLayout = mRootView.findViewById(R.id.movie_detail_similar_movie_grid_layout) as FrameLayout
+        mDetailCollectionLayout = mRootView.findViewById(R.id.movie_detail_collection_layout) as LinearLayout
+        mDetailWebLinkLayout = mRootView.findViewById(R.id.movie_detail_web_links_layout) as LinearLayout
+        mDetailReviewHeaderLayout = mRootView.findViewById(R.id.movie_detail_review_header_layout) as LinearLayout
+        mDetailReviewListViewLayout = mRootView.findViewById(R.id.movie_detail_review_list_view_layout) as LinearLayout
+
+        //All the header (fixed text) fields
+        mReleaseDateHeaderTextView = mRootView.findViewById(R.id.movie_detail_poster_release_date_header) as TextView
+        mBudgetHeaderTextView = mRootView.findViewById(R.id.movie_detail_poster_budget_header) as TextView
+        mRevenueHeaderTextView = mRootView.findViewById(R.id.movie_detail_poster_revenue_header) as TextView
+        mPopularityHeaderTextView = mRootView.findViewById(R.id.movie_detail_poster_popularity_header) as TextView
+        mTmdbRatingHeaderTextView = mRootView.findViewById(R.id.movie_detail_tmdb_rating_header) as TextView
+        mTmdbTotalVoteCountHeaderTextView = mRootView.findViewById(R.id.movie_detail_tmdb_rating_vote_count_header) as TextView
+        mTmdbTotalVoteCountTrailerTextView = mRootView.findViewById(R.id.movie_detail_tmdb_rating_vote_count_trailer) as TextView
+        mUserRatingHeaderTextView = mRootView.findViewById(R.id.movie_detail_user_rating_header) as TextView
+        mTaglineHeaderTextView = mRootView.findViewById(R.id.movie_detail_synopsis_tagline_header) as TextView
+        mSynopsisHeaderTextView = mRootView.findViewById(R.id.movie_detail_synopsis_header) as TextView
+        mMovieTrailerHeaderTextView = mRootView.findViewById(R.id.movie_detail_trailer_header) as TextView
+        mProdCompanyHeaderTextView = mRootView.findViewById(R.id.movie_detail_production_info_cmpy_header) as TextView
+        mProdCountryHeaderTextView = mRootView.findViewById(R.id.movie_detail_production_info_country_header) as TextView
+        mCastHeaderTextView = mRootView.findViewById(R.id.movie_detail_cast_header) as TextView
+        mCrewHeaderTextView = mRootView.findViewById(R.id.movie_detail_crew_header) as TextView
+        mSimilarMovieHeaderTextView = mRootView.findViewById(R.id.movie_detail_similar_movie_header) as TextView
+        mCollectionNameHeaderTextView = mRootView.findViewById(R.id.movie_detail_collection_header) as TextView
+        mCollectionNameHeaderTextView = mRootView.findViewById(R.id.movie_detail_collection_header) as TextView
+        mReviewHeaderTextView = mRootView.findViewById(R.id.movie_detail_review_header) as TextView
+
+        //All the dynamic fields (data fields)
         mMovieTitleTextView = mRootView.findViewById(R.id.movie_detail_title) as TextView
         mMpaaRatingImageView = mRootView.findViewById(R.id.movie_detail_mpaa_image) as ImageView
         mGenreTextView = mRootView.findViewById(R.id.movie_detail_title_genre) as TextView
@@ -234,7 +301,8 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
         mRevenueTextView = mRootView.findViewById(R.id.movie_detail_poster_revenue) as TextView
         mPopularityTextView = mRootView.findViewById(R.id.movie_detail_poster_popularity) as TextView
         mTmdbRatingBar = mRootView.findViewById(R.id.movie_detail_tmdb_rating_bar) as RatingBar
-        mTotalVoteCountTextView = mRootView.findViewById(R.id.tmdb_rating_vote_count_val) as TextView
+        mUserRatingBar = mRootView.findViewById(R.id.movie_detail_user_rating_bar) as RatingBar
+        mTotalVoteCountTextView = mRootView.findViewById(R.id.movie_detail_tmdb_rating_vote_count_val) as TextView
         mTaglineTextView = mRootView.findViewById(R.id.movie_detail_synopsis_tagline) as TextView
         mSynopsisTextView = mRootView.findViewById(R.id.movie_detail_synopsis) as TextView
         mProdCompanyTextView = mRootView.findViewById(R.id.movie_detail_production_info_cmpy) as TextView
@@ -278,7 +346,7 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
         mMovieCrewAdapter = new MovieCrewAdapter(getActivity())
         mHorizontalMovieCrewGridView.setAdapter(mMovieCrewAdapter)
 
-        mBackdropPagerAdapter = new BackdropPagerAdapter(getActivity().getSupportFragmentManager())
+//        mBackdropPagerAdapter = new BackdropPagerAdapter(getActivity().getSupportFragmentManager())
         return mRootView
     }
 
@@ -320,7 +388,6 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
                         null,                       //Selection Clause, null->will return all data
                         null,                       //Selection Arg, null-> will return all data
                         null)                       //Only a single row is expected, so not sorted
-
             case MOVIE_DETAIL_FRAGMENT_SIMILAR_MOVIE_LOADER_ID:
                 return new CursorLoader(
                         getActivity(),                                  //Parent Activity Context
@@ -330,7 +397,6 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
                         mMovieIdArg,                                    //Selection Arg
 //                        null,null,
                         null)                                           //Not bother on sorting
-
             case MOVIE_DETAIL_FRAGMENT_MOVIE_VIDEO_LOADER_ID:
                 return new CursorLoader(
                         getActivity(),                                  //Parent Activity Context
@@ -341,7 +407,6 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
                             $MovieMagicContract.MovieVideo.COLUMN_VIDEO_TYPE = ? """, //Selection Clause
                         mVideoArg,                                     //Selection Arg
                         null)                                           //Not bother on sorting
-
             case MOVIE_DETAIL_FRAGMENT_MOVIE_CAST_LOADER_ID:
                 return new CursorLoader(
                         getActivity(),                                  //Parent Activity Context
@@ -350,7 +415,6 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
                         MovieMagicContract.MovieCast.COLUMN_CAST_ORIG_MOVIE_ID + "= ?", //Selection Clause
                         mMovieIdArg,                                    //Selection Arg
                         MovieMagicContract.MovieCast.COLUMN_CAST_ORDER) //Sorted on the order
-
             case MOVIE_DETAIL_FRAGMENT_MOVIE_CREW_LOADER_ID:
                 return new CursorLoader(
                         getActivity(),                                  //Parent Activity Context
@@ -359,7 +423,6 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
                         MovieMagicContract.MovieCrew.COLUMN_CREW_ORIG_MOVIE_ID + "= ?", //Selection Clause
                         mMovieIdArg,                                    //Selection Arg
                         MovieMagicContract.MovieCrew.COLUMN_CREW_JOB)   //Sorted on the job
-
             case MOVIE_DETAIL_FRAGMENT_MOVIE_RELEASE_INFO_LOADER_ID:
                 return new CursorLoader(
                         getActivity(),                                    //Parent Activity Context
@@ -369,7 +432,6 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
                             $MovieMagicContract.MovieReleaseDate.COLUMN_RELEASE_ISO_COUNTRY = ? """, //Selection Clause
                         mReleaseInfoArg,                                     //Selection Arg
                         null)                                             //Sorting not used
-
             case MOVIE_DETAIL_FRAGMENT_MOVIE_IMAGE_LOADER_ID:
                 return new CursorLoader(
                         getActivity(),                                    //Parent Activity Context
@@ -393,27 +455,21 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
                 handleMovieBasicOnLoadFinished(data)
 //                startOtherLoaders()
                 break
-
             case MOVIE_DETAIL_FRAGMENT_SIMILAR_MOVIE_LOADER_ID:
                 handleSimilarMovieOnLoadFinished(data)
                 break
-
             case MOVIE_DETAIL_FRAGMENT_MOVIE_VIDEO_LOADER_ID:
                 initiateYouTubeVideo(data)
                 break
-
             case MOVIE_DETAIL_FRAGMENT_MOVIE_CAST_LOADER_ID:
                 handleMovieCastOnLoadFinished(data)
                 break
-
             case MOVIE_DETAIL_FRAGMENT_MOVIE_CREW_LOADER_ID:
                 handleMovieCrewOnLoadFinished(data)
                 break
-
             case MOVIE_DETAIL_FRAGMENT_MOVIE_RELEASE_INFO_LOADER_ID:
                 populateMpaaImage(data)
                 break
-
             case MOVIE_DETAIL_FRAGMENT_MOVIE_IMAGE_LOADER_ID:
                 processBackdropImages(data)
                 break
@@ -428,27 +484,105 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
         mSimilarMovieAdapter.swapCursor(null)
         mMovieCastAdapter.swapCursor(null)
         mMovieCrewAdapter.swapCursor(null)
-        mBackdropPagerAdapter.swapCursor(null)
+//        mBackdropPagerAdapter.swapCursor(null)
     }
 
     void handleMovieBasicOnLoadFinished(Cursor data) {
         if(data.moveToFirst()) {
-            mMovieTitleTextView.setText(data.getString(COL_MOVIE_BASIC_TITLE))
+            LogDisplay.callLog(LOG_TAG,"Cursor Data.Movie id -> ${Integer.toString(mMovieId)}",LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
+            mOriginalBackdropPath = data.getString(COL_MOVIE_BASIC_BACKDROP_PATH)
+            mMovieTitle = data.getString(COL_MOVIE_BASIC_TITLE)
+            mMovieTitleTextView.setText(mMovieTitle)
             mGenreTextView.setText(data.getString(COL_MOVIE_BASIC_GENRE))
             mRunTimeTextView.setText(FriendlyDisplay.formatRunTime(getActivity(),data.getInt(COL_MOVIE_BASIC_RUNTIME)))
+
             String posterPath = "http://image.tmdb.org/t/p/w185${data.getString(COL_MOVIE_BASIC_POSTER_PATH)}"
             Picasso.with(getActivity())
                     .load(posterPath)
                     .placeholder(R.drawable.grid_image_placeholder)
                     .error(R.drawable.grid_image_error)
-                    .into(mPosterImageView)
+                    .into(mPosterImageView, new com.squareup.picasso.Callback() {
+                @Override
+                void onSuccess() {
+                    Bitmap bitmapPoster = ((BitmapDrawable)mPosterImageView.getDrawable()).getBitmap()
+                    Palette.from(bitmapPoster).generate(new Palette.PaletteAsyncListener() {
+                        @Override
+                        public void onGenerated(Palette p) {
+                            Palette.Swatch vibrantSwatch = p.getVibrantSwatch()
+                            Palette.Swatch lightVibrantSwatch = p.getLightVibrantSwatch()
+                            Palette.Swatch darkVibrantSwatch = p.getDarkVibrantSwatch()
+                            Palette.Swatch mutedSwatch = p.getMutedSwatch()
+                            Palette.Swatch mutedLightSwatch = p.getLightMutedSwatch()
+                            Palette.Swatch mutedDarkSwatch = p.getDarkMutedSwatch()
+
+                            //Pick primary, primaryDark, title and body text color
+                            if (vibrantSwatch) {
+                                mPalletePrimaryColor = vibrantSwatch.getRgb()
+                                mPalleteTitleColor = vibrantSwatch.getTitleTextColor()
+                                mPalleteBodyTextColor = vibrantSwatch.getBodyTextColor()
+                                //Produce Dark color by changing the value (3rd parameter) of HSL value
+                                float[] primaryHsl = vibrantSwatch.getHsl()
+                                primaryHsl[2] = primaryHsl[2] * 0.9f
+                                mPalletePrimaryDarkColor = Color.HSVToColor(primaryHsl)
+                            } else if(lightVibrantSwatch) { //Try another swatch
+                                mPalletePrimaryColor = lightVibrantSwatch.getRgb()
+                                mPalleteTitleColor = lightVibrantSwatch.getTitleTextColor()
+                                mPalleteBodyTextColor = lightVibrantSwatch.getBodyTextColor()
+                                //Produce Dark color by changing the value (3rd parameter) of HSL value
+                                float[] primaryHsl = lightVibrantSwatch.getHsl()
+                                primaryHsl[2] = primaryHsl[2] * 0.9f
+                                mPalletePrimaryDarkColor = Color.HSVToColor(primaryHsl)
+                            } else if(darkVibrantSwatch) { //Try last swatch
+                                mPalletePrimaryColor = darkVibrantSwatch.getRgb()
+                                mPalleteTitleColor = darkVibrantSwatch.getTitleTextColor()
+                                mPalleteBodyTextColor = darkVibrantSwatch.getBodyTextColor()
+                                //Produce Dark color by changing the value (3rd parameter) of HSL value
+                                float[] primaryHsl = darkVibrantSwatch.getHsl()
+                                primaryHsl[2] = primaryHsl[2] * 0.9f
+                                mPalletePrimaryDarkColor = Color.HSVToColor(primaryHsl)
+                            } else { //Fallback to default
+                                mPalletePrimaryColor = ContextCompat.getColor(getActivity(),R.color.primary)
+                                mPalletePrimaryDarkColor = ContextCompat.getColor(getActivity(),R.color.primary_dark)
+                                mPalleteTitleColor = ContextCompat.getColor(getActivity(),R.color.white_color)
+                                mPalleteBodyTextColor = ContextCompat.getColor(getActivity(),R.color.grey_color)
+                            }
+
+                            //Pick accent color
+                            if(mutedSwatch) {
+                                mPalleteAccentColor = mutedSwatch.getRgb()
+                            } else if(mutedLightSwatch) { //Try another swatch
+                                mPalleteAccentColor = mutedLightSwatch.getRgb()
+                            } else if(mutedDarkSwatch) { //Try last swatch
+                                mPalleteAccentColor = mutedDarkSwatch.getRgb()
+                            } else { //Fallback to default
+                                mPalleteAccentColor = ContextCompat.getColor(getActivity(),R.color.accent)
+                            }
+
+                            changeLayoutAndTextColor()
+                            mMovieTitleAndColorCallback.initializeActivityHostedTitleAndColor(mMovieTitle, mPalletePrimaryColor, mPalletePrimaryDarkColor, mPalleteTitleColor)
+                            //Set the color for adapter fields and call method which in turn calls notifyDatasetChanged
+                            MovieCastAdapter.mPrimaryDarkColor = mPalletePrimaryDarkColor
+                            MovieCastAdapter.mBodyTextColor = mPalleteBodyTextColor
+                            mMovieCastAdapter.changeColor()
+                            MovieCrewAdapter.mPrimaryDarkColor = mPalletePrimaryDarkColor
+                            MovieCrewAdapter.mBodyTextColor = mPalleteBodyTextColor
+                            mMovieCrewAdapter.changeColor()
+                            SimilarMovieAdapter.mPrimaryDarkColor = mPalletePrimaryDarkColor
+                            SimilarMovieAdapter.mBodyTextColor = mPalleteBodyTextColor
+                            mSimilarMovieAdapter.changeColor()
+                        }
+                    })
+                }
+
+                @Override
+                void onError() {
+
+                }
+            })
             mReleaseDateTextView.setText(FriendlyDisplay.formatMiliSecondsToDate(data.getLong(COL_MOVIE_BASIC_RELEASE_DATE)))
-//            mReleaseDateTextView.setText(data.getString(COL_MOVIE_BASIC_RELEASE_DATE))
-//            mBudgetTextView.setText(data.getString(COL_MOVIE_BASIC_BUDGET))
             mBudgetTextView.setText(FriendlyDisplay.formatCurrencyInDollar(data.getInt(COL_MOVIE_BASIC_BUDGET)))
             mRevenueTextView.setText(FriendlyDisplay.formatCurrencyInDollar(data.getInt(COL_MOVIE_BASIC_REVENUE)))
             mPopularityTextView.setText(data.getString(COL_MOVIE_BASIC_POPULARITY))
-//            mRevenueTextView.setText(data.getString(COL_MOVIE_BASIC_REVENUE))
             mTmdbRatingBar.setRating(data.getFloat(COL_MOVIE_BASIC_VOTE_AVG))
             mTotalVoteCountTextView.setText(data.getString(COL_MOVIE_BASIC_VOTE_COUNT))
             mTaglineTextView.setText(data.getString(COL_MOVIE_BASIC_TAGLINE))
@@ -464,12 +598,6 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
                     .into(mCollectionBackdropImageView)
             mHomePageTextView.setText(data.getString(COL_MOVIE_BASIC_HOME_PAGE))
             mImdbLinkTextView.setText(data.getString(COL_MOVIE_BASIC_IMDB_ID))
-
-            mMovieTitle = data.getString(COL_MOVIE_BASIC_TITLE)
-            mOriginalBackdropPath = data.getString(COL_MOVIE_BASIC_BACKDROP_PATH)
-//            mCallback.initializeActivityHostedFields(mMovieTitle,backdropPath)
-//            mMovieId = data.getInt(COL_MOVIE_BASIC_MOVIE_ID)
-            LogDisplay.callLog(LOG_TAG,"Cursor Data.Movie id -> ${Integer.toString(mMovieId)}",LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
 
             int detailDataPresentFlag = data.getInt(COL_MOVIE_BASIC_DETAIL_DATA_PRESENT_FLAG)
             //If the flag is zero then data not present, so go and fetch it
@@ -546,21 +674,21 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
 
     void processBackdropImages(Cursor data) {
         LogDisplay.callLog(LOG_TAG,"processBackdropImages.Cursor rec count -> ${data.getCount()}",LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
-//        if (data.moveToFirst()) {
-//            List<String> backdropList = new ArrayList<String>()
-//            //Add the main backdrop first
-//            if(mOriginalBackdropPath) {
-//                backdropList.add(mOriginalBackdropPath)
-//            }
-//            for(i in 0..(data.count-1)) {
-//                backdropList.add(data.getString(COL_MOVIE_IMAGE_FILE_PATH))
-//                data.moveToNext()
-//            }
-//            mCallback.initializeActivityHostedFields(mMovieTitle, backdropList)
-//            LogDisplay.callLog(LOG_TAG,"backdropImageArray-> $backdropList",LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
-//        }
-        mBackdropPagerAdapter.swapCursor(data)
-        mCallback.initializeActivityHostedFields(mMovieTitle, mBackdropPagerAdapter)
+        if (data.moveToFirst()) {
+            List<String> backdropList = new ArrayList<String>()
+            //Add the main backdrop first
+            if(mOriginalBackdropPath) {
+                backdropList.add(mOriginalBackdropPath)
+            }
+            for(i in 0..(data.count-1)) {
+                backdropList.add(data.getString(COL_MOVIE_IMAGE_FILE_PATH))
+                data.moveToNext()
+            }
+            LogDisplay.callLog(LOG_TAG,"backdropImageArray-> $backdropList",LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
+            mBackdropCallback.initializeActivityHostedBackdrop(backdropList)
+        }
+//        mBackdropPagerAdapter.swapCursor(data)
+//        mCallback.initializeActivityHostedFields(mMovieTitle, mBackdropPagerAdapter)
 
     }
 
@@ -586,27 +714,105 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
 
     @Override
     public void onAttach(Activity activity) {
-        super.onAttach(activity);
+        super.onAttach(activity)
         // This makes sure that the container activity has implemented
         // the callback interface. If not, it throws an exception
         try {
-            mCallback = (Callback) activity;
+            mBackdropCallback = (BackdropCallback) activity
+            mMovieTitleAndColorCallback = (MovieTitleAndColorCallback) activity
         } catch (ClassCastException e) {
             throw new ClassCastException(activity.toString()
                     + " must implement Callback interface")
         }
     }
 
+    void changeLayoutAndTextColor() {
+        //Change color for all the layouts
+        mDetailTitleLayout.setBackgroundColor(mPalletePrimaryColor)
+        mDetailPosterLayout.setBackgroundColor(mPalletePrimaryColor)
+        mDetailTmdbRatingLayout.setBackgroundColor(mPalletePrimaryColor)
+        mDetailUserRatingLayout.setBackgroundColor(mPalletePrimaryColor)
+        mDetailSynopsisLayout.setBackgroundColor(mPalletePrimaryColor)
+        mDetailTrailerLayout.setBackgroundColor(mPalletePrimaryColor)
+        mDetailProductionInfoLayout.setBackgroundColor(mPalletePrimaryColor)
+        mDetailCastHeaderLayout.setBackgroundColor(mPalletePrimaryColor)
+        mDetailsCastGridLayout.setBackgroundColor(mPalletePrimaryColor)
+        mDetailCrewHeaderLayout.setBackgroundColor(mPalletePrimaryColor)
+        mDetailCrewGridLayout.setBackgroundColor(mPalletePrimaryColor)
+        mDetailSimilarMovieHeaderLayout.setBackgroundColor(mPalletePrimaryColor)
+        mDetailSimilarMovieGridLayout.setBackgroundColor(mPalletePrimaryColor)
+        mDetailCollectionLayout.setBackgroundColor(mPalletePrimaryColor)
+        mDetailWebLinkLayout.setBackgroundColor(mPalletePrimaryColor)
+        mDetailReviewHeaderLayout.setBackgroundColor(mPalletePrimaryColor)
+        mDetailReviewListViewLayout.setBackgroundColor(mPalletePrimaryColor)
+
+        //Change color for header text fields
+        mReleaseDateHeaderTextView.setTextColor(mPalleteTitleColor)
+        mBudgetHeaderTextView.setTextColor(mPalleteTitleColor)
+        mRevenueHeaderTextView.setTextColor(mPalleteTitleColor)
+        mPopularityHeaderTextView.setTextColor(mPalleteTitleColor)
+        mTmdbRatingHeaderTextView.setTextColor(mPalleteTitleColor)
+        mTmdbTotalVoteCountHeaderTextView.setTextColor(mPalleteTitleColor)
+        mTmdbTotalVoteCountTrailerTextView.setTextColor(mPalleteTitleColor)
+        mUserRatingHeaderTextView.setTextColor(mPalleteTitleColor)
+        mTaglineHeaderTextView.setTextColor(mPalleteTitleColor)
+        mSynopsisHeaderTextView.setTextColor(mPalleteTitleColor)
+        mMovieTrailerHeaderTextView.setTextColor(mPalleteTitleColor)
+        mProdCompanyHeaderTextView.setTextColor(mPalleteTitleColor)
+        mProdCountryHeaderTextView.setTextColor(mPalleteTitleColor)
+        mCastHeaderTextView.setTextColor(mPalleteTitleColor)
+        mCrewHeaderTextView.setTextColor(mPalleteTitleColor)
+        mSimilarMovieHeaderTextView.setTextColor(mPalleteTitleColor)
+        mCollectionNameHeaderTextView.setTextColor(mPalleteTitleColor)
+        mReviewHeaderTextView.setTextColor(mPalleteTitleColor)
+
+        //Change color for data fields
+        mMovieTitleTextView.setTextColor(mPalleteTitleColor) //Movie name is Title color
+        mGenreTextView.setTextColor(mPalleteBodyTextColor)
+        mRunTimeTextView.setTextColor(mPalleteBodyTextColor)
+        mReleaseDateTextView.setTextColor(mPalleteBodyTextColor)
+        mBudgetTextView.setTextColor(mPalleteBodyTextColor)
+        mRevenueTextView.setTextColor(mPalleteBodyTextColor)
+        mPopularityTextView.setTextColor(mPalleteBodyTextColor)
+        //Since total vote count is part of rating line, hence use same color
+        mTotalVoteCountTextView.setTextColor(mPalleteTitleColor)
+        mTaglineTextView.setTextColor(mPalleteBodyTextColor)
+        mSynopsisTextView.setTextColor(mPalleteBodyTextColor)
+        mProdCompanyTextView.setTextColor(mPalleteBodyTextColor)
+        mProdCountryTextView.setTextColor(mPalleteBodyTextColor)
+        mCollectionNameTextView.setTextColor(mPalleteBodyTextColor)
+        mHomePageTextView.setTextColor(mPalleteBodyTextColor)
+        mImdbLinkTextView.setTextColor(mPalleteBodyTextColor)
+
+        //Set ratingbar color
+        Drawable tmdbRatingdrawable = mTmdbRatingBar.getProgressDrawable()
+        DrawableCompat.setTint(tmdbRatingdrawable, mPalleteAccentColor)
+        Drawable userRatingDrawable = mUserRatingBar.getProgressDrawable()
+        DrawableCompat.setTint(userRatingDrawable, mPalleteAccentColor)
+
+    }
+
     /**
      * A callback interface that all activities containing this fragment must
-     * implement. This mechanism allows activities to be notified of item
-     * selection.
+     * implement. This mechanism allows activities to be notified when movie title and color value
+     * are determined and ready for activity to update
      */
-    public interface Callback {
+    public interface MovieTitleAndColorCallback {
         /**
-         * DetailFragmentCallback for when an item has been selected.
+         * DetailFragmentCallback for updating the Movie Title and Theme Color in Activity
          */
-//        public void initializeActivityHostedFields(String movieTitle, List<String> backdropImagePathList)
-        public void initializeActivityHostedFields(String movieTitle, BackdropPagerAdapter mBackdropPagerAdapter)
+        public void initializeActivityHostedTitleAndColor(String movieTitle, int primaryColor, int primaryDarkColor, int titleColor)
+    }
+
+    /**
+     * A callback interface that all activities containing this fragment must
+     * implement. This mechanism allows activities to be notified when Backdrop image loader
+     * is finished and processed
+     */
+    public interface BackdropCallback {
+        /**
+         * DetailFragmentCallback for updating the Backdrop images in Activity
+         */
+        public void initializeActivityHostedBackdrop(List<String> backdropImagePathList)
     }
 }

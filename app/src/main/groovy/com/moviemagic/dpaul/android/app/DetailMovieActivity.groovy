@@ -1,11 +1,6 @@
 package com.moviemagic.dpaul.android.app
 
-import android.content.res.Resources
-import android.graphics.Bitmap
-import android.graphics.BitmapFactory
-import android.graphics.drawable.Drawable
 import android.os.Bundle
-import android.os.Handler
 import android.support.design.widget.AppBarLayout
 import android.support.design.widget.CollapsingToolbarLayout
 import android.support.v4.view.ViewPager
@@ -14,40 +9,35 @@ import android.support.v7.widget.Toolbar
 import android.view.Menu
 import android.view.MenuItem
 import android.view.animation.Animation
-import android.view.animation.AnimationUtils
 import android.view.animation.TranslateAnimation
 import android.widget.ImageView
-import com.moviemagic.dpaul.android.app.adapter.BackdropPagerAdapter
-import com.moviemagic.dpaul.android.app.utility.BackdropBitmapTransform
-import com.moviemagic.dpaul.android.app.utility.BitmapTransform
 import com.moviemagic.dpaul.android.app.utility.LogDisplay
-import com.moviemagic.dpaul.android.app.youtube.MovieMagicYoutubeFragment
 import com.squareup.picasso.Callback
 import com.squareup.picasso.MemoryPolicy
 import com.squareup.picasso.NetworkPolicy
 import com.squareup.picasso.Picasso
-import com.squareup.picasso.Target
 import groovy.transform.CompileStatic
 
-import java.util.logging.Handler
-import java.util.logging.LogRecord
-
 @CompileStatic
-class DetailMovieActivity extends AppCompatActivity implements DetailMovieFragment.Callback {
+class DetailMovieActivity extends AppCompatActivity implements DetailMovieFragment.BackdropCallback, DetailMovieFragment.MovieTitleAndColorCallback {
     private static final String LOG_TAG = DetailMovieActivity.class.getSimpleName()
 
     CollapsingToolbarLayout mCollapsingToolbar
+    Toolbar mToolbar
     AppBarLayout mAppBarLayout
     ImageView mBackdrop
     ViewPager mViewPager
     final static int MAX_WIDTH = 1024
     final static int MAX_HEIGHT = 768
+    final android.os.Handler mHandler = new android.os.Handler()
+
+    public static int mPrimaryDarkColor
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_movie_detail)
-        Toolbar toolbar = (Toolbar) findViewById(R.id.movie_detail_toolbar)
-        setSupportActionBar(toolbar)
+        mToolbar = (Toolbar) findViewById(R.id.movie_detail_toolbar)
+        setSupportActionBar(mToolbar)
         //Enable back to home button
         getSupportActionBar().setDisplayHomeAsUpEnabled(true)
 
@@ -68,8 +58,8 @@ class DetailMovieActivity extends AppCompatActivity implements DetailMovieFragme
             getSupportFragmentManager().beginTransaction().add(R.id.movie_detail_container,movieDetailFragment).commit()
         }
 
-//        mBackdrop = findViewById(R.id.movie_detail_backdrop_image) as ImageView
-        mViewPager = findViewById(R.id.movie_detail_backdrop_view_pager) as ViewPager
+        mBackdrop = findViewById(R.id.movie_detail_backdrop_image) as ImageView
+//        mViewPager = findViewById(R.id.movie_detail_backdrop_view_pager) as ViewPager
 
 //        BitmapFactory.Options options = new BitmapFactory.Options()
 //        options.inJustDecodeBounds = true;
@@ -101,15 +91,16 @@ class DetailMovieActivity extends AppCompatActivity implements DetailMovieFragme
         return super.onOptionsItemSelected(item);
     }
 
-    //Override the callback method of DetailMovieFragment
+    //Override the callback methods of DetailMovieFragment
     @Override
-//    public void initializeActivityHostedFields(String movieTitle, List<String> backdropImagePathList) {
-    public void initializeActivityHostedFields(String movieTitle, BackdropPagerAdapter backdropPagerAdapter) {
+    public void initializeActivityHostedTitleAndColor(String movieTitle, int primaryColor, int primaryDarkColor, int titleColor) {
 //        mCollapsingToolbar.setTitle(movieTitle)
-//        final Animation animation = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.backdrop_slide_anim)
-//        Animation animation = new TranslateAnimation(1000, 0,0, 0)
-//        animation.setDuration(900)
-//        animation.setFillAfter(true)
+        mCollapsingToolbar.setStatusBarScrimColor(primaryDarkColor)
+        mCollapsingToolbar.setContentScrimColor(primaryColor)
+        mCollapsingToolbar.setBackgroundColor(primaryColor)
+        mCollapsingToolbar.setCollapsedTitleTextColor(titleColor)
+
+        //Show the title only when image is collapsed
         mAppBarLayout.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
             boolean isShow = false
             int scrollRange = -1
@@ -127,23 +118,39 @@ class DetailMovieActivity extends AppCompatActivity implements DetailMovieFragme
                 }
             }
         })
-        mViewPager.setAdapter(backdropPagerAdapter)
-//        int counter = 0
+    }
+
+    @Override
+    public void initializeActivityHostedBackdrop(List<String> backdropImagePathList) {
+//    public void initializeActivityHostedFields(String movieTitle, BackdropPagerAdapter backdropPagerAdapter) {
+//        mCollapsingToolbar.setTitle(movieTitle)
+//        mCollapsingToolbar.setBackgroundColor(prominentColor)
+//        mAppBarLayout.setBackgroundColor(prominentColor)
+//        mToolbar.setBackgroundColor(prominentColor)
+//        final Animation animation = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.backdrop_slide_anim)
+        Animation animation = new TranslateAnimation(1000, 0,0, 0)
+        animation.setDuration(200)
+        animation.setFillAfter(true)
+//        mViewPager.setAdapter(backdropPagerAdapter)
+        int counter = 0
 //        final android.os.Handler handler = new android.os.Handler()
-//        Runnable runnable = new Runnable() {
-//            @Override
-//            void run() {
-////                mBackdrop.clearAnimation()
-//                String backdropPath = "http://image.tmdb.org/t/p/w500${backdropImagePathList[counter]}"
-//                loadBackdropImage(backdropPath, animation)
-//                counter++
-//                if (counter >= backdropImagePathList.size()) {
-//                    counter = 0
-//                }
-//                handler.postDelayed(this, 5000) //Interval time is 5 seconds
-//            }
-//        }
-//        handler.postDelayed(runnable, 3000) //Initial delay is 3 seconds
+        final Runnable runnable = new Runnable() {
+            @Override
+            void run() {
+//                mBackdrop.clearAnimation()
+                String backdropPath = "http://image.tmdb.org/t/p/w500${backdropImagePathList[counter]}"
+                loadBackdropImage(backdropPath, animation)
+                counter++
+                if (counter >= backdropImagePathList.size()) {
+                    //Do not cycle through if the backdrop image count is 1
+                    if (backdropImagePathList.size() > 1) {
+                        counter = 0
+                    }
+                }
+                mHandler.postDelayed(this, 8000) //Interval time is 8 seconds
+            }
+        }
+        mHandler.postDelayed(runnable, 1000) //Initial delay is 1 seconds
 
 //        String backdropImagePath = "http://image.tmdb.org/t/p/w500${backdropImagePathList[counter]}"
 //        Picasso.with(this)
@@ -191,7 +198,7 @@ class DetailMovieActivity extends AppCompatActivity implements DetailMovieFragme
     }
 
     void loadBackdropImage(String backdropPath, Animation animation) {
-        LogDisplay.callLog(LOG_TAG,"backfropPath -> $backdropPath",LogDisplay.DETAIL_MOVIE_ACTIVITY_LOG_FLAG)
+//        LogDisplay.callLog(LOG_TAG,"backfropPath -> $backdropPath",LogDisplay.DETAIL_MOVIE_ACTIVITY_LOG_FLAG)
 //        Target target = new Target() {
 //            @Override
 //            void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
@@ -213,17 +220,17 @@ class DetailMovieActivity extends AppCompatActivity implements DetailMovieFragme
 //            }
 //        }
 
-        int size = (int) Math.ceil(Math.sqrt(MAX_WIDTH * MAX_HEIGHT))
+//        int size = (int) Math.ceil(Math.sqrt(MAX_WIDTH * MAX_HEIGHT))
         Picasso.with(this)
                 .load(backdropPath)
                 .noPlaceholder()
 //                .transform(new BitmapTransform(MAX_WIDTH, MAX_HEIGHT))
                 .centerInside()
 //                .noFade()
-//                .fit()
+                .fit()
                 .memoryPolicy(MemoryPolicy.NO_STORE, MemoryPolicy.NO_CACHE)
                 .networkPolicy(NetworkPolicy.NO_CACHE, NetworkPolicy.NO_STORE)
-                .resize(size,size)
+//                .resize(size,size)
 //                .placeholder(R.drawable.grid_image_placeholder)
 //                .error(R.drawable.grid_image_error)
 //                .into(target)
@@ -238,5 +245,12 @@ class DetailMovieActivity extends AppCompatActivity implements DetailMovieFragme
 
             }
         })
+    }
+
+    @Override
+    protected void onStop() {
+        LogDisplay.callLog(LOG_TAG,'onStop is called',LogDisplay.DETAIL_MOVIE_ACTIVITY_LOG_FLAG)
+        super.onStop()
+        mHandler.removeCallbacksAndMessages(null)
     }
 }

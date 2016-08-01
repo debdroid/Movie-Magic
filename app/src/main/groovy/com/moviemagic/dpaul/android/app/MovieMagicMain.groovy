@@ -235,6 +235,7 @@ public class MovieMagicMain extends AppCompatActivity
     public void onItemSelected(Uri movieIdUri) {
         Intent mIntent = new Intent(this, DetailMovieActivity.class)
                 .setData(movieIdUri)
+//                .setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY)
         startActivity(mIntent)
     }
 }

@@ -40,6 +40,7 @@ dependencies {
     compile 'com.android.support:design:23.4.0'
     compile 'com.android.support:cardview-v7:23.4.0'
     compile 'com.android.support:leanback-v17:23.4.0'
+    compile 'com.android.support:palette-v7:23.4.0'
     //add compile dependency for groovy
     //compile 'org.codehaus.groovy.modules.http-builder:http-builder:0.7.2'
     compile 'org.codehaus.groovy:groovy:2.4.6:grooid'

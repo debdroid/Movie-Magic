@@ -131,6 +131,7 @@ class MovieMagicDbHelper extends SQLiteOpenHelper {
                 $MovieMagicContract.MovieBasicInfo.TABLE_NAME ($MovieMagicContract.MovieBasicInfo._ID)
                 ON DELETE CASCADE,
                 UNIQUE ($MovieMagicContract.MovieImage.COLUMN_IMAGE_ORIG_MOVIE_ID,
+                $MovieMagicContract.MovieImage.COLUMN_IMAGE_TYPE,
                 $MovieMagicContract.MovieImage.COLUMN_IMAGE_FILE_PATH,
                 $MovieMagicContract.MovieImage.COLUMN_FOREIGN_KEY_ID) ON CONFLICT REPLACE)
                 """
@@ -311,5 +312,12 @@ class MovieMagicDbHelper extends SQLiteOpenHelper {
 
         //Call onCreate to re-create the tables
         onCreate(sqLiteDatabase)
+    }
+
+    @Override
+    void onOpen(SQLiteDatabase db) {
+        super.onOpen(db)
+        //Sqlite disable foreign key constrain by default, so need to enable it
+        db.execSQL("PRAGMA foreign_keys=ON")
     }
 }

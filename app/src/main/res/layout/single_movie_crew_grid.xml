@@ -40,7 +40,7 @@
                 android:text="@string/crew_name"
                 android:paddingBottom="@dimen/grid_overlapping_text_padding"
                 android:background="@color/primary_dark"
-                android:alpha="0.7"
+                android:alpha="@string/movie_detail_crew_name_background_alpha"
                 android:textAppearance="@style/TextAppearance.AppCompat.Body1"
                 android:textColor="@color/white_color"
                 android:textStyle="italic" />
