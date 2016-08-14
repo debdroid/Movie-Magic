@@ -21,7 +21,7 @@ class MovieMagicAuthenticator extends AbstractAccountAuthenticator {
     private static final String LOG_TAG = MovieMagicAuthenticator.class.getSimpleName()
 
     public MovieMagicAuthenticator(Context context) {
-        super(context);
+        super(context)
     }
 
     // No properties to edit.

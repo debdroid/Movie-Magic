@@ -10,8 +10,9 @@ import android.widget.ImageView
 import android.widget.TextView
 import com.moviemagic.dpaul.android.app.DetailMovieFragment
 import com.moviemagic.dpaul.android.app.R
+import com.moviemagic.dpaul.android.app.utility.GlobalStaticVariables
 import com.moviemagic.dpaul.android.app.utility.LogDisplay
-import com.squareup.picasso.Picasso
+import com.moviemagic.dpaul.android.app.utility.PicassoLoadImage
 import groovy.transform.CompileStatic
 
 @CompileStatic
@@ -19,7 +20,7 @@ class MovieCrewAdapter extends RecyclerView.Adapter<MovieCrewAdapter.MovieCrewAd
     private static final String LOG_TAG = MovieCrewAdapter.class.getSimpleName()
 
     private Cursor mCursor
-    private Context mContext
+    private final Context mContext
     public static int mPrimaryDarkColor, mBodyTextColor
 
 
@@ -65,25 +66,20 @@ class MovieCrewAdapter extends RecyclerView.Adapter<MovieCrewAdapter.MovieCrewAd
         // move the cursor to correct position
         mCursor.moveToPosition(position)
         LogDisplay.callLog(LOG_TAG,'onBindViewHolder is called',LogDisplay.MOVIE_CREW_ADAPTER_FLAG)
-        String profilePath = "http://image.tmdb.org/t/p/w185${mCursor.getString(DetailMovieFragment.COL_MOVIE_CREW_PROFILE_PATH)}"
-        Picasso.with(mContext)
-                .load(profilePath)
-                .fit()
-                .placeholder(R.drawable.grid_image_placeholder)
-                .error(R.drawable.na_person_icon)
-                .into(holder.movieCrewImageView)
+        final String profilePath = "$GlobalStaticVariables.TMDB_IMAGE_BASE_URL/$GlobalStaticVariables.TMDB_IMAGE_SIZE_W185" +
+                "${mCursor.getString(DetailMovieFragment.COL_MOVIE_CREW_PROFILE_PATH)}"
+        PicassoLoadImage.loadMoviePersonImageUsingPicasso(mContext,profilePath,holder.movieCrewImageView)
         holder.movieCrewJobName.setText(mCursor.getString(DetailMovieFragment.COL_MOVIE_CREW_CREW_JOB))
         holder.movieCrewName.setText(mCursor.getString(DetailMovieFragment.COL_MOVIE_CREW_PERSON_NAME))
         holder.movieCrewJobName.setBackgroundColor(mPrimaryDarkColor)
         holder.movieCrewJobName.setTextColor(mBodyTextColor)
         holder.movieCrewName.setBackgroundColor(mPrimaryDarkColor)
         holder.movieCrewName.setTextColor(mBodyTextColor)
-
     }
 
     @Override
     int getItemCount() {
-        LogDisplay.callLog(LOG_TAG,'Cursor item count is called',LogDisplay.MOVIE_CREW_ADAPTER_FLAG)
+//        LogDisplay.callLog(LOG_TAG,'Cursor item count is called',LogDisplay.MOVIE_CREW_ADAPTER_FLAG)
         if ( null == mCursor ) return 0
         return mCursor.getCount()
     }

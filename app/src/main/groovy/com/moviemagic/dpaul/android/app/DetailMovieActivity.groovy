@@ -10,6 +10,7 @@ import android.view.MenuItem
 import android.view.animation.Animation
 import android.view.animation.TranslateAnimation
 import android.widget.ImageView
+import com.moviemagic.dpaul.android.app.utility.GlobalStaticVariables
 import com.moviemagic.dpaul.android.app.utility.LogDisplay
 import com.squareup.picasso.Callback
 import com.squareup.picasso.MemoryPolicy
@@ -25,7 +26,7 @@ class DetailMovieActivity extends AppCompatActivity implements DetailMovieFragme
     Toolbar mToolbar
     AppBarLayout mAppBarLayout
     ImageView mBackdrop
-    final android.os.Handler mHandler = new android.os.Handler()
+    private final android.os.Handler mHandler = new android.os.Handler()
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,7 +46,7 @@ class DetailMovieActivity extends AppCompatActivity implements DetailMovieFragme
             //Create a Bundle to pass the data to Fragment
             Bundle args = new Bundle()
             //Get the data from the intent and put that to Bundle
-            args.putParcelable(DetailMovieFragment.MOVIE_BASIC_INFO_MOVIE_ID_URI, getIntent().getData())
+            args.putParcelable(GlobalStaticVariables.MOVIE_BASIC_INFO_MOVIE_ID_URI, getIntent().getData())
             LogDisplay.callLog(LOG_TAG,"Intent data -> ${getIntent().getData()}",LogDisplay.DETAIL_MOVIE_ACTIVITY_LOG_FLAG)
             //Create a movie detail fragment
             DetailMovieFragment movieDetailFragment = new DetailMovieFragment()
@@ -58,9 +59,9 @@ class DetailMovieActivity extends AppCompatActivity implements DetailMovieFragme
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.main, menu);
-        return true;
+        // Inflate the menu, this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.main, menu)
+        return true
     }
 
     @Override
@@ -68,14 +69,14 @@ class DetailMovieActivity extends AppCompatActivity implements DetailMovieFragme
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
+        int id = item.getItemId()
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
-            return true;
+            return true
         }
 
-        return super.onOptionsItemSelected(item);
+        return super.onOptionsItemSelected(item)
     }
 
     //Override the callback methods of DetailMovieFragment
@@ -109,14 +110,15 @@ class DetailMovieActivity extends AppCompatActivity implements DetailMovieFragme
 
     @Override
     public void initializeActivityHostedBackdrop(List<String> backdropImagePathList) {
-        Animation animation = new TranslateAnimation(1000, 0,0, 0)
+        final Animation animation = new TranslateAnimation(1000, 0,0, 0)
         animation.setDuration(200)
         animation.setFillAfter(true)
         int counter = 0
         final Runnable runnable = new Runnable() {
             @Override
             void run() {
-                String backdropPath = "http://image.tmdb.org/t/p/w500${backdropImagePathList[counter]}"
+                final String backdropPath = "$GlobalStaticVariables.TMDB_IMAGE_BASE_URL/$GlobalStaticVariables.TMDB_IMAGE_SIZE_W500" +
+                        "${backdropImagePathList[counter]}"
                 loadBackdropImage(backdropPath, animation)
                 counter++
                 if (counter >= backdropImagePathList.size()) {
@@ -147,7 +149,7 @@ class DetailMovieActivity extends AppCompatActivity implements DetailMovieFragme
 
             @Override
             void onError() {
-
+                //TODO: need to identify if anything is needed
             }
         })
     }

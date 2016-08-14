@@ -21,6 +21,7 @@ import android.widget.TextView
 import com.google.android.youtube.player.YouTubeApiServiceUtil
 import com.google.android.youtube.player.YouTubeInitializationResult
 import com.moviemagic.dpaul.android.app.syncadapter.MovieMagicSyncAdapterUtility
+import com.moviemagic.dpaul.android.app.utility.GlobalStaticVariables
 import com.moviemagic.dpaul.android.app.utility.LogDisplay
 import groovy.transform.CompileStatic
 
@@ -29,12 +30,7 @@ public class MovieMagicMain extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, GridFragment.Callback {
     private static final String LOG_TAG = MovieMagicMain.class.getSimpleName()
     private static final String STATE_APP_TITLE = 'app_title'
-   // private static final String LOG_TAG = 'DEB'
     NavigationView navigationView
-    private final static String MOVIE_CATEGORY_POPULAR = 'popular'
-    private final static String MOVIE_CATEGORY_TOPRATED = 'top_rated'
-    private final static String MOVIE_CATEGORY_NOWPLAYING = 'now_playing'
-    private final static String MOVIE_CATEGORY_UPCOMING = 'upcoming'
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,10 +41,10 @@ public class MovieMagicMain extends AppCompatActivity
         //*** Comment before release **********************
         //MovieMagicSyncAdapterUtility.syncImmediately(this)
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.main_activity_toolbar)
+        final Toolbar toolbar = (Toolbar) findViewById(R.id.main_activity_toolbar)
         setSupportActionBar(toolbar)
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        final FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab)
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -57,14 +53,14 @@ public class MovieMagicMain extends AppCompatActivity
             }
         })
 
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        drawer.setDrawerListener(toggle);
-        toggle.syncState();
+        final DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout)
+        final ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
+                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close)
+        drawer.setDrawerListener(toggle)
+        toggle.syncState()
 
-        navigationView = (NavigationView) findViewById(R.id.nav_view);
-        navigationView.setNavigationItemSelectedListener(this);
+        navigationView = (NavigationView) findViewById(R.id.nav_view)
+        navigationView.setNavigationItemSelectedListener(this)
         setMenuCounter(R.id.nav_home,4)
 
         //Check to ensure Youtube exists on the device
@@ -77,11 +73,11 @@ public class MovieMagicMain extends AppCompatActivity
 
     @Override
     public void onBackPressed() {
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        final DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout)
         if (drawer.isDrawerOpen(GravityCompat.START)) {
-            drawer.closeDrawer(GravityCompat.START);
+            drawer.closeDrawer(GravityCompat.START)
         } else {
-            super.onBackPressed();
+            super.onBackPressed()
         }
     }
 
@@ -139,9 +135,9 @@ public class MovieMagicMain extends AppCompatActivity
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.main, menu);
-        return true;
+        // Inflate the menu, this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.main, menu)
+        return true
     }
 
     @Override
@@ -149,21 +145,21 @@ public class MovieMagicMain extends AppCompatActivity
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
+        final int id = item.getItemId()
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
-            return true;
+            return true
         }
 
-        return super.onOptionsItemSelected(item);
+        return super.onOptionsItemSelected(item)
     }
 
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
-        int id = item.getItemId();
+        final int id = item.getItemId()
 
         if (id == R.id.nav_home) {
             showSnackBar(getString(R.string.drawer_menu_home))
@@ -171,19 +167,19 @@ public class MovieMagicMain extends AppCompatActivity
         } else if (id == R.id.nav_tmdb_popular) {
             showSnackBar(getString(R.string.drawer_menu_tmdb_popular))
             setItemTitle(getString(R.string.drawer_menu_tmdb_popular))
-            startFragment(MOVIE_CATEGORY_POPULAR)
+            startFragment(GlobalStaticVariables.MOVIE_CATEGORY_POPULAR)
         } else if (id == R.id.nav_tmdb_toprated) {
             showSnackBar(getString(R.string.drawer_menu_tmdb_toprated))
             setItemTitle(getString(R.string.drawer_menu_tmdb_toprated))
-            startFragment(MOVIE_CATEGORY_TOPRATED)
+            startFragment(GlobalStaticVariables.MOVIE_CATEGORY_TOP_RATED)
         } else if (id == R.id.nav_tmdb_nowplaying) {
             showSnackBar(getString(R.string.drawer_menu_tmdb_nowplaying))
             setItemTitle(getString(R.string.drawer_menu_tmdb_nowplaying))
-            startFragment(MOVIE_CATEGORY_NOWPLAYING)
+            startFragment(GlobalStaticVariables.MOVIE_CATEGORY_NOW_PLAYING)
         } else if (id == R.id.nav_tmdb_upcoming) {
             showSnackBar(getString(R.string.drawer_menu_tmdb_upcoming))
             setItemTitle(getString(R.string.drawer_menu_tmdb_upcoming))
-            startFragment(MOVIE_CATEGORY_UPCOMING)
+            startFragment(GlobalStaticVariables.MOVIE_CATEGORY_UPCOMING)
         } else if (id == R.id.nav_user_favourite) {
             showSnackBar(getString(R.string.drawer_menu_user_favourite))
             setItemTitle(getString(R.string.drawer_menu_user_favourite))
@@ -198,21 +194,21 @@ public class MovieMagicMain extends AppCompatActivity
             setItemTitle(getString(R.string.drawer_menu_user_collection))
         }
 
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        drawer.closeDrawer(GravityCompat.START);
-        return true;
+        final DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout)
+        drawer.closeDrawer(GravityCompat.START)
+        return true
     }
 
     private void startFragment (String category) {
-        GridFragment fragment = new GridFragment(category)
-        FragmentManager fragmentManager = getSupportFragmentManager()
-        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction()
+        final GridFragment fragment = new GridFragment(category)
+        final FragmentManager fragmentManager = getSupportFragmentManager()
+        final FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction()
         fragmentTransaction.replace(R.id.main_content_layout, fragment)
         fragmentTransaction.commit()
     }
 
     private void setMenuCounter(@IdRes int itemId, int count) {
-        TextView view = (TextView) navigationView.getMenu().findItem(itemId).getActionView()
+        final TextView view = (TextView) navigationView.getMenu().findItem(itemId).getActionView()
         view.setText(count > 0 ? String.valueOf(count) : null)
     }
 
@@ -229,9 +225,8 @@ public class MovieMagicMain extends AppCompatActivity
     //Override the callback method of GridFragment
     @Override
     public void onItemSelected(Uri movieIdUri) {
-        Intent mIntent = new Intent(this, DetailMovieActivity.class)
+        final Intent mIntent = new Intent(this, DetailMovieActivity.class)
                 .setData(movieIdUri)
-//                .setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY)
         startActivity(mIntent)
     }
 }

@@ -10,16 +10,17 @@ import android.widget.ImageView
 import android.widget.TextView
 import com.moviemagic.dpaul.android.app.GridFragment
 import com.moviemagic.dpaul.android.app.R
+import com.moviemagic.dpaul.android.app.utility.GlobalStaticVariables
 import com.moviemagic.dpaul.android.app.utility.LogDisplay
-import com.squareup.picasso.Picasso
+import com.moviemagic.dpaul.android.app.utility.PicassoLoadImage
 import groovy.transform.CompileStatic
 
 @CompileStatic
 class GridAdapter  extends CursorAdapter {
     private static final String LOG_TAG = GridAdapter.class.getSimpleName()
 
-    private Context mContext
-    private Cursor mCursor
+    private final Context mContext
+    private final Cursor mCursor
 
     public GridAdapter(Context ctx, Cursor cursor, int flags) {
         super(ctx, cursor, 0)
@@ -41,15 +42,11 @@ class GridAdapter  extends CursorAdapter {
     @Override
     public void bindView(View view, Context context, Cursor cursor) {
         LogDisplay.callLog(LOG_TAG,'bindView is called',LogDisplay.GRID_ADAPTER_LOG_FLAG)
-        ImageView movieImageView = view.findViewById(R.id.grid_image_view) as ImageView
-        TextView movieNameView = view.findViewById(R.id.grid_text_view) as TextView
-        String posterPath = "http://image.tmdb.org/t/p/w185${cursor.getString(GridFragment.COL_MOVIE_POSTER)}"
-        Picasso.with(mContext)
-                .load(posterPath)
-                .fit()
-                .placeholder(R.drawable.grid_image_placeholder)
-                .error(R.drawable.grid_image_error)
-                .into(movieImageView)
+        final ImageView movieImageView = view.findViewById(R.id.grid_image_view) as ImageView
+        final TextView movieNameView = view.findViewById(R.id.grid_text_view) as TextView
+        final String posterPath = "$GlobalStaticVariables.TMDB_IMAGE_BASE_URL/$GlobalStaticVariables.TMDB_IMAGE_SIZE_W185" +
+                "${cursor.getString(GridFragment.COL_MOVIE_POSTER)}"
+        PicassoLoadImage.loadMoviePosterUsingPicasso(mContext,posterPath,movieImageView)
         movieNameView.setText(cursor.getString(GridFragment.COL_MOVIE_TITLE))
     }
 }

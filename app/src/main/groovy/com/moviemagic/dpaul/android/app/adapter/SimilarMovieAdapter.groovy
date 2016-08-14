@@ -14,8 +14,9 @@ import com.moviemagic.dpaul.android.app.DetailMovieActivity
 import com.moviemagic.dpaul.android.app.DetailMovieFragment
 import com.moviemagic.dpaul.android.app.R
 import com.moviemagic.dpaul.android.app.contentprovider.MovieMagicContract
+import com.moviemagic.dpaul.android.app.utility.GlobalStaticVariables
 import com.moviemagic.dpaul.android.app.utility.LogDisplay
-import com.squareup.picasso.Picasso
+import com.moviemagic.dpaul.android.app.utility.PicassoLoadImage
 import groovy.transform.CompileStatic
 
 @CompileStatic
@@ -23,7 +24,7 @@ class SimilarMovieAdapter extends RecyclerView.Adapter<SimilarMovieAdapter.Simil
     private static final String LOG_TAG = SimilarMovieAdapter.class.getSimpleName()
 
     private Cursor mCursor
-    private Context mContext
+    private final Context mContext
     public static int mPrimaryDarkColor, mBodyTextColor
 
     //Empty constructor
@@ -51,25 +52,16 @@ class SimilarMovieAdapter extends RecyclerView.Adapter<SimilarMovieAdapter.Simil
         public void onClick(View v) {
             LogDisplay.callLog(LOG_TAG,"onClick is called.LayoutPos=${getLayoutPosition()}.AdapterPos=${getAdapterPosition()}",LogDisplay.SIMILAR_MOVIE_ADAPTER_FLAG)
             mCursor.moveToPosition(getAdapterPosition())
-            int movieId = mCursor.getInt(DetailMovieFragment.COL_MOVIE_BASIC_MOVIE_ID)
+            final int movieId = mCursor.getInt(DetailMovieFragment.COL_MOVIE_BASIC_MOVIE_ID)
             LogDisplay.callLog(LOG_TAG,"Movie id is $movieId",LogDisplay.SIMILAR_MOVIE_ADAPTER_FLAG)
             //Create an intent for DetailMovieActivity
-            Uri movieIdUri = MovieMagicContract.MovieBasicInfo.buildMovieUriWithMovieId(movieId)
-            Intent mIntent = new Intent(mContext, DetailMovieActivity.class)
+            final Uri movieIdUri = MovieMagicContract.MovieBasicInfo.buildMovieUriWithMovieId(movieId)
+            final Intent mIntent = new Intent(mContext, DetailMovieActivity.class)
                     .setData(movieIdUri)
-//                    .setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY)
             mContext.startActivity(mIntent)
-
-//            //Create a Bundle to pass the data to Fragment
-//            Bundle args = new Bundle()
-//            //Get the data from the intent and put that to Bundle
-//            args.putParcelable(DetailMovieFragment.MOVIE_BASIC_INFO_MOVIE_ID_URI, movieIdUri)
-//            //Create a movie detail fragment
-//            DetailMovieFragment movieDetailFragment = new DetailMovieFragment()
-//            movieDetailFragment.setArguments(args)
-//            ((DetailMovieActivity)mContext).getSupportFragmentManager().beginTransaction().add(R.id.movie_detail_container,movieDetailFragment).commit()
         }
     }
+
     @Override
     SimilarMovieAdapterViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         LogDisplay.callLog(LOG_TAG,'onCreateViewHolder is called',LogDisplay.SIMILAR_MOVIE_ADAPTER_FLAG)
@@ -83,13 +75,9 @@ class SimilarMovieAdapter extends RecyclerView.Adapter<SimilarMovieAdapter.Simil
         // move the cursor to correct position
         mCursor.moveToPosition(position)
         LogDisplay.callLog(LOG_TAG,'onBindViewHolder is called',LogDisplay.SIMILAR_MOVIE_ADAPTER_FLAG)
-        String posterPath = "http://image.tmdb.org/t/p/w185${mCursor.getString(DetailMovieFragment.COL_SIMILAR_MOVIE_POSTER_PATH)}"
-        Picasso.with(mContext)
-                .load(posterPath)
-                .fit()
-                .placeholder(R.drawable.grid_image_placeholder)
-                .error(R.drawable.grid_image_error)
-                .into(holder.similarMovieImageView)
+        final String posterPath = "$GlobalStaticVariables.TMDB_IMAGE_BASE_URL/$GlobalStaticVariables.TMDB_IMAGE_SIZE_W185" +
+                "${mCursor.getString(DetailMovieFragment.COL_SIMILAR_MOVIE_POSTER_PATH)}"
+        PicassoLoadImage.loadMoviePosterUsingPicasso(mContext,posterPath,holder.similarMovieImageView)
         holder.similarMovieTextView.setText(mCursor.getString(DetailMovieFragment.COL_SIMILAR_MOVIE_TITLE))
         holder.similarMovieTextView.setBackgroundColor(mPrimaryDarkColor)
         holder.similarMovieTextView.setTextColor(mBodyTextColor)
@@ -99,10 +87,10 @@ class SimilarMovieAdapter extends RecyclerView.Adapter<SimilarMovieAdapter.Simil
     int getItemCount() {
 //        LogDisplay.callLog(LOG_TAG,'Cursor item count is called',LogDisplay.SIMILAR_MOVIE_ADAPTER_FLAG)
         if (null == mCursor) {
-            LogDisplay.callLog(LOG_TAG, "Cursor item count = 0", LogDisplay.SIMILAR_MOVIE_ADAPTER_FLAG)
+//            LogDisplay.callLog(LOG_TAG, "Cursor item count = 0", LogDisplay.SIMILAR_MOVIE_ADAPTER_FLAG)
             return 0
         }
-        LogDisplay.callLog(LOG_TAG, "Cursor item count = ${mCursor.getCount()}", LogDisplay.SIMILAR_MOVIE_ADAPTER_FLAG)
+//        LogDisplay.callLog(LOG_TAG, "Cursor item count = ${mCursor.getCount()}", LogDisplay.SIMILAR_MOVIE_ADAPTER_FLAG)
         return mCursor.getCount()
     }
 

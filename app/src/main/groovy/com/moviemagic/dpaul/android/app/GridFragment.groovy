@@ -30,9 +30,9 @@ class GridFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cur
     private static final String STATE_MOVIE_CATEGORY = 'movie_Category'
     //This is to indicate the start page for the more load. Driven by the value used in syncadapter (i.e. total
     //number of pages already downloaded)
-    public int mStartPage = 0
+    private int mStartPage = 0
     //This is to hold the current page of the data.
-    public int mCurrentPage = mStartPage
+    private int mCurrentPage = mStartPage
     //To hold the previous count of the total records
     private int mPreviousRecordCount = 0
     //To hold the threashHold to load next pag  e. Currently set to 20 (i.e. one page worth of data)
@@ -46,9 +46,9 @@ class GridFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cur
 
     private Callback mCallback
 
-    GridView mGridView
-    GridAdapter mGridAdapter
-    String mMovieCategory
+    private GridView mGridView
+    private GridAdapter mGridAdapter
+    private String mMovieCategory
     private static final int MOVIE_GRID_FRAGMENT_LOADER_ID = 0
     private static final String[] MOVIE_COLUMNS = [MovieMagicContract.MovieBasicInfo._ID,
                                                    MovieMagicContract.MovieBasicInfo.COLUMN_TITLE,
@@ -71,7 +71,7 @@ class GridFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cur
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+        super.onCreate(savedInstanceState)
         //Following line needed to let android know that Fragment has options menu
         //If this line is not added then associated method (e.g. OnCreateOptionsMenu) does not get supported
         //even in auto code completion
@@ -84,7 +84,7 @@ class GridFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cur
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        return super.onOptionsItemSelected(item);
+        return super.onOptionsItemSelected(item)
     }
 
     @Override
@@ -94,7 +94,7 @@ class GridFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cur
             mMovieCategory = savedInstanceState.getString(STATE_MOVIE_CATEGORY, 'error')
         }
         getLoaderManager().initLoader(MOVIE_GRID_FRAGMENT_LOADER_ID, null, this)
-        super.onActivityCreated(savedInstanceState);
+        super.onActivityCreated(savedInstanceState)
     }
 
     @Override
@@ -107,8 +107,7 @@ class GridFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cur
         mGridView.setOnScrollListener(new AbsListView.OnScrollListener() {
             @Override
             void onScrollStateChanged(AbsListView view, int scrollState) {
-                LogDisplay.callLog(LOG_TAG,"ScrollState = $scrollState",
-                        LogDisplay.GRID_FRAGMENT_LOG_FLAG)
+                LogDisplay.callLog(LOG_TAG,"ScrollState = $scrollState",LogDisplay.GRID_FRAGMENT_LOG_FLAG)
             }
 
             @Override
@@ -149,7 +148,7 @@ class GridFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cur
                 //If still does not work, then stop
                 if(isDataLoadFailed && mReTryCounter < 5) {
                     isDataLoadFailed = false
-                    String[] movieCategory = [mMovieCategory] as String[]
+                    final String[] movieCategory = [mMovieCategory] as String[]
                     mReTryCounter++
                     LogDisplay.callLog(LOG_TAG,"Last API call failed, going to re-try...try # $mReTryCounter",LogDisplay.GRID_FRAGMENT_LOG_FLAG)
                     new LoadMoreData(getActivity(),mCurrentPage).execute(movieCategory)
@@ -159,11 +158,11 @@ class GridFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cur
         mGridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Cursor cursor = mGridAdapter.getCursor()
+                final Cursor cursor = mGridAdapter.getCursor()
                 cursor.moveToPosition(position)
                 int movieId = cursor.getInt(COL_MOVIE_ID)
                 Toast.makeText(getActivity(), "Item clicked- positon: $position, id:$id & movieId:$movieId", Toast.LENGTH_SHORT).show()
-                Uri movieIdUri = MovieMagicContract.MovieBasicInfo.buildMovieUriWithMovieId(movieId)
+                final Uri movieIdUri = MovieMagicContract.MovieBasicInfo.buildMovieUriWithMovieId(movieId)
                 mCallback.onItemSelected(movieIdUri)
             }
         })
@@ -182,9 +181,9 @@ class GridFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cur
     Loader<Cursor> onCreateLoader(int id, Bundle args) {
         //Sort Order: Ascending id, this ensures the list is populated as returned by the API
         //Also it ensures last page number is correct
-        String sortOrder = "$MovieMagicContract.MovieBasicInfo._ID ASC"
+        final String sortOrder = "$MovieMagicContract.MovieBasicInfo._ID ASC"
         //Build the URI with movie category
-        Uri movieCategoryUri = MovieMagicContract.MovieBasicInfo.buildMovieUriWithMovieCategory(mMovieCategory)
+        final Uri movieCategoryUri = MovieMagicContract.MovieBasicInfo.buildMovieUriWithMovieCategory(mMovieCategory)
 
         switch (id) {
             case MOVIE_GRID_FRAGMENT_LOADER_ID:
@@ -219,11 +218,11 @@ class GridFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cur
 
     @Override
     public void onAttach(Activity activity) {
-        super.onAttach(activity);
+        super.onAttach(activity)
         // This makes sure that the container activity has implemented
         // the callback interface. If not, it throws an exception
         try {
-            mCallback = (Callback) activity;
+            mCallback = (Callback) activity
         } catch (ClassCastException e) {
             throw new ClassCastException(activity.toString()
                     + " must implement Callback interface")

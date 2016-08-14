@@ -26,12 +26,12 @@ class MovieMagicSyncAdapter extends AbstractThreadedSyncAdapter {
 
     //This variable indicates the number of pages for initial load. It is also
     //used to determine the next page to download during more download
-    public final static int MAX_PAGE_DOWNLOAD = 3
+    private final static int MAX_PAGE_DOWNLOAD = 3
     //Define a variable for api page count
     private static int totalPage = 0
     // Define a variable to contain a content resolver instance
-    private ContentResolver mContentResolver
-    private Context mContext
+    private final ContentResolver mContentResolver
+    private final Context mContext
 
     //Define a flag to control the record insertion / deletion
     private boolean deleteRecords = true
@@ -58,10 +58,6 @@ class MovieMagicSyncAdapter extends AbstractThreadedSyncAdapter {
     @Override
     void onPerformSync(Account account, Bundle extras, String authority, ContentProviderClient provider, SyncResult syncResult) {
         LogDisplay.callLog(LOG_TAG,'onPerformSync is called',LogDisplay.MOVIE_MAGIC_SYNC_ADAPTER_LOG_FLAG)
-//        final String POPULAR_PATH = 'popular'
-//        final String TOP_RATED_PATH = 'top_rated'
-//        final String UPCOMING_PATH = 'upcoming'
-//        final String NOW_PLAYING_PATH = 'now_playing'
 
         List<ContentValues> contentValues = []
         //totalPage is set to 1 so that at least first page is downloaded in downloadMovieList
@@ -96,10 +92,6 @@ class MovieMagicSyncAdapter extends AbstractThreadedSyncAdapter {
     private List<ContentValues> downloadMovieList (String category, int page) {
         //TMDB api example
         //https://api.themoviedb.org/3/movie/popular?api_key=key&page=1
-//        final String TMDB_MOVIE_BASE_URL = 'https://api.themoviedb.org/3/'
-//        final String MOVIE_PATH = 'movie'
-//        final String API_KEY = 'api_key'
-//        final String PAGE = 'page'
 
         List<ContentValues> movieList
 

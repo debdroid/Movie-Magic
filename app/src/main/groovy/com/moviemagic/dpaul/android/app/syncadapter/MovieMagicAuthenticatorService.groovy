@@ -2,7 +2,7 @@ package com.moviemagic.dpaul.android.app.syncadapter
 
 import android.app.Service
 import android.content.Intent
-import android.os.IBinder;
+import android.os.IBinder
 import groovy.transform.CompileStatic
 
 /**

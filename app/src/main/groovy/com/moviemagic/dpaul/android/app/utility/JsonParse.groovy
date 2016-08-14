@@ -13,8 +13,6 @@ import com.moviemagic.dpaul.android.app.contentprovider.MovieMagicContract.Movie
 //@CompileStatic
 class JsonParse {
     private static final String LOG_TAG = JsonParse.class.getSimpleName()
-    public static final String IMAGE_TYPE_BACKDROP = 'backdrop'
-    public static final String IMAGE_TYPE_POSTER = 'poster'
 
     /**
      * Helper method to determine the total number of pages
@@ -209,7 +207,7 @@ class JsonParse {
     static List<ContentValues> parseSimilarMovieListJson(def jsonData, int movieId) {
         List<ContentValues> similarMovies
         LogDisplay.callLog(LOG_TAG, "Similar -> $jsonData.similar", LogDisplay.JSON_PARSE_LOG_FLAG)
-        similarMovies = parseMovieListJson(jsonData.similar,LoadMovieBasicAddlInfo.SIMILAR_MOVIE_CATEGORY,
+        similarMovies = parseMovieListJson(jsonData.similar,GlobalStaticVariables.MOVIE_CATEGORY_SIMILAR,
                 GlobalStaticVariables.MOVIE_LIST_TYPE_TMDB_SIMILAR)
         similarMovies.each {it.put(MovieBasicInfo.COLUMN_SIMILAR_MOVIE_LINK_ID,movieId)}
         return similarMovies
@@ -332,7 +330,7 @@ class JsonParse {
                 //Following three fields are populated internally, so null check not needed
                 movieImage.put(MovieImage.COLUMN_FOREIGN_KEY_ID,foreignKey)
                 movieImage.put(MovieImage.COLUMN_IMAGE_ORIG_MOVIE_ID,movieId)
-                movieImage.put(MovieImage.COLUMN_IMAGE_TYPE,IMAGE_TYPE_BACKDROP)
+                movieImage.put(MovieImage.COLUMN_IMAGE_TYPE,GlobalStaticVariables.IMAGE_TYPE_BACKDROP)
                 //Add item to the list now
                 movieImageList << movieImage
             }
@@ -356,7 +354,7 @@ class JsonParse {
                 //Following three fields are populated internally, so null check not needed
                 movieImage.put(MovieImage.COLUMN_FOREIGN_KEY_ID,foreignKey)
                 movieImage.put(MovieImage.COLUMN_IMAGE_ORIG_MOVIE_ID,movieId)
-                movieImage.put(MovieImage.COLUMN_IMAGE_TYPE,IMAGE_TYPE_POSTER)
+                movieImage.put(MovieImage.COLUMN_IMAGE_TYPE,GlobalStaticVariables.IMAGE_TYPE_POSTER)
                 //Add item to the list now
                 movieImageList << movieImage
             }

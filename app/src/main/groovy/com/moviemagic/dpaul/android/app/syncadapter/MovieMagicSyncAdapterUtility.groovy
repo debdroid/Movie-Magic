@@ -17,10 +17,10 @@ class MovieMagicSyncAdapterUtility {
 
     // Interval at which to sync with the movie data, in milliseconds.
     // 60 seconds (1 minute) * 360 = 6 hours
-    public static final int SECONDS_PER_MINUTE = 60
-    public static final int SYNC_INTERVAL_IN_MINUTES = 360
-    public static final int SYNC_INTERVAL = SECONDS_PER_MINUTE * SYNC_INTERVAL_IN_MINUTES
-    public static final int SYNC_FLEXTIME = SECONDS_PER_MINUTE * 120
+    private static final int SECONDS_PER_MINUTE = 60
+    private static final int SYNC_INTERVAL_IN_MINUTES = 360
+    private static final int SYNC_INTERVAL = SECONDS_PER_MINUTE * SYNC_INTERVAL_IN_MINUTES
+    private static final int SYNC_FLEXTIME = SECONDS_PER_MINUTE * 120
 
     /**
      * Helper method to initialise the MovieMagic SyncAdapter
@@ -98,6 +98,7 @@ class MovieMagicSyncAdapterUtility {
     public static void configurePeriodicSync(Context context, int syncInterval, int flexTime) {
         Account account = getSyncAccount(context)
         String authority = context.getString(R.string.content_authority)
+        //TODO: Need to look into this Build.VERSION_CODES later
 //        LogDisplay.callLog(LOG_TAG,"Build.VERSION_CODES.JELLY_BEAN= $Build.VERSION_CODES.JELLY_BEAN",LogDisplay.MOVIE_MAGIC_SYNC_ADAPTER_UTILITY_LOG_FLAG)
 //        LogDisplay.callLog(LOG_TAG,"Build.VERSION_CODES.KITKAT= $Build.VERSION_CODES.KITKAT",LogDisplay.MOVIE_MAGIC_SYNC_ADAPTER_UTILITY_LOG_FLAG)
 //        LogDisplay.callLog(LOG_TAG,"Build.VERSION_CODES.LOLLIPOP= $Build.VERSION_CODES.LOLLIPOP",LogDisplay.MOVIE_MAGIC_SYNC_ADAPTER_UTILITY_LOG_FLAG)

@@ -5,10 +5,10 @@ import android.content.ContentUris
 import android.net.Uri
 import android.provider.BaseColumns
 import android.util.Log
-import groovy.transform.CompileStatic
-
 import java.text.ParseException
 import java.text.SimpleDateFormat
+import groovy.transform.CompileStatic
+
 
 @CompileStatic
 class MovieMagicContract {
@@ -136,11 +136,11 @@ class MovieMagicContract {
         static final String COLUMN_USER_RATING = 'user_rating'
         //Column to store export flag - future use
         static final String COLUMN_USER_EXPORTED = 'user_export_flag'
-        //Future columns String
+        //Future columns - String
         static final String COLUMN_FUTURE_USE_1 = 'movie_column_future_use_1'
         static final String COLUMN_FUTURE_USE_2 = 'movie_column_future_use_2'
         static final String COLUMN_FUTURE_USE_3 = 'movie_column_future_use_3'
-        //Future columns Integer
+        //Future columns - Integer
         static final String COLUMN_FUTURE_USE_4 = 'movie_column_future_use_4'
         static final String COLUMN_FUTURE_USE_5 = 'movie_column_future_use_5'
 
@@ -337,8 +337,8 @@ class MovieMagicContract {
     }
 
     /*
-    Inner class that defines the table contents of the movie_collection table
-*/
+        Inner class that defines the table contents of the movie_collection table
+    */
     public static final class MovieCollection implements BaseColumns {
         static final String TABLE_NAME = PATH_MOVIE_COLLECTION
         //Define the columns
@@ -407,8 +407,8 @@ class MovieMagicContract {
     }
 
     /*
-    Inner class that defines the table contents of the movie_release_date table
-*/
+        Inner class that defines the table contents of the movie_release_date table
+    */
     public static final class MovieReleaseDate implements BaseColumns {
         static final String TABLE_NAME = PATH_MOVIE_RELEASE_DATE
         //Define the columns

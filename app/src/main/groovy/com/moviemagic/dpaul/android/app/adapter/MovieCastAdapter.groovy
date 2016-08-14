@@ -10,8 +10,9 @@ import android.widget.ImageView
 import android.widget.TextView
 import com.moviemagic.dpaul.android.app.DetailMovieFragment
 import com.moviemagic.dpaul.android.app.R
+import com.moviemagic.dpaul.android.app.utility.GlobalStaticVariables
 import com.moviemagic.dpaul.android.app.utility.LogDisplay
-import com.squareup.picasso.Picasso
+import com.moviemagic.dpaul.android.app.utility.PicassoLoadImage
 import groovy.transform.CompileStatic
 
 @CompileStatic
@@ -19,7 +20,8 @@ class MovieCastAdapter extends RecyclerView.Adapter<MovieCastAdapter.MovieCastAd
     private static final String LOG_TAG = MovieCastAdapter.class.getSimpleName()
 
     private Cursor mCursor
-    private Context mContext
+//    private final Context mContext
+    private final Context mContext
     public static int mPrimaryDarkColor, mBodyTextColor
 
     //Empty constructor
@@ -67,13 +69,9 @@ class MovieCastAdapter extends RecyclerView.Adapter<MovieCastAdapter.MovieCastAd
         // move the cursor to correct position
         mCursor.moveToPosition(position)
         LogDisplay.callLog(LOG_TAG,'onBindViewHolder is called',LogDisplay.MOVIE_CAST_ADAPTER_FLAG)
-        String profilePath = "http://image.tmdb.org/t/p/w185${mCursor.getString(DetailMovieFragment.COL_MOVIE_CAST_PROFILE_PATH)}"
-        Picasso.with(mContext)
-                .load(profilePath)
-                .fit()
-                .placeholder(R.drawable.grid_image_placeholder)
-                .error(R.drawable.na_person_icon)
-                .into(holder.movieCastImageView)
+        final String profilePath = "$GlobalStaticVariables.TMDB_IMAGE_BASE_URL/$GlobalStaticVariables.TMDB_IMAGE_SIZE_W185" +
+                "${mCursor.getString(DetailMovieFragment.COL_MOVIE_CAST_PROFILE_PATH)}"
+        PicassoLoadImage.loadMoviePersonImageUsingPicasso(mContext,profilePath,holder.movieCastImageView)
         holder.movieCastCharacterName.setText(mCursor.getString(DetailMovieFragment.COL_MOVIE_CAST_CHARACTER))
         holder.movieCastName.setText(mCursor.getString(DetailMovieFragment.COL_MOVIE_CAST_PERSON_NAME))
         holder.movieCastCharacterName.setBackgroundColor(mPrimaryDarkColor)
@@ -86,7 +84,7 @@ class MovieCastAdapter extends RecyclerView.Adapter<MovieCastAdapter.MovieCastAd
 
     @Override
     int getItemCount() {
-        LogDisplay.callLog(LOG_TAG,'Cursor item count is called',LogDisplay.MOVIE_CAST_ADAPTER_FLAG)
+//        LogDisplay.callLog(LOG_TAG,'Cursor item count is called',LogDisplay.MOVIE_CAST_ADAPTER_FLAG)
         if ( null == mCursor ) return 0
         return mCursor.getCount()
     }
@@ -100,6 +98,7 @@ class MovieCastAdapter extends RecyclerView.Adapter<MovieCastAdapter.MovieCastAd
     //but by then adapter might got loaded with data. Hence call notifyDataSetChanged
     //so that it get's recreated with correct color
     public void changeColor() {
+        LogDisplay.callLog(LOG_TAG,'changeColor is called',LogDisplay.MOVIE_CAST_ADAPTER_FLAG)
         notifyDataSetChanged()
     }
 }

@@ -45,7 +45,7 @@ class MovieMagicProvider extends ContentProvider {
 
     private static final SQLiteQueryBuilder sMovieMagicQueryBuilder
 
-    static{
+    static {
         sMovieMagicQueryBuilder = new SQLiteQueryBuilder()
     }
 

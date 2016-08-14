@@ -1,6 +1,5 @@
 package com.moviemagic.dpaul.android.app.adapter
 
-import android.animation.ObjectAnimator
 import android.content.Context
 import android.database.Cursor
 import android.support.v7.widget.RecyclerView
@@ -19,8 +18,8 @@ class MovieReviewAdapter extends RecyclerView.Adapter<MovieReviewAdapter.MovieRe
     private static final String LOG_TAG = MovieReviewAdapter.class.getSimpleName()
 
     private Cursor mCursor
-    private Context mContext
-    private TextView mRecyclerviewEmptyTextView
+    private final Context mContext
+    private final TextView mRecyclerviewEmptyTextView
     public static int mPrimaryColor, mPrimaryDarkColor, mTitleTextColor, mBodyTextColor
 
     //Empty constructor
@@ -47,7 +46,6 @@ class MovieReviewAdapter extends RecyclerView.Adapter<MovieReviewAdapter.MovieRe
             movieReviewContent = view.findViewById(R.id.single_review_item_review_content) as TextView
             mShowImageButton = view.findViewById(R.id.single_review_item_show_button) as ImageButton
             mHideImageButton = view.findViewById(R.id.single_review_item_hide_button) as ImageButton
-//            view.setOnClickListener(this)
             mShowImageButton.setOnClickListener( new View.OnClickListener() {
                 @Override
                 void onClick(View v) {
@@ -65,14 +63,6 @@ class MovieReviewAdapter extends RecyclerView.Adapter<MovieReviewAdapter.MovieRe
                 }
             })
         }
-
-//        @Override
-//        public void onClick(View v) {
-//            LogDisplay.callLog(LOG_TAG, "onClick is called.LayoutPos=${getLayoutPosition()}.AdapterPos=${getAdapterPosition()}", LogDisplay.MOVIE_REVIEW_ADAPTER_FLAG)
-//            mCursor.moveToPosition(getAdapterPosition())
-//            TextView textView = v.findViewById(R.id.single_review_item_review_content) as TextView
-//            textView.setMaxLines(Integer.MAX_VALUE)
-//        }
     }
 
     @Override
@@ -90,7 +80,7 @@ class MovieReviewAdapter extends RecyclerView.Adapter<MovieReviewAdapter.MovieRe
         LogDisplay.callLog(LOG_TAG,'onBindViewHolder is called',LogDisplay.MOVIE_REVIEW_ADAPTER_FLAG)
         holder.movieReviewAuthor.setText("By ${mCursor.getString(DetailMovieFragment.COL_MOVIE_REVIEW_AUTHOR)}")
         //remove all empty lines, blanks and tabs
-        String contentText = mCursor.getString(DetailMovieFragment.COL_MOVIE_REVIEW_CONTENT).replaceAll("(?m)^[ \t]*\r?\n", "")
+        final String contentText = mCursor.getString(DetailMovieFragment.COL_MOVIE_REVIEW_CONTENT).replaceAll("(?m)^[ \t]*\r?\n", "")
         holder.movieReviewContent.setText(contentText)
         holder.movieReviewAuthor.setBackgroundColor(mPrimaryColor)
         holder.movieReviewAuthor.setTextColor(mTitleTextColor)
@@ -127,18 +117,4 @@ class MovieReviewAdapter extends RecyclerView.Adapter<MovieReviewAdapter.MovieRe
     public void changeColor() {
         notifyDataSetChanged()
     }
-
-//    public void textViewAdjustments (TextView textView) {
-//        int collapsedMaxLines = 3
-//        int duration = 200
-////        int duration = (textView.getLineCount() - collapsedMaxLines) * 10
-//        int value = 0
-//        if(textView.getMaxLines() == collapsedMaxLines) {
-//            value = textView.getLineCount()
-//        } else {
-//            value = collapsedMaxLines
-//        }
-//        ObjectAnimator animation = ObjectAnimator.ofInt(textView, "maxLines",value)
-//        animation.setDuration(duration).start()
-//    }
 }

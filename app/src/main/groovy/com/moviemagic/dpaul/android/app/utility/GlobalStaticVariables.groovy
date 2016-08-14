@@ -1,4 +1,4 @@
-package com.moviemagic.dpaul.android.app.utility;
+package com.moviemagic.dpaul.android.app.utility
 
 import groovy.transform.CompileStatic
 
@@ -26,7 +26,15 @@ class GlobalStaticVariables {
     public static final String TMDB_APPEND_TO_RESPONSE_KEY = 'append_to_response'
     public static final String TMDB_APPEND_TO_RESPONSE_PARAM = 'similar,credits,images,videos,release_dates,reviews'
 
+    //Static variables for TMDB movie image url and parameters
+    public static final String TMDB_IMAGE_BASE_URL = "http://image.tmdb.org/t/p/"
+    public static final String TMDB_IMAGE_SIZE_W185 = "w185"
+    public static final String TMDB_IMAGE_SIZE_W500 = "w500"
+
     //Misc variables
+    public static final String IMAGE_TYPE_BACKDROP = 'backdrop'
+    public static final String IMAGE_TYPE_POSTER = 'poster'
+    public static final String MOVIE_BASIC_INFO_MOVIE_ID_URI = 'movie_basic_info_movie_id_uri'
 
 
 }

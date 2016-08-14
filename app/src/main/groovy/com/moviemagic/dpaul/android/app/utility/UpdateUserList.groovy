@@ -2,7 +2,6 @@ package com.moviemagic.dpaul.android.app.utility
 
 import android.content.ContentResolver
 import android.content.Context
-import android.net.Uri
 import android.os.AsyncTask
 import android.widget.LinearLayout
 import groovy.transform.CompileStatic

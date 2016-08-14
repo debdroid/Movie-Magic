@@ -15,7 +15,8 @@ class MovieMagicDbHelper extends SQLiteOpenHelper {
     // If you change the database schema, you must increment the database version.
     private static final int DATABASE_VERSION = 1
 
-    static final String DATABASE_NAME = 'movie_magic.db'
+    //Define as public as used by TestMovieMagicDatabase.groovy
+    public static final String DATABASE_NAME = 'movie_magic.db'
 
     public MovieMagicDbHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION)
@@ -289,6 +290,7 @@ class MovieMagicDbHelper extends SQLiteOpenHelper {
         // It does NOT depend on the version number for the application.
 
         //Drop all the tables
+        //TODO: Currently just dropping the tables in case of DB upgrade but need to find out a different way
         sqLiteDatabase.execSQL("DROP TABLE IF EXISTS $MovieMagicContract.MovieBasicInfo.TABLE_NAME")
         sqLiteDatabase.execSQL("DROP TABLE IF EXISTS $MovieMagicContract.MovieCast.TABLE_NAME")
         sqLiteDatabase.execSQL("DROP TABLE IF EXISTS $MovieMagicContract.MovieCrew.TABLE_NAME")
@@ -308,7 +310,7 @@ class MovieMagicDbHelper extends SQLiteOpenHelper {
     @Override
     void onOpen(SQLiteDatabase db) {
         super.onOpen(db)
-        //Sqlite disable foreign key constrain by default, so need to enable it
+        //Sqlite disables foreign key constrain by default, so need to enable it
         db.execSQL("PRAGMA foreign_keys=ON")
     }
 }

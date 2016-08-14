@@ -1,7 +1,6 @@
 package com.moviemagic.dpaul.android.app.utility
 
 import android.content.Context
-import android.graphics.Bitmap
 import com.moviemagic.dpaul.android.app.R
 import groovy.transform.CompileStatic
 
@@ -73,16 +72,5 @@ class FriendlyDisplay {
         }
 
         return -1
-    }
-
-    public static int getDominantColor(Bitmap bitmap) {
-        if(bitmap) {
-            Bitmap newBitmap = Bitmap.createScaledBitmap(bitmap, 1, 1, true)
-            final int color = newBitmap.getPixel(0, 0)
-            newBitmap.recycle()
-            return color
-        } else {
-            return -1
-        }
     }
 }
