@@ -35,17 +35,17 @@ class LoadMoreData extends AsyncTask<String, Void, Void>{
         List<ContentValues> movieList
         //TMDB api example
         //https://api.themoviedb.org/3/movie/popular?api_key=key&page=1
-        final String TMDB_MOVIE_BASE_URL = 'https://api.themoviedb.org/3/'
-        final String MOVIE_PATH = 'movie'
-        final String API_KEY = 'api_key'
-        final String PAGE = 'page'
+//        final String TMDB_MOVIE_BASE_URL = 'https://api.themoviedb.org/3/'
+//        final String MOVIE_PATH = 'movie'
+//        final String API_KEY = 'api_key'
+//        final String PAGE = 'page'
         try {
-            Uri.Builder uriBuilder = Uri.parse(TMDB_MOVIE_BASE_URL).buildUpon()
+            Uri.Builder uriBuilder = Uri.parse(GlobalStaticVariables.TMDB_MOVIE_BASE_URL).buildUpon()
 
-            Uri uri = uriBuilder.appendPath(MOVIE_PATH)
+            Uri uri = uriBuilder.appendPath(GlobalStaticVariables.TMDB_MOVIE_PATH)
                     .appendPath(movieCategory)
-                    .appendQueryParameter(API_KEY,BuildConfig.TMDB_API_KEY)
-                    .appendQueryParameter(PAGE,Integer.toString(mCurrentPage))
+                    .appendQueryParameter(GlobalStaticVariables.TMDB_MOVIE_API_KEY,BuildConfig.TMDB_API_KEY)
+                    .appendQueryParameter(GlobalStaticVariables.TMDB_MOVIE_PAGE,Integer.toString(mCurrentPage))
                     .build()
 
             URL url = new URL(uri.toString())
@@ -56,7 +56,7 @@ class LoadMoreData extends AsyncTask<String, Void, Void>{
             //This is to ensure we have valid data page
             if (mCurrentPage <= totalPage) {
                 LogDisplay.callLog(LOG_TAG, "JSON DATA for $movieCategory -> $jsonData",LogDisplay.LOAD_MORE_DATA_LOG_FLAG)
-                movieList = JsonParse.parseMovieListJson(jsonData, movieCategory,MovieMagicSyncAdapter.MOVIE_LIST_TYPE_PUBLIC)
+                movieList = JsonParse.parseMovieListJson(jsonData, movieCategory,GlobalStaticVariables.MOVIE_LIST_TYPE_TMDB_PUBLIC)
                 ContentValues[] cv = movieList as ContentValues []
                 int insertCount = mContentResolver.bulkInsert(MovieMagicContract.MovieBasicInfo.CONTENT_URI,cv)
                 LogDisplay.callLog(LOG_TAG,"Total insert for $movieCategory->$insertCount",LogDisplay.LOAD_MORE_DATA_LOG_FLAG)

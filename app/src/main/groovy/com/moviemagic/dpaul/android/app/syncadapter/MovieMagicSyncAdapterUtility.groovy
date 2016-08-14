@@ -8,6 +8,7 @@ import android.content.SyncRequest
 import android.os.Build
 import android.os.Bundle
 import com.moviemagic.dpaul.android.app.R
+import com.moviemagic.dpaul.android.app.utility.LogDisplay
 import groovy.transform.CompileStatic
 
 @CompileStatic
@@ -97,7 +98,13 @@ class MovieMagicSyncAdapterUtility {
     public static void configurePeriodicSync(Context context, int syncInterval, int flexTime) {
         Account account = getSyncAccount(context)
         String authority = context.getString(R.string.content_authority)
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+//        LogDisplay.callLog(LOG_TAG,"Build.VERSION_CODES.JELLY_BEAN= $Build.VERSION_CODES.JELLY_BEAN",LogDisplay.MOVIE_MAGIC_SYNC_ADAPTER_UTILITY_LOG_FLAG)
+//        LogDisplay.callLog(LOG_TAG,"Build.VERSION_CODES.KITKAT= $Build.VERSION_CODES.KITKAT",LogDisplay.MOVIE_MAGIC_SYNC_ADAPTER_UTILITY_LOG_FLAG)
+//        LogDisplay.callLog(LOG_TAG,"Build.VERSION_CODES.LOLLIPOP= $Build.VERSION_CODES.LOLLIPOP",LogDisplay.MOVIE_MAGIC_SYNC_ADAPTER_UTILITY_LOG_FLAG)
+       //Somehow while running in Jelly bean it cannot find Build.VERSION_CODES.KITKAT, yet to figure out why!
+        //So using the API number (19 - KITKAT)itself here
+        if (Build.VERSION.SDK_INT >= 19) {
+//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
             // we can enable inexact timers in our periodic sync
             SyncRequest request = new SyncRequest.Builder().
                     syncPeriodic(syncInterval, flexTime).

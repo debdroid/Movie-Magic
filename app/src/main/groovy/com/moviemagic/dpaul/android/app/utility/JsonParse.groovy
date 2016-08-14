@@ -210,7 +210,7 @@ class JsonParse {
         List<ContentValues> similarMovies
         LogDisplay.callLog(LOG_TAG, "Similar -> $jsonData.similar", LogDisplay.JSON_PARSE_LOG_FLAG)
         similarMovies = parseMovieListJson(jsonData.similar,LoadMovieBasicAddlInfo.SIMILAR_MOVIE_CATEGORY,
-                LoadMovieBasicAddlInfo.SIMILAR_MOVIE_LIST_TYPE)
+                GlobalStaticVariables.MOVIE_LIST_TYPE_TMDB_SIMILAR)
         similarMovies.each {it.put(MovieBasicInfo.COLUMN_SIMILAR_MOVIE_LINK_ID,movieId)}
         return similarMovies
     }
@@ -365,11 +365,11 @@ class JsonParse {
     }
 
     /**
-     * Helper method to parse movie video JSON data
+     * Helper method to parse movie now_playing JSON data
      * @param jsonData JSON data to be parsed
      * @param movieId Original movie id for which movie images are fetched
      * @param foreignKey Row id of primary movie table (movie_basic_info)
-     * @return formatted list of movie video as content values
+     * @return formatted list of movie now_playing as content values
      */
     static List<ContentValues> praseMovieVideoJson(def jsonData, int movieId, int foreignKey) {
         List<ContentValues> movieVideoList = []

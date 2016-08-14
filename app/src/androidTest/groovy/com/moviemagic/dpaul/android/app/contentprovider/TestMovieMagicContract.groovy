@@ -53,7 +53,7 @@ class TestMovieMagicContract extends AndroidTestCase {
         assertEquals(TEST_BASE_URI+'/1001',movieIdUri.toString())
         Uri movieCategoryUri = MovieMagicContract.MovieBasicInfo.buildMovieUriWithMovieCategory(TEST_MOVIE_CATEGORY)
         assertEquals(TEST_BASE_URI+'/%2Fpopular%20movie', movieCategoryUri.toString())
-        assertEquals(new Date(TEST_DATE).toString(), new Date(MovieMagicContract.covertMovieReleaseDate('2016-08-13')).toString())
+        assertEquals(new Date(TEST_DATE).toString(), new Date(MovieMagicContract.convertMovieReleaseDate('2016-08-13')).toString())
 
         assertEquals(TEST_MOVIE_ID,MovieMagicContract.MovieBasicInfo.getMovieIdFromUri(movieIdUri))
         assertEquals(TEST_MOVIE_CATEGORY,MovieMagicContract.MovieBasicInfo.getMovieCategoryFromMovieUri(movieCategoryUri))

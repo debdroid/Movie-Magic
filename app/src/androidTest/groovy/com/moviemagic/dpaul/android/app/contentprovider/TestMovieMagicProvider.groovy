@@ -42,83 +42,92 @@ class TestMovieMagicProvider extends AndroidTestCase {
         // Did the content observer get called?  If this fails, then delete isn't calling getContext().getContentResolver().notifyChange(uri, null)
         tco.waitForNotificationOrFail()
         mContext.getContentResolver().unregisterContentObserver(tco)
-
-        //Delete all records from movie_cast
-        // Register a content observer for our data delete.
-        tco = TestContentObserverUtilities.getTestContentObserver()
-        mContext.getContentResolver().registerContentObserver(MovieMagicContract.MovieCast.CONTENT_URI, true, tco)
-        mContext.getContentResolver().delete(MovieMagicContract.MovieCast.CONTENT_URI, null, null)
+        //Since CASCADE delete is in effect, so deleting records from movie_basic_info should automatically
+        //delete records from all other tables where MovieMagicContract.MovieBasicInfo._ID is used as foreign key
+        //Ensure all records are deleted from movie_cast
         delCursor = mContext.getContentResolver().query(MovieMagicContract.MovieCast.CONTENT_URI,null,null,null,null)
-        assertEquals('Error: Records not deleted from movie_cast during delete', 0, delCursor.getCount())
-        // Did the content observer get called?  If this fails, then delete isn't calling getContext().getContentResolver().notifyChange(uri, null)
-        tco.waitForNotificationOrFail()
-        mContext.getContentResolver().unregisterContentObserver(tco)
-
-        //Delete all records from movie_crew
-        // Register a content observer for our data delete.
-        tco = TestContentObserverUtilities.getTestContentObserver()
-        mContext.getContentResolver().registerContentObserver(MovieMagicContract.MovieCrew.CONTENT_URI, true, tco)
-        mContext.getContentResolver().delete(MovieMagicContract.MovieCrew.CONTENT_URI, null, null)
+        assertEquals('Error: All records not deleted from movie_cast during delete', 0, delCursor.getCount())
+        //Ensure all records are deleted from movie_crew
         delCursor = mContext.getContentResolver().query(MovieMagicContract.MovieCrew.CONTENT_URI,null,null,null,null)
-        assertEquals('Error: Records not deleted from movie_crew during delete', 0, delCursor.getCount())
-        // Did the content observer get called?  If this fails, then delete isn't calling getContext().getContentResolver().notifyChange(uri, null)
-        tco.waitForNotificationOrFail()
-        mContext.getContentResolver().unregisterContentObserver(tco)
-
-        //Delete all records from movie_image
-        // Register a content observer for our data delete.
-        tco = TestContentObserverUtilities.getTestContentObserver()
-        mContext.getContentResolver().registerContentObserver(MovieMagicContract.MovieImage.CONTENT_URI, true, tco)
-        mContext.getContentResolver().delete(MovieMagicContract.MovieImage.CONTENT_URI, null, null)
+        assertEquals('Error: All records not deleted from movie_crew during delete', 0, delCursor.getCount())
+        //Ensure all records are deleted from movie_image
         delCursor = mContext.getContentResolver().query(MovieMagicContract.MovieImage.CONTENT_URI,null,null,null,null)
-        assertEquals('Error: Records not deleted from movie_image during delete', 0, delCursor.getCount())
-        // Did the content observer get called?  If this fails, then delete isn't calling getContext().getContentResolver().notifyChange(uri, null)
-        tco.waitForNotificationOrFail()
-        mContext.getContentResolver().unregisterContentObserver(tco)
-
-        //Delete all records from movie_video
-        // Register a content observer for our data delete.
-        tco = TestContentObserverUtilities.getTestContentObserver()
-        mContext.getContentResolver().registerContentObserver(MovieMagicContract.MovieVideo.CONTENT_URI, true, tco)
-        mContext.getContentResolver().delete(MovieMagicContract.MovieVideo.CONTENT_URI, null, null)
+        assertEquals('Error: All records not deleted from movie_image during delete', 0, delCursor.getCount())
+        //Ensure all records are deleted from movie_video
         delCursor = mContext.getContentResolver().query(MovieMagicContract.MovieVideo.CONTENT_URI,null,null,null,null)
-        assertEquals('Error: Records not deleted from movie_video during delete', 0, delCursor.getCount())
-        // Did the content observer get called?  If this fails, then delete isn't calling getContext().getContentResolver().notifyChange(uri, null)
-        tco.waitForNotificationOrFail()
-        mContext.getContentResolver().unregisterContentObserver(tco)
-
-        //Delete all records from movie_collection
-        // Register a content observer for our data delete.
-        tco = TestContentObserverUtilities.getTestContentObserver()
-        mContext.getContentResolver().registerContentObserver(MovieMagicContract.MovieCollection.CONTENT_URI, true, tco)
-        mContext.getContentResolver().delete(MovieMagicContract.MovieCollection.CONTENT_URI, null, null)
-        delCursor = mContext.getContentResolver().query(MovieMagicContract.MovieCollection.CONTENT_URI,null,null,null,null)
-        assertEquals('Error: Records not deleted from movie_collection during delete', 0, delCursor.getCount())
-        // Did the content observer get called?  If this fails, then delete isn't calling getContext().getContentResolver().notifyChange(uri, null)
-        tco.waitForNotificationOrFail()
-        mContext.getContentResolver().unregisterContentObserver(tco)
-
-        //Delete all records from movie_review
-        // Register a content observer for our data delete.
-        tco = TestContentObserverUtilities.getTestContentObserver()
-        mContext.getContentResolver().registerContentObserver(MovieMagicContract.MovieReview.CONTENT_URI, true, tco)
-        mContext.getContentResolver().delete(MovieMagicContract.MovieReview.CONTENT_URI, null, null)
+        assertEquals('Error: All records not deleted from movie_video during delete', 0, delCursor.getCount())
+        //Ensure all records are deleted from movie_review
         delCursor = mContext.getContentResolver().query(MovieMagicContract.MovieReview.CONTENT_URI,null,null,null,null)
-        assertEquals('Error: Records not deleted from movie_collection during delete', 0, delCursor.getCount())
-        // Did the content observer get called?  If this fails, then delete isn't calling getContext().getContentResolver().notifyChange(uri, null)
-        tco.waitForNotificationOrFail()
-        mContext.getContentResolver().unregisterContentObserver(tco)
-
-        //Delete all records from movie_release_date
-        // Register a content observer for our data delete.
-        tco = TestContentObserverUtilities.getTestContentObserver()
-        mContext.getContentResolver().registerContentObserver(MovieMagicContract.MovieReleaseDate.CONTENT_URI, true, tco)
-        mContext.getContentResolver().delete(MovieMagicContract.MovieReleaseDate.CONTENT_URI, null, null)
+        assertEquals('Error: All records not deleted from movie_review during delete', 0, delCursor.getCount())
+        //Ensure all records are deleted from movie_release_date
         delCursor = mContext.getContentResolver().query(MovieMagicContract.MovieReleaseDate.CONTENT_URI,null,null,null,null)
-        assertEquals('Error: Records not deleted from movie_collection during delete', 0, delCursor.getCount())
-        // Did the content observer get called?  If this fails, then delete isn't calling getContext().getContentResolver().notifyChange(uri, null)
-        tco.waitForNotificationOrFail()
-        mContext.getContentResolver().unregisterContentObserver(tco)
+        assertEquals('Error: All records not deleted from movie_release_date during delete', 0, delCursor.getCount())
+
+//        //Delete all records from movie_cast
+//        // Register a content observer for our data delete.
+//        tco = TestContentObserverUtilities.getTestContentObserver()
+//        mContext.getContentResolver().registerContentObserver(MovieMagicContract.MovieCast.CONTENT_URI, true, tco)
+//        mContext.getContentResolver().delete(MovieMagicContract.MovieCast.CONTENT_URI, null, null)
+//        delCursor = mContext.getContentResolver().query(MovieMagicContract.MovieCast.CONTENT_URI,null,null,null,null)
+//        assertEquals('Error: Records not deleted from movie_cast during delete', 0, delCursor.getCount())
+//        // Did the content observer get called?  If this fails, then delete isn't calling getContext().getContentResolver().notifyChange(uri, null)
+//        tco.waitForNotificationOrFail()
+//        mContext.getContentResolver().unregisterContentObserver(tco)
+//
+//        //Delete all records from movie_crew
+//        // Register a content observer for our data delete.
+//        tco = TestContentObserverUtilities.getTestContentObserver()
+//        mContext.getContentResolver().registerContentObserver(MovieMagicContract.MovieCrew.CONTENT_URI, true, tco)
+//        mContext.getContentResolver().delete(MovieMagicContract.MovieCrew.CONTENT_URI, null, null)
+//        delCursor = mContext.getContentResolver().query(MovieMagicContract.MovieCrew.CONTENT_URI,null,null,null,null)
+//        assertEquals('Error: Records not deleted from movie_crew during delete', 0, delCursor.getCount())
+//        // Did the content observer get called?  If this fails, then delete isn't calling getContext().getContentResolver().notifyChange(uri, null)
+//        tco.waitForNotificationOrFail()
+//        mContext.getContentResolver().unregisterContentObserver(tco)
+//
+//        //Delete all records from movie_image
+//        // Register a content observer for our data delete.
+//        tco = TestContentObserverUtilities.getTestContentObserver()
+//        mContext.getContentResolver().registerContentObserver(MovieMagicContract.MovieImage.CONTENT_URI, true, tco)
+//        mContext.getContentResolver().delete(MovieMagicContract.MovieImage.CONTENT_URI, null, null)
+//        delCursor = mContext.getContentResolver().query(MovieMagicContract.MovieImage.CONTENT_URI,null,null,null,null)
+//        assertEquals('Error: Records not deleted from movie_image during delete', 0, delCursor.getCount())
+//        // Did the content observer get called?  If this fails, then delete isn't calling getContext().getContentResolver().notifyChange(uri, null)
+//        tco.waitForNotificationOrFail()
+//        mContext.getContentResolver().unregisterContentObserver(tco)
+//
+//        //Delete all records from movie_video
+//        // Register a content observer for our data delete.
+//        tco = TestContentObserverUtilities.getTestContentObserver()
+//        mContext.getContentResolver().registerContentObserver(MovieMagicContract.MovieVideo.CONTENT_URI, true, tco)
+//        mContext.getContentResolver().delete(MovieMagicContract.MovieVideo.CONTENT_URI, null, null)
+//        delCursor = mContext.getContentResolver().query(MovieMagicContract.MovieVideo.CONTENT_URI,null,null,null,null)
+//        assertEquals('Error: Records not deleted from movie_video during delete', 0, delCursor.getCount())
+//        // Did the content observer get called?  If this fails, then delete isn't calling getContext().getContentResolver().notifyChange(uri, null)
+//        tco.waitForNotificationOrFail()
+//        mContext.getContentResolver().unregisterContentObserver(tco)
+//
+//        //Delete all records from movie_review
+//        // Register a content observer for our data delete.
+//        tco = TestContentObserverUtilities.getTestContentObserver()
+//        mContext.getContentResolver().registerContentObserver(MovieMagicContract.MovieReview.CONTENT_URI, true, tco)
+//        mContext.getContentResolver().delete(MovieMagicContract.MovieReview.CONTENT_URI, null, null)
+//        delCursor = mContext.getContentResolver().query(MovieMagicContract.MovieReview.CONTENT_URI,null,null,null,null)
+//        assertEquals('Error: Records not deleted from movie_collection during delete', 0, delCursor.getCount())
+//        // Did the content observer get called?  If this fails, then delete isn't calling getContext().getContentResolver().notifyChange(uri, null)
+//        tco.waitForNotificationOrFail()
+//        mContext.getContentResolver().unregisterContentObserver(tco)
+//
+//        //Delete all records from movie_release_date
+//        // Register a content observer for our data delete.
+//        tco = TestContentObserverUtilities.getTestContentObserver()
+//        mContext.getContentResolver().registerContentObserver(MovieMagicContract.MovieReleaseDate.CONTENT_URI, true, tco)
+//        mContext.getContentResolver().delete(MovieMagicContract.MovieReleaseDate.CONTENT_URI, null, null)
+//        delCursor = mContext.getContentResolver().query(MovieMagicContract.MovieReleaseDate.CONTENT_URI,null,null,null,null)
+//        assertEquals('Error: Records not deleted from movie_collection during delete', 0, delCursor.getCount())
+//        // Did the content observer get called?  If this fails, then delete isn't calling getContext().getContentResolver().notifyChange(uri, null)
+//        tco.waitForNotificationOrFail()
+//        mContext.getContentResolver().unregisterContentObserver(tco)
 
         //Delete all records from movie_person_info
         // Register a content observer for our data delete.
@@ -126,28 +135,47 @@ class TestMovieMagicProvider extends AndroidTestCase {
         mContext.getContentResolver().registerContentObserver(MovieMagicContract.MoviePersonInfo.CONTENT_URI, true, tco)
         mContext.getContentResolver().delete(MovieMagicContract.MoviePersonInfo.CONTENT_URI, null, null)
         delCursor = mContext.getContentResolver().query(MovieMagicContract.MoviePersonInfo.CONTENT_URI,null,null,null,null)
-        assertEquals('Error: Records not deleted from movie_collection during delete', 0, delCursor.getCount())
+        assertEquals('Error: Records not deleted from movie_person_info during delete', 0, delCursor.getCount())
         // Did the content observer get called?  If this fails, then delete isn't calling getContext().getContentResolver().notifyChange(uri, null)
         tco.waitForNotificationOrFail()
         mContext.getContentResolver().unregisterContentObserver(tco)
-
-        //Delete all records from movie_person_cast
-        // Register a content observer for our data delete.
-        tco = TestContentObserverUtilities.getTestContentObserver()
-        mContext.getContentResolver().registerContentObserver(MovieMagicContract.MoviePersonCast.CONTENT_URI, true, tco)
-        mContext.getContentResolver().delete(MovieMagicContract.MoviePersonCast.CONTENT_URI, null, null)
+        //Since CASCADE delete is in effect, so deleting records from movie_person_info should automatically
+        //delete records from all other tables where MovieMagicContract.MoviePersonInfo._ID is used as foreign key
+        //Ensure all records are deleted from movie_person_cast
         delCursor = mContext.getContentResolver().query(MovieMagicContract.MoviePersonCast.CONTENT_URI,null,null,null,null)
-        assertEquals('Error: Records not deleted from movie_collection during delete', 0, delCursor.getCount())
-        // Did the content observer get called?  If this fails, then delete isn't calling getContext().getContentResolver().notifyChange(uri, null)
-        tco.waitForNotificationOrFail()
-        mContext.getContentResolver().unregisterContentObserver(tco)
+        assertEquals('Error: All records not deleted from movie_person_cast during delete', 0, delCursor.getCount())
+        //Ensure all records are deleted from movie_person_crew
+        delCursor = mContext.getContentResolver().query(MovieMagicContract.MoviePersonCrew.CONTENT_URI,null,null,null,null)
+        assertEquals('Error: All records not deleted from movie_person_cast during delete', 0, delCursor.getCount())
 
-        //Delete all records from movie_person_cast
+//        //Delete all records from movie_person_cast
+//        // Register a content observer for our data delete.
+//        tco = TestContentObserverUtilities.getTestContentObserver()
+//        mContext.getContentResolver().registerContentObserver(MovieMagicContract.MoviePersonCast.CONTENT_URI, true, tco)
+//        mContext.getContentResolver().delete(MovieMagicContract.MoviePersonCast.CONTENT_URI, null, null)
+//        delCursor = mContext.getContentResolver().query(MovieMagicContract.MoviePersonCast.CONTENT_URI,null,null,null,null)
+//        assertEquals('Error: Records not deleted from movie_collection during delete', 0, delCursor.getCount())
+//        // Did the content observer get called?  If this fails, then delete isn't calling getContext().getContentResolver().notifyChange(uri, null)
+//        tco.waitForNotificationOrFail()
+//        mContext.getContentResolver().unregisterContentObserver(tco)
+//
+//        //Delete all records from movie_person_crew
+//        // Register a content observer for our data delete.
+//        tco = TestContentObserverUtilities.getTestContentObserver()
+//        mContext.getContentResolver().registerContentObserver(MovieMagicContract.MoviePersonCrew.CONTENT_URI, true, tco)
+//        mContext.getContentResolver().delete(MovieMagicContract.MoviePersonCrew.CONTENT_URI, null, null)
+//        delCursor = mContext.getContentResolver().query(MovieMagicContract.MoviePersonCrew.CONTENT_URI,null,null,null,null)
+//        assertEquals('Error: Records not deleted from movie_collection during delete', 0, delCursor.getCount())
+//        // Did the content observer get called?  If this fails, then delete isn't calling getContext().getContentResolver().notifyChange(uri, null)
+//        tco.waitForNotificationOrFail()
+//        mContext.getContentResolver().unregisterContentObserver(tco)
+
+        //Delete all records from movie_collection
         // Register a content observer for our data delete.
         tco = TestContentObserverUtilities.getTestContentObserver()
-        mContext.getContentResolver().registerContentObserver(MovieMagicContract.MoviePersonCrew.CONTENT_URI, true, tco)
-        mContext.getContentResolver().delete(MovieMagicContract.MoviePersonCrew.CONTENT_URI, null, null)
-        delCursor = mContext.getContentResolver().query(MovieMagicContract.MoviePersonCrew.CONTENT_URI,null,null,null,null)
+        mContext.getContentResolver().registerContentObserver(MovieMagicContract.MovieCollection.CONTENT_URI, true, tco)
+        mContext.getContentResolver().delete(MovieMagicContract.MovieCollection.CONTENT_URI, null, null)
+        delCursor = mContext.getContentResolver().query(MovieMagicContract.MovieCollection.CONTENT_URI,null,null,null,null)
         assertEquals('Error: Records not deleted from movie_collection during delete', 0, delCursor.getCount())
         // Did the content observer get called?  If this fails, then delete isn't calling getContext().getContentResolver().notifyChange(uri, null)
         tco.waitForNotificationOrFail()
@@ -162,19 +190,21 @@ class TestMovieMagicProvider extends AndroidTestCase {
         specially needed when the provider has not implemented the delete function yet
     */
     void deleteAllRecordsFromDB() {
+        //Since the CASCADE delete is in effect, so only delete the main primary tables
+        //Commented out the rest, however PLEASE DO NOT DELETE THE LINES as those may be needed later
         MovieMagicDbHelper dbHelper = new MovieMagicDbHelper(mContext)
         SQLiteDatabase db = dbHelper.getWritableDatabase()
         db.delete(MovieMagicContract.MovieBasicInfo.TABLE_NAME, null, null)
-        db.delete(MovieMagicContract.MovieCast.TABLE_NAME, null, null)
-        db.delete(MovieMagicContract.MovieCrew.TABLE_NAME, null, null)
-        db.delete(MovieMagicContract.MovieImage.TABLE_NAME, null, null)
-        db.delete(MovieMagicContract.MovieVideo.TABLE_NAME, null, null)
-        db.delete(MovieMagicContract.MovieCollection.TABLE_NAME, null, null)
-        db.delete(MovieMagicContract.MovieReview.TABLE_NAME, null, null)
-        db.delete(MovieMagicContract.MovieReleaseDate.TABLE_NAME, null, null)
+//        db.delete(MovieMagicContract.MovieCast.TABLE_NAME, null, null)
+//        db.delete(MovieMagicContract.MovieCrew.TABLE_NAME, null, null)
+//        db.delete(MovieMagicContract.MovieImage.TABLE_NAME, null, null)
+//        db.delete(MovieMagicContract.MovieVideo.TABLE_NAME, null, null)
+//        db.delete(MovieMagicContract.MovieReview.TABLE_NAME, null, null)
+//        db.delete(MovieMagicContract.MovieReleaseDate.TABLE_NAME, null, null)
         db.delete(MovieMagicContract.MoviePersonInfo.TABLE_NAME, null, null)
-        db.delete(MovieMagicContract.MoviePersonCast.TABLE_NAME, null, null)
-        db.delete(MovieMagicContract.MoviePersonCrew.TABLE_NAME, null, null)
+//        db.delete(MovieMagicContract.MoviePersonCast.TABLE_NAME, null, null)
+//        db.delete(MovieMagicContract.MoviePersonCrew.TABLE_NAME, null, null)
+        db.delete(MovieMagicContract.MovieCollection.TABLE_NAME, null, null)
         db.close()
     }
 
@@ -186,7 +216,7 @@ class TestMovieMagicProvider extends AndroidTestCase {
         //Now that delete function is implemented, so no more required
         deleteAllRecordsFromDB()
         //Instead use this one
-        //deleteAllRecordsFromProvider()
+//        deleteAllRecordsFromProvider()
     }
 
     /*
@@ -358,11 +388,13 @@ class TestMovieMagicProvider extends AndroidTestCase {
         int testPersonID = TestUtilities.TEST_PERSON_ID
         String testCntryISO = TestUtilities.TEST_COUNTRY_ISO
         long rowId
-        final int TEST_FOREIGN_KEY = 2
+        long movieBasicInfoForeignKey
+        long personInfoForeignKey
         //Insert test records to movie_basic_info
         testValues = TestUtilities.createMovieValues()
         rowId = db.insert(MovieMagicContract.MovieBasicInfo.TABLE_NAME, null, testValues)
         assertTrue('Error: Unable to Insert movie_basic_info data into the Database', rowId != -1)
+        movieBasicInfoForeignKey = rowId
         // Test the basic content provider query for movie_basic_info
         testCursor = mContext.getContentResolver().query(MovieMagicContract.MovieBasicInfo.CONTENT_URI,null,null,null,null)
         // Make sure we get the correct cursor out of the database
@@ -377,7 +409,7 @@ class TestMovieMagicProvider extends AndroidTestCase {
         TestUtilities.validateCursor('testBasicMovieMagicQuery: movie_basic_info', testCursor, testValues)
 
         //Insert test records to movie_cast
-        testValues = TestUtilities.createMovieCastValues(TEST_FOREIGN_KEY)
+        testValues = TestUtilities.createMovieCastValues(movieBasicInfoForeignKey)
         rowId = db.insert(MovieMagicContract.MovieCast.TABLE_NAME, null, testValues)
         assertTrue('Error: Unable to Insert movie_cast data into the Database', rowId != -1)
         // Test the basic content provider query for movie_cast
@@ -390,7 +422,7 @@ class TestMovieMagicProvider extends AndroidTestCase {
         TestUtilities.validateCursor('testBasicMovieMagicQuery: movie_cast', testCursor, testValues)
 
         //Insert test records to movie_crew
-        testValues = TestUtilities.createMovieCrewValues(TEST_FOREIGN_KEY)
+        testValues = TestUtilities.createMovieCrewValues(movieBasicInfoForeignKey)
         rowId = db.insert(MovieMagicContract.MovieCrew.TABLE_NAME, null, testValues)
         assertTrue('Error: Unable to Insert movie_crew data into the Database', rowId != -1)
         // Test the basic content provider query for movie_crew
@@ -403,7 +435,7 @@ class TestMovieMagicProvider extends AndroidTestCase {
         TestUtilities.validateCursor('testBasicMovieMagicQuery: movie_crew', testCursor, testValues)
 
         //Insert test records to movie_image
-        testValues = TestUtilities.createMovieImageValues(TEST_FOREIGN_KEY)
+        testValues = TestUtilities.createMovieImageValues(movieBasicInfoForeignKey)
         rowId = db.insert(MovieMagicContract.MovieImage.TABLE_NAME, null, testValues)
         assertTrue('Error: Unable to Insert movie_image data into the Database', rowId != -1)
         // Test the basic content provider query for movie_image
@@ -416,7 +448,7 @@ class TestMovieMagicProvider extends AndroidTestCase {
         TestUtilities.validateCursor('testBasicMovieMagicQuery: movie_image', testCursor, testValues)
 
         //Insert test records to movie_video
-        testValues = TestUtilities.createMovieVideoValues(TEST_FOREIGN_KEY)
+        testValues = TestUtilities.createMovieVideoValues(movieBasicInfoForeignKey)
         rowId = db.insert(MovieMagicContract.MovieVideo.TABLE_NAME, null, testValues)
         assertTrue('Error: Unable to Insert movie_video data into the Database', rowId != -1)
         // Test the basic content provider query for movie_video
@@ -428,21 +460,8 @@ class TestMovieMagicProvider extends AndroidTestCase {
         // Make sure we get the correct cursor out of the database
         TestUtilities.validateCursor('testBasicMovieMagicQuery: movie_video', testCursor, testValues)
 
-        //Insert test records to movie_collection
-        testValues = TestUtilities.createMovieCollectionValues()
-        rowId = db.insert(MovieMagicContract.MovieCollection.TABLE_NAME, null, testValues)
-        assertTrue('Error: Unable to Insert movie_collection data into the Database', rowId != -1)
-        // Test the basic content provider query for movie_collection
-        testCursor = mContext.getContentResolver().query(MovieMagicContract.MovieCollection.CONTENT_URI,null,null,null,null)
-        // Make sure we get the correct cursor out of the database
-        TestUtilities.validateCursor('testBasicMovieMagicQuery: movie_collection', testCursor, testValues)
-        // Test the collection id content provider query for movie_collection
-        testCursor = mContext.getContentResolver().query(MovieMagicContract.MovieCollection.buildMovieCollectionUriWithCollectionId(testCollId),null,null,null,null)
-        // Make sure we get the correct cursor out of the database
-        TestUtilities.validateCursor('testBasicMovieMagicQuery: movie_collection', testCursor, testValues)
-
         //Insert test records to movie_review
-        testValues = TestUtilities.createMovieReviewValues(TEST_FOREIGN_KEY)
+        testValues = TestUtilities.createMovieReviewValues(movieBasicInfoForeignKey)
         rowId = db.insert(MovieMagicContract.MovieReview.TABLE_NAME, null, testValues)
         assertTrue('Error: Unable to Insert movie_review data into the Database', rowId != -1)
         // Test the basic content provider query for movie_review
@@ -455,7 +474,7 @@ class TestMovieMagicProvider extends AndroidTestCase {
         TestUtilities.validateCursor('testBasicMovieMagicQuery: movie_review', testCursor, testValues)
 
         //Insert test records to movie_release_date
-        testValues = TestUtilities.createMovieReleaseDateValues(TEST_FOREIGN_KEY)
+        testValues = TestUtilities.createMovieReleaseDateValues(movieBasicInfoForeignKey)
         rowId = db.insert(MovieMagicContract.MovieReleaseDate.TABLE_NAME, null, testValues)
         assertTrue('Error: Unable to Insert movie_release_date data into the Database', rowId != -1)        // Test the basic content provider query for movie_review
         // Test the basic content provider query for movie_release_date
@@ -475,6 +494,7 @@ class TestMovieMagicProvider extends AndroidTestCase {
         testValues = TestUtilities.createMoviePersonInfoValues()
         rowId = db.insert(MovieMagicContract.MoviePersonInfo.TABLE_NAME, null, testValues)
         assertTrue('Error: Unable to Insert movie_person_info data into the Database', rowId != -1)
+        personInfoForeignKey = rowId
         // Test the basic content provider query for movie_person_info
         testCursor = mContext.getContentResolver().query(MovieMagicContract.MoviePersonInfo.CONTENT_URI,null,null,null,null)
         // Make sure we get the correct cursor out of the database
@@ -485,7 +505,7 @@ class TestMovieMagicProvider extends AndroidTestCase {
         TestUtilities.validateCursor('testBasicMovieMagicQuery: movie_person_info', testCursor, testValues)
 
         //Insert test records to movie_person_cast
-        testValues = TestUtilities.createMoviePersonCastValues(TEST_FOREIGN_KEY)
+        testValues = TestUtilities.createMoviePersonCastValues(personInfoForeignKey)
         rowId = db.insert(MovieMagicContract.MoviePersonCast.TABLE_NAME, null, testValues)
         assertTrue('Error: Unable to Insert movie_person_cast data into the Database', rowId != -1)
         // Test the basic content provider query for movie_person_cast
@@ -498,7 +518,7 @@ class TestMovieMagicProvider extends AndroidTestCase {
         TestUtilities.validateCursor('testBasicMovieMagicQuery: movie_person_cast', testCursor, testValues)
 
         //Insert test records to movie_person_crew
-        testValues = TestUtilities.createMoviePersonCrewValues(TEST_FOREIGN_KEY)
+        testValues = TestUtilities.createMoviePersonCrewValues(personInfoForeignKey)
         rowId = db.insert(MovieMagicContract.MoviePersonCrew.TABLE_NAME, null, testValues)
         assertTrue('Error: Unable to Insert movie_person_crew data into the Database', rowId != -1)
         // Test the basic content provider query for movie_person_crew
@@ -509,6 +529,19 @@ class TestMovieMagicProvider extends AndroidTestCase {
         testCursor = mContext.getContentResolver().query(MovieMagicContract.MoviePersonCrew.buildMoviePersonCrewUriWithPersonId(testPersonID),null,null,null,null)
         // Make sure we get the correct cursor out of the database
         TestUtilities.validateCursor('testBasicMovieMagicQuery: movie_person_crew', testCursor, testValues)
+
+        //Insert test records to movie_collection
+        testValues = TestUtilities.createMovieCollectionValues()
+        rowId = db.insert(MovieMagicContract.MovieCollection.TABLE_NAME, null, testValues)
+        assertTrue('Error: Unable to Insert movie_collection data into the Database', rowId != -1)
+        // Test the basic content provider query for movie_collection
+        testCursor = mContext.getContentResolver().query(MovieMagicContract.MovieCollection.CONTENT_URI,null,null,null,null)
+        // Make sure we get the correct cursor out of the database
+        TestUtilities.validateCursor('testBasicMovieMagicQuery: movie_collection', testCursor, testValues)
+        // Test the collection id content provider query for movie_collection
+        testCursor = mContext.getContentResolver().query(MovieMagicContract.MovieCollection.buildMovieCollectionUriWithCollectionId(testCollId),null,null,null,null)
+        // Make sure we get the correct cursor out of the database
+        TestUtilities.validateCursor('testBasicMovieMagicQuery: movie_collection', testCursor, testValues)
 
         //Now close the database
         db.close()
@@ -1018,6 +1051,13 @@ class TestMovieMagicProvider extends AndroidTestCase {
    Test that provider can do the bulk insert for all tables
     */
     void testBulkInsert() {
+        //first delete all existing records to give it a fresh start
+        //this is important because UNIQUE with REPLACE is used in the tables
+        //so this will ensure we have all new data and count should not have any abrupt mismatch
+//        MovieMagicDbHelper dbHelper = new MovieMagicDbHelper(mContext)
+//        SQLiteDatabase db = dbHelper.getWritableDatabase()
+//        db.delete(MovieMagicContract.MovieBasicInfo.TABLE_NAME, null, null)
+
         final int BULK_INSERT_COUNT = 10
         int bulkCount
         Cursor bulkCursor
@@ -1042,13 +1082,13 @@ class TestMovieMagicProvider extends AndroidTestCase {
         tco.waitForNotificationOrFail()
         mContext.getContentResolver().unregisterContentObserver(tco)
         //Validate the bulkInsert count matches
-        assertEquals(bulkCount, BULK_INSERT_COUNT)
+        assertEquals('Error:bulk insert count not matched for movie_basic_info',bulkCount, BULK_INSERT_COUNT)
         // A cursor is the primary interface to the query results.
         bulkCursor = mContext.getContentResolver().query(MovieMagicContract.MovieBasicInfo.CONTENT_URI, null, null, null,
                 "$MovieMagicContract.MovieBasicInfo.COLUMN_MOVIE_ID ASC" // sort order == Movie id, so that below cursor validation works
         )
         //should have as many records in the database as we've inserted
-        assertEquals(bulkCursor.getCount(), BULK_INSERT_COUNT)
+        assertEquals('Error:bulk inserted query rec count not matched for movie_basic_info',bulkCursor.getCount(), BULK_INSERT_COUNT)
         // and let's make sure they match the ones we created
         bulkCursor.moveToFirst()
         for (int i in 0..(BULK_INSERT_COUNT - 1)) {
@@ -1059,7 +1099,11 @@ class TestMovieMagicProvider extends AndroidTestCase {
         //Bulk insert for movie_cast
         //Create some bulk data
         for (i in 0..(BULK_INSERT_COUNT - 1)) {
-            testValues[i] = TestUtilities.createMovieCastValues(i)
+            //Since there is UNIQUE REPLACE is in effect in the child table, so in order to ensure the primary
+            //and foreign key match, instead of sending 'i' as is '1' is added so that foreign key starts from 1
+            //and ends at 10 (which ideally the numbers in primary table as we insert records in empty tables).
+            //Same rules applied for all child tables
+            testValues[i] = TestUtilities.createBulkMovieCastValues(i+1)
         }
         //Register a content observer
         tco = TestContentObserverUtilities.getTestContentObserver()
@@ -1070,13 +1114,13 @@ class TestMovieMagicProvider extends AndroidTestCase {
         tco.waitForNotificationOrFail()
         mContext.getContentResolver().unregisterContentObserver(tco)
         //Validate the bulkInsert count matches
-        assertEquals(bulkCount, BULK_INSERT_COUNT)
+        assertEquals('Error:bulk insert count not matched for movie_cast',bulkCount, BULK_INSERT_COUNT)
         // A cursor is the primary interface to the query results.
         bulkCursor = mContext.getContentResolver().query(MovieMagicContract.MovieCast.CONTENT_URI, null, null, null,
                 "$MovieMagicContract.MovieCast.COLUMN_FOREIGN_KEY_ID ASC" // sort order == foreign key, so that below cursor validation works
         )
         //should have as many records in the database as we've inserted
-        assertEquals(bulkCursor.getCount(), BULK_INSERT_COUNT)
+        assertEquals('Error:bulk inserted query rec count not matched for movie_cast',bulkCursor.getCount(), BULK_INSERT_COUNT)
         // and let's make sure they match the ones we created
         bulkCursor.moveToFirst()
         for (int i in 0..(BULK_INSERT_COUNT - 1)) {
@@ -1087,7 +1131,7 @@ class TestMovieMagicProvider extends AndroidTestCase {
         //Bulk insert for movie_crew
         //Create some bulk data
         for (i in 0..(BULK_INSERT_COUNT - 1)) {
-            testValues[i] = TestUtilities.createMovieCrewValues(i)
+            testValues[i] = TestUtilities.createBulkMovieCrewValues(i+1)
         }
         //Register a content observer
         tco = TestContentObserverUtilities.getTestContentObserver()
@@ -1098,13 +1142,13 @@ class TestMovieMagicProvider extends AndroidTestCase {
         tco.waitForNotificationOrFail()
         mContext.getContentResolver().unregisterContentObserver(tco)
         //Validate the bulkInsert count matches
-        assertEquals(bulkCount, BULK_INSERT_COUNT)
+        assertEquals('Error:bulk insert count not matched for movie_crew',bulkCount, BULK_INSERT_COUNT)
         // A cursor is the primary interface to the query results.
         bulkCursor = mContext.getContentResolver().query(MovieMagicContract.MovieCrew.CONTENT_URI, null, null, null,
                 "$MovieMagicContract.MovieCrew.COLUMN_FOREIGN_KEY_ID ASC" // sort order == foreign key, so that below cursor validation works
         )
         //should have as many records in the database as we've inserted
-        assertEquals(bulkCursor.getCount(), BULK_INSERT_COUNT)
+        assertEquals('Error:bulk inserted query rec count not matched for movie_crew',bulkCursor.getCount(), BULK_INSERT_COUNT)
         // and let's make sure they match the ones we created
         bulkCursor.moveToFirst()
         for (int i in 0..(BULK_INSERT_COUNT - 1)) {
@@ -1115,7 +1159,7 @@ class TestMovieMagicProvider extends AndroidTestCase {
         //Bulk insert for movie_image
         //Create some bulk data
         for (i in 0..(BULK_INSERT_COUNT - 1)) {
-            testValues[i] = TestUtilities.createMovieImageValues(i)
+            testValues[i] = TestUtilities.createBulkMovieImageValues(i+1)
         }
         //Register a content observer
         tco = TestContentObserverUtilities.getTestContentObserver()
@@ -1126,13 +1170,13 @@ class TestMovieMagicProvider extends AndroidTestCase {
         tco.waitForNotificationOrFail()
         mContext.getContentResolver().unregisterContentObserver(tco)
         //Validate the bulkInsert count matches
-        assertEquals(bulkCount, BULK_INSERT_COUNT)
+        assertEquals('Error:bulk insert count not matched for movie_image',bulkCount, BULK_INSERT_COUNT)
         // A cursor is the primary interface to the query results.
         bulkCursor = mContext.getContentResolver().query(MovieMagicContract.MovieImage.CONTENT_URI, null, null, null,
                 "$MovieMagicContract.MovieImage.COLUMN_FOREIGN_KEY_ID ASC" // sort order == foreign key, so that below cursor validation works
         )
         //should have as many records in the database as we've inserted
-        assertEquals(bulkCursor.getCount(), BULK_INSERT_COUNT)
+        assertEquals('Error:bulk inserted query rec count not matched for movie_image',bulkCursor.getCount(), BULK_INSERT_COUNT)
         // and let's make sure they match the ones we created
         bulkCursor.moveToFirst()
         for (int i in 0..(BULK_INSERT_COUNT - 1)) {
@@ -1143,7 +1187,7 @@ class TestMovieMagicProvider extends AndroidTestCase {
         //Bulk insert for movie_video
         //Create some bulk data
         for (i in 0..(BULK_INSERT_COUNT - 1)) {
-            testValues[i] = TestUtilities.createMovieVideoValues(i)
+            testValues[i] = TestUtilities.createBulkMovieVideoValues(i+1)
         }
         //Register a content observer
         tco = TestContentObserverUtilities.getTestContentObserver()
@@ -1154,13 +1198,13 @@ class TestMovieMagicProvider extends AndroidTestCase {
         tco.waitForNotificationOrFail()
         mContext.getContentResolver().unregisterContentObserver(tco)
         //Validate the bulkInsert count matches
-        assertEquals(bulkCount, BULK_INSERT_COUNT)
+        assertEquals('Error:bulk insert count not matched for movie_video',bulkCount, BULK_INSERT_COUNT)
         // A cursor is the primary interface to the query results.
         bulkCursor = mContext.getContentResolver().query(MovieMagicContract.MovieVideo.CONTENT_URI, null, null, null,
                 "$MovieMagicContract.MovieVideo.COLUMN_FOREIGN_KEY_ID ASC" // sort order == foreign key, so that below cursor validation works
         )
         //should have as many records in the database as we've inserted
-        assertEquals(bulkCursor.getCount(), BULK_INSERT_COUNT)
+        assertEquals('Error:bulk inserted query rec count not matched for movie_video',bulkCursor.getCount(), BULK_INSERT_COUNT)
         // and let's make sure they match the ones we created
         bulkCursor.moveToFirst()
         for (int i in 0..(BULK_INSERT_COUNT - 1)) {
@@ -1171,7 +1215,7 @@ class TestMovieMagicProvider extends AndroidTestCase {
         //Bulk insert for movie_review
         //Create some bulk data
         for (i in 0..(BULK_INSERT_COUNT - 1)) {
-            testValues[i] = TestUtilities.createMovieReviewValues(i)
+            testValues[i] = TestUtilities.createBulkMovieReviewValues(i+1)
         }
         //Register a content observer
         tco = TestContentObserverUtilities.getTestContentObserver()
@@ -1182,13 +1226,13 @@ class TestMovieMagicProvider extends AndroidTestCase {
         tco.waitForNotificationOrFail()
         mContext.getContentResolver().unregisterContentObserver(tco)
         //Validate the bulkInsert count matches
-        assertEquals(bulkCount, BULK_INSERT_COUNT)
+        assertEquals('Error:bulk insert count not matched for movie_review',bulkCount, BULK_INSERT_COUNT)
         // A cursor is the primary interface to the query results.
         bulkCursor = mContext.getContentResolver().query(MovieMagicContract.MovieReview.CONTENT_URI, null, null, null,
                 "$MovieMagicContract.MovieReview.COLUMN_FOREIGN_KEY_ID" // sort order == foreign key, so that below cursor validation works
         )
         //should have as many records in the database as we've inserted
-        assertEquals(bulkCursor.getCount(), BULK_INSERT_COUNT)
+        assertEquals('Error:bulk inserted query rec count not matched for movie_review',bulkCursor.getCount(), BULK_INSERT_COUNT)
         // and let's make sure they match the ones we created
         bulkCursor.moveToFirst()
         for (int i in 0..(BULK_INSERT_COUNT - 1)) {
@@ -1199,7 +1243,7 @@ class TestMovieMagicProvider extends AndroidTestCase {
         //Bulk insert for movie_release_date
         //Create some bulk data
         for (i in 0..(BULK_INSERT_COUNT - 1)) {
-            testValues[i] = TestUtilities.createMovieReleaseDateValues(i)
+            testValues[i] = TestUtilities.createBulkMovieReleaseDateValues(i+1)
         }
         //Register a content observer
         tco = TestContentObserverUtilities.getTestContentObserver()
@@ -1210,45 +1254,17 @@ class TestMovieMagicProvider extends AndroidTestCase {
         tco.waitForNotificationOrFail()
         mContext.getContentResolver().unregisterContentObserver(tco)
         //Validate the bulkInsert count matches
-        assertEquals(bulkCount, BULK_INSERT_COUNT)
+        assertEquals('Error:bulk insert count not matched for movie_release_date',bulkCount, BULK_INSERT_COUNT)
         // A cursor is the primary interface to the query results.
         bulkCursor = mContext.getContentResolver().query(MovieMagicContract.MovieReleaseDate.CONTENT_URI, null, null, null,
                 "$MovieMagicContract.MovieReleaseDate.COLUMN_FOREIGN_KEY_ID ASC" // sort order == foreign key, so that below cursor validation works
         )
         //should have as many records in the database as we've inserted
-        assertEquals(bulkCursor.getCount(), BULK_INSERT_COUNT)
+        assertEquals('Error:bulk inserted query rec count not matched for movie_release_date',bulkCursor.getCount(), BULK_INSERT_COUNT)
         // and let's make sure they match the ones we created
         bulkCursor.moveToFirst()
         for (int i in 0..(BULK_INSERT_COUNT - 1)) {
             TestUtilities.validateCurrentRecord("testBulkInsert: movie_release_date - #$i", bulkCursor, testValues[i])
-            bulkCursor.moveToNext()
-        }
-
-        //Bulk insert for movie_collection
-        //Create some bulk data
-        for (i in 0..(BULK_INSERT_COUNT - 1)) {
-            testValues[i] = TestUtilities.createBulkMovieCollectionValues(i)
-        }
-        //Register a content observer
-        tco = TestContentObserverUtilities.getTestContentObserver()
-        mContext.getContentResolver().registerContentObserver(MovieMagicContract.MovieCollection.CONTENT_URI, true, tco)
-        //Do a bulk insert
-        bulkCount = mContext.getContentResolver().bulkInsert(MovieMagicContract.MovieCollection.CONTENT_URI, testValues)
-        //If this fails, it means that we are not calling the getContext().getContentResolver().notifyChange(uri, null) in your BulkInsert
-        tco.waitForNotificationOrFail()
-        mContext.getContentResolver().unregisterContentObserver(tco)
-        //Validate the bulkInsert count matches
-        assertEquals(bulkCount, BULK_INSERT_COUNT)
-        // A cursor is the primary interface to the query results.
-        bulkCursor = mContext.getContentResolver().query(MovieMagicContract.MovieCollection.CONTENT_URI, null, null, null,
-                "$MovieMagicContract.MovieCollection.COLUMN_COLLECTION_ID ASC" // sort order == collection id, so that below cursor validation works
-        )
-        //should have as many records in the database as we've inserted
-        assertEquals(bulkCursor.getCount(), BULK_INSERT_COUNT)
-        // and let's make sure they match the ones we created
-        bulkCursor.moveToFirst()
-        for (int i in 0..(BULK_INSERT_COUNT - 1)) {
-            TestUtilities.validateCurrentRecord("testBulkInsert: movie_collection - #$i", bulkCursor, testValues[i])
             bulkCursor.moveToNext()
         }
 
@@ -1266,13 +1282,13 @@ class TestMovieMagicProvider extends AndroidTestCase {
         tco.waitForNotificationOrFail()
         mContext.getContentResolver().unregisterContentObserver(tco)
         //Validate the bulkInsert count matches
-        assertEquals(bulkCount, BULK_INSERT_COUNT)
+        assertEquals('Error:bulk insert count not matched for movie_person_info',bulkCount, BULK_INSERT_COUNT)
         // A cursor is the primary interface to the query results.
         bulkCursor = mContext.getContentResolver().query(MovieMagicContract.MoviePersonInfo.CONTENT_URI, null, null, null,
                 "$MovieMagicContract.MoviePersonInfo.COLUMN_PERSON_ID ASC" // sort order == person id, so that below cursor validation works
         )
         //should have as many records in the database as we've inserted
-        assertEquals(bulkCursor.getCount(), BULK_INSERT_COUNT)
+        assertEquals('Error:bulk inserted query rec count not matched for movie_person_info',bulkCursor.getCount(), BULK_INSERT_COUNT)
         // and let's make sure they match the ones we created
         bulkCursor.moveToFirst()
         for (int i in 0..(BULK_INSERT_COUNT - 1)) {
@@ -1283,7 +1299,7 @@ class TestMovieMagicProvider extends AndroidTestCase {
         //Bulk insert for movie_person_cast
         //Create some bulk data
         for (i in 0..(BULK_INSERT_COUNT - 1)) {
-            testValues[i] = TestUtilities.createMoviePersonCastValues(i)
+            testValues[i] = TestUtilities.createBulkMoviePersonCastValues(i+1)
         }
         //Register a content observer
         tco = TestContentObserverUtilities.getTestContentObserver()
@@ -1294,13 +1310,13 @@ class TestMovieMagicProvider extends AndroidTestCase {
         tco.waitForNotificationOrFail()
         mContext.getContentResolver().unregisterContentObserver(tco)
         //Validate the bulkInsert count matches
-        assertEquals(bulkCount, BULK_INSERT_COUNT)
+        assertEquals('Error:bulk insert count not matched for movie_person_cast',bulkCount, BULK_INSERT_COUNT)
         // A cursor is the primary interface to the query results.
         bulkCursor = mContext.getContentResolver().query(MovieMagicContract.MoviePersonCast.CONTENT_URI, null, null, null,
                 "$MovieMagicContract.MoviePersonCast.COLUMN_FOREIGN_KEY_ID ASC" // sort order == foreign key, so that below cursor validation works
         )
         //should have as many records in the database as we've inserted
-        assertEquals(bulkCursor.getCount(), BULK_INSERT_COUNT)
+        assertEquals('Error:bulk inserted query rec count not matched for movie_person_cast',bulkCursor.getCount(), BULK_INSERT_COUNT)
         // and let's make sure they match the ones we created
         bulkCursor.moveToFirst()
         for (int i in 0..(BULK_INSERT_COUNT - 1)) {
@@ -1311,7 +1327,7 @@ class TestMovieMagicProvider extends AndroidTestCase {
         //Bulk insert for movie_person_crew
         //Create some bulk data
         for (i in 0..(BULK_INSERT_COUNT - 1)) {
-            testValues[i] = TestUtilities.createMoviePersonCrewValues(i)
+            testValues[i] = TestUtilities.createBulkMoviePersonCrewValues(i+1)
         }
         //Register a content observer
         tco = TestContentObserverUtilities.getTestContentObserver()
@@ -1322,17 +1338,45 @@ class TestMovieMagicProvider extends AndroidTestCase {
         tco.waitForNotificationOrFail()
         mContext.getContentResolver().unregisterContentObserver(tco)
         //Validate the bulkInsert count matches
-        assertEquals(bulkCount, BULK_INSERT_COUNT)
+        assertEquals('Error:bulk insert count not matched for movie_person_crew',bulkCount, BULK_INSERT_COUNT)
         // A cursor is the primary interface to the query results.
         bulkCursor = mContext.getContentResolver().query(MovieMagicContract.MoviePersonCrew.CONTENT_URI, null, null, null,
                 "$MovieMagicContract.MoviePersonCrew.COLUMN_FOREIGN_KEY_ID ASC" // sort order == foreign key, so that below cursor validation works
         )
         //should have as many records in the database as we've inserted
-        assertEquals(bulkCursor.getCount(), BULK_INSERT_COUNT)
+        assertEquals('Error:bulk inserted query rec count not matched for movie_person_crew',bulkCursor.getCount(), BULK_INSERT_COUNT)
         // and let's make sure they match the ones we created
         bulkCursor.moveToFirst()
         for (int i in 0..(BULK_INSERT_COUNT - 1)) {
             TestUtilities.validateCurrentRecord("testBulkInsert: movie_person_crew - #$i", bulkCursor, testValues[i])
+            bulkCursor.moveToNext()
+        }
+
+        //Bulk insert for movie_collection
+        //Create some bulk data
+        for (i in 0..(BULK_INSERT_COUNT - 1)) {
+            testValues[i] = TestUtilities.createBulkMovieCollectionValues(i)
+        }
+        //Register a content observer
+        tco = TestContentObserverUtilities.getTestContentObserver()
+        mContext.getContentResolver().registerContentObserver(MovieMagicContract.MovieCollection.CONTENT_URI, true, tco)
+        //Do a bulk insert
+        bulkCount = mContext.getContentResolver().bulkInsert(MovieMagicContract.MovieCollection.CONTENT_URI, testValues)
+        //If this fails, it means that we are not calling the getContext().getContentResolver().notifyChange(uri, null) in your BulkInsert
+        tco.waitForNotificationOrFail()
+        mContext.getContentResolver().unregisterContentObserver(tco)
+        //Validate the bulkInsert count matches
+        assertEquals('Error:bulk insert count not matched for movie_collection',bulkCount, BULK_INSERT_COUNT)
+        // A cursor is the primary interface to the query results.
+        bulkCursor = mContext.getContentResolver().query(MovieMagicContract.MovieCollection.CONTENT_URI, null, null, null,
+                "$MovieMagicContract.MovieCollection.COLUMN_COLLECTION_ID ASC" // sort order == collection id, so that below cursor validation works
+        )
+        //should have as many records in the database as we've inserted
+        assertEquals('Error:bulk inserted query rec count not matched for movie_collection',bulkCursor.getCount(), BULK_INSERT_COUNT)
+        // and let's make sure they match the ones we created
+        bulkCursor.moveToFirst()
+        for (int i in 0..(BULK_INSERT_COUNT - 1)) {
+            TestUtilities.validateCurrentRecord("testBulkInsert: movie_collection - #$i", bulkCursor, testValues[i])
             bulkCursor.moveToNext()
         }
 

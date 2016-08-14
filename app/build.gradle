@@ -4,7 +4,7 @@ apply plugin: 'groovyx.grooid.groovy-android'
 
 android {
     compileSdkVersion 23
-    buildToolsVersion "23.0.2"
+    buildToolsVersion '23.0.3'
 
     defaultConfig {
         applicationId "com.moviemagic.dpaul.android.app"
@@ -12,7 +12,7 @@ android {
         targetSdkVersion 23
         versionCode 1
         versionName "1.0"
-        //multiDexEnabled true
+//        multiDexEnabled true
     }
     buildTypes {
         release {
@@ -34,17 +34,18 @@ android {
 }
 
 dependencies {
-    compile fileTree(dir: 'libs', include: ['*.jar'])
+    compile fileTree(include: ['*.jar'], dir: 'libs')
     testCompile 'junit:junit:4.12'
     compile 'com.android.support:appcompat-v7:23.4.0'
     compile 'com.android.support:design:23.4.0'
     compile 'com.android.support:cardview-v7:23.4.0'
+    compile 'com.android.support:recyclerview-v7:23.2.0'
     compile 'com.android.support:leanback-v17:23.4.0'
     compile 'com.android.support:palette-v7:23.4.0'
     //add compile dependency for groovy
     //compile 'org.codehaus.groovy.modules.http-builder:http-builder:0.7.2'
     compile 'org.codehaus.groovy:groovy:2.4.6:grooid'
-    compile ('org.codehaus.groovy:groovy-json:2.4.6') {
+    compile('org.codehaus.groovy:groovy-json:2.4.6') {
         transitive = false
     }
     compile 'com.squareup.picasso:picasso:2.5.2'

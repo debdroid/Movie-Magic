@@ -30,7 +30,7 @@ class MovieMagicYoutubeFragment extends YouTubePlayerSupportFragment implements 
     /**
      * Returns a new instance of MovieMagicYoutubeFragment Fragment
      *
-     * @param videoId The ID of the YouTube video to play
+     * @param videoId The ID of the YouTube now_playing to play
      */
     public static MovieMagicYoutubeFragment createMovieMagicYouTubeFragment(final String videoId) {
         final MovieMagicYoutubeFragment movieMagicYouTubeFragment = new MovieMagicYoutubeFragment()
@@ -56,9 +56,9 @@ class MovieMagicYoutubeFragment extends YouTubePlayerSupportFragment implements 
 
 
     /**
-     * Set the video id and initialize the player
+     * Set the now_playing id and initialize the player
      * This can be used when including the Fragment in an XML layout
-     * @param videoId The ID of the video to play
+     * @param videoId The ID of the now_playing to play
      */
     public void setVideoId(final List<String> videoId) {
         mVideoIds = videoId

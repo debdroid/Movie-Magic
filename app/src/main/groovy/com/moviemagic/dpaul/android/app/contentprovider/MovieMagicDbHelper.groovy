@@ -61,8 +61,9 @@ class MovieMagicDbHelper extends SQLiteOpenHelper {
                 $MovieMagicContract.MovieBasicInfo.COLUMN_USER_WATCHED INTEGER DEFAULT 0,
                 $MovieMagicContract.MovieBasicInfo.COLUMN_USER_WISH_LIST INTEGER DEFAULT 0,
                 $MovieMagicContract.MovieBasicInfo.COLUMN_USER_FAVOURITE INTEGER DEFAULT 0,
-                $MovieMagicContract.MovieBasicInfo.COLUMN_USER_EXPORTED INTEGER DEFAULT 0,
+                $MovieMagicContract.MovieBasicInfo.COLUMN_USER_RATING REAL DEFAULT 0.0,
                 $MovieMagicContract.MovieBasicInfo.COLUMN_USER_COLLECTION INTEGER DEFAULT 0,
+                $MovieMagicContract.MovieBasicInfo.COLUMN_USER_EXPORTED INTEGER DEFAULT 0,
                 $MovieMagicContract.MovieBasicInfo.COLUMN_FUTURE_USE_1 TEXT NULL,
                 $MovieMagicContract.MovieBasicInfo.COLUMN_FUTURE_USE_2 TEXT NULL,
                 $MovieMagicContract.MovieBasicInfo.COLUMN_FUTURE_USE_3 TEXT NULL,
@@ -70,10 +71,7 @@ class MovieMagicDbHelper extends SQLiteOpenHelper {
                 $MovieMagicContract.MovieBasicInfo.COLUMN_FUTURE_USE_5 INTEGER DEFAULT 0,
                 UNIQUE ($MovieMagicContract.MovieBasicInfo.COLUMN_MOVIE_ID,
                 $MovieMagicContract.MovieBasicInfo.COLUMN_MOVIE_CATEGORY,
-                $MovieMagicContract.MovieBasicInfo.COLUMN_SIMILAR_MOVIE_LINK_ID,
-                $MovieMagicContract.MovieBasicInfo.COLUMN_USER_WATCHED,
-                $MovieMagicContract.MovieBasicInfo.COLUMN_USER_WISH_LIST,
-                $MovieMagicContract.MovieBasicInfo.COLUMN_USER_FAVOURITE) ON CONFLICT REPLACE)
+                $MovieMagicContract.MovieBasicInfo.COLUMN_SIMILAR_MOVIE_LINK_ID) ON CONFLICT REPLACE)
                 """
 
         //Create the SQL to create movie_cast table
@@ -93,8 +91,7 @@ class MovieMagicDbHelper extends SQLiteOpenHelper {
                 $MovieMagicContract.MovieBasicInfo.TABLE_NAME ($MovieMagicContract.MovieBasicInfo._ID)
                 ON DELETE CASCADE,
                 UNIQUE ($MovieMagicContract.MovieCast.COLUMN_CAST_ORIG_MOVIE_ID,
-                $MovieMagicContract.MovieCast.COLUMN_CAST_PERSON_ID,
-                $MovieMagicContract.MovieCast.COLUMN_FOREIGN_KEY_ID) ON CONFLICT REPLACE)
+                $MovieMagicContract.MovieCast.COLUMN_CAST_PERSON_ID) ON CONFLICT REPLACE)
                 """
 
         //Create the SQL to create movie_crew table
@@ -113,8 +110,7 @@ class MovieMagicDbHelper extends SQLiteOpenHelper {
                 $MovieMagicContract.MovieBasicInfo.TABLE_NAME ($MovieMagicContract.MovieBasicInfo._ID)
                 ON DELETE CASCADE,
                 UNIQUE ($MovieMagicContract.MovieCrew.COLUMN_CREW_ORIG_MOVIE_ID,
-                $MovieMagicContract.MovieCrew.COLUMN_CREW_PERSON_ID,
-                $MovieMagicContract.MovieCrew.COLUMN_FOREIGN_KEY_ID) ON CONFLICT REPLACE)
+                $MovieMagicContract.MovieCrew.COLUMN_CREW_PERSON_ID) ON CONFLICT REPLACE)
                 """
 
         //Create the SQL to create movie_image table
@@ -132,8 +128,7 @@ class MovieMagicDbHelper extends SQLiteOpenHelper {
                 ON DELETE CASCADE,
                 UNIQUE ($MovieMagicContract.MovieImage.COLUMN_IMAGE_ORIG_MOVIE_ID,
                 $MovieMagicContract.MovieImage.COLUMN_IMAGE_TYPE,
-                $MovieMagicContract.MovieImage.COLUMN_IMAGE_FILE_PATH,
-                $MovieMagicContract.MovieImage.COLUMN_FOREIGN_KEY_ID) ON CONFLICT REPLACE)
+                $MovieMagicContract.MovieImage.COLUMN_IMAGE_FILE_PATH) ON CONFLICT REPLACE)
                 """
 
         //Create the SQL to create movie_video table
@@ -152,8 +147,8 @@ class MovieMagicDbHelper extends SQLiteOpenHelper {
                 $MovieMagicContract.MovieBasicInfo.TABLE_NAME ($MovieMagicContract.MovieBasicInfo._ID)
                 ON DELETE CASCADE,
                 UNIQUE ($MovieMagicContract.MovieVideo.COLUMN_VIDEO_ORIG_MOVIE_ID,
-                $MovieMagicContract.MovieVideo.COLUMN_VIDEO_ID,
-                $MovieMagicContract.MovieVideo.COLUMN_FOREIGN_KEY_ID) ON CONFLICT REPLACE)
+                $MovieMagicContract.MovieVideo.COLUMN_VIDEO_KEY,
+                $MovieMagicContract.MovieVideo.COLUMN_VIDEO_TYPE) ON CONFLICT REPLACE)
                 """
 
         //Create the SQL to create movie_collection table
@@ -183,8 +178,7 @@ class MovieMagicDbHelper extends SQLiteOpenHelper {
                 $MovieMagicContract.MovieBasicInfo.TABLE_NAME ($MovieMagicContract.MovieBasicInfo._ID)
                 ON DELETE CASCADE,
                 UNIQUE ($MovieMagicContract.MovieReview.COLUMN_REVIEW_ORIG_MOVIE_ID,
-                $MovieMagicContract.MovieReview.COLUMN_REVIEW_ID,
-                $MovieMagicContract.MovieReview.COLUMN_FOREIGN_KEY_ID) ON CONFLICT REPLACE)
+                $MovieMagicContract.MovieReview.COLUMN_REVIEW_ID) ON CONFLICT REPLACE)
                 """
 
         //Create the SQL to create movie_release_date_info table
@@ -204,8 +198,7 @@ class MovieMagicDbHelper extends SQLiteOpenHelper {
                 ON DELETE CASCADE,
                 UNIQUE ($MovieMagicContract.MovieReleaseDate.COLUMN_RELEASE_ORIG_MOVIE_ID,
                 $MovieMagicContract.MovieReleaseDate.COLUMN_RELEASE_ISO_COUNTRY,
-                $MovieMagicContract.MovieReleaseDate.COLUMN_RELEASE_TYPE,
-                $MovieMagicContract.MovieReleaseDate.COLUMN_FOREIGN_KEY_ID) ON CONFLICT REPLACE)
+                $MovieMagicContract.MovieReleaseDate.COLUMN_RELEASE_DATE) ON CONFLICT REPLACE)
                 """
 
         //Create the SQL to create movie_person_info table
@@ -245,8 +238,7 @@ class MovieMagicDbHelper extends SQLiteOpenHelper {
                 ON DELETE CASCADE,
                 UNIQUE ($MovieMagicContract.MoviePersonCast.COLUMN_PERSON_CAST_ORIG_PERSON_ID,
                 $MovieMagicContract.MoviePersonCast.COLUMN_PERSON_CAST_MOVIE_ID,
-                $MovieMagicContract.MoviePersonCast.COLUMN_PERSON_CAST_CHARACTER,
-                $MovieMagicContract.MoviePersonCast.COLUMN_FOREIGN_KEY_ID) ON CONFLICT REPLACE)
+                $MovieMagicContract.MoviePersonCast.COLUMN_PERSON_CAST_CHARACTER) ON CONFLICT REPLACE)
                 """
 
         //Create the SQL to create movie_person_cast table
@@ -269,8 +261,7 @@ class MovieMagicDbHelper extends SQLiteOpenHelper {
                 ON DELETE CASCADE,
                 UNIQUE ( $MovieMagicContract.MoviePersonCrew.COLUMN_PERSON_CREW_ORIG_PERSON_ID,
                 $MovieMagicContract.MoviePersonCrew.COLUMN_PERSON_CREW_MOVIE_ID,
-                $MovieMagicContract.MoviePersonCrew.COLUMN_PERSON_CREW_JOB,
-                $MovieMagicContract.MoviePersonCrew.COLUMN_FOREIGN_KEY_ID) ON CONFLICT REPLACE)
+                $MovieMagicContract.MoviePersonCrew.COLUMN_PERSON_CREW_JOB) ON CONFLICT REPLACE)
                 """
 
         //Now create all the tables

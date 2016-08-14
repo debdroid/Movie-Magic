@@ -915,7 +915,7 @@ class MovieMagicProvider extends ContentProvider {
         // Covert the movie release date
         if (values.containsKey(MovieMagicContract.MovieBasicInfo.COLUMN_RELEASE_DATE)) {
             String movieReleaseDate = values.getAsString(MovieMagicContract.MovieBasicInfo.COLUMN_RELEASE_DATE)
-            values.put(MovieMagicContract.MovieBasicInfo.COLUMN_RELEASE_DATE, MovieMagicContract.covertMovieReleaseDate(movieReleaseDate))
+            values.put(MovieMagicContract.MovieBasicInfo.COLUMN_RELEASE_DATE, MovieMagicContract.convertMovieReleaseDate(movieReleaseDate))
         }
     }
 }

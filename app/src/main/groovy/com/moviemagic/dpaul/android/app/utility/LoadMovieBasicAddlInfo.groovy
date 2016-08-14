@@ -20,8 +20,8 @@ class LoadMovieBasicAddlInfo extends AsyncTask<Integer, Void, Void> {
     private ContentResolver mContentResolver
     private Context mContext
     private Uri mMovieBasicMovieIdUri
-    public static final String SIMILAR_MOVIE_CATEGORY = 'similar_movie'
-    public static final String SIMILAR_MOVIE_LIST_TYPE = 'tmdb_public_similar_movie_list'
+//    public static final String SIMILAR_MOVIE_CATEGORY = 'similar_movie'
+//    public static final String SIMILAR_MOVIE_LIST_TYPE = 'tmdb_public_similar_movie_list'
 
     public LoadMovieBasicAddlInfo(Context ctx, Uri movieUri) {
         mContext = ctx
@@ -35,18 +35,18 @@ class LoadMovieBasicAddlInfo extends AsyncTask<Integer, Void, Void> {
         int movieBasicRowId = params[1]
         //TMDB api example
         //https://api.themoviedb.org/3/movie/240?api_key=key&append_to_response=similar,credits,images,videos,release_dates,reviews
-        final String TMDB_MOVIE_BASE_URL = 'https://api.themoviedb.org/3/'
-        final String MOVIE_PATH = 'movie'
-        final String API_KEY = 'api_key'
-        final String APPEND_TO_RESPONSE_KEY = 'append_to_response'
-        final String APPEND_TO_RESPONSE_PARAM = 'similar,credits,images,videos,release_dates,reviews'
+//        final String TMDB_MOVIE_BASE_URL = 'https://api.themoviedb.org/3/'
+//        final String MOVIE_PATH = 'movie'
+//        final String API_KEY = 'api_key'
+//        final String APPEND_TO_RESPONSE_KEY = 'append_to_response'
+//        final String APPEND_TO_RESPONSE_PARAM = 'similar,credits,images,videos,release_dates,reviews'
         try {
-            Uri.Builder uriBuilder = Uri.parse(TMDB_MOVIE_BASE_URL).buildUpon()
+            Uri.Builder uriBuilder = Uri.parse(GlobalStaticVariables.TMDB_MOVIE_BASE_URL).buildUpon()
 
-            Uri uri = uriBuilder.appendPath(MOVIE_PATH)
+            Uri uri = uriBuilder.appendPath(GlobalStaticVariables.TMDB_MOVIE_PATH)
                     .appendPath(Integer.toString(movieId))
-                    .appendQueryParameter(API_KEY, BuildConfig.TMDB_API_KEY)
-                    .appendQueryParameter(APPEND_TO_RESPONSE_KEY, APPEND_TO_RESPONSE_PARAM)
+                    .appendQueryParameter(GlobalStaticVariables.TMDB_MOVIE_API_KEY, BuildConfig.TMDB_API_KEY)
+                    .appendQueryParameter(GlobalStaticVariables.TMDB_APPEND_TO_RESPONSE_KEY, GlobalStaticVariables.TMDB_APPEND_TO_RESPONSE_PARAM)
                     .build()
 
             URL url = new URL(uri.toString())
@@ -96,11 +96,11 @@ class LoadMovieBasicAddlInfo extends AsyncTask<Integer, Void, Void> {
             LogDisplay.callLog(LOG_TAG,"Total insert for movie image->$MovieImageCount",LogDisplay.LOAD_MOVIE_BASIC_ADDL_INFO_FLAG)
 
             /**
-             * Process and load (insert) the movie video data
+             * Process and load (insert) the movie now_playing data
              * **/
             ContentValues[] movieVideoContentValues = JsonParse.praseMovieVideoJson(jsonData, movieId, movieBasicRowId) as ContentValues []
             int MovieVideoCount = mContentResolver.bulkInsert(MovieMagicContract.MovieVideo.CONTENT_URI,movieVideoContentValues)
-            LogDisplay.callLog(LOG_TAG,"Total insert for movie video->$MovieVideoCount",LogDisplay.LOAD_MOVIE_BASIC_ADDL_INFO_FLAG)
+            LogDisplay.callLog(LOG_TAG,"Total insert for movie now_playing->$MovieVideoCount",LogDisplay.LOAD_MOVIE_BASIC_ADDL_INFO_FLAG)
 
             /**
              * Process and load (insert) the movie release date data

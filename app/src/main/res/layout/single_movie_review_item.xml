@@ -1,0 +1,57 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+<LinearLayout
+    android:id="@+id/single_review_item_linear_layout"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/primary">
+    <TextView
+        android:id="@+id/single_review_item_autor"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="left"
+        android:fontFamily="sans-serif-condensed"
+        android:textAppearance="@style/TextAppearance.AppCompat.Title"
+        android:text="@string/review_author"
+        android:textColor="@color/white_color"/>
+    <TextView
+        android:id="@+id/single_review_item_review_content"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ellipsize="end"
+        android:maxLines="@string/single_review_item_collapse_line_item_count"
+        android:layout_gravity="left"
+        android:background="@color/primary"
+        android:fontFamily="sans-serif-condensed"
+        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+        android:text="@string/review_content"
+        android:textColor="@color/grey_color"/>
+</LinearLayout>
+    <ImageButton
+        android:id="@+id/single_review_item_show_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:clickable="true"
+        android:layout_below="@+id/single_review_item_linear_layout"
+        android:background="@drawable/ic_keyboard_arrow_down_white_24dp"/>
+    <View
+        android:id="@+id/single_review_item_divider"
+        android:layout_marginTop="@dimen/m_design_space_between_content_area"
+        android:layout_below="@+id/single_review_item_linear_layout"
+        android:layout_toLeftOf="@+id/single_review_item_show_button"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/white_color" />
+    <ImageButton
+        android:id="@+id/single_review_item_hide_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:clickable="true"
+        android:visibility="invisible"
+        android:layout_below="@+id/single_review_item_linear_layout"
+        android:background="@drawable/ic_keyboard_arrow_up_white_24dp"/>
+</RelativeLayout>

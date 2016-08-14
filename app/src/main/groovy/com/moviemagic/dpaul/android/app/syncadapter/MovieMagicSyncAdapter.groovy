@@ -12,6 +12,7 @@ import android.os.Bundle
 import android.util.Log
 import com.moviemagic.dpaul.android.app.BuildConfig
 import com.moviemagic.dpaul.android.app.contentprovider.MovieMagicContract
+import com.moviemagic.dpaul.android.app.utility.GlobalStaticVariables
 import com.moviemagic.dpaul.android.app.utility.JsonParse
 import com.moviemagic.dpaul.android.app.utility.LogDisplay
 import groovy.json.JsonException
@@ -22,8 +23,6 @@ import groovy.transform.CompileStatic
 @CompileStatic
 class MovieMagicSyncAdapter extends AbstractThreadedSyncAdapter {
     private static final String LOG_TAG = MovieMagicSyncAdapter.class.getSimpleName()
-    //Movie list type for tmdb public movies
-    public static final String MOVIE_LIST_TYPE_PUBLIC = 'tmdb_public'
 
     //This variable indicates the number of pages for initial load. It is also
     //used to determine the next page to download during more download
@@ -59,36 +58,36 @@ class MovieMagicSyncAdapter extends AbstractThreadedSyncAdapter {
     @Override
     void onPerformSync(Account account, Bundle extras, String authority, ContentProviderClient provider, SyncResult syncResult) {
         LogDisplay.callLog(LOG_TAG,'onPerformSync is called',LogDisplay.MOVIE_MAGIC_SYNC_ADAPTER_LOG_FLAG)
-        final String POPULAR_PATH = 'popular'
-        final String TOP_RATED_PATH = 'top_rated'
-        final String UPCOMING_PATH = 'upcoming'
-        final String NOW_PLAYING_PATH = 'now_playing'
+//        final String POPULAR_PATH = 'popular'
+//        final String TOP_RATED_PATH = 'top_rated'
+//        final String UPCOMING_PATH = 'upcoming'
+//        final String NOW_PLAYING_PATH = 'now_playing'
 
         List<ContentValues> contentValues = []
         //totalPage is set to 1 so that at least first page is downloaded in downloadMovieList
         // later this variable is overridden by the total page value retrieved from the api
         totalPage = 1
         for(i in 1..MAX_PAGE_DOWNLOAD) {
-            contentValues = downloadMovieList(POPULAR_PATH, i)
-            insertBulkRecords(contentValues, POPULAR_PATH)
+            contentValues = downloadMovieList(GlobalStaticVariables.MOVIE_CATEGORY_POPULAR, i)
+            insertBulkRecords(contentValues, GlobalStaticVariables.MOVIE_CATEGORY_POPULAR)
             contentValues = []
         }
         totalPage = 1
         for(i in 1..MAX_PAGE_DOWNLOAD) {
-            contentValues = downloadMovieList(TOP_RATED_PATH, i)
-            insertBulkRecords(contentValues, TOP_RATED_PATH)
+            contentValues = downloadMovieList(GlobalStaticVariables.MOVIE_CATEGORY_TOP_RATED, i)
+            insertBulkRecords(contentValues, GlobalStaticVariables.MOVIE_CATEGORY_TOP_RATED)
             contentValues = []
         }
         totalPage = 1
         for(i in 1..MAX_PAGE_DOWNLOAD) {
-            contentValues = downloadMovieList(UPCOMING_PATH, i)
-            insertBulkRecords(contentValues, UPCOMING_PATH)
+            contentValues = downloadMovieList(GlobalStaticVariables.MOVIE_CATEGORY_UPCOMING, i)
+            insertBulkRecords(contentValues, GlobalStaticVariables.MOVIE_CATEGORY_UPCOMING)
             contentValues = []
         }
         totalPage = 1
         for(i in 1..MAX_PAGE_DOWNLOAD) {
-            contentValues += downloadMovieList(NOW_PLAYING_PATH, i)
-            insertBulkRecords(contentValues, NOW_PLAYING_PATH)
+            contentValues += downloadMovieList(GlobalStaticVariables.MOVIE_CATEGORY_NOW_PLAYING, i)
+            insertBulkRecords(contentValues, GlobalStaticVariables.MOVIE_CATEGORY_NOW_PLAYING)
             contentValues = []
         }
         deleteRecords = true
@@ -97,20 +96,20 @@ class MovieMagicSyncAdapter extends AbstractThreadedSyncAdapter {
     private List<ContentValues> downloadMovieList (String category, int page) {
         //TMDB api example
         //https://api.themoviedb.org/3/movie/popular?api_key=key&page=1
-        final String TMDB_MOVIE_BASE_URL = 'https://api.themoviedb.org/3/'
-        final String MOVIE_PATH = 'movie'
-        final String API_KEY = 'api_key'
-        final String PAGE = 'page'
+//        final String TMDB_MOVIE_BASE_URL = 'https://api.themoviedb.org/3/'
+//        final String MOVIE_PATH = 'movie'
+//        final String API_KEY = 'api_key'
+//        final String PAGE = 'page'
 
         List<ContentValues> movieList
 
         try {
-            Uri.Builder uriBuilder = Uri.parse(TMDB_MOVIE_BASE_URL).buildUpon()
+            Uri.Builder uriBuilder = Uri.parse(GlobalStaticVariables.TMDB_MOVIE_BASE_URL).buildUpon()
 
-            Uri uri = uriBuilder.appendPath(MOVIE_PATH)
+            Uri uri = uriBuilder.appendPath(GlobalStaticVariables.TMDB_MOVIE_PATH)
                     .appendPath(category)
-                    .appendQueryParameter(API_KEY,BuildConfig.TMDB_API_KEY)
-                    .appendQueryParameter(PAGE,page.toString())
+                    .appendQueryParameter(GlobalStaticVariables.TMDB_MOVIE_API_KEY,BuildConfig.TMDB_API_KEY)
+                    .appendQueryParameter(GlobalStaticVariables.TMDB_MOVIE_PAGE,page.toString())
                     .build()
 
             URL url = new URL(uri.toString())
@@ -121,14 +120,14 @@ class MovieMagicSyncAdapter extends AbstractThreadedSyncAdapter {
             if (page <= totalPage) {
                 def jsonData = new JsonSlurper(type: JsonParserType.INDEX_OVERLAY).parse(url)
                 LogDisplay.callLog(LOG_TAG, "JSON DATA for $category -> $jsonData",LogDisplay.MOVIE_MAGIC_SYNC_ADAPTER_LOG_FLAG)
-                movieList = JsonParse.parseMovieListJson(jsonData, category, MOVIE_LIST_TYPE_PUBLIC)
+                movieList = JsonParse.parseMovieListJson(jsonData, category, GlobalStaticVariables.MOVIE_LIST_TYPE_TMDB_PUBLIC)
                 totalPage = JsonParse.getTotalPages(jsonData)
             }
             if(deleteRecords) {
                 // delete old data except user's records
                 int deleteCount = mContentResolver.delete(MovieMagicContract.MovieBasicInfo.CONTENT_URI,
                         "$MovieMagicContract.MovieBasicInfo.COLUMN_MOVIE_LIST_TYPE <> ?",
-                        ['1'] as String []
+                        [GlobalStaticVariables.MOVIE_LIST_TYPE_USER_LOCAL_LIST] as String []
                 )
                 LogDisplay.callLog(LOG_TAG,"Total records deleted->$deleteCount",LogDisplay.MOVIE_MAGIC_SYNC_ADAPTER_LOG_FLAG)
                 deleteRecords = false

@@ -9,7 +9,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
-        cardview:cardBackgroundColor="@color/accent"
+        cardview:cardBackgroundColor="@color/primary"
         cardview:cardCornerRadius="@dimen/card_view_corner_radius"
         cardview:cardElevation="@dimen/card_view_elevation"
         cardview:cardUseCompatPadding="true">

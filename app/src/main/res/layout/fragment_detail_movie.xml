@@ -1,7 +1,6 @@
-<?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     android:orientation="vertical">
 
     <include
@@ -26,6 +25,10 @@
 
     <include
         layout="@layout/movie_detail_user_rating"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+    <include
+        layout="@layout/movie_detail_user_list_drawables"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
@@ -68,6 +71,11 @@
         layout="@layout/movie_detail_cast_grid"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="?android:attr/listDivider" />
 
     <include
         layout="@layout/movie_detail_crew_header"
@@ -125,7 +133,7 @@
         android:layout_height="wrap_content" />
 
     <include
-        layout="@layout/movie_detail_review_list_view"
+        layout="@layout/movie_detail_review_recycler_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 </LinearLayout>

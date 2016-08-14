@@ -12,9 +12,10 @@ class TestMovieMagicDatabase extends AndroidTestCase {
 
     //public static final String LOG_TAG = TestDb.class.getSimpleName()
 
-    private static final long TEST_FOREIGN_KEY = 1
+    private static long movieBasicInfoRowId
+    private static long moviePersonRowId
 
-    // Delete the database so that each test starts with a clean slate
+    // Delete the database so that each test starts with a clean state
     def deleteTheDatabase() {
         mContext.deleteDatabase(MovieMagicDbHelper.DATABASE_NAME)
     }
@@ -103,6 +104,7 @@ class TestMovieMagicDatabase extends AndroidTestCase {
         columeList << MovieMagicContract.MovieBasicInfo.COLUMN_USER_WISH_LIST
         columeList << MovieMagicContract.MovieBasicInfo.COLUMN_USER_FAVOURITE
         columeList << MovieMagicContract.MovieBasicInfo.COLUMN_USER_COLLECTION
+        columeList << MovieMagicContract.MovieBasicInfo.COLUMN_USER_RATING
         columeList << MovieMagicContract.MovieBasicInfo.COLUMN_USER_EXPORTED
         columeList << MovieMagicContract.MovieBasicInfo.COLUMN_FUTURE_USE_1
         columeList << MovieMagicContract.MovieBasicInfo.COLUMN_FUTURE_USE_2
@@ -364,7 +366,7 @@ class TestMovieMagicDatabase extends AndroidTestCase {
         db.close()
     }
 
-    void testMovieBasicInfoTable() {
+    void testMovieBasicInfoAndRelatedTables() {
         // First step: Get reference to writable database
         SQLiteDatabase sqLiteDatabase = new MovieMagicDbHelper(mContext).getWritableDatabase()
         // Create ContentValues of what we want to insert
@@ -372,7 +374,9 @@ class TestMovieMagicDatabase extends AndroidTestCase {
         // Insert ContentValues into database table and get a row ID back
         long rowId = sqLiteDatabase.insert(MovieMagicContract.MovieBasicInfo.TABLE_NAME,null,contentValues)
         //Verify record inserted and record received
-        assertTrue(rowId != -1)
+        assertTrue('Error: Unable to Insert movie_basic_info data into the Database', rowId != -1)
+        //Populate movieBaiscInfoRowId which is used as Foreign key in other tables
+        movieBasicInfoRowId = rowId
         // Query the database and receive a Cursor back
         Cursor cursor = sqLiteDatabase.query(MovieMagicContract.MovieBasicInfo.TABLE_NAME,null,null,null,null,null,null)
         // Move the cursor to a valid database row
@@ -381,108 +385,183 @@ class TestMovieMagicDatabase extends AndroidTestCase {
         // (you can use the validateCurrentRecord function in TestUtilities to validate the
         // query if you like)
         TestUtilities.validateCurrentRecord("Error: $MovieMagicContract.MovieBasicInfo.TABLE_NAME query data verification failed",cursor,contentValues)
-        //Move the cursor to ensure there is only once record returned
+        //Move the cursor to ensure there is only one record returned
         assertFalse("Error: more than one record returned by the $MovieMagicContract.MovieBasicInfo.TABLE_NAME query",cursor.moveToNext())
-        // Finally, close the cursor and database
-        cursor.close()
-        sqLiteDatabase.close()
-    }
 
-    void testMovieCastTable() {
-        // First step: Get reference to writable database
-        SQLiteDatabase sqLiteDatabase = new MovieMagicDbHelper(mContext).getWritableDatabase()
+        //Now test the movie cast table
         // Create ContentValues of what we want to insert
-        ContentValues contentValues = TestUtilities.createMovieCastValues(TEST_FOREIGN_KEY)
+        contentValues = TestUtilities.createMovieCastValues(movieBasicInfoRowId)
         // Insert ContentValues into database table and get a row ID back
-        long rowId = sqLiteDatabase.insert(MovieMagicContract.MovieCast.TABLE_NAME,null,contentValues)
+        rowId = sqLiteDatabase.insert(MovieMagicContract.MovieCast.TABLE_NAME,null,contentValues)
         //Verify record inserted and record received
-        assertTrue(rowId != -1)
+        assertTrue('Error: Unable to Insert movie_cast data into the Database', rowId != -1)
         // Query the database and receive a Cursor back
-        Cursor cursor = sqLiteDatabase.query(MovieMagicContract.MovieCast.TABLE_NAME,null,null,null,null,null,null)
+        cursor = sqLiteDatabase.query(MovieMagicContract.MovieCast.TABLE_NAME,null,null,null,null,null,null)
         // Move the cursor to a valid database row
         assertTrue("Error: No record returned from the $MovieMagicContract.MovieCast.TABLE_NAME table",cursor.moveToFirst())
         // Validate data in resulting Cursor with the original ContentValues
         // (you can use the validateCurrentRecord function in TestUtilities to validate the
         // query if you like)
         TestUtilities.validateCurrentRecord("Error: $MovieMagicContract.MovieCast.TABLE_NAME query data verification failed",cursor,contentValues)
-        //Move the cursor to ensure there is only once record returned
+        //Move the cursor to ensure there is only one record returned
         assertFalse("Error: more than one record returned by the $MovieMagicContract.MovieCast.TABLE_NAME query",cursor.moveToNext())
-        // Finally, close the cursor and database
-        cursor.close()
-        sqLiteDatabase.close()
-    }
 
-    void testMovieCrewTable() {
-        // First step: Get reference to writable database
-        SQLiteDatabase sqLiteDatabase = new MovieMagicDbHelper(mContext).getWritableDatabase()
+        //Now test the movie crew table
         // Create ContentValues of what we want to insert
-        ContentValues contentValues = TestUtilities.createMovieCrewValues(TEST_FOREIGN_KEY)
+        contentValues = TestUtilities.createMovieCrewValues(movieBasicInfoRowId)
         // Insert ContentValues into database table and get a row ID back
-        long rowId = sqLiteDatabase.insert(MovieMagicContract.MovieCrew.TABLE_NAME,null,contentValues)
+        rowId = sqLiteDatabase.insert(MovieMagicContract.MovieCrew.TABLE_NAME,null,contentValues)
         //Verify record inserted and record received
-        assertTrue(rowId != -1)
+        assertTrue('Error: Unable to Insert movie_crew data into the Database', rowId != -1)
         // Query the database and receive a Cursor back
-        Cursor cursor = sqLiteDatabase.query(MovieMagicContract.MovieCrew.TABLE_NAME,null,null,null,null,null,null)
+        cursor = sqLiteDatabase.query(MovieMagicContract.MovieCrew.TABLE_NAME,null,null,null,null,null,null)
         // Move the cursor to a valid database row
         assertTrue("Error: No record returned from the $MovieMagicContract.MovieCrew.TABLE_NAME table",cursor.moveToFirst())
         // Validate data in resulting Cursor with the original ContentValues
         // (you can use the validateCurrentRecord function in TestUtilities to validate the
         // query if you like)
         TestUtilities.validateCurrentRecord("Error: $MovieMagicContract.MovieCrew.TABLE_NAME query data verification failed",cursor,contentValues)
-        //Move the cursor to ensure there is only once record returned
+        //Move the cursor to ensure there is only one record returned
         assertFalse("Error: more than one record returned by the $MovieMagicContract.MovieCrew.TABLE_NAME query",cursor.moveToNext())
-        // Finally, close the cursor and database
-        cursor.close()
-        sqLiteDatabase.close()
-    }
 
-    void testMovieImageTable() {
-        // First step: Get reference to writable database
-        SQLiteDatabase sqLiteDatabase = new MovieMagicDbHelper(mContext).getWritableDatabase()
+        //Now test the movie image table
         // Create ContentValues of what we want to insert
-        ContentValues contentValues = TestUtilities.createMovieImageValues(TEST_FOREIGN_KEY)
+        contentValues = TestUtilities.createMovieImageValues(movieBasicInfoRowId)
         // Insert ContentValues into database table and get a row ID back
-        long rowId = sqLiteDatabase.insert(MovieMagicContract.MovieImage.TABLE_NAME,null,contentValues)
+        rowId = sqLiteDatabase.insert(MovieMagicContract.MovieImage.TABLE_NAME,null,contentValues)
         //Verify record inserted and record received
-        assertTrue(rowId != -1)
+        assertTrue('Error: Unable to Insert movie_image data into the Database', rowId != -1)
         // Query the database and receive a Cursor back
-        Cursor cursor = sqLiteDatabase.query(MovieMagicContract.MovieImage.TABLE_NAME,null,null,null,null,null,null)
+        cursor = sqLiteDatabase.query(MovieMagicContract.MovieImage.TABLE_NAME,null,null,null,null,null,null)
         // Move the cursor to a valid database row
         assertTrue("Error: No record returned from the $MovieMagicContract.MovieImage.TABLE_NAME table",cursor.moveToFirst())
         // Validate data in resulting Cursor with the original ContentValues
         // (you can use the validateCurrentRecord function in TestUtilities to validate the
         // query if you like)
         TestUtilities.validateCurrentRecord("Error: $MovieMagicContract.MovieImage.TABLE_NAME query data verification failed",cursor,contentValues)
-        //Move the cursor to ensure there is only once record returned
+        //Move the cursor to ensure there is only one record returned
         assertFalse("Error: more than one record returned by the $MovieMagicContract.MovieImage.TABLE_NAME query",cursor.moveToNext())
-        // Finally, close the cursor and database
-        cursor.close()
-        sqLiteDatabase.close()
-    }
 
-    void testMovieVideoTable() {
-        // First step: Get reference to writable database
-        SQLiteDatabase sqLiteDatabase = new MovieMagicDbHelper(mContext).getWritableDatabase()
+        //Now test the movie video table
         // Create ContentValues of what we want to insert
-        ContentValues contentValues = TestUtilities.createMovieVideoValues(TEST_FOREIGN_KEY)
+        contentValues = TestUtilities.createMovieVideoValues(movieBasicInfoRowId)
         // Insert ContentValues into database table and get a row ID back
-        long rowId = sqLiteDatabase.insert(MovieMagicContract.MovieVideo.TABLE_NAME,null,contentValues)
+        rowId = sqLiteDatabase.insert(MovieMagicContract.MovieVideo.TABLE_NAME,null,contentValues)
         //Verify record inserted and record received
-        assertTrue(rowId != -1)
+        assertTrue('Error: Unable to Insert movie_video data into the Database', rowId != -1)
         // Query the database and receive a Cursor back
-        Cursor cursor = sqLiteDatabase.query(MovieMagicContract.MovieVideo.TABLE_NAME,null,null,null,null,null,null)
+        cursor = sqLiteDatabase.query(MovieMagicContract.MovieVideo.TABLE_NAME,null,null,null,null,null,null)
         // Move the cursor to a valid database row
         assertTrue("Error: No record returned from the $MovieMagicContract.MovieVideo.TABLE_NAME table",cursor.moveToFirst())
         // Validate data in resulting Cursor with the original ContentValues
         // (you can use the validateCurrentRecord function in TestUtilities to validate the
         // query if you like)
         TestUtilities.validateCurrentRecord("Error: $MovieMagicContract.MovieVideo.TABLE_NAME query data verification failed",cursor,contentValues)
-        //Move the cursor to ensure there is only once record returned
+        //Move the cursor to ensure there is only one record returned
         assertFalse("Error: more than one record returned by the $MovieMagicContract.MovieVideo.TABLE_NAME query",cursor.moveToNext())
+
+        //Now test the movie review table
+        // Create ContentValues of what we want to insert
+        contentValues = TestUtilities.createMovieReviewValues(movieBasicInfoRowId)
+        // Insert ContentValues into database table and get a row ID back
+        rowId = sqLiteDatabase.insert(MovieMagicContract.MovieReview.TABLE_NAME,null,contentValues)
+        //Verify record inserted and record received
+        assertTrue('Error: Unable to Insert movie_review data into the Database', rowId != -1)
+        // Query the database and receive a Cursor back
+        cursor = sqLiteDatabase.query(MovieMagicContract.MovieReview.TABLE_NAME,null,null,null,null,null,null)
+        // Move the cursor to a valid database row
+        assertTrue("Error: No record returned from the $MovieMagicContract.MovieReview.TABLE_NAME table",cursor.moveToFirst())
+        // Validate data in resulting Cursor with the original ContentValues
+        // (you can use the validateCurrentRecord function in TestUtilities to validate the
+        // query if you like)
+        TestUtilities.validateCurrentRecord("Error: $MovieMagicContract.MovieReview.TABLE_NAME query data verification failed",cursor,contentValues)
+        //Move the cursor to ensure there is only one record returned
+        assertFalse("Error: more than one record returned by the $MovieMagicContract.MovieReview.TABLE_NAME query",cursor.moveToNext())
+
+        //Now test the movie release date table
+        // Create ContentValues of what we want to insert
+        contentValues = TestUtilities.createMovieReleaseDateValues(movieBasicInfoRowId)
+        // Insert ContentValues into database table and get a row ID back
+        rowId = sqLiteDatabase.insert(MovieMagicContract.MovieReleaseDate.TABLE_NAME,null,contentValues)
+        //Verify record inserted and record received
+        assertTrue('Error: Unable to Insert movie_release_date data into the Database', rowId != -1)
+        // Query the database and receive a Cursor back
+        cursor = sqLiteDatabase.query(MovieMagicContract.MovieReleaseDate.TABLE_NAME,null,null,null,null,null,null)
+        // Move the cursor to a valid database row
+        assertTrue("Error: No record returned from the $MovieMagicContract.MovieReleaseDate.TABLE_NAME table",cursor.moveToFirst())
+        // Validate data in resulting Cursor with the original ContentValues
+        // (you can use the validateCurrentRecord function in TestUtilities to validate the
+        // query if you like)
+        TestUtilities.validateCurrentRecord("Error: $MovieMagicContract.MovieReleaseDate.TABLE_NAME query data verification failed",cursor,contentValues)
+        //Move the cursor to ensure there is only one record returned
+        assertFalse("Error: more than one record returned by the $MovieMagicContract.MovieReleaseDate.TABLE_NAME query",cursor.moveToNext())
         // Finally, close the cursor and database
         cursor.close()
         sqLiteDatabase.close()
     }
+
+    void testMoviePersonInfoAndRelatedTables() {
+        // First step: Get reference to writable database
+        SQLiteDatabase sqLiteDatabase = new MovieMagicDbHelper(mContext).getWritableDatabase()
+        // Create ContentValues of what we want to insert
+        ContentValues contentValues = TestUtilities.createMoviePersonInfoValues()
+        // Insert ContentValues into database table and get a row ID back
+        long rowId = sqLiteDatabase.insert(MovieMagicContract.MoviePersonInfo.TABLE_NAME,null,contentValues)
+        //Verify record inserted and record received
+        assertTrue('Error: Unable to Insert movie_person_info data into the Database', rowId != -1)
+        //Populate moviePersonRowId which is used as Foreign key in other tables
+        moviePersonRowId = rowId
+        // Query the database and receive a Cursor back
+        Cursor cursor = sqLiteDatabase.query(MovieMagicContract.MoviePersonInfo.TABLE_NAME,null,null,null,null,null,null)
+        // Move the cursor to a valid database row
+        assertTrue("Error: No record returned from the $MovieMagicContract.MoviePersonInfo.TABLE_NAME table",cursor.moveToFirst())
+        // Validate data in resulting Cursor with the original ContentValues
+        // (you can use the validateCurrentRecord function in TestUtilities to validate the
+        // query if you like)
+        TestUtilities.validateCurrentRecord("Error: $MovieMagicContract.MoviePersonInfo.TABLE_NAME query data verification failed",cursor,contentValues)
+        //Move the cursor to ensure there is only one record returned
+        assertFalse("Error: more than one record returned by the $MovieMagicContract.MoviePersonInfo.TABLE_NAME query",cursor.moveToNext())
+
+        //Now test the movie person cast table
+        // Create ContentValues of what we want to insert
+        contentValues = TestUtilities.createMoviePersonCastValues(moviePersonRowId)
+        // Insert ContentValues into database table and get a row ID back
+        rowId = sqLiteDatabase.insert(MovieMagicContract.MoviePersonCast.TABLE_NAME,null,contentValues)
+        //Verify record inserted and record received
+        assertTrue('Error: Unable to Insert movie_person_cast data into the Database', rowId != -1)
+        // Query the database and receive a Cursor back
+        cursor = sqLiteDatabase.query(MovieMagicContract.MoviePersonCast.TABLE_NAME,null,null,null,null,null,null)
+        // Move the cursor to a valid database row
+        assertTrue("Error: No record returned from the $MovieMagicContract.MoviePersonCast.TABLE_NAME table",cursor.moveToFirst())
+        // Validate data in resulting Cursor with the original ContentValues
+        // (you can use the validateCurrentRecord function in TestUtilities to validate the
+        // query if you like)
+        TestUtilities.validateCurrentRecord("Error: $MovieMagicContract.MoviePersonCast.TABLE_NAME query data verification failed",cursor,contentValues)
+        //Move the cursor to ensure there is only one record returned
+        assertFalse("Error: more than one record returned by the $MovieMagicContract.MoviePersonCast.TABLE_NAME query",cursor.moveToNext())
+
+        //Now test the movie person crew table
+        // Create ContentValues of what we want to insert
+        contentValues = TestUtilities.createMoviePersonCrewValues(moviePersonRowId)
+        // Insert ContentValues into database table and get a row ID back
+        rowId = sqLiteDatabase.insert(MovieMagicContract.MoviePersonCrew.TABLE_NAME,null,contentValues)
+        //Verify record inserted and record received
+        assertTrue('Error: Unable to Insert movie_person_crew data into the Database', rowId != -1)
+        // Query the database and receive a Cursor back
+        cursor = sqLiteDatabase.query(MovieMagicContract.MoviePersonCrew.TABLE_NAME,null,null,null,null,null,null)
+        // Move the cursor to a valid database row
+        assertTrue("Error: No record returned from the $MovieMagicContract.MoviePersonCrew.TABLE_NAME table",cursor.moveToFirst())
+        // Validate data in resulting Cursor with the original ContentValues
+        // (you can use the validateCurrentRecord function in TestUtilities to validate the
+        // query if you like)
+        TestUtilities.validateCurrentRecord("Error: $MovieMagicContract.MoviePersonCrew.TABLE_NAME query data verification failed",cursor,contentValues)
+        //Move the cursor to ensure there is only one record returned
+        assertFalse("Error: more than one record returned by the $MovieMagicContract.MoviePersonCrew.TABLE_NAME query",cursor.moveToNext())
+        // Finally, close the cursor and database
+        cursor.close()
+        sqLiteDatabase.close()
+    }
+
 
     void testMovieCollectionTable() {
         // First step: Get reference to writable database
@@ -492,7 +571,7 @@ class TestMovieMagicDatabase extends AndroidTestCase {
         // Insert ContentValues into database table and get a row ID back
         long rowId = sqLiteDatabase.insert(MovieMagicContract.MovieCollection.TABLE_NAME,null,contentValues)
         //Verify record inserted and record received
-        assertTrue(rowId != -1)
+        assertTrue('Error: Unable to Insert movie_collection data into the Database', rowId != -1)
         // Query the database and receive a Cursor back
         Cursor cursor = sqLiteDatabase.query(MovieMagicContract.MovieCollection.TABLE_NAME,null,null,null,null,null,null)
         // Move the cursor to a valid database row
@@ -508,123 +587,240 @@ class TestMovieMagicDatabase extends AndroidTestCase {
         sqLiteDatabase.close()
     }
 
-    void testMovieReviewTable() {
-        // First step: Get reference to writable database
+    void testCascadeDelete() {
+        Cursor delCursor
+
+        //First insert records to all tables which are to be tested
+        testMovieBasicInfoAndRelatedTables()
+        testMoviePersonInfoAndRelatedTables()
+
+        // Now Get reference to writable database
         SQLiteDatabase sqLiteDatabase = new MovieMagicDbHelper(mContext).getWritableDatabase()
-        // Create ContentValues of what we want to insert
-        ContentValues contentValues = TestUtilities.createMovieReviewValues(TEST_FOREIGN_KEY)
-        // Insert ContentValues into database table and get a row ID back
-        long rowId = sqLiteDatabase.insert(MovieMagicContract.MovieReview.TABLE_NAME,null,contentValues)
-        //Verify record inserted and record received
-        assertTrue(rowId != -1)
-        // Query the database and receive a Cursor back
-        Cursor cursor = sqLiteDatabase.query(MovieMagicContract.MovieReview.TABLE_NAME,null,null,null,null,null,null)
-        // Move the cursor to a valid database row
-        assertTrue("Error: No record returned from the $MovieMagicContract.MovieReview.TABLE_NAME table",cursor.moveToFirst())
-        // Validate data in resulting Cursor with the original ContentValues
-        // (you can use the validateCurrentRecord function in TestUtilities to validate the
-        // query if you like)
-        TestUtilities.validateCurrentRecord("Error: $MovieMagicContract.MovieReview.TABLE_NAME query data verification failed",cursor,contentValues)
-        //Move the cursor to ensure there is only once record returned
-        assertFalse("Error: more than one record returned by the $MovieMagicContract.MovieReview.TABLE_NAME query",cursor.moveToNext())
+        //Now delete the records from movie_basic_info which in turn should delete records from other
+        //child tables
+        sqLiteDatabase.delete(MovieMagicContract.MovieBasicInfo.TABLE_NAME, null, null)
+        //Query the main and child tables and ensure all records are deleted
+        delCursor = sqLiteDatabase.query(MovieMagicContract.MovieBasicInfo.TABLE_NAME,null,null,null,null,null,null)
+        assertEquals('Error: Records not deleted from movie_basic_info during delete', 0, delCursor.getCount())
+        delCursor = sqLiteDatabase.query(MovieMagicContract.MovieCast.TABLE_NAME,null,null,null,null,null,null)
+        assertEquals('Error: Records not deleted from movie_cast during delete', 0, delCursor.getCount())
+        delCursor = sqLiteDatabase.query(MovieMagicContract.MovieCrew.TABLE_NAME,null,null,null,null,null,null)
+        assertEquals('Error: Records not deleted from movie_crew during delete', 0, delCursor.getCount())
+        delCursor = sqLiteDatabase.query(MovieMagicContract.MovieImage.TABLE_NAME,null,null,null,null,null,null)
+        assertEquals('Error: Records not deleted from movie_image during delete', 0, delCursor.getCount())
+        delCursor = sqLiteDatabase.query(MovieMagicContract.MovieVideo.TABLE_NAME,null,null,null,null,null,null)
+        assertEquals('Error: Records not deleted from movie_video during delete', 0, delCursor.getCount())
+        delCursor = sqLiteDatabase.query(MovieMagicContract.MovieReview.TABLE_NAME,null,null,null,null,null,null)
+        assertEquals('Error: Records not deleted from movie_review during delete', 0, delCursor.getCount())
+        delCursor = sqLiteDatabase.query(MovieMagicContract.MovieReleaseDate.TABLE_NAME,null,null,null,null,null,null)
+        assertEquals('Error: Records not deleted from movie_release_date during delete', 0, delCursor.getCount())
+
+        //Now delete the records from movie_person_info which in turn should delete records from other
+        //child tables
+        sqLiteDatabase.delete(MovieMagicContract.MoviePersonInfo.TABLE_NAME, null, null)
+        //Query the main and child tables and ensure all records are deleted
+        delCursor = sqLiteDatabase.query(MovieMagicContract.MoviePersonInfo.TABLE_NAME,null,null,null,null,null,null)
+        assertEquals('Error: Records not deleted from movie_person_info during delete', 0, delCursor.getCount())
+        delCursor = sqLiteDatabase.query(MovieMagicContract.MoviePersonCast.TABLE_NAME,null,null,null,null,null,null)
+        assertEquals('Error: Records not deleted from movie_person_cast during delete', 0, delCursor.getCount())
+        delCursor = sqLiteDatabase.query(MovieMagicContract.MoviePersonCrew.TABLE_NAME,null,null,null,null,null,null)
+        assertEquals('Error: Records not deleted from movie_person_cast during delete', 0, delCursor.getCount())
+
         // Finally, close the cursor and database
-        cursor.close()
+        delCursor.close()
         sqLiteDatabase.close()
     }
 
-    void testMovieReleaseDateTable() {
-        // First step: Get reference to writable database
-        SQLiteDatabase sqLiteDatabase = new MovieMagicDbHelper(mContext).getWritableDatabase()
-        // Create ContentValues of what we want to insert
-        ContentValues contentValues = TestUtilities.createMovieReleaseDateValues(TEST_FOREIGN_KEY)
-        // Insert ContentValues into database table and get a row ID back
-        long rowId = sqLiteDatabase.insert(MovieMagicContract.MovieReleaseDate.TABLE_NAME,null,contentValues)
-        //Verify record inserted and record received
-        assertTrue(rowId != -1)
-        // Query the database and receive a Cursor back
-        Cursor cursor = sqLiteDatabase.query(MovieMagicContract.MovieReleaseDate.TABLE_NAME,null,null,null,null,null,null)
-        // Move the cursor to a valid database row
-        assertTrue("Error: No record returned from the $MovieMagicContract.MovieReleaseDate.TABLE_NAME table",cursor.moveToFirst())
-        // Validate data in resulting Cursor with the original ContentValues
-        // (you can use the validateCurrentRecord function in TestUtilities to validate the
-        // query if you like)
-        TestUtilities.validateCurrentRecord("Error: $MovieMagicContract.MovieReleaseDate.TABLE_NAME query data verification failed",cursor,contentValues)
-        //Move the cursor to ensure there is only once record returned
-        assertFalse("Error: more than one record returned by the $MovieMagicContract.MovieReleaseDate.TABLE_NAME query",cursor.moveToNext())
-        // Finally, close the cursor and database
-        cursor.close()
-        sqLiteDatabase.close()
-    }
+    void testUniqueReplace() {
+        Cursor queryCursor
+        ContentValues contentValues
+        long rowId
 
-    void testMoviePersonInfoTable() {
-        // First step: Get reference to writable database
-        SQLiteDatabase sqLiteDatabase = new MovieMagicDbHelper(mContext).getWritableDatabase()
-        // Create ContentValues of what we want to insert
-        ContentValues contentValues = TestUtilities.createMoviePersonInfoValues()
-        // Insert ContentValues into database table and get a row ID back
-        long rowId = sqLiteDatabase.insert(MovieMagicContract.MoviePersonInfo.TABLE_NAME,null,contentValues)
-        //Verify record inserted and record received
-        assertTrue(rowId != -1)
-        // Query the database and receive a Cursor back
-        Cursor cursor = sqLiteDatabase.query(MovieMagicContract.MoviePersonInfo.TABLE_NAME,null,null,null,null,null,null)
-        // Move the cursor to a valid database row
-        assertTrue("Error: No record returned from the $MovieMagicContract.MoviePersonInfo.TABLE_NAME table",cursor.moveToFirst())
-        // Validate data in resulting Cursor with the original ContentValues
-        // (you can use the validateCurrentRecord function in TestUtilities to validate the
-        // query if you like)
-        TestUtilities.validateCurrentRecord("Error: $MovieMagicContract.MoviePersonInfo.TABLE_NAME query data verification failed",cursor,contentValues)
-        //Move the cursor to ensure there is only once record returned
-        assertFalse("Error: more than one record returned by the $MovieMagicContract.MoviePersonInfo.TABLE_NAME query",cursor.moveToNext())
-        // Finally, close the cursor and database
-        cursor.close()
-        sqLiteDatabase.close()
-    }
+        //First delete the database so that we always have a clean start
+        deleteTheDatabase()
 
-    void testMoviePersonCastTable() {
-        // First step: Get reference to writable database
+        //Get reference to writable database
         SQLiteDatabase sqLiteDatabase = new MovieMagicDbHelper(mContext).getWritableDatabase()
-        // Create ContentValues of what we want to insert
-        ContentValues contentValues = TestUtilities.createMoviePersonCastValues(TEST_FOREIGN_KEY)
-        // Insert ContentValues into database table and get a row ID back
-        long rowId = sqLiteDatabase.insert(MovieMagicContract.MoviePersonCast.TABLE_NAME,null,contentValues)
-        //Verify record inserted and record received
-        assertTrue(rowId != -1)
-        // Query the database and receive a Cursor back
-        Cursor cursor = sqLiteDatabase.query(MovieMagicContract.MoviePersonCast.TABLE_NAME,null,null,null,null,null,null)
-        // Move the cursor to a valid database row
-        assertTrue("Error: No record returned from the $MovieMagicContract.MoviePersonCast.TABLE_NAME table",cursor.moveToFirst())
-        // Validate data in resulting Cursor with the original ContentValues
-        // (you can use the validateCurrentRecord function in TestUtilities to validate the
-        // query if you like)
-        TestUtilities.validateCurrentRecord("Error: $MovieMagicContract.MoviePersonCast.TABLE_NAME query data verification failed",cursor,contentValues)
-        //Move the cursor to ensure there is only once record returned
-        assertFalse("Error: more than one record returned by the $MovieMagicContract.MoviePersonCast.TABLE_NAME query",cursor.moveToNext())
-        // Finally, close the cursor and database
-        cursor.close()
-        sqLiteDatabase.close()
-    }
 
-    void testMoviePersonCrewTable() {
-        // First step: Get reference to writable database
-        SQLiteDatabase sqLiteDatabase = new MovieMagicDbHelper(mContext).getWritableDatabase()
-        // Create ContentValues of what we want to insert
-        ContentValues contentValues = TestUtilities.createMoviePersonCrewValues(TEST_FOREIGN_KEY)
-        // Insert ContentValues into database table and get a row ID back
-        long rowId = sqLiteDatabase.insert(MovieMagicContract.MoviePersonCrew.TABLE_NAME,null,contentValues)
-        //Verify record inserted and record received
-        assertTrue(rowId != -1)
-        // Query the database and receive a Cursor back
-        Cursor cursor = sqLiteDatabase.query(MovieMagicContract.MoviePersonCrew.TABLE_NAME,null,null,null,null,null,null)
-        // Move the cursor to a valid database row
-        assertTrue("Error: No record returned from the $MovieMagicContract.MoviePersonCrew.TABLE_NAME table",cursor.moveToFirst())
-        // Validate data in resulting Cursor with the original ContentValues
-        // (you can use the validateCurrentRecord function in TestUtilities to validate the
-        // query if you like)
-        TestUtilities.validateCurrentRecord("Error: $MovieMagicContract.MoviePersonCrew.TABLE_NAME query data verification failed",cursor,contentValues)
-        //Move the cursor to ensure there is only once record returned
-        assertFalse("Error: more than one record returned by the $MovieMagicContract.MoviePersonCrew.TABLE_NAME query",cursor.moveToNext())
+        //First test the replace (ans also cascade) of movie_basic_info & movie_person_info tables
+        //Let's insert one record in all the main and child tables
+        contentValues = TestUtilities.createMovieValues()
+        rowId = sqLiteDatabase.insert(MovieMagicContract.MovieBasicInfo.TABLE_NAME,null,contentValues)
+        assertTrue('Error: Unable to Insert movie_basic_info data into the Database', rowId != -1)
+        //Populate movieBaiscInfoRowId which is used as Foreign key in other tables
+        movieBasicInfoRowId = rowId
+        contentValues = TestUtilities.createMovieCastValues(movieBasicInfoRowId)
+        rowId = sqLiteDatabase.insert(MovieMagicContract.MovieCast.TABLE_NAME,null,contentValues)
+        assertTrue('Error: Unable to Insert movie_cast data into the Database', rowId != -1)
+        contentValues = TestUtilities.createMovieCrewValues(movieBasicInfoRowId)
+        rowId = sqLiteDatabase.insert(MovieMagicContract.MovieCrew.TABLE_NAME,null,contentValues)
+        assertTrue('Error: Unable to Insert movie_crew data into the Database', rowId != -1)
+        contentValues = TestUtilities.createMovieImageValues(movieBasicInfoRowId)
+        rowId = sqLiteDatabase.insert(MovieMagicContract.MovieImage.TABLE_NAME,null,contentValues)
+        assertTrue('Error: Unable to Insert movie_image data into the Database', rowId != -1)
+        contentValues = TestUtilities.createMovieVideoValues(movieBasicInfoRowId)
+        rowId = sqLiteDatabase.insert(MovieMagicContract.MovieVideo.TABLE_NAME,null,contentValues)
+        assertTrue('Error: Unable to Insert movie_video data into the Database', rowId != -1)
+        contentValues = TestUtilities.createMovieReviewValues(movieBasicInfoRowId)
+        rowId = sqLiteDatabase.insert(MovieMagicContract.MovieReview.TABLE_NAME,null,contentValues)
+        assertTrue('Error: Unable to Insert movie_review data into the Database', rowId != -1)
+        contentValues = TestUtilities.createMovieReleaseDateValues(movieBasicInfoRowId)
+        rowId = sqLiteDatabase.insert(MovieMagicContract.MovieReleaseDate.TABLE_NAME,null,contentValues)
+        assertTrue('Error: Unable to Insert movie_release_date data into the Database', rowId != -1)
+        contentValues = TestUtilities.createMoviePersonInfoValues()
+        rowId = sqLiteDatabase.insert(MovieMagicContract.MoviePersonInfo.TABLE_NAME,null,contentValues)
+        assertTrue('Error: Unable to Insert movie_person_info data into the Database', rowId != -1)
+        //Populate moviePersonRowId which is used as Foreign key in other tables
+        moviePersonRowId = rowId
+        contentValues = TestUtilities.createMoviePersonCastValues(moviePersonRowId)
+        rowId = sqLiteDatabase.insert(MovieMagicContract.MoviePersonCast.TABLE_NAME,null,contentValues)
+        assertTrue('Error: Unable to Insert movie_person_cast data into the Database', rowId != -1)
+        contentValues = TestUtilities.createMoviePersonCrewValues(moviePersonRowId)
+        rowId = sqLiteDatabase.insert(MovieMagicContract.MoviePersonCrew.TABLE_NAME,null,contentValues)
+        assertTrue('Error: Unable to Insert movie_person_crew data into the Database', rowId != -1)
+        //Now insert same record in movie_basic_info and ensure replace works - there should be only one record in movie_basic_info
+        //and all records should get deleted from the child tables because of cascade effect
+        contentValues = TestUtilities.createMovieValues()
+        rowId = sqLiteDatabase.insert(MovieMagicContract.MovieBasicInfo.TABLE_NAME,null,contentValues)
+        assertTrue('Error: Unable to Insert movie_basic_info data into the Database', rowId != -1)
+        //Query the movie_basic_info and child tables and ensure there is only one record in movie_basic_info
+        //and all child tables have no records
+        queryCursor = sqLiteDatabase.query(MovieMagicContract.MovieBasicInfo.TABLE_NAME,null,null,null,null,null,null)
+        assertEquals('Error: Record not replaced in movie_basic_info during insert', 1, queryCursor.getCount())
+        queryCursor = sqLiteDatabase.query(MovieMagicContract.MovieCast.TABLE_NAME,null,null,null,null,null,null)
+        assertEquals('Error: Record not deleted from movie_cast during movie_basic_info replace', 0, queryCursor.getCount())
+        queryCursor = sqLiteDatabase.query(MovieMagicContract.MovieCrew.TABLE_NAME,null,null,null,null,null,null)
+        assertEquals('Error: Record not deleted from movie_crew during movie_basic_info replace', 0, queryCursor.getCount())
+        queryCursor = sqLiteDatabase.query(MovieMagicContract.MovieImage.TABLE_NAME,null,null,null,null,null,null)
+        assertEquals('Error: Record not deleted from movie_image during movie_basic_info replace', 0, queryCursor.getCount())
+        queryCursor = sqLiteDatabase.query(MovieMagicContract.MovieVideo.TABLE_NAME,null,null,null,null,null,null)
+        assertEquals('Error: Record not deleted from movie_video during movie_basic_info replace', 0, queryCursor.getCount())
+        queryCursor = sqLiteDatabase.query(MovieMagicContract.MovieReview.TABLE_NAME,null,null,null,null,null,null)
+        assertEquals('Error: Record not deleted from movie_review during movie_basic_info replace', 0, queryCursor.getCount())
+        queryCursor = sqLiteDatabase.query(MovieMagicContract.MovieReleaseDate.TABLE_NAME,null,null,null,null,null,null)
+        assertEquals('Error: Record not deleted from movie_release_date during movie_basic_info replace', 0, queryCursor.getCount())
+        //Now insert same record movie_person_info and ensure replace works - there should be only one record in movie_person_info
+        //and all records should get deleted from the child tables because of cascade effect
+        contentValues = TestUtilities.createMoviePersonInfoValues()
+        sqLiteDatabase.insert(MovieMagicContract.MoviePersonInfo.TABLE_NAME,null,contentValues)
+        //Query the movie_person_info and child tables and ensure there is only one record in movie_person_info
+        //and all child tables have no records
+        queryCursor = sqLiteDatabase.query(MovieMagicContract.MoviePersonInfo.TABLE_NAME,null,null,null,null,null,null)
+        assertEquals('Error: Record not replaced in movie_person_info during insert', 1, queryCursor.getCount())
+        queryCursor = sqLiteDatabase.query(MovieMagicContract.MoviePersonCast.TABLE_NAME,null,null,null,null,null,null)
+        assertEquals('Error: Record not deleted from movie_person_cast during movie_person_info replace', 0, queryCursor.getCount())
+        queryCursor = sqLiteDatabase.query(MovieMagicContract.MoviePersonCrew.TABLE_NAME,null,null,null,null,null,null)
+        assertEquals('Error: Record not deleted from movie_person_cast during movie_person_info replace', 0, queryCursor.getCount())
+
+        //This is a logical end of the testing and will delete the database before next test, so close the database
+        sqLiteDatabase.close()
+
+        //Let's delete the database again so that we always have a clean start for next test
+        deleteTheDatabase()
+        //Get reference to writable database
+        sqLiteDatabase = new MovieMagicDbHelper(mContext).getWritableDatabase()
+
+        //Now make two inserts to all tables which are to be tested, since it's same data so replace should
+        //work and there should only be one record
+        //** First Insert **
+        contentValues = TestUtilities.createMovieValues()
+        rowId = sqLiteDatabase.insert(MovieMagicContract.MovieBasicInfo.TABLE_NAME,null,contentValues)
+        assertTrue('Error: Unable to Insert movie_basic_info data into the Database', rowId != -1)
+        //Populate movieBaiscInfoRowId which is used as Foreign key in other tables
+        movieBasicInfoRowId = rowId
+        contentValues = TestUtilities.createMovieCastValues(movieBasicInfoRowId)
+        rowId = sqLiteDatabase.insert(MovieMagicContract.MovieCast.TABLE_NAME,null,contentValues)
+        assertTrue('Error: Unable to Insert movie_cast data into the Database', rowId != -1)
+        contentValues = TestUtilities.createMovieCrewValues(movieBasicInfoRowId)
+        rowId = sqLiteDatabase.insert(MovieMagicContract.MovieCrew.TABLE_NAME,null,contentValues)
+        assertTrue('Error: Unable to Insert movie_crew data into the Database', rowId != -1)
+        contentValues = TestUtilities.createMovieImageValues(movieBasicInfoRowId)
+        rowId = sqLiteDatabase.insert(MovieMagicContract.MovieImage.TABLE_NAME,null,contentValues)
+        assertTrue('Error: Unable to Insert movie_image data into the Database', rowId != -1)
+        contentValues = TestUtilities.createMovieVideoValues(movieBasicInfoRowId)
+        rowId = sqLiteDatabase.insert(MovieMagicContract.MovieVideo.TABLE_NAME,null,contentValues)
+        assertTrue('Error: Unable to Insert movie_video data into the Database', rowId != -1)
+        contentValues = TestUtilities.createMovieReviewValues(movieBasicInfoRowId)
+        rowId = sqLiteDatabase.insert(MovieMagicContract.MovieReview.TABLE_NAME,null,contentValues)
+        assertTrue('Error: Unable to Insert movie_review data into the Database', rowId != -1)
+        contentValues = TestUtilities.createMovieReleaseDateValues(movieBasicInfoRowId)
+        rowId = sqLiteDatabase.insert(MovieMagicContract.MovieReleaseDate.TABLE_NAME,null,contentValues)
+        assertTrue('Error: Unable to Insert movie_release_date data into the Database', rowId != -1)
+        contentValues = TestUtilities.createMoviePersonInfoValues()
+        rowId = sqLiteDatabase.insert(MovieMagicContract.MoviePersonInfo.TABLE_NAME,null,contentValues)
+        assertTrue('Error: Unable to Insert movie_person_info data into the Database', rowId != -1)
+        //Populate moviePersonRowId which is used as Foreign key in other tables
+        moviePersonRowId = rowId
+        contentValues = TestUtilities.createMoviePersonCastValues(moviePersonRowId)
+        rowId = sqLiteDatabase.insert(MovieMagicContract.MoviePersonCast.TABLE_NAME,null,contentValues)
+        assertTrue('Error: Unable to Insert movie_person_cast data into the Database', rowId != -1)
+        contentValues = TestUtilities.createMoviePersonCrewValues(moviePersonRowId)
+        rowId = sqLiteDatabase.insert(MovieMagicContract.MoviePersonCrew.TABLE_NAME,null,contentValues)
+
+        //** Second Insert **
+        contentValues = TestUtilities.createMovieValues()
+        //Change the movie id, so that it is considered as new record in movie_basic_info (i.e. doesn't get replaced)
+        contentValues.put(MovieMagicContract.MovieBasicInfo.COLUMN_MOVIE_ID,999)
+        rowId = sqLiteDatabase.insert(MovieMagicContract.MovieBasicInfo.TABLE_NAME,null,contentValues)
+        assertTrue('Error: Unable to Insert movie_basic_info data into the Database', rowId != -1)
+        //Populate movieBaiscInfoRowId which is used as Foreign key in other tables
+        movieBasicInfoRowId = rowId
+        contentValues = TestUtilities.createMovieCastValues(movieBasicInfoRowId)
+        rowId = sqLiteDatabase.insert(MovieMagicContract.MovieCast.TABLE_NAME,null,contentValues)
+        assertTrue('Error: Unable to Insert movie_cast data into the Database', rowId != -1)
+        contentValues = TestUtilities.createMovieCrewValues(movieBasicInfoRowId)
+        rowId = sqLiteDatabase.insert(MovieMagicContract.MovieCrew.TABLE_NAME,null,contentValues)
+        assertTrue('Error: Unable to Insert movie_crew data into the Database', rowId != -1)
+        contentValues = TestUtilities.createMovieImageValues(movieBasicInfoRowId)
+        rowId = sqLiteDatabase.insert(MovieMagicContract.MovieImage.TABLE_NAME,null,contentValues)
+        assertTrue('Error: Unable to Insert movie_image data into the Database', rowId != -1)
+        contentValues = TestUtilities.createMovieVideoValues(movieBasicInfoRowId)
+        rowId = sqLiteDatabase.insert(MovieMagicContract.MovieVideo.TABLE_NAME,null,contentValues)
+        assertTrue('Error: Unable to Insert movie_video data into the Database', rowId != -1)
+        contentValues = TestUtilities.createMovieReviewValues(movieBasicInfoRowId)
+        rowId = sqLiteDatabase.insert(MovieMagicContract.MovieReview.TABLE_NAME,null,contentValues)
+        assertTrue('Error: Unable to Insert movie_review data into the Database', rowId != -1)
+        contentValues = TestUtilities.createMovieReleaseDateValues(movieBasicInfoRowId)
+        rowId = sqLiteDatabase.insert(MovieMagicContract.MovieReleaseDate.TABLE_NAME,null,contentValues)
+        assertTrue('Error: Unable to Insert movie_release_date data into the Database', rowId != -1)
+        contentValues = TestUtilities.createMoviePersonInfoValues()
+        //Change the person id, so that it is considered as new record in movie_person_info (i.e. doesn't get replaced)
+        contentValues.put(MovieMagicContract.MoviePersonInfo.COLUMN_PERSON_ID,999)
+        rowId = sqLiteDatabase.insert(MovieMagicContract.MoviePersonInfo.TABLE_NAME,null,contentValues)
+        assertTrue('Error: Unable to Insert movie_person_info data into the Database', rowId != -1)
+        //Populate moviePersonRowId which is used as Foreign key in other tables
+        moviePersonRowId = rowId
+        contentValues = TestUtilities.createMoviePersonCastValues(moviePersonRowId)
+        rowId = sqLiteDatabase.insert(MovieMagicContract.MoviePersonCast.TABLE_NAME,null,contentValues)
+        assertTrue('Error: Unable to Insert movie_person_cast data into the Database', rowId != -1)
+        contentValues = TestUtilities.createMoviePersonCrewValues(moviePersonRowId)
+        rowId = sqLiteDatabase.insert(MovieMagicContract.MoviePersonCrew.TABLE_NAME,null,contentValues)
+
+
+        //Query the main (count in main should be 2) and child tables and ensure there is only one record
+        queryCursor = sqLiteDatabase.query(MovieMagicContract.MovieBasicInfo.TABLE_NAME,null,null,null,null,null,null)
+        assertEquals('Error: Record not replaced in movie_basic_info during insert', 2, queryCursor.getCount())
+        queryCursor = sqLiteDatabase.query(MovieMagicContract.MovieCast.TABLE_NAME,null,null,null,null,null,null)
+        assertEquals('Error: Record not replaced in movie_cast during insert', 1, queryCursor.getCount())
+        queryCursor = sqLiteDatabase.query(MovieMagicContract.MovieCrew.TABLE_NAME,null,null,null,null,null,null)
+        assertEquals('Error: Record not replaced in movie_crew during insert', 1, queryCursor.getCount())
+        queryCursor = sqLiteDatabase.query(MovieMagicContract.MovieImage.TABLE_NAME,null,null,null,null,null,null)
+        assertEquals('Error: Record not replaced in movie_image during insert', 1, queryCursor.getCount())
+        queryCursor = sqLiteDatabase.query(MovieMagicContract.MovieVideo.TABLE_NAME,null,null,null,null,null,null)
+        assertEquals('Error: Record not replaced in movie_video during insert', 1, queryCursor.getCount())
+        queryCursor = sqLiteDatabase.query(MovieMagicContract.MovieReview.TABLE_NAME,null,null,null,null,null,null)
+        assertEquals('Error: Record not replaced in movie_review during insert', 1, queryCursor.getCount())
+        queryCursor = sqLiteDatabase.query(MovieMagicContract.MovieReleaseDate.TABLE_NAME,null,null,null,null,null,null)
+        assertEquals('Error: Record not replaced in movie_release_date during insert', 1, queryCursor.getCount())
+        queryCursor = sqLiteDatabase.query(MovieMagicContract.MoviePersonInfo.TABLE_NAME,null,null,null,null,null,null)
+        assertEquals('Error: Record not replaced in movie_person_info during insert', 2, queryCursor.getCount())
+        queryCursor = sqLiteDatabase.query(MovieMagicContract.MoviePersonCast.TABLE_NAME,null,null,null,null,null,null)
+        assertEquals('Error: Record not replaced in movie_person_cast during insert', 1, queryCursor.getCount())
+        queryCursor = sqLiteDatabase.query(MovieMagicContract.MoviePersonCrew.TABLE_NAME,null,null,null,null,null,null)
+        assertEquals('Error: Record not replaced in movie_person_cast during insert', 1, queryCursor.getCount())
+
         // Finally, close the cursor and database
-        cursor.close()
+        queryCursor.close()
         sqLiteDatabase.close()
     }
 }

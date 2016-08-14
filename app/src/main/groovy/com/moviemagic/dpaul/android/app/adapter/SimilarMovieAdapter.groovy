@@ -97,8 +97,12 @@ class SimilarMovieAdapter extends RecyclerView.Adapter<SimilarMovieAdapter.Simil
 
     @Override
     int getItemCount() {
-        LogDisplay.callLog(LOG_TAG,'Cursor item count is called',LogDisplay.SIMILAR_MOVIE_ADAPTER_FLAG)
-        if ( null == mCursor ) return 0
+//        LogDisplay.callLog(LOG_TAG,'Cursor item count is called',LogDisplay.SIMILAR_MOVIE_ADAPTER_FLAG)
+        if (null == mCursor) {
+            LogDisplay.callLog(LOG_TAG, "Cursor item count = 0", LogDisplay.SIMILAR_MOVIE_ADAPTER_FLAG)
+            return 0
+        }
+        LogDisplay.callLog(LOG_TAG, "Cursor item count = ${mCursor.getCount()}", LogDisplay.SIMILAR_MOVIE_ADAPTER_FLAG)
         return mCursor.getCount()
     }
 

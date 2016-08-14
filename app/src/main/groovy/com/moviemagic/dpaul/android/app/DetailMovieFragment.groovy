@@ -1,13 +1,18 @@
 package com.moviemagic.dpaul.android.app
 
 import android.app.Activity
+import android.content.Intent
+import android.content.res.ColorStateList
 import android.database.Cursor
 import android.graphics.Bitmap
 import android.graphics.Color
 import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.Drawable
+import android.graphics.drawable.RippleDrawable
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
+import android.support.design.widget.Snackbar
 import android.support.v17.leanback.widget.HorizontalGridView
 import android.support.v4.app.Fragment
 import android.support.v4.app.LoaderManager
@@ -15,19 +20,25 @@ import android.support.v4.content.ContextCompat
 import android.support.v4.content.CursorLoader
 import android.support.v4.content.Loader
 import android.support.v4.graphics.drawable.DrawableCompat
+import android.support.v4.view.ViewCompat
 import android.support.v7.graphics.Palette
+import android.support.v7.widget.AppCompatButton
 import android.support.v7.widget.GridLayoutManager
+import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import android.widget.FrameLayout
+import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.RatingBar
 import android.widget.TextView
 import com.moviemagic.dpaul.android.app.adapter.MovieCastAdapter
 import com.moviemagic.dpaul.android.app.adapter.MovieCrewAdapter
+import com.moviemagic.dpaul.android.app.adapter.MovieReviewAdapter
 import com.moviemagic.dpaul.android.app.adapter.SimilarMovieAdapter
 import com.moviemagic.dpaul.android.app.contentprovider.MovieMagicContract
 import com.moviemagic.dpaul.android.app.utility.FriendlyDisplay
@@ -44,28 +55,33 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
 
     private TextView mMovieTitleTextView, mGenreTextView, mRunTimeTextView, mReleaseDateTextView, mBudgetTextView,
                      mRevenueTextView, mPopularityTextView, mTotalVoteCountTextView, mTaglineTextView, mSynopsisTextView,
-                     mProdCompanyTextView, mProdCountryTextView, mCollectionNameTextView, mHomePageTextView, mImdbLinkTextView
+                     mProdCompanyTextView, mProdCountryTextView, mCollectionNameTextView, mExternalLinkHeader,mImdbLinkTextView,mHomePageTextView
+
     private TextView mReleaseDateHeaderTextView, mBudgetHeaderTextView, mRevenueHeaderTextView, mPopularityHeaderTextView,
-            mTmdbRatingHeaderTextView, mTmdbTotalVoteCountHeaderTextView, mTmdbTotalVoteCountTrailerTextView,
-            mUserRatingHeaderTextView, mTaglineHeaderTextView, mSynopsisHeaderTextView, mMovieTrailerHeaderTextView,
-            mProdCompanyHeaderTextView, mProdCountryHeaderTextView, mCastHeaderTextView, mCrewHeaderTextView,
-            mSimilarMovieHeaderTextView, mCollectionNameHeaderTextView, mReviewHeaderTextView
+                    mTmdbRatingHeaderTextView, mTmdbTotalVoteCountHeaderTextView, mTmdbTotalVoteCountTrailerTextView,
+                    mUserRatingHeaderTextView, mTaglineHeaderTextView, mSynopsisHeaderTextView, mMovieTrailerHeaderTextView,
+                    mProdCompanyHeaderTextView, mProdCountryHeaderTextView, mCastHeaderTextView, mCrewHeaderTextView,
+                    mSimilarMovieHeaderTextView, mCollectionNameHeaderTextView, mReviewHeaderTextView, mRecyclerViewEmptyMsgTextView,
+                    mUserListDrawableTitle
+
     private ImageView mMpaaRatingImageView, mPosterImageView, mCollectionBackdropImageView
+
     private LinearLayout mDetailTitleLayout, mDetailPosterLayout, mDetailTmdbRatingLayout, mDetailUserRatingLayout,
                          mDetailSynopsisLayout, mDetailTrailerLayout, mDetailProductionInfoLayout, mDetailCastHeaderLayout,
-                         mDetailCrewHeaderLayout, mDetailSimilarMovieHeaderLayout,
-                         mDetailCollectionLayout, mDetailWebLinkLayout, mDetailReviewHeaderLayout,
-                         mDetailReviewListViewLayout
+                         mDetailCrewHeaderLayout, mDetailSimilarMovieHeaderLayout, mUserListDrawableLayout,
+                         mDetailCollectionLayout, mDetailWebLinkLayout, mDetailReviewHeaderLayout
+    private ImageButton mImageButtonWatched, mImageButtonWishList, mImageButtonFavourite, mImageButtonCollection
+
     private RatingBar mTmdbRatingBar, mUserRatingBar
-    private FrameLayout mDetailsCastGridLayout, mDetailCrewGridLayout, mDetailSimilarMovieGridLayout
+    private FrameLayout mDetailsCastGridLayout, mDetailCrewGridLayout, mDetailSimilarMovieGridLayout, mDetailReviewRecyclerViewLayout
+    private Button mHomePageButton, mImdbLinkButton
     private Uri mMovieIdUri
     private int mMovieId
     private String[] mMovieIdArg
     private String[] mVideoArg
     private String[] mReleaseInfoArg
     private String[] mMovieImageArg
-    private String mMovieTitle
-    private String mOriginalBackdropPath
+    private String mMovieTitle, mOriginalBackdropPath, mMovieHomePageUrl, mMovieImdbId
     private SimilarMovieAdapter mSimilarMovieAdapter
     private MovieCastAdapter mMovieCastAdapter
     private MovieCrewAdapter mMovieCrewAdapter
@@ -79,6 +95,11 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
     private int mPalleteTitleColor
     private int mPalleteBodyTextColor
     private int mPalleteAccentColor
+    private RecyclerView mMovieReviewRecyclerView
+    private RecyclerView.LayoutManager mMovieReviewLayoutManager
+//    private LinearLayoutManager mLinMovieReviewLayoutManager
+//    private MyLinearLayoutManager mMyMovieReviewLayoutManager
+    private MovieReviewAdapter mMovieReviewAdapter
 
     public static final String MOVIE_BASIC_INFO_MOVIE_ID_URI = 'movie_basic_info_movie_id_uri'
     private static final String MOVIE_VIDEO_SITE_YOUTUBE = 'YouTube'
@@ -90,6 +111,7 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
     private static final int MOVIE_DETAIL_FRAGMENT_MOVIE_CREW_LOADER_ID = 4
     private static final int MOVIE_DETAIL_FRAGMENT_MOVIE_RELEASE_INFO_LOADER_ID = 5
     private static final int MOVIE_DETAIL_FRAGMENT_MOVIE_IMAGE_LOADER_ID = 6
+    private static final int MOVIE_DETAIL_FRAGMENT_MOVIE_REVIEW_LOADER_ID = 7
 
     //Columns to fetch from movie_basic_info table
     private static final String[] MOVIE_BASIC_INFO_COLUMNS = [MovieMagicContract.MovieBasicInfo._ID,
@@ -222,6 +244,17 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
     final static int COL_MOVIE_IMAGE_TYPE = 2
     final static int COL_MOVIE_IMAGE_FILE_PATH = 3
 
+    //Columns to fetch from movie_review table
+    private static final String[] MOVIE_REVIEW_COLUMNS = [MovieMagicContract.MovieReview._ID,
+                                                         MovieMagicContract.MovieReview.COLUMN_REVIEW_ORIG_MOVIE_ID,
+                                                         MovieMagicContract.MovieReview.COLUMN_REVIEW_AUTHOR,
+                                                         MovieMagicContract.MovieReview.COLUMN_REVIEW_CONTENT]
+    //These are indices of the above columns, if projection array changes then this needs to be changed
+    final static int COL_MOVIE_REVIEW_ID = 0
+    final static int COL_MOVIE_REVIEW_ORIG_MOVIE_ID = 1
+    final static int COL_MOVIE_REVIEW_AUTHOR = 2
+    final static int COL_MOVIE_REVIEW_CONTENT = 3
+
     //An empty constructor is needed so that lifecycle is properly handled
     public DetailMovieFragment(){}
 
@@ -263,9 +296,11 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
         mDetailCollectionLayout = mRootView.findViewById(R.id.movie_detail_collection_layout) as LinearLayout
         mDetailWebLinkLayout = mRootView.findViewById(R.id.movie_detail_web_links_layout) as LinearLayout
         mDetailReviewHeaderLayout = mRootView.findViewById(R.id.movie_detail_review_header_layout) as LinearLayout
-        mDetailReviewListViewLayout = mRootView.findViewById(R.id.movie_detail_review_list_view_layout) as LinearLayout
+        mDetailReviewRecyclerViewLayout = mRootView.findViewById(R.id.movie_detail_review_recycler_view_layout) as FrameLayout
+        mUserListDrawableLayout = mRootView.findViewById(R.id.movie_detail_user_list_drawable_layout) as LinearLayout
 
-        //All the header (fixed text) fields
+
+        //All the header (fixed text) fields & buttons
         mReleaseDateHeaderTextView = mRootView.findViewById(R.id.movie_detail_poster_release_date_header) as TextView
         mBudgetHeaderTextView = mRootView.findViewById(R.id.movie_detail_poster_budget_header) as TextView
         mRevenueHeaderTextView = mRootView.findViewById(R.id.movie_detail_poster_revenue_header) as TextView
@@ -285,8 +320,30 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
         mCollectionNameHeaderTextView = mRootView.findViewById(R.id.movie_detail_collection_header) as TextView
         mCollectionNameHeaderTextView = mRootView.findViewById(R.id.movie_detail_collection_header) as TextView
         mReviewHeaderTextView = mRootView.findViewById(R.id.movie_detail_review_header) as TextView
+        mRecyclerViewEmptyMsgTextView = mRootView.findViewById(R.id.movie_detail_review_recycler_view_empty_msg_text_view) as TextView
+        mExternalLinkHeader = mRootView.findViewById(R.id.movie_detail_web_links_header) as TextView
+        mUserListDrawableTitle = mRootView.findViewById(R.id.movie_detail_user_list_drawable_title) as TextView
+        mImageButtonWatched = mRootView.findViewById(R.id.movie_detail_user_list_drawable_watched) as ImageButton
+        mImageButtonWatched.setOnClickListener(new View.OnClickListener() {
+            @Override
+            void onClick(View v) {
+                LogDisplay.callLog(LOG_TAG,'ImageButton Watched Button is clicked',LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
+                if(mImageButtonWatched.getAlpha() == 1f) {
+                    mImageButtonWatched.setAlpha(0.4f)
+                    mImageButtonWatched.setColorFilter(null)
+                } else {
+                    Snackbar.make(mRootView.findViewById(R.id.movie_detail_user_list_drawable_layout),'Added to watched list', Snackbar.LENGTH_LONG)
+                            .setAction("Action", null).show()
+                    mImageButtonWatched.setAlpha(1f)
+                    mImageButtonWatched.setColorFilter(mPalleteAccentColor)
+                }
+            }
+        })
+        mImageButtonWishList = mRootView.findViewById(R.id.movie_detail_user_list_drawable_wish_list) as ImageButton
+        mImageButtonFavourite = mRootView.findViewById(R.id.movie_detail_user_list_drawable_favourite) as ImageButton
+        mImageButtonCollection = mRootView.findViewById(R.id.movie_detail_user_list_drawable_collection) as ImageButton
 
-        //All the dynamic fields (data fields)
+        //All the dynamic fields (data fields) & ratingbar
         mMovieTitleTextView = mRootView.findViewById(R.id.movie_detail_title) as TextView
         mMpaaRatingImageView = mRootView.findViewById(R.id.movie_detail_mpaa_image) as ImageView
         mGenreTextView = mRootView.findViewById(R.id.movie_detail_title_genre) as TextView
@@ -305,8 +362,36 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
         mProdCountryTextView = mRootView.findViewById(R.id.movie_detail_production_info_country) as TextView
         mCollectionNameTextView = mRootView.findViewById(R.id.movie_detail_collection_name) as TextView
         mCollectionBackdropImageView = mRootView.findViewById(R.id.movie_detail_collection_image) as ImageView
-        mHomePageTextView = mRootView.findViewById(R.id.movie_detail_web_links_home_page) as TextView
-        mImdbLinkTextView = mRootView.findViewById(R.id.movie_detail_web_links_imdb_link) as TextView
+        mHomePageButton = mRootView.findViewById(R.id.movie_detail_web_links_home_page_button) as Button
+        mHomePageButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            void onClick(View v) {
+                LogDisplay.callLog(LOG_TAG,'Home Page Button is clicked',LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
+                startHomePageIntent()
+            }
+        })
+        mImdbLinkButton = mRootView.findViewById(R.id.movie_detail_web_links_imdb_link_button) as Button
+        mImdbLinkButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            void onClick(View v) {
+                LogDisplay.callLog(LOG_TAG,'IMDb Button is clicked',LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
+                startImdbIntent()
+            }
+        })
+//        mHomePageTextView = mRootView.findViewById(R.id.movie_detail_web_links_home_page_na) as TextView
+//        mHomePageTextView.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            void onClick(View v) {
+//                LogDisplay.callLog(LOG_TAG,'Home Page Button is clicked',LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
+//            }
+//        })
+//        mImdbLinkTextView = mRootView.findViewById(R.id.movie_detail_web_links_imdb_link_na) as TextView
+//        mImdbLinkTextView.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            void onClick(View v) {
+//                LogDisplay.callLog(LOG_TAG,'IMDb Button is clicked',LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
+//            }
+//        })
         mHorizontalSimilarMovieGridView = mRootView.findViewById(R.id.movie_detail_similar_movie_grid) as HorizontalGridView
 
         mSimilarMovieLayoutManager = new GridLayoutManager(getActivity(),1,GridLayoutManager.HORIZONTAL,false)
@@ -338,6 +423,28 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
         mMovieCrewAdapter = new MovieCrewAdapter(getActivity())
         mHorizontalMovieCrewGridView.setAdapter(mMovieCrewAdapter)
 
+        mMovieReviewRecyclerView = mRootView.findViewById(R.id.movie_detail_review_recycler_view) as RecyclerView
+//        mMovieReviewRecyclerView.setHasFixedSize(true)
+        //Set this to false for smooth scrolling of recyclerview
+        mMovieReviewRecyclerView.setNestedScrollingEnabled(false)
+        mMovieReviewLayoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL,false)
+//        mLinMovieReviewLayoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL,false)
+//        mMovieReviewLayoutManager = new RecyclerView.LayoutManager() {
+//            @Override
+//            RecyclerView.LayoutParams generateDefaultLayoutParams() {
+//                return new RecyclerView.LayoutParams(
+//                        RecyclerView.LayoutParams.WRAP_CONTENT,
+//                        RecyclerView.LayoutParams.WRAP_CONTENT)
+//            }
+//        }
+        mMovieReviewLayoutManager.setAutoMeasureEnabled(true)
+
+//        mMyMovieReviewLayoutManager = new MyLinearLayoutManager(getActivity(),LinearLayoutManager.VERTICAL,false)
+        mMovieReviewRecyclerView.setLayoutManager(mMovieReviewLayoutManager)
+//        mMovieReviewRecyclerView.setNestedScrollingEnabled(false)
+//        mMovieReviewRecyclerView.setHasFixedSize(false)
+        mMovieReviewAdapter = new MovieReviewAdapter(getActivity(), mRecyclerViewEmptyMsgTextView)
+        mMovieReviewRecyclerView.setAdapter(mMovieReviewAdapter)
         return mRootView
     }
 
@@ -364,7 +471,8 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
         getLoaderManager().initLoader(MOVIE_DETAIL_FRAGMENT_MOVIE_CREW_LOADER_ID, null, this)
         getLoaderManager().initLoader(MOVIE_DETAIL_FRAGMENT_MOVIE_RELEASE_INFO_LOADER_ID, null, this)
         getLoaderManager().initLoader(MOVIE_DETAIL_FRAGMENT_MOVIE_IMAGE_LOADER_ID, null, this)
-        super.onActivityCreated(savedInstanceState);
+        getLoaderManager().initLoader(MOVIE_DETAIL_FRAGMENT_MOVIE_REVIEW_LOADER_ID, null, this)
+        super.onActivityCreated(savedInstanceState)
     }
 
     @Override
@@ -438,6 +546,15 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
                             $MovieMagicContract.MovieImage.COLUMN_IMAGE_TYPE = ? """, //Selection Clause
                         mMovieImageArg,                                     //Selection Arg
                         null)                                             //Sorting not used
+
+            case MOVIE_DETAIL_FRAGMENT_MOVIE_REVIEW_LOADER_ID:
+                return new CursorLoader(
+                        getActivity(),                                  //Parent Activity Context
+                        MovieMagicContract.MovieReview.CONTENT_URI,       //Table to query
+                        MOVIE_REVIEW_COLUMNS,                             //Projection to return
+                        MovieMagicContract.MovieReview.COLUMN_REVIEW_ORIG_MOVIE_ID + "= ?", //Selection Clause
+                        mMovieIdArg,                                    //Selection Arg
+                        MovieMagicContract.MovieReview.COLUMN_REVIEW_AUTHOR)   //Sorted on the author
             default:
                 return null
         }
@@ -469,6 +586,9 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
             case MOVIE_DETAIL_FRAGMENT_MOVIE_IMAGE_LOADER_ID:
                 processBackdropImages(data)
                 break
+            case MOVIE_DETAIL_FRAGMENT_MOVIE_REVIEW_LOADER_ID:
+                handleMovieReviewOnLoadFinished(data)
+                break
             default:
                 LogDisplay.callLog(LOG_TAG,"Unknown loader id. id->$loaderId",LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
         }
@@ -480,11 +600,12 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
         mSimilarMovieAdapter.swapCursor(null)
         mMovieCastAdapter.swapCursor(null)
         mMovieCrewAdapter.swapCursor(null)
+        mMovieReviewAdapter.swapCursor(null)
     }
 
     void handleMovieBasicOnLoadFinished(Cursor data) {
         if(data.moveToFirst()) {
-            LogDisplay.callLog(LOG_TAG,"Cursor Data.Movie id -> ${Integer.toString(mMovieId)}",LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
+            LogDisplay.callLog(LOG_TAG,"handleMovieBasicOnLoadFinished.Movie id -> ${Integer.toString(mMovieId)}",LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
             mOriginalBackdropPath = data.getString(COL_MOVIE_BASIC_BACKDROP_PATH)
             mMovieTitle = data.getString(COL_MOVIE_BASIC_TITLE)
             mMovieTitleTextView.setText(mMovieTitle)
@@ -565,6 +686,11 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
                             SimilarMovieAdapter.mPrimaryDarkColor = mPalletePrimaryDarkColor
                             SimilarMovieAdapter.mBodyTextColor = mPalleteBodyTextColor
                             mSimilarMovieAdapter.changeColor()
+                            MovieReviewAdapter.mPrimaryColor = mPalletePrimaryColor
+                            MovieReviewAdapter.mPrimaryDarkColor = mPalletePrimaryDarkColor
+                            MovieReviewAdapter.mTitleTextColor = mPalleteTitleColor
+                            MovieReviewAdapter.mBodyTextColor = mPalleteBodyTextColor
+                            mMovieReviewAdapter.changeColor()
                         }
                     })
                 }
@@ -588,11 +714,89 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
             String collectionBackdropPath = "http://image.tmdb.org/t/p/w500${data.getString(COL_MOVIE_BASIC_COLLECTION_BACKDROP_PATH)}"
             Picasso.with(getActivity())
                     .load(collectionBackdropPath)
+                    .fit()
                     .placeholder(R.drawable.grid_image_placeholder)
                     .error(R.drawable.grid_image_error)
                     .into(mCollectionBackdropImageView)
-            mHomePageTextView.setText(data.getString(COL_MOVIE_BASIC_HOME_PAGE))
-            mImdbLinkTextView.setText(data.getString(COL_MOVIE_BASIC_IMDB_ID))
+
+            LogDisplay.callLog(LOG_TAG, "homePage:${data.getString(COL_MOVIE_BASIC_HOME_PAGE)}", LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
+            if(data.getString(COL_MOVIE_BASIC_HOME_PAGE)) {
+                mMovieHomePageUrl = data.getString(COL_MOVIE_BASIC_HOME_PAGE)
+//                mHomePageTextView.setBackgroundColor(mPalletePrimaryDarkColor)
+//                mHomePageTextView.setText(getActivity().getString(R.string.movie_detail_web_links_home_page))
+//                mHomePageTextView.setTextColor(mPalleteBodyTextColor)
+//                mHomePageTextView.setClickable(true)
+//                mHomePageTextView.setElevation(4f)
+//                ColorStateList colorStateList = ColorStateList.valueOf(mPalletePrimaryDarkColor)
+//                mHomePageButton.setBackgroundTintList(colorStateList)
+                mHomePageButton.setText(getActivity().getString(R.string.movie_detail_web_links_home_page))
+//                mHomePageButton.setTextColor(mPalleteBodyTextColor)
+                mHomePageButton.setClickable(true)
+                //Somehow while running in Jelly bean & KITKAT it cannot find Build.VERSION_CODES.LOLLIPOP, yet to figure out why!
+                //So using the API number (21 - LOLLIPOP)itself here and other places below
+                if (Build.VERSION.SDK_INT >= 21) {
+//                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                    mHomePageButton.setElevation(4f)
+                }
+//                ViewCompat.setBackgroundTintList(mHomePageButton,colorStateList)
+            } else {
+//                mHomePageTextView.setBackgroundColor(mPalletePrimaryDarkColor)
+//                mHomePageTextView.setText(getActivity().getString(R.string.movie_data_not_available))
+//                mHomePageTextView.setTextColor(mPalleteBodyTextColor)
+//                mHomePageTextView.setClickable(false)
+//                mHomePageTextView.setElevation(0f)
+//                ColorStateList colorStateList = ColorStateList.valueOf(mPalletePrimaryColor)
+//                ViewCompat.setBackgroundTintList(mHomePageButton,colorStateList)
+//                mHomePageButton.setBackgroundTintList(colorStateList)
+                mHomePageButton.setText(getActivity().getString(R.string.movie_data_not_available))
+//                mHomePageButton.setTextColor(mPalleteBodyTextColor)
+                mHomePageButton.setClickable(false)
+                if (Build.VERSION.SDK_INT >= 21) {
+//                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                    mHomePageButton.setElevation(0f)
+                }
+            }
+            LogDisplay.callLog(LOG_TAG, "IMDb ID:${data.getString(COL_MOVIE_BASIC_IMDB_ID)}", LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
+            if(data.getString(COL_MOVIE_BASIC_IMDB_ID)) {
+                mMovieImdbId = data.getString(COL_MOVIE_BASIC_IMDB_ID)
+//                mImdbLinkTextView.setBackgroundColor(mPalletePrimaryDarkColor)
+//                mImdbLinkTextView.setText(getActivity().getString(R.string.movie_detail_web_links_imdb_link))
+//                mImdbLinkTextView.setTextColor(mPalleteBodyTextColor)
+//                mImdbLinkTextView.setClickable(true)
+//                mImdbLinkTextView.setElevation(4f)
+//                mImdbLinkButton.setVisibility(Button.VISIBLE)
+//                ColorStateList colorStateList = ColorStateList.valueOf(mPalletePrimaryDarkColor)
+//                mImdbLinkButton.setBackgroundTintList(colorStateList)
+//                mImdbLinkButton.setBackgroundColor(mPalletePrimaryDarkColor)
+                mImdbLinkButton.setText(getActivity().getString(R.string.movie_detail_web_links_imdb_link))
+//                mImdbLinkButton.setTextColor(mPalleteBodyTextColor)
+                mImdbLinkButton.setClickable(true)
+                if (Build.VERSION.SDK_INT >= 21) {
+//                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                    mImdbLinkButton.setElevation(4f)
+                }
+//                mImdbLinkButton.setBackgroundColor(mPalletePrimaryColor)
+//                mImdbLinkNaTextView.setVisibility(TextView.INVISIBLE)
+            } else {
+//                mImdbLinkTextView.setBackgroundColor(mPalletePrimaryDarkColor)
+//                mImdbLinkTextView.setText(getActivity().getString(R.string.movie_data_not_available))
+//                mImdbLinkTextView.setTextColor(mPalleteBodyTextColor)
+//                mImdbLinkTextView.setClickable(false)
+//                mImdbLinkTextView.setElevation(0f)
+//                mImdbLinkButton.setVisibility(Button.INVISIBLE)
+//                mImdbLinkNaTextView.setVisibility(TextView.VISIBLE)
+//                ColorStateList colorStateList = ColorStateList.valueOf(mPalletePrimaryColor)
+//                mImdbLinkButton.setBackgroundTintList(colorStateList)
+                mImdbLinkButton.setText(getActivity().getString(R.string.movie_data_not_available))
+//                mImdbLinkButton.setTextColor(mPalleteBodyTextColor)
+                mImdbLinkButton.setClickable(false)
+                if (Build.VERSION.SDK_INT >= 21) {
+//                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                    mImdbLinkButton.setElevation(0f)
+                }
+            }
+//            mHomePageTextView.setText(data.getString(COL_MOVIE_BASIC_HOME_PAGE))
+//            mImdbLinkTextView.setText(data.getString(COL_MOVIE_BASIC_IMDB_ID))
 
             int detailDataPresentFlag = data.getInt(COL_MOVIE_BASIC_DETAIL_DATA_PRESENT_FLAG)
             //If the flag is zero then data not present, so go and fetch it
@@ -633,7 +837,7 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
             youtubeVideoKey = new ArrayList<>()
             for(i in 0..(data.count-1)) {
                 youtubeVideoKey.add(data.getString(COL_MOVIE_VIDEO_KEY))
-                LogDisplay.callLog(LOG_TAG, "YouTube video key= $youtubeVideoKey", LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
+                LogDisplay.callLog(LOG_TAG, "YouTube now_playing key= $youtubeVideoKey", LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
                 data.moveToNext()
             }
             final MovieMagicYoutubeFragment movieMagicYoutubeFragment = getChildFragmentManager()
@@ -682,6 +886,11 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
         }
     }
 
+    void handleMovieReviewOnLoadFinished(Cursor data) {
+        LogDisplay.callLog(LOG_TAG,"handleMovieReviewOnLoadFinished.Cursor rec count -> ${data.getCount()}",LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
+        mMovieReviewAdapter.swapCursor(data)
+    }
+
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity)
@@ -714,7 +923,8 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
         mDetailCollectionLayout.setBackgroundColor(mPalletePrimaryColor)
         mDetailWebLinkLayout.setBackgroundColor(mPalletePrimaryColor)
         mDetailReviewHeaderLayout.setBackgroundColor(mPalletePrimaryColor)
-        mDetailReviewListViewLayout.setBackgroundColor(mPalletePrimaryColor)
+        mDetailReviewRecyclerViewLayout.setBackgroundColor(mPalletePrimaryColor)
+        mUserListDrawableLayout.setBackgroundColor(mPalletePrimaryColor)
 
         //Change color for header text fields
         mReleaseDateHeaderTextView.setTextColor(mPalleteTitleColor)
@@ -735,6 +945,8 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
         mSimilarMovieHeaderTextView.setTextColor(mPalleteTitleColor)
         mCollectionNameHeaderTextView.setTextColor(mPalleteTitleColor)
         mReviewHeaderTextView.setTextColor(mPalleteTitleColor)
+        mExternalLinkHeader.setTextColor(mPalleteTitleColor)
+        mUserListDrawableTitle.setTextColor(mPalleteTitleColor)
 
         //Change color for data fields
         mMovieTitleTextView.setTextColor(mPalleteTitleColor) //Movie name is Title color
@@ -751,15 +963,55 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
         mProdCompanyTextView.setTextColor(mPalleteBodyTextColor)
         mProdCountryTextView.setTextColor(mPalleteBodyTextColor)
         mCollectionNameTextView.setTextColor(mPalleteBodyTextColor)
-        mHomePageTextView.setTextColor(mPalleteBodyTextColor)
-        mImdbLinkTextView.setTextColor(mPalleteBodyTextColor)
+//        mHomePageNaTextView.setTextColor(mPalleteBodyTextColor)
+//        mImdbLinkTextView.setTextColor(mPalleteBodyTextColor)
 
-        //Set ratingbar color
+        //Set user list imagebutton color
+        mImageButtonWatched.setBackgroundColor(mPalletePrimaryDarkColor)
+        mImageButtonWishList.setBackgroundColor(mPalletePrimaryDarkColor)
+        mImageButtonFavourite.setBackgroundColor(mPalletePrimaryDarkColor)
+        mImageButtonCollection.setBackgroundColor(mPalletePrimaryDarkColor)
+
+        //Set button color
+        ColorStateList colorStateList = ColorStateList.valueOf(mPalletePrimaryDarkColor)
+        //Somehow while running in Jelly bean & KITKAT it cannot find Build.VERSION_CODES.LOLLIPOP, yet to figure out why!
+        //So using the API number (21 - LOLLIPOP)itself here
+        if (Build.VERSION.SDK_INT >= 21) {
+            mHomePageButton.setBackgroundTintList(colorStateList)
+            mImdbLinkButton.setBackgroundTintList(colorStateList)
+        } else {
+            ViewCompat.setBackgroundTintList(mHomePageButton,colorStateList)
+            ViewCompat.setBackgroundTintList(mImdbLinkButton,colorStateList)
+        }
+        mHomePageButton.setTextColor(mPalleteBodyTextColor)
+        mImdbLinkButton.setTextColor(mPalleteBodyTextColor)
+
+        //Set ratingbar color. Used Compat so that can work below lollipop.
+        //Above one - didn't use. No reason, just an example how to handle lollipop and below separately
         Drawable tmdbRatingdrawable = mTmdbRatingBar.getProgressDrawable()
         DrawableCompat.setTint(tmdbRatingdrawable, mPalleteAccentColor)
         Drawable userRatingDrawable = mUserRatingBar.getProgressDrawable()
         DrawableCompat.setTint(userRatingDrawable, mPalleteAccentColor)
 
+    }
+
+    /**
+     * Intent to open a web browser when user clicks on movie home page button
+     */
+    void startHomePageIntent() {
+        Intent intent = new Intent(Intent.ACTION_VIEW)
+        intent.setData(Uri.parse(mMovieHomePageUrl))
+        startActivity(intent)
+    }
+
+    /**
+     * Intent to open the movie in imdb app(if installed) or in web browser when user clicks on imdb button
+     */
+    void startImdbIntent() {
+        String imdbUrl = "http://www.imdb.com/title/$mMovieImdbId/"
+        Intent intent = new Intent(Intent.ACTION_VIEW)
+        intent.setData(Uri.parse(imdbUrl))
+        startActivity(intent)
     }
 
     /**

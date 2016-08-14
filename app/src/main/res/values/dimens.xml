@@ -38,4 +38,5 @@
     <dimen name="movie_detail_collection_backdrop_height">240dp</dimen>
     <dimen name="grid_overlapping_text_padding">4dp</dimen>
 
+    <item name="movie_detail_user_list_drawable_alpha_value" type="dimen" format="float">0.4</item>
 </resources>

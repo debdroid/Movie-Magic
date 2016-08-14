@@ -16,7 +16,7 @@ class MovieMagicContract {
     // To make it easy to sort the list by movie release date, we store the date
     // in the database in milliseconds format using SimpleDateFormat and Date
     // The value is the number of milliseconds since Jan. 1, 1970, midnight GMT.
-    static long covertMovieReleaseDate(String releaseDate) {
+    static long convertMovieReleaseDate(String releaseDate) {
         //Split the date string which is of format yyyy-mm-dd
         try {
             final Date simpleReleaseDate = new SimpleDateFormat("yyyy-MM-dd").parse(releaseDate)
@@ -74,7 +74,7 @@ class MovieMagicContract {
         static final String COLUMN_POPULARITY = 'popularity'
         //Column to store movie title
         static final String COLUMN_TITLE = 'title'
-        //Column to store movie video flag
+        //Column to store movie now_playing flag
         static final String COLUMN_VIDEO_FLAG = 'video_flag'
         //Column to store movie voting average value
         static final String COLUMN_VOTE_AVG = 'vote_average'
@@ -84,7 +84,7 @@ class MovieMagicContract {
         static final String COLUMN_PAGE_NUMBER = 'page_number'
         //Column to store movie category (Not fetched from API)
         static final String COLUMN_MOVIE_CATEGORY = 'movie_category'
-        //Column to indicate the type (tmdb - public / tmdb - user / similar/ user local list)
+        //Column to indicate the type (tmdb_public / tmdb_user / tmdb_similar/ user_local_list)
         static final String COLUMN_MOVIE_LIST_TYPE = 'movie_list_type'
 
         //Column to track if the detail data is loaded or not (0 - false / 1 - true)
@@ -123,7 +123,7 @@ class MovieMagicContract {
         static final String COLUMN_TAGLINE = 'tagline'
 
         //Following fields are to keep and maintain user list
-        //All flags are stored as integer ( 0- flase & 1 - true)
+        //All flags are stored as integer ( 0- false & 1 - true)
         //Column to store user's watched movie list
         static final String COLUMN_USER_WATCHED = 'user_watched_flag'
         //Column to store user's wish movie list
@@ -132,6 +132,8 @@ class MovieMagicContract {
         static final String COLUMN_USER_FAVOURITE = 'user_favourite_flag'
         //Column to store user's collection
         static final String COLUMN_USER_COLLECTION = 'user_collection_flag'
+        //Column to store user rating value (This is not a flag)
+        static final String COLUMN_USER_RATING = 'user_rating'
         //Column to store export flag - future use
         static final String COLUMN_USER_EXPORTED = 'user_export_flag'
         //Future columns String
