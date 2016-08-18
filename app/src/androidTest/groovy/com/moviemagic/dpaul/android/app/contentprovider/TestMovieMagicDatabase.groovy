@@ -100,6 +100,8 @@ class TestMovieMagicDatabase extends AndroidTestCase {
         columeList << MovieMagicContract.MovieBasicInfo.COLUMN_RUNTIME
         columeList << MovieMagicContract.MovieBasicInfo.COLUMN_RELEASE_STATUS
         columeList << MovieMagicContract.MovieBasicInfo.COLUMN_TAGLINE
+        columeList << MovieMagicContract.MovieBasicInfo.COLUMN_CREATE_TIMESTAMP
+        columeList << MovieMagicContract.MovieBasicInfo.COLUMN_UPDATE_TIMESTAMP
         columeList << MovieMagicContract.MovieBasicInfo.COLUMN_USER_EXPORTED
         columeList << MovieMagicContract.MovieBasicInfo.COLUMN_FUTURE_USE_1
         columeList << MovieMagicContract.MovieBasicInfo.COLUMN_FUTURE_USE_2
@@ -370,6 +372,10 @@ class TestMovieMagicDatabase extends AndroidTestCase {
         columeList << MovieMagicContract.MovieUserListFlag.COLUMN_USER_LIST_FLAG_FAVOURITE
         columeList << MovieMagicContract.MovieUserListFlag.COLUMN_USER_LIST_FLAG_COLLECTION
         columeList << MovieMagicContract.MovieUserListFlag.COLUMN_USER_LIST_USER_RATING
+        columeList << MovieMagicContract.MovieUserListFlag.COLUMN_FUTURE_USE_1
+        columeList << MovieMagicContract.MovieUserListFlag.COLUMN_FUTURE_USE_2
+        columeList << MovieMagicContract.MovieUserListFlag.COLUMN_FUTURE_USE_3
+        columeList << MovieMagicContract.MovieUserListFlag.COLUMN_FUTURE_USE_4
 
         columnNameIndex = c.getColumnIndex('name')
         for(i in 1..c.getCount()) {

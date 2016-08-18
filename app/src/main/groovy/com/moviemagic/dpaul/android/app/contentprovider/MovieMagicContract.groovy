@@ -16,11 +16,12 @@ class MovieMagicContract {
     // To make it easy to sort the list by movie release date, we store the date
     // in the database in milliseconds format using SimpleDateFormat and Date
     // The value is the number of milliseconds since Jan. 1, 1970, midnight GMT.
-    static long convertMovieReleaseDate(String releaseDate) {
+    static long convertMovieReleaseDate(final String releaseDate) {
         //Split the date string which is of format yyyy-mm-dd
         try {
             final Date simpleReleaseDate = new SimpleDateFormat("yyyy-MM-dd").parse(releaseDate)
             final long timeInMilliSeconds = simpleReleaseDate.getTime()
+            return timeInMilliSeconds
         } catch (ParseException e) {
             Log.e(LOG_TAG,"Release date ->$releaseDate")
             Log.e(LOG_TAG, e.message, e)
@@ -123,6 +124,11 @@ class MovieMagicContract {
         //Column to store movie tagline
         static final String COLUMN_TAGLINE = 'tagline'
 
+        //Column to store record creation date
+        static final String COLUMN_CREATE_TIMESTAMP = 'create_date'
+        //Column to store record update date
+        static final String COLUMN_UPDATE_TIMESTAMP = 'update_date'
+
         //Column to store export flag - future use
         static final String COLUMN_USER_EXPORTED = 'user_export_flag'
         //Future columns - String
@@ -132,8 +138,6 @@ class MovieMagicContract {
         //Future columns - Integer
         static final String COLUMN_FUTURE_USE_4 = 'movie_column_future_use_4'
         static final String COLUMN_FUTURE_USE_5 = 'movie_column_future_use_5'
-
-
 
         //Uri for movie_basic_info table
         static final Uri CONTENT_URI =
@@ -577,6 +581,12 @@ class MovieMagicContract {
         static final String COLUMN_USER_LIST_FLAG_COLLECTION = 'user_list_flag_collection'
         //Column to store user rating value (This is not a flag)
         static final String COLUMN_USER_LIST_USER_RATING = 'user_rating'
+        //Future columns - String
+        static final String COLUMN_FUTURE_USE_1 = 'movie_column_future_use_1'
+        static final String COLUMN_FUTURE_USE_2 = 'movie_column_future_use_2'
+        //Future columns - Integer
+        static final String COLUMN_FUTURE_USE_3 = 'movie_column_future_use_3'
+        static final String COLUMN_FUTURE_USE_4 = 'movie_column_future_use_4'
 
 
         //Uri for movie_user_list_flag table

@@ -58,6 +58,8 @@ class MovieMagicDbHelper extends SQLiteOpenHelper {
                 $MovieMagicContract.MovieBasicInfo.COLUMN_REVENUE INTEGER DEFAULT 0,
                 $MovieMagicContract.MovieBasicInfo.COLUMN_PRODUCTION_COMPANIES TEXT NULL,
                 $MovieMagicContract.MovieBasicInfo.COLUMN_PRODUCTION_COUNTRIES TEXT NULL,
+                $MovieMagicContract.MovieBasicInfo.COLUMN_CREATE_TIMESTAMP TEXT NOT NULL,
+                $MovieMagicContract.MovieBasicInfo.COLUMN_UPDATE_TIMESTAMP TEXT NOT NULL,
                 $MovieMagicContract.MovieBasicInfo.COLUMN_IMDB_ID TEXT NULL,
                 $MovieMagicContract.MovieBasicInfo.COLUMN_USER_EXPORTED INTEGER DEFAULT 0,
                 $MovieMagicContract.MovieBasicInfo.COLUMN_FUTURE_USE_1 TEXT NULL,
@@ -272,6 +274,10 @@ class MovieMagicDbHelper extends SQLiteOpenHelper {
                 $MovieMagicContract.MovieUserListFlag.COLUMN_USER_LIST_FLAG_FAVOURITE INTEGER DEFAULT 0,
                 $MovieMagicContract.MovieUserListFlag.COLUMN_USER_LIST_FLAG_COLLECTION INTEGER DEFAULT 0,
                 $MovieMagicContract.MovieUserListFlag.COLUMN_USER_LIST_USER_RATING REAL DEFAULT 0.0,
+                $MovieMagicContract.MovieUserListFlag.COLUMN_FUTURE_USE_1 TEXT DEFAULT NULL,
+                $MovieMagicContract.MovieUserListFlag.COLUMN_FUTURE_USE_2 TEXT DEFAULT NULL,
+                $MovieMagicContract.MovieUserListFlag.COLUMN_FUTURE_USE_3 INTEGER DEFAULT 0,
+                $MovieMagicContract.MovieUserListFlag.COLUMN_FUTURE_USE_4 INTEGER DEFAULT 0,
                 FOREIGN KEY ($MovieMagicContract.MovieUserListFlag.COLUMN_FOREIGN_KEY_ID) REFERENCES
                 $MovieMagicContract.MovieBasicInfo.TABLE_NAME ($MovieMagicContract.MovieBasicInfo._ID)
                 ON DELETE CASCADE)

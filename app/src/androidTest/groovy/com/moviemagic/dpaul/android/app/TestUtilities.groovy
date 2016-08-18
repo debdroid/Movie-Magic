@@ -5,6 +5,7 @@ import android.database.Cursor
 import android.test.AndroidTestCase
 import com.moviemagic.dpaul.android.app.contentprovider.MovieMagicContract
 import com.moviemagic.dpaul.android.app.utility.GlobalStaticVariables
+import com.moviemagic.dpaul.android.app.utility.Utility
 import groovy.transform.CompileStatic
 
 @CompileStatic
@@ -51,6 +52,8 @@ class TestUtilities extends AndroidTestCase {
         movieInfoValues.put(MovieMagicContract.MovieBasicInfo.COLUMN_MOVIE_LIST_TYPE,GlobalStaticVariables.MOVIE_LIST_TYPE_TMDB_PUBLIC)
         movieInfoValues.put(MovieMagicContract.MovieBasicInfo.COLUMN_TITLE,'Helen of Troy')
         movieInfoValues.put(MovieMagicContract.MovieBasicInfo.COLUMN_PAGE_NUMBER,1)
+        movieInfoValues.put(MovieMagicContract.MovieBasicInfo.COLUMN_CREATE_TIMESTAMP,Utility.getTodayDate())
+        movieInfoValues.put(MovieMagicContract.MovieBasicInfo.COLUMN_UPDATE_TIMESTAMP,Utility.getTodayDate())
         movieInfoValues
     }
 
@@ -170,6 +173,8 @@ class TestUtilities extends AndroidTestCase {
         movieInfoValues.put(MovieMagicContract.MovieBasicInfo.COLUMN_MOVIE_LIST_TYPE,'tmdb_public')
         movieInfoValues.put(MovieMagicContract.MovieBasicInfo.COLUMN_TITLE,'Helen of Troy')
         movieInfoValues.put(MovieMagicContract.MovieBasicInfo.COLUMN_PAGE_NUMBER,1)
+        movieInfoValues.put(MovieMagicContract.MovieBasicInfo.COLUMN_CREATE_TIMESTAMP,Utility.getTodayDate())
+        movieInfoValues.put(MovieMagicContract.MovieBasicInfo.COLUMN_UPDATE_TIMESTAMP,Utility.getTodayDate())
         movieInfoValues
     }
 

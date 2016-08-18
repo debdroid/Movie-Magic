@@ -95,6 +95,9 @@ class JsonParse {
                 //category and movieListType are supplied in the program, so always null safe
                 movieValue.put(MovieBasicInfo.COLUMN_MOVIE_CATEGORY, category)
                 movieValue.put(MovieBasicInfo.COLUMN_MOVIE_LIST_TYPE, movieListType)
+                //Set create date and update date
+                movieValue.put(MovieBasicInfo.COLUMN_CREATE_TIMESTAMP,Utility.getTodayDate())
+                movieValue.put(MovieBasicInfo.COLUMN_UPDATE_TIMESTAMP,Utility.getTodayDate())
 
                 //add to the list
                 movieList << movieValue
@@ -194,6 +197,9 @@ class JsonParse {
             movieUpdateValue.put(MovieBasicInfo.COLUMN_PRODUCTION_COUNTRIES, prodCountryVal)
         if (jsonData.imdb_id)
             movieUpdateValue.put(MovieBasicInfo.COLUMN_IMDB_ID, jsonData.imdb_id)
+
+        //Set update date
+        movieUpdateValue.put(MovieBasicInfo.COLUMN_UPDATE_TIMESTAMP,Utility.getTodayDate())
 
         return movieUpdateValue
     }
