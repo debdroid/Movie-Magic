@@ -118,8 +118,8 @@ class MovieMagicSyncAdapter extends AbstractThreadedSyncAdapter {
             if(deleteRecords) {
                 // delete old data except user's records
                 int deleteCount = mContentResolver.delete(MovieMagicContract.MovieBasicInfo.CONTENT_URI,
-                        "$MovieMagicContract.MovieBasicInfo.COLUMN_MOVIE_LIST_TYPE <> ?",
-                        [GlobalStaticVariables.MOVIE_LIST_TYPE_USER_LOCAL_LIST] as String []
+                        "$MovieMagicContract.MovieBasicInfo.COLUMN_MOVIE_LIST_TYPE = ?",
+                        [GlobalStaticVariables.MOVIE_LIST_TYPE_TMDB_PUBLIC] as String []
                 )
                 LogDisplay.callLog(LOG_TAG,"Total records deleted->$deleteCount",LogDisplay.MOVIE_MAGIC_SYNC_ADAPTER_LOG_FLAG)
                 deleteRecords = false

@@ -19,6 +19,7 @@ class TestMovieMagicContract extends AndroidTestCase {
         final String TEST_MOVIE_PERSON_URI = 'content://com.moviemagic.dpaul.android.app/movie_person_info'
         final String TEST_MOVIE_PERSON_CAST_URI = 'content://com.moviemagic.dpaul.android.app/movie_person_cast'
         final String TEST_MOVIE_PERSON_CREW_URI = 'content://com.moviemagic.dpaul.android.app/movie_person_crew'
+        final String TEST_MOVIE_USER_LIST_FLAG_URI = 'content://com.moviemagic.dpaul.android.app/movie_user_list_flag'
         final long TEST_MOVIE_TABLE_ID = 101
         final long TEST_MOVIE_TABLE_CAST_ID = 102
         final long TEST_MOVIE_TABLE_CREW_ID = 103
@@ -30,6 +31,7 @@ class TestMovieMagicContract extends AndroidTestCase {
         final long TEST_MOVIE_TABLE_PERSON_ID = 109
         final long TEST_MOVIE_TABLE_PERSON_CAST_ID = 110
         final long TEST_MOVIE_TABLE_PERSON_CREW_ID = 111
+        final long TEST_MOVIE_TABLE_USER_LIST_FLAG_ID = 112
         final int TEST_MOVIE_ID = 1001
         final int TEST_MOVIE_CAST_ID = 1002
         final int TEST_MOVIE_CREW_ID = 1003
@@ -41,6 +43,7 @@ class TestMovieMagicContract extends AndroidTestCase {
         final int TEST_MOVIE_PERSON_ID = 1009
         final int TEST_MOVIE_PERSON_CAST_ID = 1010
         final int TEST_MOVIE_PERSON_CREW_ID = 1011
+        final int TEST_MOVIE_USER_LIST_FLAG_ID = 1012
         final String TEST_COUNTRY_ISO = 'IN'
   // intentionally includes a slash to make sure Uri is getting quoted correctly (i.e. getting %2F or '/' & %20 for space)
         final String TEST_MOVIE_CATEGORY = "/popular movie"
@@ -131,5 +134,12 @@ class TestMovieMagicContract extends AndroidTestCase {
         Uri personCrewIdUri = MovieMagicContract.MoviePersonCrew.buildMoviePersonCrewUriWithPersonId(TEST_MOVIE_PERSON_CREW_ID)
         assertEquals(TEST_MOVIE_PERSON_CREW_URI+'/1011',personCrewIdUri.toString())
         assertEquals(TEST_MOVIE_PERSON_CREW_ID,MovieMagicContract.MoviePersonCrew.getPersonIdFromMoviePersonCrewUri(personCrewIdUri))
+
+        //test movie_user_list_flag methods
+        Uri movieUserListFlagIdUri = MovieMagicContract.MovieUserListFlag.buildMovieUserListFlagUri(TEST_MOVIE_TABLE_USER_LIST_FLAG_ID)
+        assertEquals(TEST_MOVIE_USER_LIST_FLAG_URI+'/112',movieUserListFlagIdUri.toString())
+        Uri movieUserListWithMovieIdUri = MovieMagicContract.MovieUserListFlag.buildMovieUserListFlagUriWithMovieId(TEST_MOVIE_USER_LIST_FLAG_ID)
+        assertEquals(TEST_MOVIE_USER_LIST_FLAG_URI+'/1012',movieUserListWithMovieIdUri.toString())
+        assertEquals(TEST_MOVIE_USER_LIST_FLAG_ID,MovieMagicContract.MovieUserListFlag.getMovieIdFromMovieUserListFlagUri(movieUserListWithMovieIdUri))
     }
 }

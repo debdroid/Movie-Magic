@@ -46,6 +46,8 @@ import com.moviemagic.dpaul.android.app.utility.GlobalStaticVariables
 import com.moviemagic.dpaul.android.app.utility.JsonParse
 import com.moviemagic.dpaul.android.app.utility.LoadMovieBasicAddlInfo
 import com.moviemagic.dpaul.android.app.utility.LogDisplay
+import com.moviemagic.dpaul.android.app.utility.PicassoLoadImage
+import com.moviemagic.dpaul.android.app.utility.UpdateUserList
 import com.moviemagic.dpaul.android.app.youtube.MovieMagicYoutubeFragment
 import com.squareup.picasso.Callback
 import com.squareup.picasso.Picasso
@@ -75,6 +77,7 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
     private FrameLayout mDetailsCastGridLayout, mDetailCrewGridLayout, mDetailSimilarMovieGridLayout, mDetailReviewRecyclerViewLayout
     private Button mHomePageButton, mImdbLinkButton
     private Uri mMovieIdUri
+    private int _ID_movie_basic_info
     private int mMovieId
     private String[] mMovieIdArg
     private String[] mVideoArg
@@ -325,14 +328,25 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
             @Override
             void onClick(View v) {
                 LogDisplay.callLog(LOG_TAG,'ImageButton Watched Button is clicked',LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
-                if(mImageButtonWatched.getAlpha() == 1f) {
-                    mImageButtonWatched.setAlpha(0.4f)
-                    mImageButtonWatched.setColorFilter(null)
+                if(mMovieTitle && _ID_movie_basic_info) {
+                    final UpdateUserList updateUserList = new UpdateUserList(getActivity(),mUserListDrawableLayout,
+                            _ID_movie_basic_info,mMovieTitle,mPalletePrimaryColor,mPalleteBodyTextColor)
+                    final String[] updateUserListArgs
+                    if (mImageButtonWatched.getAlpha() == GlobalStaticVariables.MOVIE_MAGIC_ALPHA_FULL_OPAQUE) {
+                        updateUserListArgs = [GlobalStaticVariables.USER_LIST_WATCHED,GlobalStaticVariables.USER_LIST_FLAG_REMOVE]
+                        updateUserList.execute(updateUserListArgs)
+                        mImageButtonWatched.setAlpha(GlobalStaticVariables.MOVIE_MAGIC_ALPHA_OPAQUE_40_PERCENT)
+                        mImageButtonWatched.setColorFilter(null)
+                    } else {
+                        updateUserListArgs = [GlobalStaticVariables.USER_LIST_WATCHED,GlobalStaticVariables.USER_LIST_FLAG_ADD]
+                        updateUserList.execute(updateUserListArgs)
+                        mImageButtonWatched.setAlpha(GlobalStaticVariables.MOVIE_MAGIC_ALPHA_FULL_OPAQUE)
+                        mImageButtonWatched.setColorFilter(mPalleteAccentColor)
+                    }
                 } else {
-                    Snackbar.make(mRootView.findViewById(R.id.movie_detail_user_list_drawable_layout),'Added to watched list', Snackbar.LENGTH_LONG)
+                    Snackbar.make(mRootView.findViewById(R.id.movie_detail_user_list_drawable_layout),
+                            getActivity().getString(R.string.cannot_perform_operation_msg), Snackbar.LENGTH_LONG)
                             .setAction("Action", null).show()
-                    mImageButtonWatched.setAlpha(1f)
-                    mImageButtonWatched.setColorFilter(mPalleteAccentColor)
                 }
             }
         })
@@ -575,6 +589,7 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
     void handleMovieBasicOnLoadFinished(Cursor data) {
         if(data.moveToFirst()) {
             LogDisplay.callLog(LOG_TAG,"handleMovieBasicOnLoadFinished.Movie id -> ${Integer.toString(mMovieId)}",LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
+            _ID_movie_basic_info = data.getInt(COL_MOVIE_BASIC_ID)
             mOriginalBackdropPath = data.getString(COL_MOVIE_BASIC_BACKDROP_PATH)
             mMovieTitle = data.getString(COL_MOVIE_BASIC_TITLE)
             mMovieTitleTextView.setText(mMovieTitle)
@@ -681,13 +696,16 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
             mProdCompanyTextView.setText(data.getString(COL_MOVIE_BASIC_PRODUCTION_COMPANIES))
             mProdCountryTextView.setText(data.getString(COL_MOVIE_BASIC_PRODUCTION_COUNTRIES))
             mCollectionNameTextView.setText(data.getString(COL_MOVIE_BASIC_COLLECTION_NAME))
-            final String collectionBackdropPath = "http://image.tmdb.org/t/p/w500${data.getString(COL_MOVIE_BASIC_COLLECTION_BACKDROP_PATH)}"
-            Picasso.with(getActivity())
-                    .load(collectionBackdropPath)
-                    .fit()
-                    .placeholder(R.drawable.grid_image_placeholder)
-                    .error(R.drawable.grid_image_error)
-                    .into(mCollectionBackdropImageView)
+            final String collectionBackdropPath = "$GlobalStaticVariables.TMDB_IMAGE_BASE_URL/$GlobalStaticVariables.TMDB_IMAGE_SIZE_W500" +
+                    "${data.getString(COL_MOVIE_BASIC_COLLECTION_BACKDROP_PATH)}"
+            PicassoLoadImage.loadMoviePersonImageUsingPicasso(getActivity(),collectionBackdropPath,mCollectionBackdropImageView)
+//            final String collectionBackdropPath = "http://image.tmdb.org/t/p/w500${data.getString(COL_MOVIE_BASIC_COLLECTION_BACKDROP_PATH)}"
+//            Picasso.with(getActivity())
+//                    .load(collectionBackdropPath)
+//                    .fit()
+//                    .placeholder(R.drawable.grid_image_placeholder)
+//                    .error(R.drawable.grid_image_error)
+//                    .into(mCollectionBackdropImageView)
 
             LogDisplay.callLog(LOG_TAG, "homePage:${data.getString(COL_MOVIE_BASIC_HOME_PAGE)}", LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
             if(data.getString(COL_MOVIE_BASIC_HOME_PAGE)) {
@@ -699,14 +717,14 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
                 //So using the API number (21 - LOLLIPOP)itself here and other places below
                 if (Build.VERSION.SDK_INT >= 21) {
 //                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                    mHomePageButton.setElevation(4f)
+                    mHomePageButton.setElevation(GlobalStaticVariables.MOVIE_MAGIC_ELEVATION)
                 }
             } else {
                 mHomePageButton.setText(getActivity().getString(R.string.movie_data_not_available))
                 mHomePageButton.setClickable(false)
                 if (Build.VERSION.SDK_INT >= 21) {
 //                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                    mHomePageButton.setElevation(0f)
+                    mHomePageButton.setElevation(GlobalStaticVariables.MOVIE_MAGIC_ELEVATION_RESET)
                 }
             }
             LogDisplay.callLog(LOG_TAG, "IMDb ID:${data.getString(COL_MOVIE_BASIC_IMDB_ID)}", LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
@@ -716,22 +734,22 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
                 mImdbLinkButton.setClickable(true)
                 if (Build.VERSION.SDK_INT >= 21) {
 //                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                    mImdbLinkButton.setElevation(4f)
+                    mImdbLinkButton.setElevation(GlobalStaticVariables.MOVIE_MAGIC_ELEVATION)
                 }
             } else {
                 mImdbLinkButton.setText(getActivity().getString(R.string.movie_data_not_available))
                 mImdbLinkButton.setClickable(false)
                 if (Build.VERSION.SDK_INT >= 21) {
 //                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                    mImdbLinkButton.setElevation(0f)
+                    mImdbLinkButton.setElevation(GlobalStaticVariables.MOVIE_MAGIC_ELEVATION_RESET)
                 }
             }
 
             int detailDataPresentFlag = data.getInt(COL_MOVIE_BASIC_DETAIL_DATA_PRESENT_FLAG)
             //If the flag is zero then data not present, so go and fetch it
-            if(detailDataPresentFlag == 0) {
+            if(detailDataPresentFlag == GlobalStaticVariables.MOVIE_MAGIC_FLAG_FALSE) {
                 LogDisplay.callLog(LOG_TAG,'Additional movie data not present, go and fetch it',LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
-                final Integer[] movieIdArray = [mMovieId, data.getInt(COL_MOVIE_BASIC_ID)] as Integer[]
+                final Integer[] movieIdArray = [mMovieId, _ID_movie_basic_info] as Integer[]
                 new LoadMovieBasicAddlInfo(getActivity(), mMovieIdUri).execute(movieIdArray)
             }
             else {

@@ -39,6 +39,8 @@ class TestMovieMagicUriMatcher extends AndroidTestCase {
     private static final Uri TEST_MOVIE_PERSON_CAST_WITH_ID_DIR = MovieMagicContract.MoviePersonCast.buildMoviePersonCastUriWithPersonId(TEST_PERSON_ID)
     private static final Uri TEST_MOVIE_PERSON_CREW_DIR = MovieMagicContract.MoviePersonCrew.CONTENT_URI
     private static final Uri TEST_MOVIE_PERSON_CREW_WITH_ID_DIR = MovieMagicContract.MoviePersonCrew.buildMoviePersonCrewUriWithPersonId(TEST_PERSON_ID)
+    private static final Uri TEST_MOVIE_USER_LIST_FLAG_DIR = MovieMagicContract.MovieUserListFlag.CONTENT_URI
+    private static final Uri TEST_MOVIE_USER_LIST_FLAG_WITH_ID_DIR = MovieMagicContract.MovieUserListFlag.buildMovieUserListFlagUriWithMovieId(TEST_MOVIE_ID)
 
     /*
         Test that the UriMatcher returns the correct integer value
@@ -71,5 +73,7 @@ class TestMovieMagicUriMatcher extends AndroidTestCase {
         assertEquals('Error: movie_person_cast with person id matched matched incorrectly.',testMatcher.match(TEST_MOVIE_PERSON_CAST_WITH_ID_DIR), MovieMagicProvider.MOVIE_PERSON_CAST_WITH_PERSON_ID)
         assertEquals('Error: movie_person_crew matched matched incorrectly.',testMatcher.match(TEST_MOVIE_PERSON_CREW_DIR), MovieMagicProvider.MOVIE_PERSON_CREW)
         assertEquals('Error: movie_person_crew with person id matched matched incorrectly.',testMatcher.match(TEST_MOVIE_PERSON_CREW_WITH_ID_DIR), MovieMagicProvider.MOVIE_PERSON_CREW_WITH_PERSON_ID)
+        assertEquals('Error: movie_user_list_flag matched matched incorrectly.',testMatcher.match(TEST_MOVIE_USER_LIST_FLAG_DIR), MovieMagicProvider.MOVIE_USER_LIST_FLAG)
+        assertEquals('Error: movie_user_list_flag with movie id matched matched incorrectly.',testMatcher.match(TEST_MOVIE_USER_LIST_FLAG_WITH_ID_DIR), MovieMagicProvider.MOVIE_USER_LIST_FLAG_WITH_MOVIE_ID)
     }
 }

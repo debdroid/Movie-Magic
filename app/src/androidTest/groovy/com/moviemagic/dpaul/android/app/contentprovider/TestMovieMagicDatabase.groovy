@@ -100,11 +100,6 @@ class TestMovieMagicDatabase extends AndroidTestCase {
         columeList << MovieMagicContract.MovieBasicInfo.COLUMN_RUNTIME
         columeList << MovieMagicContract.MovieBasicInfo.COLUMN_RELEASE_STATUS
         columeList << MovieMagicContract.MovieBasicInfo.COLUMN_TAGLINE
-        columeList << MovieMagicContract.MovieBasicInfo.COLUMN_USER_WATCHED
-        columeList << MovieMagicContract.MovieBasicInfo.COLUMN_USER_WISH_LIST
-        columeList << MovieMagicContract.MovieBasicInfo.COLUMN_USER_FAVOURITE
-        columeList << MovieMagicContract.MovieBasicInfo.COLUMN_USER_COLLECTION
-        columeList << MovieMagicContract.MovieBasicInfo.COLUMN_USER_RATING
         columeList << MovieMagicContract.MovieBasicInfo.COLUMN_USER_EXPORTED
         columeList << MovieMagicContract.MovieBasicInfo.COLUMN_FUTURE_USE_1
         columeList << MovieMagicContract.MovieBasicInfo.COLUMN_FUTURE_USE_2
@@ -362,6 +357,29 @@ class TestMovieMagicDatabase extends AndroidTestCase {
         // entry columns
         assertTrue('Error: The movie_person_crew table does not contain all the fields',columeList.isEmpty())
 
+        //Check the movie_user_list_flag table
+        c = db.rawQuery("PRAGMA table_info($MovieMagicContract.MovieUserListFlag.TABLE_NAME)", null)
+        assertTrue('Error: Unable to query the database for movie_person_crew table information.',c.moveToFirst())
+        // Build a list of all of the columns
+        columeList = []
+        columeList << MovieMagicContract.MovieUserListFlag._ID
+        columeList << MovieMagicContract.MovieUserListFlag.COLUMN_FOREIGN_KEY_ID
+        columeList << MovieMagicContract.MovieUserListFlag.COLUMN_USER_LIST_FLAG_ORIG_MOVIE_ID
+        columeList << MovieMagicContract.MovieUserListFlag.COLUMN_USER_LIST_FLAG_WATCHED
+        columeList << MovieMagicContract.MovieUserListFlag.COLUMN_USER_LIST_FLAG_WISH_LIST
+        columeList << MovieMagicContract.MovieUserListFlag.COLUMN_USER_LIST_FLAG_FAVOURITE
+        columeList << MovieMagicContract.MovieUserListFlag.COLUMN_USER_LIST_FLAG_COLLECTION
+        columeList << MovieMagicContract.MovieUserListFlag.COLUMN_USER_LIST_USER_RATING
+
+        columnNameIndex = c.getColumnIndex('name')
+        for(i in 1..c.getCount()) {
+            columeList.remove(c.getString(columnNameIndex))
+            c.moveToNext()
+        }
+        // if this fails, it means that movie_person_crew does not contain all the fields
+        // entry columns
+        assertTrue('Error: The movie_user_list_flag table does not contain all the fields',columeList.isEmpty())
+
         //Close the database
         db.close()
     }
@@ -495,6 +513,25 @@ class TestMovieMagicDatabase extends AndroidTestCase {
         TestUtilities.validateCurrentRecord("Error: $MovieMagicContract.MovieReleaseDate.TABLE_NAME query data verification failed",cursor,contentValues)
         //Move the cursor to ensure there is only one record returned
         assertFalse("Error: more than one record returned by the $MovieMagicContract.MovieReleaseDate.TABLE_NAME query",cursor.moveToNext())
+
+        //Now test the movie_user_list_flag table
+        // Create ContentValues of what we want to insert
+        contentValues = TestUtilities.createMovieUserListFlagValues(movieBasicInfoRowId)
+        // Insert ContentValues into database table and get a row ID back
+        rowId = sqLiteDatabase.insert(MovieMagicContract.MovieUserListFlag.TABLE_NAME,null,contentValues)
+        //Verify record inserted and record received
+        assertTrue('Error: Unable to Insert movie_user_list_flag data into the Database', rowId != -1)
+        // Query the database and receive a Cursor back
+        cursor = sqLiteDatabase.query(MovieMagicContract.MovieUserListFlag.TABLE_NAME,null,null,null,null,null,null)
+        // Move the cursor to a valid database row
+        assertTrue("Error: No record returned from the $MovieMagicContract.MovieUserListFlag.TABLE_NAME table",cursor.moveToFirst())
+        // Validate data in resulting Cursor with the original ContentValues
+        // (you can use the validateCurrentRecord function in TestUtilities to validate the
+        // query if you like)
+        TestUtilities.validateCurrentRecord("Error: $MovieMagicContract.MovieUserListFlag.TABLE_NAME query data verification failed",cursor,contentValues)
+        //Move the cursor to ensure there is only one record returned
+        assertFalse("Error: more than one record returned by the $MovieMagicContract.MovieUserListFlag.TABLE_NAME query",cursor.moveToNext())
+
         // Finally, close the cursor and database
         cursor.close()
         sqLiteDatabase.close()
@@ -614,6 +651,8 @@ class TestMovieMagicDatabase extends AndroidTestCase {
         assertEquals('Error: Records not deleted from movie_review during delete', 0, delCursor.getCount())
         delCursor = sqLiteDatabase.query(MovieMagicContract.MovieReleaseDate.TABLE_NAME,null,null,null,null,null,null)
         assertEquals('Error: Records not deleted from movie_release_date during delete', 0, delCursor.getCount())
+        delCursor = sqLiteDatabase.query(MovieMagicContract.MovieUserListFlag.TABLE_NAME,null,null,null,null,null,null)
+        assertEquals('Error: Records not deleted from movie_user_list_flag during delete', 0, delCursor.getCount())
 
         //Now delete the records from movie_person_info which in turn should delete records from other
         //child tables
@@ -642,7 +681,7 @@ class TestMovieMagicDatabase extends AndroidTestCase {
         //Get reference to writable database
         SQLiteDatabase sqLiteDatabase = new MovieMagicDbHelper(mContext).getWritableDatabase()
 
-        //First test the replace (ans also cascade) of movie_basic_info & movie_person_info tables
+        //First test the replace (and also cascade) of movie_basic_info & movie_person_info tables
         //Let's insert one record in all the main and child tables
         contentValues = TestUtilities.createMovieValues()
         rowId = sqLiteDatabase.insert(MovieMagicContract.MovieBasicInfo.TABLE_NAME,null,contentValues)
@@ -667,6 +706,9 @@ class TestMovieMagicDatabase extends AndroidTestCase {
         contentValues = TestUtilities.createMovieReleaseDateValues(movieBasicInfoRowId)
         rowId = sqLiteDatabase.insert(MovieMagicContract.MovieReleaseDate.TABLE_NAME,null,contentValues)
         assertTrue('Error: Unable to Insert movie_release_date data into the Database', rowId != -1)
+        contentValues = TestUtilities.createMovieUserListFlagValues(movieBasicInfoRowId)
+        rowId = sqLiteDatabase.insert(MovieMagicContract.MovieUserListFlag.TABLE_NAME,null,contentValues)
+        assertTrue('Error: Unable to Insert movie_user_list_flag data into the Database', rowId != -1)
         contentValues = TestUtilities.createMoviePersonInfoValues()
         rowId = sqLiteDatabase.insert(MovieMagicContract.MoviePersonInfo.TABLE_NAME,null,contentValues)
         assertTrue('Error: Unable to Insert movie_person_info data into the Database', rowId != -1)
@@ -699,6 +741,9 @@ class TestMovieMagicDatabase extends AndroidTestCase {
         assertEquals('Error: Record not deleted from movie_review during movie_basic_info replace', 0, queryCursor.getCount())
         queryCursor = sqLiteDatabase.query(MovieMagicContract.MovieReleaseDate.TABLE_NAME,null,null,null,null,null,null)
         assertEquals('Error: Record not deleted from movie_release_date during movie_basic_info replace', 0, queryCursor.getCount())
+        //Unique replace is not used for movie_user_list_flag,but CASCADE delete is there so count should be zero
+        queryCursor = sqLiteDatabase.query(MovieMagicContract.MovieUserListFlag.TABLE_NAME,null,null,null,null,null,null)
+        assertEquals('Error: Record not deleted from movie_user_flag_list during movie_basic_info replace', 0, queryCursor.getCount())
         //Now insert same record movie_person_info and ensure replace works - there should be only one record in movie_person_info
         //and all records should get deleted from the child tables because of cascade effect
         contentValues = TestUtilities.createMoviePersonInfoValues()
@@ -746,6 +791,9 @@ class TestMovieMagicDatabase extends AndroidTestCase {
         contentValues = TestUtilities.createMovieReleaseDateValues(movieBasicInfoRowId)
         rowId = sqLiteDatabase.insert(MovieMagicContract.MovieReleaseDate.TABLE_NAME,null,contentValues)
         assertTrue('Error: Unable to Insert movie_release_date data into the Database', rowId != -1)
+        contentValues = TestUtilities.createMovieUserListFlagValues(movieBasicInfoRowId)
+        rowId = sqLiteDatabase.insert(MovieMagicContract.MovieUserListFlag.TABLE_NAME,null,contentValues)
+        assertTrue('Error: Unable to Insert movie_user_list_flag data into the Database', rowId != -1)
         contentValues = TestUtilities.createMoviePersonInfoValues()
         rowId = sqLiteDatabase.insert(MovieMagicContract.MoviePersonInfo.TABLE_NAME,null,contentValues)
         assertTrue('Error: Unable to Insert movie_person_info data into the Database', rowId != -1)
@@ -783,6 +831,9 @@ class TestMovieMagicDatabase extends AndroidTestCase {
         contentValues = TestUtilities.createMovieReleaseDateValues(movieBasicInfoRowId)
         rowId = sqLiteDatabase.insert(MovieMagicContract.MovieReleaseDate.TABLE_NAME,null,contentValues)
         assertTrue('Error: Unable to Insert movie_release_date data into the Database', rowId != -1)
+        contentValues = TestUtilities.createMovieUserListFlagValues(movieBasicInfoRowId)
+        rowId = sqLiteDatabase.insert(MovieMagicContract.MovieUserListFlag.TABLE_NAME,null,contentValues)
+        assertTrue('Error: Unable to Insert movie_user_list_flag data into the Database', rowId != -1)
         contentValues = TestUtilities.createMoviePersonInfoValues()
         //Change the person id, so that it is considered as new record in movie_person_info (i.e. doesn't get replaced)
         contentValues.put(MovieMagicContract.MoviePersonInfo.COLUMN_PERSON_ID,999)
@@ -795,7 +846,7 @@ class TestMovieMagicDatabase extends AndroidTestCase {
         assertTrue('Error: Unable to Insert movie_person_cast data into the Database', rowId != -1)
         contentValues = TestUtilities.createMoviePersonCrewValues(moviePersonRowId)
         rowId = sqLiteDatabase.insert(MovieMagicContract.MoviePersonCrew.TABLE_NAME,null,contentValues)
-
+        assertTrue('Error: Unable to Insert movie_person_crew data into the Database', rowId != -1)
 
         //Query the main (count in main should be 2) and child tables and ensure there is only one record
         queryCursor = sqLiteDatabase.query(MovieMagicContract.MovieBasicInfo.TABLE_NAME,null,null,null,null,null,null)
@@ -812,6 +863,9 @@ class TestMovieMagicDatabase extends AndroidTestCase {
         assertEquals('Error: Record not replaced in movie_review during insert', 1, queryCursor.getCount())
         queryCursor = sqLiteDatabase.query(MovieMagicContract.MovieReleaseDate.TABLE_NAME,null,null,null,null,null,null)
         assertEquals('Error: Record not replaced in movie_release_date during insert', 1, queryCursor.getCount())
+        //Unique replace is not used for movie_user_list_flag, so the record count should be 2
+        queryCursor = sqLiteDatabase.query(MovieMagicContract.MovieUserListFlag.TABLE_NAME,null,null,null,null,null,null)
+        assertEquals('Error: Record not replaced in movie_user_list_flag during insert', 2, queryCursor.getCount())
         queryCursor = sqLiteDatabase.query(MovieMagicContract.MoviePersonInfo.TABLE_NAME,null,null,null,null,null,null)
         assertEquals('Error: Record not replaced in movie_person_info during insert', 2, queryCursor.getCount())
         queryCursor = sqLiteDatabase.query(MovieMagicContract.MoviePersonCast.TABLE_NAME,null,null,null,null,null,null)

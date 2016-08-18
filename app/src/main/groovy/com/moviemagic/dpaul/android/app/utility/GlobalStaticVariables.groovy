@@ -16,7 +16,13 @@ class GlobalStaticVariables {
     public static final String MOVIE_CATEGORY_UPCOMING = 'upcoming' //tmdb upcoming category
     public static final String MOVIE_CATEGORY_NOW_PLAYING = 'now_playing' //tmdb now_playing category
     public static final String MOVIE_CATEGORY_SIMILAR = 'similar' //category to store similar movie, internal use only
-    public static final String MOVIE_CATEGORY_USER = 'user' //category to store user movies, internal use only
+    public static final String MOVIE_CATEGORY_TMDB_USER_FAVOURITE = 'tmdb_user_favourite' //category to store tmdb user movies, internal use only
+    public static final String MOVIE_CATEGORY_TMDB_USER_WATCH = 'tmdb_user_watch' //category to store tmdb user movies, internal use only
+    public static final String MOVIE_CATEGORY_TMDB_USER_RATED = 'tmdb_user_rated' //category to store tmdb user movies, internal use only
+    public static final String MOVIE_CATEGORY_LOCAL_USER_WATCHED = 'local_user_watched' //category to store user movies, internal use only
+    public static final String MOVIE_CATEGORY_LOCAL_USER_WISH_LIST = 'local_user_wish_list' //category to store user movies, internal use only
+    public static final String MOVIE_CATEGORY_LOCAL_USER_FAVOURITE = 'local_user_favourite' //category to store user movies, internal use only
+    public static final String MOVIE_CATEGORY_LOCAL_USER_COLLECTION = 'local_user_collection' //category to store user movies, internal use only
 
     //Static variables for TMDB URL and parameters
     public static final String TMDB_MOVIE_BASE_URL = 'https://api.themoviedb.org/3/'
@@ -27,14 +33,27 @@ class GlobalStaticVariables {
     public static final String TMDB_APPEND_TO_RESPONSE_PARAM = 'similar,credits,images,videos,release_dates,reviews'
 
     //Static variables for TMDB movie image url and parameters
-    public static final String TMDB_IMAGE_BASE_URL = "http://image.tmdb.org/t/p/"
-    public static final String TMDB_IMAGE_SIZE_W185 = "w185"
-    public static final String TMDB_IMAGE_SIZE_W500 = "w500"
+    public static final String TMDB_IMAGE_BASE_URL = 'http://image.tmdb.org/t/p/'
+    public static final String TMDB_IMAGE_SIZE_W185 = 'w185'
+    public static final String TMDB_IMAGE_SIZE_W500 = 'w500'
+
+    //Static variable for user list
+    public static final String USER_LIST_WATCHED = 'watched'
+    public static final String USER_LIST_WISH_LIST = 'wish_list'
+    public static final String USER_LIST_FAVOURITE = 'favourite'
+    public static final String USER_LIST_COLLECTION = 'collection'
+    public static final String USER_LIST_FLAG_ADD = 'add'
+    public static final String USER_LIST_FLAG_REMOVE = 'remove'
 
     //Misc variables
     public static final String IMAGE_TYPE_BACKDROP = 'backdrop'
     public static final String IMAGE_TYPE_POSTER = 'poster'
     public static final String MOVIE_BASIC_INFO_MOVIE_ID_URI = 'movie_basic_info_movie_id_uri'
-
+    public static final int MOVIE_MAGIC_FLAG_TRUE = 1
+    public static final int MOVIE_MAGIC_FLAG_FALSE = 0
+    public static final float MOVIE_MAGIC_ELEVATION = 4f
+    public static final float MOVIE_MAGIC_ELEVATION_RESET = 0f
+    public static final float MOVIE_MAGIC_ALPHA_FULL_OPAQUE = 1f
+    public static final float MOVIE_MAGIC_ALPHA_OPAQUE_40_PERCENT = 0.4f
 
 }

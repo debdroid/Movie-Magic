@@ -28,4 +28,13 @@ class PicassoLoadImage {
                 .error(R.drawable.na_person_icon)
                 .into(imageView)
     }
+
+    static void loadCollectionBackdrop(final Context context, final String imagePath, final ImageView imageView) {
+        Picasso.with(context)
+                .load(imagePath)
+                .fit()
+                .placeholder(R.drawable.grid_image_placeholder)
+                .error(R.drawable.grid_image_error)
+                .into(imageView)
+    }
 }

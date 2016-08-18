@@ -225,8 +225,7 @@ public class MovieMagicMain extends AppCompatActivity
     //Override the callback method of GridFragment
     @Override
     public void onItemSelected(Uri movieIdUri) {
-        final Intent mIntent = new Intent(this, DetailMovieActivity.class)
-                .setData(movieIdUri)
+        final Intent mIntent = new Intent(this, DetailMovieActivity.class).setData(movieIdUri)
         startActivity(mIntent)
     }
 }

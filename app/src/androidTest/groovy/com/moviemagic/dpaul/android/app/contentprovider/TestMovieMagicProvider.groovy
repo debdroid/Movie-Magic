@@ -62,6 +62,9 @@ class TestMovieMagicProvider extends AndroidTestCase {
         //Ensure all records are deleted from movie_release_date
         delCursor = mContext.getContentResolver().query(MovieMagicContract.MovieReleaseDate.CONTENT_URI,null,null,null,null)
         assertEquals('Error: All records not deleted from movie_release_date during delete', 0, delCursor.getCount())
+        //Ensure all records are deleted from movie_user_list_flag
+        delCursor = mContext.getContentResolver().query(MovieMagicContract.MovieUserListFlag.CONTENT_URI,null,null,null,null)
+        assertEquals('Error: All records not deleted from movie_user_list_flag during delete', 0, delCursor.getCount())
 
 //        //Delete all records from movie_cast
 //        // Register a content observer for our data delete.
@@ -201,6 +204,7 @@ class TestMovieMagicProvider extends AndroidTestCase {
 //        db.delete(MovieMagicContract.MovieVideo.TABLE_NAME, null, null)
 //        db.delete(MovieMagicContract.MovieReview.TABLE_NAME, null, null)
 //        db.delete(MovieMagicContract.MovieReleaseDate.TABLE_NAME, null, null)
+//        db.delete(MovieMagicContract.MovieUserListFlag.TABLE_NAME, null, null)
         db.delete(MovieMagicContract.MoviePersonInfo.TABLE_NAME, null, null)
 //        db.delete(MovieMagicContract.MoviePersonCast.TABLE_NAME, null, null)
 //        db.delete(MovieMagicContract.MoviePersonCrew.TABLE_NAME, null, null)
@@ -307,16 +311,6 @@ class TestMovieMagicProvider extends AndroidTestCase {
         // vnd.android.cursor.dir/com.moviemagic.dpaul.android.app/movie_video
         assertEquals('Error: movie_video with movie id should return MovieVideo.CONTENT_TYPE',MovieMagicContract.MovieVideo.CONTENT_TYPE, type)
 
-        //Test the type for movie_collection
-        // content://com.moviemagic.dpaul.android.app/movie_collection
-        type = mContext.getContentResolver().getType(MovieMagicContract.MovieCollection.CONTENT_URI)
-        // vnd.android.cursor.dir/com.moviemagic.dpaul.android.app/movie_collection
-        assertEquals('Error: movie_collection should return MovieCollection.CONTENT_TYPE',MovieMagicContract.MovieCollection.CONTENT_TYPE, type)
-        // content://com.moviemagic.dpaul.android.app/movie_collection/7890
-        type = mContext.getContentResolver().getType(MovieMagicContract.MovieCollection.buildMovieCollectionUriWithCollectionId(testCollectionId))
-        // vnd.android.cursor.item/com.moviemagic.dpaul.android.app/movie_collection
-        assertEquals('Error: movie_collection with collection id should return MovieCollection.CONTENT_ITEM_TYPE',MovieMagicContract.MovieCollection.CONTENT_ITEM_TYPE, type)
-
         //Test the type for movie_review
         // content://com.moviemagic.dpaul.android.app/movie_review
         type = mContext.getContentResolver().getType(MovieMagicContract.MovieReview.CONTENT_URI)
@@ -340,6 +334,17 @@ class TestMovieMagicProvider extends AndroidTestCase {
         type = mContext.getContentResolver().getType(MovieMagicContract.MovieReleaseDate.buildMovieReleaseUriWithMovieIdAndCountryIso(testMovieId,testCntryISO))
         // vnd.android.cursor.dir/com.moviemagic.dpaul.android.app/movie_release
         assertEquals('Error: movie_release_date with movie id should return MovieReleaseDate.CONTENT_TYPE',MovieMagicContract.MovieReleaseDate.CONTENT_TYPE, type)
+
+        //Test the type for movie_image
+        // content://com.moviemagic.dpaul.android.app/movie_user_list_flag
+        type = mContext.getContentResolver().getType(MovieMagicContract.MovieUserListFlag.CONTENT_URI)
+        // vnd.android.cursor.dir/com.moviemagic.dpaul.android.app/movie_user_list_flag
+        assertEquals('Error: movie_user_list_flag should return MovieUserListFlag.CONTENT_TYPE',MovieMagicContract.MovieUserListFlag.CONTENT_TYPE, type)
+        // content://com.moviemagic.dpaul.android.app/movie_user_list_flag/43546
+        type = mContext.getContentResolver().getType(MovieMagicContract.MovieUserListFlag.buildMovieUserListFlagUriWithMovieId(testMovieId))
+        // vnd.android.cursor.dir/com.moviemagic.dpaul.android.app/movie_user_list_flag
+        assertEquals('Error: MovieUserListFlag with movie id should return MovieUserListFlag.CONTENT_TYPE',MovieMagicContract.MovieUserListFlag.CONTENT_ITEM_TYPE, type)
+
 
         //Test the type for movie_person_info
         // content://com.moviemagic.dpaul.android.app/movie_person_info
@@ -370,6 +375,17 @@ class TestMovieMagicProvider extends AndroidTestCase {
         type = mContext.getContentResolver().getType(MovieMagicContract.MoviePersonCrew.buildMoviePersonCrewUriWithPersonId(testPersonId))
         // vnd.android.cursor.dir/com.moviemagic.dpaul.android.app/movie_person_crew
         assertEquals('Error: movie_person_crew with person id should return MoviePersonCrew.CONTENT_TYPE',MovieMagicContract.MoviePersonCrew.CONTENT_TYPE, type)
+
+
+        //Test the type for movie_collection
+        // content://com.moviemagic.dpaul.android.app/movie_collection
+        type = mContext.getContentResolver().getType(MovieMagicContract.MovieCollection.CONTENT_URI)
+        // vnd.android.cursor.dir/com.moviemagic.dpaul.android.app/movie_collection
+        assertEquals('Error: movie_collection should return MovieCollection.CONTENT_TYPE',MovieMagicContract.MovieCollection.CONTENT_TYPE, type)
+        // content://com.moviemagic.dpaul.android.app/movie_collection/7890
+        type = mContext.getContentResolver().getType(MovieMagicContract.MovieCollection.buildMovieCollectionUriWithCollectionId(testCollectionId))
+        // vnd.android.cursor.item/com.moviemagic.dpaul.android.app/movie_collection
+        assertEquals('Error: movie_collection with collection id should return MovieCollection.CONTENT_ITEM_TYPE',MovieMagicContract.MovieCollection.CONTENT_ITEM_TYPE, type)
     }
 
     /*
@@ -489,6 +505,20 @@ class TestMovieMagicProvider extends AndroidTestCase {
         testCursor = mContext.getContentResolver().query(MovieMagicContract.MovieReleaseDate.buildMovieReleaseUriWithMovieIdAndCountryIso(testMovieId,testCntryISO),null,null,null,null)
         // Make sure we get the correct cursor out of the database
         TestUtilities.validateCursor('testBasicMovieMagicQuery: movie_release_date', testCursor, testValues)
+
+
+        //Insert test records to movie_user_list_flag
+        testValues = TestUtilities.createMovieUserListFlagValues(movieBasicInfoForeignKey)
+        rowId = db.insert(MovieMagicContract.MovieUserListFlag.TABLE_NAME, null, testValues)
+        assertTrue('Error: Unable to Insert MovieUserListFlag data into the Database', rowId != -1)
+        // Test the basic content provider query for MovieUserListFlag
+        testCursor = mContext.getContentResolver().query(MovieMagicContract.MovieUserListFlag.CONTENT_URI,null,null,null,null)
+        // Make sure we get the correct cursor out of the database
+        TestUtilities.validateCursor('testBasicMovieMagicQuery: MovieUserListFlag', testCursor, testValues)
+        // Test the movie id content provider query for MovieUserListFlag
+        testCursor = mContext.getContentResolver().query(MovieMagicContract.MovieUserListFlag.buildMovieUserListFlagUriWithMovieId(testMovieId),null,null,null,null)
+        // Make sure we get the correct cursor out of the database
+        TestUtilities.validateCursor('testBasicMovieMagicQuery: MovieUserListFlag', testCursor, testValues)
 
         //Insert test records to movie_person_info
         testValues = TestUtilities.createMoviePersonInfoValues()
@@ -743,29 +773,28 @@ class TestMovieMagicProvider extends AndroidTestCase {
         updateCursor = mContext.getContentResolver().query(MovieMagicContract.MovieReleaseDate.CONTENT_URI,null,"$MovieMagicContract.MovieReleaseDate.COLUMN_RELEASE_ORIG_MOVIE_ID = '$TEST_UPDATED_MOVIE_ID'",null,null)
         TestUtilities.validateCursor('testUpdateMovieMagic: movie_release_date', updateCursor, updatedValues)
 
-        //Test the update for movie_collection
+        //Test the update for movie_user_list_flag
         //Create and insert new record
-        testValues = TestUtilities.createMovieCollectionValues()
-        testUri = mContext.getContentResolver().insert(MovieMagicContract.MovieCollection.CONTENT_URI, testValues)
-        movieMagicCollRowId = ContentUris.parseId(testUri)
+        testValues = TestUtilities.createMovieUserListFlagValues(movieMagicRowId)
+        testUri = mContext.getContentResolver().insert(MovieMagicContract.MovieUserListFlag.CONTENT_URI, testValues)
         // Verify a valid insertion
-        assertTrue(movieMagicCollRowId!= -1)
+        assertTrue(ContentUris.parseId(testUri) != -1)
         //Now update a field
         updatedValues = new ContentValues(testValues)
-        updatedValues.put(MovieMagicContract.MovieCollection.COLUMN_COLLECTION_ID, TEST_UPDATED_COLL_ID)
+        updatedValues.put(MovieMagicContract.MovieUserListFlag.COLUMN_USER_LIST_FLAG_ORIG_MOVIE_ID, TEST_UPDATED_MOVIE_ID)
         // Create a cursor with observer to make sure that the content provider is notifying the observers as expected
-        queryCursor = mContext.getContentResolver().query(MovieMagicContract.MovieCollection.CONTENT_URI, null, null, null, null)
+        queryCursor = mContext.getContentResolver().query(MovieMagicContract.MovieUserListFlag.CONTENT_URI, null, null, null, null)
         tco = TestContentObserverUtilities.getTestContentObserver()
         queryCursor.registerContentObserver(tco)
-        testId =  [Long.toString(movieMagicCollRowId)]
-        rowCount = mContext.getContentResolver().update(MovieMagicContract.MovieCollection.CONTENT_URI,updatedValues,MovieMagicContract.MovieCollection._ID + "= ?", testId)
-        assertEquals('testUpdateMovieMagic: movie_collection', rowCount, 1)
+        testId =  [Long.toString(movieMagicRowId)]
+        rowCount = mContext.getContentResolver().update(MovieMagicContract.MovieUserListFlag.CONTENT_URI,updatedValues,MovieMagicContract.MovieUserListFlag._ID + "= ?", testId)
+        assertEquals('testUpdateMovieMagic: movie_user_list_flag', rowCount, 1)
         // Test to make sure our observer is called.
         tco.waitForNotificationOrFail()
         queryCursor.unregisterContentObserver(tco)
         // A cursor is the primary interface to the query results.
-        updateCursor = mContext.getContentResolver().query(MovieMagicContract.MovieCollection.CONTENT_URI,null,"$MovieMagicContract.MovieCollection.COLUMN_COLLECTION_ID = '$TEST_UPDATED_COLL_ID'",null,null)
-        TestUtilities.validateCursor('testUpdateMovieMagic: movie_collection', updateCursor, updatedValues)
+        updateCursor = mContext.getContentResolver().query(MovieMagicContract.MovieUserListFlag.CONTENT_URI,null,"$MovieMagicContract.MovieUserListFlag.COLUMN_USER_LIST_FLAG_ORIG_MOVIE_ID = '$TEST_UPDATED_MOVIE_ID'",null,null)
+        TestUtilities.validateCursor('testUpdateMovieMagic: movie_user_list_flag', updateCursor, updatedValues)
 
         //Test the update for movie_person_info
         //Create and insert new record
@@ -836,6 +865,30 @@ class TestMovieMagicProvider extends AndroidTestCase {
         // A cursor is the primary interface to the query results.
         updateCursor = mContext.getContentResolver().query(MovieMagicContract.MoviePersonCrew.CONTENT_URI,null,"$MovieMagicContract.MoviePersonCrew.COLUMN_PERSON_CREW_ORIG_PERSON_ID = '$TEST_UPDATED_PERSON_ID'",null,null)
         TestUtilities.validateCursor('testUpdateMovieMagic: movie_person_crew', updateCursor, updatedValues)
+
+        //Test the update for movie_collection
+        //Create and insert new record
+        testValues = TestUtilities.createMovieCollectionValues()
+        testUri = mContext.getContentResolver().insert(MovieMagicContract.MovieCollection.CONTENT_URI, testValues)
+        movieMagicCollRowId = ContentUris.parseId(testUri)
+        // Verify a valid insertion
+        assertTrue(movieMagicCollRowId!= -1)
+        //Now update a field
+        updatedValues = new ContentValues(testValues)
+        updatedValues.put(MovieMagicContract.MovieCollection.COLUMN_COLLECTION_ID, TEST_UPDATED_COLL_ID)
+        // Create a cursor with observer to make sure that the content provider is notifying the observers as expected
+        queryCursor = mContext.getContentResolver().query(MovieMagicContract.MovieCollection.CONTENT_URI, null, null, null, null)
+        tco = TestContentObserverUtilities.getTestContentObserver()
+        queryCursor.registerContentObserver(tco)
+        testId =  [Long.toString(movieMagicCollRowId)]
+        rowCount = mContext.getContentResolver().update(MovieMagicContract.MovieCollection.CONTENT_URI,updatedValues,MovieMagicContract.MovieCollection._ID + "= ?", testId)
+        assertEquals('testUpdateMovieMagic: movie_collection', rowCount, 1)
+        // Test to make sure our observer is called.
+        tco.waitForNotificationOrFail()
+        queryCursor.unregisterContentObserver(tco)
+        // A cursor is the primary interface to the query results.
+        updateCursor = mContext.getContentResolver().query(MovieMagicContract.MovieCollection.CONTENT_URI,null,"$MovieMagicContract.MovieCollection.COLUMN_COLLECTION_ID = '$TEST_UPDATED_COLL_ID'",null,null)
+        TestUtilities.validateCursor('testUpdateMovieMagic: movie_collection', updateCursor, updatedValues)
 
         //Close the cursors
         queryCursor.close()
@@ -967,13 +1020,12 @@ class TestMovieMagicProvider extends AndroidTestCase {
         //Pull the data and verify
         testCursor = mContext.getContentResolver().query(MovieMagicContract.MovieReleaseDate.CONTENT_URI,null, null, null, null)
         TestUtilities.validateCursor('testInsertMovieMagicProvider: movie_release_date', testCursor, testValues)
-        //<<<<<<<<<<<<<----------------------------------------------------------------------------------------------->>>>>>>//
-        //Insert test record to movie_collection table
-        testValues = TestUtilities.createMovieCollectionValues()
+
+        testValues = TestUtilities.createMovieUserListFlagValues(movieMagicRowId)
         //Register the content observer
-        mContext.getContentResolver().registerContentObserver(MovieMagicContract.MovieCollection.CONTENT_URI,true,tco)
+        mContext.getContentResolver().registerContentObserver(MovieMagicContract.MovieUserListFlag.CONTENT_URI,true,tco)
         //Insert the data
-        testUri = mContext.getContentResolver().insert(MovieMagicContract.MovieCollection.CONTENT_URI, testValues)
+        testUri = mContext.getContentResolver().insert(MovieMagicContract.MovieUserListFlag.CONTENT_URI, testValues)
         // Verify a valid insertion
         assertTrue(ContentUris.parseId(testUri) != -1)
         //Test that the content observer is called, if it fails it means content observer was not called
@@ -981,8 +1033,8 @@ class TestMovieMagicProvider extends AndroidTestCase {
         //Unregister the observer
         mContext.getContentResolver().unregisterContentObserver(tco)
         //Pull the data and verify
-        testCursor = mContext.getContentResolver().query(MovieMagicContract.MovieCollection.CONTENT_URI,null, null, null, null)
-        TestUtilities.validateCursor('testInsertMovieMagicProvider: movie_collection', testCursor, testValues)
+        testCursor = mContext.getContentResolver().query(MovieMagicContract.MovieUserListFlag.CONTENT_URI,null, null, null, null)
+        TestUtilities.validateCursor('testInsertMovieMagicProvider: movie_user_list_flag', testCursor, testValues)
         //<<<<<<<<<<<<<----------------------------------------------------------------------------------------------->>>>>>>//
         //Insert test record to movie_person_info table
         testValues = TestUtilities.createMoviePersonInfoValues()
@@ -1034,6 +1086,23 @@ class TestMovieMagicProvider extends AndroidTestCase {
         //Pull the data and verify
         testCursor = mContext.getContentResolver().query(MovieMagicContract.MoviePersonCrew.CONTENT_URI,null, null, null, null)
         TestUtilities.validateCursor('testInsertMovieMagicProvider: movie_person_crew', testCursor, testValues)
+
+        //<<<<<<<<<<<<<----------------------------------------------------------------------------------------------->>>>>>>//
+        //Insert test record to movie_collection table
+        testValues = TestUtilities.createMovieCollectionValues()
+        //Register the content observer
+        mContext.getContentResolver().registerContentObserver(MovieMagicContract.MovieCollection.CONTENT_URI,true,tco)
+        //Insert the data
+        testUri = mContext.getContentResolver().insert(MovieMagicContract.MovieCollection.CONTENT_URI, testValues)
+        // Verify a valid insertion
+        assertTrue(ContentUris.parseId(testUri) != -1)
+        //Test that the content observer is called, if it fails it means content observer was not called
+        tco.waitForNotificationOrFail()
+        //Unregister the observer
+        mContext.getContentResolver().unregisterContentObserver(tco)
+        //Pull the data and verify
+        testCursor = mContext.getContentResolver().query(MovieMagicContract.MovieCollection.CONTENT_URI,null, null, null, null)
+        TestUtilities.validateCursor('testInsertMovieMagicProvider: movie_collection', testCursor, testValues)
     }
 
     /*
@@ -1267,6 +1336,8 @@ class TestMovieMagicProvider extends AndroidTestCase {
             TestUtilities.validateCurrentRecord("testBulkInsert: movie_release_date - #$i", bulkCursor, testValues[i])
             bulkCursor.moveToNext()
         }
+
+        //** Bulk insert is not valid for movie_user_list_flag, so no testing done
 
         //Bulk insert for movie_person_info
         //Create some bulk data

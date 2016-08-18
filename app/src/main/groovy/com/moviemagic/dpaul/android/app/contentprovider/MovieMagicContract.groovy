@@ -50,6 +50,7 @@ class MovieMagicContract {
     static final String PATH_MOVIE_PERSON_INFO = 'movie_person_info'
     static final String PATH_MOVIE_PERSON_CAST = 'movie_person_cast'
     static final String PATH_MOVIE_PERSON_CREW = 'movie_person_crew'
+    static final String PATH_MOVIE_USER_LIST_FLAG = 'movie_user_list_flag'
 
     /*
         Inner class that defines the table contents of the movie_basic_info table
@@ -89,7 +90,7 @@ class MovieMagicContract {
 
         //Column to track if the detail data is loaded or not (0 - false / 1 - true)
         static final String COLUMN_DETAIL_DATA_PRESENT_FLAG = 'detail_data_present_flag'
-        //Column to track similar movies (Zero for original movie)
+        //Column to track similar movies (Zero for original movie id)
         static final String COLUMN_SIMILAR_MOVIE_LINK_ID = 'similar_movie_link_id'
 
         //Following fields are fetched for each movie (part of detail) and added later
@@ -122,18 +123,6 @@ class MovieMagicContract {
         //Column to store movie tagline
         static final String COLUMN_TAGLINE = 'tagline'
 
-        //Following fields are to keep and maintain user list
-        //All flags are stored as integer ( 0- false & 1 - true)
-        //Column to store user's watched movie list
-        static final String COLUMN_USER_WATCHED = 'user_watched_flag'
-        //Column to store user's wish movie list
-        static final String COLUMN_USER_WISH_LIST = 'user_wish_list_flag'
-        //Column to store user's favourite list
-        static final String COLUMN_USER_FAVOURITE = 'user_favourite_flag'
-        //Column to store user's collection
-        static final String COLUMN_USER_COLLECTION = 'user_collection_flag'
-        //Column to store user rating value (This is not a flag)
-        static final String COLUMN_USER_RATING = 'user_rating'
         //Column to store export flag - future use
         static final String COLUMN_USER_EXPORTED = 'user_export_flag'
         //Future columns - String
@@ -568,6 +557,46 @@ class MovieMagicContract {
         }
 
         static int getPersonIdFromMoviePersonCrewUri (Uri uri) {
+            uri.getPathSegments().get(1).toInteger()
+        }
+    }
+
+    /*
+        Inner class that defines the table contents of the movie_user_list_flag table
+    */
+    public static final class MovieUserListFlag implements BaseColumns {
+        static final String TABLE_NAME = PATH_MOVIE_USER_LIST_FLAG
+        //Define the columns
+        static final String COLUMN_FOREIGN_KEY_ID = 'foreign_key'
+        //ORIG_PERSON_ID column is the reference(i.e. dummy Foreign key) and populated with the movie id of movie_person_info
+        static final String COLUMN_USER_LIST_FLAG_ORIG_MOVIE_ID = 'user_list_flag_orig_movie_id'
+        //All flags are stored as integer ( 0- false & 1 - true)
+        static final String COLUMN_USER_LIST_FLAG_WATCHED = 'user_list_flag_watched'
+        static final String COLUMN_USER_LIST_FLAG_WISH_LIST = 'user_list_flag_wish_list'
+        static final String COLUMN_USER_LIST_FLAG_FAVOURITE = 'user_list_flag_favourite'
+        static final String COLUMN_USER_LIST_FLAG_COLLECTION = 'user_list_flag_collection'
+        //Column to store user rating value (This is not a flag)
+        static final String COLUMN_USER_LIST_USER_RATING = 'user_rating'
+
+
+        //Uri for movie_user_list_flag table
+        static final Uri CONTENT_URI =
+                BASE_CONTENT_URI.buildUpon().appendPath(PATH_MOVIE_USER_LIST_FLAG).build()
+
+        static final String CONTENT_TYPE =
+                "$ContentResolver.CURSOR_DIR_BASE_TYPE/$CONTENT_AUTHORITY/$PATH_MOVIE_USER_LIST_FLAG"
+        static final String CONTENT_ITEM_TYPE =
+                "$ContentResolver.CURSOR_ITEM_BASE_TYPE/$CONTENT_AUTHORITY/$PATH_MOVIE_USER_LIST_FLAG"
+
+        static Uri buildMovieUserListFlagUri(long id) {
+            ContentUris.withAppendedId(CONTENT_URI, id)
+        }
+
+        static Uri buildMovieUserListFlagUriWithMovieId (int personId) {
+            CONTENT_URI.buildUpon().appendPath(personId.toString()).build()
+        }
+
+        static int getMovieIdFromMovieUserListFlagUri (Uri uri) {
             uri.getPathSegments().get(1).toInteger()
         }
     }

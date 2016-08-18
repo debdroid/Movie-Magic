@@ -53,13 +53,16 @@ class LoadMovieBasicAddlInfo extends AsyncTask<Integer, Void, Void> {
             LogDisplay.callLog(LOG_TAG, "JSON DATA for $movieId -> $jsonData", LogDisplay.LOAD_MOVIE_BASIC_ADDL_INFO_FLAG)
             final ContentValues contentMovieBasicInfoUpdateValues = JsonParse.parseAdditionalBasicMovieData(jsonData)
             //Update the indicator to indicate data is loaded
-            contentMovieBasicInfoUpdateValues.put(MovieMagicContract.MovieBasicInfo.COLUMN_DETAIL_DATA_PRESENT_FLAG,1)
-            final String[] movieBasicInfoMovieId =  [Integer.toString(MovieMagicContract.MovieBasicInfo.getMovieIdFromUri(mMovieBasicMovieIdUri))]
+            contentMovieBasicInfoUpdateValues.put(MovieMagicContract.MovieBasicInfo.COLUMN_DETAIL_DATA_PRESENT_FLAG,GlobalStaticVariables.MOVIE_MAGIC_FLAG_TRUE)
+            final String[] movieBasicInfoMovieRowId =  [Integer.toString(movieBasicRowId)]
+//            final String[] movieBasicInfoMovieId =  [Integer.toString(MovieMagicContract.MovieBasicInfo.getMovieIdFromUri(mMovieBasicMovieIdUri))]
             mContentResolver.update(
                     MovieMagicContract.MovieBasicInfo.CONTENT_URI,
                     contentMovieBasicInfoUpdateValues,
-                    MovieMagicContract.MovieBasicInfo.COLUMN_MOVIE_ID + "= ?",
-                    movieBasicInfoMovieId)
+                    MovieMagicContract.MovieBasicInfo._ID + "= ?",
+//                    MovieMagicContract.MovieBasicInfo.COLUMN_MOVIE_ID + "= ?",
+                    movieBasicInfoMovieRowId)
+//                    movieBasicInfoMovieId)
 
             /**
              * Process and load (insert) the similar movies
@@ -90,7 +93,7 @@ class LoadMovieBasicAddlInfo extends AsyncTask<Integer, Void, Void> {
             LogDisplay.callLog(LOG_TAG,"Total insert for movie image->$MovieImageCount",LogDisplay.LOAD_MOVIE_BASIC_ADDL_INFO_FLAG)
 
             /**
-             * Process and load (insert) the movie now_playing data
+             * Process and load (insert) the movie video data
              * **/
             final ContentValues[] movieVideoContentValues = JsonParse.praseMovieVideoJson(jsonData, movieId, movieBasicRowId) as ContentValues []
             final int MovieVideoCount = mContentResolver.bulkInsert(MovieMagicContract.MovieVideo.CONTENT_URI,movieVideoContentValues)
@@ -132,5 +135,11 @@ class LoadMovieBasicAddlInfo extends AsyncTask<Integer, Void, Void> {
             Log.e(LOG_TAG, "SQLiteException: $e.message")
         }
         return null
+    }
+
+    @Override
+    protected void onPostExecute(Void aVoid) {
+        super.onPostExecute(aVoid)
+        LogDisplay.callLog(LOG_TAG,'Additional movie data loaded finished',LogDisplay.LOAD_MOVIE_BASIC_ADDL_INFO_FLAG)
     }
 }

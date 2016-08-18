@@ -113,6 +113,13 @@ class TestUtilities extends AndroidTestCase {
         movieReleaseDateValues
     }
 
+    static ContentValues createMovieUserListFlagValues(long fKeyId) {
+        ContentValues movieUserListFlagValues = new ContentValues();
+        movieUserListFlagValues.put(MovieMagicContract.MovieUserListFlag.COLUMN_FOREIGN_KEY_ID,fKeyId)
+        movieUserListFlagValues.put(MovieMagicContract.MovieUserListFlag.COLUMN_USER_LIST_FLAG_ORIG_MOVIE_ID,TEST_MOVIE_ID)
+        movieUserListFlagValues
+    }
+
     static ContentValues createMoviePersonInfoValues() {
         ContentValues moviePersonInfoValues = new ContentValues();
         moviePersonInfoValues.put(MovieMagicContract.MoviePersonInfo.COLUMN_PERSON_ID,TEST_PERSON_ID)

@@ -59,11 +59,6 @@ class MovieMagicDbHelper extends SQLiteOpenHelper {
                 $MovieMagicContract.MovieBasicInfo.COLUMN_PRODUCTION_COMPANIES TEXT NULL,
                 $MovieMagicContract.MovieBasicInfo.COLUMN_PRODUCTION_COUNTRIES TEXT NULL,
                 $MovieMagicContract.MovieBasicInfo.COLUMN_IMDB_ID TEXT NULL,
-                $MovieMagicContract.MovieBasicInfo.COLUMN_USER_WATCHED INTEGER DEFAULT 0,
-                $MovieMagicContract.MovieBasicInfo.COLUMN_USER_WISH_LIST INTEGER DEFAULT 0,
-                $MovieMagicContract.MovieBasicInfo.COLUMN_USER_FAVOURITE INTEGER DEFAULT 0,
-                $MovieMagicContract.MovieBasicInfo.COLUMN_USER_RATING REAL DEFAULT 0.0,
-                $MovieMagicContract.MovieBasicInfo.COLUMN_USER_COLLECTION INTEGER DEFAULT 0,
                 $MovieMagicContract.MovieBasicInfo.COLUMN_USER_EXPORTED INTEGER DEFAULT 0,
                 $MovieMagicContract.MovieBasicInfo.COLUMN_FUTURE_USE_1 TEXT NULL,
                 $MovieMagicContract.MovieBasicInfo.COLUMN_FUTURE_USE_2 TEXT NULL,
@@ -72,6 +67,7 @@ class MovieMagicDbHelper extends SQLiteOpenHelper {
                 $MovieMagicContract.MovieBasicInfo.COLUMN_FUTURE_USE_5 INTEGER DEFAULT 0,
                 UNIQUE ($MovieMagicContract.MovieBasicInfo.COLUMN_MOVIE_ID,
                 $MovieMagicContract.MovieBasicInfo.COLUMN_MOVIE_CATEGORY,
+                $MovieMagicContract.MovieBasicInfo.COLUMN_MOVIE_LIST_TYPE,
                 $MovieMagicContract.MovieBasicInfo.COLUMN_SIMILAR_MOVIE_LINK_ID) ON CONFLICT REPLACE)
                 """
 
@@ -265,6 +261,22 @@ class MovieMagicDbHelper extends SQLiteOpenHelper {
                 $MovieMagicContract.MoviePersonCrew.COLUMN_PERSON_CREW_JOB) ON CONFLICT REPLACE)
                 """
 
+        //Create the SQL to create movie_user_list_flag table
+        final  String SQL_CREATE_MOVIE_USER_LIST_FLAG_TABLE = """
+                CREATE TABLE $MovieMagicContract.MovieUserListFlag.TABLE_NAME (
+                $MovieMagicContract.MovieUserListFlag._ID INTEGER PRIMARY KEY,
+                $MovieMagicContract.MovieUserListFlag.COLUMN_FOREIGN_KEY_ID INTEGER NOT NULL,
+                $MovieMagicContract.MovieUserListFlag.COLUMN_USER_LIST_FLAG_ORIG_MOVIE_ID INTEGER NOT NULL,
+                $MovieMagicContract.MovieUserListFlag.COLUMN_USER_LIST_FLAG_WATCHED INTEGER DEFAULT 0,
+                $MovieMagicContract.MovieUserListFlag.COLUMN_USER_LIST_FLAG_WISH_LIST INTEGER DEFAULT 0,
+                $MovieMagicContract.MovieUserListFlag.COLUMN_USER_LIST_FLAG_FAVOURITE INTEGER DEFAULT 0,
+                $MovieMagicContract.MovieUserListFlag.COLUMN_USER_LIST_FLAG_COLLECTION INTEGER DEFAULT 0,
+                $MovieMagicContract.MovieUserListFlag.COLUMN_USER_LIST_USER_RATING REAL DEFAULT 0.0,
+                FOREIGN KEY ($MovieMagicContract.MovieUserListFlag.COLUMN_FOREIGN_KEY_ID) REFERENCES
+                $MovieMagicContract.MovieBasicInfo.TABLE_NAME ($MovieMagicContract.MovieBasicInfo._ID)
+                ON DELETE CASCADE)
+                """
+
         //Now create all the tables
         sqLiteDatabase.execSQL(SQL_CREATE_MOVIE_BASIC_INFO_TABLE)
         sqLiteDatabase.execSQL(SQL_CREATE_MOVIE_CAST_TABLE)
@@ -277,6 +289,7 @@ class MovieMagicDbHelper extends SQLiteOpenHelper {
         sqLiteDatabase.execSQL(SQL_CREATE_MOVIE_PERSON_INFO_TABLE)
         sqLiteDatabase.execSQL(SQL_CREATE_MOVIE_PERSON_CAST_TABLE)
         sqLiteDatabase.execSQL(SQL_CREATE_MOVIE_PERSON_CREW_TABLE)
+        sqLiteDatabase.execSQL(SQL_CREATE_MOVIE_USER_LIST_FLAG_TABLE)
     }
 
     @Override
@@ -302,6 +315,7 @@ class MovieMagicDbHelper extends SQLiteOpenHelper {
         sqLiteDatabase.execSQL("DROP TABLE IF EXISTS $MovieMagicContract.MoviePersonInfo.TABLE_NAME")
         sqLiteDatabase.execSQL("DROP TABLE IF EXISTS $MovieMagicContract.MoviePersonCast.TABLE_NAME")
         sqLiteDatabase.execSQL("DROP TABLE IF EXISTS $MovieMagicContract.MoviePersonCrew.TABLE_NAME")
+        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS $MovieMagicContract.MovieUserListFlag.TABLE_NAME")
 
         //Call onCreate to re-create the tables
         onCreate(sqLiteDatabase)

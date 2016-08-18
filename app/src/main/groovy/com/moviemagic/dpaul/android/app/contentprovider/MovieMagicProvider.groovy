@@ -42,6 +42,8 @@ class MovieMagicProvider extends ContentProvider {
     static final int MOVIE_PERSON_CAST_WITH_PERSON_ID = 122
     static final int MOVIE_PERSON_CREW = 123
     static final int MOVIE_PERSON_CREW_WITH_PERSON_ID = 124
+    static final int MOVIE_USER_LIST_FLAG = 125
+    static final int MOVIE_USER_LIST_FLAG_WITH_MOVIE_ID = 126
 
     private static final SQLiteQueryBuilder sMovieMagicQueryBuilder
 
@@ -101,6 +103,10 @@ class MovieMagicProvider extends ContentProvider {
     //movie_person_crew.person_crew_orig_person_id = ?
     private static final String sMoviePersonCrewWithPersonIdSelection =
             "$MovieMagicContract.MoviePersonCrew.TABLE_NAME.$MovieMagicContract.MoviePersonCrew.COLUMN_PERSON_CREW_ORIG_PERSON_ID = ? "
+
+    //movie_user_list_flag.user_list_flag_orig_movie_id = ?
+    private static final String sMovieUserListFlagWithMovieIdSelection =
+            "$MovieMagicContract.MovieUserListFlag.TABLE_NAME.$MovieMagicContract.MovieUserListFlag.COLUMN_USER_LIST_FLAG_ORIG_MOVIE_ID = ? "
 
     //To get data from movie_basic_info where movie_basic_info._id = ?
     private Cursor getMovieBasicInfoByMovieId(Uri uri, String[] projection, String sortOrder) {
@@ -287,6 +293,20 @@ class MovieMagicProvider extends ContentProvider {
         )
     }
 
+    //To get data from movie_user_list_flag where movie_user_list_flag.user_list_flag_orig_movie_id = ?
+    private Cursor getMovieUserListFlagByMovieId(Uri uri, String[] projection, String sortOrder) {
+        sMovieMagicQueryBuilder.setTables("$MovieMagicContract.MovieUserListFlag.TABLE_NAME")
+        String[] movieId = [Integer.toString(MovieMagicContract.MovieUserListFlag.getMovieIdFromMovieUserListFlagUri(uri))]
+        return sMovieMagicQueryBuilder.query(mOpenHelper.getReadableDatabase(),
+                projection,
+                sMovieUserListFlagWithMovieIdSelection,
+                movieId,
+                null,
+                null,
+                sortOrder
+        )
+    }
+
     /*
        This UriMatcher will contain the URI for MOVIE, MOVIE_WITH_ID, MOVIE_WITH_CATEGORY and
        MOVIE_WITH_RELEASE_DATE, the above defined integer constants will be returned when matched
@@ -322,6 +342,8 @@ class MovieMagicProvider extends ContentProvider {
         uriMatcher.addURI(MovieMagicContract.CONTENT_AUTHORITY,"$MovieMagicContract.PATH_MOVIE_PERSON_CAST/#",MOVIE_PERSON_CAST_WITH_PERSON_ID)
         uriMatcher.addURI(MovieMagicContract.CONTENT_AUTHORITY, MovieMagicContract.PATH_MOVIE_PERSON_CREW,MOVIE_PERSON_CREW)
         uriMatcher.addURI(MovieMagicContract.CONTENT_AUTHORITY,"$MovieMagicContract.PATH_MOVIE_PERSON_CREW/#",MOVIE_PERSON_CREW_WITH_PERSON_ID)
+        uriMatcher.addURI(MovieMagicContract.CONTENT_AUTHORITY, MovieMagicContract.PATH_MOVIE_USER_LIST_FLAG,MOVIE_USER_LIST_FLAG)
+        uriMatcher.addURI(MovieMagicContract.CONTENT_AUTHORITY, "$MovieMagicContract.PATH_MOVIE_USER_LIST_FLAG/#",MOVIE_USER_LIST_FLAG_WITH_MOVIE_ID)
 
         // 3) Return the new matcher!
         return uriMatcher
@@ -387,6 +409,10 @@ class MovieMagicProvider extends ContentProvider {
                 return MovieMagicContract.MoviePersonCrew.CONTENT_TYPE
             case MOVIE_PERSON_CREW_WITH_PERSON_ID:
                 return MovieMagicContract.MoviePersonCrew.CONTENT_TYPE
+            case MOVIE_USER_LIST_FLAG:
+                return MovieMagicContract.MovieUserListFlag.CONTENT_TYPE
+            case MOVIE_USER_LIST_FLAG_WITH_MOVIE_ID:
+                return MovieMagicContract.MovieUserListFlag.CONTENT_ITEM_TYPE
             default:
                 throw new UnsupportedOperationException("Unknown uri: $uri")
         }
@@ -506,6 +532,15 @@ class MovieMagicProvider extends ContentProvider {
                 String table = MovieMagicContract.MoviePersonCrew.TABLE_NAME
                 retCursor = queryHelperMethod(table, projection, selection, selectionArgs, sortOrder)
                 break
+        // "/movie_user_list_flag/#"
+            case MOVIE_USER_LIST_FLAG_WITH_MOVIE_ID:
+                retCursor = getMovieUserListFlagByMovieId(uri,projection,sortOrder)
+                break
+        // "/movie_user_list_flag"
+            case MOVIE_USER_LIST_FLAG:
+                String table = MovieMagicContract.MovieUserListFlag.TABLE_NAME
+                retCursor = queryHelperMethod(table, projection, selection, selectionArgs, sortOrder)
+                break
             default:
                 throw new UnsupportedOperationException("Unknown uri: $uri")
         }
@@ -609,6 +644,13 @@ class MovieMagicProvider extends ContentProvider {
                 else
                     throw new android.database.SQLException("Failed to insert row into $uri")
                 break
+            case MOVIE_USER_LIST_FLAG:
+                long _id = db.insert(MovieMagicContract.MovieUserListFlag.TABLE_NAME, null, values)
+                if ( _id > 0 )
+                    returnUri = MovieMagicContract.MovieUserListFlag.buildMovieUserListFlagUri(_id)
+                else
+                    throw new android.database.SQLException("Failed to insert row into $uri")
+                break
             default:
                 throw new UnsupportedOperationException("Unknown uri: $uri")
         }
@@ -661,6 +703,9 @@ class MovieMagicProvider extends ContentProvider {
             case MOVIE_PERSON_CREW:
                 count = db.delete(MovieMagicContract.MoviePersonCrew.TABLE_NAME, selection, selectionArgs)
                 break
+            case MOVIE_USER_LIST_FLAG:
+                count = db.delete(MovieMagicContract.MovieUserListFlag.TABLE_NAME, selection, selectionArgs)
+                break
             default:
                 throw new UnsupportedOperationException("Unknown uri: $uri")
         }
@@ -711,6 +756,9 @@ class MovieMagicProvider extends ContentProvider {
                 break
             case MOVIE_PERSON_CREW:
                 count = db.update(MovieMagicContract.MoviePersonCrew.TABLE_NAME,values,selection,selectionArgs)
+                break
+            case MOVIE_USER_LIST_FLAG:
+                count = db.update(MovieMagicContract.MovieUserListFlag.TABLE_NAME,values,selection,selectionArgs)
                 break
             default:
                 throw new UnsupportedOperationException("Unknown uri: $uri")
@@ -904,6 +952,8 @@ class MovieMagicProvider extends ContentProvider {
                 }
                 getContext().getContentResolver().notifyChange(uri, null)
                 return returnCount
+            case MOVIE_USER_LIST_FLAG:
+                throw new UnsupportedOperationException("Bulk insert not supported for: $uri")
             default:
                 return super.bulkInsert(uri, values)
         }

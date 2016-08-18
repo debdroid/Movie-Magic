@@ -236,7 +236,7 @@ class GridFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cur
      */
     public interface Callback {
         /**
-         * DetailFragmentCallback for when an item has been selected.
+         * GridFragmentCallback for when an item has been selected.
          */
         public void onItemSelected(Uri movieUri)
     }
