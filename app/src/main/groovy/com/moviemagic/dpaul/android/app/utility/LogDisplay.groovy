@@ -28,16 +28,16 @@ class LogDisplay {
     public static final boolean GRID_FRAGMENT_LOG_FLAG = false
     public static final boolean GRID_ADAPTER_LOG_FLAG = false
     public static final boolean LOAD_MORE_DATA_LOG_FLAG = false
-    public static final boolean DETAIL_MOVIE_ACTIVITY_LOG_FLAG = false
-    public static final boolean DETAIL_MOVIE_FRAGMENT_LOG_FLAG = true
+    public static final boolean DETAIL_MOVIE_ACTIVITY_LOG_FLAG = true
+    public static final boolean DETAIL_MOVIE_FRAGMENT_LOG_FLAG = false
     public static final boolean LOAD_MOVIE_BASIC_ADDL_INFO_FLAG = false
     public static final boolean MOVIE_MAGIC_YOUTUBE_FRAGMENT_FLAG = false
     public static final boolean SIMILAR_MOVIE_ADAPTER_FLAG = false
     public static final boolean MOVIE_CAST_ADAPTER_FLAG = false
     public static final boolean MOVIE_CREW_ADAPTER_FLAG = false
     public static final boolean MOVIE_REVIEW_ADAPTER_FLAG = false
-    public static final boolean FRIENDLY_DISPLAY_FLAG = false
     public static final boolean UPDATE_USER_LIST_FLAG = true
+    public static final boolean UTILITY_LIST_FLAG = false
 
     static void callLog(String tag, String msg, Boolean logFlag) {
         if(SHOW_ALL_LOG_FLAG) {

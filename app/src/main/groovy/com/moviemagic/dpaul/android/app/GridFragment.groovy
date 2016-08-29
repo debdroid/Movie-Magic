@@ -17,9 +17,11 @@ import android.view.ViewGroup
 import android.widget.AbsListView
 import android.widget.AdapterView
 import android.widget.GridView
+import android.widget.ImageView
 import android.widget.Toast
 import com.moviemagic.dpaul.android.app.adapter.GridAdapter
 import com.moviemagic.dpaul.android.app.contentprovider.MovieMagicContract
+import com.moviemagic.dpaul.android.app.utility.GlobalStaticVariables
 import com.moviemagic.dpaul.android.app.utility.LoadMoreData
 import com.moviemagic.dpaul.android.app.utility.LogDisplay
 import groovy.transform.CompileStatic
@@ -45,22 +47,26 @@ class GridFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cur
     private int mReTryCounter = 0
 
     private Callback mCallback
-
     private GridView mGridView
     private GridAdapter mGridAdapter
     private String mMovieCategory
+    private String mMovieListType
     private static final int MOVIE_GRID_FRAGMENT_LOADER_ID = 0
+
+    //Projection for movie_basic_info table
     private static final String[] MOVIE_COLUMNS = [MovieMagicContract.MovieBasicInfo._ID,
                                                    MovieMagicContract.MovieBasicInfo.COLUMN_TITLE,
                                                    MovieMagicContract.MovieBasicInfo.COLUMN_POSTER_PATH,
                                                    MovieMagicContract.MovieBasicInfo.COLUMN_PAGE_NUMBER,
-                                                   MovieMagicContract.MovieBasicInfo.COLUMN_MOVIE_ID]
+                                                   MovieMagicContract.MovieBasicInfo.COLUMN_MOVIE_ID,
+                                                   MovieMagicContract.MovieBasicInfo.COLUMN_MOVIE_LIST_TYPE]
     //These are indices of the above columns, if projection array changes then this needs to be changed
-    final static int COL_MOVIE_REC_ID = 0
+    final static int COL_MOVIE_ROW_ID = 0
     final static int COL_MOVIE_TITLE = 1
     final static int COL_MOVIE_POSTER = 2
     final static int COL_MOVIE_PAGE_NUM = 3
     final static int COL_MOVIE_ID = 4
+    final static int COL_MOVIE_LIST_TYPE = 4
 
     //An empty constructor is needed so that lifecycle is properly handled
     public GridFragment(){}
@@ -93,79 +99,92 @@ class GridFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cur
         if (savedInstanceState) {
             mMovieCategory = savedInstanceState.getString(STATE_MOVIE_CATEGORY, 'error')
         }
+        //TODO: Transition testing
+//        getActivity().supportPostponeEnterTransition()
         getLoaderManager().initLoader(MOVIE_GRID_FRAGMENT_LOADER_ID, null, this)
         super.onActivityCreated(savedInstanceState)
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        LogDisplay.callLog(LOG_TAG,'onCreateView is called',LogDisplay.GRID_FRAGMENT_LOG_FLAG)
         //inflate the view before referring any view using id
         View mRootView = inflater.inflate(R.layout.fragment_grid,container,false)
         mGridView = mRootView.findViewById(R.id.gridview_fragment) as GridView
         mGridAdapter = new GridAdapter(getActivity(),null,0)
         mGridView.setAdapter(mGridAdapter)
-        mGridView.setOnScrollListener(new AbsListView.OnScrollListener() {
-            @Override
-            void onScrollStateChanged(AbsListView view, int scrollState) {
-                LogDisplay.callLog(LOG_TAG,"ScrollState = $scrollState",LogDisplay.GRID_FRAGMENT_LOG_FLAG)
-            }
-
-            @Override
-            void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
-                LogDisplay.callLog(LOG_TAG,"First visible item=$firstVisibleItem : " +
-                        "VisibleItemCount = $visibleItemCount : ToatlItemCount = $totalItemCount",
-                LogDisplay.GRID_FRAGMENT_LOG_FLAG)
-                // If the total item count is zero and the previous isn't, assume the
-                // list is invalidated and should be reset back to initial state
-                if (totalItemCount < mPreviousRecordCount) {
-                    LogDisplay.callLog(LOG_TAG,'List invalidated and reset took place.',LogDisplay.GRID_FRAGMENT_LOG_FLAG)
-                    mCurrentPage = mStartPage
-                    mPreviousRecordCount = totalItemCount
-                    mReTryCounter = 0
-                    if(totalItemCount == 0) {
+        //The more load feature is not needed for user list
+        LogDisplay.callLog(LOG_TAG,"Movie Category->$mMovieCategory",LogDisplay.GRID_FRAGMENT_LOG_FLAG)
+        if(mMovieCategory == GlobalStaticVariables.MOVIE_CATEGORY_POPULAR ||
+           mMovieCategory == GlobalStaticVariables.MOVIE_CATEGORY_TOP_RATED ||
+           mMovieCategory == GlobalStaticVariables.MOVIE_CATEGORY_UPCOMING ||
+           mMovieCategory == GlobalStaticVariables.MOVIE_CATEGORY_NOW_PLAYING) {
+            mGridView.setOnScrollListener(new AbsListView.OnScrollListener() {
+                @Override
+                void onScrollStateChanged(AbsListView view, int scrollState) {
+                    LogDisplay.callLog(LOG_TAG, "ScrollState = $scrollState", LogDisplay.GRID_FRAGMENT_LOG_FLAG)
+                }
+                @Override
+                void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+                    LogDisplay.callLog(LOG_TAG, "First visible item=$firstVisibleItem : " +
+                            "VisibleItemCount = $visibleItemCount : ToatlItemCount = $totalItemCount",
+                            LogDisplay.GRID_FRAGMENT_LOG_FLAG)
+                    // If the total item count is zero and the previous isn't, assume the
+                    // list is invalidated and should be reset back to initial state
+                    if (totalItemCount < mPreviousRecordCount) {
+                        LogDisplay.callLog(LOG_TAG, 'List invalidated and reset took place.', LogDisplay.GRID_FRAGMENT_LOG_FLAG)
+                        mCurrentPage = mStartPage
+                        mPreviousRecordCount = totalItemCount
+                        mReTryCounter = 0
+                        if (totalItemCount == 0) {
+                            isMoreDataToLoad = true
+                        }
+                    }
+                    // If it's still loading, we check to see if the dataset count has
+                    // changed, if so we conclude it has finished loading and update the current page
+                    // number and total item count.
+                    if (isMoreDataToLoad && (totalItemCount > mPreviousRecordCount)) {
+                        LogDisplay.callLog(LOG_TAG, 'Just started or loaded a new page and cursor updated.', LogDisplay.GRID_FRAGMENT_LOG_FLAG)
+                        isMoreDataToLoad = false
+                        mPreviousRecordCount = totalItemCount
+                        mCurrentPage++
+                        mReTryCounter = 0
+                    }
+                    if (!isMoreDataToLoad && (totalItemCount - visibleItemCount) <= firstVisibleItem + mThreasholdCount) {
                         isMoreDataToLoad = true
+                        if (mMovieCategory != 'error') {
+                            String[] movieCategory = [mMovieCategory] as String[]
+                            LogDisplay.callLog(LOG_TAG, 'Going to load more data...', LogDisplay.GRID_FRAGMENT_LOG_FLAG)
+                            new LoadMoreData(getActivity(), mCurrentPage).execute(movieCategory)
+                        }
+                    }
+                    //Last API called failed, so give it another try but try max 5 times only
+                    //If still does not work, then stop
+                    if (isDataLoadFailed && mReTryCounter < 5) {
+                        isDataLoadFailed = false
+                        final String[] movieCategory = [mMovieCategory] as String[]
+                        mReTryCounter++
+                        LogDisplay.callLog(LOG_TAG, "Last API call failed, going to re-try...try # $mReTryCounter", LogDisplay.GRID_FRAGMENT_LOG_FLAG)
+                        new LoadMoreData(getActivity(), mCurrentPage).execute(movieCategory)
                     }
                 }
-                // If it's still loading, we check to see if the dataset count has
-                // changed, if so we conclude it has finished loading and update the current page
-                // number and total item count.
-                if(isMoreDataToLoad && (totalItemCount > mPreviousRecordCount)) {
-                    LogDisplay.callLog(LOG_TAG,'Just started or loaded a new page and cursor updated.',LogDisplay.GRID_FRAGMENT_LOG_FLAG)
-                    isMoreDataToLoad = false
-                    mPreviousRecordCount = totalItemCount
-                    mCurrentPage++
-                    mReTryCounter = 0
-                }
-                if(!isMoreDataToLoad && (totalItemCount - visibleItemCount) <= firstVisibleItem + mThreasholdCount) {
-                    isMoreDataToLoad = true
-                    if(mMovieCategory != 'error') {
-                        String[] movieCategory = [mMovieCategory] as String[]
-                        LogDisplay.callLog(LOG_TAG,'Going to load more data...',LogDisplay.GRID_FRAGMENT_LOG_FLAG)
-                        new LoadMoreData(getActivity(),mCurrentPage).execute(movieCategory)
-                    }
-                }
-                //Last API called failed, so give it another try but try max 5 times only
-                //If still does not work, then stop
-                if(isDataLoadFailed && mReTryCounter < 5) {
-                    isDataLoadFailed = false
-                    final String[] movieCategory = [mMovieCategory] as String[]
-                    mReTryCounter++
-                    LogDisplay.callLog(LOG_TAG,"Last API call failed, going to re-try...try # $mReTryCounter",LogDisplay.GRID_FRAGMENT_LOG_FLAG)
-                    new LoadMoreData(getActivity(),mCurrentPage).execute(movieCategory)
-                }
-            }
-        })
+            })
+        }  else {
+            LogDisplay.callLog(LOG_TAG, "User list, so load more logic is skipped.Movie Category->$mMovieCategory",LogDisplay.GRID_FRAGMENT_LOG_FLAG)
+        }
+        //Add onClickListner
         mGridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 final Cursor cursor = mGridAdapter.getCursor()
                 cursor.moveToPosition(position)
-                int movieId = cursor.getInt(COL_MOVIE_ID)
-                Toast.makeText(getActivity(), "Item clicked- positon: $position, id:$id & movieId:$movieId", Toast.LENGTH_SHORT).show()
-                final Uri movieIdUri = MovieMagicContract.MovieBasicInfo.buildMovieUriWithMovieId(movieId)
-                mCallback.onItemSelected(movieIdUri)
-            }
-        })
+                final int movieId = cursor.getInt(COL_MOVIE_ID)
+                final long movieRowId = cursor.getLong(COL_MOVIE_ROW_ID)
+                final ImageView imageViewId = view.findViewById(R.id.grid_image_view) as ImageView
+                mCallback.onItemSelected(movieId, movieRowId, imageViewId)
+                Toast.makeText(getActivity(), "Item clicked- positon: $position, id:$id & movieId:$movieId, imageviewId:$imageViewId", Toast.LENGTH_SHORT).show()
+                }
+            })
         return mRootView
     }
 
@@ -202,10 +221,13 @@ class GridFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cur
     @Override
     void onLoadFinished(Loader<Cursor> loader, Cursor data) {
         LogDisplay.callLog(LOG_TAG,'onLoadFinished is called',LogDisplay.GRID_FRAGMENT_LOG_FLAG)
+        //TODO: transition testing
+//        getActivity().supportStartPostponedEnterTransition()
         data.moveToLast()
         if(data.getCount() > 0) {
             mStartPage = data.getInt(COL_MOVIE_PAGE_NUM)
             mCurrentPage = mStartPage
+            mMovieListType = data.getString(COL_MOVIE_LIST_TYPE)
         }
        LogDisplay.callLog(LOG_TAG,"Start Page # $mStartPage",LogDisplay.GRID_FRAGMENT_LOG_FLAG)
         mGridAdapter.swapCursor(data)
@@ -238,6 +260,6 @@ class GridFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cur
         /**
          * GridFragmentCallback for when an item has been selected.
          */
-        public void onItemSelected(Uri movieUri)
+        public void onItemSelected(int movieId, long movie_magic_row_ID, ImageView gridImageView)
     }
 }

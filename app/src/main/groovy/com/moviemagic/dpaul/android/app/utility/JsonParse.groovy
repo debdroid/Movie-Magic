@@ -47,6 +47,10 @@ class JsonParse {
                     movieValue.put(MovieBasicInfo.COLUMN_MOVIE_ID, jsonData.results[i].id)
                 else
                     movieValue.put(MovieBasicInfo.COLUMN_MOVIE_ID, 0)
+                if (jsonData.results[i].adult)
+                    movieValue.put(MovieBasicInfo.COLUMN_ADULT_FLAG, jsonData.results[i].adult)
+                else
+                    movieValue.put(MovieBasicInfo.COLUMN_ADULT_FLAG, '')
                 if (jsonData.results[i].backdrop_path)
                     movieValue.put(MovieBasicInfo.COLUMN_BACKDROP_PATH, jsonData.results[i].backdrop_path)
                 else
@@ -200,6 +204,34 @@ class JsonParse {
 
         //Set update date
         movieUpdateValue.put(MovieBasicInfo.COLUMN_UPDATE_TIMESTAMP,Utility.getTodayDate())
+
+        //overview, release date (for upcoming movie it could be initally not known) popularity,
+        // vote avg and vote count can be update on the site, so better to update these
+        //fields. This is more needed for user list movies as that's not refreshed daily
+        if (jsonData.overview)
+            movieUpdateValue.put(MovieBasicInfo.COLUMN_OVERVIEW, jsonData.overview)
+        else
+            movieUpdateValue.put(MovieBasicInfo.COLUMN_OVERVIEW, '')
+
+        if (jsonData.release_date)
+            movieUpdateValue.put(MovieBasicInfo.COLUMN_RELEASE_DATE, jsonData.release_date)
+        else
+            movieUpdateValue.put(MovieBasicInfo.COLUMN_RELEASE_DATE, '1900-01-01')
+
+        if (jsonData.popularity)
+            movieUpdateValue.put(MovieBasicInfo.COLUMN_POPULARITY, jsonData.popularity)
+        else
+            movieUpdateValue.put(MovieBasicInfo.COLUMN_POPULARITY, 0.0)
+
+        if (jsonData.vote_average)
+            movieUpdateValue.put(MovieBasicInfo.COLUMN_VOTE_AVG, jsonData.vote_average)
+        else
+            movieUpdateValue.put(MovieBasicInfo.COLUMN_VOTE_AVG, 0.0)
+
+        if (jsonData.vote_count)
+            movieUpdateValue.put(MovieBasicInfo.COLUMN_VOTE_COUNT, jsonData.vote_count)
+        else
+            movieUpdateValue.put(MovieBasicInfo.COLUMN_VOTE_COUNT, 0)
 
         return movieUpdateValue
     }

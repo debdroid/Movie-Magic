@@ -2,14 +2,13 @@
 
     <!-- Base theme. -->
     <style name="BaseTheme" parent="Theme.AppCompat.DayNight.NoActionBar">
-        <!-- Customize your theme here. -->
+        <!-- Customize the theme here. -->
         <item name="colorPrimary">@color/primary</item>
         <item name="colorPrimaryDark">@color/primary_dark</item>
         <item name="colorAccent">@color/accent</item>
     </style>
 
     <style name="AppTheme" parent="BaseTheme">
-
     </style>
 
     <!--<style name="AppTheme.NoActionBar">-->

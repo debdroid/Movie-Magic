@@ -8,7 +8,6 @@ import android.graphics.Bitmap
 import android.graphics.Color
 import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.Drawable
-import android.graphics.drawable.RippleDrawable
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
@@ -22,13 +21,19 @@ import android.support.v4.content.Loader
 import android.support.v4.graphics.drawable.DrawableCompat
 import android.support.v4.view.ViewCompat
 import android.support.v7.graphics.Palette
-import android.support.v7.widget.AppCompatButton
 import android.support.v7.widget.GridLayoutManager
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
+import android.transition.Fade
+import android.transition.Scene
+import android.transition.TransitionManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.animation.AlphaAnimation
+import android.view.animation.Animation
+import android.view.animation.AnimationUtils
+import android.view.animation.DecelerateInterpolator
 import android.widget.Button
 import android.widget.FrameLayout
 import android.widget.ImageButton
@@ -41,13 +46,12 @@ import com.moviemagic.dpaul.android.app.adapter.MovieCrewAdapter
 import com.moviemagic.dpaul.android.app.adapter.MovieReviewAdapter
 import com.moviemagic.dpaul.android.app.adapter.SimilarMovieAdapter
 import com.moviemagic.dpaul.android.app.contentprovider.MovieMagicContract
-import com.moviemagic.dpaul.android.app.utility.FriendlyDisplay
 import com.moviemagic.dpaul.android.app.utility.GlobalStaticVariables
-import com.moviemagic.dpaul.android.app.utility.JsonParse
 import com.moviemagic.dpaul.android.app.utility.LoadMovieBasicAddlInfo
 import com.moviemagic.dpaul.android.app.utility.LogDisplay
 import com.moviemagic.dpaul.android.app.utility.PicassoLoadImage
 import com.moviemagic.dpaul.android.app.utility.UpdateUserList
+import com.moviemagic.dpaul.android.app.utility.Utility
 import com.moviemagic.dpaul.android.app.youtube.MovieMagicYoutubeFragment
 import com.squareup.picasso.Callback
 import com.squareup.picasso.Picasso
@@ -76,9 +80,10 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
     private RatingBar mTmdbRatingBar, mUserRatingBar
     private FrameLayout mDetailsCastGridLayout, mDetailCrewGridLayout, mDetailSimilarMovieGridLayout, mDetailReviewRecyclerViewLayout
     private Button mHomePageButton, mImdbLinkButton
-    private Uri mMovieIdUri
+//    private Uri mMovieIdUri
     private int _ID_movie_basic_info
     private int mMovieId
+    private String[] mMovieRowIdArg
     private String[] mMovieIdArg
     private String[] mVideoArg
     private String[] mReleaseInfoArg
@@ -91,6 +96,7 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
     private RecyclerView.LayoutManager mSimilarMovieLayoutManager, mMovieCastLayoutManager, mMovieCrewLayoutManager
     private MovieTitleAndColorCallback mMovieTitleAndColorCallback
     private BackdropCallback mBackdropCallback
+    private UserListButtonClickCallback mUserListButtonClickCallback
     private String mLocale
     private int mPalletePrimaryColor
     private int mPalletePrimaryDarkColor
@@ -100,6 +106,12 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
     private RecyclerView mMovieReviewRecyclerView
     private RecyclerView.LayoutManager mMovieReviewLayoutManager
     private MovieReviewAdapter mMovieReviewAdapter
+    private String mMovieListType
+    private String mMovieCategory
+    private boolean mUserListWatchedFlag = false
+    private boolean mUserListWishListdFlag = false
+    private boolean mUserListFavouriteFlag = false
+    private boolean mUserListCollectionFlag = false
 
 //    public static final String MOVIE_BASIC_INFO_MOVIE_ID_URI = 'movie_basic_info_movie_id_uri'
     private static final String MOVIE_VIDEO_SITE_YOUTUBE = 'YouTube'
@@ -112,70 +124,93 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
     private static final int MOVIE_DETAIL_FRAGMENT_MOVIE_RELEASE_INFO_LOADER_ID = 5
     private static final int MOVIE_DETAIL_FRAGMENT_MOVIE_IMAGE_LOADER_ID = 6
     private static final int MOVIE_DETAIL_FRAGMENT_MOVIE_REVIEW_LOADER_ID = 7
+    private static final int MOVIE_DETAIL_FRAGMENT_MOVIE_USER_LIST_FLAG_LOADER_ID = 8
 
     //Columns to fetch from movie_basic_info table
     private static final String[] MOVIE_BASIC_INFO_COLUMNS = [MovieMagicContract.MovieBasicInfo._ID,
                                                    MovieMagicContract.MovieBasicInfo.COLUMN_MOVIE_ID,
+                                                   MovieMagicContract.MovieBasicInfo.COLUMN_ADULT_FLAG,
                                                    MovieMagicContract.MovieBasicInfo.COLUMN_BACKDROP_PATH,
-                                                   MovieMagicContract.MovieBasicInfo.COLUMN_TITLE,
-                                                   MovieMagicContract.MovieBasicInfo.COLUMN_GENRE,
-                                                   MovieMagicContract.MovieBasicInfo.COLUMN_RUNTIME,
-                                                   MovieMagicContract.MovieBasicInfo.COLUMN_POSTER_PATH,
-                                                   MovieMagicContract.MovieBasicInfo.COLUMN_RELEASE_DATE,
-                                                   MovieMagicContract.MovieBasicInfo.COLUMN_BUDGET,
-                                                   MovieMagicContract.MovieBasicInfo.COLUMN_REVENUE,
-                                                   MovieMagicContract.MovieBasicInfo.COLUMN_TAGLINE,
+                                                   MovieMagicContract.MovieBasicInfo.COLUMN_ORIGINAL_TITLE,
                                                    MovieMagicContract.MovieBasicInfo.COLUMN_OVERVIEW,
+                                                   MovieMagicContract.MovieBasicInfo.COLUMN_RELEASE_DATE,
+                                                   MovieMagicContract.MovieBasicInfo.COLUMN_POSTER_PATH,
+                                                   MovieMagicContract.MovieBasicInfo.COLUMN_POPULARITY,
+                                                   MovieMagicContract.MovieBasicInfo.COLUMN_TITLE,
+                                                   MovieMagicContract.MovieBasicInfo.COLUMN_VIDEO_FLAG,
                                                    MovieMagicContract.MovieBasicInfo.COLUMN_VOTE_AVG,
                                                    MovieMagicContract.MovieBasicInfo.COLUMN_VOTE_COUNT,
-                                                   MovieMagicContract.MovieBasicInfo.COLUMN_PRODUCTION_COMPANIES,
-                                                   MovieMagicContract.MovieBasicInfo.COLUMN_PRODUCTION_COUNTRIES,
+                                                   MovieMagicContract.MovieBasicInfo.COLUMN_PAGE_NUMBER,
+                                                   MovieMagicContract.MovieBasicInfo.COLUMN_MOVIE_CATEGORY,
+                                                   MovieMagicContract.MovieBasicInfo.COLUMN_MOVIE_LIST_TYPE,
+                                                   MovieMagicContract.MovieBasicInfo.COLUMN_DETAIL_DATA_PRESENT_FLAG,
+                                                   MovieMagicContract.MovieBasicInfo.COLUMN_SIMILAR_MOVIE_LINK_ID,
                                                    MovieMagicContract.MovieBasicInfo.COLUMN_COLLECTION_ID,
                                                    MovieMagicContract.MovieBasicInfo.COLUMN_COLLECTION_NAME,
                                                    MovieMagicContract.MovieBasicInfo.COLUMN_COLLECTION_POSTER_PATH,
                                                    MovieMagicContract.MovieBasicInfo.COLUMN_COLLECTION_BACKDROP_PATH,
+                                                   MovieMagicContract.MovieBasicInfo.COLUMN_BUDGET,
+                                                   MovieMagicContract.MovieBasicInfo.COLUMN_GENRE,
                                                    MovieMagicContract.MovieBasicInfo.COLUMN_HOME_PAGE,
                                                    MovieMagicContract.MovieBasicInfo.COLUMN_IMDB_ID,
-                                                   MovieMagicContract.MovieBasicInfo.COLUMN_DETAIL_DATA_PRESENT_FLAG,
-                                                   MovieMagicContract.MovieBasicInfo.COLUMN_POPULARITY]
+                                                   MovieMagicContract.MovieBasicInfo.COLUMN_PRODUCTION_COMPANIES,
+                                                   MovieMagicContract.MovieBasicInfo.COLUMN_PRODUCTION_COUNTRIES,
+                                                   MovieMagicContract.MovieBasicInfo.COLUMN_REVENUE,
+                                                   MovieMagicContract.MovieBasicInfo.COLUMN_RUNTIME,
+                                                   MovieMagicContract.MovieBasicInfo.COLUMN_RELEASE_STATUS,
+                                                   MovieMagicContract.MovieBasicInfo.COLUMN_TAGLINE,
+                                                   MovieMagicContract.MovieBasicInfo.COLUMN_CREATE_TIMESTAMP,
+                                                   MovieMagicContract.MovieBasicInfo.COLUMN_UPDATE_TIMESTAMP]
     //These are indices of the above columns, if projection array changes then this needs to be changed
     final static int COL_MOVIE_BASIC_ID = 0
     final static int COL_MOVIE_BASIC_MOVIE_ID = 1
-    final static int COL_MOVIE_BASIC_BACKDROP_PATH = 2
-    final static int COL_MOVIE_BASIC_TITLE = 3
-    final static int COL_MOVIE_BASIC_GENRE = 4
-    final static int COL_MOVIE_BASIC_RUNTIME = 5
-    final static int COL_MOVIE_BASIC_POSTER_PATH = 6
-    final static int COL_MOVIE_BASIC_RELEASE_DATE = 7
-    final static int COL_MOVIE_BASIC_BUDGET = 8
-    final static int COL_MOVIE_BASIC_REVENUE = 9
-    final static int COL_MOVIE_BASIC_TAGLINE = 10
-    final static int COL_MOVIE_BASIC_OVERVIEW = 11
-    final static int COL_MOVIE_BASIC_VOTE_AVG = 12
-    final static int COL_MOVIE_BASIC_VOTE_COUNT = 13
-    final static int COL_MOVIE_BASIC_PRODUCTION_COMPANIES = 14
-    final static int COL_MOVIE_BASIC_PRODUCTION_COUNTRIES = 15
-    final static int COL_MOVIE_BASIC_COLLECTION_ID = 16
-    final static int COL_MOVIE_BASIC_COLLECTION_NAME = 17
-    final static int COL_MOVIE_BASIC_COLLECTION_POSTER_PATH = 18
-    final static int COL_MOVIE_BASIC_COLLECTION_BACKDROP_PATH = 19
-    final static int COL_MOVIE_BASIC_HOME_PAGE = 20
-    final static int COL_MOVIE_BASIC_IMDB_ID = 21
-    final static int COL_MOVIE_BASIC_DETAIL_DATA_PRESENT_FLAG = 22
-    final static int COL_MOVIE_BASIC_POPULARITY = 23
+    final static int COL_MOVIE_BASIC_ADULT_FLAG = 2
+    final static int COL_MOVIE_BASIC_BACKDROP_PATH = 3
+    final static int COL_MOVIE_BASIC_ORIG_TITLE = 4
+    final static int COL_MOVIE_BASIC_OVERVIEW = 5
+    final static int COL_MOVIE_BASIC_RELEASE_DATE = 6
+    final static int COL_MOVIE_BASIC_POSTER_PATH = 7
+    final static int COL_MOVIE_BASIC_POPULARITY = 8
+    final static int COL_MOVIE_BASIC_TITLE = 9
+    final static int COL_MOVIE_BASIC_VIDEO_FLAG = 10
+    final static int COL_MOVIE_BASIC_VOTE_AVG = 11
+    final static int COL_MOVIE_BASIC_VOTE_COUNT = 12
+    final static int COL_MOVIE_BASIC_PAGE_NUM = 13
+    final static int COL_MOVIE_BASIC_MOVIE_CATEGORY = 14
+    final static int COL_MOVIE_BASIC_MOVIE_LIST_TYPE = 15
+    final static int COL_MOVIE_BASIC_DETAIL_DATA_PRESENT_FLAG = 16
+    final static int COL_MOVIE_BASIC_SIMILAR_MOVIE_LINK_ID = 17
+    final static int COL_MOVIE_BASIC_COLLECTION_ID = 18
+    final static int COL_MOVIE_BASIC_COLLECTION_NAME = 19
+    final static int COL_MOVIE_BASIC_COLLECTION_POSTER_PATH = 20
+    final static int COL_MOVIE_BASIC_COLLECTION_BACKDROP_PATH = 21
+    final static int COL_MOVIE_BASIC_BUDGET = 22
+    final static int COL_MOVIE_BASIC_GENRE = 23
+    final static int COL_MOVIE_BASIC_HOME_PAGE = 24
+    final static int COL_MOVIE_BASIC_IMDB_ID = 25
+    final static int COL_MOVIE_BASIC_PRODUCTION_COMPANIES = 26
+    final static int COL_MOVIE_BASIC_PRODUCTION_COUNTRIES = 27
+    final static int COL_MOVIE_BASIC_REVENUE = 28
+    final static int COL_MOVIE_BASIC_RUNTIME = 29
+    final static int COL_MOVIE_BASIC_RELEASE_STATUS = 30
+    final static int COL_MOVIE_BASIC_TAGLINE = 31
+    final static int COL_MOVIE_BASIC_CREATE_TIMESTAMP = 32
+    final static int COL_MOVIE_BASIC_UPDATE_TIMESTAMP = 33
 
     //Columns to fetch from movie_basic_info table for similar movies
     private static final String[] SIMILAR_MOVIE_COLUMNS = [MovieMagicContract.MovieBasicInfo._ID,
                                                            MovieMagicContract.MovieBasicInfo.COLUMN_MOVIE_ID,
                                                            MovieMagicContract.MovieBasicInfo.COLUMN_POSTER_PATH,
                                                            MovieMagicContract.MovieBasicInfo.COLUMN_TITLE,
+                                                           MovieMagicContract.MovieBasicInfo.COLUMN_MOVIE_CATEGORY,
                                                            MovieMagicContract.MovieBasicInfo.COLUMN_SIMILAR_MOVIE_LINK_ID]
     //These are indices of the above columns, if projection array changes then this needs to be changed
     final static int COL_SIMILAR_MOVIE_ID = 0
-    public final static int COL_SIMILAR_MOVIE_MOVIE_ID = 1
-    public final static int COL_SIMILAR_MOVIE_POSTER_PATH = 2
-    public final static int COL_SIMILAR_MOVIE_TITLE = 3
-    final static int COL_SIMILAR_MOVIE_LINK_ID = 4
+    final static int COL_SIMILAR_MOVIE_MOVIE_ID = 1
+    final static int COL_SIMILAR_MOVIE_POSTER_PATH = 2
+    final static int COL_SIMILAR_MOVIE_TITLE = 3
+    final static int COL_SIMILAR_MOVIE_CATEGORY = 4
+    final static int COL_SIMILAR_MOVIE_LINK_ID = 5
 
     //Columns to fetch from movie_video table
     private static final String[] MOVIE_VIDEO_COLUMNS = [MovieMagicContract.MovieVideo._ID,
@@ -255,6 +290,23 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
     final static int COL_MOVIE_REVIEW_AUTHOR = 2
     final static int COL_MOVIE_REVIEW_CONTENT = 3
 
+    //Columns to fetch from movie_user_list_flag table
+    private static final String[] MOVIE_USER_LIST_FLAG_COLUMNS = [MovieMagicContract.MovieUserListFlag._ID,
+                                                          MovieMagicContract.MovieUserListFlag.COLUMN_USER_LIST_FLAG_ORIG_MOVIE_ID,
+                                                          MovieMagicContract.MovieUserListFlag.COLUMN_USER_LIST_FLAG_WATCHED,
+                                                          MovieMagicContract.MovieUserListFlag.COLUMN_USER_LIST_FLAG_WISH_LIST,
+                                                          MovieMagicContract.MovieUserListFlag.COLUMN_USER_LIST_FLAG_FAVOURITE,
+                                                          MovieMagicContract.MovieUserListFlag.COLUMN_USER_LIST_FLAG_COLLECTION,
+                                                          MovieMagicContract.MovieUserListFlag.COLUMN_USER_LIST_USER_RATING]
+    //These are indices of the above columns, if projection array changes then this needs to be changed
+    final static int COL_MOVIE_USER_LIST_FLAG_ID = 0
+    final static int COL_MOVIE_USER_LIST_FLAG_ORIG_MOVIE_ID = 1
+    final static int COL_MOVIE_USER_LIST_FLAG_WATCHED_FLAG = 2
+    final static int COL_MOVIE_USER_LIST_FLAG_WISH_LIST_FLAG = 3
+    final static int COL_MOVIE_USER_LIST_FLAG_FAVOURITE_FLAG = 4
+    final static int COL_MOVIE_USER_LIST_FLAG_COLLECTION_FLAG = 5
+    final static int COL_MOVIE_USER_LIST_FLAG_USER_RATING = 6
+
     //An empty constructor is needed so that lifecycle is properly handled
     public DetailMovieFragment(){}
 
@@ -271,13 +323,22 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         //Get the bundle from the Fragment
         Bundle args = getArguments()
-        if (args != null) {
-            mMovieIdUri = args.getParcelable(GlobalStaticVariables.MOVIE_BASIC_INFO_MOVIE_ID_URI) as Uri
-            LogDisplay.callLog(LOG_TAG,"Bundle data -> ${mMovieIdUri.toString()}",LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
-            mMovieId = MovieMagicContract.MovieBasicInfo.getMovieIdFromUri(mMovieIdUri)
+        if (args) {
+            mMovieId = args.getInt(GlobalStaticVariables.MOVIE_BASIC_INFO_MOVIE_ID)
+            //_ID_movie_basic_info is used as Integer in the subsequent calls, so it's also defined as
+            //integer even though actually it's long
+            _ID_movie_basic_info = args.getLong(GlobalStaticVariables.MOVIE_BASIC_INFO_ROW_ID) as Integer
+            LogDisplay.callLog(LOG_TAG,"Fragment arguments.Movie ID -> $mMovieId",LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
+            LogDisplay.callLog(LOG_TAG,"Fragment arguments.Movie Row ID -> $_ID_movie_basic_info",LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
         }
         //inflate the view before referring any view using id
         View mRootView = inflater.inflate(R.layout.fragment_detail_movie, container, false)
+        //Set a fade animation
+        final Animation fadeIn = new AlphaAnimation(0,1)
+        fadeIn.setInterpolator(new DecelerateInterpolator())
+        fadeIn.setDuration(2000)
+//        fadeIn.setFillAfter(true)
+        mRootView.setAnimation(fadeIn)
 
         //All the layouts
         mDetailTitleLayout = mRootView.findViewById(R.id.movie_detail_title_layout) as LinearLayout
@@ -298,7 +359,6 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
         mDetailReviewHeaderLayout = mRootView.findViewById(R.id.movie_detail_review_header_layout) as LinearLayout
         mDetailReviewRecyclerViewLayout = mRootView.findViewById(R.id.movie_detail_review_recycler_view_layout) as FrameLayout
         mUserListDrawableLayout = mRootView.findViewById(R.id.movie_detail_user_list_drawable_layout) as LinearLayout
-
 
         //All the header (fixed text) fields & buttons
         mReleaseDateHeaderTextView = mRootView.findViewById(R.id.movie_detail_poster_release_date_header) as TextView
@@ -328,17 +388,25 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
             @Override
             void onClick(View v) {
                 LogDisplay.callLog(LOG_TAG,'ImageButton Watched Button is clicked',LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
-                if(mMovieTitle && _ID_movie_basic_info) {
+                if(mMovieTitle && mMovieId && _ID_movie_basic_info) {
                     final UpdateUserList updateUserList = new UpdateUserList(getActivity(),mUserListDrawableLayout,
-                            _ID_movie_basic_info,mMovieTitle,mPalletePrimaryColor,mPalleteBodyTextColor)
+                            _ID_movie_basic_info, mMovieId, mMovieTitle,mPalletePrimaryColor,mPalleteBodyTextColor)
                     final String[] updateUserListArgs
+                    //If full opaque then already selected, so remove it
                     if (mImageButtonWatched.getAlpha() == GlobalStaticVariables.MOVIE_MAGIC_ALPHA_FULL_OPAQUE) {
-                        updateUserListArgs = [GlobalStaticVariables.USER_LIST_WATCHED,GlobalStaticVariables.USER_LIST_FLAG_REMOVE]
+                        //Pass the third parameter as "0.0" (i.e. user rating param)
+                        updateUserListArgs = [GlobalStaticVariables.USER_LIST_WATCHED, GlobalStaticVariables.USER_LIST_REMOVE_FLAG, 0.0]
                         updateUserList.execute(updateUserListArgs)
                         mImageButtonWatched.setAlpha(GlobalStaticVariables.MOVIE_MAGIC_ALPHA_OPAQUE_40_PERCENT)
                         mImageButtonWatched.setColorFilter(null)
-                    } else {
-                        updateUserListArgs = [GlobalStaticVariables.USER_LIST_WATCHED,GlobalStaticVariables.USER_LIST_FLAG_ADD]
+                        //If user list movie then go back to previous activity as user already unchecked it
+                        if(mMovieCategory == GlobalStaticVariables.MOVIE_CATEGORY_LOCAL_USER_WATCHED) {
+                            //TODO: will decide later if this function is needed. If not needed then remove the callback
+//                            mUserListButtonClickCallback.finishCurrentActivity()
+                        }
+                    } else { //If 40% opaque then not selected, so add it
+                        //Pass the third parameter as "0.0" (i.e. user rating param)
+                        updateUserListArgs = [GlobalStaticVariables.USER_LIST_WATCHED, GlobalStaticVariables.USER_LIST_ADD_FLAG, 0.0]
                         updateUserList.execute(updateUserListArgs)
                         mImageButtonWatched.setAlpha(GlobalStaticVariables.MOVIE_MAGIC_ALPHA_FULL_OPAQUE)
                         mImageButtonWatched.setColorFilter(mPalleteAccentColor)
@@ -351,8 +419,97 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
             }
         })
         mImageButtonWishList = mRootView.findViewById(R.id.movie_detail_user_list_drawable_wish_list) as ImageButton
+        mImageButtonWishList.setOnClickListener(new View.OnClickListener() {
+            @Override
+            void onClick(View v) {
+                LogDisplay.callLog(LOG_TAG,'ImageButton WishList Button is clicked',LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
+                if(mMovieTitle && mMovieId && _ID_movie_basic_info) {
+                    final UpdateUserList updateUserList = new UpdateUserList(getActivity(),mUserListDrawableLayout,
+                            _ID_movie_basic_info, mMovieId, mMovieTitle,mPalletePrimaryColor,mPalleteBodyTextColor)
+                    final String[] updateUserListArgs
+                    //If full opaque then already selected, so remove it
+                    if (mImageButtonWishList.getAlpha() == GlobalStaticVariables.MOVIE_MAGIC_ALPHA_FULL_OPAQUE) {
+                        //Pass the third parameter as "0.0" (i.e. user rating param)
+                        updateUserListArgs = [GlobalStaticVariables.USER_LIST_WISH_LIST, GlobalStaticVariables.USER_LIST_REMOVE_FLAG, 0.0]
+                        updateUserList.execute(updateUserListArgs)
+                        mImageButtonWishList.setAlpha(GlobalStaticVariables.MOVIE_MAGIC_ALPHA_OPAQUE_40_PERCENT)
+                        mImageButtonWishList.setColorFilter(null)
+                    } else { //If 40% opaque then not selected, so add it
+                        //Pass the third parameter as "0.0" (i.e. user rating param)
+                        updateUserListArgs = [GlobalStaticVariables.USER_LIST_WISH_LIST, GlobalStaticVariables.USER_LIST_ADD_FLAG, 0.0]
+                        updateUserList.execute(updateUserListArgs)
+                        mImageButtonWishList.setAlpha(GlobalStaticVariables.MOVIE_MAGIC_ALPHA_FULL_OPAQUE)
+                        mImageButtonWishList.setColorFilter(mPalleteAccentColor)
+                    }
+                } else {
+                    Snackbar.make(mRootView.findViewById(R.id.movie_detail_user_list_drawable_layout),
+                            getActivity().getString(R.string.cannot_perform_operation_msg), Snackbar.LENGTH_LONG)
+                            .setAction("Action", null).show()
+                }
+            }
+        })
+
         mImageButtonFavourite = mRootView.findViewById(R.id.movie_detail_user_list_drawable_favourite) as ImageButton
+        mImageButtonFavourite.setOnClickListener(new View.OnClickListener() {
+            @Override
+            void onClick(View v) {
+                LogDisplay.callLog(LOG_TAG,'ImageButton Favourite Button is clicked',LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
+                if(mMovieTitle && mMovieId && _ID_movie_basic_info) {
+                    final UpdateUserList updateUserList = new UpdateUserList(getActivity(),mUserListDrawableLayout,
+                            _ID_movie_basic_info, mMovieId, mMovieTitle,mPalletePrimaryColor,mPalleteBodyTextColor)
+                    final String[] updateUserListArgs
+                    //If full opaque then already selected, so remove it
+                    if (mImageButtonFavourite.getAlpha() == GlobalStaticVariables.MOVIE_MAGIC_ALPHA_FULL_OPAQUE) {
+                        //Pass the third parameter as "0.0" (i.e. user rating param)
+                        updateUserListArgs = [GlobalStaticVariables.USER_LIST_FAVOURITE, GlobalStaticVariables.USER_LIST_REMOVE_FLAG, 0.0]
+                        updateUserList.execute(updateUserListArgs)
+                        mImageButtonFavourite.setAlpha(GlobalStaticVariables.MOVIE_MAGIC_ALPHA_OPAQUE_40_PERCENT)
+                        mImageButtonFavourite.setColorFilter(null)
+                    } else { //If 40% opaque then not selected, so add it
+                        //Pass the third parameter as "0.0" (i.e. user rating param)
+                        updateUserListArgs = [GlobalStaticVariables.USER_LIST_FAVOURITE, GlobalStaticVariables.USER_LIST_ADD_FLAG, 0.0]
+                        updateUserList.execute(updateUserListArgs)
+                        mImageButtonFavourite.setAlpha(GlobalStaticVariables.MOVIE_MAGIC_ALPHA_FULL_OPAQUE)
+                        mImageButtonFavourite.setColorFilter(mPalleteAccentColor)
+                    }
+                } else {
+                    Snackbar.make(mRootView.findViewById(R.id.movie_detail_user_list_drawable_layout),
+                            getActivity().getString(R.string.cannot_perform_operation_msg), Snackbar.LENGTH_LONG)
+                            .setAction("Action", null).show()
+                }
+            }
+        })
+
         mImageButtonCollection = mRootView.findViewById(R.id.movie_detail_user_list_drawable_collection) as ImageButton
+        mImageButtonCollection.setOnClickListener(new View.OnClickListener() {
+            @Override
+            void onClick(View v) {
+                LogDisplay.callLog(LOG_TAG,'ImageButton Favourite Button is clicked',LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
+                if(mMovieTitle && mMovieId && _ID_movie_basic_info) {
+                    final UpdateUserList updateUserList = new UpdateUserList(getActivity(),mUserListDrawableLayout,
+                            _ID_movie_basic_info, mMovieId, mMovieTitle,mPalletePrimaryColor,mPalleteBodyTextColor)
+                    final String[] updateUserListArgs
+                    //If full opaque then already selected, so remove it
+                    if (mImageButtonCollection.getAlpha() == GlobalStaticVariables.MOVIE_MAGIC_ALPHA_FULL_OPAQUE) {
+                        //Pass the third parameter as "0.0" (i.e. user rating param)
+                        updateUserListArgs = [GlobalStaticVariables.USER_LIST_COLLECTION, GlobalStaticVariables.USER_LIST_REMOVE_FLAG, 0.0]
+                        updateUserList.execute(updateUserListArgs)
+                        mImageButtonCollection.setAlpha(GlobalStaticVariables.MOVIE_MAGIC_ALPHA_OPAQUE_40_PERCENT)
+                        mImageButtonCollection.setColorFilter(null)
+                    } else { //If 40% opaque then not selected, so add it
+                        //Pass the third parameter as "0.0" (i.e. user rating param)
+                        updateUserListArgs = [GlobalStaticVariables.USER_LIST_COLLECTION, GlobalStaticVariables.USER_LIST_ADD_FLAG, 0.0]
+                        updateUserList.execute(updateUserListArgs)
+                        mImageButtonCollection.setAlpha(GlobalStaticVariables.MOVIE_MAGIC_ALPHA_FULL_OPAQUE)
+                        mImageButtonCollection.setColorFilter(mPalleteAccentColor)
+                    }
+                } else {
+                    Snackbar.make(mRootView.findViewById(R.id.movie_detail_user_list_drawable_layout),
+                            getActivity().getString(R.string.cannot_perform_operation_msg), Snackbar.LENGTH_LONG)
+                            .setAction("Action", null).show()
+                }
+            }
+        })
 
         //All the dynamic fields (data fields) & ratingbar
         mMovieTitleTextView = mRootView.findViewById(R.id.movie_detail_title) as TextView
@@ -366,6 +523,29 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
         mPopularityTextView = mRootView.findViewById(R.id.movie_detail_poster_popularity) as TextView
         mTmdbRatingBar = mRootView.findViewById(R.id.movie_detail_tmdb_rating_bar) as RatingBar
         mUserRatingBar = mRootView.findViewById(R.id.movie_detail_user_rating_bar) as RatingBar
+        mUserRatingBar.setOnRatingBarChangeListener(new RatingBar.OnRatingBarChangeListener() {
+            @Override
+            void onRatingChanged(RatingBar ratingBar, float rating, boolean fromUser) {
+                LogDisplay.callLog(LOG_TAG,"onRatingChanged:User rating bar value->$rating",LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
+                if(mMovieTitle && mMovieId && _ID_movie_basic_info) {
+                    final UpdateUserList updateUserList = new UpdateUserList(getActivity(),mUserListDrawableLayout,
+                            _ID_movie_basic_info, mMovieId, mMovieTitle,mPalletePrimaryColor,mPalleteBodyTextColor)
+                    final String[] updateUserListArgs
+                    //If the rating value is zero then remove it
+                    if (rating == 0.0) {
+                        //Pass the third parameter as rating param
+                        LogDisplay.callLog(LOG_TAG,'onRatingChanged:User rating remove',LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
+                        updateUserListArgs = [GlobalStaticVariables.USER_LIST_USER_RATING, GlobalStaticVariables.USER_RATING_REMOVE_FLAG, String.valueOf(rating)]
+                        updateUserList.execute(updateUserListArgs)
+                    } else { //Else if rating > 0.0 then add / update it
+                        //Pass the third parameter as rating param
+                        LogDisplay.callLog(LOG_TAG,'onRatingChanged:User rating add',LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
+                        updateUserListArgs = [GlobalStaticVariables.USER_LIST_USER_RATING, GlobalStaticVariables.USER_RATING_ADD_FLAG, String.valueOf(rating)]
+                        updateUserList.execute(updateUserListArgs)
+                    }
+                }
+            }
+        })
         mTotalVoteCountTextView = mRootView.findViewById(R.id.movie_detail_tmdb_rating_vote_count_val) as TextView
         mTaglineTextView = mRootView.findViewById(R.id.movie_detail_synopsis_tagline) as TextView
         mSynopsisTextView = mRootView.findViewById(R.id.movie_detail_synopsis) as TextView
@@ -434,21 +614,24 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
-        getLoaderManager().initLoader(MOVIE_DETAIL_FRAGMENT_BASIC_DATA_LOADER_ID, null, this)
         mLocale = context.getResources().getConfiguration().locale.getCountry()
         LogDisplay.callLog(LOG_TAG,"Locale: $mLocale",LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
-        if(mMovieId) {
+        if(mMovieId && _ID_movie_basic_info) {
+            mMovieRowIdArg = [Integer.toString(_ID_movie_basic_info)] as String[]
             mMovieIdArg = [Integer.toString(mMovieId)] as String[]
             mVideoArg = [Integer.toString(mMovieId),MOVIE_VIDEO_SITE_YOUTUBE, MOVIE_VIDEO_SITE_TYPE] as String[]
             mReleaseInfoArg = [Integer.toString(mMovieId), mLocale] as String[]
             mMovieImageArg = [Integer.toString(mMovieId), GlobalStaticVariables.IMAGE_TYPE_BACKDROP] as String[]
         } else {
             //this is to safeguard any unwanted data fetch
+            mMovieRowIdArg = ['ZZZZZZ'] as String[]
             mMovieIdArg = ['ZZZZZZ'] as String[]
             mVideoArg = ['XXXXXX','YYYYY','ZZZZZZ'] as String[]
             mReleaseInfoArg = ['YYYYY','ZZZZZZ'] as String[]
             mMovieImageArg = ['YYYYY','ZZZZZZ'] as String[]
         }
+        //Start all the loaders
+        getLoaderManager().initLoader(MOVIE_DETAIL_FRAGMENT_BASIC_DATA_LOADER_ID, null, this)
         getLoaderManager().initLoader(MOVIE_DETAIL_FRAGMENT_SIMILAR_MOVIE_LOADER_ID, null, this)
         getLoaderManager().initLoader(MOVIE_DETAIL_FRAGMENT_MOVIE_VIDEO_LOADER_ID, null, this)
         getLoaderManager().initLoader(MOVIE_DETAIL_FRAGMENT_MOVIE_CAST_LOADER_ID, null, this)
@@ -456,6 +639,7 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
         getLoaderManager().initLoader(MOVIE_DETAIL_FRAGMENT_MOVIE_RELEASE_INFO_LOADER_ID, null, this)
         getLoaderManager().initLoader(MOVIE_DETAIL_FRAGMENT_MOVIE_IMAGE_LOADER_ID, null, this)
         getLoaderManager().initLoader(MOVIE_DETAIL_FRAGMENT_MOVIE_REVIEW_LOADER_ID, null, this)
+        getLoaderManager().initLoader(MOVIE_DETAIL_FRAGMENT_MOVIE_USER_LIST_FLAG_LOADER_ID, null, this)
         super.onActivityCreated(savedInstanceState)
     }
 
@@ -465,79 +649,88 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
         switch (id) {
             case MOVIE_DETAIL_FRAGMENT_BASIC_DATA_LOADER_ID:
                 return new CursorLoader(
-                        getActivity(),              //Parent Activity Context
-                        mMovieIdUri,                //Table to query
-                        MOVIE_BASIC_INFO_COLUMNS,   //Projection to return
-                        null,                       //Selection Clause, null->will return all data
-                        null,                       //Selection Arg, null-> will return all data
-                        null)                       //Only a single row is expected, so not sorted
+                        getActivity(),                                  //Parent Activity Context
+                        MovieMagicContract.MovieBasicInfo.CONTENT_URI,  //Table to query
+                        MOVIE_BASIC_INFO_COLUMNS,                       //Projection to return
+                        "$MovieMagicContract.MovieBasicInfo._ID = ? ",  //Selection Clause
+                        mMovieRowIdArg,                                 //Selection Arg
+                        null)                                           //Only a single row is expected, so not sorted
 
             case MOVIE_DETAIL_FRAGMENT_SIMILAR_MOVIE_LOADER_ID:
                 return new CursorLoader(
-                        getActivity(),                                  //Parent Activity Context
-                        MovieMagicContract.MovieBasicInfo.CONTENT_URI,  //Table to query
-                        SIMILAR_MOVIE_COLUMNS,                          //Projection to return
+                        getActivity(),                                                          //Parent Activity Context
+                        MovieMagicContract.MovieBasicInfo.CONTENT_URI,                          //Table to query
+                        SIMILAR_MOVIE_COLUMNS,                                                  //Projection to return
                         MovieMagicContract.MovieBasicInfo.COLUMN_SIMILAR_MOVIE_LINK_ID + "= ?", //Selection Clause
-                        mMovieIdArg,                                    //Selection Arg
-                        null)                                           //Not bother on sorting
+                        mMovieIdArg,                                                            //Selection Arg
+                        null)                                                                   //Not bother on sorting
 
             case MOVIE_DETAIL_FRAGMENT_MOVIE_VIDEO_LOADER_ID:
                 return new CursorLoader(
-                        getActivity(),                                  //Parent Activity Context
-                        MovieMagicContract.MovieVideo.CONTENT_URI,      //Table to query
-                        MOVIE_VIDEO_COLUMNS,                            //Projection to return
+                        getActivity(),                                                        //Parent Activity Context
+                        MovieMagicContract.MovieVideo.CONTENT_URI,                            //Table to query
+                        MOVIE_VIDEO_COLUMNS,                                                  //Projection to return
                         """$MovieMagicContract.MovieVideo.COLUMN_VIDEO_ORIG_MOVIE_ID = ? and
                             $MovieMagicContract.MovieVideo.COLUMN_VIDEO_SITE = ? and
-                            $MovieMagicContract.MovieVideo.COLUMN_VIDEO_TYPE = ? """, //Selection Clause
-                        mVideoArg,                                     //Selection Arg
-                        null)                                           //Not bother on sorting
+                            $MovieMagicContract.MovieVideo.COLUMN_VIDEO_TYPE = ? """,         //Selection Clause
+                        mVideoArg,                                                            //Selection Arg
+                        null)                                                                 //Not bother on sorting
 
             case MOVIE_DETAIL_FRAGMENT_MOVIE_CAST_LOADER_ID:
                 return new CursorLoader(
-                        getActivity(),                                  //Parent Activity Context
-                        MovieMagicContract.MovieCast.CONTENT_URI,       //Table to query
-                        MOVIE_CAST_COLUMNS,                             //Projection to return
-                        MovieMagicContract.MovieCast.COLUMN_CAST_ORIG_MOVIE_ID + "= ?", //Selection Clause
-                        mMovieIdArg,                                    //Selection Arg
-                        MovieMagicContract.MovieCast.COLUMN_CAST_ORDER) //Sorted on the order
+                        getActivity(),                                                  //Parent Activity Context
+                        MovieMagicContract.MovieCast.CONTENT_URI,                       //Table to query
+                        MOVIE_CAST_COLUMNS,                                             //Projection to return
+                        "$MovieMagicContract.MovieCast.COLUMN_CAST_ORIG_MOVIE_ID = ?",  //Selection Clause
+                        mMovieIdArg,                                                    //Selection Arg
+                        MovieMagicContract.MovieCast.COLUMN_CAST_ORDER)                 //Sorted on the order
 
             case MOVIE_DETAIL_FRAGMENT_MOVIE_CREW_LOADER_ID:
                 return new CursorLoader(
-                        getActivity(),                                  //Parent Activity Context
-                        MovieMagicContract.MovieCrew.CONTENT_URI,       //Table to query
-                        MOVIE_CREW_COLUMNS,                             //Projection to return
-                        MovieMagicContract.MovieCrew.COLUMN_CREW_ORIG_MOVIE_ID + "= ?", //Selection Clause
-                        mMovieIdArg,                                    //Selection Arg
-                        MovieMagicContract.MovieCrew.COLUMN_CREW_JOB)   //Sorted on the job
+                        getActivity(),                                                  //Parent Activity Context
+                        MovieMagicContract.MovieCrew.CONTENT_URI,                       //Table to query
+                        MOVIE_CREW_COLUMNS,                                             //Projection to return
+                        "$MovieMagicContract.MovieCrew.COLUMN_CREW_ORIG_MOVIE_ID = ?",  //Selection Clause
+                        mMovieIdArg,                                                    //Selection Arg
+                        MovieMagicContract.MovieCrew.COLUMN_CREW_JOB)                   //Sorted on the job
 
             case MOVIE_DETAIL_FRAGMENT_MOVIE_RELEASE_INFO_LOADER_ID:
                 return new CursorLoader(
-                        getActivity(),                                    //Parent Activity Context
-                        MovieMagicContract.MovieReleaseDate.CONTENT_URI,  //Table to query
-                        MOVIE_RELEASE_INFO_COLUMNS,                       //Projection to return
+                        getActivity(),                                                               //Parent Activity Context
+                        MovieMagicContract.MovieReleaseDate.CONTENT_URI,                             //Table to query
+                        MOVIE_RELEASE_INFO_COLUMNS,                                                  //Projection to return
                         """$MovieMagicContract.MovieReleaseDate.COLUMN_RELEASE_ORIG_MOVIE_ID = ? and
                             $MovieMagicContract.MovieReleaseDate.COLUMN_RELEASE_ISO_COUNTRY = ? """, //Selection Clause
-                        mReleaseInfoArg,                                     //Selection Arg
-                        null)                                             //Sorting not used
+                        mReleaseInfoArg,                                                             //Selection Arg
+                        null)                                                                        //Sorting not used
 
             case MOVIE_DETAIL_FRAGMENT_MOVIE_IMAGE_LOADER_ID:
                 return new CursorLoader(
-                        getActivity(),                                    //Parent Activity Context
-                        MovieMagicContract.MovieImage.CONTENT_URI,  //Table to query
-                        MOVIE_IMAGE_COLUMNS,                       //Projection to return
+                        getActivity(),                                                     //Parent Activity Context
+                        MovieMagicContract.MovieImage.CONTENT_URI,                         //Table to query
+                        MOVIE_IMAGE_COLUMNS,                                               //Projection to return
                         """$MovieMagicContract.MovieImage.COLUMN_IMAGE_ORIG_MOVIE_ID = ? and
-                            $MovieMagicContract.MovieImage.COLUMN_IMAGE_TYPE = ? """, //Selection Clause
-                        mMovieImageArg,                                     //Selection Arg
-                        null)                                             //Sorting not used
+                            $MovieMagicContract.MovieImage.COLUMN_IMAGE_TYPE = ? """,      //Selection Clause
+                        mMovieImageArg,                                                    //Selection Arg
+                        null)                                                              //Sorting not used
 
             case MOVIE_DETAIL_FRAGMENT_MOVIE_REVIEW_LOADER_ID:
                 return new CursorLoader(
-                        getActivity(),                                  //Parent Activity Context
-                        MovieMagicContract.MovieReview.CONTENT_URI,       //Table to query
-                        MOVIE_REVIEW_COLUMNS,                             //Projection to return
+                        getActivity(),                                                      //Parent Activity Context
+                        MovieMagicContract.MovieReview.CONTENT_URI,                         //Table to query
+                        MOVIE_REVIEW_COLUMNS,                                               //Projection to return
                         MovieMagicContract.MovieReview.COLUMN_REVIEW_ORIG_MOVIE_ID + "= ?", //Selection Clause
-                        mMovieIdArg,                                    //Selection Arg
-                        MovieMagicContract.MovieReview.COLUMN_REVIEW_AUTHOR)   //Sorted on the author
+                        mMovieIdArg,                                                        //Selection Arg
+                        MovieMagicContract.MovieReview.COLUMN_REVIEW_AUTHOR)                //Sorted on the author
+
+            case MOVIE_DETAIL_FRAGMENT_MOVIE_USER_LIST_FLAG_LOADER_ID:
+                return new CursorLoader(
+                        getActivity(),                                                                   //Parent Activity Context
+                        MovieMagicContract.MovieUserListFlag.CONTENT_URI,                                //Table to query
+                        MOVIE_USER_LIST_FLAG_COLUMNS,                                                    //Projection to return
+                        "$MovieMagicContract.MovieUserListFlag.COLUMN_USER_LIST_FLAG_ORIG_MOVIE_ID = ?", //Selection Clause
+                        mMovieIdArg,                                                                     //Selection Arg
+                        null)                                                                            //Sorting not used
             default:
                 return null
         }
@@ -572,6 +765,9 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
             case MOVIE_DETAIL_FRAGMENT_MOVIE_REVIEW_LOADER_ID:
                 handleMovieReviewOnLoadFinished(data)
                 break
+            case MOVIE_DETAIL_FRAGMENT_MOVIE_USER_LIST_FLAG_LOADER_ID:
+                handleMovieUSerListFlagOnLoadFinished(data)
+                break
             default:
                 LogDisplay.callLog(LOG_TAG,"Unknown loader id. id->$loaderId",LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
         }
@@ -587,14 +783,26 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
     }
 
     void handleMovieBasicOnLoadFinished(Cursor data) {
+        LogDisplay.callLog(LOG_TAG,"handleMovieBasicOnLoadFinished.Cursor rec count -> ${data.getCount()}",LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
         if(data.moveToFirst()) {
             LogDisplay.callLog(LOG_TAG,"handleMovieBasicOnLoadFinished.Movie id -> ${Integer.toString(mMovieId)}",LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
-            _ID_movie_basic_info = data.getInt(COL_MOVIE_BASIC_ID)
+//            _ID_movie_basic_info = data.getInt(COL_MOVIE_BASIC_ID)
+//            mMovieListType = data.getString(COL_MOVIE_BASIC_MOVIE_LIST_TYPE)
+            mMovieCategory = data.getString(COL_MOVIE_BASIC_MOVIE_CATEGORY)
+            LogDisplay.callLog(LOG_TAG,"Movie Category -> $mMovieCategory",LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
             mOriginalBackdropPath = data.getString(COL_MOVIE_BASIC_BACKDROP_PATH)
             mMovieTitle = data.getString(COL_MOVIE_BASIC_TITLE)
             mMovieTitleTextView.setText(mMovieTitle)
-            mGenreTextView.setText(data.getString(COL_MOVIE_BASIC_GENRE))
-            mRunTimeTextView.setText(FriendlyDisplay.formatRunTime(getActivity(),data.getInt(COL_MOVIE_BASIC_RUNTIME)))
+            if(data.getString(COL_MOVIE_BASIC_GENRE)) {
+                mGenreTextView.setText(data.getString(COL_MOVIE_BASIC_GENRE))
+            } else {
+                mGenreTextView.setText(getActivity().getString(R.string.movie_data_not_available))
+            }
+            if(data.getInt(COL_MOVIE_BASIC_RUNTIME) > 0) {
+                mRunTimeTextView.setText(Utility.formatRunTime(getActivity(), data.getInt(COL_MOVIE_BASIC_RUNTIME)))
+            } else {
+                mRunTimeTextView.setText(getActivity().getString(R.string.movie_data_not_available))
+            }
 
             final String posterPath = "$GlobalStaticVariables.TMDB_IMAGE_BASE_URL/$GlobalStaticVariables.TMDB_IMAGE_SIZE_W185" +
                     "${data.getString(COL_MOVIE_BASIC_POSTER_PATH)}"
@@ -616,7 +824,7 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
                             Palette.Swatch mutedSwatch = p.getMutedSwatch()
                             Palette.Swatch mutedLightSwatch = p.getLightMutedSwatch()
                             Palette.Swatch mutedDarkSwatch = p.getDarkMutedSwatch()
-
+                            final boolean pickSwatchColorFlag = false
                             //Pick primary, primaryDark, title and body text color
                             if (vibrantSwatch) {
                                 mPalletePrimaryColor = vibrantSwatch.getRgb()
@@ -626,6 +834,7 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
                                 float[] primaryHsl = vibrantSwatch.getHsl()
                                 primaryHsl[2] = primaryHsl[2] * 0.9f
                                 mPalletePrimaryDarkColor = Color.HSVToColor(primaryHsl)
+                                pickSwatchColorFlag = true
                             } else if(lightVibrantSwatch) { //Try another swatch
                                 mPalletePrimaryColor = lightVibrantSwatch.getRgb()
                                 mPalleteTitleColor = lightVibrantSwatch.getTitleTextColor()
@@ -634,6 +843,7 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
                                 float[] primaryHsl = lightVibrantSwatch.getHsl()
                                 primaryHsl[2] = primaryHsl[2] * 0.9f
                                 mPalletePrimaryDarkColor = Color.HSVToColor(primaryHsl)
+                                pickSwatchColorFlag = true
                             } else if(darkVibrantSwatch) { //Try last swatch
                                 mPalletePrimaryColor = darkVibrantSwatch.getRgb()
                                 mPalleteTitleColor = darkVibrantSwatch.getTitleTextColor()
@@ -642,24 +852,27 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
                                 float[] primaryHsl = darkVibrantSwatch.getHsl()
                                 primaryHsl[2] = primaryHsl[2] * 0.9f
                                 mPalletePrimaryDarkColor = Color.HSVToColor(primaryHsl)
+                                pickSwatchColorFlag = true
                             } else { //Fallback to default
                                 mPalletePrimaryColor = ContextCompat.getColor(getActivity(),R.color.primary)
                                 mPalletePrimaryDarkColor = ContextCompat.getColor(getActivity(),R.color.primary_dark)
                                 mPalleteTitleColor = ContextCompat.getColor(getActivity(),R.color.white_color)
                                 mPalleteBodyTextColor = ContextCompat.getColor(getActivity(),R.color.grey_color)
+                                //This is needed as we are not going pick accent colour if falling back
+                                mPalleteAccentColor = ContextCompat.getColor(getActivity(), R.color.accent)
                             }
-
-                            //Pick accent color
-                            if(mutedSwatch) {
-                                mPalleteAccentColor = mutedSwatch.getRgb()
-                            } else if(mutedLightSwatch) { //Try another swatch
-                                mPalleteAccentColor = mutedLightSwatch.getRgb()
-                            } else if(mutedDarkSwatch) { //Try last swatch
-                                mPalleteAccentColor = mutedDarkSwatch.getRgb()
-                            } else { //Fallback to default
-                                mPalleteAccentColor = ContextCompat.getColor(getActivity(),R.color.accent)
+                            //Pick accent color only if Swatch color is picked, otherwise do not pick accent color
+                            if(pickSwatchColorFlag) {
+                                if (mutedSwatch) {
+                                    mPalleteAccentColor = mutedSwatch.getRgb()
+                                } else if (mutedLightSwatch) { //Try another swatch
+                                    mPalleteAccentColor = mutedLightSwatch.getRgb()
+                                } else if (mutedDarkSwatch) { //Try last swatch
+                                    mPalleteAccentColor = mutedDarkSwatch.getRgb()
+                                } else { //Fallback to default
+                                    mPalleteAccentColor = ContextCompat.getColor(getActivity(), R.color.accent)
+                                }
                             }
-
                             changeLayoutAndTextColor()
                             mMovieTitleAndColorCallback.initializeActivityHostedTitleAndColor(mMovieTitle, mPalletePrimaryColor, mPalletePrimaryDarkColor, mPalleteTitleColor)
                             //Set the color for adapter fields and call method which in turn calls notifyDatasetChanged
@@ -677,6 +890,8 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
                             MovieReviewAdapter.mTitleTextColor = mPalleteTitleColor
                             MovieReviewAdapter.mBodyTextColor = mPalleteBodyTextColor
                             mMovieReviewAdapter.changeColor()
+                            //Set the image button color
+                            setImageButtonColor()
                         }
                     })
                 }
@@ -685,20 +900,67 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
 
                 }
             })
-            mReleaseDateTextView.setText(FriendlyDisplay.formatMiliSecondsToDate(data.getLong(COL_MOVIE_BASIC_RELEASE_DATE)))
-            mBudgetTextView.setText(FriendlyDisplay.formatCurrencyInDollar(data.getInt(COL_MOVIE_BASIC_BUDGET)))
-            mRevenueTextView.setText(FriendlyDisplay.formatCurrencyInDollar(data.getInt(COL_MOVIE_BASIC_REVENUE)))
-            mPopularityTextView.setText(data.getString(COL_MOVIE_BASIC_POPULARITY))
-            mTmdbRatingBar.setRating(data.getFloat(COL_MOVIE_BASIC_VOTE_AVG))
+//            final Animation fadeIn = new AlphaAnimation(0,1)
+//            fadeIn.setInterpolator(new DecelerateInterpolator())
+//            fadeIn.setDuration(2000)
+//            mPosterImageView.setAnimation(fadeIn)
+            //Default date is 1900-01-01 which is less than Unix epoc 1st Jan 1970, so converted miliseconds is negative
+            if(data.getLong(COL_MOVIE_BASIC_RELEASE_DATE) > 0) {
+                mReleaseDateTextView.setText(Utility.formatMiliSecondsToDate(data.getLong(COL_MOVIE_BASIC_RELEASE_DATE)))
+            } else {
+                mReleaseDateTextView.setText(getActivity().getString(R.string.movie_data_not_available))
+            }
+            if(data.getInt(COL_MOVIE_BASIC_BUDGET) > 0) {
+                mBudgetTextView.setText(Utility.formatCurrencyInDollar(data.getInt(COL_MOVIE_BASIC_BUDGET)))
+            } else {
+                mBudgetTextView.setText(getActivity().getString(R.string.movie_data_not_available))
+            }
+            if(data.getInt(COL_MOVIE_BASIC_REVENUE)) {
+                mRevenueTextView.setText(Utility.formatCurrencyInDollar(data.getInt(COL_MOVIE_BASIC_REVENUE)))
+            } else {
+                mRevenueTextView.setText(getActivity().getString(R.string.movie_data_not_available))
+            }
+            if(data.getFloat(COL_MOVIE_BASIC_POPULARITY) > 0) {
+                mPopularityTextView.setText(Float.toString(data.getFloat(COL_MOVIE_BASIC_POPULARITY)))
+            } else {
+                mPopularityTextView.setText(getActivity().getString(R.string.movie_data_not_available))
+            }
+            if(data.getFloat(COL_MOVIE_BASIC_VOTE_AVG) > 0) {
+                mTmdbRatingBar.setRating(data.getFloat(COL_MOVIE_BASIC_VOTE_AVG))
+            } else {
+                mTmdbRatingBar.setRating(0)
+            }
             mTotalVoteCountTextView.setText(data.getString(COL_MOVIE_BASIC_VOTE_COUNT))
-            mTaglineTextView.setText(data.getString(COL_MOVIE_BASIC_TAGLINE))
-            mSynopsisTextView.setText(data.getString(COL_MOVIE_BASIC_OVERVIEW))
-            mProdCompanyTextView.setText(data.getString(COL_MOVIE_BASIC_PRODUCTION_COMPANIES))
-            mProdCountryTextView.setText(data.getString(COL_MOVIE_BASIC_PRODUCTION_COUNTRIES))
-            mCollectionNameTextView.setText(data.getString(COL_MOVIE_BASIC_COLLECTION_NAME))
-            final String collectionBackdropPath = "$GlobalStaticVariables.TMDB_IMAGE_BASE_URL/$GlobalStaticVariables.TMDB_IMAGE_SIZE_W500" +
-                    "${data.getString(COL_MOVIE_BASIC_COLLECTION_BACKDROP_PATH)}"
-            PicassoLoadImage.loadMoviePersonImageUsingPicasso(getActivity(),collectionBackdropPath,mCollectionBackdropImageView)
+            if(data.getString(COL_MOVIE_BASIC_TAGLINE)) {
+                mTaglineTextView.setText(data.getString(COL_MOVIE_BASIC_TAGLINE))
+            } else {
+                mTaglineTextView.setText(getActivity().getString(R.string.movie_data_not_available))
+            }
+            if(data.getString(COL_MOVIE_BASIC_OVERVIEW) != '') {
+                mSynopsisTextView.setText(data.getString(COL_MOVIE_BASIC_OVERVIEW))
+            } else {
+                mSynopsisTextView.setText(getActivity().getString(R.string.movie_data_not_available))
+            }
+            if(data.getString(COL_MOVIE_BASIC_PRODUCTION_COMPANIES)) {
+                mProdCompanyTextView.setText(data.getString(COL_MOVIE_BASIC_PRODUCTION_COMPANIES))
+            } else {
+                mProdCompanyTextView.setText(getActivity().getString(R.string.movie_data_not_available))
+            }
+            if(data.getString(COL_MOVIE_BASIC_PRODUCTION_COUNTRIES)) {
+                mProdCountryTextView.setText(data.getString(COL_MOVIE_BASIC_PRODUCTION_COUNTRIES))
+            } else {
+                mProdCountryTextView.setText(getActivity().getString(R.string.movie_data_not_available))
+            }
+            if(data.getString(COL_MOVIE_BASIC_COLLECTION_NAME)) {
+                mCollectionNameTextView.setText(data.getString(COL_MOVIE_BASIC_COLLECTION_NAME))
+                mCollectionBackdropImageView.setVisibility(LinearLayout.VISIBLE)
+                final String collectionBackdropPath = "$GlobalStaticVariables.TMDB_IMAGE_BASE_URL/$GlobalStaticVariables.TMDB_IMAGE_SIZE_W500" +
+                        "${data.getString(COL_MOVIE_BASIC_COLLECTION_BACKDROP_PATH)}"
+                PicassoLoadImage.loadMoviePersonImageUsingPicasso(getActivity(), collectionBackdropPath, mCollectionBackdropImageView)
+            } else {
+                mCollectionNameTextView.setText(getActivity().getString(R.string.collection_data_not_available))
+                mCollectionBackdropImageView.setVisibility(LinearLayout.GONE)
+            }
 //            final String collectionBackdropPath = "http://image.tmdb.org/t/p/w500${data.getString(COL_MOVIE_BASIC_COLLECTION_BACKDROP_PATH)}"
 //            Picasso.with(getActivity())
 //                    .load(collectionBackdropPath)
@@ -720,7 +982,7 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
                     mHomePageButton.setElevation(GlobalStaticVariables.MOVIE_MAGIC_ELEVATION)
                 }
             } else {
-                mHomePageButton.setText(getActivity().getString(R.string.movie_data_not_available))
+                mHomePageButton.setText(getActivity().getString(R.string.movie_detail_web_links_home_page_not_available))
                 mHomePageButton.setClickable(false)
                 if (Build.VERSION.SDK_INT >= 21) {
 //                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
@@ -737,27 +999,29 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
                     mImdbLinkButton.setElevation(GlobalStaticVariables.MOVIE_MAGIC_ELEVATION)
                 }
             } else {
-                mImdbLinkButton.setText(getActivity().getString(R.string.movie_data_not_available))
+                mImdbLinkButton.setText(getActivity().getString(R.string.movie_detail_web_links_imdb_link_not_available))
                 mImdbLinkButton.setClickable(false)
                 if (Build.VERSION.SDK_INT >= 21) {
 //                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                     mImdbLinkButton.setElevation(GlobalStaticVariables.MOVIE_MAGIC_ELEVATION_RESET)
                 }
             }
-
             int detailDataPresentFlag = data.getInt(COL_MOVIE_BASIC_DETAIL_DATA_PRESENT_FLAG)
-            //If the flag is zero then data not present, so go and fetch it
+            //If the flag is zero then all movie data not present, so go and fetch it
             if(detailDataPresentFlag == GlobalStaticVariables.MOVIE_MAGIC_FLAG_FALSE) {
                 LogDisplay.callLog(LOG_TAG,'Additional movie data not present, go and fetch it',LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
                 final Integer[] movieIdArray = [mMovieId, _ID_movie_basic_info] as Integer[]
-                new LoadMovieBasicAddlInfo(getActivity(), mMovieIdUri).execute(movieIdArray)
+                new LoadMovieBasicAddlInfo(getActivity()).execute(movieIdArray)
+//                new LoadMovieBasicAddlInfo(getActivity(), mMovieIdUri).execute(movieIdArray)
             }
             else {
                 LogDisplay.callLog(LOG_TAG,'Additional movie data already present',LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
             }
+            //TODO: transition work - testing
+//            activity.supportStartPostponedEnterTransition()
         }
         else {
-            LogDisplay.callLog(LOG_TAG,"Bad cursor.Cursor rec count -> ${data.getCount()}",LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
+            LogDisplay.callLog(LOG_TAG,"Bad cursor return by handleMovieBasicOnLoadFinished.Cursor rec count -> ${data.getCount()}",LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
         }
     }
 
@@ -802,11 +1066,11 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
         if(data.moveToFirst()) {
             final String mpaa = data.getString(COL_MOVIE_RELEASE_INFO_CERTIFICATION)
             LogDisplay.callLog(LOG_TAG,"Mpaa certification: $mpaa & Locale: $mLocale",LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
-            final int mpaaIconResId = FriendlyDisplay.getIconResourceForMpaaRating(mpaa, mLocale)
+            final int mpaaIconResId = Utility.getIconResourceForMpaaRating(mpaa, mLocale)
             if(mpaaIconResId != -1) {
                 mMpaaRatingImageView.setImageResource(mpaaIconResId)
             } else {
-                LogDisplay.callLog(LOG_TAG,'FriendlyDisplay.getIconResourceForMpaaRating returned -1',LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
+                LogDisplay.callLog(LOG_TAG,'Utility.getIconResourceForMpaaRating returned -1',LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
                 mMpaaRatingImageView.setImageResource(R.drawable.not_available)
             }
         } else {
@@ -837,6 +1101,36 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
         mMovieReviewAdapter.swapCursor(data)
     }
 
+    void handleMovieUSerListFlagOnLoadFinished(Cursor data) {
+        LogDisplay.callLog(LOG_TAG,"handleMovieUSerListFlagOnLoadFinished.Cursor rec count -> ${data.getCount()}",LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
+        //TODO: need to add the rest of the logic later
+        mUserListWatchedFlag = false
+        mUserListWishListdFlag = false
+        mUserListFavouriteFlag = false
+        mUserListCollectionFlag = false
+        if(data.moveToFirst()) {
+            if(data.getInt(COL_MOVIE_USER_LIST_FLAG_WATCHED_FLAG) == GlobalStaticVariables.MOVIE_MAGIC_FLAG_TRUE) {
+                mImageButtonWatched.setAlpha(GlobalStaticVariables.MOVIE_MAGIC_ALPHA_FULL_OPAQUE)
+                mUserListWatchedFlag = true
+            }
+            if(data.getInt(COL_MOVIE_USER_LIST_FLAG_WISH_LIST_FLAG) == GlobalStaticVariables.MOVIE_MAGIC_FLAG_TRUE) {
+                mImageButtonWishList.setAlpha(GlobalStaticVariables.MOVIE_MAGIC_ALPHA_FULL_OPAQUE)
+                mUserListWishListdFlag = true
+            }
+            if(data.getInt(COL_MOVIE_USER_LIST_FLAG_FAVOURITE_FLAG) == GlobalStaticVariables.MOVIE_MAGIC_FLAG_TRUE) {
+                mImageButtonFavourite.setAlpha(GlobalStaticVariables.MOVIE_MAGIC_ALPHA_FULL_OPAQUE)
+                mUserListFavouriteFlag = true
+            }
+            if(data.getInt(COL_MOVIE_USER_LIST_FLAG_COLLECTION_FLAG) == GlobalStaticVariables.MOVIE_MAGIC_FLAG_TRUE) {
+                mImageButtonCollection.setAlpha(GlobalStaticVariables.MOVIE_MAGIC_ALPHA_FULL_OPAQUE)
+                mUserListCollectionFlag = true
+            }
+            if(data.getFloat(COL_MOVIE_USER_LIST_FLAG_USER_RATING )> 0.0) {
+                mUserRatingBar.setRating(data.getFloat(COL_MOVIE_USER_LIST_FLAG_USER_RATING))
+            }
+        }
+    }
+
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity)
@@ -845,6 +1139,7 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
         try {
             mBackdropCallback = (BackdropCallback) activity
             mMovieTitleAndColorCallback = (MovieTitleAndColorCallback) activity
+            mUserListButtonClickCallback = (UserListButtonClickCallback) activity
         } catch (ClassCastException e) {
             throw new ClassCastException(activity.toString()
                     + " must implement Callback interface")
@@ -910,7 +1205,7 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
         mProdCountryTextView.setTextColor(mPalleteBodyTextColor)
         mCollectionNameTextView.setTextColor(mPalleteBodyTextColor)
 
-        //Set user list imagebutton color
+        //Set user list ImageButton color
         mImageButtonWatched.setBackgroundColor(mPalletePrimaryDarkColor)
         mImageButtonWishList.setBackgroundColor(mPalletePrimaryDarkColor)
         mImageButtonFavourite.setBackgroundColor(mPalletePrimaryDarkColor)
@@ -938,7 +1233,22 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
         DrawableCompat.setTint(userRatingDrawable, mPalleteAccentColor)
     }
 
-    /**
+    void setImageButtonColor() {
+        if(mUserListWatchedFlag) {
+            mImageButtonWatched.setColorFilter(mPalleteAccentColor)
+        }
+        if(mUserListWishListdFlag) {
+            mImageButtonWishList.setColorFilter(mPalleteAccentColor)
+        }
+        if(mUserListFavouriteFlag) {
+            mImageButtonFavourite.setColorFilter(mPalleteAccentColor)
+        }
+        if(mUserListCollectionFlag) {
+            mImageButtonCollection.setColorFilter(mPalleteAccentColor)
+        }
+    }
+
+/**
      * Intent to open a web browser when user clicks on movie home page button
      */
     void startHomePageIntent() {
@@ -951,7 +1261,7 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
      * Intent to open the movie in imdb app(if installed) or in web browser when user clicks on imdb button
      */
     void startImdbIntent() {
-        final String imdbUrl = "http://www.imdb.com/title/$mMovieImdbId/"
+        final String imdbUrl = "$GlobalStaticVariables.IMDB_BASE_URL$mMovieImdbId/"
         final Intent intent = new Intent(Intent.ACTION_VIEW)
         intent.setData(Uri.parse(imdbUrl))
         startActivity(intent)
@@ -980,4 +1290,17 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
          */
         public void initializeActivityHostedBackdrop(List<String> backdropImagePathList)
     }
+
+    /**
+     * A callback interface that all activities containing this fragment must
+     * implement. This mechanism allows activities to be notified when user list button is clicked
+     */
+    public interface UserListButtonClickCallback {
+        /**
+         * DetailFragmentCallback for updating the Backdrop images in Activity
+         */
+        //TODO:not using this, so may need cleanup at the end
+        public void finishCurrentActivity()
+    }
+
 }

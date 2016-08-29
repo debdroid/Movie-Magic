@@ -1,7 +1,8 @@
 package com.moviemagic.dpaul.android.app
 
+import android.content.Context
 import android.content.Intent
-import android.net.Uri
+import android.os.AsyncTask
 import android.os.Bundle
 import android.support.annotation.IdRes
 import android.support.design.widget.FloatingActionButton
@@ -17,9 +18,11 @@ import android.support.v7.widget.Toolbar
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
+import android.widget.ImageView
 import android.widget.TextView
 import com.google.android.youtube.player.YouTubeApiServiceUtil
 import com.google.android.youtube.player.YouTubeInitializationResult
+import com.moviemagic.dpaul.android.app.contentprovider.MovieMagicContract
 import com.moviemagic.dpaul.android.app.syncadapter.MovieMagicSyncAdapterUtility
 import com.moviemagic.dpaul.android.app.utility.GlobalStaticVariables
 import com.moviemagic.dpaul.android.app.utility.LogDisplay
@@ -30,7 +33,7 @@ public class MovieMagicMain extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, GridFragment.Callback {
     private static final String LOG_TAG = MovieMagicMain.class.getSimpleName()
     private static final String STATE_APP_TITLE = 'app_title'
-    NavigationView navigationView
+    private NavigationView navigationView
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,8 +64,14 @@ public class MovieMagicMain extends AppCompatActivity
 
         navigationView = (NavigationView) findViewById(R.id.nav_view)
         navigationView.setNavigationItemSelectedListener(this)
-        setMenuCounter(R.id.nav_home,4)
-
+//        setMenuCounter(R.id.nav_home,40)
+        //Update the user list menu counter
+        final UpdateMenuCounter updateMenuCounter = new UpdateMenuCounter(this)
+        //Execute the asynctask
+        //program fails if 'Void' is used for parameter, could be beacuase of groovy compiler??
+        //So get rid of the problem a 'dummy' integer is passed
+        //TODO: Need to fix this later
+        updateMenuCounter.execute(['dummy'] as String[])
         //Check to ensure Youtube exists on the device
         final YouTubeInitializationResult result = YouTubeApiServiceUtil.isYouTubeApiServiceAvailable(this)
         if (result != YouTubeInitializationResult.SUCCESS) {
@@ -180,18 +189,22 @@ public class MovieMagicMain extends AppCompatActivity
             showSnackBar(getString(R.string.drawer_menu_tmdb_upcoming))
             setItemTitle(getString(R.string.drawer_menu_tmdb_upcoming))
             startFragment(GlobalStaticVariables.MOVIE_CATEGORY_UPCOMING)
-        } else if (id == R.id.nav_user_favourite) {
-            showSnackBar(getString(R.string.drawer_menu_user_favourite))
-            setItemTitle(getString(R.string.drawer_menu_user_favourite))
         } else if (id == R.id.nav_user_watched) {
             showSnackBar(getString(R.string.drawer_menu_user_watched))
             setItemTitle(getString(R.string.drawer_menu_user_watched))
+            startFragment(GlobalStaticVariables.MOVIE_CATEGORY_LOCAL_USER_WATCHED)
         } else if (id == R.id.nav_user_wishlist) {
             showSnackBar(getString(R.string.drawer_menu_user_wishlist))
             setItemTitle(getString(R.string.drawer_menu_user_wishlist))
+            startFragment(GlobalStaticVariables.MOVIE_CATEGORY_LOCAL_USER_WISH_LIST)
+        } else if (id == R.id.nav_user_favourite) {
+            showSnackBar(getString(R.string.drawer_menu_user_favourite))
+            setItemTitle(getString(R.string.drawer_menu_user_favourite))
+            startFragment(GlobalStaticVariables.MOVIE_CATEGORY_LOCAL_USER_FAVOURITE)
         } else if (id == R.id.nav_user_collection) {
             showSnackBar(getString(R.string.drawer_menu_user_collection))
             setItemTitle(getString(R.string.drawer_menu_user_collection))
+            startFragment(GlobalStaticVariables.MOVIE_CATEGORY_LOCAL_USER_COLLECTION)
         }
 
         final DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout)
@@ -203,14 +216,16 @@ public class MovieMagicMain extends AppCompatActivity
         final GridFragment fragment = new GridFragment(category)
         final FragmentManager fragmentManager = getSupportFragmentManager()
         final FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction()
+        //Set the custom animation
+        fragmentTransaction.setCustomAnimations(R.anim.slide_bottom_up_animation,0)
         fragmentTransaction.replace(R.id.main_content_layout, fragment)
         fragmentTransaction.commit()
     }
 
-    private void setMenuCounter(@IdRes int itemId, int count) {
-        final TextView view = (TextView) navigationView.getMenu().findItem(itemId).getActionView()
-        view.setText(count > 0 ? String.valueOf(count) : null)
-    }
+//    private void setMenuCounter(@IdRes int itemId, int count) {
+//        final TextView view = (TextView) navigationView.getMenu().findItem(itemId).getActionView()
+//        view.setText(count > 0 ? String.valueOf(count) : null)
+//    }
 
     private void setItemTitle(CharSequence title){
         LogDisplay.callLog(LOG_TAG,"The drawer menu $title is called",LogDisplay.MOVIE_MAGIC_MAIN_LOG_FLAG)
@@ -224,8 +239,85 @@ public class MovieMagicMain extends AppCompatActivity
 
     //Override the callback method of GridFragment
     @Override
-    public void onItemSelected(Uri movieIdUri) {
-        final Intent mIntent = new Intent(this, DetailMovieActivity.class).setData(movieIdUri)
-        startActivity(mIntent)
+    public void onItemSelected(int movieId, long movie_magic_row_ID, ImageView gridImageView) {
+        final Intent intent = new Intent(this, DetailMovieActivity.class)
+        final Bundle bundle = new Bundle()
+        bundle.putInt(GlobalStaticVariables.MOVIE_BASIC_INFO_MOVIE_ID,movieId)
+        bundle.putLong(GlobalStaticVariables.MOVIE_BASIC_INFO_ROW_ID,movie_magic_row_ID)
+        intent.putExtras(bundle)
+        startActivity(intent)
+        //Start the animation
+        overridePendingTransition(R.anim.slide_bottom_up_animation,0)
+    }
+
+    /**
+     * Updating of meneu counter is thightly coupled with main activity, so no separate class is
+     * created for the AsyncTask
+     */
+
+    public class UpdateMenuCounter extends AsyncTask<String, Void, Integer[]> {
+        private final Context mContext
+
+        public UpdateMenuCounter(Context ctx) {
+            mContext = ctx
+        }
+        @Override
+        protected Integer[] doInBackground(String... params) {
+            final Integer[] result = new Integer[4]
+            final cursor
+            //Get the count for watched
+            cursor = mContext.getContentResolver().query(
+                    MovieMagicContract.MovieBasicInfo.CONTENT_URI,
+                    null,
+                    "$MovieMagicContract.MovieBasicInfo.COLUMN_MOVIE_CATEGORY = ? ",
+                    [GlobalStaticVariables.MOVIE_CATEGORY_LOCAL_USER_WATCHED] as String[],
+                    null)
+            if(cursor.moveToFirst()) result[0] = cursor.getCount()
+            //Get the count for wish list
+            cursor = mContext.getContentResolver().query(
+                    MovieMagicContract.MovieBasicInfo.CONTENT_URI,
+                    null,
+                    "$MovieMagicContract.MovieBasicInfo.COLUMN_MOVIE_CATEGORY = ? ",
+                    [GlobalStaticVariables.MOVIE_CATEGORY_LOCAL_USER_WISH_LIST] as String[],
+                    null)
+            if(cursor.moveToFirst()) result[1] = cursor.getCount()
+            //Get the count for favourite
+            cursor = mContext.getContentResolver().query(
+                    MovieMagicContract.MovieBasicInfo.CONTENT_URI,
+                    null,
+                    "$MovieMagicContract.MovieBasicInfo.COLUMN_MOVIE_CATEGORY = ? ",
+                    [GlobalStaticVariables.MOVIE_CATEGORY_LOCAL_USER_FAVOURITE] as String[],
+                    null)
+            if(cursor.moveToFirst()) result[2] = cursor.getCount()
+            //Get the count for wish list
+            cursor = mContext.getContentResolver().query(
+                    MovieMagicContract.MovieBasicInfo.CONTENT_URI,
+                    null,
+                    "$MovieMagicContract.MovieBasicInfo.COLUMN_MOVIE_CATEGORY = ? ",
+                    [GlobalStaticVariables.MOVIE_CATEGORY_LOCAL_USER_COLLECTION] as String[],
+                    null)
+            if(cursor.moveToFirst()) result[3] = cursor.getCount()
+
+            //Close the cursor
+            if(cursor) cursor.close()
+
+            return result
+        }
+
+        @Override
+        protected void onPostExecute(Integer[] result) {
+            //Set the Watched counter
+            final TextView watchedView = (TextView) navigationView.getMenu().findItem(R.id.nav_user_watched).getActionView()
+            watchedView.setText(result[0] > 0 ? String.valueOf(result[0]) : null)
+            //Set the wish list counter
+            final TextView wishListView = (TextView) navigationView.getMenu().findItem(R.id.nav_user_wishlist).getActionView()
+            wishListView.setText(result[1] > 0 ? String.valueOf(result[1]) : null)
+            //Set the favourite counter
+            final TextView favouriteView = (TextView) navigationView.getMenu().findItem(R.id.nav_user_favourite).getActionView()
+            favouriteView.setText(result[2] > 0 ? String.valueOf(result[2]) : null)
+            //Set the collection counter
+            final TextView collectionView = (TextView) navigationView.getMenu().findItem(R.id.nav_user_collection).getActionView()
+            collectionView.setText(result[3] > 0 ? String.valueOf(result[3]) : null)
+        }
     }
 }

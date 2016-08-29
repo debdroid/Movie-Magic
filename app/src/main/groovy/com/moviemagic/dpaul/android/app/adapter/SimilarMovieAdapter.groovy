@@ -3,7 +3,8 @@ package com.moviemagic.dpaul.android.app.adapter
 import android.content.Context
 import android.content.Intent
 import android.database.Cursor
-import android.net.Uri
+import android.os.Bundle
+import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
@@ -13,7 +14,6 @@ import android.widget.TextView
 import com.moviemagic.dpaul.android.app.DetailMovieActivity
 import com.moviemagic.dpaul.android.app.DetailMovieFragment
 import com.moviemagic.dpaul.android.app.R
-import com.moviemagic.dpaul.android.app.contentprovider.MovieMagicContract
 import com.moviemagic.dpaul.android.app.utility.GlobalStaticVariables
 import com.moviemagic.dpaul.android.app.utility.LogDisplay
 import com.moviemagic.dpaul.android.app.utility.PicassoLoadImage
@@ -53,12 +53,22 @@ class SimilarMovieAdapter extends RecyclerView.Adapter<SimilarMovieAdapter.Simil
             LogDisplay.callLog(LOG_TAG,"onClick is called.LayoutPos=${getLayoutPosition()}.AdapterPos=${getAdapterPosition()}",LogDisplay.SIMILAR_MOVIE_ADAPTER_FLAG)
             mCursor.moveToPosition(getAdapterPosition())
             final int movieId = mCursor.getInt(DetailMovieFragment.COL_MOVIE_BASIC_MOVIE_ID)
-            LogDisplay.callLog(LOG_TAG,"Movie id is $movieId",LogDisplay.SIMILAR_MOVIE_ADAPTER_FLAG)
+            final long movieRowId = mCursor.getLong(DetailMovieFragment.COL_MOVIE_BASIC_ID)
+            LogDisplay.callLog(LOG_TAG,"Movie row id is $movieRowId & Movie id is $movieId",LogDisplay.SIMILAR_MOVIE_ADAPTER_FLAG)
             //Create an intent for DetailMovieActivity
-            final Uri movieIdUri = MovieMagicContract.MovieBasicInfo.buildMovieUriWithMovieId(movieId)
-            final Intent mIntent = new Intent(mContext, DetailMovieActivity.class)
-                    .setData(movieIdUri)
-            mContext.startActivity(mIntent)
+            final Intent intent = new Intent(mContext, DetailMovieActivity.class)
+            final Bundle bundle = new Bundle()
+            bundle.putInt(GlobalStaticVariables.MOVIE_BASIC_INFO_MOVIE_ID,movieId)
+            bundle.putLong(GlobalStaticVariables.MOVIE_BASIC_INFO_ROW_ID,movieRowId)
+            intent.putExtras(bundle)
+            mContext.startActivity(intent)
+            //Get a reference of the activity and start the animation
+            AppCompatActivity appCompatActivity = (AppCompatActivity)mContext
+            appCompatActivity. overridePendingTransition(R.anim.slide_bottom_up_animation,0)
+//            final Uri movieIdUri = MovieMagicContract.MovieBasicInfo.buildMovieUriWithMovieId(movieId)
+//            final Intent mIntent = new Intent(mContext, DetailMovieActivity.class)
+//                    .setData(movieIdUri)
+//            mContext.startActivity(mIntent)
         }
     }
 

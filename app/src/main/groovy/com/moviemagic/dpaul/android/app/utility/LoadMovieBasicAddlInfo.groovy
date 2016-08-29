@@ -19,11 +19,12 @@ class LoadMovieBasicAddlInfo extends AsyncTask<Integer, Void, Void> {
     private static final String LOG_TAG = LoadMovieBasicAddlInfo.class.getSimpleName()
     private final ContentResolver mContentResolver
     private final Context mContext
-    private final Uri mMovieBasicMovieIdUri
+//    private final Uri mMovieBasicMovieIdUri
 
-    public LoadMovieBasicAddlInfo(Context ctx, Uri movieUri) {
+    public LoadMovieBasicAddlInfo(Context ctx) {
+//    public LoadMovieBasicAddlInfo(Context ctx, Uri movieUri) {
         mContext = ctx
-        mMovieBasicMovieIdUri = movieUri
+//        mMovieBasicMovieIdUri = movieUri
         mContentResolver = mContext.getContentResolver()
     }
 

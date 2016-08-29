@@ -12,8 +12,8 @@ import groovy.transform.CompileStatic
 @CompileStatic
 class MovieMagicDbHelper extends SQLiteOpenHelper {
     private static final String LOG_TAG = MovieMagicDbHelper.class.getSimpleName()
-    // If you change the database schema, you must increment the database version.
-    private static final int DATABASE_VERSION = 1
+    // Increment the database version if the schema gets changed
+    private static final int DATABASE_VERSION = 2
 
     //Define as public as used by TestMovieMagicDatabase.groovy
     public static final String DATABASE_NAME = 'movie_magic.db'
@@ -30,6 +30,7 @@ class MovieMagicDbHelper extends SQLiteOpenHelper {
                 CREATE TABLE $MovieMagicContract.MovieBasicInfo.TABLE_NAME (
                 $MovieMagicContract.MovieBasicInfo._ID INTEGER PRIMARY KEY,
                 $MovieMagicContract.MovieBasicInfo.COLUMN_MOVIE_ID INTEGER NOT NULL,
+                $MovieMagicContract.MovieBasicInfo.COLUMN_ADULT_FLAG TEXT NOT NULL,
                 $MovieMagicContract.MovieBasicInfo.COLUMN_BACKDROP_PATH TEXT NOT NULL,
                 $MovieMagicContract.MovieBasicInfo.COLUMN_ORIGINAL_TITLE TEXT NOT NULL,
                 $MovieMagicContract.MovieBasicInfo.COLUMN_OVERVIEW TEXT NOT NULL,
@@ -49,18 +50,18 @@ class MovieMagicDbHelper extends SQLiteOpenHelper {
                 $MovieMagicContract.MovieBasicInfo.COLUMN_COLLECTION_NAME TEXT NULL,
                 $MovieMagicContract.MovieBasicInfo.COLUMN_COLLECTION_POSTER_PATH TEXT NULL,
                 $MovieMagicContract.MovieBasicInfo.COLUMN_COLLECTION_BACKDROP_PATH TEXT NULL,
-                $MovieMagicContract.MovieBasicInfo.COLUMN_RELEASE_STATUS TEXT NULL,
-                $MovieMagicContract.MovieBasicInfo.COLUMN_TAGLINE TEXT NULL,
+                $MovieMagicContract.MovieBasicInfo.COLUMN_BUDGET INTEGER DEFAULT 0,
                 $MovieMagicContract.MovieBasicInfo.COLUMN_GENRE TEXT NULL,
                 $MovieMagicContract.MovieBasicInfo.COLUMN_HOME_PAGE TEXT NULL,
-                $MovieMagicContract.MovieBasicInfo.COLUMN_RUNTIME INTEGER DEFAULT 0,
-                $MovieMagicContract.MovieBasicInfo.COLUMN_BUDGET INTEGER DEFAULT 0,
-                $MovieMagicContract.MovieBasicInfo.COLUMN_REVENUE INTEGER DEFAULT 0,
+                $MovieMagicContract.MovieBasicInfo.COLUMN_IMDB_ID TEXT NULL,
                 $MovieMagicContract.MovieBasicInfo.COLUMN_PRODUCTION_COMPANIES TEXT NULL,
                 $MovieMagicContract.MovieBasicInfo.COLUMN_PRODUCTION_COUNTRIES TEXT NULL,
+                $MovieMagicContract.MovieBasicInfo.COLUMN_REVENUE INTEGER DEFAULT 0,
+                $MovieMagicContract.MovieBasicInfo.COLUMN_RUNTIME INTEGER DEFAULT 0,
+                $MovieMagicContract.MovieBasicInfo.COLUMN_RELEASE_STATUS TEXT NULL,
+                $MovieMagicContract.MovieBasicInfo.COLUMN_TAGLINE TEXT NULL,
                 $MovieMagicContract.MovieBasicInfo.COLUMN_CREATE_TIMESTAMP TEXT NOT NULL,
                 $MovieMagicContract.MovieBasicInfo.COLUMN_UPDATE_TIMESTAMP TEXT NOT NULL,
-                $MovieMagicContract.MovieBasicInfo.COLUMN_IMDB_ID TEXT NULL,
                 $MovieMagicContract.MovieBasicInfo.COLUMN_USER_EXPORTED INTEGER DEFAULT 0,
                 $MovieMagicContract.MovieBasicInfo.COLUMN_FUTURE_USE_1 TEXT NULL,
                 $MovieMagicContract.MovieBasicInfo.COLUMN_FUTURE_USE_2 TEXT NULL,

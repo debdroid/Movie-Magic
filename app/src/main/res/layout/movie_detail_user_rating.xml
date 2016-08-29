@@ -32,6 +32,6 @@
         android:maxHeight="32dp"
         android:minHeight="32dp"
         android:numStars="10"
-        android:rating="2.5"
+        android:rating="0"
         android:stepSize="0.1" />
 </LinearLayout>

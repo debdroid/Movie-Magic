@@ -71,6 +71,7 @@ class TestMovieMagicDatabase extends AndroidTestCase {
         def columeList = []
         columeList << MovieMagicContract.MovieBasicInfo._ID
         columeList << MovieMagicContract.MovieBasicInfo.COLUMN_MOVIE_ID
+        columeList << MovieMagicContract.MovieBasicInfo.COLUMN_ADULT_FLAG
         columeList << MovieMagicContract.MovieBasicInfo.COLUMN_BACKDROP_PATH
         columeList << MovieMagicContract.MovieBasicInfo.COLUMN_ORIGINAL_TITLE
         columeList << MovieMagicContract.MovieBasicInfo.COLUMN_OVERVIEW

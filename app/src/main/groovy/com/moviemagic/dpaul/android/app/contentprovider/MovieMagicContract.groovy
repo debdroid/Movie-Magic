@@ -62,6 +62,8 @@ class MovieMagicContract {
         //Following fields till COLUMN_VOTE_COUNT are fetched along with initial list of movies
         //Column to store movie id
         static final String COLUMN_MOVIE_ID = 'movie_id'
+        //Column to store adult flag
+        static final String COLUMN_ADULT_FLAG = 'adult_flag'
         //Column to store movie backdrop path
         static final String COLUMN_BACKDROP_PATH = 'backdrop_path'
         //Column to store movie original title
@@ -125,9 +127,9 @@ class MovieMagicContract {
         static final String COLUMN_TAGLINE = 'tagline'
 
         //Column to store record creation date
-        static final String COLUMN_CREATE_TIMESTAMP = 'create_date'
+        static final String COLUMN_CREATE_TIMESTAMP = 'create_timestamp'
         //Column to store record update date
-        static final String COLUMN_UPDATE_TIMESTAMP = 'update_date'
+        static final String COLUMN_UPDATE_TIMESTAMP = 'update_timestamp'
 
         //Column to store export flag - future use
         static final String COLUMN_USER_EXPORTED = 'user_export_flag'
@@ -602,8 +604,8 @@ class MovieMagicContract {
             ContentUris.withAppendedId(CONTENT_URI, id)
         }
 
-        static Uri buildMovieUserListFlagUriWithMovieId (int personId) {
-            CONTENT_URI.buildUpon().appendPath(personId.toString()).build()
+        static Uri buildMovieUserListFlagUriWithMovieId (int movieId) {
+            CONTENT_URI.buildUpon().appendPath(movieId.toString()).build()
         }
 
         static int getMovieIdFromMovieUserListFlagUri (Uri uri) {

@@ -28,6 +28,7 @@
         android:layout_height="wrap_content"
         android:fontFamily="sans-serif-condensed"
         android:text="@string/movie_detail_collection_name_data"
+        android:paddingBottom="@dimen/m_design_space_between_content_area"
         android:textAppearance="@style/TextAppearance.AppCompat.Medium"
         android:textColor="@color/grey_color" />
 

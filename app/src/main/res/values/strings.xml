@@ -49,8 +49,10 @@
     <string name="movie_detail_synopsis">Synopsis</string>
     <string name="movie_detail_collection_header_text">Collection</string>
     <string name="movie_detail_collection_name_data">God Father Collection</string>
-    <string name="movie_detail_web_links_home_page">Home Page</string>
+    <string name="movie_detail_web_links_home_page">Movie Home Page</string>
+    <string name="movie_detail_web_links_home_page_not_available">No Home Page</string>
     <string name="movie_detail_web_links_imdb_link">IMDb Link</string>
+    <string name="movie_detail_web_links_imdb_link_not_available">No IMDb Link</string>
     <string name="cast_name">Lionardo Dicaprio</string>
     <string name="char_name">Jack</string>
     <string name="as_text_value">as</string>
@@ -63,6 +65,7 @@
     <string name="movie_detail_popularity_data">24.654</string>
     <string name="movie_detail_crew_name_background_alpha">0.7</string>
     <string name="movie_data_not_available">Not Available</string>
+    <string name="collection_data_not_available">Not part of any collection</string>
     <string name="review_author">By Debashis Paul</string>
     <string name="review_content">I actually enjoyed the movie so much that i\'ll recommend it to all my friends, at first i didn\'t really want to watch it because i\'m not into super hero movies at all, but i did anyway, i mean people were talking so much about it i had to see it myself and what an awesome choice i made.</string>
     <string name="single_review_item_collapse_line_item_count">2</string>
@@ -70,10 +73,12 @@
     <string name="movie_detail_web_links_header">External Links</string>
     <string name="movie_detail_user_list_drawable_title_value">My List</string>
     <string name="cannot_perform_operation_msg">Selected operation cannot be performed now</string>
+    <string name="poster_icon_transition_name" translatable="false">poster_transition</string>
 
     <!-- formatted string for display -->
     <string name="movie_run_time"><xliff:g id="hour">%d</xliff:g> hr <xliff:g id="min">%d</xliff:g> min</string>
     <string name="user_list_add_message">%1$s movie added to %2$s</string>
     <string name="user_list_del_message">%1$s movie removed from %2$s</string>
+    <string name="user_rating_add_message">Rating updated successfully for %1$s</string>
 
 </resources>
