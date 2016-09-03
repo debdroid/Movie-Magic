@@ -8,7 +8,6 @@ import android.content.SyncRequest
 import android.os.Build
 import android.os.Bundle
 import com.moviemagic.dpaul.android.app.R
-import com.moviemagic.dpaul.android.app.utility.LogDisplay
 import groovy.transform.CompileStatic
 
 @CompileStatic

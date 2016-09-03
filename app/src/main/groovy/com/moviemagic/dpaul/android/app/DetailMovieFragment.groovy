@@ -24,15 +24,11 @@ import android.support.v7.graphics.Palette
 import android.support.v7.widget.GridLayoutManager
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
-import android.transition.Fade
-import android.transition.Scene
-import android.transition.TransitionManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.animation.AlphaAnimation
 import android.view.animation.Animation
-import android.view.animation.AnimationUtils
 import android.view.animation.DecelerateInterpolator
 import android.widget.Button
 import android.widget.FrameLayout
@@ -46,12 +42,12 @@ import com.moviemagic.dpaul.android.app.adapter.MovieCrewAdapter
 import com.moviemagic.dpaul.android.app.adapter.MovieReviewAdapter
 import com.moviemagic.dpaul.android.app.adapter.SimilarMovieAdapter
 import com.moviemagic.dpaul.android.app.contentprovider.MovieMagicContract
-import com.moviemagic.dpaul.android.app.utility.GlobalStaticVariables
-import com.moviemagic.dpaul.android.app.utility.LoadMovieBasicAddlInfo
-import com.moviemagic.dpaul.android.app.utility.LogDisplay
-import com.moviemagic.dpaul.android.app.utility.PicassoLoadImage
-import com.moviemagic.dpaul.android.app.utility.UpdateUserList
-import com.moviemagic.dpaul.android.app.utility.Utility
+import com.moviemagic.dpaul.android.app.backgroundmodules.GlobalStaticVariables
+import com.moviemagic.dpaul.android.app.backgroundmodules.LoadMovieBasicAddlInfo
+import com.moviemagic.dpaul.android.app.backgroundmodules.LogDisplay
+import com.moviemagic.dpaul.android.app.backgroundmodules.PicassoLoadImage
+import com.moviemagic.dpaul.android.app.backgroundmodules.UpdateUserListChoiceAndRating
+import com.moviemagic.dpaul.android.app.backgroundmodules.Utility
 import com.moviemagic.dpaul.android.app.youtube.MovieMagicYoutubeFragment
 import com.squareup.picasso.Callback
 import com.squareup.picasso.Picasso
@@ -83,7 +79,7 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
 //    private Uri mMovieIdUri
     private int _ID_movie_basic_info
     private int mMovieId
-    private String[] mMovieRowIdArg
+//    private String[] mMovieRowIdArg
     private String[] mMovieIdArg
     private String[] mVideoArg
     private String[] mReleaseInfoArg
@@ -327,9 +323,9 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
             mMovieId = args.getInt(GlobalStaticVariables.MOVIE_BASIC_INFO_MOVIE_ID)
             //_ID_movie_basic_info is used as Integer in the subsequent calls, so it's also defined as
             //integer even though actually it's long
-            _ID_movie_basic_info = args.getLong(GlobalStaticVariables.MOVIE_BASIC_INFO_ROW_ID) as Integer
+//            _ID_movie_basic_info = args.getLong(GlobalStaticVariables.MOVIE_BASIC_INFO_ROW_ID) as Integer
             LogDisplay.callLog(LOG_TAG,"Fragment arguments.Movie ID -> $mMovieId",LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
-            LogDisplay.callLog(LOG_TAG,"Fragment arguments.Movie Row ID -> $_ID_movie_basic_info",LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
+//            LogDisplay.callLog(LOG_TAG,"Fragment arguments.Movie Row ID -> $_ID_movie_basic_info",LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
         }
         //inflate the view before referring any view using id
         View mRootView = inflater.inflate(R.layout.fragment_detail_movie, container, false)
@@ -389,7 +385,7 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
             void onClick(View v) {
                 LogDisplay.callLog(LOG_TAG,'ImageButton Watched Button is clicked',LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
                 if(mMovieTitle && mMovieId && _ID_movie_basic_info) {
-                    final UpdateUserList updateUserList = new UpdateUserList(getActivity(),mUserListDrawableLayout,
+                    final UpdateUserListChoiceAndRating updateUserList = new UpdateUserListChoiceAndRating(getActivity(),mUserListDrawableLayout,
                             _ID_movie_basic_info, mMovieId, mMovieTitle,mPalletePrimaryColor,mPalleteBodyTextColor)
                     final String[] updateUserListArgs
                     //If full opaque then already selected, so remove it
@@ -424,7 +420,7 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
             void onClick(View v) {
                 LogDisplay.callLog(LOG_TAG,'ImageButton WishList Button is clicked',LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
                 if(mMovieTitle && mMovieId && _ID_movie_basic_info) {
-                    final UpdateUserList updateUserList = new UpdateUserList(getActivity(),mUserListDrawableLayout,
+                    final UpdateUserListChoiceAndRating updateUserList = new UpdateUserListChoiceAndRating(getActivity(),mUserListDrawableLayout,
                             _ID_movie_basic_info, mMovieId, mMovieTitle,mPalletePrimaryColor,mPalleteBodyTextColor)
                     final String[] updateUserListArgs
                     //If full opaque then already selected, so remove it
@@ -455,7 +451,7 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
             void onClick(View v) {
                 LogDisplay.callLog(LOG_TAG,'ImageButton Favourite Button is clicked',LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
                 if(mMovieTitle && mMovieId && _ID_movie_basic_info) {
-                    final UpdateUserList updateUserList = new UpdateUserList(getActivity(),mUserListDrawableLayout,
+                    final UpdateUserListChoiceAndRating updateUserList = new UpdateUserListChoiceAndRating(getActivity(),mUserListDrawableLayout,
                             _ID_movie_basic_info, mMovieId, mMovieTitle,mPalletePrimaryColor,mPalleteBodyTextColor)
                     final String[] updateUserListArgs
                     //If full opaque then already selected, so remove it
@@ -486,7 +482,7 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
             void onClick(View v) {
                 LogDisplay.callLog(LOG_TAG,'ImageButton Favourite Button is clicked',LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
                 if(mMovieTitle && mMovieId && _ID_movie_basic_info) {
-                    final UpdateUserList updateUserList = new UpdateUserList(getActivity(),mUserListDrawableLayout,
+                    final UpdateUserListChoiceAndRating updateUserList = new UpdateUserListChoiceAndRating(getActivity(),mUserListDrawableLayout,
                             _ID_movie_basic_info, mMovieId, mMovieTitle,mPalletePrimaryColor,mPalleteBodyTextColor)
                     final String[] updateUserListArgs
                     //If full opaque then already selected, so remove it
@@ -528,7 +524,7 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
             void onRatingChanged(RatingBar ratingBar, float rating, boolean fromUser) {
                 LogDisplay.callLog(LOG_TAG,"onRatingChanged:User rating bar value->$rating",LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
                 if(mMovieTitle && mMovieId && _ID_movie_basic_info) {
-                    final UpdateUserList updateUserList = new UpdateUserList(getActivity(),mUserListDrawableLayout,
+                    final UpdateUserListChoiceAndRating updateUserList = new UpdateUserListChoiceAndRating(getActivity(),mUserListDrawableLayout,
                             _ID_movie_basic_info, mMovieId, mMovieTitle,mPalletePrimaryColor,mPalleteBodyTextColor)
                     final String[] updateUserListArgs
                     //If the rating value is zero then remove it
@@ -616,15 +612,15 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
     public void onActivityCreated(Bundle savedInstanceState) {
         mLocale = context.getResources().getConfiguration().locale.getCountry()
         LogDisplay.callLog(LOG_TAG,"Locale: $mLocale",LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
-        if(mMovieId && _ID_movie_basic_info) {
-            mMovieRowIdArg = [Integer.toString(_ID_movie_basic_info)] as String[]
+        if(mMovieId) {
+//            mMovieRowIdArg = [Integer.toString(_ID_movie_basic_info)] as String[]
             mMovieIdArg = [Integer.toString(mMovieId)] as String[]
             mVideoArg = [Integer.toString(mMovieId),MOVIE_VIDEO_SITE_YOUTUBE, MOVIE_VIDEO_SITE_TYPE] as String[]
             mReleaseInfoArg = [Integer.toString(mMovieId), mLocale] as String[]
             mMovieImageArg = [Integer.toString(mMovieId), GlobalStaticVariables.IMAGE_TYPE_BACKDROP] as String[]
         } else {
             //this is to safeguard any unwanted data fetch
-            mMovieRowIdArg = ['ZZZZZZ'] as String[]
+//            mMovieRowIdArg = ['ZZZZZZ'] as String[]
             mMovieIdArg = ['ZZZZZZ'] as String[]
             mVideoArg = ['XXXXXX','YYYYY','ZZZZZZ'] as String[]
             mReleaseInfoArg = ['YYYYY','ZZZZZZ'] as String[]
@@ -652,8 +648,8 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
                         getActivity(),                                  //Parent Activity Context
                         MovieMagicContract.MovieBasicInfo.CONTENT_URI,  //Table to query
                         MOVIE_BASIC_INFO_COLUMNS,                       //Projection to return
-                        "$MovieMagicContract.MovieBasicInfo._ID = ? ",  //Selection Clause
-                        mMovieRowIdArg,                                 //Selection Arg
+                        "$MovieMagicContract.MovieBasicInfo.COLUMN_MOVIE_ID = ? ",  //Selection Clause
+                        mMovieIdArg,                                 //Selection Arg
                         null)                                           //Only a single row is expected, so not sorted
 
             case MOVIE_DETAIL_FRAGMENT_SIMILAR_MOVIE_LOADER_ID:
@@ -785,8 +781,10 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
     void handleMovieBasicOnLoadFinished(Cursor data) {
         LogDisplay.callLog(LOG_TAG,"handleMovieBasicOnLoadFinished.Cursor rec count -> ${data.getCount()}",LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
         if(data.moveToFirst()) {
-            LogDisplay.callLog(LOG_TAG,"handleMovieBasicOnLoadFinished.Movie id -> ${Integer.toString(mMovieId)}",LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
-//            _ID_movie_basic_info = data.getInt(COL_MOVIE_BASIC_ID)
+            //_ID_movie_basic_info is used as Integer in the subsequent calls, so it's also defined as
+            //integer even though actually it's long
+            _ID_movie_basic_info = data.getInt(COL_MOVIE_BASIC_ID)
+            LogDisplay.callLog(LOG_TAG,"handleMovieBasicOnLoadFinished.Movie row id -> $_ID_movie_basic_info",LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
 //            mMovieListType = data.getString(COL_MOVIE_BASIC_MOVIE_LIST_TYPE)
             mMovieCategory = data.getString(COL_MOVIE_BASIC_MOVIE_CATEGORY)
             LogDisplay.callLog(LOG_TAG,"Movie Category -> $mMovieCategory",LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
@@ -1017,8 +1015,6 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
             else {
                 LogDisplay.callLog(LOG_TAG,'Additional movie data already present',LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
             }
-            //TODO: transition work - testing
-//            activity.supportStartPostponedEnterTransition()
         }
         else {
             LogDisplay.callLog(LOG_TAG,"Bad cursor return by handleMovieBasicOnLoadFinished.Cursor rec count -> ${data.getCount()}",LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)

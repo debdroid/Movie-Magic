@@ -1,4 +1,4 @@
-package com.moviemagic.dpaul.android.app.utility
+package com.moviemagic.dpaul.android.app.backgroundmodules
 
 import groovy.transform.CompileStatic
 
@@ -17,6 +17,7 @@ class GlobalStaticVariables {
     public static final String MOVIE_CATEGORY_UPCOMING = 'upcoming' //tmdb upcoming category
     public static final String MOVIE_CATEGORY_NOW_PLAYING = 'now_playing' //tmdb now_playing category
     public static final String MOVIE_CATEGORY_SIMILAR = 'similar' //category to store similar movie, internal use only
+    public static final String MOVIE_CATEGORY_COLLECTION = 'collection' //category to store collection movie, internal use only
     public static final String MOVIE_CATEGORY_TMDB_USER_FAVOURITE = 'tmdb_user_favourite' //category to store tmdb user movies, internal use only
     public static final String MOVIE_CATEGORY_TMDB_USER_WATCH = 'tmdb_user_watch' //category to store tmdb user movies, internal use only
     public static final String MOVIE_CATEGORY_TMDB_USER_RATED = 'tmdb_user_rated' //category to store tmdb user movies, internal use only
@@ -64,5 +65,7 @@ class GlobalStaticVariables {
     public static final float MOVIE_MAGIC_ELEVATION_RESET = 0f
     public static final float MOVIE_MAGIC_ALPHA_FULL_OPAQUE = 1f
     public static final float MOVIE_MAGIC_ALPHA_OPAQUE_40_PERCENT = 0.4f
+    public static final String MOVIE_COLLECTION_ID = 'collection_id'
+
 
 }

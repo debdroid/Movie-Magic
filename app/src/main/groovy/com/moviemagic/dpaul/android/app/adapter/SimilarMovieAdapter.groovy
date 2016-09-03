@@ -14,9 +14,9 @@ import android.widget.TextView
 import com.moviemagic.dpaul.android.app.DetailMovieActivity
 import com.moviemagic.dpaul.android.app.DetailMovieFragment
 import com.moviemagic.dpaul.android.app.R
-import com.moviemagic.dpaul.android.app.utility.GlobalStaticVariables
-import com.moviemagic.dpaul.android.app.utility.LogDisplay
-import com.moviemagic.dpaul.android.app.utility.PicassoLoadImage
+import com.moviemagic.dpaul.android.app.backgroundmodules.GlobalStaticVariables
+import com.moviemagic.dpaul.android.app.backgroundmodules.LogDisplay
+import com.moviemagic.dpaul.android.app.backgroundmodules.PicassoLoadImage
 import groovy.transform.CompileStatic
 
 @CompileStatic
@@ -53,13 +53,14 @@ class SimilarMovieAdapter extends RecyclerView.Adapter<SimilarMovieAdapter.Simil
             LogDisplay.callLog(LOG_TAG,"onClick is called.LayoutPos=${getLayoutPosition()}.AdapterPos=${getAdapterPosition()}",LogDisplay.SIMILAR_MOVIE_ADAPTER_FLAG)
             mCursor.moveToPosition(getAdapterPosition())
             final int movieId = mCursor.getInt(DetailMovieFragment.COL_MOVIE_BASIC_MOVIE_ID)
-            final long movieRowId = mCursor.getLong(DetailMovieFragment.COL_MOVIE_BASIC_ID)
-            LogDisplay.callLog(LOG_TAG,"Movie row id is $movieRowId & Movie id is $movieId",LogDisplay.SIMILAR_MOVIE_ADAPTER_FLAG)
+//            final long movieRowId = mCursor.getLong(DetailMovieFragment.COL_MOVIE_BASIC_ID)
+//            LogDisplay.callLog(LOG_TAG,"Movie row id is $movieRowId & Movie id is $movieId",LogDisplay.SIMILAR_MOVIE_ADAPTER_FLAG)
+            LogDisplay.callLog(LOG_TAG,"Movie id is $movieId",LogDisplay.SIMILAR_MOVIE_ADAPTER_FLAG)
             //Create an intent for DetailMovieActivity
             final Intent intent = new Intent(mContext, DetailMovieActivity.class)
             final Bundle bundle = new Bundle()
             bundle.putInt(GlobalStaticVariables.MOVIE_BASIC_INFO_MOVIE_ID,movieId)
-            bundle.putLong(GlobalStaticVariables.MOVIE_BASIC_INFO_ROW_ID,movieRowId)
+//            bundle.putLong(GlobalStaticVariables.MOVIE_BASIC_INFO_ROW_ID,movieRowId)
             intent.putExtras(bundle)
             mContext.startActivity(intent)
             //Get a reference of the activity and start the animation

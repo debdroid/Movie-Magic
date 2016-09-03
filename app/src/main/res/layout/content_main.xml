@@ -10,6 +10,6 @@
     android:paddingRight="@dimen/m_design_grid_list_padding"
     android:paddingStart="@dimen/m_design_grid_list_padding"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context="com.moviemagic.dpaul.android.app.MovieMagicMain"
+    tools:context=".MovieMagicMainActivity"
     tools:showIn="@layout/app_bar_main">
 </FrameLayout>

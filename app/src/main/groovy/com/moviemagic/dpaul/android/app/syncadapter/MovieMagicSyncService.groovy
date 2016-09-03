@@ -3,7 +3,7 @@ package com.moviemagic.dpaul.android.app.syncadapter
 import android.app.Service
 import android.content.Intent
 import android.os.IBinder
-import com.moviemagic.dpaul.android.app.utility.LogDisplay
+import com.moviemagic.dpaul.android.app.backgroundmodules.LogDisplay
 import groovy.transform.CompileStatic
 
 /**

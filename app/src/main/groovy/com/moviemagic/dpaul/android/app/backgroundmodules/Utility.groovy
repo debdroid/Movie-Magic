@@ -1,4 +1,4 @@
-package com.moviemagic.dpaul.android.app.utility
+package com.moviemagic.dpaul.android.app.backgroundmodules
 
 import android.content.Context
 import com.moviemagic.dpaul.android.app.R;

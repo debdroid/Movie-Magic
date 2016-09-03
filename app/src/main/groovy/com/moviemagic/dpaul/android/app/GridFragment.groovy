@@ -19,11 +19,11 @@ import android.widget.AdapterView
 import android.widget.GridView
 import android.widget.ImageView
 import android.widget.Toast
-import com.moviemagic.dpaul.android.app.adapter.GridAdapter
+import com.moviemagic.dpaul.android.app.adapter.MovieGridAdapter
 import com.moviemagic.dpaul.android.app.contentprovider.MovieMagicContract
-import com.moviemagic.dpaul.android.app.utility.GlobalStaticVariables
-import com.moviemagic.dpaul.android.app.utility.LoadMoreData
-import com.moviemagic.dpaul.android.app.utility.LogDisplay
+import com.moviemagic.dpaul.android.app.backgroundmodules.GlobalStaticVariables
+import com.moviemagic.dpaul.android.app.backgroundmodules.LoadMoreMovieData
+import com.moviemagic.dpaul.android.app.backgroundmodules.LogDisplay
 import groovy.transform.CompileStatic
 
 @CompileStatic
@@ -48,8 +48,9 @@ class GridFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cur
 
     private Callback mCallback
     private GridView mGridView
-    private GridAdapter mGridAdapter
+    private MovieGridAdapter mGridAdapter
     private String mMovieCategory
+    private String mMovieCollectionId
     private String mMovieListType
     private static final int MOVIE_GRID_FRAGMENT_LOADER_ID = 0
 
@@ -71,8 +72,11 @@ class GridFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cur
     //An empty constructor is needed so that lifecycle is properly handled
     public GridFragment(){}
 
-    public GridFragment(String movieCategory){
+    //Collection id is used so that same module can be used for different categories and collection
+    //Excpet categories, the collection id is passed as zero and not used
+    public GridFragment(String movieCategory, int collectionId){
         mMovieCategory = movieCategory
+        mMovieCollectionId = collectionId
     }
 
     @Override
@@ -99,8 +103,6 @@ class GridFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cur
         if (savedInstanceState) {
             mMovieCategory = savedInstanceState.getString(STATE_MOVIE_CATEGORY, 'error')
         }
-        //TODO: Transition testing
-//        getActivity().supportPostponeEnterTransition()
         getLoaderManager().initLoader(MOVIE_GRID_FRAGMENT_LOADER_ID, null, this)
         super.onActivityCreated(savedInstanceState)
     }
@@ -111,7 +113,7 @@ class GridFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cur
         //inflate the view before referring any view using id
         View mRootView = inflater.inflate(R.layout.fragment_grid,container,false)
         mGridView = mRootView.findViewById(R.id.gridview_fragment) as GridView
-        mGridAdapter = new GridAdapter(getActivity(),null,0)
+        mGridAdapter = new MovieGridAdapter(getActivity(),null,0)
         mGridView.setAdapter(mGridAdapter)
         //The more load feature is not needed for user list
         LogDisplay.callLog(LOG_TAG,"Movie Category->$mMovieCategory",LogDisplay.GRID_FRAGMENT_LOG_FLAG)
@@ -155,7 +157,7 @@ class GridFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cur
                         if (mMovieCategory != 'error') {
                             String[] movieCategory = [mMovieCategory] as String[]
                             LogDisplay.callLog(LOG_TAG, 'Going to load more data...', LogDisplay.GRID_FRAGMENT_LOG_FLAG)
-                            new LoadMoreData(getActivity(), mCurrentPage).execute(movieCategory)
+                            new LoadMoreMovieData(getActivity(), mCurrentPage).execute(movieCategory)
                         }
                     }
                     //Last API called failed, so give it another try but try max 5 times only
@@ -165,7 +167,7 @@ class GridFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cur
                         final String[] movieCategory = [mMovieCategory] as String[]
                         mReTryCounter++
                         LogDisplay.callLog(LOG_TAG, "Last API call failed, going to re-try...try # $mReTryCounter", LogDisplay.GRID_FRAGMENT_LOG_FLAG)
-                        new LoadMoreData(getActivity(), mCurrentPage).execute(movieCategory)
+                        new LoadMoreMovieData(getActivity(), mCurrentPage).execute(movieCategory)
                     }
                 }
             })
@@ -179,10 +181,12 @@ class GridFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cur
                 final Cursor cursor = mGridAdapter.getCursor()
                 cursor.moveToPosition(position)
                 final int movieId = cursor.getInt(COL_MOVIE_ID)
-                final long movieRowId = cursor.getLong(COL_MOVIE_ROW_ID)
-                final ImageView imageViewId = view.findViewById(R.id.grid_image_view) as ImageView
-                mCallback.onItemSelected(movieId, movieRowId, imageViewId)
-                Toast.makeText(getActivity(), "Item clicked- positon: $position, id:$id & movieId:$movieId, imageviewId:$imageViewId", Toast.LENGTH_SHORT).show()
+//                final long movieRowId = cursor.getLong(COL_MOVIE_ROW_ID)
+//                final ImageView imageViewId = view.findViewById(R.id.grid_image_view) as ImageView
+//                mCallback.onItemSelected(movieId, movieRowId, imageViewId)
+//                mCallback.onItemSelected(movieId, imageViewId)
+                mCallback.onItemSelected(movieId)
+                Toast.makeText(getActivity(), "Item clicked- positon: $position, id:$id & movieId:$movieId", Toast.LENGTH_SHORT).show()
                 }
             })
         return mRootView
@@ -221,8 +225,6 @@ class GridFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cur
     @Override
     void onLoadFinished(Loader<Cursor> loader, Cursor data) {
         LogDisplay.callLog(LOG_TAG,'onLoadFinished is called',LogDisplay.GRID_FRAGMENT_LOG_FLAG)
-        //TODO: transition testing
-//        getActivity().supportStartPostponedEnterTransition()
         data.moveToLast()
         if(data.getCount() > 0) {
             mStartPage = data.getInt(COL_MOVIE_PAGE_NUM)
@@ -260,6 +262,8 @@ class GridFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cur
         /**
          * GridFragmentCallback for when an item has been selected.
          */
-        public void onItemSelected(int movieId, long movie_magic_row_ID, ImageView gridImageView)
+//        public void onItemSelected(int movieId, long movie_magic_row_ID, ImageView gridImageView)
+//        public void onItemSelected(int movieId, ImageView gridImageView)
+        public void onItemSelected(int movieId)
     }
 }

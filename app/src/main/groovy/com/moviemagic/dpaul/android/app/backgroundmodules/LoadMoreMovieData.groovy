@@ -1,4 +1,4 @@
-package com.moviemagic.dpaul.android.app.utility
+package com.moviemagic.dpaul.android.app.backgroundmodules
 
 import android.content.ContentResolver
 import android.content.ContentValues
@@ -15,13 +15,13 @@ import groovy.json.JsonSlurper
 import groovy.transform.CompileStatic
 
 @CompileStatic
-class LoadMoreData extends AsyncTask<String, Void, Void>{
-    private static final String LOG_TAG = LoadMoreData.class.getSimpleName()
+class LoadMoreMovieData extends AsyncTask<String, Void, Void>{
+    private static final String LOG_TAG = LoadMoreMovieData.class.getSimpleName()
     ContentResolver mContentResolver
     Context mContext
     int mCurrentPage
 
-    public LoadMoreData (Context ctx, int currPage) {
+    public LoadMoreMovieData(Context ctx, int currPage) {
         mContext = ctx
         mCurrentPage = currPage
         mContentResolver = mContext.getContentResolver()

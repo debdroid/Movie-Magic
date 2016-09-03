@@ -4,8 +4,8 @@ import android.content.ContentValues
 import android.database.Cursor
 import android.test.AndroidTestCase
 import com.moviemagic.dpaul.android.app.contentprovider.MovieMagicContract
-import com.moviemagic.dpaul.android.app.utility.GlobalStaticVariables
-import com.moviemagic.dpaul.android.app.utility.Utility
+import com.moviemagic.dpaul.android.app.backgroundmodules.GlobalStaticVariables
+import com.moviemagic.dpaul.android.app.backgroundmodules.Utility
 import groovy.transform.CompileStatic
 
 @CompileStatic

@@ -1,4 +1,4 @@
-package com.moviemagic.dpaul.android.app.utility
+package com.moviemagic.dpaul.android.app.backgroundmodules
 
 import android.util.Log
 import groovy.transform.CompileStatic
@@ -38,6 +38,7 @@ class LogDisplay {
     public static final boolean MOVIE_REVIEW_ADAPTER_FLAG = false
     public static final boolean UPDATE_USER_LIST_FLAG = true
     public static final boolean UTILITY_LIST_FLAG = false
+    public static final boolean COLLECTION_MOVIE_ACTIVITY_LOG_FLAG = true
 
     static void callLog(String tag, String msg, Boolean logFlag) {
         if(SHOW_ALL_LOG_FLAG) {

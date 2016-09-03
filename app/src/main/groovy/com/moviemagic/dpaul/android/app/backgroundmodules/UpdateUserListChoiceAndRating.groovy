@@ -1,4 +1,4 @@
-package com.moviemagic.dpaul.android.app.utility
+package com.moviemagic.dpaul.android.app.backgroundmodules
 
 import android.app.ProgressDialog
 import android.content.ContentResolver
@@ -16,8 +16,8 @@ import com.moviemagic.dpaul.android.app.contentprovider.MovieMagicContract
 import groovy.transform.CompileStatic
 
 @CompileStatic
-class UpdateUserList extends AsyncTask<String, Void, Integer> {
-    private static final String LOG_TAG = UpdateUserList.class.getSimpleName()
+class UpdateUserListChoiceAndRating extends AsyncTask<String, Void, Integer> {
+    private static final String LOG_TAG = UpdateUserListChoiceAndRating.class.getSimpleName()
     private final ContentResolver mContentResolver
     private final Context mContext
     private final LinearLayout mUserDrawableLayout
@@ -48,8 +48,8 @@ class UpdateUserList extends AsyncTask<String, Void, Integer> {
     private final static int COL_MOVIE_USER_LIST_FLAG_USER_RATING = 6
 
 
-    public UpdateUserList(Context ctx, LinearLayout userDrawableLayout, int _ID_movieBasicInfo, int movieId,
-                          String movieTitle, int backgroundColor, int bodyTextColor) {
+    public UpdateUserListChoiceAndRating(Context ctx, LinearLayout userDrawableLayout, int _ID_movieBasicInfo, int movieId,
+                                         String movieTitle, int backgroundColor, int bodyTextColor) {
         mContext = ctx
         mContentResolver = mContext.getContentResolver()
         mUserDrawableLayout = userDrawableLayout

@@ -342,6 +342,7 @@ class MovieMagicContract {
         static final String COLUMN_COLLECTION_OVERVIEW = 'collection_overview'
         static final String COLUMN_COLLECTION_POSTER_PATH = 'collection_poster_path'
         static final String COLUMN_COLLECTION_BACKDROP_PATH = 'collection_backdrop_path'
+        static final String COLUMN_COLLECTION_MOVIE_PRESENT_FLAG = 'collection_movie_present_flag'
 
         //Uri for movie_collection table
         static final Uri CONTENT_URI =
@@ -463,6 +464,8 @@ class MovieMagicContract {
         static final String COLUMN_PERSON_NAME = 'person_name'
         static final String COLUMN_PERSON_PLACE_OF_BIRTH = 'person_place_of_birth'
         static final String COLUMN_PERSON_PROFILE_PATH = 'person_profile_path'
+        static final String COLUMN_PERSON_IMDB_ID = 'person_imdb_id'
+        static final String COLUMN_PERSON_POPULARITY = 'person_popularity'
 
         //Uri for movie_person_info table
         static final Uri CONTENT_URI =

@@ -12,9 +12,9 @@ import android.os.Bundle
 import android.util.Log
 import com.moviemagic.dpaul.android.app.BuildConfig
 import com.moviemagic.dpaul.android.app.contentprovider.MovieMagicContract
-import com.moviemagic.dpaul.android.app.utility.GlobalStaticVariables
-import com.moviemagic.dpaul.android.app.utility.JsonParse
-import com.moviemagic.dpaul.android.app.utility.LogDisplay
+import com.moviemagic.dpaul.android.app.backgroundmodules.GlobalStaticVariables
+import com.moviemagic.dpaul.android.app.backgroundmodules.JsonParse
+import com.moviemagic.dpaul.android.app.backgroundmodules.LogDisplay
 import groovy.json.JsonException
 import groovy.json.JsonParserType
 import groovy.json.JsonSlurper
@@ -108,7 +108,7 @@ class MovieMagicSyncAdapter extends AbstractThreadedSyncAdapter {
             LogDisplay.callLog(LOG_TAG,"Movie url-> ${uri.toString()}",LogDisplay.MOVIE_MAGIC_SYNC_ADAPTER_LOG_FLAG)
 
             //This is intentional so that at lest one page is not loaded in order to make sure
-            //at least one (i.e. first) LoadMoreData call is always successful
+            //at least one (i.e. first) LoadMoreMovieData call is always successful
             if (page <= totalPage) {
                 def jsonData = new JsonSlurper(type: JsonParserType.INDEX_OVERLAY).parse(url)
                 LogDisplay.callLog(LOG_TAG, "JSON DATA for $category -> $jsonData",LogDisplay.MOVIE_MAGIC_SYNC_ADAPTER_LOG_FLAG)

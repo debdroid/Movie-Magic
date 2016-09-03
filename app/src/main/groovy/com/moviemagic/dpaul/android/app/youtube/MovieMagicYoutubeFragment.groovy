@@ -7,7 +7,7 @@ import com.google.android.youtube.player.YouTubePlayer
 import com.google.android.youtube.player.YouTubePlayerSupportFragment
 import com.moviemagic.dpaul.android.app.BuildConfig
 import com.moviemagic.dpaul.android.app.R
-import com.moviemagic.dpaul.android.app.utility.LogDisplay
+import com.moviemagic.dpaul.android.app.backgroundmodules.LogDisplay
 import groovy.transform.CompileStatic
 
 @CompileStatic

@@ -14,8 +14,8 @@ import android.view.animation.AnimationUtils
 import android.view.animation.DecelerateInterpolator
 import android.widget.ImageSwitcher
 import android.widget.ImageView
-import com.moviemagic.dpaul.android.app.utility.GlobalStaticVariables
-import com.moviemagic.dpaul.android.app.utility.LogDisplay
+import com.moviemagic.dpaul.android.app.backgroundmodules.GlobalStaticVariables
+import com.moviemagic.dpaul.android.app.backgroundmodules.LogDisplay
 import com.squareup.picasso.Callback
 import com.squareup.picasso.MemoryPolicy
 import com.squareup.picasso.NetworkPolicy
@@ -63,7 +63,7 @@ class DetailMovieActivity extends AppCompatActivity implements DetailMovieFragme
 //                args.putInt(GlobalStaticVariables.MOVIE_BASIC_INFO_MOVIE_ID,extras.getInt(GlobalStaticVariables.MOVIE_BASIC_INFO_MOVIE_ID))
 //                args.putLong(GlobalStaticVariables.MOVIE_BASIC_INFO_ROW_ID,extras.getLong(GlobalStaticVariables.MOVIE_BASIC_INFO_ROW_ID))
                 //Create a movie detail fragment
-                DetailMovieFragment movieDetailFragment = new DetailMovieFragment()
+                final DetailMovieFragment movieDetailFragment = new DetailMovieFragment()
 //                movieDetailFragment.setArguments(args)
                 movieDetailFragment.setArguments(extras)
                 final FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction()

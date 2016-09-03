@@ -10,9 +10,9 @@ import android.widget.ImageView
 import android.widget.TextView
 import com.moviemagic.dpaul.android.app.DetailMovieFragment
 import com.moviemagic.dpaul.android.app.R
-import com.moviemagic.dpaul.android.app.utility.GlobalStaticVariables
-import com.moviemagic.dpaul.android.app.utility.LogDisplay
-import com.moviemagic.dpaul.android.app.utility.PicassoLoadImage
+import com.moviemagic.dpaul.android.app.backgroundmodules.GlobalStaticVariables
+import com.moviemagic.dpaul.android.app.backgroundmodules.LogDisplay
+import com.moviemagic.dpaul.android.app.backgroundmodules.PicassoLoadImage
 import groovy.transform.CompileStatic
 
 @CompileStatic

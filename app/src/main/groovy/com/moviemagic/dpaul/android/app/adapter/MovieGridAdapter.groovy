@@ -10,19 +10,19 @@ import android.widget.ImageView
 import android.widget.TextView
 import com.moviemagic.dpaul.android.app.GridFragment
 import com.moviemagic.dpaul.android.app.R
-import com.moviemagic.dpaul.android.app.utility.GlobalStaticVariables
-import com.moviemagic.dpaul.android.app.utility.LogDisplay
-import com.moviemagic.dpaul.android.app.utility.PicassoLoadImage
+import com.moviemagic.dpaul.android.app.backgroundmodules.GlobalStaticVariables
+import com.moviemagic.dpaul.android.app.backgroundmodules.LogDisplay
+import com.moviemagic.dpaul.android.app.backgroundmodules.PicassoLoadImage
 import groovy.transform.CompileStatic
 
 @CompileStatic
-class GridAdapter  extends CursorAdapter {
-    private static final String LOG_TAG = GridAdapter.class.getSimpleName()
+class MovieGridAdapter extends CursorAdapter {
+    private static final String LOG_TAG = MovieGridAdapter.class.getSimpleName()
 
     private final Context mContext
     private final Cursor mCursor
 
-    public GridAdapter(Context ctx, Cursor cursor, int flags) {
+    public MovieGridAdapter(Context ctx, Cursor cursor, int flags) {
         super(ctx, cursor, 0)
         mContext = ctx
         mCursor = cursor

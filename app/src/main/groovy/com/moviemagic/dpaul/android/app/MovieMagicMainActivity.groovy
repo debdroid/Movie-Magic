@@ -4,7 +4,6 @@ import android.content.Context
 import android.content.Intent
 import android.os.AsyncTask
 import android.os.Bundle
-import android.support.annotation.IdRes
 import android.support.design.widget.FloatingActionButton
 import android.support.design.widget.NavigationView
 import android.support.design.widget.Snackbar
@@ -24,14 +23,14 @@ import com.google.android.youtube.player.YouTubeApiServiceUtil
 import com.google.android.youtube.player.YouTubeInitializationResult
 import com.moviemagic.dpaul.android.app.contentprovider.MovieMagicContract
 import com.moviemagic.dpaul.android.app.syncadapter.MovieMagicSyncAdapterUtility
-import com.moviemagic.dpaul.android.app.utility.GlobalStaticVariables
-import com.moviemagic.dpaul.android.app.utility.LogDisplay
+import com.moviemagic.dpaul.android.app.backgroundmodules.GlobalStaticVariables
+import com.moviemagic.dpaul.android.app.backgroundmodules.LogDisplay
 import groovy.transform.CompileStatic
 
 @CompileStatic
-public class MovieMagicMain extends AppCompatActivity
+public class MovieMagicMainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, GridFragment.Callback {
-    private static final String LOG_TAG = MovieMagicMain.class.getSimpleName()
+    private static final String LOG_TAG = MovieMagicMainActivity.class.getSimpleName()
     private static final String STATE_APP_TITLE = 'app_title'
     private NavigationView navigationView
 
@@ -68,7 +67,7 @@ public class MovieMagicMain extends AppCompatActivity
         //Update the user list menu counter
         final UpdateMenuCounter updateMenuCounter = new UpdateMenuCounter(this)
         //Execute the asynctask
-        //program fails if 'Void' is used for parameter, could be beacuase of groovy compiler??
+        //program fails if 'Void' is used for parameter, could be because of groovy compiler??
         //So get rid of the problem a 'dummy' integer is passed
         //TODO: Need to fix this later
         updateMenuCounter.execute(['dummy'] as String[])
@@ -213,7 +212,8 @@ public class MovieMagicMain extends AppCompatActivity
     }
 
     private void startFragment (String category) {
-        final GridFragment fragment = new GridFragment(category)
+        //Collection id is not required here, so passed on as zero
+        final GridFragment fragment = new GridFragment(category, 0)
         final FragmentManager fragmentManager = getSupportFragmentManager()
         final FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction()
         //Set the custom animation
@@ -239,11 +239,13 @@ public class MovieMagicMain extends AppCompatActivity
 
     //Override the callback method of GridFragment
     @Override
-    public void onItemSelected(int movieId, long movie_magic_row_ID, ImageView gridImageView) {
+//    public void onItemSelected(int movieId, long movie_magic_row_ID, ImageView gridImageView) {
+//    public void onItemSelected(int movieId, ImageView gridImageView) {
+    public void onItemSelected(int movieId) {
         final Intent intent = new Intent(this, DetailMovieActivity.class)
         final Bundle bundle = new Bundle()
         bundle.putInt(GlobalStaticVariables.MOVIE_BASIC_INFO_MOVIE_ID,movieId)
-        bundle.putLong(GlobalStaticVariables.MOVIE_BASIC_INFO_ROW_ID,movie_magic_row_ID)
+//        bundle.putLong(GlobalStaticVariables.MOVIE_BASIC_INFO_ROW_ID,movie_magic_row_ID)
         intent.putExtras(bundle)
         startActivity(intent)
         //Start the animation
@@ -251,7 +253,7 @@ public class MovieMagicMain extends AppCompatActivity
     }
 
     /**
-     * Updating of meneu counter is thightly coupled with main activity, so no separate class is
+     * Updating of menu counter is tightly coupled with main activity, so no separate class is
      * created for the AsyncTask
      */
 

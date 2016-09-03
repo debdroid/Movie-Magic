@@ -10,9 +10,9 @@ import android.widget.ImageView
 import android.widget.TextView
 import com.moviemagic.dpaul.android.app.DetailMovieFragment
 import com.moviemagic.dpaul.android.app.R
-import com.moviemagic.dpaul.android.app.utility.GlobalStaticVariables
-import com.moviemagic.dpaul.android.app.utility.LogDisplay
-import com.moviemagic.dpaul.android.app.utility.PicassoLoadImage
+import com.moviemagic.dpaul.android.app.backgroundmodules.GlobalStaticVariables
+import com.moviemagic.dpaul.android.app.backgroundmodules.LogDisplay
+import com.moviemagic.dpaul.android.app.backgroundmodules.PicassoLoadImage
 import groovy.transform.CompileStatic
 
 @CompileStatic
@@ -25,12 +25,12 @@ class MovieCastAdapter extends RecyclerView.Adapter<MovieCastAdapter.MovieCastAd
     public static int mPrimaryDarkColor, mBodyTextColor
 
     //Empty constructor
-    public MovieCastAdapter(){
-        LogDisplay.callLog(LOG_TAG,'MovieCastAdapter empty constructor is called',LogDisplay.MOVIE_CAST_ADAPTER_FLAG)
+    public MovieCastAdapter() {
+        LogDisplay.callLog(LOG_TAG, 'MovieCastAdapter empty constructor is called', LogDisplay.MOVIE_CAST_ADAPTER_FLAG)
     }
 
-    public MovieCastAdapter(Context ctx){
-        LogDisplay.callLog(LOG_TAG,'MovieCastAdapter non-empty constructor is called',LogDisplay.MOVIE_CAST_ADAPTER_FLAG)
+    public MovieCastAdapter(Context ctx) {
+        LogDisplay.callLog(LOG_TAG, 'MovieCastAdapter non-empty constructor is called', LogDisplay.MOVIE_CAST_ADAPTER_FLAG)
         mContext = ctx
     }
 
@@ -51,15 +51,15 @@ class MovieCastAdapter extends RecyclerView.Adapter<MovieCastAdapter.MovieCastAd
 
         @Override
         public void onClick(View v) {
-            LogDisplay.callLog(LOG_TAG,"onClick is called.LayoutPos=${getLayoutPosition()}.AdapterPos=${getAdapterPosition()}",LogDisplay.MOVIE_CAST_ADAPTER_FLAG)
+            LogDisplay.callLog(LOG_TAG, "onClick is called.LayoutPos=${getLayoutPosition()}.AdapterPos=${getAdapterPosition()}", LogDisplay.MOVIE_CAST_ADAPTER_FLAG)
             mCursor.moveToPosition(getAdapterPosition())
         }
     }
 
     @Override
     MovieCastAdapterViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        LogDisplay.callLog(LOG_TAG,'onCreateViewHolder is called',LogDisplay.MOVIE_CAST_ADAPTER_FLAG)
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.single_movie_cast_grid,parent,false)
+        LogDisplay.callLog(LOG_TAG, 'onCreateViewHolder is called', LogDisplay.MOVIE_CAST_ADAPTER_FLAG)
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.single_movie_cast_grid, parent, false)
         view.setFocusable(true)
         return new MovieCastAdapterViewHolder(view)
     }
@@ -68,10 +68,10 @@ class MovieCastAdapter extends RecyclerView.Adapter<MovieCastAdapter.MovieCastAd
     void onBindViewHolder(MovieCastAdapterViewHolder holder, int position) {
         // move the cursor to correct position
         mCursor.moveToPosition(position)
-        LogDisplay.callLog(LOG_TAG,'onBindViewHolder is called',LogDisplay.MOVIE_CAST_ADAPTER_FLAG)
+        LogDisplay.callLog(LOG_TAG, 'onBindViewHolder is called', LogDisplay.MOVIE_CAST_ADAPTER_FLAG)
         final String profilePath = "$GlobalStaticVariables.TMDB_IMAGE_BASE_URL/$GlobalStaticVariables.TMDB_IMAGE_SIZE_W185" +
                 "${mCursor.getString(DetailMovieFragment.COL_MOVIE_CAST_PROFILE_PATH)}"
-        PicassoLoadImage.loadMoviePersonImageUsingPicasso(mContext,profilePath,holder.movieCastImageView)
+        PicassoLoadImage.loadMoviePersonImageUsingPicasso(mContext, profilePath, holder.movieCastImageView)
         holder.movieCastCharacterName.setText(mCursor.getString(DetailMovieFragment.COL_MOVIE_CAST_CHARACTER))
         holder.movieCastName.setText(mCursor.getString(DetailMovieFragment.COL_MOVIE_CAST_PERSON_NAME))
         holder.movieCastCharacterName.setBackgroundColor(mPrimaryDarkColor)
@@ -85,7 +85,7 @@ class MovieCastAdapter extends RecyclerView.Adapter<MovieCastAdapter.MovieCastAd
     @Override
     int getItemCount() {
 //        LogDisplay.callLog(LOG_TAG,'Cursor item count is called',LogDisplay.MOVIE_CAST_ADAPTER_FLAG)
-        if ( null == mCursor ) return 0
+        if (null == mCursor) return 0
         return mCursor.getCount()
     }
 
@@ -98,7 +98,7 @@ class MovieCastAdapter extends RecyclerView.Adapter<MovieCastAdapter.MovieCastAd
     //but by then adapter might got loaded with data. Hence call notifyDataSetChanged
     //so that it get's recreated with correct color
     public void changeColor() {
-        LogDisplay.callLog(LOG_TAG,'changeColor is called',LogDisplay.MOVIE_CAST_ADAPTER_FLAG)
+        LogDisplay.callLog(LOG_TAG, 'changeColor is called', LogDisplay.MOVIE_CAST_ADAPTER_FLAG)
         notifyDataSetChanged()
     }
 }

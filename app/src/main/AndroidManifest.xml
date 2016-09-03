@@ -16,7 +16,7 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme.MovieMain">
-        <activity android:name=".MovieMagicMain">
+        <activity android:name=".MovieMagicMainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -25,11 +25,20 @@
         <activity
             android:name=".DetailMovieActivity"
             android:label="@string/title_activity_detail_movie"
-            android:parentActivityName=".MovieMagicMain"
+            android:parentActivityName=".MovieMagicMainActivity"
             android:theme="@style/AppTheme.MovieDetail">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.moviemagic.dpaul.android.app.MovieMagicMain"/>
+                android:value=".MovieMagicMainActivity"/>
+        </activity>
+        <activity
+            android:name=".CollectionMovieActivity"
+            android:label="@string/title_activity_collection_movie"
+            android:parentActivityName=".DetailMovieActivity"
+            android:theme="@style/AppTheme.MovieCollection">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".DetailMovieActivity"/>
         </activity>
         <!-- Register the content provider -->
         <provider

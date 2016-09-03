@@ -6,14 +6,14 @@ import android.database.sqlite.SQLiteOpenHelper
 import groovy.transform.CompileStatic
 
 /**
- * Manages a local database for movie data.
+ * Manages a local database for movie and related data.
  */
 
 @CompileStatic
 class MovieMagicDbHelper extends SQLiteOpenHelper {
     private static final String LOG_TAG = MovieMagicDbHelper.class.getSimpleName()
     // Increment the database version if the schema gets changed
-    private static final int DATABASE_VERSION = 2
+    private static final int DATABASE_VERSION = 1
 
     //Define as public as used by TestMovieMagicDatabase.groovy
     public static final String DATABASE_NAME = 'movie_magic.db'
@@ -160,6 +160,7 @@ class MovieMagicDbHelper extends SQLiteOpenHelper {
                 $MovieMagicContract.MovieCollection.COLUMN_COLLECTION_OVERVIEW TEXT NULL,
                 $MovieMagicContract.MovieCollection.COLUMN_COLLECTION_POSTER_PATH TEXT NULL,
                 $MovieMagicContract.MovieCollection.COLUMN_COLLECTION_BACKDROP_PATH TEXT NULL,
+                $MovieMagicContract.MovieCollection.COLUMN_COLLECTION_MOVIE_PRESENT_FLAG INTEGER NULL,
                 UNIQUE ($MovieMagicContract.MovieCollection.COLUMN_COLLECTION_ID,
                 $MovieMagicContract.MovieCollection.COLUMN_COLLECTION_NAME) ON CONFLICT REPLACE)
                 """
@@ -215,6 +216,8 @@ class MovieMagicDbHelper extends SQLiteOpenHelper {
                 $MovieMagicContract.MoviePersonInfo.COLUMN_PERSON_NAME TEXT NOT NULL,
                 $MovieMagicContract.MoviePersonInfo.COLUMN_PERSON_PLACE_OF_BIRTH TEXT NULL,
                 $MovieMagicContract.MoviePersonInfo.COLUMN_PERSON_PROFILE_PATH TEXT NULL,
+                $MovieMagicContract.MoviePersonInfo.COLUMN_PERSON_IMDB_ID TEXT NULL,
+                $MovieMagicContract.MoviePersonInfo.COLUMN_PERSON_POPULARITY REAL NULL,
                 UNIQUE ($MovieMagicContract.MoviePersonInfo.COLUMN_PERSON_ID,
                 $MovieMagicContract.MoviePersonInfo.COLUMN_PERSON_NAME) ON CONFLICT REPLACE)
                 """
