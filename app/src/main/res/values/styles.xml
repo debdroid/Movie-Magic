@@ -38,6 +38,7 @@
 
     <!-- Styles for each activity -->
     <style name="AppTheme.MovieMain" parent="@style/AppTheme"/>
+    <style name="AppTheme.MovieGrid" parent="@style/AppTheme"/>
     <style name="AppTheme.MovieDetail" parent="@style/AppTheme"/>
     <style name="AppTheme.MovieCollection" parent="@style/AppTheme"/>
 </resources>

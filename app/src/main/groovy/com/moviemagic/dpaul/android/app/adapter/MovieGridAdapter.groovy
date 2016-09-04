@@ -8,7 +8,7 @@ import android.view.ViewGroup
 import android.widget.CursorAdapter
 import android.widget.ImageView
 import android.widget.TextView
-import com.moviemagic.dpaul.android.app.GridFragment
+import com.moviemagic.dpaul.android.app.GridMovieFragment
 import com.moviemagic.dpaul.android.app.R
 import com.moviemagic.dpaul.android.app.backgroundmodules.GlobalStaticVariables
 import com.moviemagic.dpaul.android.app.backgroundmodules.LogDisplay
@@ -45,8 +45,8 @@ class MovieGridAdapter extends CursorAdapter {
         final ImageView movieImageView = view.findViewById(R.id.grid_image_view) as ImageView
         final TextView movieNameView = view.findViewById(R.id.grid_text_view) as TextView
         final String posterPath = "$GlobalStaticVariables.TMDB_IMAGE_BASE_URL/$GlobalStaticVariables.TMDB_IMAGE_SIZE_W185" +
-                "${cursor.getString(GridFragment.COL_MOVIE_POSTER)}"
+                "${cursor.getString(GridMovieFragment.COL_MOVIE_POSTER)}"
         PicassoLoadImage.loadMoviePosterUsingPicasso(mContext,posterPath,movieImageView)
-        movieNameView.setText(cursor.getString(GridFragment.COL_MOVIE_TITLE))
+        movieNameView.setText(cursor.getString(GridMovieFragment.COL_MOVIE_TITLE))
     }
 }

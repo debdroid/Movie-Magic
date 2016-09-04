@@ -58,7 +58,9 @@ class GlobalStaticVariables {
     public static final String IMAGE_TYPE_BACKDROP = 'backdrop'
     public static final String IMAGE_TYPE_POSTER = 'poster'
     public static final String MOVIE_BASIC_INFO_MOVIE_ID = 'movie_basic_info_movie_id'
+    public static final String MOVIE_BASIC_INFO_CATEGORY = 'movie_basic_info_category'
     public static final String MOVIE_BASIC_INFO_ROW_ID = 'movie_basic_info_row_id'
+    public static final String MOVIE_BASIC_INFO_COLL_ID = 'movie_basic_info_collection_id'
     public static final int MOVIE_MAGIC_FLAG_TRUE = 1
     public static final int MOVIE_MAGIC_FLAG_FALSE = 0
     public static final float MOVIE_MAGIC_ELEVATION = 4f

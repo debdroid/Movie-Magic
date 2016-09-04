@@ -1,140 +1,64 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/fragment_detail_movie_layout"
+<android.support.design.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/movie_detail_coordinator_layout"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:orientation="vertical">
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true">
 
-    <include
-        layout="@layout/movie_detail_title"
+    <android.support.design.widget.AppBarLayout
+        android:id="@+id/movie_detail_app_bar_layout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:fitsSystemWindows="true"
+        android:theme="@style/AppTheme.AppBarOverlay">
 
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="?android:attr/listDivider" />
+        <android.support.design.widget.CollapsingToolbarLayout
+            android:id="@+id/movie_detail_collapsing_toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/movie_detail_backdrop_height"
+            app:contentScrim="?attr/colorPrimary"
+            android:fitsSystemWindows="true"
+            app:layout_scrollFlags="scroll|exitUntilCollapsed">
 
-    <include
-        layout="@layout/movie_detail_poster"
+            <ImageSwitcher
+                android:id="@+id/movie_detail_backdrop_image_switcher"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/backdrop_image_height_detail_view"
+                android:fitsSystemWindows="true"
+                app:layout_collapseMode="parallax">
+                <ImageView
+                    android:id="@+id/movie_detail_backdrop_image_1"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/backdrop_image_height_detail_view"
+                    android:scaleType="centerCrop"
+                    android:fitsSystemWindows="true"
+                    android:src="@drawable/grid_image_placeholder" />
+                <!-- ImageSrc not used for the following one to avoid cluttering in imageswitcher -->
+                <ImageView
+                    android:id="@+id/movie_detail_backdrop_image_2"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/backdrop_image_height_detail_view"
+                    android:fitsSystemWindows="true"
+                    android:scaleType="centerCrop"/>
+            </ImageSwitcher>
+            <!-- setting itsSystemWindows="true" for toolbar moves home up and setting buttons to status bar -->
+            <android.support.v7.widget.Toolbar
+                android:id="@+id/movie_detail_toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                android:elevation="@dimen/m_design_toolbar_elevation"
+                app:layout_collapseMode="pin"
+                android:fitsSystemWindows="false"
+                app:popupTheme="@style/AppTheme.PopupOverlay" />
+        </android.support.design.widget.CollapsingToolbarLayout>
+    </android.support.design.widget.AppBarLayout>
+    <android.support.v4.widget.NestedScrollView
+        android:id="@+id/movie_detail_scroll"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
-
-    <include
-        layout="@layout/movie_detail_tmdb_rating"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
-
-    <include
-        layout="@layout/movie_detail_user_rating"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
-    <include
-        layout="@layout/movie_detail_user_list_drawables"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
-
-    <include
-        layout="@layout/movie_detail_synopsis"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
-
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="?android:attr/listDivider" />
-
-    <include
-        layout="@layout/movie_detail_trailer"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
-
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="?android:attr/listDivider" />
-
-    <include
-        layout="@layout/movie_detail_production_info"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
-
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="?android:attr/listDivider" />
-
-    <include
-        layout="@layout/movie_detail_cast_header"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
-
-    <include
-        layout="@layout/movie_detail_cast_grid"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
-
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="?android:attr/listDivider" />
-
-    <include
-        layout="@layout/movie_detail_crew_header"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
-
-    <include
-        layout="@layout/movie_detail_crew_grid"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
-
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="?android:attr/listDivider" />
-
-    <include
-        layout="@layout/movie_detail_similar_movie_header"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
-
-    <include
-        layout="@layout/movie_detail_similar_movie_grid"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
-
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="?android:attr/listDivider" />
-
-    <include
-        layout="@layout/movie_detail_collection"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
-
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="?android:attr/listDivider" />
-
-    <include
-        layout="@layout/movie_detail_web_links"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
-
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="?android:attr/listDivider" />
-
-    <include
-        layout="@layout/movie_detail_review_header"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
-
-    <include
-        layout="@layout/movie_detail_review_recycler_view"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
-</LinearLayout>
+        android:layout_height="wrap_content"
+        android:fitsSystemWindows="true"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+        <include layout="@layout/content_detail_movie_fragment" />
+    </android.support.v4.widget.NestedScrollView>
+</android.support.design.widget.CoordinatorLayout>

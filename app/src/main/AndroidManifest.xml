@@ -16,12 +16,15 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme.MovieMain">
+        <!-- Main Activity -->
         <activity android:name=".MovieMagicMainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <!-- Detail movie Activity -->
         <activity
             android:name=".DetailMovieActivity"
             android:label="@string/title_activity_detail_movie"
@@ -31,6 +34,8 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".MovieMagicMainActivity"/>
         </activity>
+
+        <!-- Collection movie Activity -->
         <activity
             android:name=".CollectionMovieActivity"
             android:label="@string/title_activity_collection_movie"
@@ -40,6 +45,7 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".DetailMovieActivity"/>
         </activity>
+
         <!-- Register the content provider -->
         <provider
             android:name=".contentprovider.MovieMagicProvider"

@@ -18,7 +18,7 @@ class CollectionMovieActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_movie_collection)
+        setContentView(R.layout.activity_collection_movie)
         final Toolbar toolbar = (Toolbar) findViewById(R.id.collection_activity_toolbar)
         setSupportActionBar(toolbar)
         //Enable back to home button
@@ -31,7 +31,7 @@ class CollectionMovieActivity extends AppCompatActivity {
               final String category = extras.getInt(GlobalStaticVariables.MOVIE_CATEGORY_COLLECTION)
                 final int collectionId = extras.getInt(GlobalStaticVariables.MOVIE_COLLECTION_ID)
                 //Collection id is required here, so passed on that value
-                final GridFragment fragment = new GridFragment(category, collectionId)
+                final GridMovieFragment fragment = new GridMovieFragment()
                 final FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction()
                 //Set the custom animation
 //                fragmentTransaction.setCustomAnimations(R.anim.slide_bottom_up_animation,0)
@@ -46,7 +46,7 @@ class CollectionMovieActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu, this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.main, menu)
+        getMenuInflater().inflate(R.menu.main_activity_menu, menu)
         return true
     }
 

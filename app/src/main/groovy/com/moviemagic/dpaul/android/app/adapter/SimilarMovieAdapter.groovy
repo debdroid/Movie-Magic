@@ -4,6 +4,8 @@ import android.content.Context
 import android.content.Intent
 import android.database.Cursor
 import android.os.Bundle
+import android.support.v4.app.FragmentActivity
+import android.support.v4.app.FragmentTransaction
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
@@ -57,19 +59,28 @@ class SimilarMovieAdapter extends RecyclerView.Adapter<SimilarMovieAdapter.Simil
 //            LogDisplay.callLog(LOG_TAG,"Movie row id is $movieRowId & Movie id is $movieId",LogDisplay.SIMILAR_MOVIE_ADAPTER_FLAG)
             LogDisplay.callLog(LOG_TAG,"Movie id is $movieId",LogDisplay.SIMILAR_MOVIE_ADAPTER_FLAG)
             //Create an intent for DetailMovieActivity
-            final Intent intent = new Intent(mContext, DetailMovieActivity.class)
+//            final Intent intent = new Intent(mContext, DetailMovieActivity.class)
             final Bundle bundle = new Bundle()
             bundle.putInt(GlobalStaticVariables.MOVIE_BASIC_INFO_MOVIE_ID,movieId)
 //            bundle.putLong(GlobalStaticVariables.MOVIE_BASIC_INFO_ROW_ID,movieRowId)
-            intent.putExtras(bundle)
-            mContext.startActivity(intent)
+//            intent.putExtras(bundle)
+//            mContext.startActivity(intent)
             //Get a reference of the activity and start the animation
-            AppCompatActivity appCompatActivity = (AppCompatActivity)mContext
-            appCompatActivity. overridePendingTransition(R.anim.slide_bottom_up_animation,0)
+//            AppCompatActivity appCompatActivity = (AppCompatActivity)mContext
+//            appCompatActivity. overridePendingTransition(R.anim.slide_bottom_up_animation,0)
 //            final Uri movieIdUri = MovieMagicContract.MovieBasicInfo.buildMovieUriWithMovieId(movieId)
 //            final Intent mIntent = new Intent(mContext, DetailMovieActivity.class)
 //                    .setData(movieIdUri)
 //            mContext.startActivity(mIntent)
+            final DetailMovieFragment movieDetailFragment = new DetailMovieFragment()
+            movieDetailFragment.setArguments(bundle)
+            ((FragmentActivity)mContext).getSupportFragmentManager().beginTransaction()
+                    //Used the method enter,exit,popEnter,popExit custom animation. Our cases are enter & popExit
+                    .setCustomAnimations(R.anim.slide_bottom_up_animation,0,0,R.anim.slide_bottom_down_animation)
+                    .replace(R.id.detail_movie_container,movieDetailFragment)
+                    // Add this transaction to the back stack
+                    .addToBackStack(null) //Parameter is optional, so used null
+                    .commit()
         }
     }
 

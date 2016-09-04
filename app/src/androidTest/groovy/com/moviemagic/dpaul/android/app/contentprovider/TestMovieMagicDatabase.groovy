@@ -858,7 +858,7 @@ class TestMovieMagicDatabase extends AndroidTestCase {
         rowId = sqLiteDatabase.insert(MovieMagicContract.MoviePersonCrew.TABLE_NAME,null,contentValues)
         assertTrue('Error: Unable to Insert movie_person_crew data into the Database', rowId != -1)
 
-        //Query the main (count in main should be 2) and child tables and ensure there is only one record
+        //Query the main_activity_menu (count in main_activity_menu should be 2) and child tables and ensure there is only one record
         queryCursor = sqLiteDatabase.query(MovieMagicContract.MovieBasicInfo.TABLE_NAME,null,null,null,null,null,null)
         assertEquals('Error: Record not replaced in movie_basic_info during insert', 2, queryCursor.getCount())
         queryCursor = sqLiteDatabase.query(MovieMagicContract.MovieCast.TABLE_NAME,null,null,null,null,null,null)

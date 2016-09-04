@@ -81,5 +81,9 @@
     <string name="user_list_del_message">%1$s movie removed from %2$s</string>
     <string name="user_rating_add_message">Rating updated successfully for %1$s</string>
     <string name="title_activity_collection_movie">Collection</string>
+    <string name="title_activity_grid_movie">GridMovieActivity</string>
+    <string name="grid_fragment_menu">GridFragmentMenu</string>
+    <string name="detail_fragment_menu">DetailFragmentMenu</string>
+    <string name="detail_activity_menu">DetailActivityMenu</string>
 
 </resources>

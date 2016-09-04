@@ -24,11 +24,16 @@
         android:textAppearance="@style/TextAppearance.AppCompat.Title"
         android:textColor="@color/white_color" />
 
-    <!-- YouTube Fragment -->
-    <fragment
-        android:id="@+id/movie_detail_trailer_fragment_youtube"
-        android:name="com.moviemagic.dpaul.android.app.youtube.MovieMagicYoutubeFragment"
+    <!-- YouTube Fragment Container -->
+    <FrameLayout
+        android:id="@+id/youtube_fragment_container"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        tools:context="com.moviemagic.dpaul.android.app.youtube.MovieMagicYoutubeFragment" />
+        android:layout_centerHorizontal="true"
+        android:visibility="visible" />
+    <!--<fragment-->
+        <!--android:id="@+id/movie_detail_trailer_fragment_youtube"-->
+        <!--android:name="com.moviemagic.dpaul.android.app.youtube.MovieMagicYoutubeFragment"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content" />-->
 </LinearLayout>

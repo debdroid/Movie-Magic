@@ -7,7 +7,7 @@ import android.net.Uri
 import android.os.AsyncTask
 import android.util.Log
 import com.moviemagic.dpaul.android.app.BuildConfig
-import com.moviemagic.dpaul.android.app.GridFragment
+import com.moviemagic.dpaul.android.app.GridMovieFragment
 import com.moviemagic.dpaul.android.app.contentprovider.MovieMagicContract
 import groovy.json.JsonException
 import groovy.json.JsonParserType
@@ -116,23 +116,23 @@ class LoadMovieBasicAddlInfo extends AsyncTask<Integer, Void, Void> {
 
         } catch (URISyntaxException e) {
             //Set the boolean to true to indicate API call failed
-            GridFragment.isDataLoadFailed = true
+            GridMovieFragment.isDataLoadFailed = true
             Log.e(LOG_TAG, "URISyntaxException: $e.message", e)
         } catch (JsonException e) {
             //Set the boolean to true to indicate API call failed
-            GridFragment.isDataLoadFailed = true
+            GridMovieFragment.isDataLoadFailed = true
             Log.e(LOG_TAG, "JsonException: $e.message", e)
         } catch (IOException e) {
             //Set the boolean to true to indicate API call failed
-            GridFragment.isDataLoadFailed = true
+            GridMovieFragment.isDataLoadFailed = true
             Log.e(LOG_TAG, "IOException: $e.message")
         } catch (android.database.sqlite.SQLiteConstraintException e) {
             //Set the boolean to true to indicate API call failed
-            GridFragment.isDataLoadFailed = true
+            GridMovieFragment.isDataLoadFailed = true
             Log.e(LOG_TAG, "SQLiteConstraintException: $e.message")
         } catch (android.database.sqlite.SQLiteException e) {
             //Set the boolean to true to indicate API call failed
-            GridFragment.isDataLoadFailed = true
+            GridMovieFragment.isDataLoadFailed = true
             Log.e(LOG_TAG, "SQLiteException: $e.message")
         }
         return null

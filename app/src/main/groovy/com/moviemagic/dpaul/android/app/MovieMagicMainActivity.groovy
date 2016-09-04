@@ -7,7 +7,6 @@ import android.os.Bundle
 import android.support.design.widget.FloatingActionButton
 import android.support.design.widget.NavigationView
 import android.support.design.widget.Snackbar
-import android.support.v4.app.FragmentManager
 import android.support.v4.app.FragmentTransaction
 import android.support.v4.view.GravityCompat
 import android.support.v4.widget.DrawerLayout
@@ -17,7 +16,6 @@ import android.support.v7.widget.Toolbar
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
-import android.widget.ImageView
 import android.widget.TextView
 import com.google.android.youtube.player.YouTubeApiServiceUtil
 import com.google.android.youtube.player.YouTubeInitializationResult
@@ -29,7 +27,7 @@ import groovy.transform.CompileStatic
 
 @CompileStatic
 public class MovieMagicMainActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener, GridFragment.Callback {
+        implements NavigationView.OnNavigationItemSelectedListener, GridMovieFragment.Callback {
     private static final String LOG_TAG = MovieMagicMainActivity.class.getSimpleName()
     private static final String STATE_APP_TITLE = 'app_title'
     private NavigationView navigationView
@@ -144,7 +142,7 @@ public class MovieMagicMainActivity extends AppCompatActivity
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu, this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.main, menu)
+        getMenuInflater().inflate(R.menu.main_activity_menu, menu)
         return true
     }
 
@@ -175,35 +173,35 @@ public class MovieMagicMainActivity extends AppCompatActivity
         } else if (id == R.id.nav_tmdb_popular) {
             showSnackBar(getString(R.string.drawer_menu_tmdb_popular))
             setItemTitle(getString(R.string.drawer_menu_tmdb_popular))
-            startFragment(GlobalStaticVariables.MOVIE_CATEGORY_POPULAR)
+            startGridFragment(GlobalStaticVariables.MOVIE_CATEGORY_POPULAR)
         } else if (id == R.id.nav_tmdb_toprated) {
             showSnackBar(getString(R.string.drawer_menu_tmdb_toprated))
             setItemTitle(getString(R.string.drawer_menu_tmdb_toprated))
-            startFragment(GlobalStaticVariables.MOVIE_CATEGORY_TOP_RATED)
+            startGridFragment(GlobalStaticVariables.MOVIE_CATEGORY_TOP_RATED)
         } else if (id == R.id.nav_tmdb_nowplaying) {
             showSnackBar(getString(R.string.drawer_menu_tmdb_nowplaying))
             setItemTitle(getString(R.string.drawer_menu_tmdb_nowplaying))
-            startFragment(GlobalStaticVariables.MOVIE_CATEGORY_NOW_PLAYING)
+            startGridFragment(GlobalStaticVariables.MOVIE_CATEGORY_NOW_PLAYING)
         } else if (id == R.id.nav_tmdb_upcoming) {
             showSnackBar(getString(R.string.drawer_menu_tmdb_upcoming))
             setItemTitle(getString(R.string.drawer_menu_tmdb_upcoming))
-            startFragment(GlobalStaticVariables.MOVIE_CATEGORY_UPCOMING)
+            startGridFragment(GlobalStaticVariables.MOVIE_CATEGORY_UPCOMING)
         } else if (id == R.id.nav_user_watched) {
             showSnackBar(getString(R.string.drawer_menu_user_watched))
             setItemTitle(getString(R.string.drawer_menu_user_watched))
-            startFragment(GlobalStaticVariables.MOVIE_CATEGORY_LOCAL_USER_WATCHED)
+            startGridFragment(GlobalStaticVariables.MOVIE_CATEGORY_LOCAL_USER_WATCHED)
         } else if (id == R.id.nav_user_wishlist) {
             showSnackBar(getString(R.string.drawer_menu_user_wishlist))
             setItemTitle(getString(R.string.drawer_menu_user_wishlist))
-            startFragment(GlobalStaticVariables.MOVIE_CATEGORY_LOCAL_USER_WISH_LIST)
+            startGridFragment(GlobalStaticVariables.MOVIE_CATEGORY_LOCAL_USER_WISH_LIST)
         } else if (id == R.id.nav_user_favourite) {
             showSnackBar(getString(R.string.drawer_menu_user_favourite))
             setItemTitle(getString(R.string.drawer_menu_user_favourite))
-            startFragment(GlobalStaticVariables.MOVIE_CATEGORY_LOCAL_USER_FAVOURITE)
+            startGridFragment(GlobalStaticVariables.MOVIE_CATEGORY_LOCAL_USER_FAVOURITE)
         } else if (id == R.id.nav_user_collection) {
             showSnackBar(getString(R.string.drawer_menu_user_collection))
             setItemTitle(getString(R.string.drawer_menu_user_collection))
-            startFragment(GlobalStaticVariables.MOVIE_CATEGORY_LOCAL_USER_COLLECTION)
+            startGridFragment(GlobalStaticVariables.MOVIE_CATEGORY_LOCAL_USER_COLLECTION)
         }
 
         final DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout)
@@ -211,14 +209,24 @@ public class MovieMagicMainActivity extends AppCompatActivity
         return true
     }
 
-    private void startFragment (String category) {
+    private void startGridFragment(String category) {
+//        final GridMovieFragment fragment = new GridMovieFragment(category, 0)
+//        final FragmentManager fragmentManager = getSupportFragmentManager()
+//        final FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction()
+//        //Set the custom animation
+//        fragmentTransaction.setCustomAnimations(R.anim.slide_bottom_up_animation,0)
+//        fragmentTransaction.replace(R.id.main_content_layout, fragment)
+//        fragmentTransaction.commit()
+        final Bundle bundle = new Bundle()
+        bundle.putString(GlobalStaticVariables.MOVIE_BASIC_INFO_CATEGORY,category)
         //Collection id is not required here, so passed on as zero
-        final GridFragment fragment = new GridFragment(category, 0)
-        final FragmentManager fragmentManager = getSupportFragmentManager()
-        final FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction()
+        bundle.putInt(GlobalStaticVariables.MOVIE_BASIC_INFO_COLL_ID,0)
+        final GridMovieFragment gridMovieFragment = new GridMovieFragment()
+        gridMovieFragment.setArguments(bundle)
+        final FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction()
         //Set the custom animation
         fragmentTransaction.setCustomAnimations(R.anim.slide_bottom_up_animation,0)
-        fragmentTransaction.replace(R.id.main_content_layout, fragment)
+        fragmentTransaction.replace(R.id.content_grid_main_layout, gridMovieFragment)
         fragmentTransaction.commit()
     }
 
@@ -233,27 +241,13 @@ public class MovieMagicMainActivity extends AppCompatActivity
     }
 
     private showSnackBar(String menuItem) {
-        Snackbar.make(findViewById(R.id.main_content_layout), menuItem + " is clicked", Snackbar.LENGTH_LONG)
+        Snackbar.make(findViewById(R.id.content_grid_main_layout), menuItem + " is clicked", Snackbar.LENGTH_LONG)
                 .setAction("Action", null).show()
     }
 
-    //Override the callback method of GridFragment
-    @Override
-//    public void onItemSelected(int movieId, long movie_magic_row_ID, ImageView gridImageView) {
-//    public void onItemSelected(int movieId, ImageView gridImageView) {
-    public void onItemSelected(int movieId) {
-        final Intent intent = new Intent(this, DetailMovieActivity.class)
-        final Bundle bundle = new Bundle()
-        bundle.putInt(GlobalStaticVariables.MOVIE_BASIC_INFO_MOVIE_ID,movieId)
-//        bundle.putLong(GlobalStaticVariables.MOVIE_BASIC_INFO_ROW_ID,movie_magic_row_ID)
-        intent.putExtras(bundle)
-        startActivity(intent)
-        //Start the animation
-        overridePendingTransition(R.anim.slide_bottom_up_animation,0)
-    }
 
     /**
-     * Updating of menu counter is tightly coupled with main activity, so no separate class is
+     * Updating of menu counter is tightly coupled with main_activity_menu activity, so no separate class is
      * created for the AsyncTask
      */
 
@@ -321,5 +315,19 @@ public class MovieMagicMainActivity extends AppCompatActivity
             final TextView collectionView = (TextView) navigationView.getMenu().findItem(R.id.nav_user_collection).getActionView()
             collectionView.setText(result[3] > 0 ? String.valueOf(result[3]) : null)
         }
+    }
+
+    //Override the callback method of GridMovieFragment
+    @Override
+//    public void onItemSelected(int movieId, long movie_magic_row_ID, ImageView gridImageView) {
+//    public void onItemSelected(int movieId, ImageView gridImageView) {
+    public void onItemSelected(int movieId) {
+        final Intent intent = new Intent(this, DetailMovieActivity.class)
+        final Bundle bundle = new Bundle()
+        bundle.putInt(GlobalStaticVariables.MOVIE_BASIC_INFO_MOVIE_ID,movieId)
+        intent.putExtras(bundle)
+        startActivity(intent)
+        //Start the animation
+        overridePendingTransition(R.anim.slide_bottom_up_animation,0)
     }
 }
