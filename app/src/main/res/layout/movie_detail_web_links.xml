@@ -34,6 +34,7 @@
         android:fontFamily="sans-serif-condensed"
         android:text="@string/movie_detail_web_links_home_page"
         android:gravity="center"
+        android:background="@color/primary_dark"
         android:textAppearance="@style/TextAppearance.AppCompat.Title"
         android:textColor="@color/white_color" />
     <!--<TextView-->
@@ -60,6 +61,7 @@
         android:fontFamily="sans-serif-condensed"
         android:text="@string/movie_detail_web_links_imdb_link"
         android:gravity="center"
+        android:background="@color/primary_dark"
         android:textAppearance="@style/TextAppearance.AppCompat.Title"
         android:textColor="@color/white_color" />
     <!--<TextView-->

@@ -76,29 +76,29 @@ class LoadMovieBasicAddlInfo extends AsyncTask<Integer, Void, Void> {
              * Process and load (insert) the movie cast data
              * **/
             final ContentValues[] movieCastContentValues = JsonParse.praseMovieCastJson(jsonData, movieId, movieBasicRowId) as ContentValues []
-            final int MovieCastCount = mContentResolver.bulkInsert(MovieMagicContract.MovieCast.CONTENT_URI,movieCastContentValues)
-            LogDisplay.callLog(LOG_TAG,"Total insert for movie cast->$MovieCastCount",LogDisplay.LOAD_MOVIE_BASIC_ADDL_INFO_FLAG)
+            final int movieCastCount = mContentResolver.bulkInsert(MovieMagicContract.MovieCast.CONTENT_URI,movieCastContentValues)
+            LogDisplay.callLog(LOG_TAG,"Total insert for movie cast->$movieCastCount",LogDisplay.LOAD_MOVIE_BASIC_ADDL_INFO_FLAG)
 
             /**
              * Process and load (insert) the movie crew data
              * **/
             final ContentValues[] movieCrewContentValues = JsonParse.praseMovieCrewJson(jsonData, movieId, movieBasicRowId) as ContentValues []
-            final int MovieCrewCount = mContentResolver.bulkInsert(MovieMagicContract.MovieCrew.CONTENT_URI,movieCrewContentValues)
-            LogDisplay.callLog(LOG_TAG,"Total insert for movie crew->$MovieCrewCount",LogDisplay.LOAD_MOVIE_BASIC_ADDL_INFO_FLAG)
+            final int movieCrewCount = mContentResolver.bulkInsert(MovieMagicContract.MovieCrew.CONTENT_URI,movieCrewContentValues)
+            LogDisplay.callLog(LOG_TAG,"Total insert for movie crew->$movieCrewCount",LogDisplay.LOAD_MOVIE_BASIC_ADDL_INFO_FLAG)
 
             /**
              * Process and load (insert) the movie image data
              * **/
             final ContentValues[] movieImageContentValues = JsonParse.praseMovieImageJson(jsonData, movieId, movieBasicRowId) as ContentValues []
-            final int MovieImageCount = mContentResolver.bulkInsert(MovieMagicContract.MovieImage.CONTENT_URI,movieImageContentValues)
-            LogDisplay.callLog(LOG_TAG,"Total insert for movie image->$MovieImageCount",LogDisplay.LOAD_MOVIE_BASIC_ADDL_INFO_FLAG)
+            final int movieImageCount = mContentResolver.bulkInsert(MovieMagicContract.MovieImage.CONTENT_URI,movieImageContentValues)
+            LogDisplay.callLog(LOG_TAG,"Total insert for movie image->$movieImageCount",LogDisplay.LOAD_MOVIE_BASIC_ADDL_INFO_FLAG)
 
             /**
              * Process and load (insert) the movie video data
              * **/
             final ContentValues[] movieVideoContentValues = JsonParse.praseMovieVideoJson(jsonData, movieId, movieBasicRowId) as ContentValues []
-            final int MovieVideoCount = mContentResolver.bulkInsert(MovieMagicContract.MovieVideo.CONTENT_URI,movieVideoContentValues)
-            LogDisplay.callLog(LOG_TAG,"Total insert for movie now_playing->$MovieVideoCount",LogDisplay.LOAD_MOVIE_BASIC_ADDL_INFO_FLAG)
+            final int movieVideoCount = mContentResolver.bulkInsert(MovieMagicContract.MovieVideo.CONTENT_URI,movieVideoContentValues)
+            LogDisplay.callLog(LOG_TAG,"Total insert for movie now_playing->$movieVideoCount",LogDisplay.LOAD_MOVIE_BASIC_ADDL_INFO_FLAG)
 
             /**
              * Process and load (insert) the movie release date data
@@ -111,8 +111,8 @@ class LoadMovieBasicAddlInfo extends AsyncTask<Integer, Void, Void> {
              * Process and load (insert) the movie review data
              * **/
             final ContentValues[] movieReviewContentValues = JsonParse.praseMovieReviewJson(jsonData, movieId, movieBasicRowId) as ContentValues []
-            final int MovieReviewCount = mContentResolver.bulkInsert(MovieMagicContract.MovieReview.CONTENT_URI,movieReviewContentValues)
-            LogDisplay.callLog(LOG_TAG,"Total insert for movie review->$MovieReviewCount",LogDisplay.LOAD_MOVIE_BASIC_ADDL_INFO_FLAG)
+            final int movieReviewCount = mContentResolver.bulkInsert(MovieMagicContract.MovieReview.CONTENT_URI,movieReviewContentValues)
+            LogDisplay.callLog(LOG_TAG,"Total insert for movie review->$movieReviewCount",LogDisplay.LOAD_MOVIE_BASIC_ADDL_INFO_FLAG)
 
         } catch (URISyntaxException e) {
             //Set the boolean to true to indicate API call failed

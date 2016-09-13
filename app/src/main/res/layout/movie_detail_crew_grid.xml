@@ -14,4 +14,14 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
     </android.support.v17.leanback.widget.HorizontalGridView>
+
+    <!-- this is to display a message when the crewgrid is empty -->
+    <TextView
+        android:id="@+id/movie_detail_crew_grid_empty_msg_text_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="left"
+        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+        android:textColor="@color/grey_color"
+        android:text="@string/movie_data_not_available"/>
 </FrameLayout>

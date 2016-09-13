@@ -17,6 +17,7 @@ import groovy.transform.CompileStatic
 
 @CompileStatic
 class MovieGridAdapter extends CursorAdapter {
+    //TODO: Not using the adapter anymore, replaced by MovieGridRecyclerAdapter. Delte it before release.
     private static final String LOG_TAG = MovieGridAdapter.class.getSimpleName()
 
     private final Context mContext
@@ -46,7 +47,7 @@ class MovieGridAdapter extends CursorAdapter {
         final TextView movieNameView = view.findViewById(R.id.grid_text_view) as TextView
         final String posterPath = "$GlobalStaticVariables.TMDB_IMAGE_BASE_URL/$GlobalStaticVariables.TMDB_IMAGE_SIZE_W185" +
                 "${cursor.getString(GridMovieFragment.COL_MOVIE_POSTER)}"
-        PicassoLoadImage.loadMoviePosterUsingPicasso(mContext,posterPath,movieImageView)
+        PicassoLoadImage.loadMoviePosterImage(mContext,posterPath,movieImageView)
         movieNameView.setText(cursor.getString(GridMovieFragment.COL_MOVIE_TITLE))
     }
 }

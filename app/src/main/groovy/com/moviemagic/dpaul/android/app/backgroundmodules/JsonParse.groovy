@@ -8,6 +8,7 @@ import com.moviemagic.dpaul.android.app.contentprovider.MovieMagicContract.Movie
 import com.moviemagic.dpaul.android.app.contentprovider.MovieMagicContract.MovieReleaseDate
 import com.moviemagic.dpaul.android.app.contentprovider.MovieMagicContract.MovieReview
 import com.moviemagic.dpaul.android.app.contentprovider.MovieMagicContract.MovieVideo
+import com.moviemagic.dpaul.android.app.contentprovider.MovieMagicContract.MovieCollection
 
 //Since the json field is used dynamically, so this class is not compiled as CompileStatic
 //@CompileStatic
@@ -533,5 +534,111 @@ class JsonParse {
             }
         }
         return movieReviewList
+    }
+
+    /**
+     * Helper method to parse collection JSON data
+     * @param jsonData JSON data to be parsed
+     * @return formatted collection data as content values
+     */
+    static ContentValues parseCollectionDataJson(def jsonData) {
+        ContentValues collectionData = new ContentValues()
+        if(jsonData) {
+            if (jsonData.id)
+                collectionData.put(MovieCollection.COLUMN_COLLECTION_ID, jsonData.id)
+            else
+                collectionData.put(MovieCollection.COLUMN_COLLECTION_ID, 0)
+            if (jsonData.name)
+                collectionData.put(MovieCollection.COLUMN_COLLECTION_NAME, jsonData.name)
+            else
+                collectionData.put(MovieCollection.COLUMN_COLLECTION_NAME, '')
+            collectionData.put(MovieCollection.COLUMN_COLLECTION_OVERVIEW, jsonData.overview)
+            collectionData.put(MovieCollection.COLUMN_COLLECTION_POSTER_PATH, jsonData.poster_path)
+            collectionData.put(MovieCollection.COLUMN_COLLECTION_BACKDROP_PATH, jsonData.backdrop_path)
+            collectionData.put(MovieCollection.COLUMN_COLLECTION_MOVIE_PRESENT_FLAG, GlobalStaticVariables.MOVIE_MAGIC_FLAG_FALSE)
+            return collectionData
+        }
+        else return null
+    }
+
+    /**
+     * Helper method to parse collection movie JSON
+     * @param jsonData JSON data to be parsed
+     * @return formatted list of collection movies as content values
+     */
+    static List<ContentValues> parseCollectionMovieJson(def jsonData) {
+        List<ContentValues> collectionMovieList = []
+        def cnt = jsonData.parts.size() - 1
+        //Ensure that the parts is not Null
+        if (jsonData.parts) {
+            for (i in 0..cnt) {
+                LogDisplay.callLog(LOG_TAG, "$i -> ${jsonData.parts[i].title}", LogDisplay.JSON_PARSE_LOG_FLAG)
+                ContentValues collectionMovieValue = new ContentValues()
+                //if-else is used for all json fields for null safe
+                if (jsonData.parts[i].id)
+                    collectionMovieValue.put(MovieBasicInfo.COLUMN_MOVIE_ID, jsonData.parts[i].id)
+                else
+                    collectionMovieValue.put(MovieBasicInfo.COLUMN_MOVIE_ID, 0)
+                if (jsonData.parts[i].adult)
+                    collectionMovieValue.put(MovieBasicInfo.COLUMN_ADULT_FLAG, jsonData.parts[i].adult)
+                else
+                    collectionMovieValue.put(MovieBasicInfo.COLUMN_ADULT_FLAG, '')
+                if (jsonData.parts[i].backdrop_path)
+                    collectionMovieValue.put(MovieBasicInfo.COLUMN_BACKDROP_PATH, jsonData.parts[i].backdrop_path)
+                else
+                    collectionMovieValue.put(MovieBasicInfo.COLUMN_BACKDROP_PATH, '')
+                if (jsonData.parts[i].original_title)
+                    collectionMovieValue.put(MovieBasicInfo.COLUMN_ORIGINAL_TITLE, jsonData.parts[i].original_title)
+                else
+                    collectionMovieValue.put(MovieBasicInfo.COLUMN_ORIGINAL_TITLE, '')
+                if (jsonData.parts[i].overview)
+                    collectionMovieValue.put(MovieBasicInfo.COLUMN_OVERVIEW, jsonData.parts[i].overview)
+                else
+                    collectionMovieValue.put(MovieBasicInfo.COLUMN_OVERVIEW, '')
+                if (jsonData.parts[i].release_date)
+                    collectionMovieValue.put(MovieBasicInfo.COLUMN_RELEASE_DATE, jsonData.parts[i].release_date)
+                else
+                    collectionMovieValue.put(MovieBasicInfo.COLUMN_RELEASE_DATE, '1900-01-01')
+                //date format -> yyyy-mm-dd
+                if (jsonData.parts[i].poster_path)
+                    collectionMovieValue.put(MovieBasicInfo.COLUMN_POSTER_PATH, jsonData.parts[i].poster_path)
+                else
+                    collectionMovieValue.put(MovieBasicInfo.COLUMN_POSTER_PATH, '')
+                if (jsonData.parts[i].popularity)
+                    collectionMovieValue.put(MovieBasicInfo.COLUMN_POPULARITY, jsonData.parts[i].popularity)
+                else
+                    collectionMovieValue.put(MovieBasicInfo.COLUMN_POPULARITY, 0.0)
+                if (jsonData.parts[i].title)
+                    collectionMovieValue.put(MovieBasicInfo.COLUMN_TITLE, jsonData.parts[i].title)
+                else
+                    collectionMovieValue.put(MovieBasicInfo.COLUMN_TITLE, '')
+                if (jsonData.parts[i].video)
+                    collectionMovieValue.put(MovieBasicInfo.COLUMN_VIDEO_FLAG, jsonData.parts[i].video)
+                else
+                    collectionMovieValue.put(MovieBasicInfo.COLUMN_VIDEO_FLAG, 'false')
+                if (jsonData.parts[i].vote_average)
+                    collectionMovieValue.put(MovieBasicInfo.COLUMN_VOTE_AVG, jsonData.parts[i].vote_average)
+                else
+                    collectionMovieValue.put(MovieBasicInfo.COLUMN_VOTE_AVG, 0.0)
+                if (jsonData.parts[i].vote_count)
+                    collectionMovieValue.put(MovieBasicInfo.COLUMN_VOTE_COUNT, jsonData.parts[i].vote_count)
+                else
+                    collectionMovieValue.put(MovieBasicInfo.COLUMN_VOTE_COUNT, 0)
+                //Page number not used in collection movie, so populate as 0
+                collectionMovieValue.put(MovieBasicInfo.COLUMN_PAGE_NUMBER, 0)
+                //category and movieListType are collection and tmdb_collection
+                collectionMovieValue.put(MovieBasicInfo.COLUMN_MOVIE_CATEGORY, GlobalStaticVariables.MOVIE_CATEGORY_COLLECTION)
+                collectionMovieValue.put(MovieBasicInfo.COLUMN_MOVIE_LIST_TYPE, GlobalStaticVariables.MOVIE_LIST_TYPE_TMDB_COLLECTION)
+                //This is important, populate the data with collection id because it's used to extract data in the program
+                collectionMovieValue.put(MovieBasicInfo.COLUMN_COLLECTION_ID,jsonData.id)
+                //Set create date and update date
+                collectionMovieValue.put(MovieBasicInfo.COLUMN_CREATE_TIMESTAMP,Utility.getTodayDate())
+                collectionMovieValue.put(MovieBasicInfo.COLUMN_UPDATE_TIMESTAMP,Utility.getTodayDate())
+
+                //add to the list
+                collectionMovieList << collectionMovieValue
+            }
+        }
+        return collectionMovieList
     }
 }

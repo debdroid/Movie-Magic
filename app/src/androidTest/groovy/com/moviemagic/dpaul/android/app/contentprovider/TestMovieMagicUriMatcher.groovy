@@ -18,6 +18,7 @@ class TestMovieMagicUriMatcher extends AndroidTestCase {
     private static final Uri TEST_MOVIE_BASIC_INFO_DIR = MovieMagicContract.MovieBasicInfo.CONTENT_URI
     private static final Uri TEST_MOVIE_BASIC_INFO_WITH_ID_ITEM = MovieMagicContract.MovieBasicInfo.buildMovieUriWithMovieId(TEST_MOVIE_ID)
     private static final Uri TEST_MOVIE_BASIC_INFO_WITH_CATEGORY_DIR = MovieMagicContract.MovieBasicInfo.buildMovieUriWithMovieCategory(TEST_MOVIE_CATEGORY)
+    private static final Uri TEST_MOVIE_BASIC_INFO_WITH_CATEGORY_AND_COLL_ID_ITEM = MovieMagicContract.MovieBasicInfo.buildMovieUriWithMovieCategoryAndCollectionId(TEST_MOVIE_CATEGORY,TEST_COLL_ID)
     private static final Uri TEST_MOVIE_CAST_DIR = MovieMagicContract.MovieCast.CONTENT_URI
     private static final Uri TEST_MOVIE_CAST_WITH_ID_DIR = MovieMagicContract.MovieCast.buildMovieCastUriWithMovieId(TEST_MOVIE_ID)
     private static final Uri TEST_MOVIE_CREW_DIR = MovieMagicContract.MovieCrew.CONTENT_URI
@@ -52,6 +53,7 @@ class TestMovieMagicUriMatcher extends AndroidTestCase {
         assertEquals('Error: movie_basic_info matched incorrectly.',testMatcher.match(TEST_MOVIE_BASIC_INFO_DIR), MovieMagicProvider.MOVIE_BASIC_INFO)
         assertEquals('Error: movie_basic_info with movie id matched incorrectly.',testMatcher.match(TEST_MOVIE_BASIC_INFO_WITH_ID_ITEM), MovieMagicProvider.MOVIE_BASIC_INFO_WITH_MOVIE_ID)
         assertEquals('Error: movie_basic_info with category matched incorrectly.',testMatcher.match(TEST_MOVIE_BASIC_INFO_WITH_CATEGORY_DIR), MovieMagicProvider.MOVIE_BASIC_INFO_WITH_CATEGORY)
+        assertEquals('Error: movie_basic_info with category and collection id matched incorrectly.',testMatcher.match(TEST_MOVIE_BASIC_INFO_WITH_CATEGORY_AND_COLL_ID_ITEM), MovieMagicProvider.MOVIE_BASIC_INFO_WITH_CATEGORY_AND_COLLECTION_ID)
         assertEquals('Error: movie_cast matched matched incorrectly.',testMatcher.match(TEST_MOVIE_CAST_DIR), MovieMagicProvider.MOVIE_CAST)
         assertEquals('Error: movie_cast with movie id matched matched incorrectly.',testMatcher.match(TEST_MOVIE_CAST_WITH_ID_DIR), MovieMagicProvider.MOVIE_CAST_WITH_MOVIE_ID)
         assertEquals('Error: movie_crew matched matched incorrectly.',testMatcher.match(TEST_MOVIE_CREW_DIR), MovieMagicProvider.MOVIE_CREW)

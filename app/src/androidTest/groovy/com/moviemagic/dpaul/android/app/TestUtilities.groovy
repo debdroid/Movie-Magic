@@ -53,6 +53,7 @@ class TestUtilities extends AndroidTestCase {
         movieInfoValues.put(MovieMagicContract.MovieBasicInfo.COLUMN_MOVIE_LIST_TYPE,GlobalStaticVariables.MOVIE_LIST_TYPE_TMDB_PUBLIC)
         movieInfoValues.put(MovieMagicContract.MovieBasicInfo.COLUMN_TITLE,'Helen of Troy')
         movieInfoValues.put(MovieMagicContract.MovieBasicInfo.COLUMN_PAGE_NUMBER,1)
+        movieInfoValues.put(MovieMagicContract.MovieBasicInfo.COLUMN_COLLECTION_ID,TEST_COLL_ID)
         movieInfoValues.put(MovieMagicContract.MovieBasicInfo.COLUMN_CREATE_TIMESTAMP,Utility.getTodayDate())
         movieInfoValues.put(MovieMagicContract.MovieBasicInfo.COLUMN_UPDATE_TIMESTAMP,Utility.getTodayDate())
         movieInfoValues

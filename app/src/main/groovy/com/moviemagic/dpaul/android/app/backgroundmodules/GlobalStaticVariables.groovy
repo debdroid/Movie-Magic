@@ -8,6 +8,7 @@ class GlobalStaticVariables {
     public static final String MOVIE_LIST_TYPE_TMDB_PUBLIC = 'tmdb_public'
     public static final String MOVIE_LIST_TYPE_TMDB_USER = 'tmdb_user'
     public static final String MOVIE_LIST_TYPE_TMDB_SIMILAR = 'tmdb_similar'
+    public static final String MOVIE_LIST_TYPE_TMDB_COLLECTION = 'tmdb_collection'
     public static final String MOVIE_LIST_TYPE_USER_LOCAL_LIST = 'user_local_list'
     public static final String MOVIE_LIST_TYPE_ORPHANED = 'orphaned_list'
 
@@ -34,6 +35,8 @@ class GlobalStaticVariables {
     public static final String TMDB_MOVIE_PAGE = 'page'
     public static final String TMDB_APPEND_TO_RESPONSE_KEY = 'append_to_response'
     public static final String TMDB_APPEND_TO_RESPONSE_PARAM = 'similar,credits,images,videos,release_dates,reviews'
+    public static final String TMDB_COLLECTION_PATH = 'collection'
+
 
     //Static variables for TMDB movie image url and parameters
     public static final String TMDB_IMAGE_BASE_URL = 'http://image.tmdb.org/t/p/'
@@ -68,6 +71,9 @@ class GlobalStaticVariables {
     public static final float MOVIE_MAGIC_ALPHA_FULL_OPAQUE = 1f
     public static final float MOVIE_MAGIC_ALPHA_OPAQUE_40_PERCENT = 0.4f
     public static final String MOVIE_COLLECTION_ID = 'collection_id'
-
-
+    public static final String MOVIE_BASIC_INFO_URI = 'movie_basic_info_uri'
+    public static final String MOVIE_COLLECTION_URI = 'collection_uri'
+    public static final String MOVIE_CATEGORY_AND_COLL_ID_URI = 'category_and_collection_id_uri'
+    public static final String PICASSO_POSTER_IMAGE_TAG = 'picasso_poster_image_tag'
+    public static final String COLLECTION_MOVIE_FRAGMENT_TAG = 'collection_movie_fragment_tag'
 }

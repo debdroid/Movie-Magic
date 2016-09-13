@@ -13,7 +13,10 @@ import groovy.transform.CompileStatic
 class MovieMagicDbHelper extends SQLiteOpenHelper {
     private static final String LOG_TAG = MovieMagicDbHelper.class.getSimpleName()
     // Increment the database version if the schema gets changed
-    private static final int DATABASE_VERSION = 1
+    //TODO:In my nexus4, somehow the database does not get deleted while uninstalling, so every change in db
+    //TODO: is forcing me to upgrade the database.
+    //TODO:Need to change before release
+    private static final int DATABASE_VERSION = 3
 
     //Define as public as used by TestMovieMagicDatabase.groovy
     public static final String DATABASE_NAME = 'movie_magic.db'
@@ -151,20 +154,6 @@ class MovieMagicDbHelper extends SQLiteOpenHelper {
                 $MovieMagicContract.MovieVideo.COLUMN_VIDEO_TYPE) ON CONFLICT REPLACE)
                 """
 
-        //Create the SQL to create movie_collection table
-        final  String SQL_CREATE_MOVIE_COLLECTION_TABLE = """
-                CREATE TABLE $MovieMagicContract.MovieCollection.TABLE_NAME (
-                $MovieMagicContract.MovieCollection._ID INTEGER PRIMARY KEY,
-                $MovieMagicContract.MovieCollection.COLUMN_COLLECTION_ID INTEGER NOT NULL,
-                $MovieMagicContract.MovieCollection.COLUMN_COLLECTION_NAME TEXT NOT NULL,
-                $MovieMagicContract.MovieCollection.COLUMN_COLLECTION_OVERVIEW TEXT NULL,
-                $MovieMagicContract.MovieCollection.COLUMN_COLLECTION_POSTER_PATH TEXT NULL,
-                $MovieMagicContract.MovieCollection.COLUMN_COLLECTION_BACKDROP_PATH TEXT NULL,
-                $MovieMagicContract.MovieCollection.COLUMN_COLLECTION_MOVIE_PRESENT_FLAG INTEGER NULL,
-                UNIQUE ($MovieMagicContract.MovieCollection.COLUMN_COLLECTION_ID,
-                $MovieMagicContract.MovieCollection.COLUMN_COLLECTION_NAME) ON CONFLICT REPLACE)
-                """
-
         //Create the SQL to create movie_review table
         final  String SQL_CREATE_MOVIE_REVIEW_TABLE = """
                 CREATE TABLE $MovieMagicContract.MovieReview.TABLE_NAME (
@@ -200,6 +189,26 @@ class MovieMagicDbHelper extends SQLiteOpenHelper {
                 UNIQUE ($MovieMagicContract.MovieReleaseDate.COLUMN_RELEASE_ORIG_MOVIE_ID,
                 $MovieMagicContract.MovieReleaseDate.COLUMN_RELEASE_ISO_COUNTRY,
                 $MovieMagicContract.MovieReleaseDate.COLUMN_RELEASE_DATE) ON CONFLICT REPLACE)
+                """
+
+        //Create the SQL to create movie_user_list_flag table
+        final  String SQL_CREATE_MOVIE_USER_LIST_FLAG_TABLE = """
+                CREATE TABLE $MovieMagicContract.MovieUserListFlag.TABLE_NAME (
+                $MovieMagicContract.MovieUserListFlag._ID INTEGER PRIMARY KEY,
+                $MovieMagicContract.MovieUserListFlag.COLUMN_FOREIGN_KEY_ID INTEGER NOT NULL,
+                $MovieMagicContract.MovieUserListFlag.COLUMN_USER_LIST_FLAG_ORIG_MOVIE_ID INTEGER NOT NULL,
+                $MovieMagicContract.MovieUserListFlag.COLUMN_USER_LIST_FLAG_WATCHED INTEGER DEFAULT 0,
+                $MovieMagicContract.MovieUserListFlag.COLUMN_USER_LIST_FLAG_WISH_LIST INTEGER DEFAULT 0,
+                $MovieMagicContract.MovieUserListFlag.COLUMN_USER_LIST_FLAG_FAVOURITE INTEGER DEFAULT 0,
+                $MovieMagicContract.MovieUserListFlag.COLUMN_USER_LIST_FLAG_COLLECTION INTEGER DEFAULT 0,
+                $MovieMagicContract.MovieUserListFlag.COLUMN_USER_LIST_USER_RATING REAL DEFAULT 0.0,
+                $MovieMagicContract.MovieUserListFlag.COLUMN_FUTURE_USE_1 TEXT DEFAULT NULL,
+                $MovieMagicContract.MovieUserListFlag.COLUMN_FUTURE_USE_2 TEXT DEFAULT NULL,
+                $MovieMagicContract.MovieUserListFlag.COLUMN_FUTURE_USE_3 INTEGER DEFAULT 0,
+                $MovieMagicContract.MovieUserListFlag.COLUMN_FUTURE_USE_4 INTEGER DEFAULT 0,
+                FOREIGN KEY ($MovieMagicContract.MovieUserListFlag.COLUMN_FOREIGN_KEY_ID) REFERENCES
+                $MovieMagicContract.MovieBasicInfo.TABLE_NAME ($MovieMagicContract.MovieBasicInfo._ID)
+                ON DELETE CASCADE)
                 """
 
         //Create the SQL to create movie_person_info table
@@ -267,24 +276,18 @@ class MovieMagicDbHelper extends SQLiteOpenHelper {
                 $MovieMagicContract.MoviePersonCrew.COLUMN_PERSON_CREW_JOB) ON CONFLICT REPLACE)
                 """
 
-        //Create the SQL to create movie_user_list_flag table
-        final  String SQL_CREATE_MOVIE_USER_LIST_FLAG_TABLE = """
-                CREATE TABLE $MovieMagicContract.MovieUserListFlag.TABLE_NAME (
-                $MovieMagicContract.MovieUserListFlag._ID INTEGER PRIMARY KEY,
-                $MovieMagicContract.MovieUserListFlag.COLUMN_FOREIGN_KEY_ID INTEGER NOT NULL,
-                $MovieMagicContract.MovieUserListFlag.COLUMN_USER_LIST_FLAG_ORIG_MOVIE_ID INTEGER NOT NULL,
-                $MovieMagicContract.MovieUserListFlag.COLUMN_USER_LIST_FLAG_WATCHED INTEGER DEFAULT 0,
-                $MovieMagicContract.MovieUserListFlag.COLUMN_USER_LIST_FLAG_WISH_LIST INTEGER DEFAULT 0,
-                $MovieMagicContract.MovieUserListFlag.COLUMN_USER_LIST_FLAG_FAVOURITE INTEGER DEFAULT 0,
-                $MovieMagicContract.MovieUserListFlag.COLUMN_USER_LIST_FLAG_COLLECTION INTEGER DEFAULT 0,
-                $MovieMagicContract.MovieUserListFlag.COLUMN_USER_LIST_USER_RATING REAL DEFAULT 0.0,
-                $MovieMagicContract.MovieUserListFlag.COLUMN_FUTURE_USE_1 TEXT DEFAULT NULL,
-                $MovieMagicContract.MovieUserListFlag.COLUMN_FUTURE_USE_2 TEXT DEFAULT NULL,
-                $MovieMagicContract.MovieUserListFlag.COLUMN_FUTURE_USE_3 INTEGER DEFAULT 0,
-                $MovieMagicContract.MovieUserListFlag.COLUMN_FUTURE_USE_4 INTEGER DEFAULT 0,
-                FOREIGN KEY ($MovieMagicContract.MovieUserListFlag.COLUMN_FOREIGN_KEY_ID) REFERENCES
-                $MovieMagicContract.MovieBasicInfo.TABLE_NAME ($MovieMagicContract.MovieBasicInfo._ID)
-                ON DELETE CASCADE)
+        //Create the SQL to create movie_collection table
+        final  String SQL_CREATE_MOVIE_COLLECTION_TABLE = """
+                CREATE TABLE $MovieMagicContract.MovieCollection.TABLE_NAME (
+                $MovieMagicContract.MovieCollection._ID INTEGER PRIMARY KEY,
+                $MovieMagicContract.MovieCollection.COLUMN_COLLECTION_ID INTEGER NOT NULL,
+                $MovieMagicContract.MovieCollection.COLUMN_COLLECTION_NAME TEXT NOT NULL,
+                $MovieMagicContract.MovieCollection.COLUMN_COLLECTION_OVERVIEW TEXT NULL,
+                $MovieMagicContract.MovieCollection.COLUMN_COLLECTION_POSTER_PATH TEXT NULL,
+                $MovieMagicContract.MovieCollection.COLUMN_COLLECTION_BACKDROP_PATH TEXT NULL,
+                $MovieMagicContract.MovieCollection.COLUMN_COLLECTION_MOVIE_PRESENT_FLAG INTEGER DEFAULT 0,
+                UNIQUE ($MovieMagicContract.MovieCollection.COLUMN_COLLECTION_ID,
+                $MovieMagicContract.MovieCollection.COLUMN_COLLECTION_NAME) ON CONFLICT REPLACE)
                 """
 
         //Now create all the tables

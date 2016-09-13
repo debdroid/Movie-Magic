@@ -85,5 +85,9 @@
     <string name="grid_fragment_menu">GridFragmentMenu</string>
     <string name="detail_fragment_menu">DetailFragmentMenu</string>
     <string name="detail_activity_menu">DetailActivityMenu</string>
+    <string name="collection_overview_text">Collection Overview</string>
+    <string name="collection_overview_data">This is the collection overview details of a particualr collection. This field can have multiple lines or null value.</string>
+    <string name="collection_activity_menu">CollectionActivity</string>
+    <string name="collection_fragment_menu">CollectionFragment</string>
 
 </resources>

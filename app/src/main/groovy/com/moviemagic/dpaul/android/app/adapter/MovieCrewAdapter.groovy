@@ -21,6 +21,7 @@ class MovieCrewAdapter extends RecyclerView.Adapter<MovieCrewAdapter.MovieCrewAd
 
     private Cursor mCursor
     private final Context mContext
+    private final TextView mCrewGridEmptyTextView
     public static int mPrimaryDarkColor, mBodyTextColor
 
 
@@ -29,9 +30,10 @@ class MovieCrewAdapter extends RecyclerView.Adapter<MovieCrewAdapter.MovieCrewAd
         LogDisplay.callLog(LOG_TAG,'MovieCrewAdapter empty constructor is called',LogDisplay.MOVIE_CREW_ADAPTER_FLAG)
     }
 
-    public MovieCrewAdapter(Context ctx){
+    public MovieCrewAdapter(Context ctx, TextView emptyView){
         LogDisplay.callLog(LOG_TAG,'MovieCrewAdapter non-empty constructor is called',LogDisplay.MOVIE_CREW_ADAPTER_FLAG)
         mContext = ctx
+        mCrewGridEmptyTextView = emptyView
     }
 
     public class MovieCrewAdapterViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
@@ -68,7 +70,7 @@ class MovieCrewAdapter extends RecyclerView.Adapter<MovieCrewAdapter.MovieCrewAd
         LogDisplay.callLog(LOG_TAG,'onBindViewHolder is called',LogDisplay.MOVIE_CREW_ADAPTER_FLAG)
         final String profilePath = "$GlobalStaticVariables.TMDB_IMAGE_BASE_URL/$GlobalStaticVariables.TMDB_IMAGE_SIZE_W185" +
                 "${mCursor.getString(DetailMovieFragment.COL_MOVIE_CREW_PROFILE_PATH)}"
-        PicassoLoadImage.loadMoviePersonImageUsingPicasso(mContext,profilePath,holder.movieCrewImageView)
+        PicassoLoadImage.loadMoviePersonImage(mContext,profilePath,holder.movieCrewImageView)
         holder.movieCrewJobName.setText(mCursor.getString(DetailMovieFragment.COL_MOVIE_CREW_CREW_JOB))
         holder.movieCrewName.setText(mCursor.getString(DetailMovieFragment.COL_MOVIE_CREW_PERSON_NAME))
         holder.movieCrewJobName.setBackgroundColor(mPrimaryDarkColor)
@@ -86,13 +88,22 @@ class MovieCrewAdapter extends RecyclerView.Adapter<MovieCrewAdapter.MovieCrewAd
 
     public void swapCursor(Cursor newCursor) {
         mCursor = newCursor
-        notifyDataSetChanged()
+        if (getItemCount() == 0) {
+            mCrewGridEmptyTextView.setVisibility(TextView.VISIBLE)
+        } else {
+            mCrewGridEmptyTextView.setVisibility(TextView.INVISIBLE)
+            notifyDataSetChanged()
+        }
     }
 
     //Since the color is decided once the poster is downloaded by Picasso
     //but by then adapter might got loaded with data. Hence call notifyDataSetChanged
     //so that it get's recreated with correct color
     public void changeColor() {
-        notifyDataSetChanged()
+        if (getItemCount() == 0) {
+            mCrewGridEmptyTextView.setTextColor(mBodyTextColor)
+        } else {
+            notifyDataSetChanged()
+        }
     }
 }

@@ -75,9 +75,9 @@ class MovieReviewAdapter extends RecyclerView.Adapter<MovieReviewAdapter.MovieRe
 
     @Override
     void onBindViewHolder(MovieReviewAdapterViewHolder holder, int position) {
+        LogDisplay.callLog(LOG_TAG,'onBindViewHolder is called',LogDisplay.MOVIE_REVIEW_ADAPTER_FLAG)
         // move the cursor to correct position
         mCursor.moveToPosition(position)
-        LogDisplay.callLog(LOG_TAG,'onBindViewHolder is called',LogDisplay.MOVIE_REVIEW_ADAPTER_FLAG)
         holder.movieReviewAuthor.setText("By ${mCursor.getString(DetailMovieFragment.COL_MOVIE_REVIEW_AUTHOR)}")
         //remove all empty lines, blanks and tabs
         final String contentText = mCursor.getString(DetailMovieFragment.COL_MOVIE_REVIEW_CONTENT).replaceAll("(?m)^[ \t]*\r?\n", "")
@@ -104,7 +104,6 @@ class MovieReviewAdapter extends RecyclerView.Adapter<MovieReviewAdapter.MovieRe
         mCursor = newCursor
         if (getItemCount() == 0) {
             mRecyclerviewEmptyTextView.setVisibility(TextView.VISIBLE)
-            mRecyclerviewEmptyTextView.setTextColor(mBodyTextColor)
         } else {
             mRecyclerviewEmptyTextView.setVisibility(TextView.INVISIBLE)
             notifyDataSetChanged()
@@ -115,6 +114,10 @@ class MovieReviewAdapter extends RecyclerView.Adapter<MovieReviewAdapter.MovieRe
     //but by then adapter might got loaded with data. Hence call notifyDataSetChanged
     //so that it get's recreated with correct color
     public void changeColor() {
-        notifyDataSetChanged()
+        if (getItemCount() == 0) {
+            mRecyclerviewEmptyTextView.setTextColor(mBodyTextColor)
+        } else {
+            notifyDataSetChanged()
+        }
     }
 }

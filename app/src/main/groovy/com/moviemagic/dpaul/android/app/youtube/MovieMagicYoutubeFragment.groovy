@@ -33,6 +33,7 @@ class MovieMagicYoutubeFragment extends YouTubePlayerSupportFragment implements 
      * @param videoId The ID of the YouTube now_playing to play
      */
     public static MovieMagicYoutubeFragment createMovieMagicYouTubeFragment(final List<String> videoIds) {
+        LogDisplay.callLog(LOG_TAG,'createMovieMagicYouTubeFragment is called',LogDisplay.MOVIE_MAGIC_YOUTUBE_FRAGMENT_FLAG)
         final MovieMagicYoutubeFragment movieMagicYouTubeFragment = new MovieMagicYoutubeFragment()
         final Bundle bundle = new Bundle()
         bundle.putStringArrayList(YOUTUBE_VIDEO_ID_KEY, videoIds as ArrayList<String>)
@@ -42,6 +43,7 @@ class MovieMagicYoutubeFragment extends YouTubePlayerSupportFragment implements 
 
     @Override
     public void onCreate(Bundle bundle) {
+        LogDisplay.callLog(LOG_TAG,'onCreate is called',LogDisplay.MOVIE_MAGIC_YOUTUBE_FRAGMENT_FLAG)
         super.onCreate(bundle)
 
         final Bundle arguments = getArguments()
@@ -49,7 +51,9 @@ class MovieMagicYoutubeFragment extends YouTubePlayerSupportFragment implements 
         if (bundle != null && bundle.containsKey(YOUTUBE_VIDEO_ID_KEY)) {
             mVideoIds = bundle.getStringArrayList(YOUTUBE_VIDEO_ID_KEY)
         } else if (arguments != null && arguments.containsKey(YOUTUBE_VIDEO_ID_KEY)) {
-            videoIdsArrayList = arguments.getStringArrayList(YOUTUBE_VIDEO_ID_KEY)
+            //TODO: Strangely videoIdsArrayList is no where used but holds data! so changing it, will remove after testing
+//            videoIdsArrayList = arguments.getStringArrayList(YOUTUBE_VIDEO_ID_KEY)
+            mVideoIds = arguments.getStringArrayList(YOUTUBE_VIDEO_ID_KEY)
         }
         initialize(BuildConfig.YOUTUBE_API_KEY, this)
     }
@@ -61,12 +65,14 @@ class MovieMagicYoutubeFragment extends YouTubePlayerSupportFragment implements 
      * @param videoId The ID of the now_playing to play
      */
     public void setVideoId(final List<String> videoIds) {
+        LogDisplay.callLog(LOG_TAG,'setVideoId is called',LogDisplay.MOVIE_MAGIC_YOUTUBE_FRAGMENT_FLAG)
         mVideoIds = videoIds
         initialize(BuildConfig.YOUTUBE_API_KEY, this)
     }
 
     @Override
     void onInitializationSuccess(YouTubePlayer.Provider provider, YouTubePlayer youTubePlayer, boolean restored) {
+        LogDisplay.callLog(LOG_TAG,'onInitializationSuccess is called',LogDisplay.MOVIE_MAGIC_YOUTUBE_FRAGMENT_FLAG)
         //This flag tells the player to switch to landscape when in fullscreen, it will also return to portrait
         //when leaving fullscreen
         youTubePlayer.setFullscreenControlFlags(YouTubePlayer.FULLSCREEN_FLAG_CONTROL_ORIENTATION)
@@ -86,16 +92,20 @@ class MovieMagicYoutubeFragment extends YouTubePlayerSupportFragment implements 
 
     @Override
     void onInitializationFailure(YouTubePlayer.Provider provider, YouTubeInitializationResult youTubeInitializationResult) {
+        LogDisplay.callLog(LOG_TAG,'onInitializationFailure is called',LogDisplay.MOVIE_MAGIC_YOUTUBE_FRAGMENT_FLAG)
         if (youTubeInitializationResult.isUserRecoverableError()) {
+            LogDisplay.callLog(LOG_TAG,'onInitializationFailure:user recoverable',LogDisplay.MOVIE_MAGIC_YOUTUBE_FRAGMENT_FLAG)
             youTubeInitializationResult.getErrorDialog(getActivity(), RECOVERY_ERROR_DIALOG_ID).show()
         } else {
             //Handle the failure
             Toast.makeText(getActivity(), R.string.youtube_initialization_error, Toast.LENGTH_LONG).show()
+            LogDisplay.callLog(LOG_TAG,'onInitializationFailure:non-user recoverable',LogDisplay.MOVIE_MAGIC_YOUTUBE_FRAGMENT_FLAG)
         }
     }
 
     @Override
     public void onSaveInstanceState(Bundle bundle) {
+        LogDisplay.callLog(LOG_TAG,'onSaveInstanceState is called',LogDisplay.MOVIE_MAGIC_YOUTUBE_FRAGMENT_FLAG)
         if(mVideoIds) {
             bundle.putStringArrayList(YOUTUBE_VIDEO_ID_KEY, new ArrayList<String>(mVideoIds))
         }

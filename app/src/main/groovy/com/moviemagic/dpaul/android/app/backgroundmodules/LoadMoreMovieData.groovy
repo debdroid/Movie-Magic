@@ -17,9 +17,9 @@ import groovy.transform.CompileStatic
 @CompileStatic
 class LoadMoreMovieData extends AsyncTask<String, Void, Void>{
     private static final String LOG_TAG = LoadMoreMovieData.class.getSimpleName()
-    ContentResolver mContentResolver
-    Context mContext
-    int mCurrentPage
+    private final ContentResolver mContentResolver
+    private final Context mContext
+    private final int mCurrentPage
 
     public LoadMoreMovieData(Context ctx, int currPage) {
         mContext = ctx
@@ -29,8 +29,8 @@ class LoadMoreMovieData extends AsyncTask<String, Void, Void>{
 
     @Override
     protected Void doInBackground(String... params) {
-        String movieCategory = params[0]
-        int totalPage
+        final String movieCategory = params[0]
+        final int totalPage
         List<ContentValues> movieList
         //TMDB api example
         //https://api.themoviedb.org/3/movie/popular?api_key=key&page=1

@@ -53,7 +53,7 @@ class MovieMagicContract {
     static final String PATH_MOVIE_PERSON_CREW = 'movie_person_crew'
     static final String PATH_MOVIE_USER_LIST_FLAG = 'movie_user_list_flag'
 
-    /*
+    /**
         Inner class that defines the table contents of the movie_basic_info table
      */
     public static final class MovieBasicInfo implements BaseColumns {
@@ -162,6 +162,11 @@ class MovieMagicContract {
             CONTENT_URI.buildUpon().appendPath(movieCategory).build()
         }
 
+        static Uri buildMovieUriWithMovieCategoryAndCollectionId (String movieCategory, int collectionId) {
+            CONTENT_URI.buildUpon().appendPath(movieCategory)
+                    .appendPath(Integer.toString(collectionId)).build()
+        }
+
         static long getRowIdFromUri (Uri uri) {
             uri.getPathSegments().get(1).toLong()
         }
@@ -173,9 +178,17 @@ class MovieMagicContract {
         static String getMovieCategoryFromMovieUri (Uri uri) {
             uri.getPathSegments().get(1)
         }
+
+        static String getMovieCategoryFromMovieAndCollectionIdUri (Uri uri) {
+            uri.getPathSegments().get(1)
+        }
+
+        static int getCollectionIdFromMovieAndCollectionIdUri (Uri uri) {
+            uri.getPathSegments().get(2).toInteger()
+        }
     }
 
-    /*
+    /**
         Inner class that defines the table contents of the movie_cast table
      */
 
@@ -219,7 +232,7 @@ class MovieMagicContract {
         }
     }
 
-    /*
+    /**
         Inner class that defines the table contents of the movie_crew table
      */
     public static final class MovieCrew implements BaseColumns {
@@ -257,7 +270,7 @@ class MovieMagicContract {
         }
     }
 
-    /*
+    /**
         Inner class that defines the table contents of the movie_image table
     */
     public static final class MovieImage implements BaseColumns {
@@ -293,7 +306,7 @@ class MovieMagicContract {
         }
     }
 
-    /*
+    /**
         Inner class that defines the table contents of the movie_video table
     */
     public static final class MovieVideo implements BaseColumns {
@@ -331,42 +344,7 @@ class MovieMagicContract {
         }
     }
 
-    /*
-        Inner class that defines the table contents of the movie_collection table
-    */
-    public static final class MovieCollection implements BaseColumns {
-        static final String TABLE_NAME = PATH_MOVIE_COLLECTION
-        //Define the columns
-        static final String COLUMN_COLLECTION_ID = 'collection_id'
-        static final String COLUMN_COLLECTION_NAME = 'collection_name'
-        static final String COLUMN_COLLECTION_OVERVIEW = 'collection_overview'
-        static final String COLUMN_COLLECTION_POSTER_PATH = 'collection_poster_path'
-        static final String COLUMN_COLLECTION_BACKDROP_PATH = 'collection_backdrop_path'
-        static final String COLUMN_COLLECTION_MOVIE_PRESENT_FLAG = 'collection_movie_present_flag'
-
-        //Uri for movie_collection table
-        static final Uri CONTENT_URI =
-                BASE_CONTENT_URI.buildUpon().appendPath(PATH_MOVIE_COLLECTION).build()
-
-        static final String CONTENT_TYPE =
-                "$ContentResolver.CURSOR_DIR_BASE_TYPE/$CONTENT_AUTHORITY/$PATH_MOVIE_COLLECTION"
-        static final String CONTENT_ITEM_TYPE =
-                "$ContentResolver.CURSOR_ITEM_BASE_TYPE/$CONTENT_AUTHORITY/$PATH_MOVIE_COLLECTION"
-
-        static Uri buildMovieCollectionUri(long id) {
-            ContentUris.withAppendedId(CONTENT_URI, id)
-        }
-
-        static Uri buildMovieCollectionUriWithCollectionId (int collectionId) {
-            CONTENT_URI.buildUpon().appendPath(collectionId.toString()).build()
-        }
-
-        static int getCollectionIdFromMovieCollectionUri (Uri uri) {
-            uri.getPathSegments().get(1).toInteger()
-        }
-    }
-
-    /*
+    /**
         Inner class that defines the table contents of the movie_review table
     */
     public static final class MovieReview implements BaseColumns {
@@ -402,7 +380,7 @@ class MovieMagicContract {
         }
     }
 
-    /*
+    /**
         Inner class that defines the table contents of the movie_release_date table
     */
     public static final class MovieReleaseDate implements BaseColumns {
@@ -448,129 +426,7 @@ class MovieMagicContract {
         }
     }
 
-    /*
-        Inner class that defines the table contents of the movie_person_info table
-    */
-    public static final class MoviePersonInfo implements BaseColumns {
-        static final String TABLE_NAME = PATH_MOVIE_PERSON_INFO
-        //Define the columns
-        static final String COLUMN_PERSON_ADULT_FLAG = 'person_adult_flag'
-        static final String COLUMN_PERSON_ALSO_KNOWN_AS = 'person_also_known_as'
-        static final String COLUMN_PERSON_BIOGRAPHY = 'person_biography'
-        static final String COLUMN_PERSON_BIRTHDAY = 'person_birthday'
-        static final String COLUMN_PERSON_DEATHDAY = 'person_deathday'
-        static final String COLUMN_PERSON_HOMEPAGE = 'person_homepage'
-        static final String COLUMN_PERSON_ID = 'person_id'
-        static final String COLUMN_PERSON_NAME = 'person_name'
-        static final String COLUMN_PERSON_PLACE_OF_BIRTH = 'person_place_of_birth'
-        static final String COLUMN_PERSON_PROFILE_PATH = 'person_profile_path'
-        static final String COLUMN_PERSON_IMDB_ID = 'person_imdb_id'
-        static final String COLUMN_PERSON_POPULARITY = 'person_popularity'
-
-        //Uri for movie_person_info table
-        static final Uri CONTENT_URI =
-                BASE_CONTENT_URI.buildUpon().appendPath(PATH_MOVIE_PERSON_INFO).build()
-
-        static final String CONTENT_TYPE =
-                "$ContentResolver.CURSOR_DIR_BASE_TYPE/$CONTENT_AUTHORITY/$PATH_MOVIE_PERSON_INFO"
-        static final String CONTENT_ITEM_TYPE =
-                "$ContentResolver.CURSOR_ITEM_BASE_TYPE/$CONTENT_AUTHORITY/$PATH_MOVIE_PERSON_INFO"
-
-        static Uri buildMoviePersonInfoUri(long id) {
-            ContentUris.withAppendedId(CONTENT_URI, id)
-        }
-
-        static Uri buildMoviePersonInfoUriWithPersonId (int personId) {
-            CONTENT_URI.buildUpon().appendPath(personId.toString()).build()
-        }
-
-        static int getPersonIdFromMoviePersonInfoUri (Uri uri) {
-            uri.getPathSegments().get(1).toInteger()
-        }
-    }
-
-    /*
-        Inner class that defines the table contents of the movie_person_cast table
-    */
-    public static final class MoviePersonCast implements BaseColumns {
-        static final String TABLE_NAME = PATH_MOVIE_PERSON_CAST
-        //Define the columns
-        static final String COLUMN_FOREIGN_KEY_ID = 'foreign_key'
-        //ORIG_PERSON_ID column is the reference(i.e. dummy Foreign key) and populated with the person id of movie_person_info
-        static final String COLUMN_PERSON_CAST_ORIG_PERSON_ID = 'person_cast_orig_person_id'
-        static final String COLUMN_PERSON_CAST_ADULT_FLAG = 'person_cast_adult_flag'
-        static final String COLUMN_PERSON_CAST_CHARACTER = 'person_cast_character'
-        static final String COLUMN_PERSON_CAST_CREDIT_ID = 'person_cast_credit_id'
-        static final String COLUMN_PERSON_CAST_MOVIE_ID = 'person_cast_movie_id'
-        static final String COLUMN_PERSON_CAST_ORIG_TITLE = 'person_cast_orig_title'
-        static final String COLUMN_PERSON_CAST_POSTER_PATH = 'person_cast_poster_path'
-        static final String COLUMN_PERSON_CAST_RELEASE_DATE = 'person_cast_release_date'
-        static final String COLUMN_PERSON_CAST_TITLE = 'person_cast_title'
-
-        //Uri for movie_person_cast table
-        static final Uri CONTENT_URI =
-                BASE_CONTENT_URI.buildUpon().appendPath(PATH_MOVIE_PERSON_CAST).build()
-
-        static final String CONTENT_TYPE =
-                "$ContentResolver.CURSOR_DIR_BASE_TYPE/$CONTENT_AUTHORITY/$PATH_MOVIE_PERSON_CAST"
-        static final String CONTENT_ITEM_TYPE =
-                "$ContentResolver.CURSOR_ITEM_BASE_TYPE/$CONTENT_AUTHORITY/$PATH_MOVIE_PERSON_CAST"
-
-        static Uri buildMoviePersonCastUri(long id) {
-            ContentUris.withAppendedId(CONTENT_URI, id)
-        }
-
-        static Uri buildMoviePersonCastUriWithPersonId (int personId) {
-            CONTENT_URI.buildUpon().appendPath(personId.toString()).build()
-        }
-
-        static int getPersonIdFromMoviePersonCastUri (Uri uri) {
-            uri.getPathSegments().get(1).toInteger()
-        }
-    }
-
-    /*
-        Inner class that defines the table contents of the movie_person_crew table
-    */
-    public static final class MoviePersonCrew implements BaseColumns {
-        static final String TABLE_NAME = PATH_MOVIE_PERSON_CREW
-        //Define the columns
-        static final String COLUMN_FOREIGN_KEY_ID = 'foreign_key'
-        //ORIG_PERSON_ID column is the reference(i.e. dummy Foreign key) and populated with the movie id of movie_person_info
-        static final String COLUMN_PERSON_CREW_ORIG_PERSON_ID = 'person_crew_orig_person_id'
-        static final String COLUMN_PERSON_CREW_ADULT_FLAG = 'person_crew_adult_flag'
-        static final String COLUMN_PERSON_CREW_CREDIT_ID = 'person_crew_credit_id'
-        static final String COLUMN_PERSON_CREW_DEPARTMENT = 'person_crew_department'
-        static final String COLUMN_PERSON_CREW_MOVIE_ID = 'person_crew_movie_id'
-        static final String COLUMN_PERSON_CREW_JOB = 'person_crew_job'
-        static final String COLUMN_PERSON_CREW_ORIG_TITLE = 'person_crew_orig_title'
-        static final String COLUMN_PERSON_CREW_POSTER_PATH = 'person_crew_poster_path'
-        static final String COLUMN_PERSON_CREW_RELEASE_DATE = 'person_crew_release_date'
-        static final String COLUMN_PERSON_CREW_TITLE = 'person_crew_title'
-
-        //Uri for movie_person_crew table
-        static final Uri CONTENT_URI =
-                BASE_CONTENT_URI.buildUpon().appendPath(PATH_MOVIE_PERSON_CREW).build()
-
-        static final String CONTENT_TYPE =
-                "$ContentResolver.CURSOR_DIR_BASE_TYPE/$CONTENT_AUTHORITY/$PATH_MOVIE_PERSON_CREW"
-        static final String CONTENT_ITEM_TYPE =
-                "$ContentResolver.CURSOR_ITEM_BASE_TYPE/$CONTENT_AUTHORITY/$PATH_MOVIE_PERSON_CREW"
-
-        static Uri buildMoviePersonCrewUri(long id) {
-            ContentUris.withAppendedId(CONTENT_URI, id)
-        }
-
-        static Uri buildMoviePersonCrewUriWithPersonId (int personId) {
-            CONTENT_URI.buildUpon().appendPath(personId.toString()).build()
-        }
-
-        static int getPersonIdFromMoviePersonCrewUri (Uri uri) {
-            uri.getPathSegments().get(1).toInteger()
-        }
-    }
-
-    /*
+    /**
         Inner class that defines the table contents of the movie_user_list_flag table
     */
     public static final class MovieUserListFlag implements BaseColumns {
@@ -612,6 +468,167 @@ class MovieMagicContract {
         }
 
         static int getMovieIdFromMovieUserListFlagUri (Uri uri) {
+            uri.getPathSegments().get(1).toInteger()
+        }
+    }
+
+    /**
+        Inner class that defines the table contents of the movie_person_info table
+    */
+    public static final class MoviePersonInfo implements BaseColumns {
+        static final String TABLE_NAME = PATH_MOVIE_PERSON_INFO
+        //Define the columns
+        static final String COLUMN_PERSON_ADULT_FLAG = 'person_adult_flag'
+        static final String COLUMN_PERSON_ALSO_KNOWN_AS = 'person_also_known_as'
+        static final String COLUMN_PERSON_BIOGRAPHY = 'person_biography'
+        static final String COLUMN_PERSON_BIRTHDAY = 'person_birthday'
+        static final String COLUMN_PERSON_DEATHDAY = 'person_deathday'
+        static final String COLUMN_PERSON_HOMEPAGE = 'person_homepage'
+        static final String COLUMN_PERSON_ID = 'person_id'
+        static final String COLUMN_PERSON_NAME = 'person_name'
+        static final String COLUMN_PERSON_PLACE_OF_BIRTH = 'person_place_of_birth'
+        static final String COLUMN_PERSON_PROFILE_PATH = 'person_profile_path'
+        static final String COLUMN_PERSON_IMDB_ID = 'person_imdb_id'
+        static final String COLUMN_PERSON_POPULARITY = 'person_popularity'
+
+        //Uri for movie_person_info table
+        static final Uri CONTENT_URI =
+                BASE_CONTENT_URI.buildUpon().appendPath(PATH_MOVIE_PERSON_INFO).build()
+
+        static final String CONTENT_TYPE =
+                "$ContentResolver.CURSOR_DIR_BASE_TYPE/$CONTENT_AUTHORITY/$PATH_MOVIE_PERSON_INFO"
+        static final String CONTENT_ITEM_TYPE =
+                "$ContentResolver.CURSOR_ITEM_BASE_TYPE/$CONTENT_AUTHORITY/$PATH_MOVIE_PERSON_INFO"
+
+        static Uri buildMoviePersonInfoUri(long id) {
+            ContentUris.withAppendedId(CONTENT_URI, id)
+        }
+
+        static Uri buildMoviePersonInfoUriWithPersonId (int personId) {
+            CONTENT_URI.buildUpon().appendPath(personId.toString()).build()
+        }
+
+        static int getPersonIdFromMoviePersonInfoUri (Uri uri) {
+            uri.getPathSegments().get(1).toInteger()
+        }
+    }
+
+    /**
+        Inner class that defines the table contents of the movie_person_cast table
+    */
+    public static final class MoviePersonCast implements BaseColumns {
+        static final String TABLE_NAME = PATH_MOVIE_PERSON_CAST
+        //Define the columns
+        static final String COLUMN_FOREIGN_KEY_ID = 'foreign_key'
+        //ORIG_PERSON_ID column is the reference(i.e. dummy Foreign key) and populated with the person id of movie_person_info
+        static final String COLUMN_PERSON_CAST_ORIG_PERSON_ID = 'person_cast_orig_person_id'
+        static final String COLUMN_PERSON_CAST_ADULT_FLAG = 'person_cast_adult_flag'
+        static final String COLUMN_PERSON_CAST_CHARACTER = 'person_cast_character'
+        static final String COLUMN_PERSON_CAST_CREDIT_ID = 'person_cast_credit_id'
+        static final String COLUMN_PERSON_CAST_MOVIE_ID = 'person_cast_movie_id'
+        static final String COLUMN_PERSON_CAST_ORIG_TITLE = 'person_cast_orig_title'
+        static final String COLUMN_PERSON_CAST_POSTER_PATH = 'person_cast_poster_path'
+        static final String COLUMN_PERSON_CAST_RELEASE_DATE = 'person_cast_release_date'
+        static final String COLUMN_PERSON_CAST_TITLE = 'person_cast_title'
+
+        //Uri for movie_person_cast table
+        static final Uri CONTENT_URI =
+                BASE_CONTENT_URI.buildUpon().appendPath(PATH_MOVIE_PERSON_CAST).build()
+
+        static final String CONTENT_TYPE =
+                "$ContentResolver.CURSOR_DIR_BASE_TYPE/$CONTENT_AUTHORITY/$PATH_MOVIE_PERSON_CAST"
+        static final String CONTENT_ITEM_TYPE =
+                "$ContentResolver.CURSOR_ITEM_BASE_TYPE/$CONTENT_AUTHORITY/$PATH_MOVIE_PERSON_CAST"
+
+        static Uri buildMoviePersonCastUri(long id) {
+            ContentUris.withAppendedId(CONTENT_URI, id)
+        }
+
+        static Uri buildMoviePersonCastUriWithPersonId (int personId) {
+            CONTENT_URI.buildUpon().appendPath(personId.toString()).build()
+        }
+
+        static int getPersonIdFromMoviePersonCastUri (Uri uri) {
+            uri.getPathSegments().get(1).toInteger()
+        }
+    }
+
+    /**
+        Inner class that defines the table contents of the movie_person_crew table
+    */
+    public static final class MoviePersonCrew implements BaseColumns {
+        static final String TABLE_NAME = PATH_MOVIE_PERSON_CREW
+        //Define the columns
+        static final String COLUMN_FOREIGN_KEY_ID = 'foreign_key'
+        //ORIG_PERSON_ID column is the reference(i.e. dummy Foreign key) and populated with the movie id of movie_person_info
+        static final String COLUMN_PERSON_CREW_ORIG_PERSON_ID = 'person_crew_orig_person_id'
+        static final String COLUMN_PERSON_CREW_ADULT_FLAG = 'person_crew_adult_flag'
+        static final String COLUMN_PERSON_CREW_CREDIT_ID = 'person_crew_credit_id'
+        static final String COLUMN_PERSON_CREW_DEPARTMENT = 'person_crew_department'
+        static final String COLUMN_PERSON_CREW_MOVIE_ID = 'person_crew_movie_id'
+        static final String COLUMN_PERSON_CREW_JOB = 'person_crew_job'
+        static final String COLUMN_PERSON_CREW_ORIG_TITLE = 'person_crew_orig_title'
+        static final String COLUMN_PERSON_CREW_POSTER_PATH = 'person_crew_poster_path'
+        static final String COLUMN_PERSON_CREW_RELEASE_DATE = 'person_crew_release_date'
+        static final String COLUMN_PERSON_CREW_TITLE = 'person_crew_title'
+
+        //Uri for movie_person_crew table
+        static final Uri CONTENT_URI =
+                BASE_CONTENT_URI.buildUpon().appendPath(PATH_MOVIE_PERSON_CREW).build()
+
+        static final String CONTENT_TYPE =
+                "$ContentResolver.CURSOR_DIR_BASE_TYPE/$CONTENT_AUTHORITY/$PATH_MOVIE_PERSON_CREW"
+        static final String CONTENT_ITEM_TYPE =
+                "$ContentResolver.CURSOR_ITEM_BASE_TYPE/$CONTENT_AUTHORITY/$PATH_MOVIE_PERSON_CREW"
+
+        static Uri buildMoviePersonCrewUri(long id) {
+            ContentUris.withAppendedId(CONTENT_URI, id)
+        }
+
+        static Uri buildMoviePersonCrewUriWithPersonId (int personId) {
+            CONTENT_URI.buildUpon().appendPath(personId.toString()).build()
+        }
+
+        static int getPersonIdFromMoviePersonCrewUri (Uri uri) {
+            uri.getPathSegments().get(1).toInteger()
+        }
+    }
+
+    /**
+     Inner class that defines the table contents of the movie_collection table
+     */
+    public static final class MovieCollection implements BaseColumns {
+        static final String TABLE_NAME = PATH_MOVIE_COLLECTION
+        //Define the columns
+        static final String COLUMN_COLLECTION_ID = 'collection_id'
+        static final String COLUMN_COLLECTION_NAME = 'collection_name'
+        static final String COLUMN_COLLECTION_OVERVIEW = 'collection_overview'
+        static final String COLUMN_COLLECTION_POSTER_PATH = 'collection_poster_path'
+        static final String COLUMN_COLLECTION_BACKDROP_PATH = 'collection_backdrop_path'
+        static final String COLUMN_COLLECTION_MOVIE_PRESENT_FLAG = 'collection_movie_present_flag'
+
+        //Uri for movie_collection table
+        static final Uri CONTENT_URI =
+                BASE_CONTENT_URI.buildUpon().appendPath(PATH_MOVIE_COLLECTION).build()
+
+        static final String CONTENT_TYPE =
+                "$ContentResolver.CURSOR_DIR_BASE_TYPE/$CONTENT_AUTHORITY/$PATH_MOVIE_COLLECTION"
+        static final String CONTENT_ITEM_TYPE =
+                "$ContentResolver.CURSOR_ITEM_BASE_TYPE/$CONTENT_AUTHORITY/$PATH_MOVIE_COLLECTION"
+
+        static Uri buildMovieCollectionUri(long id) {
+            ContentUris.withAppendedId(CONTENT_URI, id)
+        }
+
+        static Uri buildMovieCollectionUriWithCollectionId (int collectionId) {
+            CONTENT_URI.buildUpon().appendPath(collectionId.toString()).build()
+        }
+
+        static long getCollectionRpwIdFromMovieCollectionUri (Uri uri) {
+            uri.getPathSegments().get(1).toLong()
+        }
+
+        static int getCollectionIdFromMovieCollectionUri (Uri uri) {
             uri.getPathSegments().get(1).toInteger()
         }
     }

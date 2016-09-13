@@ -270,6 +270,10 @@ class TestMovieMagicProvider extends AndroidTestCase {
         type = mContext.getContentResolver().getType(MovieMagicContract.MovieBasicInfo.buildMovieUriWithMovieCategory(testMovieCategory))
         // vnd.android.cursor.dir/com.moviemagic.dpaul.android.app/movie_basic_info
         assertEquals('Error: movie_basic_info with category should return MovieBasicInfo.CONTENT_TYPE',MovieMagicContract.MovieBasicInfo.CONTENT_TYPE, type)
+        // content://com.moviemagic.dpaul.android.app/movie_basic_info/popular/7890
+        type = mContext.getContentResolver().getType(MovieMagicContract.MovieBasicInfo.buildMovieUriWithMovieCategoryAndCollectionId(testMovieCategory,testCollectionId))
+        // vnd.android.cursor.item/com.moviemagic.dpaul.android.app/movie_basic_info
+        assertEquals('Error: movie_basic_info with category should return MovieBasicInfo.CONTENT_ITEM_TYPE',MovieMagicContract.MovieBasicInfo.CONTENT_ITEM_TYPE, type)
 
         //Test the type for movie_cast
         // content://com.moviemagic.dpaul.android.app/movie_cast
@@ -421,6 +425,10 @@ class TestMovieMagicProvider extends AndroidTestCase {
         TestUtilities.validateCursor('testBasicMovieMagicQuery: movie_basic_info', testCursor, testValues)
         // Test the movie category content provider query for movie_basic_info
         testCursor = mContext.getContentResolver().query(MovieMagicContract.MovieBasicInfo.buildMovieUriWithMovieCategory(testMovieCategory),null,null,null,null)
+        // Make sure we get the correct cursor out of the database
+        TestUtilities.validateCursor('testBasicMovieMagicQuery: movie_basic_info', testCursor, testValues)
+        // Test the movie category and collection id content provider query for movie_basic_info
+        testCursor = mContext.getContentResolver().query(MovieMagicContract.MovieBasicInfo.buildMovieUriWithMovieCategoryAndCollectionId(testMovieCategory, testCollId),null,null,null,null)
         // Make sure we get the correct cursor out of the database
         TestUtilities.validateCursor('testBasicMovieMagicQuery: movie_basic_info', testCursor, testValues)
 

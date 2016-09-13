@@ -39,11 +39,11 @@
         <activity
             android:name=".CollectionMovieActivity"
             android:label="@string/title_activity_collection_movie"
-            android:parentActivityName=".DetailMovieActivity"
+            android:parentActivityName=".MovieMagicMainActivity"
             android:theme="@style/AppTheme.MovieCollection">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".DetailMovieActivity"/>
+                android:value=".MovieMagicMainActivity"/>
         </activity>
 
         <!-- Register the content provider -->

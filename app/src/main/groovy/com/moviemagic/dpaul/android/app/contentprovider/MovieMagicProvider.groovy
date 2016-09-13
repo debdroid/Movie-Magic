@@ -21,29 +21,30 @@ class MovieMagicProvider extends ContentProvider {
     //To access a single item we shall use the primary key (_ID) of movie_basic_info
     static final int MOVIE_BASIC_INFO_WITH_MOVIE_ID = 102
     static final int MOVIE_BASIC_INFO_WITH_CATEGORY = 103
-    static final int MOVIE_CAST = 104
-    static final int MOVIE_CAST_WITH_MOVIE_ID = 105
-    static final int MOVIE_CREW = 106
-    static final int MOVIE_CREW_WITH_MOVIE_ID = 107
-    static final int MOVIE_IMAGE = 108
-    static final int MOVIE_IMAGE_WITH_MOVIE_ID = 109
-    static final int MOVIE_VIDEO = 110
-    static final int MOVIE_VIDEO_WITH_MOVIE_ID = 111
-    static final int MOVIE_COLLECTION = 112
-    static final int MOVIE_COLLECTION_WITH_COLECTION_ID = 113
-    static final int MOVIE_REVIEW = 114
-    static final int MOVIE_REVIEW_WITH_MOVIE_ID = 115
-    static final int MOVIE_RELEASE_DATE = 116
-    static final int MOVIE_RELEASE_DATE_WITH_MOVIE_ID = 117
-    static final int MOVIE_RELEASE_DATE_WITH_MOVIE_ID_AND_COUNTRY_ISO = 118
-    static final int MOVIE_PERSON_INFO = 119
-    static final int MOVIE_PERSON_INFO_WITH_PERSON_ID = 120
-    static final int MOVIE_PERSON_CAST = 121
-    static final int MOVIE_PERSON_CAST_WITH_PERSON_ID = 122
-    static final int MOVIE_PERSON_CREW = 123
-    static final int MOVIE_PERSON_CREW_WITH_PERSON_ID = 124
-    static final int MOVIE_USER_LIST_FLAG = 125
-    static final int MOVIE_USER_LIST_FLAG_WITH_MOVIE_ID = 126
+    static final int MOVIE_BASIC_INFO_WITH_CATEGORY_AND_COLLECTION_ID = 104
+    static final int MOVIE_CAST = 105
+    static final int MOVIE_CAST_WITH_MOVIE_ID = 106
+    static final int MOVIE_CREW = 107
+    static final int MOVIE_CREW_WITH_MOVIE_ID = 108
+    static final int MOVIE_IMAGE = 109
+    static final int MOVIE_IMAGE_WITH_MOVIE_ID = 110
+    static final int MOVIE_VIDEO = 111
+    static final int MOVIE_VIDEO_WITH_MOVIE_ID = 112
+    static final int MOVIE_REVIEW = 113
+    static final int MOVIE_REVIEW_WITH_MOVIE_ID = 114
+    static final int MOVIE_RELEASE_DATE = 115
+    static final int MOVIE_RELEASE_DATE_WITH_MOVIE_ID = 116
+    static final int MOVIE_RELEASE_DATE_WITH_MOVIE_ID_AND_COUNTRY_ISO = 117
+    static final int MOVIE_USER_LIST_FLAG = 118
+    static final int MOVIE_USER_LIST_FLAG_WITH_MOVIE_ID = 119
+    static final int MOVIE_PERSON_INFO = 120
+    static final int MOVIE_PERSON_INFO_WITH_PERSON_ID = 121
+    static final int MOVIE_PERSON_CAST = 122
+    static final int MOVIE_PERSON_CAST_WITH_PERSON_ID = 123
+    static final int MOVIE_PERSON_CREW = 124
+    static final int MOVIE_PERSON_CREW_WITH_PERSON_ID = 125
+    static final int MOVIE_COLLECTION = 126
+    static final int MOVIE_COLLECTION_WITH_COLECTION_ID = 127
 
     private static final SQLiteQueryBuilder sMovieMagicQueryBuilder
 
@@ -58,6 +59,11 @@ class MovieMagicProvider extends ContentProvider {
     //movie_basic_info.movie_category = ?
     private static final String sMovieBasicInfoWithCategorySelection =
             "$MovieMagicContract.MovieBasicInfo.TABLE_NAME.$MovieMagicContract.MovieBasicInfo.COLUMN_MOVIE_CATEGORY = ? "
+
+    //movie_basic_info.movie_category = ?
+    private static final String sMovieBasicInfoWithCategoryAndCollectionIdSelection =
+            "$MovieMagicContract.MovieBasicInfo.TABLE_NAME.$MovieMagicContract.MovieBasicInfo.COLUMN_MOVIE_CATEGORY = ? " +
+            " and $MovieMagicContract.MovieBasicInfo.COLUMN_COLLECTION_ID = ?"
 
     //movie_cast.cast_orig_movie_id = ?
     private static final String sMovieCastWithMovieIdSelection =
@@ -111,7 +117,7 @@ class MovieMagicProvider extends ContentProvider {
     //To get data from movie_basic_info where movie_basic_info._id = ?
     private Cursor getMovieBasicInfoByMovieId(Uri uri, String[] projection, String sortOrder) {
         sMovieMagicQueryBuilder.setTables("$MovieMagicContract.MovieBasicInfo.TABLE_NAME")
-        String[] movieId = [Integer.toString(MovieMagicContract.MovieBasicInfo.getMovieIdFromUri(uri))]
+        final String[] movieId = [Integer.toString(MovieMagicContract.MovieBasicInfo.getMovieIdFromUri(uri))]
         return sMovieMagicQueryBuilder.query(mOpenHelper.getReadableDatabase(),
                 projection,
                 sMovieBasicInfoWithMovieIdSelection,
@@ -125,7 +131,7 @@ class MovieMagicProvider extends ContentProvider {
     //To get data from movie_basic_info where movie_basic_info.movie_category = ?
     private Cursor getMovieBasicInfoByMovieCategory(Uri uri, String[] projection, String sortOrder) {
         sMovieMagicQueryBuilder.setTables("$MovieMagicContract.MovieBasicInfo.TABLE_NAME")
-        String[] movieId = [MovieMagicContract.MovieBasicInfo.getMovieCategoryFromMovieUri(uri)]
+        final String[] movieId = [MovieMagicContract.MovieBasicInfo.getMovieCategoryFromMovieUri(uri)]
 
         return sMovieMagicQueryBuilder.query(mOpenHelper.getReadableDatabase(),
                 projection,
@@ -137,10 +143,27 @@ class MovieMagicProvider extends ContentProvider {
         )
     }
 
+    //To get data from movie_basic_info where movie_basic_info.movie_category = ? and movie_basic_info.collection_id = ?
+    private Cursor getMovieBasicInfoByMovieCategoryAndCollectionId(Uri uri, String[] projection, String sortOrder) {
+        sMovieMagicQueryBuilder.setTables("$MovieMagicContract.MovieBasicInfo.TABLE_NAME")
+        final String category = MovieMagicContract.MovieBasicInfo.getMovieCategoryFromMovieAndCollectionIdUri(uri)
+        final String collectionID = Integer.toString(MovieMagicContract.MovieBasicInfo.getCollectionIdFromMovieAndCollectionIdUri(uri))
+        String[] selArgs = [category,collectionID]
+
+        return sMovieMagicQueryBuilder.query(mOpenHelper.getReadableDatabase(),
+                projection,
+                sMovieBasicInfoWithCategoryAndCollectionIdSelection,
+                selArgs,
+                null,
+                null,
+                sortOrder
+        )
+    }
+
     //To get data from movie_cast where movie_cast.cast_orig_movie_id = ?
     private Cursor getMovieCastByMovieId(Uri uri, String[] projection, String sortOrder) {
         sMovieMagicQueryBuilder.setTables("$MovieMagicContract.MovieCast.TABLE_NAME")
-        String[] movieId = [Integer.toString(MovieMagicContract.MovieCast.getMovieIdFromMovieCastUri(uri))]
+        final String[] movieId = [Integer.toString(MovieMagicContract.MovieCast.getMovieIdFromMovieCastUri(uri))]
         return sMovieMagicQueryBuilder.query(mOpenHelper.getReadableDatabase(),
                 projection,
                 sMovieCastWithMovieIdSelection,
@@ -154,7 +177,7 @@ class MovieMagicProvider extends ContentProvider {
     //To get data from movie_crew where movie_crew.crew_orig_movie_id = ?
     private Cursor getMovieCrewByMovieId(Uri uri, String[] projection, String sortOrder) {
         sMovieMagicQueryBuilder.setTables("$MovieMagicContract.MovieCrew.TABLE_NAME")
-        String[] movieId = [Integer.toString(MovieMagicContract.MovieCrew.getMovieIdFromMovieCrewUri(uri))]
+        final String[] movieId = [Integer.toString(MovieMagicContract.MovieCrew.getMovieIdFromMovieCrewUri(uri))]
         return sMovieMagicQueryBuilder.query(mOpenHelper.getReadableDatabase(),
                 projection,
                 sMovieCrewWithMovieIdSelection,
@@ -168,7 +191,7 @@ class MovieMagicProvider extends ContentProvider {
     //To get data from movie_image where movie_image.image_orig_movie_id = ?
     private Cursor getMovieImageByMovieId(Uri uri, String[] projection, String sortOrder) {
         sMovieMagicQueryBuilder.setTables("$MovieMagicContract.MovieImage.TABLE_NAME")
-        String[] movieId = [Integer.toString(MovieMagicContract.MovieImage.getMovieIdFromMovieImageUri(uri))]
+        final String[] movieId = [Integer.toString(MovieMagicContract.MovieImage.getMovieIdFromMovieImageUri(uri))]
         return sMovieMagicQueryBuilder.query(mOpenHelper.getReadableDatabase(),
                 projection,
                 sMovieImageWithMovieIdSelection,
@@ -182,7 +205,7 @@ class MovieMagicProvider extends ContentProvider {
     //To get data from movie_video where movie_video.video_orig_movie_id = ?
     private Cursor getMovieVideoByMovieId(Uri uri, String[] projection, String sortOrder) {
         sMovieMagicQueryBuilder.setTables("$MovieMagicContract.MovieVideo.TABLE_NAME")
-        String[] movieId = [Integer.toString(MovieMagicContract.MovieVideo.getMovieIdFromMovieVideoUri(uri))]
+        final String[] movieId = [Integer.toString(MovieMagicContract.MovieVideo.getMovieIdFromMovieVideoUri(uri))]
         return sMovieMagicQueryBuilder.query(mOpenHelper.getReadableDatabase(),
                 projection,
                 sMovieVideoWithMovieIdSelection,
@@ -196,7 +219,7 @@ class MovieMagicProvider extends ContentProvider {
     //To get data from movie_collection where movie_collection.collection_id = ?
     private Cursor getMovieCollectionByCollectionId(Uri uri, String[] projection, String sortOrder) {
         sMovieMagicQueryBuilder.setTables("$MovieMagicContract.MovieCollection.TABLE_NAME")
-        String[] movieId = [Integer.toString(MovieMagicContract.MovieCollection.getCollectionIdFromMovieCollectionUri(uri))]
+        final String[] movieId = [Integer.toString(MovieMagicContract.MovieCollection.getCollectionIdFromMovieCollectionUri(uri))]
         return sMovieMagicQueryBuilder.query(mOpenHelper.getReadableDatabase(),
                 projection,
                 sMovieCollectionWithCollectionIdSelection,
@@ -210,7 +233,7 @@ class MovieMagicProvider extends ContentProvider {
     //To get data from movie_review where movie_review.review_orig_movie_id = ?
     private Cursor getMovieReviewByMovieId(Uri uri, String[] projection, String sortOrder) {
         sMovieMagicQueryBuilder.setTables("$MovieMagicContract.MovieReview.TABLE_NAME")
-        String[] movieId = [Integer.toString(MovieMagicContract.MovieReview.getMovieIdFromMovieReviewUri(uri))]
+        final String[] movieId = [Integer.toString(MovieMagicContract.MovieReview.getMovieIdFromMovieReviewUri(uri))]
         return sMovieMagicQueryBuilder.query(mOpenHelper.getReadableDatabase(),
                 projection,
                 sMovieReviewWithMovieIdSelection,
@@ -224,7 +247,7 @@ class MovieMagicProvider extends ContentProvider {
     //To get data from movie_release_date where movie_release_date.release_orig_movie_id = ?
     private Cursor getMovieReleaseByMovieId(Uri uri, String[] projection, String sortOrder) {
         sMovieMagicQueryBuilder.setTables("$MovieMagicContract.MovieReleaseDate.TABLE_NAME")
-        String[] movieId = [Integer.toString(MovieMagicContract.MovieReleaseDate.getMovieIdFromMovieReleaseUri(uri))]
+        final String[] movieId = [Integer.toString(MovieMagicContract.MovieReleaseDate.getMovieIdFromMovieReleaseUri(uri))]
         return sMovieMagicQueryBuilder.query(mOpenHelper.getReadableDatabase(),
                 projection,
                 sMovieReleaseWithMovieIdSelection,
@@ -238,9 +261,9 @@ class MovieMagicProvider extends ContentProvider {
     //To get data from movie_release_date where movie_release_date.release_orig_movie_id = ? and release_iso_country = ?
     private Cursor getMovieReleaseByMovieIdAndCountryISO(Uri uri, String[] projection, String sortOrder) {
         sMovieMagicQueryBuilder.setTables("$MovieMagicContract.MovieReleaseDate.TABLE_NAME")
-        String movieId = Integer.toString(MovieMagicContract.MovieReleaseDate.getMovieIdFromMovieReleaseUri(uri))
-            String countryISO = MovieMagicContract.MovieReleaseDate.getCountryIsoFromMovieReleaseUri(uri)
-            String[] selArgs = [movieId,countryISO]
+        final String movieId = Integer.toString(MovieMagicContract.MovieReleaseDate.getMovieIdFromMovieReleaseUri(uri))
+        final String countryISO = MovieMagicContract.MovieReleaseDate.getCountryIsoFromMovieReleaseUri(uri)
+        final String[] selArgs = [movieId,countryISO]
         return sMovieMagicQueryBuilder.query(mOpenHelper.getReadableDatabase(),
                 projection,
                 sMovieReleaseWithMovieIdAndCountryISOSelection,
@@ -254,7 +277,7 @@ class MovieMagicProvider extends ContentProvider {
     //To get data from movie_person_info where movie_person_info.person_id = ?
     private Cursor getMoviePersonInfoByPersonId(Uri uri, String[] projection, String sortOrder) {
         sMovieMagicQueryBuilder.setTables("$MovieMagicContract.MoviePersonInfo.TABLE_NAME")
-        String[] personId = [Integer.toString(MovieMagicContract.MoviePersonInfo.getPersonIdFromMoviePersonInfoUri(uri))]
+        final String[] personId = [Integer.toString(MovieMagicContract.MoviePersonInfo.getPersonIdFromMoviePersonInfoUri(uri))]
         return sMovieMagicQueryBuilder.query(mOpenHelper.getReadableDatabase(),
                 projection,
                 sMoviePersonInfoWithPersonIdSelection,
@@ -268,7 +291,7 @@ class MovieMagicProvider extends ContentProvider {
     //To get data from movie_person_cast where movie_person_cast.person_cast_orig_person_id = ?
     private Cursor getMoviePersonCastByPersonId(Uri uri, String[] projection, String sortOrder) {
         sMovieMagicQueryBuilder.setTables("$MovieMagicContract.MoviePersonCast.TABLE_NAME")
-        String[] personId = [Integer.toString(MovieMagicContract.MoviePersonCast.getPersonIdFromMoviePersonCastUri(uri))]
+        final String[] personId = [Integer.toString(MovieMagicContract.MoviePersonCast.getPersonIdFromMoviePersonCastUri(uri))]
         return sMovieMagicQueryBuilder.query(mOpenHelper.getReadableDatabase(),
                 projection,
                 sMoviePersonCastWithPersonIdSelection,
@@ -282,7 +305,7 @@ class MovieMagicProvider extends ContentProvider {
     //To get data from movie_person_crew where movie_person_crew.person_crew_orig_person_id = ?
     private Cursor getMoviePersonCrewByPersonId(Uri uri, String[] projection, String sortOrder) {
         sMovieMagicQueryBuilder.setTables("$MovieMagicContract.MoviePersonCrew.TABLE_NAME")
-        String[] personId = [Integer.toString(MovieMagicContract.MoviePersonCrew.getPersonIdFromMoviePersonCrewUri(uri))]
+        final String[] personId = [Integer.toString(MovieMagicContract.MoviePersonCrew.getPersonIdFromMoviePersonCrewUri(uri))]
         return sMovieMagicQueryBuilder.query(mOpenHelper.getReadableDatabase(),
                 projection,
                 sMoviePersonCrewWithPersonIdSelection,
@@ -296,7 +319,7 @@ class MovieMagicProvider extends ContentProvider {
     //To get data from movie_user_list_flag where movie_user_list_flag.user_list_flag_orig_movie_id = ?
     private Cursor getMovieUserListFlagByMovieId(Uri uri, String[] projection, String sortOrder) {
         sMovieMagicQueryBuilder.setTables("$MovieMagicContract.MovieUserListFlag.TABLE_NAME")
-        String[] movieId = [Integer.toString(MovieMagicContract.MovieUserListFlag.getMovieIdFromMovieUserListFlagUri(uri))]
+        final String[] movieId = [Integer.toString(MovieMagicContract.MovieUserListFlag.getMovieIdFromMovieUserListFlagUri(uri))]
         return sMovieMagicQueryBuilder.query(mOpenHelper.getReadableDatabase(),
                 projection,
                 sMovieUserListFlagWithMovieIdSelection,
@@ -307,9 +330,8 @@ class MovieMagicProvider extends ContentProvider {
         )
     }
 
-    /*
-       This UriMatcher will contain the URI for MOVIE, MOVIE_WITH_ID, MOVIE_WITH_CATEGORY and
-       MOVIE_WITH_RELEASE_DATE, the above defined integer constants will be returned when matched
+    /**
+       The UriMatcher will contain the URI for all the URIs used for different tables and will be returned when matched
     */
     static UriMatcher buildUriMatcher() {
         // 1) The code passed into the constructor represents the code to return for the root
@@ -321,6 +343,7 @@ class MovieMagicProvider extends ContentProvider {
         uriMatcher.addURI(MovieMagicContract.CONTENT_AUTHORITY, MovieMagicContract.PATH_MOVIE_BASIC_INFO,MOVIE_BASIC_INFO)
         uriMatcher.addURI(MovieMagicContract.CONTENT_AUTHORITY,"$MovieMagicContract.PATH_MOVIE_BASIC_INFO/#",MOVIE_BASIC_INFO_WITH_MOVIE_ID)
         uriMatcher.addURI(MovieMagicContract.CONTENT_AUTHORITY,"$MovieMagicContract.PATH_MOVIE_BASIC_INFO/*",MOVIE_BASIC_INFO_WITH_CATEGORY)
+        uriMatcher.addURI(MovieMagicContract.CONTENT_AUTHORITY,"$MovieMagicContract.PATH_MOVIE_BASIC_INFO/*/#",MOVIE_BASIC_INFO_WITH_CATEGORY_AND_COLLECTION_ID)
         uriMatcher.addURI(MovieMagicContract.CONTENT_AUTHORITY, MovieMagicContract.PATH_MOVIE_CAST,MOVIE_CAST)
         uriMatcher.addURI(MovieMagicContract.CONTENT_AUTHORITY,"$MovieMagicContract.PATH_MOVIE_CAST/#",MOVIE_CAST_WITH_MOVIE_ID)
         uriMatcher.addURI(MovieMagicContract.CONTENT_AUTHORITY, MovieMagicContract.PATH_MOVIE_CREW,MOVIE_CREW)
@@ -343,8 +366,7 @@ class MovieMagicProvider extends ContentProvider {
         uriMatcher.addURI(MovieMagicContract.CONTENT_AUTHORITY, MovieMagicContract.PATH_MOVIE_PERSON_CREW,MOVIE_PERSON_CREW)
         uriMatcher.addURI(MovieMagicContract.CONTENT_AUTHORITY,"$MovieMagicContract.PATH_MOVIE_PERSON_CREW/#",MOVIE_PERSON_CREW_WITH_PERSON_ID)
         uriMatcher.addURI(MovieMagicContract.CONTENT_AUTHORITY, MovieMagicContract.PATH_MOVIE_USER_LIST_FLAG,MOVIE_USER_LIST_FLAG)
-        uriMatcher.addURI(MovieMagicContract.CONTENT_AUTHORITY, "$MovieMagicContract.PATH_MOVIE_USER_LIST_FLAG/#",MOVIE_USER_LIST_FLAG_WITH_MOVIE_ID)
-
+        uriMatcher.addURI(MovieMagicContract.CONTENT_AUTHORITY,"$MovieMagicContract.PATH_MOVIE_USER_LIST_FLAG/#",MOVIE_USER_LIST_FLAG_WITH_MOVIE_ID)
         // 3) Return the new matcher!
         return uriMatcher
     }
@@ -355,6 +377,9 @@ class MovieMagicProvider extends ContentProvider {
         return true
     }
 
+    /**
+     The getType method will return the URI type based on match result
+     */
     @Override
     String getType(Uri uri) {
         // Use the Uri Matcher to determine what kind of URI this is.
@@ -367,6 +392,8 @@ class MovieMagicProvider extends ContentProvider {
                 return MovieMagicContract.MovieBasicInfo.CONTENT_ITEM_TYPE
             case MOVIE_BASIC_INFO_WITH_CATEGORY:
                 return MovieMagicContract.MovieBasicInfo.CONTENT_TYPE
+            case MOVIE_BASIC_INFO_WITH_CATEGORY_AND_COLLECTION_ID:
+                return MovieMagicContract.MovieBasicInfo.CONTENT_ITEM_TYPE
             case MOVIE_CAST:
                 return MovieMagicContract.MovieCast.CONTENT_TYPE
             case MOVIE_CAST_WITH_MOVIE_ID:
@@ -418,7 +445,9 @@ class MovieMagicProvider extends ContentProvider {
         }
     }
 
-
+    /**
+     The query method of the provider returns the query based on URI passed in the query request
+     */
     @Override
     Cursor query(Uri uri, String[] projection, String selection, String[] selectionArgs, String sortOrder) {
         // Here's the switch statement that, given a URI, will determine what kind of request it is,
@@ -432,6 +461,10 @@ class MovieMagicProvider extends ContentProvider {
         // "/movie_basic_info/*"
             case MOVIE_BASIC_INFO_WITH_CATEGORY:
                 retCursor = getMovieBasicInfoByMovieCategory(uri, projection, sortOrder)
+                break
+        // "/movie_basic_info/#/*"
+            case MOVIE_BASIC_INFO_WITH_CATEGORY_AND_COLLECTION_ID:
+                retCursor = getMovieBasicInfoByMovieCategoryAndCollectionId(uri, projection, sortOrder)
                 break
         // "/movie_basic_info"
             case MOVIE_BASIC_INFO:
@@ -548,6 +581,9 @@ class MovieMagicProvider extends ContentProvider {
         return retCursor
     }
 
+    /**
+     The query helper method is used to handle the query for all the tables
+     */
     private Cursor queryHelperMethod(String table, String[] projection, String selection, String[] selectionArgs, String sortOrder) {
         //This is another way for writing the query ()
         return mOpenHelper.getReadableDatabase().query(table,
@@ -559,6 +595,9 @@ class MovieMagicProvider extends ContentProvider {
                 sortOrder)
     }
 
+    /**
+     The insert method of the provider inserts a single record to the table corresponding to the URI and returns uri (with row id) of the inserted record
+     */
     @Override
     Uri insert(Uri uri, ContentValues values) {
         final SQLiteDatabase db = mOpenHelper.getWritableDatabase()
@@ -662,6 +701,10 @@ class MovieMagicProvider extends ContentProvider {
         return returnUri
     }
 
+    /**
+     The delete method of the provider deletes record(s) from the table corresponding to the URI and returns the delete count.
+     If null is passed as selection criteria then all records are deleted
+     */
     @Override
     int delete(Uri uri, String selection, String[] selectionArgs) {
         final SQLiteDatabase db = mOpenHelper.getWritableDatabase()
@@ -717,6 +760,9 @@ class MovieMagicProvider extends ContentProvider {
         return count
     }
 
+    /**
+     The update method of the provider updates record(s) to the table corresponding to the URI and returns update count
+     */
     @Override
     int update(Uri uri, ContentValues values, String selection, String[] selectionArgs) {
         final SQLiteDatabase db = mOpenHelper.getWritableDatabase()
@@ -770,6 +816,9 @@ class MovieMagicProvider extends ContentProvider {
         return count
     }
 
+    /**
+     The bulkInsert method of the provider inserts record in bulk to the table corresponding to the URI and returns insert count
+     */
     @Override
     int bulkInsert(Uri uri, ContentValues[] values) {
         final SQLiteDatabase db = mOpenHelper.getWritableDatabase()
@@ -964,7 +1013,7 @@ class MovieMagicProvider extends ContentProvider {
     private void convertDate(ContentValues values) {
         // Covert the movie release date
         if (values.containsKey(MovieMagicContract.MovieBasicInfo.COLUMN_RELEASE_DATE)) {
-            String movieReleaseDate = values.getAsString(MovieMagicContract.MovieBasicInfo.COLUMN_RELEASE_DATE)
+            final String movieReleaseDate = values.getAsString(MovieMagicContract.MovieBasicInfo.COLUMN_RELEASE_DATE)
             values.put(MovieMagicContract.MovieBasicInfo.COLUMN_RELEASE_DATE, MovieMagicContract.convertMovieReleaseDate(movieReleaseDate))
         }
     }

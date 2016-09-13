@@ -2,6 +2,7 @@ package com.moviemagic.dpaul.android.app
 
 import android.content.Context
 import android.content.Intent
+import android.net.Uri
 import android.os.AsyncTask
 import android.os.Bundle
 import android.support.design.widget.FloatingActionButton
@@ -19,6 +20,7 @@ import android.view.View
 import android.widget.TextView
 import com.google.android.youtube.player.YouTubeApiServiceUtil
 import com.google.android.youtube.player.YouTubeInitializationResult
+import com.moviemagic.dpaul.android.app.adapter.MovieGridRecyclerAdapter
 import com.moviemagic.dpaul.android.app.contentprovider.MovieMagicContract
 import com.moviemagic.dpaul.android.app.syncadapter.MovieMagicSyncAdapterUtility
 import com.moviemagic.dpaul.android.app.backgroundmodules.GlobalStaticVariables
@@ -26,8 +28,8 @@ import com.moviemagic.dpaul.android.app.backgroundmodules.LogDisplay
 import groovy.transform.CompileStatic
 
 @CompileStatic
-public class MovieMagicMainActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener, GridMovieFragment.Callback {
+public class MovieMagicMainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener,
+        GridMovieFragment.Callback, GridMovieFragment.CollectionColorChangeCallback {
     private static final String LOG_TAG = MovieMagicMainActivity.class.getSimpleName()
     private static final String STATE_APP_TITLE = 'app_title'
     private NavigationView navigationView
@@ -214,18 +216,22 @@ public class MovieMagicMainActivity extends AppCompatActivity
 //        final FragmentManager fragmentManager = getSupportFragmentManager()
 //        final FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction()
 //        //Set the custom animation
-//        fragmentTransaction.setCustomAnimations(R.anim.slide_bottom_up_animation,0)
+//        fragmentTransaction.setCustomAnimations(R.anim.slide_bottom_in_animation,0)
 //        fragmentTransaction.replace(R.id.main_content_layout, fragment)
 //        fragmentTransaction.commit()
+        //Set this flag as false so that theme primaryDark color is used in the grid
+        MovieGridRecyclerAdapter.collectionGridFlag = false
         final Bundle bundle = new Bundle()
-        bundle.putString(GlobalStaticVariables.MOVIE_BASIC_INFO_CATEGORY,category)
+        final Uri uri = MovieMagicContract.MovieBasicInfo.buildMovieUriWithMovieCategoryAndCollectionId(category,0)
+//        bundle.putString(GlobalStaticVariables.MOVIE_BASIC_INFO_CATEGORY,category)
         //Collection id is not required here, so passed on as zero
-        bundle.putInt(GlobalStaticVariables.MOVIE_BASIC_INFO_COLL_ID,0)
+//        bundle.putInt(GlobalStaticVariables.MOVIE_BASIC_INFO_COLL_ID,0)
+        bundle.putParcelable(GlobalStaticVariables.MOVIE_CATEGORY_AND_COLL_ID_URI,uri)
         final GridMovieFragment gridMovieFragment = new GridMovieFragment()
         gridMovieFragment.setArguments(bundle)
         final FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction()
         //Set the custom animation
-        fragmentTransaction.setCustomAnimations(R.anim.slide_bottom_up_animation,0)
+        fragmentTransaction.setCustomAnimations(R.anim.slide_bottom_in_animation,0)
         fragmentTransaction.replace(R.id.content_grid_main_layout, gridMovieFragment)
         fragmentTransaction.commit()
     }
@@ -269,6 +275,8 @@ public class MovieMagicMainActivity extends AppCompatActivity
                     [GlobalStaticVariables.MOVIE_CATEGORY_LOCAL_USER_WATCHED] as String[],
                     null)
             if(cursor.moveToFirst()) result[0] = cursor.getCount()
+            //Close the cursor
+            if(cursor) cursor.close()
             //Get the count for wish list
             cursor = mContext.getContentResolver().query(
                     MovieMagicContract.MovieBasicInfo.CONTENT_URI,
@@ -277,6 +285,8 @@ public class MovieMagicMainActivity extends AppCompatActivity
                     [GlobalStaticVariables.MOVIE_CATEGORY_LOCAL_USER_WISH_LIST] as String[],
                     null)
             if(cursor.moveToFirst()) result[1] = cursor.getCount()
+            //Close the cursor
+            if(cursor) cursor.close()
             //Get the count for favourite
             cursor = mContext.getContentResolver().query(
                     MovieMagicContract.MovieBasicInfo.CONTENT_URI,
@@ -285,6 +295,8 @@ public class MovieMagicMainActivity extends AppCompatActivity
                     [GlobalStaticVariables.MOVIE_CATEGORY_LOCAL_USER_FAVOURITE] as String[],
                     null)
             if(cursor.moveToFirst()) result[2] = cursor.getCount()
+            //Close the cursor
+            if(cursor) cursor.close()
             //Get the count for wish list
             cursor = mContext.getContentResolver().query(
                     MovieMagicContract.MovieBasicInfo.CONTENT_URI,
@@ -293,7 +305,6 @@ public class MovieMagicMainActivity extends AppCompatActivity
                     [GlobalStaticVariables.MOVIE_CATEGORY_LOCAL_USER_COLLECTION] as String[],
                     null)
             if(cursor.moveToFirst()) result[3] = cursor.getCount()
-
             //Close the cursor
             if(cursor) cursor.close()
 
@@ -321,13 +332,20 @@ public class MovieMagicMainActivity extends AppCompatActivity
     @Override
 //    public void onItemSelected(int movieId, long movie_magic_row_ID, ImageView gridImageView) {
 //    public void onItemSelected(int movieId, ImageView gridImageView) {
-    public void onItemSelected(int movieId) {
+    public void onItemSelected(int movieId, MovieGridRecyclerAdapter.MovieGridRecyclerAdapterViewHolder viewHolder) {
         final Intent intent = new Intent(this, DetailMovieActivity.class)
-        final Bundle bundle = new Bundle()
-        bundle.putInt(GlobalStaticVariables.MOVIE_BASIC_INFO_MOVIE_ID,movieId)
-        intent.putExtras(bundle)
+//        final Bundle bundle = new Bundle()
+        final Uri movieMagicMovieIdUri = MovieMagicContract.MovieBasicInfo.buildMovieUriWithMovieId(movieId)
+//        bundle.putInt(GlobalStaticVariables.MOVIE_BASIC_INFO_MOVIE_ID,movieId)
+        intent.setData(movieMagicMovieIdUri)
         startActivity(intent)
         //Start the animation
-        overridePendingTransition(R.anim.slide_bottom_up_animation,0)
+        overridePendingTransition(R.anim.slide_bottom_in_animation,0)
+    }
+
+    @Override
+    public void notifyCollectionColorChange() {
+        //Do nothing. This is not called for main activity
+        //Implemented, otherwise application will give error as GridFragment onAttach has check if it is implemented
     }
 }

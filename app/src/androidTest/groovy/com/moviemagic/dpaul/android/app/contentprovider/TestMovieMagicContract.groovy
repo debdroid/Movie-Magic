@@ -56,10 +56,14 @@ class TestMovieMagicContract extends AndroidTestCase {
         assertEquals(TEST_BASE_URI+'/1001',movieIdUri.toString())
         Uri movieCategoryUri = MovieMagicContract.MovieBasicInfo.buildMovieUriWithMovieCategory(TEST_MOVIE_CATEGORY)
         assertEquals(TEST_BASE_URI+'/%2Fpopular%20movie', movieCategoryUri.toString())
+        Uri movieCategoryAndCollIdUri = MovieMagicContract.MovieBasicInfo.buildMovieUriWithMovieCategoryAndCollectionId(TEST_MOVIE_CATEGORY,TEST_MOVIE_COLLECTION_ID)
+        assertEquals(TEST_BASE_URI+'/%2Fpopular%20movie/1008', movieCategoryAndCollIdUri.toString())
         assertEquals(new Date(TEST_DATE).toString(), new Date(MovieMagicContract.convertMovieReleaseDate('2016-08-13')).toString())
 
         assertEquals(TEST_MOVIE_ID,MovieMagicContract.MovieBasicInfo.getMovieIdFromUri(movieIdUri))
         assertEquals(TEST_MOVIE_CATEGORY,MovieMagicContract.MovieBasicInfo.getMovieCategoryFromMovieUri(movieCategoryUri))
+        assertEquals(TEST_MOVIE_CATEGORY,MovieMagicContract.MovieBasicInfo.getMovieCategoryFromMovieAndCollectionIdUri(movieCategoryAndCollIdUri))
+        assertEquals(TEST_MOVIE_COLLECTION_ID,MovieMagicContract.MovieBasicInfo.getCollectionIdFromMovieAndCollectionIdUri(movieCategoryAndCollIdUri))
 
         //test movie_casts methods
         Uri movieCastTableIdUri = MovieMagicContract.MovieCast.buildMovieCastUri(TEST_MOVIE_TABLE_CAST_ID)
@@ -110,9 +114,12 @@ class TestMovieMagicContract extends AndroidTestCase {
         //test movie_collection methods
         Uri movieCollectionTableIdUri = MovieMagicContract.MovieCollection.buildMovieCollectionUri(TEST_MOVIE_TABLE_COLLECTION_ID)
         assertEquals(TEST_MOVIE_COLLECTION_URI+'/108',movieCollectionTableIdUri.toString())
-        Uri movieIdCollectionUri = MovieMagicContract.MovieCollection.buildMovieCollectionUriWithCollectionId(TEST_MOVIE_COLLECTION_ID)
-        assertEquals(TEST_MOVIE_COLLECTION_URI+'/1008',movieIdCollectionUri.toString())
-        assertEquals(TEST_MOVIE_COLLECTION_ID,MovieMagicContract.MovieCollection.getCollectionIdFromMovieCollectionUri(movieIdCollectionUri))
+        Uri movieIdCollectionIdUri = MovieMagicContract.MovieCollection.buildMovieCollectionUriWithCollectionId(TEST_MOVIE_COLLECTION_ID)
+        assertEquals(TEST_MOVIE_COLLECTION_URI+'/1008',movieIdCollectionIdUri.toString())
+        assertEquals(TEST_MOVIE_COLLECTION_ID,MovieMagicContract.MovieCollection.getCollectionIdFromMovieCollectionUri(movieIdCollectionIdUri))
+        Uri movieIdCollectionRowIdUri = MovieMagicContract.MovieCollection.buildMovieCollectionUri(10001)
+        assertEquals(TEST_MOVIE_COLLECTION_URI+'/10001',movieIdCollectionRowIdUri.toString())
+        assertEquals(10001,MovieMagicContract.MovieCollection.getCollectionRpwIdFromMovieCollectionUri(movieIdCollectionRowIdUri))
 
         //test movie_person_info methods
         Uri moviePersonTableIdUri = MovieMagicContract.MoviePersonInfo.buildMoviePersonInfoUri(TEST_MOVIE_TABLE_PERSON_ID)

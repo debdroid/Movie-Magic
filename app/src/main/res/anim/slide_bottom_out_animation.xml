@@ -5,4 +5,9 @@
         android:interpolator="@android:anim/accelerate_decelerate_interpolator"
         android:fromYDelta="0"
         android:toYDelta="100%p" />
+    <alpha
+        android:duration="@android:integer/config_mediumAnimTime"
+        android:interpolator="@android:anim/accelerate_interpolator"
+        android:fromAlpha="1"
+        android:toAlpha="0" />
 </set>

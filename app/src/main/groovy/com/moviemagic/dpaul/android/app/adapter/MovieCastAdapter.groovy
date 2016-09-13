@@ -22,6 +22,7 @@ class MovieCastAdapter extends RecyclerView.Adapter<MovieCastAdapter.MovieCastAd
     private Cursor mCursor
 //    private final Context mContext
     private final Context mContext
+    private final TextView mCastGridEmptyTextView
     public static int mPrimaryDarkColor, mBodyTextColor
 
     //Empty constructor
@@ -29,9 +30,10 @@ class MovieCastAdapter extends RecyclerView.Adapter<MovieCastAdapter.MovieCastAd
         LogDisplay.callLog(LOG_TAG, 'MovieCastAdapter empty constructor is called', LogDisplay.MOVIE_CAST_ADAPTER_FLAG)
     }
 
-    public MovieCastAdapter(Context ctx) {
+    public MovieCastAdapter(Context ctx, TextView emptyView) {
         LogDisplay.callLog(LOG_TAG, 'MovieCastAdapter non-empty constructor is called', LogDisplay.MOVIE_CAST_ADAPTER_FLAG)
         mContext = ctx
+        mCastGridEmptyTextView = emptyView
     }
 
     public class MovieCastAdapterViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
@@ -71,7 +73,7 @@ class MovieCastAdapter extends RecyclerView.Adapter<MovieCastAdapter.MovieCastAd
         LogDisplay.callLog(LOG_TAG, 'onBindViewHolder is called', LogDisplay.MOVIE_CAST_ADAPTER_FLAG)
         final String profilePath = "$GlobalStaticVariables.TMDB_IMAGE_BASE_URL/$GlobalStaticVariables.TMDB_IMAGE_SIZE_W185" +
                 "${mCursor.getString(DetailMovieFragment.COL_MOVIE_CAST_PROFILE_PATH)}"
-        PicassoLoadImage.loadMoviePersonImageUsingPicasso(mContext, profilePath, holder.movieCastImageView)
+        PicassoLoadImage.loadMoviePersonImage(mContext, profilePath, holder.movieCastImageView)
         holder.movieCastCharacterName.setText(mCursor.getString(DetailMovieFragment.COL_MOVIE_CAST_CHARACTER))
         holder.movieCastName.setText(mCursor.getString(DetailMovieFragment.COL_MOVIE_CAST_PERSON_NAME))
         holder.movieCastCharacterName.setBackgroundColor(mPrimaryDarkColor)
@@ -90,8 +92,14 @@ class MovieCastAdapter extends RecyclerView.Adapter<MovieCastAdapter.MovieCastAd
     }
 
     public void swapCursor(Cursor newCursor) {
+        LogDisplay.callLog(LOG_TAG, 'swapCursor is called', LogDisplay.MOVIE_CAST_ADAPTER_FLAG)
         mCursor = newCursor
-        notifyDataSetChanged()
+        if (getItemCount() == 0) {
+            mCastGridEmptyTextView.setVisibility(TextView.VISIBLE)
+        } else {
+            mCastGridEmptyTextView.setVisibility(TextView.INVISIBLE)
+            notifyDataSetChanged()
+        }
     }
 
     //Since the color is decided once the poster is downloaded by Picasso
@@ -99,6 +107,10 @@ class MovieCastAdapter extends RecyclerView.Adapter<MovieCastAdapter.MovieCastAd
     //so that it get's recreated with correct color
     public void changeColor() {
         LogDisplay.callLog(LOG_TAG, 'changeColor is called', LogDisplay.MOVIE_CAST_ADAPTER_FLAG)
-        notifyDataSetChanged()
+        if (getItemCount() == 0) {
+            mCastGridEmptyTextView.setTextColor(mBodyTextColor)
+        } else {
+            notifyDataSetChanged()
+        }
     }
 }

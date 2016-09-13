@@ -1,25 +1,12 @@
 package com.moviemagic.dpaul.android.app
 
+import android.net.Uri
 import android.os.Bundle
-import android.support.design.widget.AppBarLayout
-import android.support.design.widget.CollapsingToolbarLayout
-import android.support.v4.app.FragmentTransaction
 import android.support.v7.app.AppCompatActivity
-import android.support.v7.widget.Toolbar
 import android.view.Menu
 import android.view.MenuItem
-import android.view.animation.AlphaAnimation
-import android.view.animation.Animation
-import android.view.animation.AnimationUtils
-import android.view.animation.DecelerateInterpolator
-import android.widget.ImageSwitcher
-import android.widget.ImageView
 import com.moviemagic.dpaul.android.app.backgroundmodules.GlobalStaticVariables
 import com.moviemagic.dpaul.android.app.backgroundmodules.LogDisplay
-import com.squareup.picasso.Callback
-import com.squareup.picasso.MemoryPolicy
-import com.squareup.picasso.NetworkPolicy
-import com.squareup.picasso.Picasso
 import groovy.transform.CompileStatic
 
 @CompileStatic
@@ -55,19 +42,22 @@ class DetailMovieActivity extends AppCompatActivity {
 
         if (savedInstanceState == null) {
             //Get the arguments from the intent
-            final Bundle extras = getIntent().getExtras()
-            if (extras) {
+//            final Bundle extras = getIntent().getExtras()
+            final Uri uri = getIntent().getData()
+            if (uri) {
                 //Create a Bundle to pass the data to Fragment
 //                Bundle args = new Bundle()
 //                args.putInt(GlobalStaticVariables.MOVIE_BASIC_INFO_MOVIE_ID,extras.getInt(GlobalStaticVariables.MOVIE_BASIC_INFO_MOVIE_ID))
 //                args.putLong(GlobalStaticVariables.MOVIE_BASIC_INFO_ROW_ID,extras.getLong(GlobalStaticVariables.MOVIE_BASIC_INFO_ROW_ID))
                 //Create a movie detail fragment
-                final DetailMovieFragment movieDetailFragment = new DetailMovieFragment()
-                movieDetailFragment.setArguments(extras)
+                final Bundle bundle = new Bundle()
+                bundle.putParcelable(GlobalStaticVariables.MOVIE_BASIC_INFO_URI,uri)
+                final DetailMovieFragment detailMovieFragment = new DetailMovieFragment()
+//                detailMovieFragment.setArguments(extras)
+                detailMovieFragment.setArguments(bundle)
                 getSupportFragmentManager().beginTransaction()
-                        .replace(R.id.detail_movie_container,movieDetailFragment)
-                        // Add this transaction to the back stack
-//                        .addToBackStack(null)
+                        .replace(R.id.detail_movie_fragment_container,detailMovieFragment)
+                        // No need to add the transaction to backstack as this is first transaction and activity will hold it
                         .commit()
             } else {
                 LogDisplay.callLog(LOG_TAG, 'Could not parse intent data', LogDisplay.DETAIL_MOVIE_ACTIVITY_LOG_FLAG)
@@ -215,6 +205,7 @@ class DetailMovieActivity extends AppCompatActivity {
 //        } else {
             super.onBackPressed()
 //        }
-        overridePendingTransition(0, R.anim.slide_bottom_down_animation)
+        //Start the animation
+        overridePendingTransition(0, R.anim.slide_bottom_out_animation)
     }
 }

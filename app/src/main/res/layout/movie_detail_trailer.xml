@@ -36,4 +36,14 @@
         <!--android:name="com.moviemagic.dpaul.android.app.youtube.MovieMagicYoutubeFragment"-->
         <!--android:layout_width="match_parent"-->
         <!--android:layout_height="wrap_content" />-->
+
+    <!-- this is to display a message when the movie trailer is empty -->
+    <TextView
+        android:id="@+id/movie_detail_trailer_empty_msg_text_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="left"
+        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+        android:textColor="@color/grey_color"
+        android:text="@string/movie_data_not_available"/>
 </LinearLayout>

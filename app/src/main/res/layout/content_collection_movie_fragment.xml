@@ -1,0 +1,44 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/movie_detail_collection_layout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/primary"
+    android:orientation="vertical"
+    android:paddingBottom="@dimen/m_design_space_between_content_area"
+    android:paddingEnd="@dimen/m_design_screen_edge_left_right_margin"
+    android:paddingLeft="@dimen/m_design_screen_edge_left_right_margin"
+    android:paddingRight="@dimen/m_design_screen_edge_left_right_margin"
+    android:paddingStart="@dimen/m_design_screen_edge_left_right_margin"
+    android:paddingTop="@dimen/m_design_space_between_content_area">
+
+    <TextView
+        android:id="@+id/collection_overview_header"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:fontFamily="sans-serif-condensed"
+        android:gravity="left"
+        android:text="@string/collection_overview_text"
+        android:paddingBottom="@dimen/m_design_space_between_content_area"
+        android:textAppearance="@style/TextAppearance.AppCompat.Title"
+        android:textColor="@color/white_color" />
+
+    <TextView
+        android:id="@+id/collection_overview"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="sans-serif-condensed"
+        android:text="@string/collection_overview_data"
+        android:paddingBottom="@dimen/m_design_space_between_content_area"
+        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+        android:textColor="@color/grey_color" />
+    <!-- Container for collection movies -->
+    <FrameLayout
+        android:id="@+id/collection_movie_grid"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/primary"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+    </FrameLayout>
+</LinearLayout>

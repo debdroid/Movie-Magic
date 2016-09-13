@@ -19,12 +19,8 @@
         android:id="@+id/movie_detail_review_recycler_view_empty_msg_text_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:gravity="center_horizontal"
-        android:paddingBottom="@dimen/m_design_space_between_content_area"
-        android:paddingEnd="@dimen/m_design_screen_edge_left_right_margin"
-        android:paddingLeft="@dimen/m_design_screen_edge_left_right_margin"
-        android:paddingRight="@dimen/m_design_screen_edge_left_right_margin"
-        android:paddingStart="@dimen/m_design_screen_edge_left_right_margin"
-        android:paddingTop="@dimen/m_design_space_between_content_area"
-        android:text="@string/movie_detail_review_recycler_view_empty_msg"/>
+        android:gravity="left"
+        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+        android:textColor="@color/grey_color"
+        android:text="@string/movie_data_not_available"/>
 </FrameLayout>
