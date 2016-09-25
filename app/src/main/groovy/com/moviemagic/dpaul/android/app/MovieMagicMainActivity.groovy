@@ -1,5 +1,6 @@
 package com.moviemagic.dpaul.android.app
 
+import android.app.ActivityOptions
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
@@ -222,6 +223,7 @@ public class MovieMagicMainActivity extends AppCompatActivity implements Navigat
         //Set this flag as false so that theme primaryDark color is used in the grid
         MovieGridRecyclerAdapter.collectionGridFlag = false
         final Bundle bundle = new Bundle()
+        //Since it's not for collection category, so collection id is passed as zero
         final Uri uri = MovieMagicContract.MovieBasicInfo.buildMovieUriWithMovieCategoryAndCollectionId(category,0)
 //        bundle.putString(GlobalStaticVariables.MOVIE_BASIC_INFO_CATEGORY,category)
         //Collection id is not required here, so passed on as zero
@@ -332,12 +334,14 @@ public class MovieMagicMainActivity extends AppCompatActivity implements Navigat
     @Override
 //    public void onItemSelected(int movieId, long movie_magic_row_ID, ImageView gridImageView) {
 //    public void onItemSelected(int movieId, ImageView gridImageView) {
-    public void onItemSelected(int movieId, MovieGridRecyclerAdapter.MovieGridRecyclerAdapterViewHolder viewHolder) {
+    public void onMovieGridItemSelected(int movieId, String movieCategory, MovieGridRecyclerAdapter.MovieGridRecyclerAdapterViewHolder viewHolder) {
         final Intent intent = new Intent(this, DetailMovieActivity.class)
-//        final Bundle bundle = new Bundle()
-        final Uri movieMagicMovieIdUri = MovieMagicContract.MovieBasicInfo.buildMovieUriWithMovieId(movieId)
-//        bundle.putInt(GlobalStaticVariables.MOVIE_BASIC_INFO_MOVIE_ID,movieId)
-        intent.setData(movieMagicMovieIdUri)
+        final Bundle bundle = new Bundle()
+//        final Uri movieMagicMovieIdUri = MovieMagicContract.MovieBasicInfo.buildMovieUriWithMovieId(movieId)
+        bundle.putInt(GlobalStaticVariables.MOVIE_BASIC_INFO_MOVIE_ID,movieId)
+        bundle.putString(GlobalStaticVariables.MOVIE_BASIC_INFO_CATEGORY,movieCategory)
+//        intent.setData(movieMagicMovieIdUri)
+        intent.putExtras(bundle)
         startActivity(intent)
         //Start the animation
         overridePendingTransition(R.anim.slide_bottom_in_animation,0)

@@ -9,7 +9,6 @@ import android.support.v4.app.Fragment
 import android.support.v4.app.LoaderManager
 import android.support.v4.content.CursorLoader
 import android.support.v4.content.Loader
-import android.support.v4.view.ViewCompat
 import android.support.v7.widget.GridLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
@@ -18,15 +17,10 @@ import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
-import android.widget.AbsListView
-import android.widget.AdapterView
-import android.widget.GridView
-import android.widget.Toast
-import com.moviemagic.dpaul.android.app.adapter.MovieGridAdapter
 import com.moviemagic.dpaul.android.app.adapter.MovieGridRecyclerAdapter
 import com.moviemagic.dpaul.android.app.contentprovider.MovieMagicContract
 import com.moviemagic.dpaul.android.app.backgroundmodules.GlobalStaticVariables
-import com.moviemagic.dpaul.android.app.backgroundmodules.LoadMoreMovieData
+import com.moviemagic.dpaul.android.app.backgroundmodules.LoadMoreMovies
 import com.moviemagic.dpaul.android.app.backgroundmodules.LogDisplay
 import com.squareup.picasso.Picasso
 import groovy.transform.CompileStatic
@@ -143,7 +137,7 @@ class GridMovieFragment extends Fragment implements LoaderManager.LoaderCallback
                 new MovieGridRecyclerAdapter.MovieGridRecyclerAdapterOnClickHandler(){
                     @Override
                     void onClick(int movieId, MovieGridRecyclerAdapter.MovieGridRecyclerAdapterViewHolder viewHolder) {
-                        mCallback.onItemSelected(movieId, viewHolder)
+                        mCallback.onMovieGridItemSelected(movieId, mMovieCategory, viewHolder)
                     }
                 })
 //        mGridAdapter = new MovieGridAdapter(getActivity(),null,0)
@@ -199,14 +193,14 @@ class GridMovieFragment extends Fragment implements LoaderManager.LoaderCallback
                     }
                     // If it isn’t currently loading, we check to see if we have breached
                     // the visibleThreshold and need to reload more data.
-                    // If we do need to reload some more data, we execute LoadMoreMovieData to fetch the data.
+                    // If we do need to reload some more data, we execute LoadMoreMovies to fetch the data.
                     // threshold should reflect how many total columns there are too
                     if (!isMoreDataToLoad && (lastVisibleItemPosition + mThreasholdCount) >= totalItemCount) {
                         isMoreDataToLoad = true
                         if (mMovieCategory != 'error') {
                             String[] movieCategory = [mMovieCategory] as String[]
                             LogDisplay.callLog(LOG_TAG, 'Going to load more data...', LogDisplay.GRID_MOVIE_FRAGMENT_LOG_FLAG)
-                            new LoadMoreMovieData(getActivity(), mCurrentPage).execute(movieCategory)
+                            new LoadMoreMovies(getActivity(), mCurrentPage).execute(movieCategory)
                         }
                     }
 
@@ -217,7 +211,7 @@ class GridMovieFragment extends Fragment implements LoaderManager.LoaderCallback
                         final String[] movieCategory = [mMovieCategory] as String[]
                         mReTryCounter++
                         LogDisplay.callLog(LOG_TAG, "Last API call failed, going to re-try...try # $mReTryCounter", LogDisplay.GRID_MOVIE_FRAGMENT_LOG_FLAG)
-                        new LoadMoreMovieData(getActivity(), mCurrentPage).execute(movieCategory)
+                        new LoadMoreMovies(getActivity(), mCurrentPage).execute(movieCategory)
                     }
                 }
             })
@@ -266,7 +260,7 @@ class GridMovieFragment extends Fragment implements LoaderManager.LoaderCallback
 //                        if (mMovieCategory != 'error') {
 //                            String[] movieCategory = [mMovieCategory] as String[]
 //                            LogDisplay.callLog(LOG_TAG, 'Going to load more data...', LogDisplay.GRID_MOVIE_FRAGMENT_LOG_FLAG)
-//                            new LoadMoreMovieData(getActivity(), mCurrentPage).execute(movieCategory)
+//                            new LoadMoreMovies(getActivity(), mCurrentPage).execute(movieCategory)
 //                        }
 //                    }
 //                    //Last API called failed, so give it another try but try max 5 times only
@@ -276,7 +270,7 @@ class GridMovieFragment extends Fragment implements LoaderManager.LoaderCallback
 //                        final String[] movieCategory = [mMovieCategory] as String[]
 //                        mReTryCounter++
 //                        LogDisplay.callLog(LOG_TAG, "Last API call failed, going to re-try...try # $mReTryCounter", LogDisplay.GRID_MOVIE_FRAGMENT_LOG_FLAG)
-//                        new LoadMoreMovieData(getActivity(), mCurrentPage).execute(movieCategory)
+//                        new LoadMoreMovies(getActivity(), mCurrentPage).execute(movieCategory)
 //                    }
 //                }
 //            })
@@ -373,7 +367,7 @@ class GridMovieFragment extends Fragment implements LoaderManager.LoaderCallback
             mCurrentPage = mStartPage
             mMovieListType = data.getString(COL_MOVIE_LIST_TYPE)
             LogDisplay.callLog(LOG_TAG, "Start Page # $mStartPage", LogDisplay.GRID_MOVIE_FRAGMENT_LOG_FLAG)
-            mGridRecyclerAdapter.swapCursor(data)
+//            mGridRecyclerAdapter.swapCursor(data)
             if(mCollectionGridFlag) {
                 //Call CollectionColorChangeCallback which Collection activity will use to change the grid color
                 mCollectionColorChangeCallback.notifyCollectionColorChange()
@@ -383,6 +377,7 @@ class GridMovieFragment extends Fragment implements LoaderManager.LoaderCallback
             LogDisplay.callLog(LOG_TAG, 'Empty cursor returned by loader', LogDisplay.GRID_MOVIE_FRAGMENT_LOG_FLAG)
         }
 //        mGridAdapter.swapCursor(data)
+          mGridRecyclerAdapter.swapCursor(data)
     }
 
     @Override
@@ -429,7 +424,7 @@ class GridMovieFragment extends Fragment implements LoaderManager.LoaderCallback
          */
 //        public void onItemSelected(int movieId, long movie_magic_row_ID, ImageView gridImageView)
 //        public void onItemSelected(int movieId, ImageView gridImageView)
-        public void onItemSelected(int movieId, MovieGridRecyclerAdapter.MovieGridRecyclerAdapterViewHolder viewHolder)
+        public void onMovieGridItemSelected(int movieId, String movieCategory, MovieGridRecyclerAdapter.MovieGridRecyclerAdapterViewHolder viewHolder)
     }
 
     /**

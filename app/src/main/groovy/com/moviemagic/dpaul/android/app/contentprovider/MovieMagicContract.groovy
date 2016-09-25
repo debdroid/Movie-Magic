@@ -508,6 +508,10 @@ class MovieMagicContract {
             CONTENT_URI.buildUpon().appendPath(personId.toString()).build()
         }
 
+        static long getRowIdFromMoviePersonInfoUri (Uri uri) {
+            uri.getPathSegments().get(1).toLong()
+        }
+
         static int getPersonIdFromMoviePersonInfoUri (Uri uri) {
             uri.getPathSegments().get(1).toInteger()
         }
@@ -560,7 +564,7 @@ class MovieMagicContract {
         static final String TABLE_NAME = PATH_MOVIE_PERSON_CREW
         //Define the columns
         static final String COLUMN_FOREIGN_KEY_ID = 'foreign_key'
-        //ORIG_PERSON_ID column is the reference(i.e. dummy Foreign key) and populated with the movie id of movie_person_info
+        //ORIG_PERSON_ID column is the reference(i.e. dummy Foreign key) and populated with the person id of movie_person_info
         static final String COLUMN_PERSON_CREW_ORIG_PERSON_ID = 'person_crew_orig_person_id'
         static final String COLUMN_PERSON_CREW_ADULT_FLAG = 'person_crew_adult_flag'
         static final String COLUMN_PERSON_CREW_CREDIT_ID = 'person_crew_credit_id'

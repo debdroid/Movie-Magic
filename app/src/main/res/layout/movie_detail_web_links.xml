@@ -59,7 +59,7 @@
         android:layout_marginStart="@dimen/m_design_space_between_content_area"
         android:layout_weight="1"
         android:fontFamily="sans-serif-condensed"
-        android:text="@string/movie_detail_web_links_imdb_link"
+        android:text="@string/detail_web_links_imdb_link"
         android:gravity="center"
         android:background="@color/primary_dark"
         android:textAppearance="@style/TextAppearance.AppCompat.Title"

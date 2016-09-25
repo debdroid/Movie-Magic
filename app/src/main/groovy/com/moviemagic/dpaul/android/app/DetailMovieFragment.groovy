@@ -26,6 +26,7 @@ import android.support.v7.graphics.Palette
 import android.support.v7.widget.GridLayoutManager
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
+import android.support.v7.widget.RecyclerView.LayoutManager
 import android.support.v7.widget.Toolbar
 import android.view.LayoutInflater
 import android.view.Menu
@@ -51,7 +52,7 @@ import com.moviemagic.dpaul.android.app.adapter.MovieReviewAdapter
 import com.moviemagic.dpaul.android.app.adapter.SimilarMovieAdapter
 import com.moviemagic.dpaul.android.app.contentprovider.MovieMagicContract
 import com.moviemagic.dpaul.android.app.backgroundmodules.GlobalStaticVariables
-import com.moviemagic.dpaul.android.app.backgroundmodules.LoadMovieBasicAddlInfo
+import com.moviemagic.dpaul.android.app.backgroundmodules.LoadMovieDetails
 import com.moviemagic.dpaul.android.app.backgroundmodules.LogDisplay
 import com.moviemagic.dpaul.android.app.backgroundmodules.PicassoLoadImage
 import com.moviemagic.dpaul.android.app.backgroundmodules.UpdateUserListChoiceAndRating
@@ -91,6 +92,7 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
     private int mCollectionId
 //    private String[] mMovieRowIdArg
     private String[] mMovieIdArg
+    private String[] mMovieIdCategoryArg
     private String[] mVideoArg
     private String[] mReleaseInfoArg
     private String[] mMovieImageArg
@@ -99,7 +101,7 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
     private MovieCastAdapter mMovieCastAdapter
     private MovieCrewAdapter mMovieCrewAdapter
     private HorizontalGridView mHorizontalSimilarMovieGridView, mHorizontalMovieCastGridView, mHorizontalMovieCrewGridView
-    private RecyclerView.LayoutManager mSimilarMovieLayoutManager, mMovieCastLayoutManager, mMovieCrewLayoutManager
+//    private RecyclerView.LayoutManager mSimilarMovieLayoutManager, mMovieCastLayoutManager, mMovieCrewLayoutManager
 //    private MovieTitleAndColorCallback mMovieTitleAndColorCallback
 //    private BackdropCallback mBackdropCallback
 //    private UserListButtonClickCallback mUserListButtonClickCallback
@@ -110,7 +112,7 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
     private int mPalleteBodyTextColor
     private int mPalleteAccentColor
     private RecyclerView mMovieReviewRecyclerView
-    private RecyclerView.LayoutManager mMovieReviewLayoutManager
+//    private RecyclerView.LayoutManager mMovieReviewLayoutManager
     private MovieReviewAdapter mMovieReviewAdapter
     private String mMovieListType
     private String mMovieCategory
@@ -127,6 +129,7 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
     private static boolean setBackdropAnimation = true
     private final android.os.Handler mHandler = new android.os.Handler()
     private static final String MOVIE_TITLE = 'movie_title'
+    private GridLayoutManager mSimilarMovieGridLayoutManager
 
 //    public static final String MOVIE_BASIC_INFO_MOVIE_ID_URI = 'movie_basic_info_movie_id_uri'
     private static final String MOVIE_VIDEO_SITE_YOUTUBE = 'YouTube'
@@ -357,17 +360,22 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         LogDisplay.callLog(LOG_TAG, 'onCreateView is called', LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
         //Get the bundle from the Fragment
-        Bundle args = getArguments()
+        final Bundle args = getArguments()
         if (args) {
-            mMovieMagicMovieIdUri = args.getParcelable(GlobalStaticVariables.MOVIE_BASIC_INFO_URI) as Uri
-            mMovieId = MovieMagicContract.MovieBasicInfo.getMovieIdFromUri(mMovieMagicMovieIdUri)
+            mMovieId = args.getInt(GlobalStaticVariables.MOVIE_BASIC_INFO_MOVIE_ID)
+            mMovieCategory = args.getString(GlobalStaticVariables.MOVIE_BASIC_INFO_CATEGORY)
+//            mMovieMagicMovieIdUri = args.getParcelable(GlobalStaticVariables.MOVIE_BASIC_INFO_URI) as Uri
+//            mMovieId = MovieMagicContract.MovieBasicInfo.getMovieIdFromUri(mMovieMagicMovieIdUri)
 //            mMovieId = args.getInt(GlobalStaticVariables.MOVIE_BASIC_INFO_MOVIE_ID)
             //_ID_movie_basic_info is used as Integer in the subsequent calls, so it's also defined as
             //integer even though actually it's long
 //            _ID_movie_basic_info = args.getLong(GlobalStaticVariables.MOVIE_BASIC_INFO_ROW_ID) as Integer
-            LogDisplay.callLog(LOG_TAG, "Fragment arguments.Movie Uri -> ${mMovieMagicMovieIdUri.toString()}", LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
+//            LogDisplay.callLog(LOG_TAG, "Fragment arguments.Movie Uri -> ${mMovieMagicMovieIdUri.toString()}", LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
             LogDisplay.callLog(LOG_TAG, "Fragment arguments.Movie ID -> $mMovieId", LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
+            LogDisplay.callLog(LOG_TAG, "Fragment arguments.Movie Category -> $mMovieCategory", LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
 //            LogDisplay.callLog(LOG_TAG,"Fragment arguments.Movie Row ID -> $_ID_movie_basic_info",LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
+        } else {
+            LogDisplay.callLog(LOG_TAG, 'Could not parse fragment data', LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
         }
         //inflate the view before referring any view using id
         View mRootView = inflater.inflate(R.layout.fragment_detail_movie, container, false)
@@ -428,6 +436,9 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
         mRecyclerViewEmptyMsgTextView = mRootView.findViewById(R.id.movie_detail_review_recycler_view_empty_msg_text_view) as TextView
         mExternalLinkHeader = mRootView.findViewById(R.id.movie_detail_web_links_header) as TextView
         mUserListDrawableTitle = mRootView.findViewById(R.id.movie_detail_user_list_drawable_title) as TextView
+        /**
+         * User list button handling
+         */
         mImageButtonWatched = mRootView.findViewById(R.id.movie_detail_user_list_drawable_watched) as ImageButton
         mImageButtonWatched.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -458,8 +469,7 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
                     }
                 } else {
                     Snackbar.make(mRootView.findViewById(R.id.movie_detail_user_list_drawable_layout),
-                            getActivity().getString(R.string.cannot_perform_operation_msg), Snackbar.LENGTH_LONG)
-                            .setAction("Action", null).show()
+                            getActivity().getString(R.string.cannot_perform_operation_msg), Snackbar.LENGTH_LONG).show()
                 }
             }
         })
@@ -493,7 +503,6 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
                 }
             }
         })
-
         mImageButtonFavourite = mRootView.findViewById(R.id.movie_detail_user_list_drawable_favourite) as ImageButton
         mImageButtonFavourite.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -524,7 +533,6 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
                 }
             }
         })
-
         mImageButtonCollection = mRootView.findViewById(R.id.movie_detail_user_list_drawable_collection) as ImageButton
         mImageButtonCollection.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -555,7 +563,6 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
                 }
             }
         })
-
         //All the dynamic fields (data fields) & ratingbar
         mMovieTitleTextView = mRootView.findViewById(R.id.movie_detail_title) as TextView
         mMpaaRatingImageView = mRootView.findViewById(R.id.movie_detail_mpaa_image) as ImageView
@@ -567,6 +574,9 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
         mRevenueTextView = mRootView.findViewById(R.id.movie_detail_poster_revenue) as TextView
         mPopularityTextView = mRootView.findViewById(R.id.movie_detail_poster_popularity) as TextView
         mTmdbRatingBar = mRootView.findViewById(R.id.movie_detail_tmdb_rating_bar) as RatingBar
+        /**
+         * User rating bar handling
+         */
         mUserRatingBar = mRootView.findViewById(R.id.movie_detail_user_rating_bar) as RatingBar
         mUserRatingBar.setOnRatingBarChangeListener(new RatingBar.OnRatingBarChangeListener() {
             @Override
@@ -597,6 +607,9 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
         mProdCompanyTextView = mRootView.findViewById(R.id.movie_detail_production_info_cmpy) as TextView
         mProdCountryTextView = mRootView.findViewById(R.id.movie_detail_production_info_country) as TextView
         mCollectionNameTextView = mRootView.findViewById(R.id.movie_detail_collection_name) as TextView
+        /**
+         * Collection backdrop image handling
+         */
         mCollectionBackdropImageView = mRootView.findViewById(R.id.movie_detail_collection_image) as ImageView
         mCollectionBackdropImageView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -615,6 +628,58 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
                 }
             }
         })
+        /**
+         * Movie Cast Grid handling
+         */
+        mHorizontalMovieCastGridView = mRootView.findViewById(R.id.movie_detail_cast_grid) as HorizontalGridView
+        mCastGridEmptyMsgTextView = mRootView.findViewById(R.id.movie_detail_cast_grid_empty_msg_text_view) as TextView
+//        mMovieCastLayoutManager = new GridLayoutManager(getActivity(), 1, GridLayoutManager.HORIZONTAL, false)
+//        mHorizontalMovieCastGridView.setLayoutManager(mMovieCastLayoutManager)
+        final GridLayoutManager castGridLayoutManager = new GridLayoutManager(getActivity(), 1, GridLayoutManager.HORIZONTAL, false)
+        mHorizontalMovieCastGridView.setLayoutManager(castGridLayoutManager)
+        mMovieCastAdapter = new MovieCastAdapter(getActivity(), mCastGridEmptyMsgTextView)
+        mHorizontalMovieCastGridView.setAdapter(mMovieCastAdapter)
+
+        /**
+         * Movie Crew Grid handling
+         */
+        //Create a layout manager which is used for similar movie, movie cast & crew grid
+        mHorizontalMovieCrewGridView = mRootView.findViewById(R.id.movie_detail_crew_grid) as HorizontalGridView
+        mCrewGridEmptyMsgTextView = mRootView.findViewById(R.id.movie_detail_crew_grid_empty_msg_text_view) as TextView
+//        mMovieCrewLayoutManager = new GridLayoutManager(getActivity(), 1, GridLayoutManager.HORIZONTAL, false)
+//        mHorizontalMovieCrewGridView.setLayoutManager(mMovieCrewLayoutManager)
+        final GridLayoutManager crewGridLayoutManager = new GridLayoutManager(getActivity(), 1, GridLayoutManager.HORIZONTAL, false)
+        mHorizontalMovieCrewGridView.setLayoutManager(crewGridLayoutManager)
+        mMovieCrewAdapter = new MovieCrewAdapter(getActivity(), mCrewGridEmptyMsgTextView)
+        mHorizontalMovieCrewGridView.setAdapter(mMovieCrewAdapter)
+
+        /**
+         * Similar movie Grid handling
+         */
+        mHorizontalSimilarMovieGridView = mRootView.findViewById(R.id.movie_detail_similar_movie_grid) as HorizontalGridView
+        mSimilarMovieGridEmptyMsgTextView = mRootView.findViewById(R.id.movie_detail_similar_movie_grid_empty_msg_text_view) as TextView
+//        mSimilarMovieLayoutManager = new GridLayoutManager(getActivity(), 1, GridLayoutManager.HORIZONTAL, false)
+//        mHorizontalSimilarMovieGridView.setLayoutManager(mSimilarMovieLayoutManager)
+        mSimilarMovieGridLayoutManager = new GridLayoutManager(getActivity(), 1, GridLayoutManager.HORIZONTAL, false)
+        mHorizontalSimilarMovieGridView.setLayoutManager(mSimilarMovieGridLayoutManager)
+        mSimilarMovieAdapter = new SimilarMovieAdapter(getActivity(), mSimilarMovieGridEmptyMsgTextView)
+        mHorizontalSimilarMovieGridView.setAdapter(mSimilarMovieAdapter)
+        mHorizontalSimilarMovieGridView.setOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+                super.onScrollStateChanged(recyclerView, newState)
+                LogDisplay.callLog(LOG_TAG, "onScrollStateChanged is called.", LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
+            }
+
+            @Override
+            void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy)
+                LogDisplay.callLog(LOG_TAG, "onScrolled is called.dx=$dx & dy=$dy", LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
+            }
+        })
+        /**
+         * External web link button handling
+         */
         mHomePageButton = mRootView.findViewById(R.id.movie_detail_web_links_home_page_button) as Button
         mHomePageButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -631,48 +696,21 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
                 startImdbIntent()
             }
         })
-
-        mHorizontalSimilarMovieGridView = mRootView.findViewById(R.id.movie_detail_similar_movie_grid) as HorizontalGridView
-        mSimilarMovieGridEmptyMsgTextView = mRootView.findViewById(R.id.movie_detail_similar_movie_grid_empty_msg_text_view) as TextView
-        mSimilarMovieLayoutManager = new GridLayoutManager(getActivity(), 1, GridLayoutManager.HORIZONTAL, false)
-        mHorizontalSimilarMovieGridView.setLayoutManager(mSimilarMovieLayoutManager)
-        mSimilarMovieAdapter = new SimilarMovieAdapter(getActivity(), mSimilarMovieGridEmptyMsgTextView)
-        mHorizontalSimilarMovieGridView.setAdapter(mSimilarMovieAdapter)
-        mHorizontalSimilarMovieGridView.setOnScrollListener(new RecyclerView.OnScrollListener() {
-            @Override
-            void onScrollStateChanged(RecyclerView recyclerView, int newState) {
-                super.onScrollStateChanged(recyclerView, newState)
-                LogDisplay.callLog(LOG_TAG, "onScrollStateChanged is called.", LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
-            }
-
-            @Override
-            void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-                super.onScrolled(recyclerView, dx, dy)
-                LogDisplay.callLog(LOG_TAG, "onScrolled is called.dx=$dx & dy=$dy", LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
-            }
-        })
-        mHorizontalMovieCastGridView = mRootView.findViewById(R.id.movie_detail_cast_grid) as HorizontalGridView
-        mCastGridEmptyMsgTextView = mRootView.findViewById(R.id.movie_detail_cast_grid_empty_msg_text_view) as TextView
-        mMovieCastLayoutManager = new GridLayoutManager(getActivity(), 1, GridLayoutManager.HORIZONTAL, false)
-        mHorizontalMovieCastGridView.setLayoutManager(mMovieCastLayoutManager)
-        mMovieCastAdapter = new MovieCastAdapter(getActivity(), mCastGridEmptyMsgTextView)
-        mHorizontalMovieCastGridView.setAdapter(mMovieCastAdapter)
-
-        mHorizontalMovieCrewGridView = mRootView.findViewById(R.id.movie_detail_crew_grid) as HorizontalGridView
-        mCrewGridEmptyMsgTextView = mRootView.findViewById(R.id.movie_detail_crew_grid_empty_msg_text_view) as TextView
-        mMovieCrewLayoutManager = new GridLayoutManager(getActivity(), 1, GridLayoutManager.HORIZONTAL, false)
-        mHorizontalMovieCrewGridView.setLayoutManager(mMovieCrewLayoutManager)
-        mMovieCrewAdapter = new MovieCrewAdapter(getActivity(), mCrewGridEmptyMsgTextView)
-        mHorizontalMovieCrewGridView.setAdapter(mMovieCrewAdapter)
-
+        /**
+         * Review recycler view handling
+         */
         mMovieReviewRecyclerView = mRootView.findViewById(R.id.movie_detail_review_recycler_view) as RecyclerView
         //Set this to false for smooth scrolling of recyclerview
         mMovieReviewRecyclerView.setNestedScrollingEnabled(false)
-        mMovieReviewLayoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false)
-        mMovieReviewLayoutManager.setAutoMeasureEnabled(true)
-        mMovieReviewRecyclerView.setLayoutManager(mMovieReviewLayoutManager)
+//        mMovieReviewLayoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false)
+//        mMovieReviewLayoutManager.setAutoMeasureEnabled(true)
+//        mMovieReviewRecyclerView.setLayoutManager(mMovieReviewLayoutManager)
+        final LayoutManager linearLayoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false)
+        linearLayoutManager.setAutoMeasureEnabled(true)
+        mMovieReviewRecyclerView.setLayoutManager(linearLayoutManager)
         mMovieReviewAdapter = new MovieReviewAdapter(getActivity(), mRecyclerViewEmptyMsgTextView)
         mMovieReviewRecyclerView.setAdapter(mMovieReviewAdapter)
+
         return mRootView
     }
 
@@ -702,9 +740,10 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
 
         mLocale = context.getResources().getConfiguration().locale.getCountry()
         LogDisplay.callLog(LOG_TAG, "Locale: $mLocale", LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
-        if (mMovieId) {
+        if (mMovieId && mMovieCategory) {
 //            mMovieRowIdArg = [Integer.toString(_ID_movie_basic_info)] as String[]
             mMovieIdArg = [Integer.toString(mMovieId)] as String[]
+            mMovieIdCategoryArg = [Integer.toString(mMovieId), mMovieCategory] as String[]
             mVideoArg = [Integer.toString(mMovieId), MOVIE_VIDEO_SITE_YOUTUBE, MOVIE_VIDEO_SITE_TYPE] as String[]
             mReleaseInfoArg = [Integer.toString(mMovieId), mLocale] as String[]
             mMovieImageArg = [Integer.toString(mMovieId), GlobalStaticVariables.IMAGE_TYPE_BACKDROP] as String[]
@@ -712,6 +751,7 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
             //this is to safeguard any unwanted data fetch
 //            mMovieRowIdArg = ['ZZZZZZ'] as String[]
             mMovieIdArg = ['ZZZZZZ'] as String[]
+            mMovieIdCategoryArg = ['XXXXXX', 'YYYYY'] as String[]
             mVideoArg = ['XXXXXX', 'YYYYY', 'ZZZZZZ'] as String[]
             mReleaseInfoArg = ['YYYYY', 'ZZZZZZ'] as String[]
             mMovieImageArg = ['YYYYY', 'ZZZZZZ'] as String[]
@@ -756,16 +796,19 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
         LogDisplay.callLog(LOG_TAG, "onCreateLoader.loader id->$id", LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
         switch (id) {
             case MOVIE_DETAIL_FRAGMENT_BASIC_DATA_LOADER_ID:
-                //TODO: this cursor can return more than one row - same movie id under different category, need to do optimization later, use URI category/id?
+                //TODO: this cursor can still return more than one row for similar movies
                 return new CursorLoader(
                         getActivity(),                                  //Parent Activity Context
-                        mMovieMagicMovieIdUri,                          //Uri of the movie id
-//                        MovieMagicContract.MovieBasicInfo.CONTENT_URI,  //Table to query
+//                        mMovieMagicMovieIdUri,                          //Uri of the movie id
+                        MovieMagicContract.MovieBasicInfo.CONTENT_URI,  //Table to query
                         MOVIE_BASIC_INFO_COLUMNS,                       //Projection to return
-                        null,                                           //null as used movie id Uri
+//                        null,                                           //null as used movie id Uri
 //                        "$MovieMagicContract.MovieBasicInfo.COLUMN_MOVIE_ID = ? ",  //Selection Clause
-                        null,                                           ////null as used movie id Uri
+                        """$MovieMagicContract.MovieBasicInfo.COLUMN_MOVIE_ID = ? and
+                           $MovieMagicContract.MovieBasicInfo.COLUMN_MOVIE_CATEGORY = ? """,  //Selection Clause
+//                        null,                                           //null as used movie id Uri
 //                        mMovieIdArg,                                 //Selection Arg
+                        mMovieIdCategoryArg,                                 //Selection Arg
                         null)                                           //Only a single row is expected, so not sorted
 
             case MOVIE_DETAIL_FRAGMENT_SIMILAR_MOVIE_LOADER_ID:
@@ -773,7 +816,7 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
                         getActivity(),                                                          //Parent Activity Context
                         MovieMagicContract.MovieBasicInfo.CONTENT_URI,                          //Table to query
                         SIMILAR_MOVIE_COLUMNS,                                                  //Projection to return
-                        MovieMagicContract.MovieBasicInfo.COLUMN_SIMILAR_MOVIE_LINK_ID + "= ?", //Selection Clause
+                        "$MovieMagicContract.MovieBasicInfo.COLUMN_SIMILAR_MOVIE_LINK_ID = ?", //Selection Clause
                         mMovieIdArg,                                                            //Selection Arg
                         null)                                                                   //Not bother on sorting
 
@@ -804,7 +847,8 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
                         MOVIE_CREW_COLUMNS,                                             //Projection to return
                         "$MovieMagicContract.MovieCrew.COLUMN_CREW_ORIG_MOVIE_ID = ?",  //Selection Clause
                         mMovieIdArg,                                                    //Selection Arg
-                        MovieMagicContract.MovieCrew.COLUMN_CREW_JOB)                   //Sorted on the job
+                        """$MovieMagicContract.MovieCrew.COLUMN_CREW_PROFILE_PATH desc,
+                           $MovieMagicContract.MovieCrew.COLUMN_CREW_JOB asc""")        //Sorted on the profile path(desc), job(asc)
 
             case MOVIE_DETAIL_FRAGMENT_MOVIE_RELEASE_INFO_LOADER_ID:
                 return new CursorLoader(
@@ -831,7 +875,7 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
                         getActivity(),                                                      //Parent Activity Context
                         MovieMagicContract.MovieReview.CONTENT_URI,                         //Table to query
                         MOVIE_REVIEW_COLUMNS,                                               //Projection to return
-                        MovieMagicContract.MovieReview.COLUMN_REVIEW_ORIG_MOVIE_ID + "= ?", //Selection Clause
+                        "$MovieMagicContract.MovieReview.COLUMN_REVIEW_ORIG_MOVIE_ID = ?", //Selection Clause
                         mMovieIdArg,                                                        //Selection Arg
                         MovieMagicContract.MovieReview.COLUMN_REVIEW_AUTHOR)                //Sorted on the author
 
@@ -903,8 +947,8 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
             _ID_movie_basic_info = data.getInt(COL_MOVIE_BASIC_ID)
             LogDisplay.callLog(LOG_TAG, "handleMovieBasicOnLoadFinished.Movie row id -> $_ID_movie_basic_info", LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
 //            mMovieListType = data.getString(COL_MOVIE_BASIC_MOVIE_LIST_TYPE)
-            mMovieCategory = data.getString(COL_MOVIE_BASIC_MOVIE_CATEGORY)
-            LogDisplay.callLog(LOG_TAG, "Movie Category -> $mMovieCategory", LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
+//            mMovieCategory = data.getString(COL_MOVIE_BASIC_MOVIE_CATEGORY)
+            LogDisplay.callLog(LOG_TAG, "handleMovieBasicOnLoadFinished.Movie Category -> ${data.getString(COL_MOVIE_BASIC_MOVIE_CATEGORY)}", LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
             mOriginalBackdropPath = data.getString(COL_MOVIE_BASIC_BACKDROP_PATH)
             //TODO: some optimisation is needed here for this picasso call
             //Load the first backdrop, so that there is not much lag while displaying the first image
@@ -1013,23 +1057,24 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
                                 }
                             }
                             changeLayoutAndTextColor()
-//                            mMovieTitleAndColorCallback.initializeActivityHostedTitleAndColor(mMovieTitle, mPalletePrimaryColor, mPalletePrimaryDarkColor, mPalleteTitleColor)
+//                            mMovieTitleAndColorCallback.initializeActivityHostedTitleAndColor(mMovieTitle, mPalettePrimaryColor, mPalettePrimaryDarkColor, mPaletteTitleColor)
                             initializeTitleAndColor()
                             //Set the color for adapter fields and call method which in turn calls notifyDatasetChanged
-                            MovieCastAdapter.mPrimaryDarkColor = mPalletePrimaryDarkColor
-                            MovieCastAdapter.mBodyTextColor = mPalleteBodyTextColor
-                            mMovieCastAdapter.changeColor()
-                            MovieCrewAdapter.mPrimaryDarkColor = mPalletePrimaryDarkColor
-                            MovieCrewAdapter.mBodyTextColor = mPalleteBodyTextColor
-                            mMovieCrewAdapter.changeColor()
-                            SimilarMovieAdapter.mPrimaryDarkColor = mPalletePrimaryDarkColor
-                            SimilarMovieAdapter.mBodyTextColor = mPalleteBodyTextColor
-                            mSimilarMovieAdapter.changeColor()
-                            MovieReviewAdapter.mPrimaryColor = mPalletePrimaryColor
-                            MovieReviewAdapter.mPrimaryDarkColor = mPalletePrimaryDarkColor
-                            MovieReviewAdapter.mTitleTextColor = mPalleteTitleColor
-                            MovieReviewAdapter.mBodyTextColor = mPalleteBodyTextColor
-                            mMovieReviewAdapter.changeColor()
+//                            MovieCastAdapter.mPrimaryDarkColor = mPalletePrimaryDarkColor
+//                            MovieCastAdapter.mBodyTextColor = mPalleteBodyTextColor
+                            mMovieCastAdapter.changeColor(mPalletePrimaryDarkColor, mPalleteBodyTextColor)
+//                            MovieCrewAdapter.mPrimaryDarkColor = mPalletePrimaryDarkColor
+//                            MovieCrewAdapter.mBodyTextColor = mPalleteBodyTextColor
+                            mMovieCrewAdapter.changeColor(mPalletePrimaryDarkColor, mPalleteBodyTextColor)
+//                            SimilarMovieAdapter.mPrimaryDarkColor = mPalletePrimaryDarkColor
+//                            SimilarMovieAdapter.mBodyTextColor = mPalleteBodyTextColor
+//                            mSimilarMovieAdapter.changeColor()
+                            mSimilarMovieAdapter.changeColor(mPalletePrimaryDarkColor, mPalleteBodyTextColor)
+//                            MovieReviewAdapter.mPrimaryColor = mPalletePrimaryColor
+//                            MovieReviewAdapter.mPrimaryDarkColor = mPalletePrimaryDarkColor
+//                            MovieReviewAdapter.mTitleTextColor = mPalleteTitleColor
+//                            MovieReviewAdapter.mBodyTextColor = mPalleteBodyTextColor
+                            mMovieReviewAdapter.changeColor(mPalletePrimaryColor, mPalleteTitleColor, mPalleteBodyTextColor)
                             //Set the image button color
                             setImageButtonColor()
                         }
@@ -1047,9 +1092,9 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
 //            fadeIn.setInterpolator(new DecelerateInterpolator())
 //            fadeIn.setDuration(2000)
 //            mPosterImageView.setAnimation(fadeIn)
-            //Default date is 1900-01-01 which is less than Unix epoc 1st Jan 1970, so converted miliseconds is negative
+            //Default date is 1900-01-01 which is less than Unix epoc 1st Jan 1970, so converted milliseconds is negative
             if (data.getLong(COL_MOVIE_BASIC_RELEASE_DATE) > 0) {
-                mReleaseDateTextView.setText(Utility.formatMiliSecondsToDate(data.getLong(COL_MOVIE_BASIC_RELEASE_DATE)))
+                mReleaseDateTextView.setText(Utility.formatMilliSecondsToDate(data.getLong(COL_MOVIE_BASIC_RELEASE_DATE)))
             } else {
                 mReleaseDateTextView.setText(getActivity().getString(R.string.movie_data_not_available))
             }
@@ -1129,7 +1174,7 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
             LogDisplay.callLog(LOG_TAG, "IMDb ID:${data.getString(COL_MOVIE_BASIC_IMDB_ID)}", LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
             if (data.getString(COL_MOVIE_BASIC_IMDB_ID)) {
                 mMovieImdbId = data.getString(COL_MOVIE_BASIC_IMDB_ID)
-                mImdbLinkButton.setText(getActivity().getString(R.string.movie_detail_web_links_imdb_link))
+                mImdbLinkButton.setText(getActivity().getString(R.string.detail_web_links_imdb_link))
                 mImdbLinkButton.setClickable(true)
                 if (Build.VERSION.SDK_INT >= 21) {
 //                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
@@ -1146,20 +1191,31 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
             int detailDataPresentFlag = data.getInt(COL_MOVIE_BASIC_DETAIL_DATA_PRESENT_FLAG)
             //If the flag is zero then all movie data not present, so go and fetch it
             if (detailDataPresentFlag == GlobalStaticVariables.MOVIE_MAGIC_FLAG_FALSE) {
-                LogDisplay.callLog(LOG_TAG, 'Additional movie data not present, go and fetch it', LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
+                LogDisplay.callLog(LOG_TAG, 'handleMovieBasicOnLoadFinished.Additional movie data not present, go and fetch it', LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
                 final Integer[] movieIdArray = [mMovieId, _ID_movie_basic_info] as Integer[]
-                new LoadMovieBasicAddlInfo(getActivity()).execute(movieIdArray)
-//                new LoadMovieBasicAddlInfo(getActivity(), mMovieIdUri).execute(movieIdArray)
+                new LoadMovieDetails(getActivity()).execute(movieIdArray)
+//                new LoadMovieDetails(getActivity(), mMovieIdUri).execute(movieIdArray)
             } else {
-                LogDisplay.callLog(LOG_TAG, 'Additional movie data already present', LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
+                LogDisplay.callLog(LOG_TAG, 'handleMovieBasicOnLoadFinished.Additional movie data already present', LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
             }
         } else {
-            LogDisplay.callLog(LOG_TAG, "Bad cursor return by handleMovieBasicOnLoadFinished.Cursor rec count -> ${data.getCount()}", LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
+            LogDisplay.callLog(LOG_TAG, "handleMovieBasicOnLoadFinished.Record not found, should reach here only when movie is clicked on person screen - Movie id:$mMovieId, Category:$mMovieCategory", LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
+            if(mMovieCategory == GlobalStaticVariables.MOVIE_CATEGORY_PERSON) {
+                //Movie does not exists, go and fetch then insert into movie basic info table
+                LogDisplay.callLog(LOG_TAG, 'handleMovieBasicOnLoadFinished.Movie does not exists, go and fetch then insert into movie basic info table', LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
+                new LoadMovieDetails(getActivity()).execute([mMovieId,0] as Integer[])
+            } else {
+                LogDisplay.callLog(LOG_TAG, "Investigate how reached here - Movie id:$mMovieId, Category:$mMovieCategory", LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
+            }
         }
     }
 
     void handleSimilarMovieOnLoadFinished(Cursor data) {
         LogDisplay.callLog(LOG_TAG, "handleSimilarMovieOnLoadFinished.Cursor rec count -> ${data.getCount()}", LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
+        //Show two rows if the count is greater than 6 otherwise show single row
+        if(data.count >= 6) {
+            mSimilarMovieGridLayoutManager.setSpanCount(2)
+        }
         mSimilarMovieAdapter.swapCursor(data)
     }
 
@@ -1270,7 +1326,7 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
                 mImageButtonCollection.setAlpha(GlobalStaticVariables.MOVIE_MAGIC_ALPHA_FULL_OPAQUE)
                 mUserListCollectionFlag = true
             }
-            if (data.getFloat(COL_MOVIE_USER_LIST_FLAG_USER_RATING) > 0.0) {
+            if (data.getFloat(COL_MOVIE_USER_LIST_FLAG_USER_RATING) > 0) {
                 mUserRatingBar.setRating(data.getFloat(COL_MOVIE_USER_LIST_FLAG_USER_RATING))
             }
         }
@@ -1411,7 +1467,7 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
      * Intent to open the movie in imdb app(if installed) or in web browser when user clicks on imdb button
      */
     void startImdbIntent() {
-        final String imdbUrl = "$GlobalStaticVariables.IMDB_BASE_URL$mMovieImdbId/"
+        final String imdbUrl = "$GlobalStaticVariables.IMDB_BASE_MOVIE_TITLE_URL$mMovieImdbId/"
         final Intent intent = new Intent(Intent.ACTION_VIEW)
         intent.setData(Uri.parse(imdbUrl))
         startActivity(intent)
@@ -1581,6 +1637,7 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
         super.onStop()
         mHandler.removeCallbacksAndMessages(null)
         //Cancel Picasso requests - required where callback (hard reference) is used
+        //TODO this is not done everywhere, so need to do in other places
         Picasso.with(getActivity()).cancelRequest(mPosterImageView)
         Picasso.with(getActivity()).cancelRequest(mBackdropImageSwitcher.getChildAt(0) as ImageView)
         Picasso.with(getActivity()).cancelRequest(mBackdropImageSwitcher.getChildAt(1) as ImageView)

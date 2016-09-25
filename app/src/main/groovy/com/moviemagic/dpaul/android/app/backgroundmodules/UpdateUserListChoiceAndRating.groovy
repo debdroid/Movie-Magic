@@ -26,7 +26,7 @@ class UpdateUserListChoiceAndRating extends AsyncTask<String, Void, Integer> {
     private final int mMovieId
     private final String mMovieTitle
     private String mUserListMsg
-    private int mUserFlag
+    private int mUserFlag = 0
     private float mUserRating
     private final ProgressDialog mProgressDialog
 
@@ -79,9 +79,9 @@ class UpdateUserListChoiceAndRating extends AsyncTask<String, Void, Integer> {
         //Get the record from movie_user_list_flag
         final Cursor movieUSerListFlagCursor = mContentResolver.query(movieUserListFlagUri,MOVIE_USER_LIST_FLAG_COLUMNS,null,null,null)
 
-        LogDisplay.callLog(LOG_TAG,"listType->$listType",LogDisplay.UPDATE_USER_LIST_FLAG)
-        LogDisplay.callLog(LOG_TAG,"operationType->$operationType",LogDisplay.UPDATE_USER_LIST_FLAG)
-        LogDisplay.callLog(LOG_TAG,"ratingValue->$ratingValue",LogDisplay.UPDATE_USER_LIST_FLAG)
+        LogDisplay.callLog(LOG_TAG,"listType->$listType",LogDisplay.UPDATE_USER_LIST_LOG_FLAG)
+        LogDisplay.callLog(LOG_TAG,"operationType->$operationType",LogDisplay.UPDATE_USER_LIST_LOG_FLAG)
+        LogDisplay.callLog(LOG_TAG,"ratingValue->$ratingValue",LogDisplay.UPDATE_USER_LIST_LOG_FLAG)
         if(operationType == GlobalStaticVariables.USER_LIST_ADD_FLAG) {
             mUserFlag = GlobalStaticVariables.MOVIE_MAGIC_FLAG_TRUE
             //Get the movie basic details which will be used to create user record
@@ -89,28 +89,28 @@ class UpdateUserListChoiceAndRating extends AsyncTask<String, Void, Integer> {
             movieBasicInfoCursor = mContentResolver.query(
                     MovieMagicContract.MovieBasicInfo.CONTENT_URI,
                     null,
-                    "$MovieMagicContract.MovieBasicInfo._ID = ? ",
-                    [Integer.toString(mMovieBasicInfo_ID)] as String[],
+                    "$MovieMagicContract.MovieBasicInfo.COLUMN_MOVIE_ID = ? ",
+                    [Integer.toString(mMovieId)] as String[],
                     null)
-            //Position the cursor then convert
+            //Position the cursor then convert the cursor to content values
             if(movieBasicInfoCursor.moveToFirst()) {
                 //Convert the cursor to content values
                 DatabaseUtils.cursorRowToContentValues(movieBasicInfoCursor, movieBasicInfoContentValues)
             } else {
-                LogDisplay.callLog(LOG_TAG,"Bad cursor from movie_basic_info.Row id->$mMovieBasicInfo_ID",LogDisplay.UPDATE_USER_LIST_FLAG)
+                LogDisplay.callLog(LOG_TAG,"Bad cursor from movie_basic_info.Movie id->$mMovieId",LogDisplay.UPDATE_USER_LIST_LOG_FLAG)
             }
         } else if(operationType == GlobalStaticVariables.USER_LIST_REMOVE_FLAG) {
             mUserFlag = GlobalStaticVariables.MOVIE_MAGIC_FLAG_FALSE
         } else if(operationType == GlobalStaticVariables.USER_RATING_ADD_FLAG) {
             //Store the user rating to be updated
             mUserRating = ratingValue
-            //"-1" indicates that it's rating we need to deal with (later use for SnackBar message)
+            //"-1" indicates that it's rating and we need to deal with (later use for SnackBar message)
             mUserFlag = -1
         } else if(operationType == GlobalStaticVariables.USER_RATING_REMOVE_FLAG) {
-            //just update mUserFlag with "-1" (indicates that it's rating) we need to deal with (later use for SnackBar message)
+            //just update mUserFlag with "-1" (indicates that it's rating) and we need to deal with (later use for SnackBar message)
             mUserFlag = -1
         } else {
-            LogDisplay.callLog(LOG_TAG,"Unknown operation type->$operationType",LogDisplay.UPDATE_USER_LIST_FLAG)
+            LogDisplay.callLog(LOG_TAG,"Unknown operation type->$operationType",LogDisplay.UPDATE_USER_LIST_LOG_FLAG)
         }
 
         //Based on listType prepare the ContentValues and other parameters
@@ -140,7 +140,7 @@ class UpdateUserListChoiceAndRating extends AsyncTask<String, Void, Integer> {
 //                mUserListMsg = mContext.getString(R.string.drawer_menu_user_collection)
                 break
             default:
-                LogDisplay.callLog(LOG_TAG,"Unknown user list type->$listType",LogDisplay.UPDATE_USER_LIST_FLAG)
+                LogDisplay.callLog(LOG_TAG,"Unknown user list type->$listType",LogDisplay.UPDATE_USER_LIST_LOG_FLAG)
         }
 
         if(operationType == GlobalStaticVariables.USER_LIST_ADD_FLAG ||
@@ -150,25 +150,28 @@ class UpdateUserListChoiceAndRating extends AsyncTask<String, Void, Integer> {
                 retValue = mContentResolver.update(
                         MovieMagicContract.MovieUserListFlag.CONTENT_URI,
                         movieUserListFlagContentValues,
-                        MovieMagicContract.MovieUserListFlag._ID + "= ?",
+                        "$MovieMagicContract.MovieUserListFlag._ID = ?",
                         [Long.toString(movieUSerListFlagCursor.getLong(COL_MOVIE_USER_LIST_FLAG_ID))] as String[])
                 if(retValue != 1) {
-                    LogDisplay.callLog(LOG_TAG,"Update in movie_user_list_flag failed. Update Count->$retValue",LogDisplay.UPDATE_USER_LIST_FLAG)
-                } else { //set the return value to 1, indicate successful insert
-                    LogDisplay.callLog(LOG_TAG,"Update in movie_user_list_flag successful. Update Count->$retValue",LogDisplay.UPDATE_USER_LIST_FLAG)
+                    LogDisplay.callLog(LOG_TAG,"Update in movie_user_list_flag failed. Update Count->$retValue",LogDisplay.UPDATE_USER_LIST_LOG_FLAG)
+                } else { //If the return value to 1, indicate successful insert
+                    LogDisplay.callLog(LOG_TAG,"Update in movie_user_list_flag successful. Update Count->$retValue",LogDisplay.UPDATE_USER_LIST_LOG_FLAG)
                 }
             } else { //Insert the record in the movie_user_list_flag table
-                movieUserListFlagContentValues.put(MovieMagicContract.MovieUserListFlag.COLUMN_FOREIGN_KEY_ID,mMovieBasicInfo_ID)
+                //Same record of movie_user_list_flag can be updated from public category or user category, so COLUMN_FOREIGN_KEY_ID usage
+                //is irrelevant here. So updating it as 0 (could have been removed also but kept - feeling lazy :) )
+                movieUserListFlagContentValues.put(MovieMagicContract.MovieUserListFlag.COLUMN_FOREIGN_KEY_ID,0)
+//                movieUserListFlagContentValues.put(MovieMagicContract.MovieUserListFlag.COLUMN_FOREIGN_KEY_ID,mMovieBasicInfo_ID)
                 movieUserListFlagContentValues.put(MovieMagicContract.MovieUserListFlag.COLUMN_USER_LIST_FLAG_ORIG_MOVIE_ID,mMovieId)
                 final Uri uri = mContentResolver.insert(MovieMagicContract.MovieUserListFlag.CONTENT_URI,movieUserListFlagContentValues)
                 if(ContentUris.parseId(uri) == -1) {
-                    LogDisplay.callLog(LOG_TAG,"Insert in movie_user_list_flag failed. Uri->$uri",LogDisplay.UPDATE_USER_LIST_FLAG)
+                    LogDisplay.callLog(LOG_TAG,"Insert in movie_user_list_flag failed. Uri->$uri",LogDisplay.UPDATE_USER_LIST_LOG_FLAG)
                 } else { //set the return value to 1, indicate successful insert
-                    LogDisplay.callLog(LOG_TAG,"Insert in movie_user_list_flag successful. Uri->$uri",LogDisplay.UPDATE_USER_LIST_FLAG)
+                    LogDisplay.callLog(LOG_TAG,"Insert in movie_user_list_flag successful. Uri->$uri",LogDisplay.UPDATE_USER_LIST_LOG_FLAG)
                     retValue = 1
                 }
             }
-            //Now create the user record in movie_basic_info table
+            //Now create the user record in movie_basic_info table (do not needed if it's rating)
             //Add the record to movie_basic_info is needed for user list and NOT for rating operation
             if(operationType == GlobalStaticVariables.USER_LIST_ADD_FLAG){
                 movieBasicInfoContentValues.put(MovieMagicContract.MovieBasicInfo.COLUMN_MOVIE_CATEGORY,userListCategory)
@@ -187,80 +190,81 @@ class UpdateUserListChoiceAndRating extends AsyncTask<String, Void, Integer> {
                 movieBasicInfoContentValues.remove(MovieMagicContract.MovieBasicInfo._ID)
                 final Uri uri = mContentResolver.insert(MovieMagicContract.MovieBasicInfo.CONTENT_URI,movieBasicInfoContentValues)
                 if(ContentUris.parseId(uri) == -1) {
-                    LogDisplay.callLog(LOG_TAG,"Insert in movie_basic_info failed. Uri->$uri",LogDisplay.UPDATE_USER_LIST_FLAG)
+                    LogDisplay.callLog(LOG_TAG,"Insert in movie_basic_info failed. Uri->$uri",LogDisplay.UPDATE_USER_LIST_LOG_FLAG)
                 } else {
-                    LogDisplay.callLog(LOG_TAG,"Insert in movie_basic_info successful. Uri->$uri",LogDisplay.UPDATE_USER_LIST_FLAG)
+                    LogDisplay.callLog(LOG_TAG,"Insert in movie_basic_info successful. Uri->$uri",LogDisplay.UPDATE_USER_LIST_LOG_FLAG)
                 }
             }
         } else if (operationType == GlobalStaticVariables.USER_LIST_REMOVE_FLAG ||
                     operationType == GlobalStaticVariables.USER_RATING_REMOVE_FLAG) {
-            final boolean deleteUserListFlagRecord = false
+            final boolean deleteUserListRecordFlag = false
+            //It's remove operation (i.e. record is already present in the movie_user_list_flag table
             if(movieUSerListFlagCursor.moveToFirst()) {
-//                LogDisplay.callLog(LOG_TAG,"COL_MOVIE_USER_LIST_FLAG_WATCHED_FLAG->${movieUSerListFlagCursor.getInt(COL_MOVIE_USER_LIST_FLAG_WATCHED_FLAG)}",LogDisplay.UPDATE_USER_LIST_FLAG)
-//                LogDisplay.callLog(LOG_TAG,"COL_MOVIE_USER_LIST_FLAG_WISH_LIST_FLAG->${movieUSerListFlagCursor.getInt(COL_MOVIE_USER_LIST_FLAG_WISH_LIST_FLAG)}",LogDisplay.UPDATE_USER_LIST_FLAG)
-//                LogDisplay.callLog(LOG_TAG,"COL_MOVIE_USER_LIST_FLAG_FAVOURITE_FLAG->${movieUSerListFlagCursor.getInt(COL_MOVIE_USER_LIST_FLAG_FAVOURITE_FLAG)}",LogDisplay.UPDATE_USER_LIST_FLAG)
-//                LogDisplay.callLog(LOG_TAG,"COL_MOVIE_USER_LIST_FLAG_COLLECTION_FLAG->${movieUSerListFlagCursor.getInt(COL_MOVIE_USER_LIST_FLAG_COLLECTION_FLAG)}",LogDisplay.UPDATE_USER_LIST_FLAG)
-//                LogDisplay.callLog(LOG_TAG,"COL_MOVIE_USER_LIST_FLAG_USER_RATING->${movieUSerListFlagCursor.getInt(COL_MOVIE_USER_LIST_FLAG_USER_RATING)}",LogDisplay.UPDATE_USER_LIST_FLAG)
-//                LogDisplay.callLog(LOG_TAG,"mUserRating->$mUserRating",LogDisplay.UPDATE_USER_LIST_FLAG)
+//                LogDisplay.callLog(LOG_TAG,"COL_MOVIE_USER_LIST_FLAG_WATCHED_FLAG->${movieUSerListFlagCursor.getInt(COL_MOVIE_USER_LIST_FLAG_WATCHED_FLAG)}",LogDisplay.UPDATE_USER_LIST_LOG_FLAG)
+//                LogDisplay.callLog(LOG_TAG,"COL_MOVIE_USER_LIST_FLAG_WISH_LIST_FLAG->${movieUSerListFlagCursor.getInt(COL_MOVIE_USER_LIST_FLAG_WISH_LIST_FLAG)}",LogDisplay.UPDATE_USER_LIST_LOG_FLAG)
+//                LogDisplay.callLog(LOG_TAG,"COL_MOVIE_USER_LIST_FLAG_FAVOURITE_FLAG->${movieUSerListFlagCursor.getInt(COL_MOVIE_USER_LIST_FLAG_FAVOURITE_FLAG)}",LogDisplay.UPDATE_USER_LIST_LOG_FLAG)
+//                LogDisplay.callLog(LOG_TAG,"COL_MOVIE_USER_LIST_FLAG_COLLECTION_FLAG->${movieUSerListFlagCursor.getInt(COL_MOVIE_USER_LIST_FLAG_COLLECTION_FLAG)}",LogDisplay.UPDATE_USER_LIST_LOG_FLAG)
+//                LogDisplay.callLog(LOG_TAG,"COL_MOVIE_USER_LIST_FLAG_USER_RATING->${movieUSerListFlagCursor.getInt(COL_MOVIE_USER_LIST_FLAG_USER_RATING)}",LogDisplay.UPDATE_USER_LIST_LOG_FLAG)
+//                LogDisplay.callLog(LOG_TAG,"mUserRating->$mUserRating",LogDisplay.UPDATE_USER_LIST_LOG_FLAG)
                 if(listType == GlobalStaticVariables.USER_LIST_WATCHED) {
                     if( movieUSerListFlagCursor.getInt(COL_MOVIE_USER_LIST_FLAG_WISH_LIST_FLAG) == GlobalStaticVariables.MOVIE_MAGIC_FLAG_FALSE &&
                         movieUSerListFlagCursor.getInt(COL_MOVIE_USER_LIST_FLAG_FAVOURITE_FLAG) == GlobalStaticVariables.MOVIE_MAGIC_FLAG_FALSE &&
                         movieUSerListFlagCursor.getInt(COL_MOVIE_USER_LIST_FLAG_COLLECTION_FLAG) == GlobalStaticVariables.MOVIE_MAGIC_FLAG_FALSE &&
                         movieUSerListFlagCursor.getInt(COL_MOVIE_USER_LIST_FLAG_USER_RATING) == 0.0) {
-                        deleteUserListFlagRecord = true
+                        deleteUserListRecordFlag = true
                     }
                 } else if(listType == GlobalStaticVariables.USER_LIST_WISH_LIST) {
                     if( movieUSerListFlagCursor.getInt(COL_MOVIE_USER_LIST_FLAG_WATCHED_FLAG) == GlobalStaticVariables.MOVIE_MAGIC_FLAG_FALSE &&
                         movieUSerListFlagCursor.getInt(COL_MOVIE_USER_LIST_FLAG_FAVOURITE_FLAG) == GlobalStaticVariables.MOVIE_MAGIC_FLAG_FALSE &&
                         movieUSerListFlagCursor.getInt(COL_MOVIE_USER_LIST_FLAG_COLLECTION_FLAG) == GlobalStaticVariables.MOVIE_MAGIC_FLAG_FALSE &&
                         movieUSerListFlagCursor.getInt(COL_MOVIE_USER_LIST_FLAG_USER_RATING) == 0.0) {
-                        deleteUserListFlagRecord = true
+                        deleteUserListRecordFlag = true
                     }
                 } else if(listType == GlobalStaticVariables.USER_LIST_FAVOURITE) {
                     if( movieUSerListFlagCursor.getInt(COL_MOVIE_USER_LIST_FLAG_WATCHED_FLAG) == GlobalStaticVariables.MOVIE_MAGIC_FLAG_FALSE &&
                         movieUSerListFlagCursor.getInt(COL_MOVIE_USER_LIST_FLAG_WISH_LIST_FLAG) == GlobalStaticVariables.MOVIE_MAGIC_FLAG_FALSE &&
                         movieUSerListFlagCursor.getInt(COL_MOVIE_USER_LIST_FLAG_COLLECTION_FLAG) == GlobalStaticVariables.MOVIE_MAGIC_FLAG_FALSE &&
                         movieUSerListFlagCursor.getInt(COL_MOVIE_USER_LIST_FLAG_USER_RATING) == 0.0) {
-                        deleteUserListFlagRecord = true
+                        deleteUserListRecordFlag = true
                     }
                 } else if(listType == GlobalStaticVariables.USER_LIST_COLLECTION) {
                     if( movieUSerListFlagCursor.getInt(COL_MOVIE_USER_LIST_FLAG_WATCHED_FLAG) == GlobalStaticVariables.MOVIE_MAGIC_FLAG_FALSE &&
                         movieUSerListFlagCursor.getInt(COL_MOVIE_USER_LIST_FLAG_WISH_LIST_FLAG) == GlobalStaticVariables.MOVIE_MAGIC_FLAG_FALSE &&
                         movieUSerListFlagCursor.getInt(COL_MOVIE_USER_LIST_FLAG_FAVOURITE_FLAG) == GlobalStaticVariables.MOVIE_MAGIC_FLAG_FALSE &&
                         movieUSerListFlagCursor.getInt(COL_MOVIE_USER_LIST_FLAG_USER_RATING) == 0.0) {
-                        deleteUserListFlagRecord = true
+                        deleteUserListRecordFlag = true
                     }
                 } else if(listType == GlobalStaticVariables.USER_LIST_USER_RATING) {
                     if( movieUSerListFlagCursor.getInt(COL_MOVIE_USER_LIST_FLAG_WATCHED_FLAG) == GlobalStaticVariables.MOVIE_MAGIC_FLAG_FALSE &&
                         movieUSerListFlagCursor.getInt(COL_MOVIE_USER_LIST_FLAG_WISH_LIST_FLAG) == GlobalStaticVariables.MOVIE_MAGIC_FLAG_FALSE &&
                         movieUSerListFlagCursor.getInt(COL_MOVIE_USER_LIST_FLAG_FAVOURITE_FLAG) == GlobalStaticVariables.MOVIE_MAGIC_FLAG_FALSE &&
                         movieUSerListFlagCursor.getInt(COL_MOVIE_USER_LIST_FLAG_COLLECTION_FLAG) == GlobalStaticVariables.MOVIE_MAGIC_FLAG_FALSE) {
-                        deleteUserListFlagRecord = true
+                        deleteUserListRecordFlag = true
                     }
                 } else {
-                    LogDisplay.callLog(LOG_TAG,"Unknown user list type->$listType",LogDisplay.UPDATE_USER_LIST_FLAG)
+                    LogDisplay.callLog(LOG_TAG,"Unknown user list type->$listType",LogDisplay.UPDATE_USER_LIST_LOG_FLAG)
                 }
-                //Delete the record from movie_user_list_flag if flag value satisfies
-                if(deleteUserListFlagRecord) {
+                //Delete the record from movie_user_list_flag if deleteUserListRecordFlag flag value satisfies (i.e. single flag or only rating which is being removed)
+                if(deleteUserListRecordFlag) {
                     retValue = mContentResolver.delete(
                             MovieMagicContract.MovieUserListFlag.CONTENT_URI,
                             "$MovieMagicContract.MovieUserListFlag._ID = ?",
                             [Long.toString(movieUSerListFlagCursor.getLong(COL_MOVIE_USER_LIST_FLAG_ID))] as String[])
                     if(retValue != 1) {
-                        LogDisplay.callLog(LOG_TAG,"Delete from movie_user_list_flag failed. Delete Count->$retValue",LogDisplay.UPDATE_USER_LIST_FLAG)
+                        LogDisplay.callLog(LOG_TAG,"Delete from movie_user_list_flag failed. Delete Count->$retValue",LogDisplay.UPDATE_USER_LIST_LOG_FLAG)
                     } else {
-                        LogDisplay.callLog(LOG_TAG,"Delete from movie_user_list_flag successful. Delete Count->$retValue",LogDisplay.UPDATE_USER_LIST_FLAG)
+                        LogDisplay.callLog(LOG_TAG,"Delete from movie_user_list_flag successful. Delete Count->$retValue",LogDisplay.UPDATE_USER_LIST_LOG_FLAG)
                     }
                 } else { // update the record in movie_user_list_flag
                     retValue = mContentResolver.update(
                             MovieMagicContract.MovieUserListFlag.CONTENT_URI,
                             movieUserListFlagContentValues,
-                            MovieMagicContract.MovieUserListFlag._ID + "= ?",
+                            "$MovieMagicContract.MovieUserListFlag._ID = ?",
                             [Long.toString(movieUSerListFlagCursor.getLong(COL_MOVIE_USER_LIST_FLAG_ID))] as String[])
                     if(retValue != 1) {
-                        LogDisplay.callLog(LOG_TAG,"Update in movie_user_list_flag failed. Update Count->$retValue",LogDisplay.UPDATE_USER_LIST_FLAG)
+                        LogDisplay.callLog(LOG_TAG,"Update in movie_user_list_flag failed. Update Count->$retValue",LogDisplay.UPDATE_USER_LIST_LOG_FLAG)
                     } else {
-                        LogDisplay.callLog(LOG_TAG,"Update in movie_user_list_flag successful. Update Count->$retValue",LogDisplay.UPDATE_USER_LIST_FLAG)
+                        LogDisplay.callLog(LOG_TAG,"Update in movie_user_list_flag successful. Update Count->$retValue",LogDisplay.UPDATE_USER_LIST_LOG_FLAG)
                     }
                 }
                 //Now delete the user record from movie_basic_info table
@@ -269,6 +273,7 @@ class UpdateUserListChoiceAndRating extends AsyncTask<String, Void, Integer> {
 //                        """$MovieMagicContract.MovieBasicInfo.COLUMN_MOVIE_ID = ? and
 //                            $MovieMagicContract.MovieBasicInfo.COLUMN_MOVIE_CATEGORY = ? """,
 //                        [Integer.toString(mMovieId),userListCategory] as String[])
+
                 //When user remove the movie from the list it should be ideally deleted but due to the logic
                 //of the application, the user can still see the details of the movie even after the delete. So in order
                 //to achieve that we need to keep that row in the table otherwise application will crash as the loader 0 of
@@ -288,15 +293,15 @@ class UpdateUserListChoiceAndRating extends AsyncTask<String, Void, Integer> {
                             """$MovieMagicContract.MovieBasicInfo.COLUMN_MOVIE_ID = ? and
                             $MovieMagicContract.MovieBasicInfo.COLUMN_MOVIE_CATEGORY = ? """,
                             [Integer.toString(mMovieId), userListCategory] as String[])
-                    //Expecting just one record to be deleted from movie_basic_info
+                    //Expecting just one record to be updated in movie_basic_info
                     if (rowCount != 1) {
-                        LogDisplay.callLog(LOG_TAG, "Update movie_basic_info record to orphaned failed. Update Count->$rowCount", LogDisplay.UPDATE_USER_LIST_FLAG)
+                        LogDisplay.callLog(LOG_TAG, "Update movie_basic_info record to orphaned failed. Update Count->$rowCount", LogDisplay.UPDATE_USER_LIST_LOG_FLAG)
                     } else {
-                        LogDisplay.callLog(LOG_TAG, "Update movie_basic_info record to orphaned successful. Update Count->$rowCount", LogDisplay.UPDATE_USER_LIST_FLAG)
+                        LogDisplay.callLog(LOG_TAG, "Update movie_basic_info record to orphaned successful. Update Count->$rowCount", LogDisplay.UPDATE_USER_LIST_LOG_FLAG)
                     }
                 }
             } else {
-                LogDisplay.callLog(LOG_TAG,"Record not present in movie_user_list_flag. Movie ID->$mMovieId",LogDisplay.UPDATE_USER_LIST_FLAG)
+                LogDisplay.callLog(LOG_TAG,"Record not present in movie_user_list_flag. Movie Id->$mMovieId",LogDisplay.UPDATE_USER_LIST_LOG_FLAG)
             }
         }
         //Close the cursors
@@ -329,7 +334,7 @@ class UpdateUserListChoiceAndRating extends AsyncTask<String, Void, Integer> {
         } else if (mUserFlag == -1) { //"-1" indicates user rating
             snackBarMsg = String.format(mContext.getString(R.string.user_rating_add_message,mMovieTitle))
         } else {
-            LogDisplay.callLog(LOG_TAG,"Unknown user flag value.User flag value->$mUserFlag",LogDisplay.UPDATE_USER_LIST_FLAG)
+            LogDisplay.callLog(LOG_TAG,"Unknown user flag value.User flag value->$mUserFlag",LogDisplay.UPDATE_USER_LIST_LOG_FLAG)
         }
         //Expecting a single row update or insert only
         if(result == 1) {
@@ -346,7 +351,7 @@ class UpdateUserListChoiceAndRating extends AsyncTask<String, Void, Integer> {
 //            snackbarTextView.setTextColor(mBodyTextColor)
 //            snackbar.show()
         } else {
-            LogDisplay.callLog(LOG_TAG,"Something went wrong during user list update.Result value->$result",LogDisplay.UPDATE_USER_LIST_FLAG)
+            LogDisplay.callLog(LOG_TAG,"Something went wrong during user list update.Result value->$result",LogDisplay.UPDATE_USER_LIST_LOG_FLAG)
         }
     }
 }

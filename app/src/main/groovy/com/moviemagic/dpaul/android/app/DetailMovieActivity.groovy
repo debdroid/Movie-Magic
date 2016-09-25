@@ -42,19 +42,20 @@ class DetailMovieActivity extends AppCompatActivity {
 
         if (savedInstanceState == null) {
             //Get the arguments from the intent
-//            final Bundle extras = getIntent().getExtras()
-            final Uri uri = getIntent().getData()
-            if (uri) {
+            final Bundle extras = getIntent().getExtras()
+//            final Uri uri = getIntent().getData()
+//            if (uri) {
+            if (extras) {
                 //Create a Bundle to pass the data to Fragment
 //                Bundle args = new Bundle()
 //                args.putInt(GlobalStaticVariables.MOVIE_BASIC_INFO_MOVIE_ID,extras.getInt(GlobalStaticVariables.MOVIE_BASIC_INFO_MOVIE_ID))
 //                args.putLong(GlobalStaticVariables.MOVIE_BASIC_INFO_ROW_ID,extras.getLong(GlobalStaticVariables.MOVIE_BASIC_INFO_ROW_ID))
                 //Create a movie detail fragment
-                final Bundle bundle = new Bundle()
-                bundle.putParcelable(GlobalStaticVariables.MOVIE_BASIC_INFO_URI,uri)
+//                final Bundle bundle = new Bundle()
+//                bundle.putParcelable(GlobalStaticVariables.MOVIE_BASIC_INFO_URI,uri)
                 final DetailMovieFragment detailMovieFragment = new DetailMovieFragment()
-//                detailMovieFragment.setArguments(extras)
-                detailMovieFragment.setArguments(bundle)
+                detailMovieFragment.setArguments(extras)
+//                detailMovieFragment.setArguments(bundle)
                 getSupportFragmentManager().beginTransaction()
                         .replace(R.id.detail_movie_fragment_container,detailMovieFragment)
                         // No need to add the transaction to backstack as this is first transaction and activity will hold it

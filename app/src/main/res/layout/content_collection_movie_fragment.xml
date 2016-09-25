@@ -3,8 +3,13 @@
     android:id="@+id/movie_detail_collection_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/primary"
+    android:orientation="vertical">
+<LinearLayout
+    android:id="@+id/collection_overview_block"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
     android:orientation="vertical"
+    android:background="@color/primary"
     android:paddingBottom="@dimen/m_design_space_between_content_area"
     android:paddingEnd="@dimen/m_design_screen_edge_left_right_margin"
     android:paddingLeft="@dimen/m_design_screen_edge_left_right_margin"
@@ -33,11 +38,19 @@
         android:paddingBottom="@dimen/m_design_space_between_content_area"
         android:textAppearance="@style/TextAppearance.AppCompat.Medium"
         android:textColor="@color/grey_color" />
+</LinearLayout>
+    <View
+        android:id="@+id/devider_view"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="?android:attr/listDivider" />
+
     <!-- Container for collection movies -->
     <FrameLayout
         android:id="@+id/collection_movie_grid"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_marginTop="@dimen/m_design_space_between_content_area"
         android:background="@color/primary"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
     </FrameLayout>

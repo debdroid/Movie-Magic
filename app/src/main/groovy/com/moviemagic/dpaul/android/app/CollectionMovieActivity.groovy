@@ -71,11 +71,15 @@ class CollectionMovieActivity extends AppCompatActivity implements GridMovieFrag
 
     //Override the GridMovieFragment Callback
     @Override
-    public void onItemSelected(int movieId, MovieGridRecyclerAdapter.MovieGridRecyclerAdapterViewHolder viewHolder) {
+    public void onMovieGridItemSelected(int movieId, String movieCategory, MovieGridRecyclerAdapter.MovieGridRecyclerAdapterViewHolder viewHolder) {
         LogDisplay.callLog(LOG_TAG, 'onItemSelected is called', LogDisplay.COLLECTION_MOVIE_FRAGMENT_LOG_FLAG)
         final Intent intent = new Intent(this, DetailMovieActivity.class)
-        final Uri movieMagicMovieIdUri = MovieMagicContract.MovieBasicInfo.buildMovieUriWithMovieId(movieId)
-        intent.setData(movieMagicMovieIdUri)
+//        final Uri movieMagicMovieIdUri = MovieMagicContract.MovieBasicInfo.buildMovieUriWithMovieId(movieId)
+//        intent.setData(movieMagicMovieIdUri)
+        final Bundle bundle = new Bundle()
+        bundle.putInt(GlobalStaticVariables.MOVIE_BASIC_INFO_MOVIE_ID,movieId)
+        bundle.putString(GlobalStaticVariables.MOVIE_BASIC_INFO_CATEGORY,movieCategory)
+        intent.putExtras(bundle)
         startActivity(intent)
         //Start the animation
 //        overridePendingTransition(R.anim.slide_bottom_in_animation,0)

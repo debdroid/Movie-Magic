@@ -1,6 +1,7 @@
 package com.moviemagic.dpaul.android.app.backgroundmodules
 
 import android.content.ContentValues
+import com.moviemagic.dpaul.android.app.contentprovider.MovieMagicContract
 import com.moviemagic.dpaul.android.app.contentprovider.MovieMagicContract.MovieBasicInfo
 import com.moviemagic.dpaul.android.app.contentprovider.MovieMagicContract.MovieCast
 import com.moviemagic.dpaul.android.app.contentprovider.MovieMagicContract.MovieCrew
@@ -9,6 +10,9 @@ import com.moviemagic.dpaul.android.app.contentprovider.MovieMagicContract.Movie
 import com.moviemagic.dpaul.android.app.contentprovider.MovieMagicContract.MovieReview
 import com.moviemagic.dpaul.android.app.contentprovider.MovieMagicContract.MovieVideo
 import com.moviemagic.dpaul.android.app.contentprovider.MovieMagicContract.MovieCollection
+import com.moviemagic.dpaul.android.app.contentprovider.MovieMagicContract.MoviePersonInfo
+import com.moviemagic.dpaul.android.app.contentprovider.MovieMagicContract.MoviePersonCast
+import com.moviemagic.dpaul.android.app.contentprovider.MovieMagicContract.MoviePersonCrew
 
 //Since the json field is used dynamically, so this class is not compiled as CompileStatic
 //@CompileStatic
@@ -16,7 +20,7 @@ class JsonParse {
     private static final String LOG_TAG = JsonParse.class.getSimpleName()
 
     /**
-     * Helper method to determine the total number of pages
+     * Helper method to determine the total number of pages of particular movie category
      * @param jsonData JSON data ot be parsed
      * @return total page count
      */
@@ -29,7 +33,7 @@ class JsonParse {
     }
 
     /**
-     * Helper method to parse movie JSON
+     * Helper method to parse movie JSON data
      * @param jsonData JSON data to be parsed
      * @param category Movie category (i.e. popular, now playing, etc)
      * @param movieListType Indicate the type (i.e. public tmdb or user)
@@ -46,8 +50,10 @@ class JsonParse {
                 //if-else is used for all json fields for null safe
                 if (jsonData.results[i].id)
                     movieValue.put(MovieBasicInfo.COLUMN_MOVIE_ID, jsonData.results[i].id)
-                else
+                else {
                     movieValue.put(MovieBasicInfo.COLUMN_MOVIE_ID, 0)
+                    LogDisplay.callLog(LOG_TAG, 'Not a valid movie id', LogDisplay.JSON_PARSE_LOG_FLAG)
+                }
                 if (jsonData.results[i].adult)
                     movieValue.put(MovieBasicInfo.COLUMN_ADULT_FLAG, jsonData.results[i].adult)
                 else
@@ -64,11 +70,11 @@ class JsonParse {
                     movieValue.put(MovieBasicInfo.COLUMN_OVERVIEW, jsonData.results[i].overview)
                 else
                     movieValue.put(MovieBasicInfo.COLUMN_OVERVIEW, '')
+                //date format -> yyyy-mm-dd
                 if (jsonData.results[i].release_date)
                     movieValue.put(MovieBasicInfo.COLUMN_RELEASE_DATE, jsonData.results[i].release_date)
                 else
                     movieValue.put(MovieBasicInfo.COLUMN_RELEASE_DATE, '1900-01-01')
-                //date format -> yyyy-mm-dd
                 if (jsonData.results[i].poster_path)
                     movieValue.put(MovieBasicInfo.COLUMN_POSTER_PATH, jsonData.results[i].poster_path)
                 else
@@ -108,7 +114,10 @@ class JsonParse {
                 movieList << movieValue
             }
         }
-        return movieList
+        if(movieList)
+            return movieList
+        else
+            return null
     }
 
     /**
@@ -170,71 +179,102 @@ class JsonParse {
         LogDisplay.callLog(LOG_TAG, "Production Countries -> $prodCountryVal", LogDisplay.JSON_PARSE_LOG_FLAG)
 
 
-        ContentValues movieUpdateValue = new ContentValues()
+        ContentValues movieAllValues = new ContentValues()
         //if check is used for all json fields for null safe
         if (jsonData.belongs_to_collection) {
             if (jsonData.belongs_to_collection.id)
-                movieUpdateValue.put(MovieBasicInfo.COLUMN_COLLECTION_ID, jsonData.belongs_to_collection.id)
+                movieAllValues.put(MovieBasicInfo.COLUMN_COLLECTION_ID, jsonData.belongs_to_collection.id)
             if (jsonData.belongs_to_collection.name)
-                movieUpdateValue.put(MovieBasicInfo.COLUMN_COLLECTION_NAME, jsonData.belongs_to_collection.name)
+                movieAllValues.put(MovieBasicInfo.COLUMN_COLLECTION_NAME, jsonData.belongs_to_collection.name)
             if (jsonData.belongs_to_collection.poster_path)
-                movieUpdateValue.put(MovieBasicInfo.COLUMN_COLLECTION_POSTER_PATH, jsonData.belongs_to_collection.poster_path)
+                movieAllValues.put(MovieBasicInfo.COLUMN_COLLECTION_POSTER_PATH, jsonData.belongs_to_collection.poster_path)
             if (jsonData.belongs_to_collection.backdrop_path)
-                movieUpdateValue.put(MovieBasicInfo.COLUMN_COLLECTION_BACKDROP_PATH, jsonData.belongs_to_collection.backdrop_path)
+                movieAllValues.put(MovieBasicInfo.COLUMN_COLLECTION_BACKDROP_PATH, jsonData.belongs_to_collection.backdrop_path)
         }
         if (jsonData.status)
-            movieUpdateValue.put(MovieBasicInfo.COLUMN_RELEASE_STATUS, jsonData.status)
+            movieAllValues.put(MovieBasicInfo.COLUMN_RELEASE_STATUS, jsonData.status)
         if (jsonData.tagline)
-            movieUpdateValue.put(MovieBasicInfo.COLUMN_TAGLINE, jsonData.tagline)
+            movieAllValues.put(MovieBasicInfo.COLUMN_TAGLINE, jsonData.tagline)
         if (genreVal)
-            movieUpdateValue.put(MovieBasicInfo.COLUMN_GENRE, genreVal)
+            movieAllValues.put(MovieBasicInfo.COLUMN_GENRE, genreVal)
         if (jsonData.homepage)
-            movieUpdateValue.put(MovieBasicInfo.COLUMN_HOME_PAGE, jsonData.homepage)
+            movieAllValues.put(MovieBasicInfo.COLUMN_HOME_PAGE, jsonData.homepage)
         if (jsonData.runtime)
-            movieUpdateValue.put(MovieBasicInfo.COLUMN_RUNTIME, jsonData.runtime)
+            movieAllValues.put(MovieBasicInfo.COLUMN_RUNTIME, jsonData.runtime)
         if (jsonData.budget)
-            movieUpdateValue.put(MovieBasicInfo.COLUMN_BUDGET, jsonData.budget)
+            movieAllValues.put(MovieBasicInfo.COLUMN_BUDGET, jsonData.budget)
         if (jsonData.revenue)
-            movieUpdateValue.put(MovieBasicInfo.COLUMN_REVENUE, jsonData.revenue)
+            movieAllValues.put(MovieBasicInfo.COLUMN_REVENUE, jsonData.revenue)
         if (prodCompanyVal)
-            movieUpdateValue.put(MovieBasicInfo.COLUMN_PRODUCTION_COMPANIES, prodCompanyVal)
+            movieAllValues.put(MovieBasicInfo.COLUMN_PRODUCTION_COMPANIES, prodCompanyVal)
         if (prodCountryVal)
-            movieUpdateValue.put(MovieBasicInfo.COLUMN_PRODUCTION_COUNTRIES, prodCountryVal)
+            movieAllValues.put(MovieBasicInfo.COLUMN_PRODUCTION_COUNTRIES, prodCountryVal)
         if (jsonData.imdb_id)
-            movieUpdateValue.put(MovieBasicInfo.COLUMN_IMDB_ID, jsonData.imdb_id)
+            movieAllValues.put(MovieBasicInfo.COLUMN_IMDB_ID, jsonData.imdb_id)
+
+        //Following mandatory fields exist for existing record but still populated because
+        //we need these when a insert is needed (click on person cast / crew grid)
+        if (jsonData.id)
+            movieAllValues.put(MovieBasicInfo.COLUMN_MOVIE_ID, jsonData.id)
+        else {
+            movieAllValues.put(MovieBasicInfo.COLUMN_MOVIE_ID, 0)
+            LogDisplay.callLog(LOG_TAG, 'Not a valid movie id', LogDisplay.JSON_PARSE_LOG_FLAG)
+        }
+        if (jsonData.adult)
+            movieAllValues.put(MovieBasicInfo.COLUMN_ADULT_FLAG, jsonData.adult)
+        else
+            movieAllValues.put(MovieBasicInfo.COLUMN_ADULT_FLAG, '')
+        if (jsonData.backdrop_path)
+            movieAllValues.put(MovieBasicInfo.COLUMN_BACKDROP_PATH, jsonData.backdrop_path)
+        else
+            movieAllValues.put(MovieBasicInfo.COLUMN_BACKDROP_PATH, '')
+        if (jsonData.roriginal_title)
+            movieAllValues.put(MovieBasicInfo.COLUMN_ORIGINAL_TITLE, jsonData.original_title)
+        else
+            movieAllValues.put(MovieBasicInfo.COLUMN_ORIGINAL_TITLE, '')
+        if (jsonData.overview)
+            movieAllValues.put(MovieBasicInfo.COLUMN_OVERVIEW, jsonData.overview)
+        else
+            movieAllValues.put(MovieBasicInfo.COLUMN_OVERVIEW, '')
+        if (jsonData.release_date)
+            movieAllValues.put(MovieBasicInfo.COLUMN_RELEASE_DATE, jsonData.release_date)
+        else
+            movieAllValues.put(MovieBasicInfo.COLUMN_RELEASE_DATE, '1900-01-01')
+        if (jsonData.poster_path)
+            movieAllValues.put(MovieBasicInfo.COLUMN_POSTER_PATH, jsonData.poster_path)
+        else
+            movieAllValues.put(MovieBasicInfo.COLUMN_POSTER_PATH, '')
+        if (jsonData.popularity)
+            movieAllValues.put(MovieBasicInfo.COLUMN_POPULARITY, jsonData.popularity)
+        else
+            movieAllValues.put(MovieBasicInfo.COLUMN_POPULARITY, 0.0)
+        if (jsonData.title)
+            movieAllValues.put(MovieBasicInfo.COLUMN_TITLE, jsonData.title)
+        else
+            movieAllValues.put(MovieBasicInfo.COLUMN_TITLE, '')
+        if (jsonData.video)
+            movieAllValues.put(MovieBasicInfo.COLUMN_VIDEO_FLAG, jsonData.video)
+        else
+            movieAllValues.put(MovieBasicInfo.COLUMN_VIDEO_FLAG, 'false')
+        if (jsonData.vote_average)
+            movieAllValues.put(MovieBasicInfo.COLUMN_VOTE_AVG, jsonData.vote_average)
+        else
+            movieAllValues.put(MovieBasicInfo.COLUMN_VOTE_AVG, 0.0)
+        if (jsonData.vote_count)
+            movieAllValues.put(MovieBasicInfo.COLUMN_VOTE_COUNT, jsonData.vote_count)
+        else
+            movieAllValues.put(MovieBasicInfo.COLUMN_VOTE_COUNT, 0)
+
+        //Update the data present to indicate data is loaded
+        movieAllValues.put(MovieMagicContract.MovieBasicInfo.COLUMN_DETAIL_DATA_PRESENT_FLAG,GlobalStaticVariables.MOVIE_MAGIC_FLAG_TRUE)
 
         //Set update date
-        movieUpdateValue.put(MovieBasicInfo.COLUMN_UPDATE_TIMESTAMP,Utility.getTodayDate())
+        movieAllValues.put(MovieBasicInfo.COLUMN_UPDATE_TIMESTAMP,Utility.getTodayDate())
 
-        //overview, release date (for upcoming movie it could be initally not known) popularity,
-        // vote avg and vote count can be update on the site, so better to update these
-        //fields. This is more needed for user list movies as that's not refreshed daily
-        if (jsonData.overview)
-            movieUpdateValue.put(MovieBasicInfo.COLUMN_OVERVIEW, jsonData.overview)
+        if(movieAllValues)
+            return movieAllValues
         else
-            movieUpdateValue.put(MovieBasicInfo.COLUMN_OVERVIEW, '')
-
-        if (jsonData.release_date)
-            movieUpdateValue.put(MovieBasicInfo.COLUMN_RELEASE_DATE, jsonData.release_date)
-        else
-            movieUpdateValue.put(MovieBasicInfo.COLUMN_RELEASE_DATE, '1900-01-01')
-
-        if (jsonData.popularity)
-            movieUpdateValue.put(MovieBasicInfo.COLUMN_POPULARITY, jsonData.popularity)
-        else
-            movieUpdateValue.put(MovieBasicInfo.COLUMN_POPULARITY, 0.0)
-
-        if (jsonData.vote_average)
-            movieUpdateValue.put(MovieBasicInfo.COLUMN_VOTE_AVG, jsonData.vote_average)
-        else
-            movieUpdateValue.put(MovieBasicInfo.COLUMN_VOTE_AVG, 0.0)
-
-        if (jsonData.vote_count)
-            movieUpdateValue.put(MovieBasicInfo.COLUMN_VOTE_COUNT, jsonData.vote_count)
-        else
-            movieUpdateValue.put(MovieBasicInfo.COLUMN_VOTE_COUNT, 0)
-
-        return movieUpdateValue
+            return null
     }
 
     /**
@@ -248,8 +288,13 @@ class JsonParse {
         LogDisplay.callLog(LOG_TAG, "Similar -> $jsonData.similar", LogDisplay.JSON_PARSE_LOG_FLAG)
         similarMovies = parseMovieListJson(jsonData.similar,GlobalStaticVariables.MOVIE_CATEGORY_SIMILAR,
                 GlobalStaticVariables.MOVIE_LIST_TYPE_TMDB_SIMILAR)
+        //Some groovy magic - Closure
         similarMovies.each {it.put(MovieBasicInfo.COLUMN_SIMILAR_MOVIE_LINK_ID,movieId)}
-        return similarMovies
+
+        if(similarMovies)
+            return similarMovies
+        else
+            return null
     }
 
     /**
@@ -294,8 +339,9 @@ class JsonParse {
                 //Add item to the list now
                 movieCastList << movieCast
             }
+            return movieCastList
         }
-        return movieCastList
+        return null
     }
 
     /**
@@ -338,8 +384,9 @@ class JsonParse {
                 //Add item to the list now
                 movieCrewList << movieCrew
             }
+            return movieCrewList
         }
-        return movieCrewList
+        return null
     }
 
     /**
@@ -398,7 +445,10 @@ class JsonParse {
                 movieImageList << movieImage
             }
         }
-        return movieImageList
+        if(movieImageList)
+            return movieImageList
+        else
+            return null
     }
 
     /**
@@ -441,8 +491,9 @@ class JsonParse {
                 //Add item to the list now
                 movieVideoList << movieVideo
             }
+            return movieVideoList
         }
-        return movieVideoList
+        return null
     }
 
     /**
@@ -450,7 +501,7 @@ class JsonParse {
      * @param jsonData JSON data to be parsed
      * @param movieId Original movie id for which movie images are fetched
      * @param foreignKey Row id of primary movie table (movie_basic_info)
-     * @return formatted list of movie relese date as content values
+     * @return formatted list of movie release date as content values
      */
     static List<ContentValues> praseMovieReleaseDateJson(def jsonData, int movieId, int foreignKey) {
         List<ContentValues> movieReleaseDateList = []
@@ -492,8 +543,9 @@ class JsonParse {
                     }
                 }
             }
+            return movieReleaseDateList
         }
-        return movieReleaseDateList
+        return null
     }
 
     /**
@@ -514,8 +566,10 @@ class JsonParse {
                 //if-else is used for all mandatory json fields for null safe
                 if (jsonData.reviews.results[i].id)
                     movieReview.put(MovieReview.COLUMN_REVIEW_ID, jsonData.reviews.results[i].id)
-                else
+                else {
                     movieReview.put(MovieReview.COLUMN_REVIEW_ID, 0)
+                    LogDisplay.callLog(LOG_TAG, 'Not a valid review id', LogDisplay.JSON_PARSE_LOG_FLAG)
+                }
                 if (jsonData.reviews.results[i].author)
                     movieReview.put(MovieReview.COLUMN_REVIEW_AUTHOR, jsonData.reviews.results[i].author)
                 else
@@ -532,8 +586,9 @@ class JsonParse {
                 //Add item to the list now
                 movieReviewList << movieReview
             }
+            return movieReviewList
         }
-        return movieReviewList
+        return null
     }
 
     /**
@@ -546,8 +601,10 @@ class JsonParse {
         if(jsonData) {
             if (jsonData.id)
                 collectionData.put(MovieCollection.COLUMN_COLLECTION_ID, jsonData.id)
-            else
+            else {
                 collectionData.put(MovieCollection.COLUMN_COLLECTION_ID, 0)
+                LogDisplay.callLog(LOG_TAG, 'Not a valid collection id', LogDisplay.JSON_PARSE_LOG_FLAG)
+            }
             if (jsonData.name)
                 collectionData.put(MovieCollection.COLUMN_COLLECTION_NAME, jsonData.name)
             else
@@ -555,7 +612,7 @@ class JsonParse {
             collectionData.put(MovieCollection.COLUMN_COLLECTION_OVERVIEW, jsonData.overview)
             collectionData.put(MovieCollection.COLUMN_COLLECTION_POSTER_PATH, jsonData.poster_path)
             collectionData.put(MovieCollection.COLUMN_COLLECTION_BACKDROP_PATH, jsonData.backdrop_path)
-            collectionData.put(MovieCollection.COLUMN_COLLECTION_MOVIE_PRESENT_FLAG, GlobalStaticVariables.MOVIE_MAGIC_FLAG_FALSE)
+            collectionData.put(MovieCollection.COLUMN_COLLECTION_MOVIE_PRESENT_FLAG, GlobalStaticVariables.MOVIE_MAGIC_FLAG_TRUE)
             return collectionData
         }
         else return null
@@ -577,8 +634,10 @@ class JsonParse {
                 //if-else is used for all json fields for null safe
                 if (jsonData.parts[i].id)
                     collectionMovieValue.put(MovieBasicInfo.COLUMN_MOVIE_ID, jsonData.parts[i].id)
-                else
+                else {
                     collectionMovieValue.put(MovieBasicInfo.COLUMN_MOVIE_ID, 0)
+                    LogDisplay.callLog(LOG_TAG, 'Not a valid movie id', LogDisplay.JSON_PARSE_LOG_FLAG)
+                }
                 if (jsonData.parts[i].adult)
                     collectionMovieValue.put(MovieBasicInfo.COLUMN_ADULT_FLAG, jsonData.parts[i].adult)
                 else
@@ -638,7 +697,194 @@ class JsonParse {
                 //add to the list
                 collectionMovieList << collectionMovieValue
             }
+            return collectionMovieList
         }
-        return collectionMovieList
+        return null
+    }
+
+    /**
+     * Helper method to parse person info JSON data
+     * @param jsonData JSON data to be parsed
+     * @param personId Person id
+     * @return formatted person info data as content values
+     */
+    static ContentValues parsePersonInfoDataJson(def jsonData, int personId) {
+        ContentValues personInfoData = new ContentValues()
+        if(jsonData) {
+            if(jsonData.adult)
+                personInfoData.put(MoviePersonInfo.COLUMN_PERSON_ADULT_FLAG,jsonData.adult)
+
+            def alsoKnownAsCount = jsonData.also_known_as.size()
+            def alsoKnownAsVal = null
+            if (alsoKnownAsCount == 1) {
+                alsoKnownAsVal = jsonData.also_known_as[0]
+            } else if (alsoKnownAsCount == 2) {
+                alsoKnownAsVal = jsonData.also_known_as[0] + " | " + jsonData.also_known_as[1]
+            } else if (alsoKnownAsCount > 2) {
+                alsoKnownAsVal = jsonData.also_known_as[0] + " | "
+                for (i in 1..(alsoKnownAsCount - 2)) {
+                    alsoKnownAsVal = alsoKnownAsVal + jsonData.also_known_as[i] + " | "
+                }
+                alsoKnownAsVal = alsoKnownAsVal + jsonData.also_known_as[alsoKnownAsCount - 1]
+            }
+            LogDisplay.callLog(LOG_TAG, "Also known as -> $alsoKnownAsVal", LogDisplay.JSON_PARSE_LOG_FLAG)
+
+            if(alsoKnownAsVal)
+                personInfoData.put(MoviePersonInfo.COLUMN_PERSON_ALSO_KNOWN_AS,alsoKnownAsVal)
+
+            if(jsonData.biography)
+                personInfoData.put(MoviePersonInfo.COLUMN_PERSON_BIOGRAPHY,jsonData.biography)
+            if(jsonData.birthday)
+                personInfoData.put(MoviePersonInfo.COLUMN_PERSON_BIRTHDAY,jsonData.birthday)
+            if(jsonData.deathday)
+                personInfoData.put(MoviePersonInfo.COLUMN_PERSON_DEATHDAY,jsonData.deathday)
+            if(jsonData.homepage)
+                personInfoData.put(MoviePersonInfo.COLUMN_PERSON_HOMEPAGE,jsonData.homepage)
+            if(jsonData.id)
+                personInfoData.put(MoviePersonInfo.COLUMN_PERSON_ID,jsonData.id)
+            else {
+                LogDisplay.callLog(LOG_TAG, 'Not a valid person id', LogDisplay.JSON_PARSE_LOG_FLAG)
+                personInfoData.put(MoviePersonInfo.COLUMN_PERSON_ID, personId)
+            }
+            if(jsonData.imdb_id)
+                personInfoData.put(MoviePersonInfo.COLUMN_PERSON_IMDB_ID,jsonData.imdb_id)
+            if(jsonData.name)
+                personInfoData.put(MoviePersonInfo.COLUMN_PERSON_NAME,jsonData.name)
+            else {
+                personInfoData.put(MoviePersonInfo.COLUMN_PERSON_NAME, ' ')
+                LogDisplay.callLog(LOG_TAG, 'Not a valid person name', LogDisplay.JSON_PARSE_LOG_FLAG)
+            }
+            if(jsonData.place_of_birth)
+                personInfoData.put(MoviePersonInfo.COLUMN_PERSON_PLACE_OF_BIRTH,jsonData.place_of_birth)
+            if(jsonData.popularity)
+                personInfoData.put(MoviePersonInfo.COLUMN_PERSON_POPULARITY,jsonData.popularity)
+            if(jsonData.profile_path)
+                personInfoData.put(MoviePersonInfo.COLUMN_PERSON_PROFILE_PATH,jsonData.profile_path)
+
+            return personInfoData
+        }
+        else return null
+    }
+
+    /**
+     * Helper method to parse person cast JSON data
+     * @param jsonData JSON data to be parsed
+     * @param personId Person id
+     * @param foreignKey Row id of person info table
+     * @return formatted list of person cast data as content values
+     */
+    static List<ContentValues> parsePersonCastDataJson(def jsonData, int personId, long foreignKey) {
+        List<ContentValues> personCastList = []
+        def castCounter = jsonData.movie_credits.cast.size() - 1
+        if (jsonData.movie_credits.cast) {
+            for (i in 0..castCounter) {
+                LogDisplay.callLog(LOG_TAG, "$i -> ${jsonData.movie_credits.cast[i].character} -> " +
+                        "${jsonData.movie_credits.cast[i].original_title}", LogDisplay.JSON_PARSE_LOG_FLAG)
+
+                ContentValues personCastData = new ContentValues()
+                if (foreignKey) {
+                    personCastData.put(MoviePersonCast.COLUMN_FOREIGN_KEY_ID, foreignKey)
+                } else {
+                    LogDisplay.callLog(LOG_TAG, 'Not a valid person info row id', LogDisplay.JSON_PARSE_LOG_FLAG)
+                    personCastData.put(MoviePersonCast.COLUMN_FOREIGN_KEY_ID, 0)
+                }
+                if (personId) {
+                    personCastData.put(MoviePersonCast.COLUMN_PERSON_CAST_ORIG_PERSON_ID, personId)
+                } else {
+                    LogDisplay.callLog(LOG_TAG, 'Not a valid person id', LogDisplay.JSON_PARSE_LOG_FLAG)
+                    personCastData.put(MoviePersonCast.COLUMN_PERSON_CAST_ORIG_PERSON_ID, 0)
+                }
+                if (jsonData.movie_credits.cast[i].adult)
+                    personCastData.put(MoviePersonCast.COLUMN_PERSON_CAST_ADULT_FLAG, jsonData.movie_credits.cast[i].adult)
+                if (jsonData.movie_credits.cast[i].character) {
+                    personCastData.put(MoviePersonCast.COLUMN_PERSON_CAST_CHARACTER, jsonData.movie_credits.cast[i].character)
+                } else {
+                    LogDisplay.callLog(LOG_TAG, 'Not a valid person character', LogDisplay.JSON_PARSE_LOG_FLAG)
+                    personCastData.put(MoviePersonCast.COLUMN_PERSON_CAST_CHARACTER, ' ')
+                }
+                if (jsonData.movie_credits.cast[i].credit_id)
+                    personCastData.put(MoviePersonCast.COLUMN_PERSON_CAST_CREDIT_ID, jsonData.movie_credits.cast[i].credit_id)
+                if (jsonData.movie_credits.cast[i].id) {
+                    personCastData.put(MoviePersonCast.COLUMN_PERSON_CAST_MOVIE_ID, jsonData.movie_credits.cast[i].id)
+                } else {
+                    LogDisplay.callLog(LOG_TAG, 'Not a valid person cast movie id', LogDisplay.JSON_PARSE_LOG_FLAG)
+                    personCastData.put(MoviePersonCast.COLUMN_PERSON_CAST_MOVIE_ID, 0)
+                }
+                if (jsonData.movie_credits.cast[i].original_title)
+                    personCastData.put(MoviePersonCast.COLUMN_PERSON_CAST_ORIG_TITLE, jsonData.movie_credits.cast[i].original_title)
+                if (jsonData.movie_credits.cast[i].poster_path)
+                    personCastData.put(MoviePersonCast.COLUMN_PERSON_CAST_POSTER_PATH, jsonData.movie_credits.cast[i].poster_path)
+                if (jsonData.movie_credits.cast[i].release_date)
+                    personCastData.put(MoviePersonCast.COLUMN_PERSON_CAST_RELEASE_DATE, jsonData.movie_credits.cast[i].release_date)
+                if (jsonData.movie_credits.cast[i].title)
+                    personCastData.put(MoviePersonCast.COLUMN_PERSON_CAST_TITLE, jsonData.movie_credits.cast[i].title)
+
+                personCastList << personCastData
+            }
+            return personCastList
+        }
+        return null
+    }
+
+    /**
+     * Helper method to parse person crew JSON data
+     * @param jsonData JSON data to be parsed
+     * @param personId Person id
+     * @param foreignKey Row id of person info table
+     * @return formatted list of person crew data as content values
+     */
+    static List<ContentValues> parsePersonCrewDataJson(def jsonData, int personId, long foreignKey) {
+        List<ContentValues> personCrewList = []
+        def crewCounter = jsonData.movie_credits.crew.size() - 1
+        if (jsonData.movie_credits.crew) {
+            for (i in 0..crewCounter) {
+                LogDisplay.callLog(LOG_TAG, "$i -> ${jsonData.movie_credits.crew[i].job} -> " +
+                        "${jsonData.movie_credits.crew[i].original_title}", LogDisplay.JSON_PARSE_LOG_FLAG)
+
+                ContentValues personCrewData = new ContentValues()
+                if (foreignKey) {
+                    personCrewData.put(MoviePersonCrew.COLUMN_FOREIGN_KEY_ID, foreignKey)
+                } else {
+                    LogDisplay.callLog(LOG_TAG, 'Not a valid person info row id', LogDisplay.JSON_PARSE_LOG_FLAG)
+                    personCrewData.put(MoviePersonCrew.COLUMN_FOREIGN_KEY_ID, 0)
+                }
+                if (personId) {
+                    personCrewData.put(MoviePersonCrew.COLUMN_PERSON_CREW_ORIG_PERSON_ID, personId)
+                } else {
+                    LogDisplay.callLog(LOG_TAG, 'Not a valid person id', LogDisplay.JSON_PARSE_LOG_FLAG)
+                    personCrewData.put(MoviePersonCrew.COLUMN_PERSON_CREW_ORIG_PERSON_ID, 0)
+                }
+                if (jsonData.movie_credits.crew[i].adult)
+                    personCrewData.put(MoviePersonCrew.COLUMN_PERSON_CREW_ADULT_FLAG, jsonData.movie_credits.crew[i].adult)
+                if (jsonData.movie_credits.crew[i].credit_id)
+                    personCrewData.put(MoviePersonCrew.COLUMN_PERSON_CREW_CREDIT_ID, jsonData.movie_credits.crew[i].credit_id)
+                if (jsonData.movie_credits.crew[i].department) {
+                    personCrewData.put(MoviePersonCrew.COLUMN_PERSON_CREW_DEPARTMENT, jsonData.movie_credits.crew[i].department)
+                } else {
+                    LogDisplay.callLog(LOG_TAG, 'Not a valid person department', LogDisplay.JSON_PARSE_LOG_FLAG)
+                    personCrewData.put(MoviePersonCrew.COLUMN_PERSON_CREW_DEPARTMENT, ' ')
+                }
+                if (jsonData.movie_credits.crew[i].id) {
+                    personCrewData.put(MoviePersonCrew.COLUMN_PERSON_CREW_MOVIE_ID, jsonData.movie_credits.crew[i].id)
+                } else {
+                    LogDisplay.callLog(LOG_TAG, 'Not a valid person crew movie id', LogDisplay.JSON_PARSE_LOG_FLAG)
+                    personCrewData.put(MoviePersonCrew.COLUMN_PERSON_CREW_MOVIE_ID, 0)
+                }
+                if (jsonData.movie_credits.crew[i].job)
+                    personCrewData.put(MoviePersonCrew.COLUMN_PERSON_CREW_JOB, jsonData.movie_credits.crew[i].job)
+                if (jsonData.movie_credits.crew[i].original_title)
+                    personCrewData.put(MoviePersonCrew.COLUMN_PERSON_CREW_ORIG_TITLE, jsonData.movie_credits.crew[i].original_title)
+                if (jsonData.movie_credits.crew[i].poster_path)
+                    personCrewData.put(MoviePersonCrew.COLUMN_PERSON_CREW_POSTER_PATH, jsonData.movie_credits.crew[i].poster_path)
+                if (jsonData.movie_credits.crew[i].release_date)
+                    personCrewData.put(MoviePersonCrew.COLUMN_PERSON_CREW_RELEASE_DATE, jsonData.movie_credits.crew[i].release_date)
+                if (jsonData.movie_credits.crew[i].title)
+                    personCrewData.put(MoviePersonCrew.COLUMN_PERSON_CREW_TITLE, jsonData.movie_credits.crew[i].title)
+
+                personCrewList << personCrewData
+            }
+            return personCrewList
+        }
+        return null
     }
 }

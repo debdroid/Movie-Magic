@@ -51,7 +51,7 @@
     <string name="movie_detail_collection_name_data">God Father Collection</string>
     <string name="movie_detail_web_links_home_page">Movie Home Page</string>
     <string name="movie_detail_web_links_home_page_not_available">No Home Page</string>
-    <string name="movie_detail_web_links_imdb_link">IMDb Link</string>
+    <string name="detail_web_links_imdb_link">IMDb Link</string>
     <string name="movie_detail_web_links_imdb_link_not_available">No IMDb Link</string>
     <string name="cast_name">Lionardo Dicaprio</string>
     <string name="char_name">Jack</string>
@@ -61,14 +61,15 @@
     <string name="tmdb_rating_vote_count_text"> (Total Vote:</string>
     <string name="tmdb_rating_vote_count_closing_brace">)</string>
     <string name="tmdb_rating_vote_count_val">68</string>
-    <string name="movie_detail_popularity">Popularity</string>
-    <string name="movie_detail_popularity_data">24.654</string>
+    <string name="person_popularity">Popularity</string>
+    <string name="person_popularity_data">24.654</string>
     <string name="movie_detail_crew_name_background_alpha">0.7</string>
     <string name="movie_data_not_available">Not Available</string>
     <string name="collection_data_not_available">Not part of any collection</string>
     <string name="review_author">By Debashis Paul</string>
     <string name="review_content">I actually enjoyed the movie so much that i\'ll recommend it to all my friends, at first i didn\'t really want to watch it because i\'m not into super hero movies at all, but i did anyway, i mean people were talking so much about it i had to see it myself and what an awesome choice i made.</string>
     <string name="single_review_item_collapse_line_item_count">2</string>
+    <string name="person_biography_collapse_line_item_count">3</string>
     <string name="movie_detail_review_recycler_view_empty_msg">No review available</string>
     <string name="movie_detail_web_links_header">External Links</string>
     <string name="movie_detail_user_list_drawable_title_value">My List</string>
@@ -81,6 +82,7 @@
     <string name="user_list_del_message">%1$s movie removed from %2$s</string>
     <string name="user_rating_add_message">Rating updated successfully for %1$s</string>
     <string name="title_activity_collection_movie">Collection</string>
+    <string name="title_activity_person_movie">Person</string>
     <string name="title_activity_grid_movie">GridMovieActivity</string>
     <string name="grid_fragment_menu">GridFragmentMenu</string>
     <string name="detail_fragment_menu">DetailFragmentMenu</string>
@@ -89,5 +91,24 @@
     <string name="collection_overview_data">This is the collection overview details of a particualr collection. This field can have multiple lines or null value.</string>
     <string name="collection_activity_menu">CollectionActivity</string>
     <string name="collection_fragment_menu">CollectionFragment</string>
+    <string name="person_name">Name</string>
+    <string name="person_name_data">Al Pacino</string>
+    <string name="person_dob">Date of Birth</string>
+    <string name="person_dob_data">13 Aug 1984</string>
+    <string name="person_place_of_birth">Place of Birth</string>
+    <string name="person_place_of_birth_data">Cittaranjan, Kolkata, India</string>
+    <string name="person_also_known_as">Also Known As</string>
+    <string name="person_also_known_as_data">S**e**</string>
+    <string name="person_death_day">Death Day</string>
+    <string name="person_death_day_data">Not Applicable</string>
+    <string name="person_biography">Biography</string>
+    <string name="person_biography_Data">Alfredo James \"Al\" Pacino (born April 25, 1940) is an American film and stage actor and director. He is famous for playing mobsters, including Michael Corleone in The Godfather trilogy, Tony Montana in Scarface, Alphonse \"Big Boy\" Caprice in Dick Tracy and Carlito Brigante in Carlito\'s Way, though he has also appeared several times on the other side of the law — as a police officer, detective and a lawyer. His role as Frank Slade in Scent of a Woman won him the Academy Award for Best Actor in 1992 after receiving seven previous Oscar nominations. He made his feature film debut in the 1969 film Me, Natalie in a minor supporting role, before playing the leading role in the 1971 drama The Panic in Needle Park. Pacino made his major breakthrough when he was given the role of Michael Corleone in The Godfather in 1972, which earned him an Academy Award nomination for Best Supporting Actor. Other Oscar nominations for Best Supporting Actor were for Dick Tracy and Glengarry Glen Ross. Oscar nominations for Best Actor include The Godfather Part II, Serpico, Dog Day Afternoon, the court room drama ...And Justice for All and Scent of a Woman. In addition to a career in film, he has also enjoyed a successful career on stage, picking up Tony Awards for Does a Tiger Wear a Necktie? and The Basic Training of Pavlo Hummel. His love of Shakespeare led him to direct his first film with Looking for Richard, a part documentary on the play Richard III. Pacino has received numerous lifetime achievement awards, including one from the American Film Institute. He is a method actor, taught mainly by Lee Strasberg and Charlie Laughton at the Actors Studio in New York. Although he has never married, Pacino has had several relationships with actresses and has three children. Description above from the Wikipedia article Al Pacino, licensed under CC-BY-SA, full list of contributors on Wikipedia</string>
+    <string name="person_cast_grid">As Actor</string>
+    <string name="person_crew_grid">As Crew</string>
+    <string name="person_activity_menu">PersonActivity</string>
+    <string name="person_fragment_menu">PersonFragment</string>
+    <string name="person_web_links_header">External Links</string>
+    <string name="person_web_links_home_page">Person Home Page</string>
+    <string name="title_activity_main_movie">Movie Main</string>
 
 </resources>

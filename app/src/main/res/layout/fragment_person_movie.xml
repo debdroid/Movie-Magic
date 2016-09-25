@@ -1,0 +1,52 @@
+<android.support.design.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/person_coordinator_layout"
+    android:fitsSystemWindows="true"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <android.support.design.widget.AppBarLayout
+        android:id="@+id/person_app_bar_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:elevation="0dp"
+        app:theme="@style/AppTheme.AppBarOverlay">
+
+        <!--<android.support.design.widget.CollapsingToolbarLayout-->
+            <!--android:id="@+id/person_collapsing_toolbar"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="@dimen/poster_image_height_detail_view"-->
+            <!--app:contentScrim="?attr/colorPrimary"-->
+            <!--android:fitsSystemWindows="true"-->
+            <!--app:layout_scrollFlags="scroll|exitUntilCollapsed">-->
+
+            <!--<TextView-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="wrap_content" -->
+                <!--android:text="This is test"/>-->
+            <!--<ImageView-->
+                <!--android:id="@+id/person_poster_image"-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="@dimen/poster_image_height_detail_view"-->
+                <!--android:scaleType="centerCrop"-->
+                <!--android:fitsSystemWindows="true"-->
+                <!--android:src="@drawable/grid_image_placeholder" />-->
+        <!-- setting itsSystemWindows="true" for toolbar moves home up and setting buttons to status bar -->
+        <android.support.v7.widget.Toolbar
+                android:id="@+id/person_toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                android:elevation="0dp"
+                app:layout_scrollFlags="snap"
+                app:popupTheme="@style/AppTheme.PopupOverlay" />
+        <!--</android.support.design.widget.CollapsingToolbarLayout>-->
+    </android.support.design.widget.AppBarLayout>
+    <android.support.v4.widget.NestedScrollView
+        android:id="@+id/person_nested_scroll"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+        <include layout="@layout/content_person_movie_fragment" />
+    </android.support.v4.widget.NestedScrollView>
+</android.support.design.widget.CoordinatorLayout>

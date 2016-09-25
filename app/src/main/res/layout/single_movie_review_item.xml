@@ -8,7 +8,7 @@
     android:layout_height="wrap_content"
     android:background="@color/primary">
     <TextView
-        android:id="@+id/single_review_item_autor"
+        android:id="@+id/single_review_item_author"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="left"
@@ -34,7 +34,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
         android:clickable="true"
+        android:backgroundTint="@color/devider_color"
         android:layout_below="@+id/single_review_item_linear_layout"
         android:background="@drawable/ic_keyboard_arrow_down_white_24dp"/>
     <View
@@ -44,13 +46,15 @@
         android:layout_toLeftOf="@+id/single_review_item_show_button"
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:background="@color/white_color" />
+        android:background="@color/devider_color" />
     <ImageButton
         android:id="@+id/single_review_item_hide_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
         android:clickable="true"
+        android:backgroundTint="@color/devider_color"
         android:visibility="invisible"
         android:layout_below="@+id/single_review_item_linear_layout"
         android:background="@drawable/ic_keyboard_arrow_up_white_24dp"/>

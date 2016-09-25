@@ -21,7 +21,7 @@ class MovieGridRecyclerAdapter extends RecyclerView.Adapter<MovieGridRecyclerAda
     private final Context mContext
     private Cursor mCursor
     private final MovieGridRecyclerAdapterOnClickHandler mMovieGridRecyclerAdapterOnClickHandler
-    public static int mPrimaryColor, mPrimaryDarkColor, mTitleTextColor, mBodyTextColor
+    private int mPrimaryDarkColor, mBodyTextColor
     //This flag is set as true by CollectionMovieFragment in order to apply color
     //And the same is set as false by MovieMagicMainActivity in order to use defualt color
     public static boolean collectionGridFlag = false
@@ -73,14 +73,19 @@ class MovieGridRecyclerAdapter extends RecyclerView.Adapter<MovieGridRecyclerAda
                 "${mCursor.getString(GridMovieFragment.COL_MOVIE_POSTER)}"
         PicassoLoadImage.loadMoviePosterImage(mContext,posterPath,holder.movieImageView)
         holder.movieNameView.setText(mCursor.getString(GridMovieFragment.COL_MOVIE_TITLE))
-        if(collectionGridFlag) {
+        //Apply color only it has got a value
+        if(mPrimaryDarkColor && mBodyTextColor) {
             holder.movieNameView.setBackgroundColor(mPrimaryDarkColor)
             holder.movieNameView.setTextColor(mBodyTextColor)
-        } else {
-            //This is to ensure the correct color is used when grid is used for main browsing (i.e. popular, upcoming, etc)
-            holder.movieNameView.setBackgroundColor(mContext.getColor(R.color.primary_dark))
-            holder.movieNameView.setTextColor(mContext.getColor(R.color.white_color))
         }
+//        if(collectionGridFlag) {
+//            holder.movieNameView.setBackgroundColor(mPrimaryDarkColor)
+//            holder.movieNameView.setTextColor(mBodyTextColor)
+//        } else {
+//            //This is to ensure the correct color is used when grid is used for main browsing (i.e. popular, upcoming, etc)
+//            holder.movieNameView.setBackgroundColor(mContext.getColor(R.color.primary_dark))
+//            holder.movieNameView.setTextColor(mContext.getColor(R.color.white_color))
+//        }
     }
 
     @Override
@@ -102,8 +107,10 @@ class MovieGridRecyclerAdapter extends RecyclerView.Adapter<MovieGridRecyclerAda
     //Since the color is decided once the poster is downloaded by Picasso
     //but by then adapter might got loaded with data. Hence call notifyDataSetChanged
     //so that it get's recreated with correct color
-    public void changeColor() {
+    public void changeColor(int primaryDarkColor, int bodyTextColor) {
         LogDisplay.callLog(LOG_TAG, 'changeColor is called', LogDisplay.GRID_RECYCLER_ADAPTER_LOG_FLAG)
+        mPrimaryDarkColor = primaryDarkColor
+        mBodyTextColor = bodyTextColor
         notifyDataSetChanged()
     }
     /**

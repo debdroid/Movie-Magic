@@ -14,13 +14,19 @@ class Utility {
     static String getTodayDate() {
         final SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSSZ")
         final String todayDate = simpleDateFormat.format(new Date())
-        LogDisplay.callLog(LOG_TAG, "Date stamp-> $todayDate", LogDisplay.UTILITY_LIST_FLAG)
+        LogDisplay.callLog(LOG_TAG, "Date stamp-> $todayDate", LogDisplay.UTILITY_LIST_LOG_FLAG)
         return todayDate
     }
 
     static String convertMilliSecsToOrigReleaseDate(long timeInMilis) {
         final SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd")
         String dateString = simpleDateFormat.format(new Date(timeInMilis))
+        return dateString
+    }
+
+    static String formatFriendlyDate(String date) {
+        final SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd MMM yyyy")
+        String dateString = simpleDateFormat.format(new SimpleDateFormat("yyyy-MM-dd").parse(date))
         return dateString
     }
 
@@ -38,7 +44,7 @@ class Utility {
         return formattedValue
     }
 
-    public static String formatMiliSecondsToDate(long timeInMilliSeconds) {
+    public static String formatMilliSecondsToDate(long timeInMilliSeconds) {
         SimpleDateFormat formatter = new SimpleDateFormat("dd MMM yyyy")
         String dateString = formatter.format(new Date(timeInMilliSeconds))
         return dateString

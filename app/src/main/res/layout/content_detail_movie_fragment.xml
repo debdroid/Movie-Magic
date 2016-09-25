@@ -9,7 +9,7 @@
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:background="?android:attr/listDivider" />
+        android:background="@color/devider_color"/>
 
     <include layout="@layout/movie_detail_poster"/>
 
@@ -24,21 +24,21 @@
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:background="?android:attr/listDivider" />
+        android:background="@color/devider_color"/>
 
     <include layout="@layout/movie_detail_trailer"/>
 
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:background="?android:attr/listDivider" />
+        android:background="@color/devider_color"/>
 
     <include layout="@layout/movie_detail_production_info"/>
 
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:background="?android:attr/listDivider" />
+        android:background="@color/devider_color"/>
 
     <include layout="@layout/movie_detail_cast_header"/>
 
@@ -47,7 +47,7 @@
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:background="?android:attr/listDivider" />
+        android:background="@color/devider_color"/>
 
     <include layout="@layout/movie_detail_crew_header"/>
 
@@ -56,7 +56,7 @@
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:background="?android:attr/listDivider" />
+        android:background="@color/devider_color"/>
 
     <include
         layout="@layout/movie_detail_similar_movie_header"
@@ -68,21 +68,21 @@
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:background="?android:attr/listDivider" />
+        android:background="@color/devider_color"/>
 
     <include layout="@layout/movie_detail_collection"/>
 
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:background="?android:attr/listDivider" />
+        android:background="@color/devider_color"/>
 
     <include layout="@layout/movie_detail_web_links"/>
 
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:background="?android:attr/listDivider" />
+        android:background="@color/devider_color"/>
 
     <include layout="@layout/movie_detail_review_header"/>
 

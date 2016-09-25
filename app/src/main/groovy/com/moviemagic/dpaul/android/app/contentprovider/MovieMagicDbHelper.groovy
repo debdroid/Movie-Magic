@@ -205,10 +205,7 @@ class MovieMagicDbHelper extends SQLiteOpenHelper {
                 $MovieMagicContract.MovieUserListFlag.COLUMN_FUTURE_USE_1 TEXT DEFAULT NULL,
                 $MovieMagicContract.MovieUserListFlag.COLUMN_FUTURE_USE_2 TEXT DEFAULT NULL,
                 $MovieMagicContract.MovieUserListFlag.COLUMN_FUTURE_USE_3 INTEGER DEFAULT 0,
-                $MovieMagicContract.MovieUserListFlag.COLUMN_FUTURE_USE_4 INTEGER DEFAULT 0,
-                FOREIGN KEY ($MovieMagicContract.MovieUserListFlag.COLUMN_FOREIGN_KEY_ID) REFERENCES
-                $MovieMagicContract.MovieBasicInfo.TABLE_NAME ($MovieMagicContract.MovieBasicInfo._ID)
-                ON DELETE CASCADE)
+                $MovieMagicContract.MovieUserListFlag.COLUMN_FUTURE_USE_4 INTEGER DEFAULT 0)
                 """
 
         //Create the SQL to create movie_person_info table
@@ -226,7 +223,7 @@ class MovieMagicDbHelper extends SQLiteOpenHelper {
                 $MovieMagicContract.MoviePersonInfo.COLUMN_PERSON_PLACE_OF_BIRTH TEXT NULL,
                 $MovieMagicContract.MoviePersonInfo.COLUMN_PERSON_PROFILE_PATH TEXT NULL,
                 $MovieMagicContract.MoviePersonInfo.COLUMN_PERSON_IMDB_ID TEXT NULL,
-                $MovieMagicContract.MoviePersonInfo.COLUMN_PERSON_POPULARITY REAL NULL,
+                $MovieMagicContract.MoviePersonInfo.COLUMN_PERSON_POPULARITY REAL DEFAULT 0.0,
                 UNIQUE ($MovieMagicContract.MoviePersonInfo.COLUMN_PERSON_ID,
                 $MovieMagicContract.MoviePersonInfo.COLUMN_PERSON_NAME) ON CONFLICT REPLACE)
                 """

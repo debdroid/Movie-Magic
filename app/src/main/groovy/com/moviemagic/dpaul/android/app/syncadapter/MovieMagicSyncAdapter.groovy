@@ -108,7 +108,7 @@ class MovieMagicSyncAdapter extends AbstractThreadedSyncAdapter {
             LogDisplay.callLog(LOG_TAG,"Movie url-> ${uri.toString()}",LogDisplay.MOVIE_MAGIC_SYNC_ADAPTER_LOG_FLAG)
 
             //This is intentional so that at lest one page is not loaded in order to make sure
-            //at least one (i.e. first) LoadMoreMovieData call is always successful
+            //at least one (i.e. first) LoadMoreMovies call is always successful
             if (page <= totalPage) {
                 def jsonData = new JsonSlurper(type: JsonParserType.INDEX_OVERLAY).parse(url)
                 LogDisplay.callLog(LOG_TAG, "JSON DATA for $category -> $jsonData",LogDisplay.MOVIE_MAGIC_SYNC_ADAPTER_LOG_FLAG)
@@ -117,9 +117,10 @@ class MovieMagicSyncAdapter extends AbstractThreadedSyncAdapter {
             }
             if(deleteRecords) {
                 // delete old data except user's records
+                //TODO if tmdb user list needs to be kept then modification needed in this delete query
                 int deleteCount = mContentResolver.delete(MovieMagicContract.MovieBasicInfo.CONTENT_URI,
-                        "$MovieMagicContract.MovieBasicInfo.COLUMN_MOVIE_LIST_TYPE = ?",
-                        [GlobalStaticVariables.MOVIE_LIST_TYPE_TMDB_PUBLIC] as String []
+                        "$MovieMagicContract.MovieBasicInfo.COLUMN_MOVIE_LIST_TYPE != ?",
+                        [GlobalStaticVariables.MOVIE_LIST_TYPE_USER_LOCAL_LIST] as String []
                 )
                 LogDisplay.callLog(LOG_TAG,"Total records deleted->$deleteCount",LogDisplay.MOVIE_MAGIC_SYNC_ADAPTER_LOG_FLAG)
                 deleteRecords = false
@@ -136,7 +137,16 @@ class MovieMagicSyncAdapter extends AbstractThreadedSyncAdapter {
 
     private void insertBulkRecords(List<ContentValues> cvList, String category) {
         ContentValues[] cv = cvList as ContentValues []
-        int insertCount = mContentResolver.bulkInsert(MovieMagicContract.MovieBasicInfo.CONTENT_URI,cv)
-        LogDisplay.callLog(LOG_TAG,"Total insert for $category->$insertCount",LogDisplay.MOVIE_MAGIC_SYNC_ADAPTER_LOG_FLAG)
+        if(cv) {
+            int insertCount = mContentResolver.bulkInsert(MovieMagicContract.MovieBasicInfo.CONTENT_URI, cv)
+            LogDisplay.callLog(LOG_TAG, "Total insert for $category->$insertCount", LogDisplay.MOVIE_MAGIC_SYNC_ADAPTER_LOG_FLAG)
+            if (insertCount > 0) {
+                LogDisplay.callLog(LOG_TAG, "Insert in movie_basic_info successful. Total insert for $category->$insertCount", LogDisplay.MOVIE_MAGIC_SYNC_ADAPTER_LOG_FLAG)
+            } else {
+                LogDisplay.callLog(LOG_TAG, "Insert in movie_basic_info failed. Insert count for $category->$insertCount", LogDisplay.MOVIE_MAGIC_SYNC_ADAPTER_LOG_FLAG)
+            }
+        } else {
+            LogDisplay.callLog(LOG_TAG,'cv is null. JsonParse.parseMovieListJson returned null',LogDisplay.MOVIE_MAGIC_SYNC_ADAPTER_LOG_FLAG)
+        }
     }
 }

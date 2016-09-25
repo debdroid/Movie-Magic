@@ -6,9 +6,15 @@
         <item name="colorPrimary">@color/primary</item>
         <item name="colorPrimaryDark">@color/primary_dark</item>
         <item name="colorAccent">@color/accent</item>
+        <item name="toolbarStyle">@style/Toolbar</item>
     </style>
 
     <style name="AppTheme" parent="BaseTheme">
+    </style>
+
+    <!-- Toolbar theme -->
+    <style name="Toolbar" parent="Widget.AppCompat.Toolbar">
+        <item name="popupTheme">@style/Theme.AppCompat.Light</item>
     </style>
 
     <!--<style name="AppTheme.NoActionBar">-->
@@ -41,4 +47,5 @@
     <style name="AppTheme.MovieGrid" parent="@style/AppTheme"/>
     <style name="AppTheme.MovieDetail" parent="@style/AppTheme"/>
     <style name="AppTheme.MovieCollection" parent="@style/AppTheme"/>
+    <style name="AppTheme.MoviePerson" parent="@style/AppTheme"/>
 </resources>

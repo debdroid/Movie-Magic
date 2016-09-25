@@ -18,6 +18,7 @@
     <dimen name="m_design_grid_list_text_padding">16dp</dimen>
     <dimen name="m_design_grid_list_text_size">16sp</dimen>
     <dimen name="m_design_icon_size">48dp</dimen>
+    <dimen name="m_design_space_between_words">4dp</dimen>
 
 
     <!-- Movie Detail Layout parameters -->
@@ -26,8 +27,15 @@
     <dimen name="movie_detail_poster_fields_margin">16dp</dimen>
     <dimen name="movie_detail_backdrop_height">280dp</dimen>
 
+    <!-- Movie Poster Layout parameters -->
+    <dimen name="person_poster_width">240dp</dimen>
+    <dimen name="person_poster_height">320dp</dimen>
+    <dimen name="poster_image_data_fields_margin">8dp</dimen>
+
+
     <dimen name="gridview_horizontal_vertical_spacing">2dp</dimen>
     <dimen name="gridview_column_width">120dp</dimen>
+    <dimen name="poster_image_height_detail_view">320dp</dimen>
     <dimen name="backdrop_image_height_detail_view">280dp</dimen>
     <dimen name="grid_image_height">160dp</dimen>
     <dimen name="grid_image_width">120dp</dimen>
@@ -37,6 +45,7 @@
     <dimen name="detail_today_layout_mpga_image_size">24dp</dimen>
     <dimen name="movie_detail_collection_backdrop_height">240dp</dimen>
     <dimen name="grid_overlapping_text_padding">4dp</dimen>
+    <dimen name="person_biography_collapse_icon_size">48dp</dimen>
 
     <item name="movie_detail_user_list_drawable_alpha_value" type="dimen" format="float">0.4</item>
 </resources>
