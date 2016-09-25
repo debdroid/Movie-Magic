@@ -24,7 +24,7 @@ class LoadCollectionData extends AsyncTask<Integer, Void, Void> {
         mContext = ctx
         mContentResolver = mContext.getContentResolver()
     }
-
+    //TODO - need to do housekeeping with collection data later
     @Override
     protected Void doInBackground(Integer... params) {
         final int collectionId = params[0]

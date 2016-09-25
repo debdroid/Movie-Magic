@@ -19,25 +19,25 @@ class TestUtilities extends AndroidTestCase {
     public static final String TEST_COUNTRY_ISO = 'US'
 
     static void validateCursor(String error, Cursor valueCursor, ContentValues expectedValues) {
-        assertTrue("Empty cursor returned for $error", valueCursor.moveToFirst());
-        validateCurrentRecord(error, valueCursor, expectedValues);
-        valueCursor.close();
+        assertTrue("Empty cursor returned for $error", valueCursor.moveToFirst())
+        validateCurrentRecord(error, valueCursor, expectedValues)
+        valueCursor.close()
     }
 
     static void validateCurrentRecord(String error, Cursor valueCursor, ContentValues expectedValues) {
-        Set<Map.Entry<String, Object>> valueSet = expectedValues.valueSet();
+        Set<Map.Entry<String, Object>> valueSet = expectedValues.valueSet()
         for (Map.Entry<String, Object> entry : valueSet) {
-            String columnName = entry.getKey();
-            int idx = valueCursor.getColumnIndex(columnName);
-            assertFalse("Column '$columnName' not found in $error", idx == -1);
-            String expectedValue = entry.getValue().toString();
+            String columnName = entry.getKey()
+            int idx = valueCursor.getColumnIndex(columnName)
+            assertFalse("Column '$columnName' not found in $error", idx == -1)
+            String expectedValue = entry.getValue().toString()
             assertEquals("Value '${entry.getValue().toString()}' did not match the expected value '$expectedValue.$error",
                     expectedValue, valueCursor.getString(idx))
         }
     }
 
     static ContentValues createMovieValues() {
-        ContentValues movieInfoValues = new ContentValues();
+        ContentValues movieInfoValues = new ContentValues()
         movieInfoValues.put(MovieMagicContract.MovieBasicInfo.COLUMN_MOVIE_ID,TEST_MOVIE_ID)
         movieInfoValues.put(MovieMagicContract.MovieBasicInfo.COLUMN_ORIGINAL_TITLE,'Troy')
         movieInfoValues.put(MovieMagicContract.MovieBasicInfo.COLUMN_OVERVIEW,'Troy is a good movie')
@@ -60,7 +60,7 @@ class TestUtilities extends AndroidTestCase {
     }
 
     static ContentValues createMovieCastValues(long fKeyId) {
-        ContentValues movieCastValues = new ContentValues();
+        ContentValues movieCastValues = new ContentValues()
         movieCastValues.put(MovieMagicContract.MovieCast.COLUMN_FOREIGN_KEY_ID,fKeyId)
         movieCastValues.put(MovieMagicContract.MovieCast.COLUMN_CAST_ORIG_MOVIE_ID,TEST_MOVIE_ID)
         movieCastValues.put(MovieMagicContract.MovieCast.COLUMN_CAST_CHARACTER,'Robin')
@@ -71,7 +71,7 @@ class TestUtilities extends AndroidTestCase {
     }
 
     static ContentValues createMovieCrewValues(long fKeyId) {
-        ContentValues movieCrewValues = new ContentValues();
+        ContentValues movieCrewValues = new ContentValues()
         movieCrewValues.put(MovieMagicContract.MovieCrew.COLUMN_FOREIGN_KEY_ID,fKeyId)
         movieCrewValues.put(MovieMagicContract.MovieCrew.COLUMN_CREW_ORIG_MOVIE_ID,TEST_MOVIE_ID)
         movieCrewValues.put(MovieMagicContract.MovieCrew.COLUMN_CREW_PERSON_ID,902)
@@ -81,7 +81,7 @@ class TestUtilities extends AndroidTestCase {
     }
 
     static ContentValues createMovieImageValues(long fKeyId) {
-        ContentValues movieImageValues = new ContentValues();
+        ContentValues movieImageValues = new ContentValues()
         movieImageValues.put(MovieMagicContract.MovieImage.COLUMN_FOREIGN_KEY_ID,fKeyId)
         movieImageValues.put(MovieMagicContract.MovieImage.COLUMN_IMAGE_ORIG_MOVIE_ID,TEST_MOVIE_ID)
         movieImageValues.put(MovieMagicContract.MovieImage.COLUMN_IMAGE_TYPE,'poster')
@@ -90,7 +90,7 @@ class TestUtilities extends AndroidTestCase {
     }
 
     static ContentValues createMovieVideoValues(long fKeyId) {
-        ContentValues movieVideoValues = new ContentValues();
+        ContentValues movieVideoValues = new ContentValues()
         movieVideoValues.put(MovieMagicContract.MovieVideo.COLUMN_FOREIGN_KEY_ID,fKeyId)
         movieVideoValues.put(MovieMagicContract.MovieVideo.COLUMN_VIDEO_ORIG_MOVIE_ID,TEST_MOVIE_ID)
         movieVideoValues.put(MovieMagicContract.MovieVideo.COLUMN_VIDEO_KEY,'aafgslkhs')
@@ -100,7 +100,7 @@ class TestUtilities extends AndroidTestCase {
     }
 
     static ContentValues createMovieReviewValues(long fKeyId) {
-        ContentValues movieReviewValues = new ContentValues();
+        ContentValues movieReviewValues = new ContentValues()
         movieReviewValues.put(MovieMagicContract.MovieReview.COLUMN_FOREIGN_KEY_ID,fKeyId)
         movieReviewValues.put(MovieMagicContract.MovieReview.COLUMN_REVIEW_ORIG_MOVIE_ID,TEST_MOVIE_ID)
         movieReviewValues.put(MovieMagicContract.MovieReview.COLUMN_REVIEW_ID,105)
@@ -110,7 +110,7 @@ class TestUtilities extends AndroidTestCase {
     }
 
     static ContentValues createMovieReleaseDateValues(long fKeyId) {
-        ContentValues movieReleaseDateValues = new ContentValues();
+        ContentValues movieReleaseDateValues = new ContentValues()
         movieReleaseDateValues.put(MovieMagicContract.MovieReleaseDate.COLUMN_FOREIGN_KEY_ID,fKeyId)
         movieReleaseDateValues.put(MovieMagicContract.MovieReleaseDate.COLUMN_RELEASE_ORIG_MOVIE_ID,TEST_MOVIE_ID)
         movieReleaseDateValues.put(MovieMagicContract.MovieReleaseDate.COLUMN_RELEASE_ISO_COUNTRY,TEST_COUNTRY_ISO)
@@ -119,21 +119,21 @@ class TestUtilities extends AndroidTestCase {
     }
 
     static ContentValues createMovieUserListFlagValues(long fKeyId) {
-        ContentValues movieUserListFlagValues = new ContentValues();
+        ContentValues movieUserListFlagValues = new ContentValues()
         movieUserListFlagValues.put(MovieMagicContract.MovieUserListFlag.COLUMN_FOREIGN_KEY_ID,fKeyId)
         movieUserListFlagValues.put(MovieMagicContract.MovieUserListFlag.COLUMN_USER_LIST_FLAG_ORIG_MOVIE_ID,TEST_MOVIE_ID)
         movieUserListFlagValues
     }
 
     static ContentValues createMoviePersonInfoValues() {
-        ContentValues moviePersonInfoValues = new ContentValues();
+        ContentValues moviePersonInfoValues = new ContentValues()
         moviePersonInfoValues.put(MovieMagicContract.MoviePersonInfo.COLUMN_PERSON_ID,TEST_PERSON_ID)
         moviePersonInfoValues.put(MovieMagicContract.MoviePersonInfo.COLUMN_PERSON_NAME,'Person One')
         moviePersonInfoValues
     }
 
     static ContentValues createMoviePersonCastValues(long fKeyId) {
-        ContentValues moviePersonCastValues = new ContentValues();
+        ContentValues moviePersonCastValues = new ContentValues()
         moviePersonCastValues.put(MovieMagicContract.MoviePersonCast.COLUMN_FOREIGN_KEY_ID,fKeyId)
         moviePersonCastValues.put(MovieMagicContract.MoviePersonCast.COLUMN_PERSON_CAST_ORIG_PERSON_ID,TEST_PERSON_ID)
         moviePersonCastValues.put(MovieMagicContract.MoviePersonCast.COLUMN_PERSON_CAST_CHARACTER,'Robin Hood')
@@ -143,7 +143,7 @@ class TestUtilities extends AndroidTestCase {
     }
 
     static ContentValues createMoviePersonCrewValues(long fKeyId) {
-        ContentValues moviePersonCrewValues = new ContentValues();
+        ContentValues moviePersonCrewValues = new ContentValues()
         moviePersonCrewValues.put(MovieMagicContract.MoviePersonCrew.COLUMN_FOREIGN_KEY_ID,fKeyId)
         moviePersonCrewValues.put(MovieMagicContract.MoviePersonCrew.COLUMN_PERSON_CREW_ORIG_PERSON_ID,TEST_PERSON_ID)
         moviePersonCrewValues.put(MovieMagicContract.MoviePersonCrew.COLUMN_PERSON_CREW_MOVIE_ID,3009)
@@ -152,15 +152,23 @@ class TestUtilities extends AndroidTestCase {
         moviePersonCrewValues
     }
 
+    static ContentValues createMoviePersonImageValues(long fKeyId) {
+        ContentValues moviePersonCrewValues = new ContentValues()
+        moviePersonCrewValues.put(MovieMagicContract.MoviePersonImage.COLUMN_FOREIGN_KEY_ID,fKeyId)
+        moviePersonCrewValues.put(MovieMagicContract.MoviePersonImage.COLUMN_PERSON_IMAGE_ORIG_PERSON_ID,TEST_PERSON_ID)
+        moviePersonCrewValues.put(MovieMagicContract.MoviePersonImage.COLUMN_PERSON_IMAGE_FILE_PATH,'/image_file_path')
+        moviePersonCrewValues
+    }
+
     static ContentValues createMovieCollectionValues() {
-        ContentValues movieCollectionValues = new ContentValues();
+        ContentValues movieCollectionValues = new ContentValues()
         movieCollectionValues.put(MovieMagicContract.MovieCollection.COLUMN_COLLECTION_ID,TEST_COLL_ID)
         movieCollectionValues.put(MovieMagicContract.MovieCollection.COLUMN_COLLECTION_NAME,14)
         movieCollectionValues
     }
 
     static ContentValues createBulkMovieValues(int movieId) {
-        ContentValues movieInfoValues = new ContentValues();
+        ContentValues movieInfoValues = new ContentValues()
         movieInfoValues.put(MovieMagicContract.MovieBasicInfo.COLUMN_MOVIE_ID,movieId)
         movieInfoValues.put(MovieMagicContract.MovieBasicInfo.COLUMN_ORIGINAL_TITLE,'Troy')
         movieInfoValues.put(MovieMagicContract.MovieBasicInfo.COLUMN_OVERVIEW,'Troy is a good movie')
@@ -182,14 +190,14 @@ class TestUtilities extends AndroidTestCase {
     }
 
     static ContentValues createBulkMovieCollectionValues(int collId) {
-        ContentValues movieCollectionValues = new ContentValues();
+        ContentValues movieCollectionValues = new ContentValues()
         movieCollectionValues.put(MovieMagicContract.MovieCollection.COLUMN_COLLECTION_ID,collId)
         movieCollectionValues.put(MovieMagicContract.MovieCollection.COLUMN_COLLECTION_NAME,14)
         movieCollectionValues
     }
 
     static ContentValues createBulkMoviePersonInfoValues(int personId) {
-        ContentValues moviePersonInfoValues = new ContentValues();
+        ContentValues moviePersonInfoValues = new ContentValues()
         moviePersonInfoValues.put(MovieMagicContract.MoviePersonInfo.COLUMN_PERSON_ID,personId)
         moviePersonInfoValues.put(MovieMagicContract.MoviePersonInfo.COLUMN_PERSON_NAME,'Person One')
         moviePersonInfoValues
@@ -198,7 +206,7 @@ class TestUtilities extends AndroidTestCase {
     //fKeyId is added to ORIG_MOVIE_ID and ORIG_PERSON_ID in this and following methods to ensure they become
     //unique so that bulk insert can be tested successfully (work around for UNIQUE REPLACE used in tables)
     static ContentValues createBulkMovieCastValues(long fKeyId) {
-        ContentValues movieCastValues = new ContentValues();
+        ContentValues movieCastValues = new ContentValues()
         movieCastValues.put(MovieMagicContract.MovieCast.COLUMN_FOREIGN_KEY_ID,fKeyId)
         movieCastValues.put(MovieMagicContract.MovieCast.COLUMN_CAST_ORIG_MOVIE_ID,TEST_MOVIE_ID+fKeyId)
         movieCastValues.put(MovieMagicContract.MovieCast.COLUMN_CAST_CHARACTER,'Robin')
@@ -209,7 +217,7 @@ class TestUtilities extends AndroidTestCase {
     }
 
     static ContentValues createBulkMovieCrewValues(long fKeyId) {
-        ContentValues movieCrewValues = new ContentValues();
+        ContentValues movieCrewValues = new ContentValues()
         movieCrewValues.put(MovieMagicContract.MovieCrew.COLUMN_FOREIGN_KEY_ID,fKeyId)
         movieCrewValues.put(MovieMagicContract.MovieCrew.COLUMN_CREW_ORIG_MOVIE_ID,TEST_MOVIE_ID+fKeyId)
         movieCrewValues.put(MovieMagicContract.MovieCrew.COLUMN_CREW_PERSON_ID,902)
@@ -219,7 +227,7 @@ class TestUtilities extends AndroidTestCase {
     }
 
     static ContentValues createBulkMovieImageValues(long fKeyId) {
-        ContentValues movieImageValues = new ContentValues();
+        ContentValues movieImageValues = new ContentValues()
         movieImageValues.put(MovieMagicContract.MovieImage.COLUMN_FOREIGN_KEY_ID,fKeyId)
         movieImageValues.put(MovieMagicContract.MovieImage.COLUMN_IMAGE_ORIG_MOVIE_ID,TEST_MOVIE_ID+fKeyId)
         movieImageValues.put(MovieMagicContract.MovieImage.COLUMN_IMAGE_TYPE,'poster')
@@ -228,7 +236,7 @@ class TestUtilities extends AndroidTestCase {
     }
 
     static ContentValues createBulkMovieVideoValues(long fKeyId) {
-        ContentValues movieVideoValues = new ContentValues();
+        ContentValues movieVideoValues = new ContentValues()
         movieVideoValues.put(MovieMagicContract.MovieVideo.COLUMN_FOREIGN_KEY_ID,fKeyId)
         movieVideoValues.put(MovieMagicContract.MovieVideo.COLUMN_VIDEO_ORIG_MOVIE_ID,TEST_MOVIE_ID+fKeyId)
         movieVideoValues.put(MovieMagicContract.MovieVideo.COLUMN_VIDEO_KEY,'aafgslkhs')
@@ -238,7 +246,7 @@ class TestUtilities extends AndroidTestCase {
     }
 
     static ContentValues createBulkMovieReviewValues(long fKeyId) {
-        ContentValues movieReviewValues = new ContentValues();
+        ContentValues movieReviewValues = new ContentValues()
         movieReviewValues.put(MovieMagicContract.MovieReview.COLUMN_FOREIGN_KEY_ID,fKeyId)
         movieReviewValues.put(MovieMagicContract.MovieReview.COLUMN_REVIEW_ORIG_MOVIE_ID,TEST_MOVIE_ID+fKeyId)
         movieReviewValues.put(MovieMagicContract.MovieReview.COLUMN_REVIEW_ID,105)
@@ -248,7 +256,7 @@ class TestUtilities extends AndroidTestCase {
     }
 
     static ContentValues createBulkMovieReleaseDateValues(long fKeyId) {
-        ContentValues movieReleaseDateValues = new ContentValues();
+        ContentValues movieReleaseDateValues = new ContentValues()
         movieReleaseDateValues.put(MovieMagicContract.MovieReleaseDate.COLUMN_FOREIGN_KEY_ID,fKeyId)
         movieReleaseDateValues.put(MovieMagicContract.MovieReleaseDate.COLUMN_RELEASE_ORIG_MOVIE_ID,TEST_MOVIE_ID+fKeyId)
         movieReleaseDateValues.put(MovieMagicContract.MovieReleaseDate.COLUMN_RELEASE_ISO_COUNTRY,TEST_COUNTRY_ISO)
@@ -257,7 +265,7 @@ class TestUtilities extends AndroidTestCase {
     }
 
     static ContentValues createBulkMoviePersonCastValues(long fKeyId) {
-        ContentValues moviePersonCastValues = new ContentValues();
+        ContentValues moviePersonCastValues = new ContentValues()
         moviePersonCastValues.put(MovieMagicContract.MoviePersonCast.COLUMN_FOREIGN_KEY_ID,fKeyId)
         moviePersonCastValues.put(MovieMagicContract.MoviePersonCast.COLUMN_PERSON_CAST_ORIG_PERSON_ID,TEST_PERSON_ID+fKeyId)
         moviePersonCastValues.put(MovieMagicContract.MoviePersonCast.COLUMN_PERSON_CAST_CHARACTER,'Robin Hood')
@@ -267,12 +275,20 @@ class TestUtilities extends AndroidTestCase {
     }
 
     static ContentValues createBulkMoviePersonCrewValues(long fKeyId) {
-        ContentValues moviePersonCrewValues = new ContentValues();
+        ContentValues moviePersonCrewValues = new ContentValues()
         moviePersonCrewValues.put(MovieMagicContract.MoviePersonCrew.COLUMN_FOREIGN_KEY_ID,fKeyId)
         moviePersonCrewValues.put(MovieMagicContract.MoviePersonCrew.COLUMN_PERSON_CREW_ORIG_PERSON_ID,TEST_PERSON_ID+fKeyId)
         moviePersonCrewValues.put(MovieMagicContract.MoviePersonCrew.COLUMN_PERSON_CREW_MOVIE_ID,3009)
         moviePersonCrewValues.put(MovieMagicContract.MoviePersonCrew.COLUMN_PERSON_CREW_JOB,'Producer')
         moviePersonCrewValues.put(MovieMagicContract.MoviePersonCrew.COLUMN_PERSON_CREW_TITLE,'God Father')
+        moviePersonCrewValues
+    }
+
+    static ContentValues createBulkMoviePersonImageValues(long fKeyId) {
+        ContentValues moviePersonCrewValues = new ContentValues()
+        moviePersonCrewValues.put(MovieMagicContract.MoviePersonImage.COLUMN_FOREIGN_KEY_ID,fKeyId)
+        moviePersonCrewValues.put(MovieMagicContract.MoviePersonImage.COLUMN_PERSON_IMAGE_ORIG_PERSON_ID,TEST_PERSON_ID+fKeyId)
+        moviePersonCrewValues.put(MovieMagicContract.MoviePersonImage.COLUMN_PERSON_IMAGE_FILE_PATH,'/file_poster_path')
         moviePersonCrewValues
     }
 }

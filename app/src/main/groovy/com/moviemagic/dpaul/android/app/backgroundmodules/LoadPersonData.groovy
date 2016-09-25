@@ -24,7 +24,7 @@ class LoadPersonData extends AsyncTask<Integer, Void, Void> {
         mContext = ctx
         mContentResolver = mContext.getContentResolver()
     }
-
+    //TODO - need to do housekeeping with person data later
     @Override
     protected Void doInBackground(Integer... params) {
         final int personId = params[0]

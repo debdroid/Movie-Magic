@@ -16,7 +16,7 @@ class MovieMagicDbHelper extends SQLiteOpenHelper {
     //TODO:In my nexus4, somehow the database does not get deleted while uninstalling, so every change in db
     //TODO: is forcing me to upgrade the database.
     //TODO:Need to change before release
-    private static final int DATABASE_VERSION = 3
+    private static final int DATABASE_VERSION = 1
 
     //Define as public as used by TestMovieMagicDatabase.groovy
     public static final String DATABASE_NAME = 'movie_magic.db'
@@ -272,6 +272,25 @@ class MovieMagicDbHelper extends SQLiteOpenHelper {
                 $MovieMagicContract.MoviePersonCrew.COLUMN_PERSON_CREW_MOVIE_ID,
                 $MovieMagicContract.MoviePersonCrew.COLUMN_PERSON_CREW_JOB) ON CONFLICT REPLACE)
                 """
+        //Create the SQL to create movie_person_image table
+        final  String SQL_CREATE_MOVIE_PERSON_IMAGE_TABLE = """
+                CREATE TABLE $MovieMagicContract.MoviePersonImage.TABLE_NAME (
+                $MovieMagicContract.MoviePersonImage._ID INTEGER PRIMARY KEY,
+                $MovieMagicContract.MoviePersonImage.COLUMN_FOREIGN_KEY_ID INTEGER NOT NULL,
+                $MovieMagicContract.MoviePersonImage.COLUMN_PERSON_IMAGE_ORIG_PERSON_ID INTEGER NOT NULL,
+                $MovieMagicContract.MoviePersonImage.COLUMN_PERSON_IMAGE_ASPECT_RATIO REAL DEFAULT 0.0,
+                $MovieMagicContract.MoviePersonImage.COLUMN_PERSON_IMAGE_FILE_PATH TEXT NOT NULL,
+                $MovieMagicContract.MoviePersonImage.COLUMN_PERSON_IMAGE_HEIGHT INTEGER DEFAULT 0,
+                $MovieMagicContract.MoviePersonImage.COLUMN_PERSON_IMAGE_ISO_639_1 INTEGER DEFAULT 0,
+                $MovieMagicContract.MoviePersonImage.COLUMN_PERSON_IMAGE_VOTE_AVERAGE REAL DEFAULT 0.0,
+                $MovieMagicContract.MoviePersonImage.COLUMN_PERSON_IMAGE_VOTE_COUNT INTEGER DEFAULT 0,
+                $MovieMagicContract.MoviePersonImage.COLUMN_PERSON_IMAGE_WIDTH TINTEGER DEFAULT 0,
+                FOREIGN KEY ($MovieMagicContract.MoviePersonImage.COLUMN_FOREIGN_KEY_ID) REFERENCES
+                $MovieMagicContract.MoviePersonInfo.TABLE_NAME ($MovieMagicContract.MoviePersonInfo._ID)
+                ON DELETE CASCADE,
+                UNIQUE ( $MovieMagicContract.MoviePersonImage.COLUMN_PERSON_IMAGE_ORIG_PERSON_ID,
+                $MovieMagicContract.MoviePersonImage.COLUMN_PERSON_IMAGE_FILE_PATH) ON CONFLICT REPLACE)
+                """
 
         //Create the SQL to create movie_collection table
         final  String SQL_CREATE_MOVIE_COLLECTION_TABLE = """
@@ -293,13 +312,14 @@ class MovieMagicDbHelper extends SQLiteOpenHelper {
         sqLiteDatabase.execSQL(SQL_CREATE_MOVIE_CREW_TABLE)
         sqLiteDatabase.execSQL(SQL_CREATE_MOVIE_IMAGE_TABLE)
         sqLiteDatabase.execSQL(SQL_CREATE_MOVIE_VIDEO_TABLE)
-        sqLiteDatabase.execSQL(SQL_CREATE_MOVIE_COLLECTION_TABLE)
         sqLiteDatabase.execSQL(SQL_CREATE_MOVIE_REVIEW_TABLE)
         sqLiteDatabase.execSQL(SQL_CREATE_MOVIE_RELEASE_TABLE)
+        sqLiteDatabase.execSQL(SQL_CREATE_MOVIE_USER_LIST_FLAG_TABLE)
         sqLiteDatabase.execSQL(SQL_CREATE_MOVIE_PERSON_INFO_TABLE)
         sqLiteDatabase.execSQL(SQL_CREATE_MOVIE_PERSON_CAST_TABLE)
         sqLiteDatabase.execSQL(SQL_CREATE_MOVIE_PERSON_CREW_TABLE)
-        sqLiteDatabase.execSQL(SQL_CREATE_MOVIE_USER_LIST_FLAG_TABLE)
+        sqLiteDatabase.execSQL(SQL_CREATE_MOVIE_PERSON_IMAGE_TABLE)
+        sqLiteDatabase.execSQL(SQL_CREATE_MOVIE_COLLECTION_TABLE)
     }
 
     @Override
@@ -319,13 +339,14 @@ class MovieMagicDbHelper extends SQLiteOpenHelper {
         sqLiteDatabase.execSQL("DROP TABLE IF EXISTS $MovieMagicContract.MovieCrew.TABLE_NAME")
         sqLiteDatabase.execSQL("DROP TABLE IF EXISTS $MovieMagicContract.MovieImage.TABLE_NAME")
         sqLiteDatabase.execSQL("DROP TABLE IF EXISTS $MovieMagicContract.MovieVideo.TABLE_NAME")
-        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS $MovieMagicContract.MovieCollection.TABLE_NAME")
         sqLiteDatabase.execSQL("DROP TABLE IF EXISTS $MovieMagicContract.MovieReview.TABLE_NAME")
         sqLiteDatabase.execSQL("DROP TABLE IF EXISTS $MovieMagicContract.MovieReleaseDate.TABLE_NAME")
         sqLiteDatabase.execSQL("DROP TABLE IF EXISTS $MovieMagicContract.MoviePersonInfo.TABLE_NAME")
         sqLiteDatabase.execSQL("DROP TABLE IF EXISTS $MovieMagicContract.MoviePersonCast.TABLE_NAME")
         sqLiteDatabase.execSQL("DROP TABLE IF EXISTS $MovieMagicContract.MoviePersonCrew.TABLE_NAME")
+        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS $MovieMagicContract.MoviePersonImage.TABLE_NAME")
         sqLiteDatabase.execSQL("DROP TABLE IF EXISTS $MovieMagicContract.MovieUserListFlag.TABLE_NAME")
+        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS $MovieMagicContract.MovieCollection.TABLE_NAME")
 
         //Call onCreate to re-create the tables
         onCreate(sqLiteDatabase)

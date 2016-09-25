@@ -47,11 +47,12 @@ class MovieMagicContract {
     static final String PATH_MOVIE_VIDEO = 'movie_video'
     static final String PATH_MOVIE_REVIEW = 'movie_review'
     static final String PATH_MOVIE_RELEASE_DATE = 'movie_release_date'
+    static final String PATH_MOVIE_USER_LIST_FLAG = 'movie_user_list_flag'
     static final String PATH_MOVIE_COLLECTION = 'movie_collection'
     static final String PATH_MOVIE_PERSON_INFO = 'movie_person_info'
     static final String PATH_MOVIE_PERSON_CAST = 'movie_person_cast'
     static final String PATH_MOVIE_PERSON_CREW = 'movie_person_crew'
-    static final String PATH_MOVIE_USER_LIST_FLAG = 'movie_user_list_flag'
+    static final String PATH_MOVIE_PERSON_IMAGE = 'movie_person_image'
 
     /**
         Inner class that defines the table contents of the movie_basic_info table
@@ -594,6 +595,46 @@ class MovieMagicContract {
         }
 
         static int getPersonIdFromMoviePersonCrewUri (Uri uri) {
+            uri.getPathSegments().get(1).toInteger()
+        }
+    }
+
+    /**
+     Inner class that defines the table contents of the movie_person_image table
+     */
+    public static final class MoviePersonImage implements BaseColumns {
+        static final String TABLE_NAME = PATH_MOVIE_PERSON_IMAGE
+        //Define the columns
+        static final String COLUMN_FOREIGN_KEY_ID = 'foreign_key'
+        //ORIG_PERSON_ID column is the reference(i.e. dummy Foreign key) and populated with the person id of movie_person_info
+        static final String COLUMN_PERSON_IMAGE_ORIG_PERSON_ID = 'person_image_orig_person_id'
+        static final String COLUMN_PERSON_IMAGE_ASPECT_RATIO = 'person_image_aspect_ratio'
+        static final String COLUMN_PERSON_IMAGE_FILE_PATH = 'person_image_file_path'
+        static final String COLUMN_PERSON_IMAGE_HEIGHT = 'person_image_height'
+        static final String COLUMN_PERSON_IMAGE_ISO_639_1 = 'person_image_iso_639_1'
+        static final String COLUMN_PERSON_IMAGE_VOTE_AVERAGE = 'person_image_vote_average'
+        static final String COLUMN_PERSON_IMAGE_VOTE_COUNT = 'person_image_vote_count'
+        static final String COLUMN_PERSON_IMAGE_WIDTH = 'person_image_width'
+
+
+        //Uri for movie_person_crew table
+        static final Uri CONTENT_URI =
+                BASE_CONTENT_URI.buildUpon().appendPath(PATH_MOVIE_PERSON_IMAGE).build()
+
+        static final String CONTENT_TYPE =
+                "$ContentResolver.CURSOR_DIR_BASE_TYPE/$CONTENT_AUTHORITY/$PATH_MOVIE_PERSON_IMAGE"
+        static final String CONTENT_ITEM_TYPE =
+                "$ContentResolver.CURSOR_ITEM_BASE_TYPE/$CONTENT_AUTHORITY/$PATH_MOVIE_PERSON_IMAGE"
+
+        static Uri buildMoviePersonImageUri(long id) {
+            ContentUris.withAppendedId(CONTENT_URI, id)
+        }
+
+        static Uri buildMoviePersonImageUriWithPersonId (int personId) {
+            CONTENT_URI.buildUpon().appendPath(personId.toString()).build()
+        }
+
+        static int getPersonIdFromMoviePersonImageUri (Uri uri) {
             uri.getPathSegments().get(1).toInteger()
         }
     }
