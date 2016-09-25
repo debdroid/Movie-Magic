@@ -21,7 +21,7 @@ class UpdateUserListChoiceAndRating extends AsyncTask<String, Void, Integer> {
     private final ContentResolver mContentResolver
     private final Context mContext
     private final LinearLayout mUserDrawableLayout
-    private final int mMovieBasicInfo_ID
+//    private final int mMovieBasicInfo_ID
     private final int mBackgroundColor, mBodyTextColor
     private final int mMovieId
     private final String mMovieTitle
@@ -48,12 +48,12 @@ class UpdateUserListChoiceAndRating extends AsyncTask<String, Void, Integer> {
     private final static int COL_MOVIE_USER_LIST_FLAG_USER_RATING = 6
 
 
-    public UpdateUserListChoiceAndRating(Context ctx, LinearLayout userDrawableLayout, int _ID_movieBasicInfo, int movieId,
-                                         String movieTitle, int backgroundColor, int bodyTextColor) {
+    public UpdateUserListChoiceAndRating(Context ctx, LinearLayout userDrawableLayout, int movieId, String movieTitle,
+                                         int backgroundColor, int bodyTextColor) {
         mContext = ctx
         mContentResolver = mContext.getContentResolver()
         mUserDrawableLayout = userDrawableLayout
-        mMovieBasicInfo_ID = _ID_movieBasicInfo
+//        mMovieBasicInfo_ID = _ID_movieBasicInfo
         mMovieId = movieId
         mMovieTitle = movieTitle
         mBodyTextColor = backgroundColor

@@ -1,5 +1,7 @@
 package com.moviemagic.dpaul.android.app
 
+import android.app.Activity
+import android.content.Context
 import android.content.Intent
 import android.content.res.ColorStateList
 import android.database.Cursor
@@ -32,6 +34,7 @@ import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
+import com.moviemagic.dpaul.android.app.adapter.MovieGridRecyclerAdapter
 import com.moviemagic.dpaul.android.app.adapter.PersonCastAdapter
 import com.moviemagic.dpaul.android.app.adapter.PersonCrewAdapter
 import com.moviemagic.dpaul.android.app.backgroundmodules.GlobalStaticVariables
@@ -63,7 +66,7 @@ class PersonMovieFragment extends Fragment implements LoaderManager.LoaderCallba
     private PersonCastAdapter mPersonCastAdapter
     private PersonCrewAdapter mPersonCrewAdapter
     private String mPersonHomePageUrl, mPersonImdbId
-    private View mDeathDayDivider
+    private View mDeathDayDivider, mAlsoKnownAsDivider
     private int mPalettePrimaryColor
     private int mPalettePrimaryDarkColor
     private int mPaletteTitleColor
@@ -71,6 +74,8 @@ class PersonMovieFragment extends Fragment implements LoaderManager.LoaderCallba
     private int mPaletteAccentColor
     private GridLayoutManager mCrewGridLayoutManager
     private GridLayoutManager mCastGridLayoutManager
+    private CallbackForCastClick mCallbackForCastClick
+    private CallbackForCrewClick mCallbackForCrewClick
 
     private static final int PERSON_MOVIE_FRAGMENT_PERSON_INFO_LOADER_ID = 0
     private static final int PERSON_MOVIE_FRAGMENT_PERSON_CAST_LOADER_ID = 1
@@ -183,6 +188,7 @@ class PersonMovieFragment extends Fragment implements LoaderManager.LoaderCallba
         mDobTextView = mRootView.findViewById(R.id.person_dob) as TextView
         mBirthPlaceHdrTextView = mRootView.findViewById(R.id.person_place_of_birth_header) as TextView
         mBirthPlaceTextView = mRootView.findViewById(R.id.person_place_of_birth) as TextView
+        mAlsoKnownAsDivider = mRootView.findViewById(R.id.person_also_known_as_header) as View
         mAlsoKnownAsHdrTextView = mRootView.findViewById(R.id.person_also_known_as_header) as TextView
         mAlsoKnownAsTextView = mRootView.findViewById(R.id.person_also_known_as) as TextView
         mDeathDayHdrTextView = mRootView.findViewById(R.id.person_death_day_header) as TextView
@@ -225,7 +231,15 @@ class PersonMovieFragment extends Fragment implements LoaderManager.LoaderCallba
         mCastGridEmptyMsgTextView = mRootView.findViewById(R.id.person_cast_grid_empty_msg_text_view) as TextView
         mCastGridLayoutManager = new GridLayoutManager(getActivity(), 1, GridLayoutManager.HORIZONTAL, false)
         mCastGridView.setLayoutManager(mCastGridLayoutManager)
-        mPersonCastAdapter = new PersonCastAdapter(getActivity(), mCastGridEmptyMsgTextView)
+        //Create a new interface member variable for PersonCastAdapterOnClickHandler and the same is passed as
+        //parameter to Adapter, this onClick method is called whenever onClick is called from PersonCastAdapter
+        mPersonCastAdapter = new PersonCastAdapter(getActivity(),mCastGridEmptyMsgTextView,
+            new PersonCastAdapter.PersonCastAdapterOnClickHandler(){
+                @Override
+                void onClick(int movieId, PersonCastAdapter.PersonCastAdapterViewHolder viewHolder) {
+                    mCallbackForCastClick.onCastMovieItemSelected(movieId,viewHolder)
+                }
+            })
         mCastGridView.setAdapter(mPersonCastAdapter)
         /**
          * Person Crew Grid handling
@@ -235,7 +249,13 @@ class PersonMovieFragment extends Fragment implements LoaderManager.LoaderCallba
         mCrewGridEmptyMsgTextView = mRootView.findViewById(R.id.person_crew_grid_empty_msg_text_view) as TextView
         mCrewGridLayoutManager = new GridLayoutManager(getActivity(), 1, GridLayoutManager.HORIZONTAL, false)
         mCrewGridView.setLayoutManager(mCrewGridLayoutManager)
-        mPersonCrewAdapter = new PersonCrewAdapter(getActivity(), mCrewGridEmptyMsgTextView)
+        mPersonCrewAdapter = new PersonCrewAdapter(getActivity(), mCrewGridEmptyMsgTextView,
+            new PersonCrewAdapter.PersonCrewAdapterOnClickHandler(){
+                @Override
+                void onClick(int movieId, PersonCrewAdapter.PersonCrewAdapterViewHolder viewHolder) {
+                    mCallbackForCrewClick.onCrewMovieItemSelected(movieId,viewHolder)
+                }
+            })
         mCrewGridView.setAdapter(mPersonCrewAdapter)
 
         mWebLinksHdrTextView = mRootView.findViewById(R.id.person_web_links_header) as TextView
@@ -492,9 +512,14 @@ class PersonMovieFragment extends Fragment implements LoaderManager.LoaderCallba
                 mBirthPlaceTextView.setText(getString(R.string.movie_data_not_available))
             }
             if(data.getString(COL_PERSON_INFO_PERSON_ALSO_KNOWN_AS)) {
+                mAlsoKnownAsHdrTextView.setVisibility(TextView.VISIBLE)
+                mAlsoKnownAsTextView.setVisibility(TextView.VISIBLE)
                 mAlsoKnownAsTextView.setText(data.getString(COL_PERSON_INFO_PERSON_ALSO_KNOWN_AS))
+                mAlsoKnownAsDivider.setVisibility(View.VISIBLE)
             } else {
-                mAlsoKnownAsTextView.setText(getString(R.string.movie_data_not_available))
+                mAlsoKnownAsHdrTextView.setVisibility(TextView.GONE)
+                mAlsoKnownAsTextView.setVisibility(TextView.GONE)
+                mAlsoKnownAsDivider.setVisibility(View.GONE)
             }
             if(data.getString(COL_PERSON_INFO_PERSON_DEATH_DAY)) {
                 mDeathDayHdrTextView.setVisibility(TextView.VISIBLE)
@@ -599,5 +624,53 @@ class PersonMovieFragment extends Fragment implements LoaderManager.LoaderCallba
         final Intent intent = new Intent(Intent.ACTION_VIEW)
         intent.setData(Uri.parse(imdbUrl))
         startActivity(intent)
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        LogDisplay.callLog(LOG_TAG,'onAttach is called',LogDisplay.GRID_MOVIE_FRAGMENT_LOG_FLAG)
+        super.onAttach(context)
+        // This makes sure that the container activity has implemented
+        // the callback interface. If not, it throws an exception
+        try {
+            if(context instanceof Activity) {
+                mCallbackForCastClick = (CallbackForCastClick) context
+            }
+        } catch (ClassCastException e) {
+            throw new ClassCastException(getActivity().toString()
+                    + " must implement Callback interface")
+        }
+        try {
+            if(context instanceof Activity) {
+                mCallbackForCrewClick = (CallbackForCrewClick) context
+            }
+        } catch (ClassCastException e) {
+            throw new ClassCastException(getActivity().toString()
+                    + " must implement Callback interface")
+        }
+    }
+
+    /**
+     * A callback interface that all activities containing this fragment must
+     * implement. This mechanism allows activities to be notified of person cast movie
+     * item click.
+     */
+    public interface CallbackForCastClick {
+        /**
+         * PersonCastFragmentCallback when an movie item has been clicked for cast.
+         */
+        public void onCastMovieItemSelected(int movieId, PersonCastAdapter.PersonCastAdapterViewHolder viewHolder)
+    }
+
+    /**
+     * A callback interface that all activities containing this fragment must
+     * implement. This mechanism allows activities to be notified of person crew movie
+     * item click.
+     */
+    public interface CallbackForCrewClick {
+        /**
+         * PersonCrewFragmentCallback when an movie item has been clicked for crew.
+         */
+        public void onCrewMovieItemSelected(int movieId, PersonCrewAdapter.PersonCrewAdapterViewHolder viewHolder)
     }
 }

@@ -10,6 +10,7 @@ import android.os.Handler
 import android.os.Message
 import android.support.design.widget.AppBarLayout
 import android.support.design.widget.CollapsingToolbarLayout
+import android.support.design.widget.CoordinatorLayout
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentTransaction
 import android.support.v4.app.LoaderManager
@@ -50,6 +51,7 @@ class CollectionMovieFragment extends Fragment implements LoaderManager.LoaderCa
     private Toolbar mToolbar
     private AppBarLayout mAppBarLayout
     private ImageView mBackdropImageView
+    private TextView mCollectionTitleTextView
     private TextView mCollectionOverviewTextViewHeader
     private TextView mCollectionOverviewTextView
     private static final int COLLECTION_MOVIE_FRAGMENT_LOADER_ID = 0
@@ -58,9 +60,11 @@ class CollectionMovieFragment extends Fragment implements LoaderManager.LoaderCa
     private int mPalleteTitleColor
     private int mPalleteBodyTextColor
     private int mPalleteAccentColor
-    private LinearLayout mCollectionOverviewBlock
+    private LinearLayout mCollectionDetailLayout
+    private CoordinatorLayout mCollectionCoordLayout
+//    private LinearLayout mCollectionOverviewBlock
     private NestedScrollView mNestedScrollView
-    private View mDeviderView
+//    private View mDeviderView
     private boolean mCollectionDataLoadSuccessFlag = false
     private String mCollectionBackdropPath
 
@@ -122,11 +126,15 @@ class CollectionMovieFragment extends Fragment implements LoaderManager.LoaderCa
         //inflate the view before referring any view using id
         View mRootView = inflater.inflate(R.layout.fragment_collection_movie, container, false)
         mBackdropImageView = mRootView.findViewById(R.id.collection_backdrop_image) as ImageView
+        mCollectionTitleTextView = mRootView.findViewById(R.id.movie_collection_title) as TextView
         mCollectionOverviewTextViewHeader = mRootView.findViewById(R.id.collection_overview_header) as TextView
         mCollectionOverviewTextView = mRootView.findViewById(R.id.collection_overview) as TextView
-        mCollectionOverviewBlock = mRootView.findViewById(R.id.collection_overview_block) as LinearLayout
+        mCollectionDetailLayout = mRootView.findViewById(R.id.movie_detail_collection_layout) as LinearLayout
+//        mCollectionOverviewBlock = mRootView.findViewById(R.id.collection_overview_block) as LinearLayout
         mNestedScrollView = mRootView.findViewById(R.id.collection_nested_scroll) as NestedScrollView
-        mDeviderView = mRootView.findViewById(R.id.devider_view) as View
+//        mDeviderView = mRootView.findViewById(R.id.devider_view) as View
+        mAppBarLayout = mRootView.findViewById(R.id.collection_app_bar_layout) as AppBarLayout
+        mCollectionCoordLayout = mRootView.findViewById(R.id.collection_coordinator_layout) as CoordinatorLayout
 
         return mRootView
     }
@@ -183,7 +191,8 @@ class CollectionMovieFragment extends Fragment implements LoaderManager.LoaderCa
             mCollectionDataLoadSuccessFlag = true
             mCollectionBackdropPath = "$GlobalStaticVariables.TMDB_IMAGE_BASE_URL/$GlobalStaticVariables.TMDB_IMAGE_SIZE_W500" +
                     "${data.getString(COL_COLLECTION_MOVIE_COLLECTION_BACKDROP_PATH)}"
-            mCollapsingToolbar.setTitle(data.getString(COL_COLLECTION_MOVIE_COLLECTION_NAME))
+            mCollectionTitleTextView.setText(data.getString(COL_COLLECTION_MOVIE_COLLECTION_NAME))
+//            mCollapsingToolbar.setTitle(data.getString(COL_COLLECTION_MOVIE_COLLECTION_NAME))
             mCollectionOverviewTextView.setText(data.getString(COL_COLLECTION_MOVIE_COLLECTION_OVERVIEW))
             if(data.getInt(COL_COLLECTION_MOVIE_PRESENT_FLAG) == GlobalStaticVariables.MOVIE_MAGIC_FLAG_TRUE) {
                 //TODO: Call the GridFragment
@@ -208,6 +217,26 @@ class CollectionMovieFragment extends Fragment implements LoaderManager.LoaderCa
 //                animation2.setDuration(700)
 //                mBackdropImageView.startAnimation(animation2)
 //                mCollapsingToolbar.startAnimation(animation2)
+                //Show the title only when image is collapsed
+                mAppBarLayout.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
+                    boolean isShow = false
+                    int scrollRange = -1
+                    @Override
+                    void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
+//                LogDisplay.callLog(LOG_TAG, 'onOffsetChanged is called', LogDisplay.COLLECTION_MOVIE_FRAGMENT_LOG_FLAG)
+                        if (scrollRange == -1) {
+                            scrollRange = appBarLayout.getTotalScrollRange()
+                        }
+//                LogDisplay.callLog(LOG_TAG, "scrollRange + verticalOffset:$scrollRange & $verticalOffset", LogDisplay.COLLECTION_MOVIE_FRAGMENT_LOG_FLAG)
+                        if (scrollRange + verticalOffset == 0) {
+                            mCollapsingToolbar.setTitle(data.getString(COL_COLLECTION_MOVIE_COLLECTION_NAME))
+                            isShow = true
+                        } else if (isShow) {
+                            mCollapsingToolbar.setTitle(" ")
+                            isShow = false
+                        }
+                    }
+                })
 
             } else {
                 LogDisplay.callLog(LOG_TAG, "onLoadFinished.Collection movie flag is false for collection id $mCollectionId. So go clean up and re-load", LogDisplay.COLLECTION_MOVIE_FRAGMENT_LOG_FLAG)
@@ -319,8 +348,12 @@ class CollectionMovieFragment extends Fragment implements LoaderManager.LoaderCa
                             if(autoGridRecyclerView) {
                                 LogDisplay.callLog(LOG_TAG, 'onGenerated:recycler view is NOT null', LogDisplay.COLLECTION_MOVIE_FRAGMENT_LOG_FLAG)
                                 autoGridRecyclerView.setBackgroundColor(mPalletePrimaryColor)
-                                mCollectionOverviewBlock.setBackgroundColor(mPalletePrimaryColor)
-                                mNestedScrollView.setBackgroundColor(mPalletePrimaryColor)
+//                                mCollectionOverviewBlock.setBackgroundColor(mPalletePrimaryColor)
+                                mCollectionDetailLayout.setBackgroundColor(mPalletePrimaryColor)
+                                mCollectionCoordLayout.setBackgroundColor(mPalletePrimaryColor)
+//                                mNestedScrollView.setBackgroundColor(mPalletePrimaryColor)
+                                mCollectionTitleTextView.setTextColor(mPalleteBodyTextColor)
+                                mCollectionTitleTextView.setTextColor(mPalleteTitleColor)
                                 mCollectionOverviewTextView.setTextColor(mPalleteBodyTextColor)
                                 mCollectionOverviewTextViewHeader.setTextColor(mPalleteTitleColor)
                                 mCollapsingToolbar.setStatusBarScrimColor(mPalletePrimaryDarkColor)
@@ -328,7 +361,7 @@ class CollectionMovieFragment extends Fragment implements LoaderManager.LoaderCa
                                 mCollapsingToolbar.setBackgroundColor(mPalletePrimaryColor)
                                 mCollapsingToolbar.setCollapsedTitleTextColor(mPalleteBodyTextColor)
 //                                mDeviderView.setVisibility(View.INVISIBLE)
-                                mDeviderView.setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.devider_color))
+//                                mDeviderView.setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.devider_color))
 //                                mCollapsingToolbar.setExpandedTitleColor(mPaletteTitleColor)
 
 //                            MovieGridRecyclerAdapter.mPrimaryColor = mPalettePrimaryColor

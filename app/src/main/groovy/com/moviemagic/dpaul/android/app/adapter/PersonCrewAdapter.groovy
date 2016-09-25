@@ -26,16 +26,18 @@ class PersonCrewAdapter extends RecyclerView.Adapter<PersonCrewAdapter.PersonCre
     private final Context mContext
     private final TextView mPersonCrewGridEmptyTextView
     private int mPrimaryDarkColor, mBodyTextColor
+    private final PersonCrewAdapterOnClickHandler mMoviePersonCrewAdapterOnClickHandler
 
     //Empty constructor
     public PersonCrewAdapter(){
         LogDisplay.callLog(LOG_TAG,'PersonCrewAdapter empty constructor is called',LogDisplay.PERSON_CREW_ADAPTER_LOG_FLAG)
     }
 
-    public PersonCrewAdapter(Context ctx, TextView emptyView){
+    public PersonCrewAdapter(Context ctx, TextView emptyView, PersonCrewAdapterOnClickHandler clickHandler){
         LogDisplay.callLog(LOG_TAG,'PersonCrewAdapter non-empty constructor is called',LogDisplay.PERSON_CREW_ADAPTER_LOG_FLAG)
         mContext = ctx
         mPersonCrewGridEmptyTextView = emptyView
+        mMoviePersonCrewAdapterOnClickHandler = clickHandler
     }
 
     public class PersonCrewAdapterViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
@@ -53,15 +55,19 @@ class PersonCrewAdapter extends RecyclerView.Adapter<PersonCrewAdapter.PersonCre
         @Override
         public void onClick(View v) {
             LogDisplay.callLog(LOG_TAG,"onClick is called.LayoutPos=${getLayoutPosition()}.AdapterPos=${getAdapterPosition()}",LogDisplay.PERSON_CREW_ADAPTER_LOG_FLAG)
-            mCursor.moveToPosition(getAdapterPosition())
+            final int adapterPosition = getAdapterPosition()
+            mCursor.moveToPosition(adapterPosition)
             final int movieId = mCursor.getInt(PersonMovieFragment.COL_PERSON_CREW_MOVIE_ID)
-            LogDisplay.callLog(LOG_TAG,"Movie id is $movieId",LogDisplay.PERSON_CREW_ADAPTER_LOG_FLAG)
-            final Bundle bundle = new Bundle()
-            bundle.putInt(GlobalStaticVariables.MOVIE_BASIC_INFO_MOVIE_ID,movieId)
-            bundle.putString(GlobalStaticVariables.MOVIE_BASIC_INFO_CATEGORY,GlobalStaticVariables.MOVIE_CATEGORY_PERSON)
-            final Intent intent = new Intent(mContext, DetailMovieActivity.class)
-            intent.putExtras(bundle)
-            mContext.startActivity(intent)
+            mMoviePersonCrewAdapterOnClickHandler.onClick(movieId, this)
+//            mCursor.moveToPosition(getAdapterPosition())
+//            final int movieId = mCursor.getInt(PersonMovieFragment.COL_PERSON_CREW_MOVIE_ID)
+//            LogDisplay.callLog(LOG_TAG,"Movie id is $movieId",LogDisplay.PERSON_CREW_ADAPTER_LOG_FLAG)
+//            final Bundle bundle = new Bundle()
+//            bundle.putInt(GlobalStaticVariables.MOVIE_BASIC_INFO_MOVIE_ID,movieId)
+//            bundle.putString(GlobalStaticVariables.MOVIE_BASIC_INFO_CATEGORY,GlobalStaticVariables.MOVIE_CATEGORY_PERSON)
+//            final Intent intent = new Intent(mContext, DetailMovieActivity.class)
+//            intent.putExtras(bundle)
+//            mContext.startActivity(intent)
         }
     }
 
@@ -125,5 +131,12 @@ class PersonCrewAdapter extends RecyclerView.Adapter<PersonCrewAdapter.PersonCre
         } else {
             notifyDataSetChanged()
         }
+    }
+
+    /**
+     * This is the interface which will be implemented by the host PersonMovieFragment
+     */
+    public interface PersonCrewAdapterOnClickHandler {
+        public void onClick(int movieId, PersonCrewAdapterViewHolder viewHolder)
     }
 }

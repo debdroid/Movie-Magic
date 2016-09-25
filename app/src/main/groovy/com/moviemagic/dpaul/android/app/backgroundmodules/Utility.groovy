@@ -26,8 +26,14 @@ class Utility {
 
     static String formatFriendlyDate(String date) {
         final SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd MMM yyyy")
-        String dateString = simpleDateFormat.format(new SimpleDateFormat("yyyy-MM-dd").parse(date))
-        return dateString
+        if(date.size() == 10) {
+            if (date.getAt(4) == '-' && date.getAt(7) == '-') {
+                String dateString = simpleDateFormat.format(new SimpleDateFormat("yyyy-MM-dd").parse(date))
+                return dateString
+            } else
+                return date
+        } else
+            return date
     }
 
     public static String formatRunTime(Context ctx, int runTime) {

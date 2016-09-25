@@ -23,6 +23,7 @@ import android.support.v4.graphics.drawable.DrawableCompat
 import android.support.v4.view.ViewCompat
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.graphics.Palette
+import android.support.v7.widget.AppCompatImageButton
 import android.support.v7.widget.GridLayoutManager
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
@@ -78,7 +79,7 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
                      mUserListDrawableTitle, mCastGridEmptyMsgTextView, mCrewGridEmptyMsgTextView, mSimilarMovieGridEmptyMsgTextView,
                      mMovieTrailerEmptyMsgTextView
     private ImageView mMpaaRatingImageView, mPosterImageView, mCollectionBackdropImageView
-    private LinearLayout mDetailTitleLayout, mDetailPosterLayout, mDetailTmdbRatingLayout, mDetailUserRatingLayout,
+    private LinearLayout mDetailMovieLayout,mDetailTitleLayout, mDetailPosterLayout, mDetailTmdbRatingLayout, mDetailUserRatingLayout,
                          mDetailSynopsisLayout, mDetailTrailerLayout, mDetailProductionInfoLayout, mDetailCastHeaderLayout,
                          mDetailCrewHeaderLayout, mDetailSimilarMovieHeaderLayout, mUserListDrawableLayout,
                          mDetailCollectionLayout, mDetailWebLinkLayout, mDetailReviewHeaderLayout
@@ -393,23 +394,24 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
         mBackdropImageSwitcher = mRootView.findViewById(R.id.movie_detail_backdrop_image_switcher) as ImageSwitcher
 
         //All the layouts
-        mDetailTitleLayout = mRootView.findViewById(R.id.movie_detail_title_layout) as LinearLayout
-        mDetailPosterLayout = mRootView.findViewById(R.id.movie_detail_poster_layout) as LinearLayout
-        mDetailTmdbRatingLayout = mRootView.findViewById(R.id.movie_detail_tmdb_rating_layout) as LinearLayout
-        mDetailUserRatingLayout = mRootView.findViewById(R.id.movie_detail_user_rating_layout) as LinearLayout
-        mDetailSynopsisLayout = mRootView.findViewById(R.id.movie_detail_synopsis_layout) as LinearLayout
-        mDetailTrailerLayout = mRootView.findViewById(R.id.movie_detail_trailer_layout) as LinearLayout
-        mDetailProductionInfoLayout = mRootView.findViewById(R.id.movie_detail_production_info_layout) as LinearLayout
-        mDetailCastHeaderLayout = mRootView.findViewById(R.id.movie_detail_cast_header_layout) as LinearLayout
-        mDetailsCastGridLayout = mRootView.findViewById(R.id.movie_detail_cast_grid_layout) as FrameLayout
-        mDetailCrewHeaderLayout = mRootView.findViewById(R.id.movie_detail_crew_header_layout) as LinearLayout
-        mDetailCrewGridLayout = mRootView.findViewById(R.id.movie_detail_crew_grid_layout) as FrameLayout
-        mDetailSimilarMovieHeaderLayout = mRootView.findViewById(R.id.movie_detail_similar_movie_header_layout) as LinearLayout
-        mDetailSimilarMovieGridLayout = mRootView.findViewById(R.id.movie_detail_similar_movie_grid_layout) as FrameLayout
-        mDetailCollectionLayout = mRootView.findViewById(R.id.movie_detail_collection_layout) as LinearLayout
-        mDetailWebLinkLayout = mRootView.findViewById(R.id.movie_detail_web_links_layout) as LinearLayout
-        mDetailReviewHeaderLayout = mRootView.findViewById(R.id.movie_detail_review_header_layout) as LinearLayout
-        mDetailReviewRecyclerViewLayout = mRootView.findViewById(R.id.movie_detail_review_recycler_view_layout) as FrameLayout
+        mDetailMovieLayout = mRootView.findViewById(R.id.fragment_detail_movie_layout) as LinearLayout
+//        mDetailTitleLayout = mRootView.findViewById(R.id.movie_detail_title_layout) as LinearLayout
+//        mDetailPosterLayout = mRootView.findViewById(R.id.movie_detail_poster_layout) as LinearLayout
+//        mDetailTmdbRatingLayout = mRootView.findViewById(R.id.movie_detail_tmdb_rating_layout) as LinearLayout
+//        mDetailUserRatingLayout = mRootView.findViewById(R.id.movie_detail_user_rating_layout) as LinearLayout
+//        mDetailSynopsisLayout = mRootView.findViewById(R.id.movie_detail_synopsis_layout) as LinearLayout
+//        mDetailTrailerLayout = mRootView.findViewById(R.id.movie_detail_trailer_layout) as LinearLayout
+//        mDetailProductionInfoLayout = mRootView.findViewById(R.id.movie_detail_production_info_layout) as LinearLayout
+//        mDetailCastHeaderLayout = mRootView.findViewById(R.id.movie_detail_cast_header_layout) as LinearLayout
+//        mDetailsCastGridLayout = mRootView.findViewById(R.id.movie_detail_cast_grid_layout) as FrameLayout
+//        mDetailCrewHeaderLayout = mRootView.findViewById(R.id.movie_detail_crew_header_layout) as LinearLayout
+//        mDetailCrewGridLayout = mRootView.findViewById(R.id.movie_detail_crew_grid_layout) as FrameLayout
+//        mDetailSimilarMovieHeaderLayout = mRootView.findViewById(R.id.movie_detail_similar_movie_header_layout) as LinearLayout
+//        mDetailSimilarMovieGridLayout = mRootView.findViewById(R.id.movie_detail_similar_movie_grid_layout) as FrameLayout
+//        mDetailCollectionLayout = mRootView.findViewById(R.id.movie_detail_collection_layout) as LinearLayout
+//        mDetailWebLinkLayout = mRootView.findViewById(R.id.movie_detail_web_links_layout) as LinearLayout
+//        mDetailReviewHeaderLayout = mRootView.findViewById(R.id.movie_detail_review_header_layout) as LinearLayout
+//        mDetailReviewRecyclerViewLayout = mRootView.findViewById(R.id.movie_detail_review_recycler_view_layout) as FrameLayout
         mUserListDrawableLayout = mRootView.findViewById(R.id.movie_detail_user_list_drawable_layout) as LinearLayout
 
         //All the header (fixed text) fields & buttons
@@ -444,9 +446,9 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
             @Override
             void onClick(View v) {
                 LogDisplay.callLog(LOG_TAG, 'ImageButton Watched Button is clicked', LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
-                if (mMovieTitle && mMovieId && _ID_movie_basic_info) {
+                if (mMovieTitle && mMovieId) {
                     final UpdateUserListChoiceAndRating updateUserList = new UpdateUserListChoiceAndRating(getActivity(), mUserListDrawableLayout,
-                            _ID_movie_basic_info, mMovieId, mMovieTitle, mPalletePrimaryColor, mPalleteBodyTextColor)
+                            mMovieId, mMovieTitle, mPalletePrimaryColor, mPalleteBodyTextColor)
                     final String[] updateUserListArgs
                     //If full opaque then already selected, so remove it
                     if (mImageButtonWatched.getAlpha() == GlobalStaticVariables.MOVIE_MAGIC_ALPHA_FULL_OPAQUE) {
@@ -478,9 +480,9 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
             @Override
             void onClick(View v) {
                 LogDisplay.callLog(LOG_TAG, 'ImageButton WishList Button is clicked', LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
-                if (mMovieTitle && mMovieId && _ID_movie_basic_info) {
+                if (mMovieTitle && mMovieId) {
                     final UpdateUserListChoiceAndRating updateUserList = new UpdateUserListChoiceAndRating(getActivity(), mUserListDrawableLayout,
-                            _ID_movie_basic_info, mMovieId, mMovieTitle, mPalletePrimaryColor, mPalleteBodyTextColor)
+                            mMovieId, mMovieTitle, mPalletePrimaryColor, mPalleteBodyTextColor)
                     final String[] updateUserListArgs
                     //If full opaque then already selected, so remove it
                     if (mImageButtonWishList.getAlpha() == GlobalStaticVariables.MOVIE_MAGIC_ALPHA_FULL_OPAQUE) {
@@ -508,9 +510,9 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
             @Override
             void onClick(View v) {
                 LogDisplay.callLog(LOG_TAG, 'ImageButton Favourite Button is clicked', LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
-                if (mMovieTitle && mMovieId && _ID_movie_basic_info) {
+                if (mMovieTitle && mMovieId) {
                     final UpdateUserListChoiceAndRating updateUserList = new UpdateUserListChoiceAndRating(getActivity(), mUserListDrawableLayout,
-                            _ID_movie_basic_info, mMovieId, mMovieTitle, mPalletePrimaryColor, mPalleteBodyTextColor)
+                            mMovieId, mMovieTitle, mPalletePrimaryColor, mPalleteBodyTextColor)
                     final String[] updateUserListArgs
                     //If full opaque then already selected, so remove it
                     if (mImageButtonFavourite.getAlpha() == GlobalStaticVariables.MOVIE_MAGIC_ALPHA_FULL_OPAQUE) {
@@ -538,9 +540,9 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
             @Override
             void onClick(View v) {
                 LogDisplay.callLog(LOG_TAG, 'ImageButton Favourite Button is clicked', LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
-                if (mMovieTitle && mMovieId && _ID_movie_basic_info) {
+                if (mMovieTitle && mMovieId) {
                     final UpdateUserListChoiceAndRating updateUserList = new UpdateUserListChoiceAndRating(getActivity(), mUserListDrawableLayout,
-                            _ID_movie_basic_info, mMovieId, mMovieTitle, mPalletePrimaryColor, mPalleteBodyTextColor)
+                            mMovieId, mMovieTitle, mPalletePrimaryColor, mPalleteBodyTextColor)
                     final String[] updateUserListArgs
                     //If full opaque then already selected, so remove it
                     if (mImageButtonCollection.getAlpha() == GlobalStaticVariables.MOVIE_MAGIC_ALPHA_FULL_OPAQUE) {
@@ -582,9 +584,9 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
             @Override
             void onRatingChanged(RatingBar ratingBar, float rating, boolean fromUser) {
                 LogDisplay.callLog(LOG_TAG, "onRatingChanged:User rating bar value->$rating", LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
-                if (mMovieTitle && mMovieId && _ID_movie_basic_info) {
+                if (mMovieTitle && mMovieId) {
                     final UpdateUserListChoiceAndRating updateUserList = new UpdateUserListChoiceAndRating(getActivity(), mUserListDrawableLayout,
-                            _ID_movie_basic_info, mMovieId, mMovieTitle, mPalletePrimaryColor, mPalleteBodyTextColor)
+                            mMovieId, mMovieTitle, mPalletePrimaryColor, mPalleteBodyTextColor)
                     final String[] updateUserListArgs
                     //If the rating value is zero then remove it
                     if (rating == 0.0) {
@@ -1349,24 +1351,25 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
 
     void changeLayoutAndTextColor() {
         //Change color for all the layouts
-        mDetailTitleLayout.setBackgroundColor(mPalletePrimaryColor)
-        mDetailPosterLayout.setBackgroundColor(mPalletePrimaryColor)
-        mDetailTmdbRatingLayout.setBackgroundColor(mPalletePrimaryColor)
-        mDetailUserRatingLayout.setBackgroundColor(mPalletePrimaryColor)
-        mDetailSynopsisLayout.setBackgroundColor(mPalletePrimaryColor)
-        mDetailTrailerLayout.setBackgroundColor(mPalletePrimaryColor)
-        mDetailProductionInfoLayout.setBackgroundColor(mPalletePrimaryColor)
-        mDetailCastHeaderLayout.setBackgroundColor(mPalletePrimaryColor)
-        mDetailsCastGridLayout.setBackgroundColor(mPalletePrimaryColor)
-        mDetailCrewHeaderLayout.setBackgroundColor(mPalletePrimaryColor)
-        mDetailCrewGridLayout.setBackgroundColor(mPalletePrimaryColor)
-        mDetailSimilarMovieHeaderLayout.setBackgroundColor(mPalletePrimaryColor)
-        mDetailSimilarMovieGridLayout.setBackgroundColor(mPalletePrimaryColor)
-        mDetailCollectionLayout.setBackgroundColor(mPalletePrimaryColor)
-        mDetailWebLinkLayout.setBackgroundColor(mPalletePrimaryColor)
-        mDetailReviewHeaderLayout.setBackgroundColor(mPalletePrimaryColor)
-        mDetailReviewRecyclerViewLayout.setBackgroundColor(mPalletePrimaryColor)
-        mUserListDrawableLayout.setBackgroundColor(mPalletePrimaryColor)
+        mDetailMovieLayout.setBackgroundColor(mPalletePrimaryColor)
+//        mDetailTitleLayout.setBackgroundColor(mPalletePrimaryColor)
+//        mDetailPosterLayout.setBackgroundColor(mPalletePrimaryColor)
+//        mDetailTmdbRatingLayout.setBackgroundColor(mPalletePrimaryColor)
+//        mDetailUserRatingLayout.setBackgroundColor(mPalletePrimaryColor)
+//        mDetailSynopsisLayout.setBackgroundColor(mPalletePrimaryColor)
+//        mDetailTrailerLayout.setBackgroundColor(mPalletePrimaryColor)
+//        mDetailProductionInfoLayout.setBackgroundColor(mPalletePrimaryColor)
+//        mDetailCastHeaderLayout.setBackgroundColor(mPalletePrimaryColor)
+//        mDetailsCastGridLayout.setBackgroundColor(mPalletePrimaryColor)
+//        mDetailCrewHeaderLayout.setBackgroundColor(mPalletePrimaryColor)
+//        mDetailCrewGridLayout.setBackgroundColor(mPalletePrimaryColor)
+//        mDetailSimilarMovieHeaderLayout.setBackgroundColor(mPalletePrimaryColor)
+//        mDetailSimilarMovieGridLayout.setBackgroundColor(mPalletePrimaryColor)
+//        mDetailCollectionLayout.setBackgroundColor(mPalletePrimaryColor)
+//        mDetailWebLinkLayout.setBackgroundColor(mPalletePrimaryColor)
+//        mDetailReviewHeaderLayout.setBackgroundColor(mPalletePrimaryColor)
+//        mDetailReviewRecyclerViewLayout.setBackgroundColor(mPalletePrimaryColor)
+//        mUserListDrawableLayout.setBackgroundColor(mPalletePrimaryColor)
 
         //Change color for header text fields
         mReleaseDateHeaderTextView.setTextColor(mPalleteTitleColor)
@@ -1421,13 +1424,15 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
         final ColorStateList colorStateList = ColorStateList.valueOf(mPalletePrimaryDarkColor)
         //Somehow while running in Jelly bean & KITKAT it cannot find Build.VERSION_CODES.LOLLIPOP, yet to figure out why!
         //So using the API number (21 - LOLLIPOP)itself here
-        if (Build.VERSION.SDK_INT >= 21) {
-            mHomePageButton.setBackgroundTintList(colorStateList)
-            mImdbLinkButton.setBackgroundTintList(colorStateList)
-        } else {
-            ViewCompat.setBackgroundTintList(mHomePageButton, colorStateList)
-            ViewCompat.setBackgroundTintList(mImdbLinkButton, colorStateList)
-        }
+//        if (Build.VERSION.SDK_INT >= 21) {
+//            mHomePageButton.setBackgroundTintList(colorStateList)
+//            mImdbLinkButton.setBackgroundTintList(colorStateList)
+//        } else {
+//            ViewCompat.setBackgroundTintList(mHomePageButton, colorStateList)
+//            ViewCompat.setBackgroundTintList(mImdbLinkButton, colorStateList)
+//        }
+        mHomePageButton.setBackgroundColor(mPalletePrimaryDarkColor)
+        mImdbLinkButton.setBackgroundColor(mPalletePrimaryDarkColor)
         mHomePageButton.setTextColor(mPalleteBodyTextColor)
         mImdbLinkButton.setTextColor(mPalleteBodyTextColor)
 

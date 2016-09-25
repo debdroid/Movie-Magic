@@ -28,8 +28,8 @@
     <dimen name="movie_detail_backdrop_height">280dp</dimen>
 
     <!-- Movie Poster Layout parameters -->
-    <dimen name="person_poster_width">240dp</dimen>
-    <dimen name="person_poster_height">320dp</dimen>
+    <dimen name="person_poster_width">200dp</dimen>
+    <dimen name="person_poster_height">280dp</dimen>
     <dimen name="poster_image_data_fields_margin">8dp</dimen>
 
 

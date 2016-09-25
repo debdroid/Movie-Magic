@@ -141,6 +141,7 @@
                 android:textAppearance="@style/TextAppearance.AppCompat.Medium"
                 android:textColor="@color/grey_color" />
             <View
+                android:id="@+id/person_also_known_as_devider"
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
                 android:layout_marginLeft="@dimen/poster_image_data_fields_margin"

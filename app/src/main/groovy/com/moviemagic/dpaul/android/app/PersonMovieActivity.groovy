@@ -1,16 +1,20 @@
 package com.moviemagic.dpaul.android.app
 
+import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.view.Menu
 import android.view.MenuItem
+import com.moviemagic.dpaul.android.app.adapter.PersonCastAdapter
+import com.moviemagic.dpaul.android.app.adapter.PersonCrewAdapter
 import com.moviemagic.dpaul.android.app.backgroundmodules.GlobalStaticVariables
 import com.moviemagic.dpaul.android.app.backgroundmodules.LogDisplay;
 import groovy.transform.CompileStatic
 
 @CompileStatic
-class PersonMovieActivity extends AppCompatActivity {
+class PersonMovieActivity extends AppCompatActivity implements PersonMovieFragment.CallbackForCastClick,
+                PersonMovieFragment.CallbackForCrewClick {
     private static final String LOG_TAG = PersonMovieActivity.class.getSimpleName()
 
     @Override
@@ -60,5 +64,39 @@ class PersonMovieActivity extends AppCompatActivity {
     void onBackPressed() {
         super.onBackPressed()
         overridePendingTransition(0, R.anim.slide_bottom_out_animation)
+    }
+
+    /**
+     * Fragment callback method for PersonCast - called when a movie item is clicked for person cast
+     * @param movieId   Movie id of the selected movie
+     * @param viewHolder    PersonCastAdapterViewHolder
+     */
+    @Override
+    void onCastMovieItemSelected(int movieId, PersonCastAdapter.PersonCastAdapterViewHolder viewHolder) {
+            final Bundle bundle = new Bundle()
+            bundle.putInt(GlobalStaticVariables.MOVIE_BASIC_INFO_MOVIE_ID,movieId)
+            bundle.putString(GlobalStaticVariables.MOVIE_BASIC_INFO_CATEGORY,GlobalStaticVariables.MOVIE_CATEGORY_PERSON)
+            final Intent intent = new Intent(this, DetailMovieActivity.class)
+            intent.putExtras(bundle)
+            startActivity(intent)
+            //Start the animation
+            overridePendingTransition(R.anim.slide_bottom_in_animation,0)
+    }
+
+    /**
+     * Fragment callback method for PersonCrew - called when a movie item is clicked for person crew
+     * @param movieId   Movie id of the selected movie
+     * @param viewHolder    PersonCrewAdapterViewHolder
+     */
+    @Override
+    void onCrewMovieItemSelected(int movieId, PersonCrewAdapter.PersonCrewAdapterViewHolder viewHolder) {
+        final Bundle bundle = new Bundle()
+        bundle.putInt(GlobalStaticVariables.MOVIE_BASIC_INFO_MOVIE_ID,movieId)
+        bundle.putString(GlobalStaticVariables.MOVIE_BASIC_INFO_CATEGORY,GlobalStaticVariables.MOVIE_CATEGORY_PERSON)
+        final Intent intent = new Intent(this, DetailMovieActivity.class)
+        intent.putExtras(bundle)
+        startActivity(intent)
+        //Start the animation
+        overridePendingTransition(R.anim.slide_bottom_in_animation,0)
     }
 }

@@ -13,6 +13,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import com.moviemagic.dpaul.android.app.DetailMovieActivity
 import com.moviemagic.dpaul.android.app.DetailMovieFragment
+import com.moviemagic.dpaul.android.app.GridMovieFragment
 import com.moviemagic.dpaul.android.app.PersonMovieFragment
 import com.moviemagic.dpaul.android.app.R
 import com.moviemagic.dpaul.android.app.backgroundmodules.GlobalStaticVariables
@@ -28,16 +29,18 @@ class PersonCastAdapter extends RecyclerView.Adapter<PersonCastAdapter.PersonCas
     private final Context mContext
     private final TextView mPersonCastGridEmptyTextView
     private int mPrimaryDarkColor, mBodyTextColor
+    private final PersonCastAdapterOnClickHandler mMoviePersonCastAdapterOnClickHandler
 
     //Empty constructor
     public PersonCastAdapter(){
         LogDisplay.callLog(LOG_TAG,'PersonCastAdapter empty constructor is called',LogDisplay.PERSON_CAST_ADAPTER_LOG_FLAG)
     }
 
-    public PersonCastAdapter(Context ctx, TextView emptyView){
+    public PersonCastAdapter(Context ctx, TextView emptyView, PersonCastAdapterOnClickHandler clickHandler){
         LogDisplay.callLog(LOG_TAG,'PersonCastAdapter non-empty constructor is called',LogDisplay.PERSON_CAST_ADAPTER_LOG_FLAG)
         mContext = ctx
         mPersonCastGridEmptyTextView = emptyView
+        mMoviePersonCastAdapterOnClickHandler = clickHandler
     }
 
     public class PersonCastAdapterViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
@@ -55,15 +58,20 @@ class PersonCastAdapter extends RecyclerView.Adapter<PersonCastAdapter.PersonCas
         @Override
         public void onClick(View v) {
             LogDisplay.callLog(LOG_TAG,"onClick is called.LayoutPos=${getLayoutPosition()}.AdapterPos=${getAdapterPosition()}",LogDisplay.PERSON_CAST_ADAPTER_LOG_FLAG)
-            mCursor.moveToPosition(getAdapterPosition())
+            final int adapterPosition = getAdapterPosition()
+            mCursor.moveToPosition(adapterPosition)
             final int movieId = mCursor.getInt(PersonMovieFragment.COL_PERSON_CAST_MOVIE_ID)
-            LogDisplay.callLog(LOG_TAG,"Movie id is $movieId",LogDisplay.PERSON_CAST_ADAPTER_LOG_FLAG)
-            final Bundle bundle = new Bundle()
-            bundle.putInt(GlobalStaticVariables.MOVIE_BASIC_INFO_MOVIE_ID,movieId)
-            bundle.putString(GlobalStaticVariables.MOVIE_BASIC_INFO_CATEGORY,GlobalStaticVariables.MOVIE_CATEGORY_PERSON)
-            final Intent intent = new Intent(mContext, DetailMovieActivity.class)
-            intent.putExtras(bundle)
-            mContext.startActivity(intent)
+            mMoviePersonCastAdapterOnClickHandler.onClick(movieId, this)
+
+//            mCursor.moveToPosition(getAdapterPosition())
+//            final int movieId = mCursor.getInt(PersonMovieFragment.COL_PERSON_CAST_MOVIE_ID)
+//            LogDisplay.callLog(LOG_TAG,"Movie id is $movieId",LogDisplay.PERSON_CAST_ADAPTER_LOG_FLAG)
+//            final Bundle bundle = new Bundle()
+//            bundle.putInt(GlobalStaticVariables.MOVIE_BASIC_INFO_MOVIE_ID,movieId)
+//            bundle.putString(GlobalStaticVariables.MOVIE_BASIC_INFO_CATEGORY,GlobalStaticVariables.MOVIE_CATEGORY_PERSON)
+//            final Intent intent = new Intent(mContext, DetailMovieActivity.class)
+//            intent.putExtras(bundle)
+//            mContext.startActivity(intent)
 //            //Start the animation
 //            mContext.overridePendingTransition(R.anim.slide_bottom_in_animation,0)
 
@@ -140,5 +148,12 @@ class PersonCastAdapter extends RecyclerView.Adapter<PersonCastAdapter.PersonCas
         } else {
             notifyDataSetChanged()
         }
+    }
+
+    /**
+     * This is the interface which will be implemented by the host PersonMovieFragment
+     */
+    public interface PersonCastAdapterOnClickHandler {
+        public void onClick(int movieId, PersonCastAdapterViewHolder viewHolder)
     }
 }
