@@ -37,6 +37,7 @@ import android.widget.TextView
 import com.moviemagic.dpaul.android.app.adapter.MovieGridRecyclerAdapter
 import com.moviemagic.dpaul.android.app.adapter.PersonCastAdapter
 import com.moviemagic.dpaul.android.app.adapter.PersonCrewAdapter
+import com.moviemagic.dpaul.android.app.adapter.PersonImageAdapter
 import com.moviemagic.dpaul.android.app.backgroundmodules.GlobalStaticVariables
 import com.moviemagic.dpaul.android.app.backgroundmodules.LoadPersonData
 import com.moviemagic.dpaul.android.app.backgroundmodules.LogDisplay
@@ -58,13 +59,14 @@ class PersonMovieFragment extends Fragment implements LoaderManager.LoaderCallba
     private TextView mNameHdrTextView, mNameTextView, mDobHdrTextView, mDobTextView, mBirthPlaceHdrTextView, mBirthPlaceTextView,
             mAlsoKnownAsHdrTextView, mAlsoKnownAsTextView, mDeathDayHdrTextView, mDeathDayTextView, mPopularityHdrTextView, mPopularityTextView,
             mBiographyHdrTextView, mBiographyTextView,  mCastGridHdrTextView, mCastGridEmptyMsgTextView, mCrewGridHdrTextView, mCrewGridEmptyMsgTextView,
-            mWebLinksHdrTextView
-    private HorizontalGridView mCastGridView, mCrewGridView
+            mImageGridHdrTextView, mImageGridEmptyMsgTextView, mWebLinksHdrTextView
+    private HorizontalGridView mCastGridView, mCrewGridView, mImageGridView
     private Button mHomePageButton, mImdbLinkButton
     private ImageButton mShowBiographyImageButton, mHideBiographyImageButton
     private LinearLayout mPersonLinLayout
     private PersonCastAdapter mPersonCastAdapter
     private PersonCrewAdapter mPersonCrewAdapter
+    private PersonImageAdapter mPersonImageAdapter
     private String mPersonHomePageUrl, mPersonImdbId
     private View mDeathDayDivider, mAlsoKnownAsDivider
     private int mPalettePrimaryColor
@@ -74,12 +76,15 @@ class PersonMovieFragment extends Fragment implements LoaderManager.LoaderCallba
     private int mPaletteAccentColor
     private GridLayoutManager mCrewGridLayoutManager
     private GridLayoutManager mCastGridLayoutManager
+    private GridLayoutManager mImageGridLayoutManager
     private CallbackForCastClick mCallbackForCastClick
     private CallbackForCrewClick mCallbackForCrewClick
+    private CallbackForImageClick mCallbackForImageClick
 
     private static final int PERSON_MOVIE_FRAGMENT_PERSON_INFO_LOADER_ID = 0
     private static final int PERSON_MOVIE_FRAGMENT_PERSON_CAST_LOADER_ID = 1
     private static final int PERSON_MOVIE_FRAGMENT_PERSON_CREW_LOADER_ID = 2
+    private static final int PERSON_MOVIE_FRAGMENT_PERSON_IMAGE_LOADER_ID = 3
 
 
     //Columns to fetch from movie_person_info table for similar movies
@@ -148,6 +153,21 @@ class PersonMovieFragment extends Fragment implements LoaderManager.LoaderCallba
     final static int COL_PERSON_CREW_JOB_NAME = 5
     final static int COL_PERSON_CREW_MOVIE_RELEASE_DATE = 6
     final static int COL_PERSON_CREW_AUDULT_FLAG = 7
+
+    //Columns to fetch from movie_person_image table for similar movies
+    private static final String[] PERSON_IMAGE_COLUMNS = [MovieMagicContract.MoviePersonImage._ID,
+                                                         MovieMagicContract.MoviePersonImage.COLUMN_PERSON_IMAGE_ORIG_PERSON_ID,
+                                                         MovieMagicContract.MoviePersonImage.COLUMN_PERSON_IMAGE_FILE_PATH,
+                                                         MovieMagicContract.MoviePersonImage.COLUMN_PERSON_IMAGE_VOTE_AVERAGE,
+                                                         MovieMagicContract.MoviePersonImage.COLUMN_PERSON_IMAGE_VOTE_COUNT,
+                                                         MovieMagicContract.MoviePersonImage.COLUMN_PERSON_IMAGE_ISO_639_1]
+    //These are indices of the above columns, if projection array changes then this needs to be changed
+    final static int COL_PERSON_IMAGE_ID = 0
+    final static int COL_PERSON_IMAGE_ORIG_PERSON_ID = 1
+    final static int COL_PERSON_IMAGE_FILE_PATH = 2
+    final static int COL_PERSON_IMAGE_VOTE_AVG = 3
+    final static int COL_PERSON_IMAGE_VOTE_COUNT = 4
+    final static int COL_PERSON_IMAGE_VOTE_ISO = 5
 
     //An empty constructor is needed so that lifecycle is properly handled
     public PersonMovieFragment() {
@@ -257,7 +277,22 @@ class PersonMovieFragment extends Fragment implements LoaderManager.LoaderCallba
                 }
             })
         mCrewGridView.setAdapter(mPersonCrewAdapter)
-
+        /**
+         * Person Image Grid handling
+         */
+        mImageGridHdrTextView = mRootView.findViewById(R.id.person_image_grid_header) as TextView
+        mImageGridView = mRootView.findViewById(R.id.person_image_grid) as HorizontalGridView
+        mImageGridEmptyMsgTextView = mRootView.findViewById(R.id.person_image_grid_empty_msg_text_view) as TextView
+        mImageGridLayoutManager = new GridLayoutManager(getActivity(), 1, GridLayoutManager.HORIZONTAL, false)
+        mImageGridView.setLayoutManager(mImageGridLayoutManager)
+        mPersonImageAdapter = new PersonImageAdapter(getActivity(), mImageGridEmptyMsgTextView,
+                new PersonImageAdapter.PersonImageAdapterOnClickHandler(){
+                    @Override
+                    void onClick(String imageFilePath, PersonImageAdapter.PersonImageAdapterViewHolder viewHolder) {
+                        mCallbackForImageClick.onCrewMovieItemSelected(imageFilePath, viewHolder)
+                    }
+                })
+        mImageGridView.setAdapter(mPersonImageAdapter)
         mWebLinksHdrTextView = mRootView.findViewById(R.id.person_web_links_header) as TextView
         /**
          * External web link button handling
@@ -306,11 +341,13 @@ class PersonMovieFragment extends Fragment implements LoaderManager.LoaderCallba
             getLoaderManager().initLoader(PERSON_MOVIE_FRAGMENT_PERSON_INFO_LOADER_ID, null, this)
             getLoaderManager().initLoader(PERSON_MOVIE_FRAGMENT_PERSON_CAST_LOADER_ID, null, this)
             getLoaderManager().initLoader(PERSON_MOVIE_FRAGMENT_PERSON_CREW_LOADER_ID, null, this)
+            getLoaderManager().initLoader(PERSON_MOVIE_FRAGMENT_PERSON_IMAGE_LOADER_ID, null, this)
         } else {        //If it's restore then restart the loader
             LogDisplay.callLog(LOG_TAG, 'onActivityCreated:not first time, so restart loaders', LogDisplay.PERSON_MOVIE_FRAGMENT_LOG_FLAG)
             getLoaderManager().restartLoader(PERSON_MOVIE_FRAGMENT_PERSON_INFO_LOADER_ID, null, this)
             getLoaderManager().restartLoader(PERSON_MOVIE_FRAGMENT_PERSON_CAST_LOADER_ID, null, this)
             getLoaderManager().restartLoader(PERSON_MOVIE_FRAGMENT_PERSON_CREW_LOADER_ID, null, this)
+            getLoaderManager().restartLoader(PERSON_MOVIE_FRAGMENT_PERSON_IMAGE_LOADER_ID, null, this)
         }
     }
 
@@ -342,6 +379,14 @@ class PersonMovieFragment extends Fragment implements LoaderManager.LoaderCallba
                         "$MovieMagicContract.MoviePersonCrew.COLUMN_PERSON_CREW_ORIG_PERSON_ID = ?",  //Section Clause
                         mPersonIdArg,                                                                 //Selection Arguments
                         "$MovieMagicContract.MoviePersonCrew.COLUMN_PERSON_CREW_POSTER_PATH desc")           //Sort on release date
+            case PERSON_MOVIE_FRAGMENT_PERSON_IMAGE_LOADER_ID:
+                return new CursorLoader(
+                        getActivity(),                                                                //Parent Activity Context
+                        MovieMagicContract.MoviePersonImage.CONTENT_URI,                              //Uri of the person info id
+                        PERSON_IMAGE_COLUMNS,                                                          //Projection to return
+                        "$MovieMagicContract.MoviePersonImage.COLUMN_PERSON_IMAGE_ORIG_PERSON_ID = ?", //Section Clause
+                        mPersonIdArg,                                                                 //Selection Arguments
+                        "$MovieMagicContract.MoviePersonImage.COLUMN_PERSON_IMAGE_VOTE_AVERAGE desc")   //Sort on release date
             default:
                 return null
         }
@@ -361,6 +406,9 @@ class PersonMovieFragment extends Fragment implements LoaderManager.LoaderCallba
             case PERSON_MOVIE_FRAGMENT_PERSON_CREW_LOADER_ID:
                 handlePersonCrewOnLoadFinished(data)
                 break
+            case PERSON_MOVIE_FRAGMENT_PERSON_IMAGE_LOADER_ID:
+                handlePersonImageOnLoadFinished(data)
+                break
             default:
                 LogDisplay.callLog(LOG_TAG, "Unknown loader id. id->$loaderId", LogDisplay.PERSON_MOVIE_FRAGMENT_LOG_FLAG)
         }
@@ -371,6 +419,8 @@ class PersonMovieFragment extends Fragment implements LoaderManager.LoaderCallba
         //Reset the adapter
         LogDisplay.callLog(LOG_TAG, 'onLoaderReset is called', LogDisplay.PERSON_MOVIE_FRAGMENT_LOG_FLAG)
         mPersonCastAdapter.swapCursor(null)
+        mPersonCrewAdapter.swapCursor(null)
+        mPersonImageAdapter.swapCursor(null)
     }
 
     void handlePersonInfoOnLoadFinished(Cursor data) {
@@ -463,6 +513,7 @@ class PersonMovieFragment extends Fragment implements LoaderManager.LoaderCallba
                             mBiographyTextView.setTextColor(mPaletteBodyTextColor)
                             mCastGridHdrTextView.setTextColor(mPaletteTitleColor)
                             mCrewGridHdrTextView.setTextColor(mPaletteTitleColor)
+                            mImageGridHdrTextView.setTextColor(mPaletteTitleColor)
                             mWebLinksHdrTextView.setTextColor(mPaletteTitleColor)
                             //Apply color to toolbar and status bar
                             mToolbar.setBackgroundColor(mPalettePrimaryColor)
@@ -471,23 +522,26 @@ class PersonMovieFragment extends Fragment implements LoaderManager.LoaderCallba
                                 Window window = getActivity().getWindow()
                                 window.setStatusBarColor(mPalettePrimaryDarkColor)
                             }
-                            //Set button color
-                            final ColorStateList colorStateList = ColorStateList.valueOf(mPalettePrimaryDarkColor)
-                            //Somehow while running in Jelly bean & KITKAT it cannot find Build.VERSION_CODES.LOLLIPOP, yet to figure out why!
-                            //So using the API number (21 - LOLLIPOP)itself here
-                            if (Build.VERSION.SDK_INT >= 21) {
-                                mHomePageButton.setBackgroundTintList(colorStateList)
-                                mImdbLinkButton.setBackgroundTintList(colorStateList)
-                            } else {
-                                ViewCompat.setBackgroundTintList(mHomePageButton, colorStateList)
-                                ViewCompat.setBackgroundTintList(mImdbLinkButton, colorStateList)
-                            }
+//                            //Set button color
+//                            final ColorStateList colorStateList = ColorStateList.valueOf(mPalettePrimaryDarkColor)
+//                            //Somehow while running in Jelly bean & KITKAT it cannot find Build.VERSION_CODES.LOLLIPOP, yet to figure out why!
+//                            //So using the API number (21 - LOLLIPOP)itself here
+//                            if (Build.VERSION.SDK_INT >= 21) {
+//                                mHomePageButton.setBackgroundTintList(colorStateList)
+//                                mImdbLinkButton.setBackgroundTintList(colorStateList)
+//                            } else {
+//                                ViewCompat.setBackgroundTintList(mHomePageButton, colorStateList)
+//                                ViewCompat.setBackgroundTintList(mImdbLinkButton, colorStateList)
+//                            }
+                            mHomePageButton.setBackgroundColor(mPalettePrimaryDarkColor)
+                            mImdbLinkButton.setBackgroundColor(mPalettePrimaryDarkColor)
                             mHomePageButton.setTextColor(mPaletteBodyTextColor)
                             mImdbLinkButton.setTextColor(mPaletteBodyTextColor)
 
                             //Apply color to adapter elements
                             mPersonCastAdapter.changeColor(mPalettePrimaryDarkColor, mPaletteBodyTextColor)
                             mPersonCrewAdapter.changeColor(mPalettePrimaryDarkColor, mPaletteBodyTextColor)
+                            mPersonImageAdapter.changeColor(mPalettePrimaryDarkColor, mPaletteBodyTextColor)
                         }
                     })
 
@@ -592,7 +646,7 @@ class PersonMovieFragment extends Fragment implements LoaderManager.LoaderCallba
     void handlePersonCastOnLoadFinished(Cursor data) {
         LogDisplay.callLog(LOG_TAG, "handlePersonCastOnLoadFinished.Cursor rec count -> ${data.getCount()}", LogDisplay.PERSON_MOVIE_FRAGMENT_LOG_FLAG)
         //Show two rows if the count is greater than 6 otherwise show single row
-        if(data.count >= 6) {
+        if(data.count >= 10) {
             mCastGridLayoutManager.setSpanCount(2)
         }
         mPersonCastAdapter.swapCursor(data)
@@ -601,12 +655,20 @@ class PersonMovieFragment extends Fragment implements LoaderManager.LoaderCallba
     void handlePersonCrewOnLoadFinished(Cursor data) {
         LogDisplay.callLog(LOG_TAG, "handlePersonCrewOnLoadFinished.Cursor rec count -> ${data.getCount()}", LogDisplay.PERSON_MOVIE_FRAGMENT_LOG_FLAG)
         //Show two rows if the count is greater than 6 otherwise show single row
-        if(data.count >= 6) {
+        if(data.count >= 10) {
             mCrewGridLayoutManager.setSpanCount(2)
         }
         mPersonCrewAdapter.swapCursor(data)
     }
 
+    void handlePersonImageOnLoadFinished(Cursor data) {
+        LogDisplay.callLog(LOG_TAG, "handlePersonImageOnLoadFinished.Cursor rec count -> ${data.getCount()}", LogDisplay.PERSON_MOVIE_FRAGMENT_LOG_FLAG)
+        //Show two rows if the count is greater than 6 otherwise show single row
+        if(data.count >= 10) {
+            mImageGridLayoutManager.setSpanCount(2)
+        }
+        mPersonImageAdapter.swapCursor(data)
+    }
     /**
      * Intent to open a web browser when user clicks on person home page button
      */
@@ -638,7 +700,7 @@ class PersonMovieFragment extends Fragment implements LoaderManager.LoaderCallba
             }
         } catch (ClassCastException e) {
             throw new ClassCastException(getActivity().toString()
-                    + " must implement Callback interface")
+                    + " must implement CallbackForCastClick interface")
         }
         try {
             if(context instanceof Activity) {
@@ -646,7 +708,16 @@ class PersonMovieFragment extends Fragment implements LoaderManager.LoaderCallba
             }
         } catch (ClassCastException e) {
             throw new ClassCastException(getActivity().toString()
-                    + " must implement Callback interface")
+                    + " must implement CallbackForCrewClick interface")
+        }
+
+        try {
+            if(context instanceof Activity) {
+                mCallbackForCrewClick = (CallbackForCrewClick) context
+            }
+        } catch (ClassCastException e) {
+            throw new ClassCastException(getActivity().toString()
+                    + " must implement CallbackForImageClick interface")
         }
     }
 
@@ -672,5 +743,18 @@ class PersonMovieFragment extends Fragment implements LoaderManager.LoaderCallba
          * PersonCrewFragmentCallback when an movie item has been clicked for crew.
          */
         public void onCrewMovieItemSelected(int movieId, PersonCrewAdapter.PersonCrewAdapterViewHolder viewHolder)
+    }
+
+
+    /**
+     * A callback interface that all activities containing this fragment must
+     * implement. This mechanism allows activities to be notified of person crew movie
+     * item click.
+     */
+    public interface CallbackForImageClick {
+        /**
+         * PersonCrewFragmentCallback when an movie item has been clicked for crew.
+         */
+        public void onCrewMovieItemSelected(String imageFilePath, PersonImageAdapter.PersonImageAdapterViewHolder viewHolder)
     }
 }

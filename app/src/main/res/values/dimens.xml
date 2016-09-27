@@ -39,6 +39,8 @@
     <dimen name="backdrop_image_height_detail_view">280dp</dimen>
     <dimen name="grid_image_height">160dp</dimen>
     <dimen name="grid_image_width">120dp</dimen>
+    <dimen name="person_grid_image_height">210dp</dimen>
+    <dimen name="person_grid_image_width">180dp</dimen>
     <dimen name="grid_text_padding">8dp</dimen>
     <dimen name="card_view_elevation">2dp</dimen>
     <dimen name="card_view_corner_radius">2dp</dimen>

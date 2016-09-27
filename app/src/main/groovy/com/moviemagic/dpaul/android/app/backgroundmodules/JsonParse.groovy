@@ -13,6 +13,7 @@ import com.moviemagic.dpaul.android.app.contentprovider.MovieMagicContract.Movie
 import com.moviemagic.dpaul.android.app.contentprovider.MovieMagicContract.MoviePersonInfo
 import com.moviemagic.dpaul.android.app.contentprovider.MovieMagicContract.MoviePersonCast
 import com.moviemagic.dpaul.android.app.contentprovider.MovieMagicContract.MoviePersonCrew
+import com.moviemagic.dpaul.android.app.contentprovider.MovieMagicContract.MoviePersonImage
 
 //Since the json field is used dynamically, so this class is not compiled as CompileStatic
 //@CompileStatic
@@ -884,6 +885,59 @@ class JsonParse {
                 personCrewList << personCrewData
             }
             return personCrewList
+        }
+        return null
+    }
+
+    /**
+     * Helper method to parse person images JSON data
+     * @param jsonData JSON data to be parsed
+     * @param personId Person id
+     * @param foreignKey Row id of person info table
+     * @return formatted list of person image data as content values
+     */
+    static List<ContentValues> parsePersonImageDataJson(def jsonData, int personId, long foreignKey) {
+        List<ContentValues> personImageList = []
+        def imageCounter = jsonData.profiles.size() - 1
+        if (jsonData.profiles) {
+            for (i in 0..imageCounter) {
+                LogDisplay.callLog(LOG_TAG, "$i -> ${jsonData.profiles[i].file_path}", LogDisplay.JSON_PARSE_LOG_FLAG)
+
+                ContentValues personImageData = new ContentValues()
+                if (foreignKey) {
+                    personImageData.put(MoviePersonImage.COLUMN_FOREIGN_KEY_ID, foreignKey)
+                } else {
+                    LogDisplay.callLog(LOG_TAG, 'Not a valid person info row id', LogDisplay.JSON_PARSE_LOG_FLAG)
+                    personImageData.put(MoviePersonImage.COLUMN_FOREIGN_KEY_ID, 0)
+                }
+                if (personId) {
+                    personImageData.put(MoviePersonImage.COLUMN_PERSON_IMAGE_ORIG_PERSON_ID, personId)
+                } else {
+                    LogDisplay.callLog(LOG_TAG, 'Not a valid person id', LogDisplay.JSON_PARSE_LOG_FLAG)
+                    personImageData.put(MoviePersonImage.COLUMN_PERSON_IMAGE_ORIG_PERSON_ID, 0)
+                }
+                if (jsonData.profiles[i].aspect_ratio)
+                    personImageData.put(MoviePersonImage.COLUMN_PERSON_IMAGE_ASPECT_RATIO, jsonData.profiles[i].aspect_ratio)
+                if (jsonData.profiles[i].file_path) {
+                    personImageData.put(MoviePersonImage.COLUMN_PERSON_IMAGE_FILE_PATH, jsonData.profiles[i].file_path)
+                } else {
+                    LogDisplay.callLog(LOG_TAG, 'Not a valid image file path', LogDisplay.JSON_PARSE_LOG_FLAG)
+                    personImageData.put(MoviePersonImage.COLUMN_PERSON_IMAGE_FILE_PATH, ' ')
+                }
+                if (jsonData.profiles[i].height)
+                    personImageData.put(MoviePersonImage.COLUMN_PERSON_IMAGE_HEIGHT, jsonData.profiles[i].height)
+                if (jsonData.profiles[i].iso_639_1)
+                    personImageData.put(MoviePersonImage.COLUMN_PERSON_IMAGE_ISO_639_1, jsonData.profiles[i].iso_639_1)
+                if (jsonData.profiles[i].vote_average)
+                    personImageData.put(MoviePersonImage.COLUMN_PERSON_IMAGE_VOTE_AVERAGE, jsonData.profiles[i].vote_average)
+                if (jsonData.profiles[i].vote_count)
+                    personImageData.put(MoviePersonImage.COLUMN_PERSON_IMAGE_VOTE_COUNT, jsonData.profiles[i].vote_count)
+                if (jsonData.profiles[i].width)
+                    personImageData.put(MoviePersonImage.COLUMN_PERSON_IMAGE_WIDTH, jsonData.profiles[i].width)
+
+                personImageList << personImageData
+            }
+            return personImageList
         }
         return null
     }

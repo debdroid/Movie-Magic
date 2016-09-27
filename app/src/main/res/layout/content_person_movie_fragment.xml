@@ -264,6 +264,57 @@
             android:background="@drawable/ic_keyboard_arrow_up_white_24dp"/>
     </RelativeLayout>
 
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/devider_color" />
+
+    <!-- Person images grid view section -->
+    <LinearLayout
+        android:id="@+id/person_image_grid_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingBottom="@dimen/m_design_space_between_content_area"
+        android:paddingEnd="@dimen/m_design_screen_edge_left_right_margin"
+        android:paddingLeft="@dimen/m_design_screen_edge_left_right_margin"
+        android:paddingRight="@dimen/m_design_screen_edge_left_right_margin"
+        android:paddingStart="@dimen/m_design_screen_edge_left_right_margin"
+        android:paddingTop="@dimen/m_design_space_between_content_area">
+        <TextView
+            android:id="@+id/person_image_grid_header"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:fontFamily="sans-serif-condensed"
+            android:gravity="left"
+            android:paddingBottom="@dimen/m_design_space_between_content_area"
+            android:text="@string/person_image_grid"
+            android:textAppearance="@style/TextAppearance.AppCompat.Title"
+            android:textColor="@color/white_color" />
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <android.support.v17.leanback.widget.HorizontalGridView
+                android:id="@+id/person_image_grid"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+            </android.support.v17.leanback.widget.HorizontalGridView>
+
+            <!-- this is to display a message when the person crew grid is empty -->
+            <TextView
+                android:id="@+id/person_image_grid_empty_msg_text_view"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="left"
+                android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                android:textColor="@color/grey_color"
+                android:text="@string/movie_data_not_available"/>
+        </FrameLayout>
+    </LinearLayout>
+
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"

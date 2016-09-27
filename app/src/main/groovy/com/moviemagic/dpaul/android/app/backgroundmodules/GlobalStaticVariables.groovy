@@ -40,6 +40,7 @@ class GlobalStaticVariables {
     public static final String TMDB_PERSON_APPEND_TO_RESPONSE_PARAM = 'movie_credits'
     public static final String TMDB_COLLECTION_PATH = 'collection'
     public static final String TMDB_PERSON_PATH = 'person'
+    public static final String TMDB_PERSON_IMAGE_PATH = 'images'
 
 
     //Static variables for TMDB movie image url and parameters

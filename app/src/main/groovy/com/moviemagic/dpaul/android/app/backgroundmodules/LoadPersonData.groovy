@@ -93,6 +93,35 @@ class LoadPersonData extends AsyncTask<Integer, Void, Void> {
                 LogDisplay.callLog(LOG_TAG,"Person info row id is not valid.->$personInfoRowId",LogDisplay.LOAD_PERSON_DATA_LOG_FLAG)
             }
 
+            //URL for person images is different and TMDb currently does not provide the images as part of append_to_reponse
+            //TMDB api example (person with appended response)
+            //http://api.themoviedb.org/3/person/1158/images?api_key=key5&append_to_response=movie_credits
+            final Uri.Builder personUriBuilder = Uri.parse(GlobalStaticVariables.TMDB_MOVIE_BASE_URL).buildUpon()
+            final Uri personImageUri = personUriBuilder.appendPath(GlobalStaticVariables.TMDB_PERSON_PATH)
+                    .appendPath(Integer.toString(personId))
+                    .appendPath(GlobalStaticVariables.TMDB_PERSON_IMAGE_PATH)
+                    .appendQueryParameter(GlobalStaticVariables.TMDB_MOVIE_API_KEY,BuildConfig.TMDB_API_KEY)
+                    .build()
+
+            final URL personImageUrl = new URL(personImageUri.toString())
+            LogDisplay.callLog(LOG_TAG,"Person images url-> ${personImageUri.toString()}",LogDisplay.LOAD_PERSON_DATA_LOG_FLAG)
+
+            def personImagesJsonData = new JsonSlurper(type: JsonParserType.INDEX_OVERLAY).parse(personImageUrl)
+            /**
+             * Process and load (insert) the person images data
+             * **/
+            final ContentValues[] personImageContentValues = JsonParse.parsePersonImageDataJson(personImagesJsonData, personId, personInfoRowId) as ContentValues []
+            if(personImageContentValues) {
+                final int personImageCount = mContentResolver.bulkInsert(MovieMagicContract.MoviePersonImage.CONTENT_URI, personImageContentValues)
+                if (personImageCount > 0) {
+                    LogDisplay.callLog(LOG_TAG, "Insert in movie_person_image successful. Insert count->$personImageCount", LogDisplay.LOAD_PERSON_DATA_LOG_FLAG)
+                } else {
+                    LogDisplay.callLog(LOG_TAG, "Insert in movie_person_image failed. Insert count->$personImageCount", LogDisplay.LOAD_PERSON_DATA_LOG_FLAG)
+                }
+            } else {
+                LogDisplay.callLog(LOG_TAG,'JsonParse.parsePersonImageDataJson returned null',LogDisplay.LOAD_PERSON_DATA_LOG_FLAG)
+            }
+
         } catch (URISyntaxException e) {
             Log.e(LOG_TAG, e.message, e)
         } catch (JsonException e) {
