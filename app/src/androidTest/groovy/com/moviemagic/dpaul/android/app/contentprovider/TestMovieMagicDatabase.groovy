@@ -307,6 +307,9 @@ class TestMovieMagicDatabase extends AndroidTestCase {
         columeList << MovieMagicContract.MoviePersonInfo.COLUMN_PERSON_PROFILE_PATH
         columeList << MovieMagicContract.MoviePersonInfo.COLUMN_PERSON_IMDB_ID
         columeList << MovieMagicContract.MoviePersonInfo.COLUMN_PERSON_POPULARITY
+        columeList << MovieMagicContract.MoviePersonInfo.COLUMN_CPERSON_PRESENT_FLAG
+        columeList << MovieMagicContract.MoviePersonInfo.COLUMN_PERSON_CREATE_TIMESTAMP
+        columeList << MovieMagicContract.MoviePersonInfo.COLUMN_PERSON_UPDATE_TIMESTAMP
 
         columnNameIndex = c.getColumnIndex('name')
         for(i in 1..c.getCount()) {
@@ -407,6 +410,8 @@ class TestMovieMagicDatabase extends AndroidTestCase {
         columeList << MovieMagicContract.MovieCollection.COLUMN_COLLECTION_POSTER_PATH
         columeList << MovieMagicContract.MovieCollection.COLUMN_COLLECTION_BACKDROP_PATH
         columeList << MovieMagicContract.MovieCollection.COLUMN_COLLECTION_MOVIE_PRESENT_FLAG
+        columeList << MovieMagicContract.MovieCollection.COLUMN_COLLECTION_CREATE_TIMESTAMP
+        columeList << MovieMagicContract.MovieCollection.COLUMN_COLLECTION_UPDATE_TIMESTAMP
 
         columnNameIndex = c.getColumnIndex('name')
         for(i in 1..c.getCount()) {

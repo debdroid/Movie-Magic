@@ -129,6 +129,8 @@ class TestUtilities extends AndroidTestCase {
         ContentValues moviePersonInfoValues = new ContentValues()
         moviePersonInfoValues.put(MovieMagicContract.MoviePersonInfo.COLUMN_PERSON_ID,TEST_PERSON_ID)
         moviePersonInfoValues.put(MovieMagicContract.MoviePersonInfo.COLUMN_PERSON_NAME,'Person One')
+        moviePersonInfoValues.put(MovieMagicContract.MoviePersonInfo.COLUMN_PERSON_CREATE_TIMESTAMP,Utility.getTodayDate())
+        moviePersonInfoValues.put(MovieMagicContract.MoviePersonInfo.COLUMN_PERSON_UPDATE_TIMESTAMP,Utility.getTodayDate())
         moviePersonInfoValues
     }
 
@@ -164,6 +166,8 @@ class TestUtilities extends AndroidTestCase {
         ContentValues movieCollectionValues = new ContentValues()
         movieCollectionValues.put(MovieMagicContract.MovieCollection.COLUMN_COLLECTION_ID,TEST_COLL_ID)
         movieCollectionValues.put(MovieMagicContract.MovieCollection.COLUMN_COLLECTION_NAME,14)
+        movieCollectionValues.put(MovieMagicContract.MovieCollection.COLUMN_COLLECTION_CREATE_TIMESTAMP,Utility.getTodayDate())
+        movieCollectionValues.put(MovieMagicContract.MovieCollection.COLUMN_COLLECTION_UPDATE_TIMESTAMP,Utility.getTodayDate())
         movieCollectionValues
     }
 
@@ -189,17 +193,12 @@ class TestUtilities extends AndroidTestCase {
         movieInfoValues
     }
 
-    static ContentValues createBulkMovieCollectionValues(int collId) {
-        ContentValues movieCollectionValues = new ContentValues()
-        movieCollectionValues.put(MovieMagicContract.MovieCollection.COLUMN_COLLECTION_ID,collId)
-        movieCollectionValues.put(MovieMagicContract.MovieCollection.COLUMN_COLLECTION_NAME,14)
-        movieCollectionValues
-    }
-
     static ContentValues createBulkMoviePersonInfoValues(int personId) {
         ContentValues moviePersonInfoValues = new ContentValues()
         moviePersonInfoValues.put(MovieMagicContract.MoviePersonInfo.COLUMN_PERSON_ID,personId)
         moviePersonInfoValues.put(MovieMagicContract.MoviePersonInfo.COLUMN_PERSON_NAME,'Person One')
+        moviePersonInfoValues.put(MovieMagicContract.MoviePersonInfo.COLUMN_PERSON_CREATE_TIMESTAMP,Utility.getTodayDate())
+        moviePersonInfoValues.put(MovieMagicContract.MoviePersonInfo.COLUMN_PERSON_UPDATE_TIMESTAMP,Utility.getTodayDate())
         moviePersonInfoValues
     }
 
@@ -290,5 +289,14 @@ class TestUtilities extends AndroidTestCase {
         moviePersonCrewValues.put(MovieMagicContract.MoviePersonImage.COLUMN_PERSON_IMAGE_ORIG_PERSON_ID,TEST_PERSON_ID+fKeyId)
         moviePersonCrewValues.put(MovieMagicContract.MoviePersonImage.COLUMN_PERSON_IMAGE_FILE_PATH,'/file_poster_path')
         moviePersonCrewValues
+    }
+
+    static ContentValues createBulkMovieCollectionValues(int collId) {
+        ContentValues movieCollectionValues = new ContentValues()
+        movieCollectionValues.put(MovieMagicContract.MovieCollection.COLUMN_COLLECTION_ID,collId)
+        movieCollectionValues.put(MovieMagicContract.MovieCollection.COLUMN_COLLECTION_NAME,14)
+        movieCollectionValues.put(MovieMagicContract.MovieCollection.COLUMN_COLLECTION_CREATE_TIMESTAMP,Utility.getTodayDate())
+        movieCollectionValues.put(MovieMagicContract.MovieCollection.COLUMN_COLLECTION_UPDATE_TIMESTAMP,Utility.getTodayDate())
+        movieCollectionValues
     }
 }

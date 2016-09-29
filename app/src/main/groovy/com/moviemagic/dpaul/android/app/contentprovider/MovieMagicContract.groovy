@@ -491,6 +491,11 @@ class MovieMagicContract {
         static final String COLUMN_PERSON_PROFILE_PATH = 'person_profile_path'
         static final String COLUMN_PERSON_IMDB_ID = 'person_imdb_id'
         static final String COLUMN_PERSON_POPULARITY = 'person_popularity'
+        static final String COLUMN_CPERSON_PRESENT_FLAG = 'cperson_info_present_flag'
+        //Column to store record creation date
+        static final String COLUMN_PERSON_CREATE_TIMESTAMP = 'create_timestamp'
+        //Column to store record update date
+        static final String COLUMN_PERSON_UPDATE_TIMESTAMP = 'update_timestamp'
 
         //Uri for movie_person_info table
         static final Uri CONTENT_URI =
@@ -651,6 +656,10 @@ class MovieMagicContract {
         static final String COLUMN_COLLECTION_POSTER_PATH = 'collection_poster_path'
         static final String COLUMN_COLLECTION_BACKDROP_PATH = 'collection_backdrop_path'
         static final String COLUMN_COLLECTION_MOVIE_PRESENT_FLAG = 'collection_movie_present_flag'
+        //Column to store record creation date
+        static final String COLUMN_COLLECTION_CREATE_TIMESTAMP = 'create_timestamp'
+        //Column to store record update date
+        static final String COLUMN_COLLECTION_UPDATE_TIMESTAMP = 'update_timestamp'
 
         //Uri for movie_collection table
         static final Uri CONTENT_URI =

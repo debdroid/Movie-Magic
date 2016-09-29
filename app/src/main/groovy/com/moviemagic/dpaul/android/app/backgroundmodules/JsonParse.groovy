@@ -614,6 +614,8 @@ class JsonParse {
             collectionData.put(MovieCollection.COLUMN_COLLECTION_POSTER_PATH, jsonData.poster_path)
             collectionData.put(MovieCollection.COLUMN_COLLECTION_BACKDROP_PATH, jsonData.backdrop_path)
             collectionData.put(MovieCollection.COLUMN_COLLECTION_MOVIE_PRESENT_FLAG, GlobalStaticVariables.MOVIE_MAGIC_FLAG_TRUE)
+            collectionData.put(MovieCollection.COLUMN_COLLECTION_CREATE_TIMESTAMP, Utility.getTodayDate())
+            collectionData.put(MovieCollection.COLUMN_COLLECTION_UPDATE_TIMESTAMP, Utility.getTodayDate())
             return collectionData
         }
         else return null
@@ -761,7 +763,9 @@ class JsonParse {
                 personInfoData.put(MoviePersonInfo.COLUMN_PERSON_POPULARITY,jsonData.popularity)
             if(jsonData.profile_path)
                 personInfoData.put(MoviePersonInfo.COLUMN_PERSON_PROFILE_PATH,jsonData.profile_path)
-
+            personInfoData.put(MoviePersonInfo.COLUMN_CPERSON_PRESENT_FLAG,GlobalStaticVariables.MOVIE_MAGIC_FLAG_TRUE)
+            personInfoData.put(MoviePersonInfo.COLUMN_PERSON_CREATE_TIMESTAMP,Utility.getTodayDate())
+            personInfoData.put(MoviePersonInfo.COLUMN_PERSON_UPDATE_TIMESTAMP,Utility.getTodayDate())
             return personInfoData
         }
         else return null

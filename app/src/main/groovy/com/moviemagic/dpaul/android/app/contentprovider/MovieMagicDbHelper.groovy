@@ -224,6 +224,9 @@ class MovieMagicDbHelper extends SQLiteOpenHelper {
                 $MovieMagicContract.MoviePersonInfo.COLUMN_PERSON_PROFILE_PATH TEXT NULL,
                 $MovieMagicContract.MoviePersonInfo.COLUMN_PERSON_IMDB_ID TEXT NULL,
                 $MovieMagicContract.MoviePersonInfo.COLUMN_PERSON_POPULARITY REAL DEFAULT 0.0,
+                $MovieMagicContract.MoviePersonInfo.COLUMN_CPERSON_PRESENT_FLAG INTEGER DEFAULT 0,
+                $MovieMagicContract.MoviePersonInfo.COLUMN_PERSON_CREATE_TIMESTAMP TEXT NOT NULL,
+                $MovieMagicContract.MoviePersonInfo.COLUMN_PERSON_UPDATE_TIMESTAMP TEXT NOT NULL,
                 UNIQUE ($MovieMagicContract.MoviePersonInfo.COLUMN_PERSON_ID,
                 $MovieMagicContract.MoviePersonInfo.COLUMN_PERSON_NAME) ON CONFLICT REPLACE)
                 """
@@ -302,6 +305,8 @@ class MovieMagicDbHelper extends SQLiteOpenHelper {
                 $MovieMagicContract.MovieCollection.COLUMN_COLLECTION_POSTER_PATH TEXT NULL,
                 $MovieMagicContract.MovieCollection.COLUMN_COLLECTION_BACKDROP_PATH TEXT NULL,
                 $MovieMagicContract.MovieCollection.COLUMN_COLLECTION_MOVIE_PRESENT_FLAG INTEGER DEFAULT 0,
+                $MovieMagicContract.MovieCollection.COLUMN_COLLECTION_CREATE_TIMESTAMP TEXT NOT NULL,
+                $MovieMagicContract.MovieCollection.COLUMN_COLLECTION_UPDATE_TIMESTAMP TEXT NOT NULL,
                 UNIQUE ($MovieMagicContract.MovieCollection.COLUMN_COLLECTION_ID,
                 $MovieMagicContract.MovieCollection.COLUMN_COLLECTION_NAME) ON CONFLICT REPLACE)
                 """
