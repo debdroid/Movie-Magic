@@ -253,8 +253,7 @@ public class MovieMagicMainActivity extends AppCompatActivity implements Navigat
                 .setAction("Action", null).show()
     }
 
-
-    /**
+/**
      * Updating of menu counter is tightly coupled with main_activity_menu activity, so no separate class is
      * created for the AsyncTask
      */

@@ -8,13 +8,14 @@ import android.view.Menu
 import android.view.MenuItem
 import com.moviemagic.dpaul.android.app.adapter.PersonCastAdapter
 import com.moviemagic.dpaul.android.app.adapter.PersonCrewAdapter
+import com.moviemagic.dpaul.android.app.adapter.PersonImageAdapter
 import com.moviemagic.dpaul.android.app.backgroundmodules.GlobalStaticVariables
 import com.moviemagic.dpaul.android.app.backgroundmodules.LogDisplay;
 import groovy.transform.CompileStatic
 
 @CompileStatic
 class PersonMovieActivity extends AppCompatActivity implements PersonMovieFragment.CallbackForCastClick,
-                PersonMovieFragment.CallbackForCrewClick {
+                PersonMovieFragment.CallbackForCrewClick, PersonMovieFragment.CallbackForImageClick {
     private static final String LOG_TAG = PersonMovieActivity.class.getSimpleName()
 
     @Override
@@ -94,6 +95,26 @@ class PersonMovieActivity extends AppCompatActivity implements PersonMovieFragme
         bundle.putInt(GlobalStaticVariables.MOVIE_BASIC_INFO_MOVIE_ID,movieId)
         bundle.putString(GlobalStaticVariables.MOVIE_BASIC_INFO_CATEGORY,GlobalStaticVariables.MOVIE_CATEGORY_PERSON)
         final Intent intent = new Intent(this, DetailMovieActivity.class)
+        intent.putExtras(bundle)
+        startActivity(intent)
+        //Start the animation
+        overridePendingTransition(R.anim.slide_bottom_in_animation,0)
+    }
+
+    /**
+     * Fragment callback method for PersonImage - called when a image item is clicked for person image
+     * @param title   person name
+     * @param imageFilePath   array of image profile path of the person
+     * @param viewHolder    PersonImageAdapterViewHolder
+     */
+    @Override
+    void onImageMovieItemSelected(String title, int adapterPosition, String[] imageFilePath, PersonImageAdapter.PersonImageAdapterViewHolder viewHolder) {
+        final Bundle bundle = new Bundle()
+        bundle.putString(GlobalStaticVariables.IMAGE_VIEWER_TITLE,title)
+        bundle.putInt(GlobalStaticVariables.IMAGE_VIEWER_ADAPTER_POSITION, adapterPosition)
+        bundle.putStringArrayList(GlobalStaticVariables.IMAGE_VIEWER_IMAGE_PATH_ARRAY,imageFilePath as ArrayList<String>)
+        bundle.putBoolean(GlobalStaticVariables.IMAGE_VIEWER_BACKDROP_IMAGE_FLAG, false)
+        final Intent intent = new Intent(this, ImageViewerActivity.class)
         intent.putExtras(bundle)
         startActivity(intent)
         //Start the animation

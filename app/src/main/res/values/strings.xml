@@ -112,5 +112,7 @@
     <string name="title_activity_main_movie">Movie Main</string>
     <string name="movie_collection_title_text">Collection Title</string>
     <string name="person_image_grid">Images</string>
+    <string name="title_activity_image_viewer">Image Viewer</string>
+    <string name="image_viewer_pager_footer_text">1 of 6 : Title</string>
 
 </resources>

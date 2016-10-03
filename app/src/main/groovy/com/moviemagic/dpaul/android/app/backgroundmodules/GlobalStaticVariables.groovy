@@ -83,5 +83,8 @@ class GlobalStaticVariables {
     public static final String PICASSO_POSTER_IMAGE_TAG = 'picasso_poster_image_tag'
     public static final String COLLECTION_MOVIE_FRAGMENT_TAG = 'collection_movie_fragment_tag'
     public static final String MOVIE_PERSON_URI = 'collection_uri'
-
+    public static final String IMAGE_VIEWER_IMAGE_PATH_ARRAY = 'imageviewer_image_path_array'
+    public static final String IMAGE_VIEWER_TITLE = 'imageviewer_title'
+    public static final String IMAGE_VIEWER_ADAPTER_POSITION = 'imageviewer_adapter_position'
+    public static final String IMAGE_VIEWER_BACKDROP_IMAGE_FLAG = 'imageviewer_backdrop_image_flag'
 }

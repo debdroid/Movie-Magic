@@ -1,5 +1,6 @@
 package com.moviemagic.dpaul.android.app
 
+import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
@@ -10,7 +11,7 @@ import com.moviemagic.dpaul.android.app.backgroundmodules.LogDisplay
 import groovy.transform.CompileStatic
 
 @CompileStatic
-class DetailMovieActivity extends AppCompatActivity {
+class DetailMovieActivity extends AppCompatActivity implements DetailMovieFragment.CallbackForBackdropImageClick {
     private static final String LOG_TAG = DetailMovieActivity.class.getSimpleName()
 
 //    private CollapsingToolbarLayout mCollapsingToolbar
@@ -208,5 +209,20 @@ class DetailMovieActivity extends AppCompatActivity {
 //        }
         //Start the animation
         overridePendingTransition(0, R.anim.slide_bottom_out_animation)
+    }
+
+
+    @Override
+    void onBackdropImageClicked(String title, int position, ArrayList<String> backdropImageFilePath) {
+        final Bundle bundle = new Bundle()
+        bundle.putString(GlobalStaticVariables.IMAGE_VIEWER_TITLE,title)
+        bundle.putInt(GlobalStaticVariables.IMAGE_VIEWER_ADAPTER_POSITION, position)
+        bundle.putStringArrayList(GlobalStaticVariables.IMAGE_VIEWER_IMAGE_PATH_ARRAY,backdropImageFilePath)
+        bundle.putBoolean(GlobalStaticVariables.IMAGE_VIEWER_BACKDROP_IMAGE_FLAG, true)
+        final Intent intent = new Intent(this, ImageViewerActivity.class)
+        intent.putExtras(bundle)
+        startActivity(intent)
+        //Start the animation
+        overridePendingTransition(R.anim.slide_bottom_in_animation,0)
     }
 }

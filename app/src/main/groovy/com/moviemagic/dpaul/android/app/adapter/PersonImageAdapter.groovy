@@ -49,6 +49,16 @@ class PersonImageAdapter extends RecyclerView.Adapter<PersonImageAdapter.PersonI
         @Override
         public void onClick(View v) {
             LogDisplay.callLog(LOG_TAG,"onClick is called.LayoutPos=${getLayoutPosition()}.AdapterPos=${getAdapterPosition()}",LogDisplay.PERSON_IMAGE_ADAPTER_LOG_FLAG)
+            final String[] imagePath = new String[mCursor.getCount()]
+            LogDisplay.callLog(LOG_TAG,"onClick:Cursor count ${mCursor.getCount()}",LogDisplay.PERSON_IMAGE_ADAPTER_LOG_FLAG)
+            mCursor.moveToFirst()
+            for(i in 0..mCursor.getCount()-1) {
+                imagePath[i] = mCursor.getString(PersonMovieFragment.COL_PERSON_IMAGE_FILE_PATH)
+                mCursor.moveToNext()
+            }
+            LogDisplay.callLog(LOG_TAG,"onClick:imagePath array count ${imagePath.size()}",LogDisplay.PERSON_IMAGE_ADAPTER_LOG_FLAG)
+            final int adapterPosition = getAdapterPosition()
+            mMoviePersonImageAdapterOnClickHandler.onClick(adapterPosition, imagePath, this)
 //            final int adapterPosition = getAdapterPosition()
 //            mCursor.moveToPosition(adapterPosition)
 //            final int movieId = mCursor.getInt(PersonMovieFragment.COL_PERSON_CREW_MOVIE_ID)
@@ -122,6 +132,6 @@ class PersonImageAdapter extends RecyclerView.Adapter<PersonImageAdapter.PersonI
      * This is the interface which will be implemented by the host PersonMovieFragment
      */
     public interface PersonImageAdapterOnClickHandler {
-        public void onClick(String imageFilePath, PersonImageAdapterViewHolder viewHolder)
+        public void onClick(int adapterPosition, String[] imageFilePath, PersonImageAdapterViewHolder viewHolder)
     }
 }

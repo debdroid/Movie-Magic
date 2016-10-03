@@ -48,4 +48,7 @@
     <style name="AppTheme.MovieDetail" parent="@style/AppTheme"/>
     <style name="AppTheme.MovieCollection" parent="@style/AppTheme"/>
     <style name="AppTheme.MoviePerson" parent="@style/AppTheme"/>
+    <!--<style name="AppTheme.ImageViewer" parent="Theme.AppCompat.DayNight.NoActionBar"/>-->
+    <style name="AppTheme.ImageViewer" parent="@style/BaseTheme"/>
+    <!--<style name="AppTheme.ImageViewer" parent="@style/AppTheme"/>-->
 </resources>

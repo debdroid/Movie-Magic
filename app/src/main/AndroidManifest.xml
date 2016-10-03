@@ -53,7 +53,17 @@
             android:name=".PersonMovieActivity"
             android:label="@string/title_activity_person_movie"
             android:parentActivityName=".MovieMagicMainActivity"
-            android:theme="@style/AppTheme.MovieCollection">
+            android:theme="@style/AppTheme.MoviePerson">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".MovieMagicMainActivity"/>
+        </activity>
+
+        <!-- Image Viewer movie Activity -->
+        <activity
+            android:name=".ImageViewerActivity"
+            android:label="@string/title_activity_image_viewer"
+            android:theme="@style/AppTheme.ImageViewer">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".MovieMagicMainActivity"/>

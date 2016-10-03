@@ -78,4 +78,13 @@ class PicassoLoadImage {
                 .error(R.drawable.grid_image_error)
                 .into(imageView, callback)
     }
+
+    //To load the image for ViewPage adapter - used to display full screen images
+    static void loadViewPagerImage(final Context context, final String imagePath, final ImageView imageView) {
+        Picasso.with(context)
+                .load(imagePath)
+                .placeholder(R.drawable.grid_image_placeholder)
+                .error(R.drawable.na_person_icon)
+                .into(imageView)
+    }
 }

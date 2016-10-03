@@ -1,5 +1,7 @@
 package com.moviemagic.dpaul.android.app
 
+import android.app.Activity
+import android.content.Context
 import android.content.Intent
 import android.content.res.ColorStateList
 import android.database.Cursor
@@ -50,6 +52,7 @@ import android.widget.TextView
 import com.moviemagic.dpaul.android.app.adapter.MovieCastAdapter
 import com.moviemagic.dpaul.android.app.adapter.MovieCrewAdapter
 import com.moviemagic.dpaul.android.app.adapter.MovieReviewAdapter
+import com.moviemagic.dpaul.android.app.adapter.PersonImageAdapter
 import com.moviemagic.dpaul.android.app.adapter.SimilarMovieAdapter
 import com.moviemagic.dpaul.android.app.contentprovider.MovieMagicContract
 import com.moviemagic.dpaul.android.app.backgroundmodules.GlobalStaticVariables
@@ -129,8 +132,14 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
     private static boolean picasoLoadComplete = true
     private static boolean setBackdropAnimation = true
     private final android.os.Handler mHandler = new android.os.Handler()
+    private Runnable mRunnable
     private static final String MOVIE_TITLE = 'movie_title'
     private GridLayoutManager mSimilarMovieGridLayoutManager
+    private int mBackdropImageCounter = 0
+    private List<String> mBackdropList
+    private CallbackForBackdropImageClick mCallbackForBackdropImageClick
+
+
 
 //    public static final String MOVIE_BASIC_INFO_MOVIE_ID_URI = 'movie_basic_info_movie_id_uri'
     private static final String MOVIE_VIDEO_SITE_YOUTUBE = 'YouTube'
@@ -391,7 +400,24 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
         mAppBarLayout = mRootView.findViewById(R.id.movie_detail_app_bar_layout) as AppBarLayout
         mBackdropImage1 = mRootView.findViewById(R.id.movie_detail_backdrop_image_1) as ImageView
         mBackdropImage2 = mRootView.findViewById(R.id.movie_detail_backdrop_image_2) as ImageView
+        mUserListDrawableTitle = mRootView.findViewById(R.id.movie_detail_user_list_drawable_title) as TextView
+        /**
+         * Image switcher onClick handling
+         */
         mBackdropImageSwitcher = mRootView.findViewById(R.id.movie_detail_backdrop_image_switcher) as ImageSwitcher
+        mBackdropImageSwitcher.setOnClickListener(new View.OnClickListener() {
+            @Override
+            void onClick(View v) {
+                LogDisplay.callLog(LOG_TAG, 'Backdrop imageSwitcher is clicked', LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
+                LogDisplay.callLog(LOG_TAG, "Backdrop imageSwitcher is clicked.mBackdropImageCounter-> $mBackdropImageCounter", LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
+                mBackdropImageCounter--
+                if(mBackdropList && mBackdropImageCounter >= 0) {
+                    mCallbackForBackdropImageClick.onBackdropImageClicked(mMovieTitle, mBackdropImageCounter, mBackdropList as ArrayList<String>)
+                } else {
+                    LogDisplay.callLog(LOG_TAG, 'Backdrop image list is null or image loading not started', LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
+                }
+            }
+        })
 
         //All the layouts
         mDetailMovieLayout = mRootView.findViewById(R.id.fragment_detail_movie_layout) as LinearLayout
@@ -1284,18 +1310,18 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
     void processBackdropImages(Cursor data) {
         LogDisplay.callLog(LOG_TAG, "processBackdropImages.Cursor rec count -> ${data.getCount()}", LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
         if (data.moveToFirst()) {
-            List<String> backdropList = new ArrayList<String>()
+            mBackdropList = new ArrayList<String>()
             //Add the main_activity_menu backdrop first
             if (mOriginalBackdropPath) {
-                backdropList.add(mOriginalBackdropPath)
+                mBackdropList.add(mOriginalBackdropPath)
             }
             for (i in 0..(data.count - 1)) {
-                backdropList.add(data.getString(COL_MOVIE_IMAGE_FILE_PATH))
+                mBackdropList.add(data.getString(COL_MOVIE_IMAGE_FILE_PATH))
                 data.moveToNext()
             }
-            LogDisplay.callLog(LOG_TAG, "backdropImageArray-> $backdropList", LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
-//            mBackdropCallback.initializeActivityHostedBackdrop(backdropList)
-            initializeBackdrop(backdropList)
+            LogDisplay.callLog(LOG_TAG, "backdropImageArray-> $mBackdropList", LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
+//            mBackdropCallback.initializeActivityHostedBackdrop(mBackdropList)
+            initializeBackdrop(mBackdropList)
         }
     }
 
@@ -1551,13 +1577,15 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
         final Animation fadeInAnimation = new AlphaAnimation(0, 1)
         fadeInAnimation.setInterpolator(new DecelerateInterpolator())
         fadeInAnimation.setDuration(3000)
-        int counter = 0
+        final int counter = 0
+//        mBackdropImageCounter = 0
         Callback backdropPicassoCallback = new Callback() {
             @Override
             void onSuccess() {
                 LogDisplay.callLog(LOG_TAG, 'Picasso:onSuccess is called', LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
                 mBackdropImageSwitcher.startAnimation(fadeInAnimation)
                 mBackdropImageSwitcher.showNext()
+                mBackdropImageCounter++
             }
 
             @Override
@@ -1566,7 +1594,7 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
                 LogDisplay.callLog(LOG_TAG, 'Picasso:onError is called', LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
             }
         }
-        final Runnable runnable = new Runnable() {
+        mRunnable = new Runnable() {
             @Override
             void run() {
 //                LogDisplay.callLog(LOG_TAG,"initializeBackdrop:picasoLoadComplete:$picasoLoadComplete",LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
@@ -1595,7 +1623,7 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
                 mHandler.postDelayed(this, 10000) //Interval time is 10 seconds
             }
         }
-        mHandler.postDelayed(runnable, 10) //Initial delay is 10 mili seconds
+        mHandler.postDelayed(mRunnable, 10) //Initial delay is 10 mili seconds
     }
 
     //TODO: Future change - provide a setting option to user to chose single backdrop for mobile data
@@ -1637,10 +1665,19 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
     }
 
     @Override
+    void onResume() {
+        LogDisplay.callLog(LOG_TAG, 'onResume is called', LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
+        super.onResume()
+        mHandler.postDelayed(mRunnable,10000)
+    }
+
+    @Override
     void onStop() {
         LogDisplay.callLog(LOG_TAG, 'onStop is called', LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
         super.onStop()
-        mHandler.removeCallbacksAndMessages(null)
+        if(mHandler) {
+            mHandler.removeCallbacksAndMessages(null)
+        }
         //Cancel Picasso requests - required where callback (hard reference) is used
         //TODO this is not done everywhere, so need to do in other places
         Picasso.with(getActivity()).cancelRequest(mPosterImageView)
@@ -1695,5 +1732,33 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
             }
         }
         return animation
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        LogDisplay.callLog(LOG_TAG,'onAttach is called',LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
+        super.onAttach(context)
+        // This makes sure that the container activity has implemented
+        // the callback interface. If not, it throws an exception
+        try {
+            if(context instanceof Activity) {
+                mCallbackForBackdropImageClick = (CallbackForBackdropImageClick) context
+            }
+        } catch (ClassCastException e) {
+            throw new ClassCastException(getActivity().toString()
+                    + " must implement CallbackForImageClick interface")
+        }
+    }
+
+    /**
+     * A callback interface that all activities containing this fragment must
+     * implement. This mechanism allows activities to be notified of person crew movie
+     * item click.
+     */
+    public interface CallbackForBackdropImageClick {
+        /**
+         * BackdropImageClickCallback when backdrop image switcher item is clicked
+         */
+        public void onBackdropImageClicked(String title, int position, ArrayList<String> backdropImageFilePath)
     }
 }

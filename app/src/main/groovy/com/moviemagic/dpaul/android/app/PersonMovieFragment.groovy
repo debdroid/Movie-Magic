@@ -80,6 +80,7 @@ class PersonMovieFragment extends Fragment implements LoaderManager.LoaderCallba
     private CallbackForCastClick mCallbackForCastClick
     private CallbackForCrewClick mCallbackForCrewClick
     private CallbackForImageClick mCallbackForImageClick
+    private String mPersonName
 
     private static final int PERSON_MOVIE_FRAGMENT_PERSON_INFO_LOADER_ID = 0
     private static final int PERSON_MOVIE_FRAGMENT_PERSON_CAST_LOADER_ID = 1
@@ -288,8 +289,8 @@ class PersonMovieFragment extends Fragment implements LoaderManager.LoaderCallba
         mPersonImageAdapter = new PersonImageAdapter(getActivity(), mImageGridEmptyMsgTextView,
                 new PersonImageAdapter.PersonImageAdapterOnClickHandler(){
                     @Override
-                    void onClick(String imageFilePath, PersonImageAdapter.PersonImageAdapterViewHolder viewHolder) {
-                        mCallbackForImageClick.onCrewMovieItemSelected(imageFilePath, viewHolder)
+                    void onClick(int adapterPosition, String[] imageFilePath, PersonImageAdapter.PersonImageAdapterViewHolder viewHolder) {
+                        mCallbackForImageClick.onImageMovieItemSelected(mPersonName, adapterPosition, imageFilePath, viewHolder)
                     }
                 })
         mImageGridView.setAdapter(mPersonImageAdapter)
@@ -555,6 +556,7 @@ class PersonMovieFragment extends Fragment implements LoaderManager.LoaderCallba
             PicassoLoadImage.loadDetailFragmentPosterImage(getActivity(),posterPath,mPosterImageView,picassoPosterCallback)
             mNameTextView.setText(data.getString(COL_PERSON_INFO_PERSON_NAME))
             mToolbar.setTitle(data.getString(COL_PERSON_INFO_PERSON_NAME))
+            mPersonName = data.getString(COL_PERSON_INFO_PERSON_NAME)
             if(data.getString(COL_PERSON_INFO_PERSON_BIRTHDAY)) {
                 mDobTextView.setText(Utility.formatFriendlyDate(data.getString(COL_PERSON_INFO_PERSON_BIRTHDAY)))
             } else {
@@ -690,7 +692,7 @@ class PersonMovieFragment extends Fragment implements LoaderManager.LoaderCallba
 
     @Override
     public void onAttach(Context context) {
-        LogDisplay.callLog(LOG_TAG,'onAttach is called',LogDisplay.GRID_MOVIE_FRAGMENT_LOG_FLAG)
+        LogDisplay.callLog(LOG_TAG,'onAttach is called',LogDisplay.PERSON_MOVIE_FRAGMENT_LOG_FLAG)
         super.onAttach(context)
         // This makes sure that the container activity has implemented
         // the callback interface. If not, it throws an exception
@@ -713,7 +715,7 @@ class PersonMovieFragment extends Fragment implements LoaderManager.LoaderCallba
 
         try {
             if(context instanceof Activity) {
-                mCallbackForCrewClick = (CallbackForCrewClick) context
+                mCallbackForImageClick = (CallbackForImageClick) context
             }
         } catch (ClassCastException e) {
             throw new ClassCastException(getActivity().toString()
@@ -728,7 +730,7 @@ class PersonMovieFragment extends Fragment implements LoaderManager.LoaderCallba
      */
     public interface CallbackForCastClick {
         /**
-         * PersonCastFragmentCallback when an movie item has been clicked for cast.
+         * PersonCastFragmentCallback when a movie item has been clicked for cast.
          */
         public void onCastMovieItemSelected(int movieId, PersonCastAdapter.PersonCastAdapterViewHolder viewHolder)
     }
@@ -740,7 +742,7 @@ class PersonMovieFragment extends Fragment implements LoaderManager.LoaderCallba
      */
     public interface CallbackForCrewClick {
         /**
-         * PersonCrewFragmentCallback when an movie item has been clicked for crew.
+         * PersonCrewFragmentCallback when a movie item has been clicked for crew.
          */
         public void onCrewMovieItemSelected(int movieId, PersonCrewAdapter.PersonCrewAdapterViewHolder viewHolder)
     }
@@ -748,13 +750,13 @@ class PersonMovieFragment extends Fragment implements LoaderManager.LoaderCallba
 
     /**
      * A callback interface that all activities containing this fragment must
-     * implement. This mechanism allows activities to be notified of person crew movie
+     * implement. This mechanism allows activities to be notified of person image
      * item click.
      */
     public interface CallbackForImageClick {
         /**
-         * PersonCrewFragmentCallback when an movie item has been clicked for crew.
+         * PersonImageFragmentCallback when a image has been clicked for cast/crew.
          */
-        public void onCrewMovieItemSelected(String imageFilePath, PersonImageAdapter.PersonImageAdapterViewHolder viewHolder)
+        public void onImageMovieItemSelected(String title, int adapterPosition, String[] imageFilePath, PersonImageAdapter.PersonImageAdapterViewHolder viewHolder)
     }
 }
