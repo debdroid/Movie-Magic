@@ -31,6 +31,7 @@ class ImagePagerAdapter extends PagerAdapter {
     private final String[] mImageFilePaths
     private boolean visibilityFlag = true
     private final ImagePagerAdapterOnClickHandler mImagePagerAdapterOnClickHandler
+    private LayoutInflater mLayoutInflater
     private final boolean mBackdropImageFlag
 
     public ImagePagerAdapter() {
@@ -60,8 +61,8 @@ class ImagePagerAdapter extends PagerAdapter {
     @Override
     Object instantiateItem(ViewGroup container, int position) {
         LogDisplay.callLog(LOG_TAG,"instantiateItem is called:$position",LogDisplay.IMAGE_VIEWER_ACTIVITY_LOG_FLAG)
-        final LayoutInflater layoutInflater = LayoutInflater.from(mContext)
-        final View view = layoutInflater.inflate(R.layout.single_image_viewer_item, container, false)
+        mLayoutInflater = LayoutInflater.from(mContext)
+        final View view = mLayoutInflater.inflate(R.layout.single_image_viewer_item, container, false)
         final ImageView imageView = view.findViewById(R.id.image_viewer_image) as ImageView
         if(mBackdropImageFlag) {
             final LayoutParams layoutParams = imageView.getLayoutParams()

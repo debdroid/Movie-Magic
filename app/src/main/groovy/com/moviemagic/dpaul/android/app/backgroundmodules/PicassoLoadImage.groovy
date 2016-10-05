@@ -58,6 +58,20 @@ class PicassoLoadImage {
                 .into(imageView, callback)
     }
 
+    //To load the movie poster for detail fragment viewpager adapter
+    static void loadDetailFragmentPAgerAdapterImage(final Context context, final String imagePath,
+                                                final ImageView imageView) {
+        Picasso.with(context)
+                .load(imagePath)
+                .priority(Picasso.Priority.HIGH) //Picasso will treat this as high priority
+                .fit()
+                .placeholder(R.drawable.grid_image_placeholder)
+                .error(R.drawable.grid_image_error)
+                .memoryPolicy(MemoryPolicy.NO_STORE, MemoryPolicy.NO_CACHE)
+                .networkPolicy(NetworkPolicy.NO_STORE, NetworkPolicy.NO_CACHE)
+                .into(imageView)
+    }
+
     //To load the collection backdrop for detail fragment
     static void loadDetailFragmentCollectionBackdropImage(final Context context, final String imagePath, final ImageView imageView) {
         Picasso.with(context)

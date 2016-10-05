@@ -22,15 +22,17 @@ import android.support.v4.content.ContextCompat
 import android.support.v4.content.CursorLoader
 import android.support.v4.content.Loader
 import android.support.v4.graphics.drawable.DrawableCompat
-import android.support.v4.view.ViewCompat
+import android.support.v4.view.ViewPager
+import android.support.v4.view.ViewPager.OnPageChangeListener
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.graphics.Palette
-import android.support.v7.widget.AppCompatImageButton
 import android.support.v7.widget.GridLayoutManager
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.support.v7.widget.RecyclerView.LayoutManager
 import android.support.v7.widget.Toolbar
+import android.text.Html
+import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuInflater
@@ -44,15 +46,14 @@ import android.view.animation.DecelerateInterpolator
 import android.widget.Button
 import android.widget.FrameLayout
 import android.widget.ImageButton
-import android.widget.ImageSwitcher
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.RatingBar
 import android.widget.TextView
+import com.moviemagic.dpaul.android.app.adapter.DetailFragmentPagerAdapter
 import com.moviemagic.dpaul.android.app.adapter.MovieCastAdapter
 import com.moviemagic.dpaul.android.app.adapter.MovieCrewAdapter
 import com.moviemagic.dpaul.android.app.adapter.MovieReviewAdapter
-import com.moviemagic.dpaul.android.app.adapter.PersonImageAdapter
 import com.moviemagic.dpaul.android.app.adapter.SimilarMovieAdapter
 import com.moviemagic.dpaul.android.app.contentprovider.MovieMagicContract
 import com.moviemagic.dpaul.android.app.backgroundmodules.GlobalStaticVariables
@@ -82,7 +83,7 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
                      mUserListDrawableTitle, mCastGridEmptyMsgTextView, mCrewGridEmptyMsgTextView, mSimilarMovieGridEmptyMsgTextView,
                      mMovieTrailerEmptyMsgTextView
     private ImageView mMpaaRatingImageView, mPosterImageView, mCollectionBackdropImageView
-    private LinearLayout mDetailMovieLayout,mDetailTitleLayout, mDetailPosterLayout, mDetailTmdbRatingLayout, mDetailUserRatingLayout,
+    private LinearLayout mDetailMovieLayout,mBackdropDotHolderLayout, mDetailTitleLayout, mDetailPosterLayout, mDetailTmdbRatingLayout, mDetailUserRatingLayout,
                          mDetailSynopsisLayout, mDetailTrailerLayout, mDetailProductionInfoLayout, mDetailCastHeaderLayout,
                          mDetailCrewHeaderLayout, mDetailSimilarMovieHeaderLayout, mUserListDrawableLayout,
                          mDetailCollectionLayout, mDetailWebLinkLayout, mDetailReviewHeaderLayout
@@ -127,8 +128,9 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
     private CollapsingToolbarLayout mCollapsingToolbar
     private Toolbar mToolbar
     private AppBarLayout mAppBarLayout
-    private ImageView mBackdropImage1, mBackdropImage2
-    private ImageSwitcher mBackdropImageSwitcher
+//    private ImageView mBackdropImage1, mBackdropImage2
+//    private ImageSwitcher mBackdropImageSwitcher
+    private ViewPager mBackdropViewPager
     private static boolean picasoLoadComplete = true
     private static boolean setBackdropAnimation = true
     private final android.os.Handler mHandler = new android.os.Handler()
@@ -398,26 +400,28 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
         mRootView.setAnimation(fadeIn)
 
         mAppBarLayout = mRootView.findViewById(R.id.movie_detail_app_bar_layout) as AppBarLayout
-        mBackdropImage1 = mRootView.findViewById(R.id.movie_detail_backdrop_image_1) as ImageView
-        mBackdropImage2 = mRootView.findViewById(R.id.movie_detail_backdrop_image_2) as ImageView
+//        mBackdropImage1 = mRootView.findViewById(R.id.movie_detail_backdrop_image_1) as ImageView
+//        mBackdropImage2 = mRootView.findViewById(R.id.movie_detail_backdrop_image_2) as ImageView
+        mBackdropViewPager = mRootView.findViewById(R.id.movie_detail_backdrop_viewpager) as ViewPager
+        mBackdropDotHolderLayout = mRootView.findViewById(R.id.view_pager_dots_holder) as LinearLayout
         mUserListDrawableTitle = mRootView.findViewById(R.id.movie_detail_user_list_drawable_title) as TextView
         /**
          * Image switcher onClick handling
          */
-        mBackdropImageSwitcher = mRootView.findViewById(R.id.movie_detail_backdrop_image_switcher) as ImageSwitcher
-        mBackdropImageSwitcher.setOnClickListener(new View.OnClickListener() {
-            @Override
-            void onClick(View v) {
-                LogDisplay.callLog(LOG_TAG, 'Backdrop imageSwitcher is clicked', LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
-                LogDisplay.callLog(LOG_TAG, "Backdrop imageSwitcher is clicked.mBackdropImageCounter-> $mBackdropImageCounter", LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
-                mBackdropImageCounter--
-                if(mBackdropList && mBackdropImageCounter >= 0) {
-                    mCallbackForBackdropImageClick.onBackdropImageClicked(mMovieTitle, mBackdropImageCounter, mBackdropList as ArrayList<String>)
-                } else {
-                    LogDisplay.callLog(LOG_TAG, 'Backdrop image list is null or image loading not started', LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
-                }
-            }
-        })
+//        mBackdropImageSwitcher = mRootView.findViewById(R.id.movie_detail_backdrop_image_switcher) as ImageSwitcher
+//        mBackdropImageSwitcher.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            void onClick(View v) {
+//                LogDisplay.callLog(LOG_TAG, 'Backdrop imageSwitcher is clicked', LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
+//                LogDisplay.callLog(LOG_TAG, "Backdrop imageSwitcher is clicked.mBackdropImageCounter-> $mBackdropImageCounter", LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
+//                mBackdropImageCounter--
+//                if(mBackdropList && mBackdropImageCounter >= 0) {
+//                    mCallbackForBackdropImageClick.onBackdropImageClicked(mMovieTitle, mBackdropImageCounter, mBackdropList as ArrayList<String>)
+//                } else {
+//                    LogDisplay.callLog(LOG_TAG, 'Backdrop image list is null or image loading not started', LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
+//                }
+//            }
+//        })
 
         //All the layouts
         mDetailMovieLayout = mRootView.findViewById(R.id.fragment_detail_movie_layout) as LinearLayout
@@ -1321,8 +1325,75 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
             }
             LogDisplay.callLog(LOG_TAG, "backdropImageArray-> $mBackdropList", LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
 //            mBackdropCallback.initializeActivityHostedBackdrop(mBackdropList)
-            initializeBackdrop(mBackdropList)
+//            initializeBackdrop(mBackdropList)
+            final DetailFragmentPagerAdapter adapter = new DetailFragmentPagerAdapter(getActivity(), mBackdropList as String[],
+                                new DetailFragmentPagerAdapter.DetailFragmentPagerAdapterOnClickHandler() {
+                                    @Override
+                                    void onClick(int position) {
+                                        LogDisplay.callLog(LOG_TAG, "DetailFragmentPagerAdapter clicked.Position->$position", LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
+                                    }
+                                })
+            mBackdropViewPager.setAdapter(adapter)
+            final int dotsCount = adapter.getCount()
+            final TextView[] dots = new TextView[dotsCount]
+            setBackDropViewPagerDots(dotsCount, dots)
+            final OnPageChangeListener onPageChangeListener = new OnPageChangeListener() {
+                @Override
+                void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+                }
+
+                @Override
+                void onPageSelected(int position) {
+//                    mBackdropDotHolderLayout.removeAllViews()
+                    for (i in 0..(dotsCount - 1)) {
+                        if (i != position) {
+//                            dots[i].setText(Html.fromHtml("&#8226;"))
+                            dots[i].setTextSize(30)
+                            dots[i].setTextColor(ContextCompat.getColor(getActivity(), R.color.grey_color))
+//                            mBackdropDotHolderLayout.addView(dots[i])
+//                        dots[i].setGravity(17)
+                        } else {
+//                            dots[position].setText(Html.fromHtml("&#8226;"))
+                            dots[position].setTextSize(50)
+                            dots[position].setTextColor(ContextCompat.getColor(getActivity(), R.color.accent))
+//                            mBackdropDotHolderLayout.addView(dots[position])
+//                            dots[position].setTextColor(ContextCompat.getColor(getActivity(), R.color.accent))
+//                    dots[position].setText(Html.fromHtml("&#8226;"))
+//                            dots[position].setTextSize(35)
+//                    dots[position].setGravity(17)
+//                    mBackdropDotHolderLayout.updateViewLayout(dots[position],ViewGroup.LayoutParams.si)
+                        }
+                    }
+                }
+
+                @Override
+                void onPageScrollStateChanged(int state) {
+
+                }
+            }
+            mBackdropViewPager.removeOnPageChangeListener(onPageChangeListener)
+            mBackdropViewPager.addOnPageChangeListener(onPageChangeListener)
+            mBackdropViewPager.setCurrentItem(0)
         }
+    }
+
+    void setBackDropViewPagerDots(int dotsCount, TextView[] dots) {
+        for(i in 0..(dotsCount - 1)) {
+            dots[i] = new TextView(getActivity())
+            dots[i].setText(Html.fromHtml("&#8226;"))
+            dots[i].setTextSize(30)
+//            dots[i].setGravity(17)
+            dots[i].setTextColor(ContextCompat.getColor(getActivity(), R.color.grey_color))
+            mBackdropDotHolderLayout.addView(dots[i])
+//            LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,
+//                    ViewGroup.LayoutParams.WRAP_CONTENT)
+//            layoutParams.gravity = Gravity.BOTTOM
+//            dots[i].setLayoutParams(layoutParams)
+        }
+        //Set the first one's color
+        dots[0].setTextSize(50)
+        dots[0].setTextColor(ContextCompat.getColor(getActivity(), R.color.accent))
     }
 
     void handleMovieReviewOnLoadFinished(Cursor data) {
@@ -1571,89 +1642,22 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
         })
     }
 
-    void initializeBackdrop(List<String> backdropImagePathList) {
-        LogDisplay.callLog(LOG_TAG, 'initializeBackdrop is called', LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
-        setBackdropAnimation = true
-        final Animation fadeInAnimation = new AlphaAnimation(0, 1)
-        fadeInAnimation.setInterpolator(new DecelerateInterpolator())
-        fadeInAnimation.setDuration(3000)
-        final int counter = 0
-//        mBackdropImageCounter = 0
-        Callback backdropPicassoCallback = new Callback() {
-            @Override
-            void onSuccess() {
-                LogDisplay.callLog(LOG_TAG, 'Picasso:onSuccess is called', LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
-                mBackdropImageSwitcher.startAnimation(fadeInAnimation)
-                mBackdropImageSwitcher.showNext()
-                mBackdropImageCounter++
-            }
 
-            @Override
-            void onError() {
-                //TODO: need to identify if anything is needed
-                LogDisplay.callLog(LOG_TAG, 'Picasso:onError is called', LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
-            }
-        }
-        mRunnable = new Runnable() {
-            @Override
-            void run() {
-//                LogDisplay.callLog(LOG_TAG,"initializeBackdrop:picasoLoadComplete:$picasoLoadComplete",LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
-//                if (picasoLoadComplete) {
-//                }
-                final String backdropPath = "$GlobalStaticVariables.TMDB_IMAGE_BASE_URL/$GlobalStaticVariables.TMDB_IMAGE_SIZE_W500" +
-                        "${backdropImagePathList[counter]}"
-                final int evenOrOdd = counter % 2
-//                    LogDisplay.callLog(LOG_TAG, "evenOrOdd value:$evenOrOdd", LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
-                final ImageView imageView
-                //The order is important, do not alter - otherwise imageswitcher will not work properly!
-                if (evenOrOdd == 0) {
-                    imageView = mBackdropImageSwitcher.getChildAt(1) as ImageView
-                } else {
-                    imageView = mBackdropImageSwitcher.getChildAt(0) as ImageView
-                }
-                loadBackdropImage(backdropPath, imageView, counter, backdropPicassoCallback)
-//                loadBackdropImage(backdropPath, fadeInAnimation, imageView, counter)
-                counter++
-                if (counter >= backdropImagePathList.size()) {
-                    //Do not cycle through if the backdrop image count is 1
-                    if (backdropImagePathList.size() > 1) {
-                        counter = 0
-                    }
-                }
-                mHandler.postDelayed(this, 10000) //Interval time is 10 seconds
-            }
-        }
-        mHandler.postDelayed(mRunnable, 10) //Initial delay is 10 mili seconds
-    }
-
-    //TODO: Future change - provide a setting option to user to chose single backdrop for mobile data
-    //TODO: Future change - provide a setting option to user to chose no image donwload over mobile data & fo better
-    //TODO: implementation, put all picasso call in a single place(class that exists)
-    void loadBackdropImage(String backdropPath, ImageView imageView, int counter, Callback callback) {
-//    void loadBackdropImage(String backdropPath, Animation animation, ImageView imageView, int counter) {
-        LogDisplay.callLog(LOG_TAG, 'loadBackdropImage is called', LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
-        //This is to avoid abrupt flipping of first 2 / 3 images - it happens because of Picasso background call timing
-        //So for first three images no slide animation is used and it ensures no cluttering
-        if (setBackdropAnimation && counter > 3) {
-            mBackdropImageSwitcher.setInAnimation(AnimationUtils.loadAnimation(getActivity(), R.anim.slide_right_in_animation))
-            mBackdropImageSwitcher.setOutAnimation(AnimationUtils.loadAnimation(getActivity(), R.anim.slide_left_out_animation))
-            setBackdropAnimation = false
-        }
-        //Load the backdrop using Picasso
-        PicassoLoadImage.loadDetailFragmentBackdropImage(getActivity(),backdropPath,imageView,callback)
-//        Picasso.with(getActivity())
-//                .load(backdropPath)
-//                .noPlaceholder()
-//                .centerInside()
-//                .fit()
-//                .memoryPolicy(MemoryPolicy.NO_STORE, MemoryPolicy.NO_CACHE)
-//                .networkPolicy(NetworkPolicy.NO_STORE, NetworkPolicy.NO_CACHE)
-//                .into(imageView, new Callback() {
+//    void initializeBackdrop(List<String> backdropImagePathList) {
+//        LogDisplay.callLog(LOG_TAG, 'initializeBackdrop is called', LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
+//        setBackdropAnimation = true
+//        final Animation fadeInAnimation = new AlphaAnimation(0, 1)
+//        fadeInAnimation.setInterpolator(new DecelerateInterpolator())
+//        fadeInAnimation.setDuration(3000)
+//        final int counter = 0
+////        mBackdropImageCounter = 0
+//        Callback backdropPicassoCallback = new Callback() {
 //            @Override
 //            void onSuccess() {
 //                LogDisplay.callLog(LOG_TAG, 'Picasso:onSuccess is called', LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
-//                mBackdropImageSwitcher.startAnimation(animation)
+//                mBackdropImageSwitcher.startAnimation(fadeInAnimation)
 //                mBackdropImageSwitcher.showNext()
+//                mBackdropImageCounter++
 //            }
 //
 //            @Override
@@ -1661,8 +1665,76 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
 //                //TODO: need to identify if anything is needed
 //                LogDisplay.callLog(LOG_TAG, 'Picasso:onError is called', LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
 //            }
-//        })
-    }
+//        }
+//        mRunnable = new Runnable() {
+//            @Override
+//            void run() {
+////                LogDisplay.callLog(LOG_TAG,"initializeBackdrop:picasoLoadComplete:$picasoLoadComplete",LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
+////                if (picasoLoadComplete) {
+////                }
+//                final String backdropPath = "$GlobalStaticVariables.TMDB_IMAGE_BASE_URL/$GlobalStaticVariables.TMDB_IMAGE_SIZE_W500" +
+//                        "${backdropImagePathList[counter]}"
+//                final int evenOrOdd = counter % 2
+////                    LogDisplay.callLog(LOG_TAG, "evenOrOdd value:$evenOrOdd", LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
+//                final ImageView imageView
+//                //The order is important, do not alter - otherwise imageswitcher will not work properly!
+//                if (evenOrOdd == 0) {
+//                    imageView = mBackdropImageSwitcher.getChildAt(1) as ImageView
+//                } else {
+//                    imageView = mBackdropImageSwitcher.getChildAt(0) as ImageView
+//                }
+//                loadBackdropImage(backdropPath, imageView, counter, backdropPicassoCallback)
+////                loadBackdropImage(backdropPath, fadeInAnimation, imageView, counter)
+//                counter++
+//                if (counter >= backdropImagePathList.size()) {
+//                    //Do not cycle through if the backdrop image count is 1
+//                    if (backdropImagePathList.size() > 1) {
+//                        counter = 0
+//                    }
+//                }
+//                mHandler.postDelayed(this, 10000) //Interval time is 10 seconds
+//            }
+//        }
+//        mHandler.postDelayed(mRunnable, 10) //Initial delay is 10 mili seconds
+//    }
+//
+//    //TODO: Future change - provide a setting option to user to chose single backdrop for mobile data
+//    //TODO: Future change - provide a setting option to user to chose no image donwload over mobile data & fo better
+//    //TODO: implementation, put all picasso call in a single place(class that exists)
+//    void loadBackdropImage(String backdropPath, ImageView imageView, int counter, Callback callback) {
+////    void loadBackdropImage(String backdropPath, Animation animation, ImageView imageView, int counter) {
+//        LogDisplay.callLog(LOG_TAG, 'loadBackdropImage is called', LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
+//        //This is to avoid abrupt flipping of first 2 / 3 images - it happens because of Picasso background call timing
+//        //So for first three images no slide animation is used and it ensures no cluttering
+//        if (setBackdropAnimation && counter > 3) {
+//            mBackdropImageSwitcher.setInAnimation(AnimationUtils.loadAnimation(getActivity(), R.anim.slide_right_in_animation))
+//            mBackdropImageSwitcher.setOutAnimation(AnimationUtils.loadAnimation(getActivity(), R.anim.slide_left_out_animation))
+//            setBackdropAnimation = false
+//        }
+//        //Load the backdrop using Picasso
+//        PicassoLoadImage.loadDetailFragmentBackdropImage(getActivity(),backdropPath,imageView,callback)
+////        Picasso.with(getActivity())
+////                .load(backdropPath)
+////                .noPlaceholder()
+////                .centerInside()
+////                .fit()
+////                .memoryPolicy(MemoryPolicy.NO_STORE, MemoryPolicy.NO_CACHE)
+////                .networkPolicy(NetworkPolicy.NO_STORE, NetworkPolicy.NO_CACHE)
+////                .into(imageView, new Callback() {
+////            @Override
+////            void onSuccess() {
+////                LogDisplay.callLog(LOG_TAG, 'Picasso:onSuccess is called', LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
+////                mBackdropImageSwitcher.startAnimation(animation)
+////                mBackdropImageSwitcher.showNext()
+////            }
+////
+////            @Override
+////            void onError() {
+////                //TODO: need to identify if anything is needed
+////                LogDisplay.callLog(LOG_TAG, 'Picasso:onError is called', LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
+////            }
+////        })
+//    }
 
     @Override
     void onResume() {
@@ -1681,8 +1753,8 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
         //Cancel Picasso requests - required where callback (hard reference) is used
         //TODO this is not done everywhere, so need to do in other places
         Picasso.with(getActivity()).cancelRequest(mPosterImageView)
-        Picasso.with(getActivity()).cancelRequest(mBackdropImageSwitcher.getChildAt(0) as ImageView)
-        Picasso.with(getActivity()).cancelRequest(mBackdropImageSwitcher.getChildAt(1) as ImageView)
+//        Picasso.with(getActivity()).cancelRequest(mBackdropImageSwitcher.getChildAt(0) as ImageView)
+//        Picasso.with(getActivity()).cancelRequest(mBackdropImageSwitcher.getChildAt(1) as ImageView)
     }
 
     @Override

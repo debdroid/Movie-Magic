@@ -50,6 +50,7 @@ class LogDisplay {
     public static final boolean PERSON_IMAGE_ADAPTER_LOG_FLAG = true
     public static final boolean IMAGE_VIEWER_ACTIVITY_LOG_FLAG = true
     public static final boolean IMAGE_PAGER_ADAPTER_LOG_FLAG = true
+    public static final boolean DETAIL_FRAGMENT_PAGER_ADAPTER_LOG_FLAG = true
 
     static void callLog(String tag, String msg, Boolean logFlag) {
         if(SHOW_ALL_LOG_FLAG) {
