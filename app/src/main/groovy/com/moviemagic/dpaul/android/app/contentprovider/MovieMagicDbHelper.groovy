@@ -146,6 +146,7 @@ class MovieMagicDbHelper extends SQLiteOpenHelper {
                 $MovieMagicContract.MovieVideo.COLUMN_VIDEO_SITE TEXT NOT NULL,
                 $MovieMagicContract.MovieVideo.COLUMN_VIDEO_SIZE TINTEGER NULL,
                 $MovieMagicContract.MovieVideo.COLUMN_VIDEO_TYPE TEXT NOT NULL,
+                $MovieMagicContract.MovieVideo.COLUMN_VIDEO_FOR_HOME_PAGE_USE_FLAG INTEGER DEFAULT 0,
                 FOREIGN KEY ($MovieMagicContract.MovieVideo.COLUMN_FOREIGN_KEY_ID) REFERENCES
                 $MovieMagicContract.MovieBasicInfo.TABLE_NAME ($MovieMagicContract.MovieBasicInfo._ID)
                 ON DELETE CASCADE,

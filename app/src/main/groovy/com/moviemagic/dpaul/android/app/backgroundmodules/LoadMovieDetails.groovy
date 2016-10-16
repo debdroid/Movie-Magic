@@ -33,8 +33,10 @@ class LoadMovieDetails extends AsyncTask<ArrayList<Integer>, Void, Void> {
     protected Void doInBackground(ArrayList<Integer>... params) {
         final ArrayList<Integer> movieIdList = new ArrayList<Integer>()
         final ArrayList<Integer> movieBasicRowIdList = new ArrayList<Integer>()
+        final ArrayList<Integer> isForHomeList = new ArrayList<Integer>(1)
         movieIdList = params[0]
         movieBasicRowIdList = params[1]
+        isForHomeList = params[2]
         LogDisplay.callLog(LOG_TAG, "Movie ID list param-> $movieIdList", LogDisplay.LOAD_MOVIE_DETAILS_LOG_FLAG)
         LogDisplay.callLog(LOG_TAG, "Movie row id list param-> $movieBasicRowIdList", LogDisplay.LOAD_MOVIE_DETAILS_LOG_FLAG)
 
@@ -174,7 +176,7 @@ class LoadMovieDetails extends AsyncTask<ArrayList<Integer>, Void, Void> {
                 /**
                  * Process and load (insert) the movie video data
                  * **/
-                final ContentValues[] movieVideoContentValues = JsonParse.praseMovieVideoJson(jsonData, movieIdList.get(i), movieBasicRowIdList.get(i)) as ContentValues[]
+                final ContentValues[] movieVideoContentValues = JsonParse.praseMovieVideoJson(jsonData, movieIdList.get(i), movieBasicRowIdList.get(i), isForHomeList.get(0)) as ContentValues[]
                 if (movieVideoContentValues && allOperationSuccessullFlag) {
                     final int movieVideoCount = mContentResolver.bulkInsert(MovieMagicContract.MovieVideo.CONTENT_URI, movieVideoContentValues)
                     if (movieVideoCount > 0) {

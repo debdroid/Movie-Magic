@@ -85,7 +85,6 @@ class MovieMagicYoutubeFragment extends YouTubePlayerSupportFragment implements 
             if (restored) {
                 youTubePlayer.play()
             } else {
-//                youTubePlayer.release()
                 youTubePlayer.loadVideos(mVideoIds)
             }
         }

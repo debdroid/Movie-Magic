@@ -459,7 +459,7 @@ class JsonParse {
      * @param foreignKey Row id of primary movie table (movie_basic_info)
      * @return formatted list of movie now_playing as content values
      */
-    static List<ContentValues> praseMovieVideoJson(def jsonData, int movieId, int foreignKey) {
+    static List<ContentValues> praseMovieVideoJson(def jsonData, int movieId, int foreignKey, int isForHomePage) {
         List<ContentValues> movieVideoList = []
         def videoCounter = jsonData.videos.results.size() - 1
         if (jsonData.videos.results) {
@@ -487,6 +487,7 @@ class JsonParse {
                 else
                     movieVideo.put(MovieVideo.COLUMN_VIDEO_TYPE, ' ')
                 //Following two fields are populated internally, so null check not needed
+                movieVideo.put(MovieVideo.COLUMN_VIDEO_FOR_HOME_PAGE_USE_FLAG, isForHomePage)
                 movieVideo.put(MovieVideo.COLUMN_FOREIGN_KEY_ID,foreignKey)
                 movieVideo.put(MovieVideo.COLUMN_VIDEO_ORIG_MOVIE_ID,movieId)
                 //Add item to the list now

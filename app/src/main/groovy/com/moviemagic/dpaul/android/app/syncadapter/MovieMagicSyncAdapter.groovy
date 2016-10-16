@@ -218,7 +218,9 @@ class MovieMagicSyncAdapter extends AbstractThreadedSyncAdapter {
 
         if(mMovieIdList.size() > 0 && mMovieRowIdList.size() > 0) {
             LogDisplay.callLog(LOG_TAG, 'Now go and load the details of the movies', LogDisplay.MOVIE_MAGIC_SYNC_ADAPTER_LOG_FLAG)
-            final ArrayList<Integer>[] loadMovieDetailsArg = [mMovieIdList, mMovieRowIdList] as ArrayList<Integer>[]
+            final ArrayList<Integer> isForHomeList = new ArrayList<>(1)
+            isForHomeList.add(0,GlobalStaticVariables.MOVIE_MAGIC_FLAG_TRUE)
+            final ArrayList<Integer>[] loadMovieDetailsArg = [mMovieIdList, mMovieRowIdList, isForHomeList] as ArrayList<Integer>[]
             new LoadMovieDetails(mContext).execute(loadMovieDetailsArg)
         }
     }

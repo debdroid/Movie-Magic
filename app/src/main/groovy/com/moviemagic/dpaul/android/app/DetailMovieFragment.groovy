@@ -1227,11 +1227,13 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
             //If the flag is zero then all movie data not present, so go and fetch it
             if (detailDataPresentFlag == GlobalStaticVariables.MOVIE_MAGIC_FLAG_FALSE) {
                 LogDisplay.callLog(LOG_TAG, 'handleMovieBasicOnLoadFinished.Additional movie data not present, go and fetch it', LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
-                final ArrayList<Integer> mMovieIdList = new ArrayList<>(1)
-                final ArrayList<Integer> mMovieRowIdList = new ArrayList<>(1)
-                mMovieIdList.add(0,mMovieId)
-                mMovieRowIdList.add(0,_ID_movie_basic_info)
-                final ArrayList<Integer>[] loadMovieDetailsArg = [mMovieIdList, mMovieRowIdList] as ArrayList<Integer>[]
+                final ArrayList<Integer> movieIdList = new ArrayList<>(1)
+                final ArrayList<Integer> movieRowIdList = new ArrayList<>(1)
+                final ArrayList<Integer> isForHomeList = new ArrayList<>(1)
+                movieIdList.add(0,mMovieId)
+                movieRowIdList.add(0,_ID_movie_basic_info)
+                isForHomeList.add(0,GlobalStaticVariables.MOVIE_MAGIC_FLAG_FALSE)
+                final ArrayList<Integer>[] loadMovieDetailsArg = [movieIdList, movieRowIdList, isForHomeList] as ArrayList<Integer>[]
 //                final Integer[] loadMovieDetailsArg = [mMovieId, _ID_movie_basic_info] as Integer[]
                 new LoadMovieDetails(getActivity()).execute(loadMovieDetailsArg)
 //                new LoadMovieDetails(getActivity(), mMovieIdUri).execute(movieIdArray)
@@ -1243,11 +1245,13 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
             if(mMovieCategory == GlobalStaticVariables.MOVIE_CATEGORY_PERSON) {
                 //Movie does not exists, go and fetch then insert into movie basic info table
                 LogDisplay.callLog(LOG_TAG, 'handleMovieBasicOnLoadFinished.Movie does not exists, go and fetch then insert into movie basic info table', LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
-                final ArrayList<Integer> mMovieIdList = new ArrayList<>(1)
-                final ArrayList<Integer> mMovieRowIdList = new ArrayList<>(1)
-                mMovieIdList.add(0,mMovieId)
-                mMovieRowIdList.add(0,0)
-                final ArrayList<Integer>[] loadMovieDetailsArg = [mMovieIdList, mMovieRowIdList] as ArrayList<Integer>[]
+                final ArrayList<Integer> movieIdList = new ArrayList<>(1)
+                final ArrayList<Integer> movieRowIdList = new ArrayList<>(1)
+                final ArrayList<Integer> isForHomeList = new ArrayList<>(1)
+                movieIdList.add(0,mMovieId)
+                movieRowIdList.add(0,0)
+                isForHomeList.add(0,GlobalStaticVariables.MOVIE_MAGIC_FLAG_FALSE)
+                final ArrayList<Integer>[] loadMovieDetailsArg = [movieIdList, movieRowIdList, isForHomeList] as ArrayList<Integer>[]
                 new LoadMovieDetails(getActivity()).execute(loadMovieDetailsArg)
             } else {
                 LogDisplay.callLog(LOG_TAG, "Investigate how it reached here - Movie id:$mMovieId, Category:$mMovieCategory", LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)

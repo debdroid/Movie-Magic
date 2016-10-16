@@ -206,6 +206,7 @@ class TestMovieMagicDatabase extends AndroidTestCase {
         columeList << MovieMagicContract.MovieVideo.COLUMN_VIDEO_SITE
         columeList << MovieMagicContract.MovieVideo.COLUMN_VIDEO_SIZE
         columeList << MovieMagicContract.MovieVideo.COLUMN_VIDEO_TYPE
+        columeList << MovieMagicContract.MovieVideo.COLUMN_VIDEO_FOR_HOME_PAGE_USE_FLAG
 
         columnNameIndex = c.getColumnIndex('name')
         for(i in 1..c.getCount()) {

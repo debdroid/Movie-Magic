@@ -322,6 +322,7 @@ class MovieMagicContract {
         static final String COLUMN_VIDEO_SITE = 'video_site'
         static final String COLUMN_VIDEO_SIZE = 'video_size'
         static final String COLUMN_VIDEO_TYPE = 'video_type'
+        static final String COLUMN_VIDEO_FOR_HOME_PAGE_USE_FLAG = 'video_for_home_page_use'
 
         //Uri for movie_video table
         static final Uri CONTENT_URI =

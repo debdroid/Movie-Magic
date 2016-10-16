@@ -188,7 +188,7 @@ class HomeMovieFragment extends Fragment implements LoaderManager.LoaderCallback
     void onActivityCreated(Bundle savedInstanceState) {
         LogDisplay.callLog(LOG_TAG, 'onActivityCreated is called', LogDisplay.HOME_MOVIE_FRAGMENT_LOG_FLAG)
         super.onActivityCreated(savedInstanceState)
-        mMovieVideoArg = ['', GlobalStaticVariables.MOVIE_VIDEO_SITE_YOUTUBE, GlobalStaticVariables.MOVIE_VIDEO_SITE_TYPE] as String[]
+        mMovieVideoArg = [GlobalStaticVariables.MOVIE_MAGIC_FLAG_TRUE, GlobalStaticVariables.MOVIE_VIDEO_SITE_YOUTUBE, GlobalStaticVariables.MOVIE_VIDEO_SITE_TYPE] as String[]
         //If it's a fresh start then call init loader
         if(savedInstanceState == null) {
             LogDisplay.callLog(LOG_TAG, 'onActivityCreated:first time, so init loaders', LogDisplay.HOME_MOVIE_FRAGMENT_LOG_FLAG)
@@ -222,11 +222,11 @@ class HomeMovieFragment extends Fragment implements LoaderManager.LoaderCallback
                         getActivity(),                                                        //Parent Activity Context
                         MovieMagicContract.MovieVideo.CONTENT_URI,                            //Table to query
                         MOVIE_VIDEO_COLUMNS,                                                  //Projection to return
-                        """$MovieMagicContract.MovieVideo.COLUMN_VIDEO_ORIG_MOVIE_ID != ? and
+                        """$MovieMagicContract.MovieVideo.COLUMN_VIDEO_FOR_HOME_PAGE_USE_FLAG = ? and
                             $MovieMagicContract.MovieVideo.COLUMN_VIDEO_SITE = ? and
                             $MovieMagicContract.MovieVideo.COLUMN_VIDEO_TYPE = ? """,         //Selection Clause
                         mMovieVideoArg,                                                            //Selection Arg
-                        null)                                                                 //Not bother on sorting
+                        "$MovieMagicContract.MovieVideo.COLUMN_FOREIGN_KEY_ID asc ")                                                                 //Not bother on sorting
 
             case HOME_MOVIE_FRAGMENT_IN_CINEMA_LOADER_ID:
                 return new CursorLoader(
