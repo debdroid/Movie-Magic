@@ -16,5 +16,9 @@
     <color name="grey_700_color">#646464</color>
     <color name="grey_800_color">#424242</color>
     <color name="black_color">#000000</color>
+    <color name="black_color_opacity_30">#4D000000</color>
+    <color name="primary_opacity_50">#80607D8B</color>
+    <color name="accent_opacity_60">#99FF5252</color>
+
 
 </resources>

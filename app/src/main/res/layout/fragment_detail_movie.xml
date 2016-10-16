@@ -31,6 +31,7 @@
                 android:id="@+id/view_pager_indicator"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/m_design_space_between_content_area"
                 android:orientation="vertical"
                 android:layout_gravity="bottom">
 

@@ -1,6 +1,5 @@
 package com.moviemagic.dpaul.android.app
 
-import android.app.ActivityOptions
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
@@ -21,6 +20,7 @@ import android.view.View
 import android.widget.TextView
 import com.google.android.youtube.player.YouTubeApiServiceUtil
 import com.google.android.youtube.player.YouTubeInitializationResult
+import com.moviemagic.dpaul.android.app.adapter.HomeMovieAdapter
 import com.moviemagic.dpaul.android.app.adapter.MovieGridRecyclerAdapter
 import com.moviemagic.dpaul.android.app.contentprovider.MovieMagicContract
 import com.moviemagic.dpaul.android.app.syncadapter.MovieMagicSyncAdapterUtility
@@ -30,7 +30,7 @@ import groovy.transform.CompileStatic
 
 @CompileStatic
 public class MovieMagicMainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener,
-        GridMovieFragment.Callback, GridMovieFragment.CollectionColorChangeCallback {
+        GridMovieFragment.Callback, GridMovieFragment.CollectionColorChangeCallback, HomeMovieFragment.CallbackForHomeMovieClick {
     private static final String LOG_TAG = MovieMagicMainActivity.class.getSimpleName()
     private static final String STATE_APP_TITLE = 'app_title'
     private NavigationView navigationView
@@ -69,7 +69,7 @@ public class MovieMagicMainActivity extends AppCompatActivity implements Navigat
         final UpdateMenuCounter updateMenuCounter = new UpdateMenuCounter(this)
         //Execute the asynctask
         //program fails if 'Void' is used for parameter, could be because of groovy compiler??
-        //So get rid of the problem a 'dummy' integer is passed
+        //So to get rid of the problem a 'dummy' value is passed
         //TODO: Need to fix this later
         updateMenuCounter.execute(['dummy'] as String[])
         //Check to ensure Youtube exists on the device
@@ -78,6 +78,9 @@ public class MovieMagicMainActivity extends AppCompatActivity implements Navigat
             //If there are any issues we can show an error dialog.
             result.getErrorDialog(this, 0).show()
         }
+
+        //Load the Home Fragment
+        loadHomeFragment()
     }
 
     @Override
@@ -173,38 +176,39 @@ public class MovieMagicMainActivity extends AppCompatActivity implements Navigat
         if (id == R.id.nav_home) {
             showSnackBar(getString(R.string.drawer_menu_home))
             setItemTitle(getString(R.string.drawer_menu_home))
+            loadHomeFragment()
         } else if (id == R.id.nav_tmdb_popular) {
             showSnackBar(getString(R.string.drawer_menu_tmdb_popular))
             setItemTitle(getString(R.string.drawer_menu_tmdb_popular))
-            startGridFragment(GlobalStaticVariables.MOVIE_CATEGORY_POPULAR)
+            loadGridFragment(GlobalStaticVariables.MOVIE_CATEGORY_POPULAR)
         } else if (id == R.id.nav_tmdb_toprated) {
             showSnackBar(getString(R.string.drawer_menu_tmdb_toprated))
             setItemTitle(getString(R.string.drawer_menu_tmdb_toprated))
-            startGridFragment(GlobalStaticVariables.MOVIE_CATEGORY_TOP_RATED)
+            loadGridFragment(GlobalStaticVariables.MOVIE_CATEGORY_TOP_RATED)
         } else if (id == R.id.nav_tmdb_nowplaying) {
             showSnackBar(getString(R.string.drawer_menu_tmdb_nowplaying))
             setItemTitle(getString(R.string.drawer_menu_tmdb_nowplaying))
-            startGridFragment(GlobalStaticVariables.MOVIE_CATEGORY_NOW_PLAYING)
+            loadGridFragment(GlobalStaticVariables.MOVIE_CATEGORY_NOW_PLAYING)
         } else if (id == R.id.nav_tmdb_upcoming) {
             showSnackBar(getString(R.string.drawer_menu_tmdb_upcoming))
             setItemTitle(getString(R.string.drawer_menu_tmdb_upcoming))
-            startGridFragment(GlobalStaticVariables.MOVIE_CATEGORY_UPCOMING)
+            loadGridFragment(GlobalStaticVariables.MOVIE_CATEGORY_UPCOMING)
         } else if (id == R.id.nav_user_watched) {
             showSnackBar(getString(R.string.drawer_menu_user_watched))
             setItemTitle(getString(R.string.drawer_menu_user_watched))
-            startGridFragment(GlobalStaticVariables.MOVIE_CATEGORY_LOCAL_USER_WATCHED)
+            loadGridFragment(GlobalStaticVariables.MOVIE_CATEGORY_LOCAL_USER_WATCHED)
         } else if (id == R.id.nav_user_wishlist) {
             showSnackBar(getString(R.string.drawer_menu_user_wishlist))
             setItemTitle(getString(R.string.drawer_menu_user_wishlist))
-            startGridFragment(GlobalStaticVariables.MOVIE_CATEGORY_LOCAL_USER_WISH_LIST)
+            loadGridFragment(GlobalStaticVariables.MOVIE_CATEGORY_LOCAL_USER_WISH_LIST)
         } else if (id == R.id.nav_user_favourite) {
             showSnackBar(getString(R.string.drawer_menu_user_favourite))
             setItemTitle(getString(R.string.drawer_menu_user_favourite))
-            startGridFragment(GlobalStaticVariables.MOVIE_CATEGORY_LOCAL_USER_FAVOURITE)
+            loadGridFragment(GlobalStaticVariables.MOVIE_CATEGORY_LOCAL_USER_FAVOURITE)
         } else if (id == R.id.nav_user_collection) {
             showSnackBar(getString(R.string.drawer_menu_user_collection))
             setItemTitle(getString(R.string.drawer_menu_user_collection))
-            startGridFragment(GlobalStaticVariables.MOVIE_CATEGORY_LOCAL_USER_COLLECTION)
+            loadGridFragment(GlobalStaticVariables.MOVIE_CATEGORY_LOCAL_USER_COLLECTION)
         }
 
         final DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout)
@@ -212,7 +216,22 @@ public class MovieMagicMainActivity extends AppCompatActivity implements Navigat
         return true
     }
 
-    private void startGridFragment(String category) {
+    /**
+     * Load the Home Fragment
+     */
+    private void loadHomeFragment() {
+        final HomeMovieFragment homeMovieFragment = new HomeMovieFragment()
+        final FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction()
+        //Set the custom animation
+        fragmentTransaction.replace(R.id.content_movie_magic_main_layout, homeMovieFragment)
+        fragmentTransaction.commit()
+    }
+
+    /**
+     * Load the Grid Fragment of the movie selected movie category
+     * @param category Movie category
+     */
+    private void loadGridFragment(String category) {
 //        final GridMovieFragment fragment = new GridMovieFragment(category, 0)
 //        final FragmentManager fragmentManager = getSupportFragmentManager()
 //        final FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction()
@@ -234,7 +253,7 @@ public class MovieMagicMainActivity extends AppCompatActivity implements Navigat
         final FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction()
         //Set the custom animation
         fragmentTransaction.setCustomAnimations(R.anim.slide_bottom_in_animation,0)
-        fragmentTransaction.replace(R.id.content_grid_main_layout, gridMovieFragment)
+        fragmentTransaction.replace(R.id.content_movie_magic_main_layout, gridMovieFragment)
         fragmentTransaction.commit()
     }
 
@@ -249,10 +268,26 @@ public class MovieMagicMainActivity extends AppCompatActivity implements Navigat
     }
 
     private showSnackBar(String menuItem) {
-        Snackbar.make(findViewById(R.id.content_grid_main_layout), menuItem + " is clicked", Snackbar.LENGTH_LONG)
+        Snackbar.make(findViewById(R.id.content_movie_magic_main_layout), menuItem + " is clicked", Snackbar.LENGTH_LONG)
                 .setAction("Action", null).show()
     }
 
+    /**
+     * Fragment callback method for HomeMovie Item - called when a movie item is clicked
+     * @param movieId  Movie id of the selected movie
+     * @param viewHolder HomeMovieApterViewHolder
+     */
+    @Override
+    void onHomeMovieItemSelected(int movieId, String movieCategory, HomeMovieAdapter.HomeMovieAdapterViewHolder viewHolder) {
+        final Bundle bundle = new Bundle()
+        bundle.putInt(GlobalStaticVariables.MOVIE_BASIC_INFO_MOVIE_ID,movieId)
+        bundle.putString(GlobalStaticVariables.MOVIE_BASIC_INFO_CATEGORY,movieCategory)
+        final Intent intent = new Intent(this, DetailMovieActivity.class)
+        intent.putExtras(bundle)
+        startActivity(intent)
+        //Start the animation
+        overridePendingTransition(R.anim.slide_bottom_in_animation,0)
+    }
 /**
      * Updating of menu counter is tightly coupled with main_activity_menu activity, so no separate class is
      * created for the AsyncTask

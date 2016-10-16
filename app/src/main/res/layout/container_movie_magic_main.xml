@@ -21,7 +21,7 @@
             app:popupTheme="@style/AppTheme.PopupOverlay" />
     </android.support.design.widget.AppBarLayout>
 
-    <include layout="@layout/content_grid_main_activity" />
+    <include layout="@layout/content_movie_magic_main" />
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/fab"

@@ -114,5 +114,21 @@
     <string name="person_image_grid">Images</string>
     <string name="title_activity_image_viewer">Image Viewer</string>
     <string name="image_viewer_pager_footer_text">1 of 6 : Title</string>
+    <string name="home_movie_in_cinema_title">In Cinemas</string>
+    <string name="home_movie_coming_soon_title">Coming Soon</string>
+    <string name="home_movie_recently_added_title">Recently Added To List</string>
+    <string name="home_movie_title">Movie Title</string>
+    <string name="home_movie_list_text_container">Container</string>
+    <string name="home_movie_release_date">Release Date: 13 Aug 1984</string>
+    <string name="home_fragment_menu">HomeFragmentMenu</string>
+    <string name="home_movie_release_date_text">Release Date</string>
+    <string name="home_movie_run_time_text">Run Time</string>
+    <string name="home_movie_in_cinema_text">In Cinemas</string>
+    <string name="home_movie_coming_soon_text">Coming soon</string>
+    <string name="home_movie_watched_list_text">In Watched List</string>
+    <string name="home_movie_wish_list_text">In Wish List</string>
+    <string name="home_movie_favourite_list_text">In Favourite List</string>
+    <string name="home_movie_collection_list_text">In Collection List</string>
+
 
 </resources>

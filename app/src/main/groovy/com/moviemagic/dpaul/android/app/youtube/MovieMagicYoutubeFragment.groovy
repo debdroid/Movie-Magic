@@ -30,7 +30,7 @@ class MovieMagicYoutubeFragment extends YouTubePlayerSupportFragment implements 
     /**
      * Returns a new instance of MovieMagicYoutubeFragment Fragment
      *
-     * @param videoId The ID of the YouTube now_playing to play
+     * @param videoIds The IDs of the YouTube now_playing to play
      */
     public static MovieMagicYoutubeFragment createMovieMagicYouTubeFragment(final List<String> videoIds) {
         LogDisplay.callLog(LOG_TAG,'createMovieMagicYouTubeFragment is called',LogDisplay.MOVIE_MAGIC_YOUTUBE_FRAGMENT_LOG_FLAG)
@@ -48,9 +48,9 @@ class MovieMagicYoutubeFragment extends YouTubePlayerSupportFragment implements 
 
         final Bundle arguments = getArguments()
 
-        if (bundle != null && bundle.containsKey(YOUTUBE_VIDEO_ID_KEY)) {
+        if (bundle != null && bundle.containsKey(YOUTUBE_VIDEO_ID_KEY)) { // Restore case, so retrieve it from bundle
             mVideoIds = bundle.getStringArrayList(YOUTUBE_VIDEO_ID_KEY)
-        } else if (arguments != null && arguments.containsKey(YOUTUBE_VIDEO_ID_KEY)) {
+        } else if (arguments != null && arguments.containsKey(YOUTUBE_VIDEO_ID_KEY)) { // First start
             //TODO: Strangely videoIdsArrayList is no where used but holds data! so changing it, will remove after testing
 //            videoIdsArrayList = arguments.getStringArrayList(YOUTUBE_VIDEO_ID_KEY)
             mVideoIds = arguments.getStringArrayList(YOUTUBE_VIDEO_ID_KEY)
@@ -85,6 +85,7 @@ class MovieMagicYoutubeFragment extends YouTubePlayerSupportFragment implements 
             if (restored) {
                 youTubePlayer.play()
             } else {
+//                youTubePlayer.release()
                 youTubePlayer.loadVideos(mVideoIds)
             }
         }
@@ -101,6 +102,13 @@ class MovieMagicYoutubeFragment extends YouTubePlayerSupportFragment implements 
             Toast.makeText(getActivity(), R.string.youtube_initialization_error, Toast.LENGTH_LONG).show()
             LogDisplay.callLog(LOG_TAG,'onInitializationFailure:non-user recoverable',LogDisplay.MOVIE_MAGIC_YOUTUBE_FRAGMENT_LOG_FLAG)
         }
+    }
+
+    @Override
+    void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser)
+        LogDisplay.callLog(LOG_TAG,'setUserVisibleHint is called',LogDisplay.MOVIE_MAGIC_YOUTUBE_FRAGMENT_LOG_FLAG)
+//        initialize(BuildConfig.YOUTUBE_API_KEY, this)
     }
 
     @Override

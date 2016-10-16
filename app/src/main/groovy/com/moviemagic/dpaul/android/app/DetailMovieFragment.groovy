@@ -22,6 +22,7 @@ import android.support.v4.content.ContextCompat
 import android.support.v4.content.CursorLoader
 import android.support.v4.content.Loader
 import android.support.v4.graphics.drawable.DrawableCompat
+import android.support.v4.view.ViewCompat
 import android.support.v4.view.ViewPager
 import android.support.v4.view.ViewPager.OnPageChangeListener
 import android.support.v7.app.AppCompatActivity
@@ -140,12 +141,11 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
     private int mBackdropImageCounter = 0
     private List<String> mBackdropList
     private CallbackForBackdropImageClick mCallbackForBackdropImageClick
+    private int mBackdropViewPagerPos = 0
 
 
 
 //    public static final String MOVIE_BASIC_INFO_MOVIE_ID_URI = 'movie_basic_info_movie_id_uri'
-    private static final String MOVIE_VIDEO_SITE_YOUTUBE = 'YouTube'
-    private static final String MOVIE_VIDEO_SITE_TYPE = 'Trailer'
     private static final int MOVIE_DETAIL_FRAGMENT_BASIC_DATA_LOADER_ID = 0
     private static final int MOVIE_DETAIL_FRAGMENT_SIMILAR_MOVIE_LOADER_ID = 1
     private static final int MOVIE_DETAIL_FRAGMENT_MOVIE_VIDEO_LOADER_ID = 2
@@ -776,7 +776,7 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
 //            mMovieRowIdArg = [Integer.toString(_ID_movie_basic_info)] as String[]
             mMovieIdArg = [Integer.toString(mMovieId)] as String[]
             mMovieIdCategoryArg = [Integer.toString(mMovieId), mMovieCategory] as String[]
-            mVideoArg = [Integer.toString(mMovieId), MOVIE_VIDEO_SITE_YOUTUBE, MOVIE_VIDEO_SITE_TYPE] as String[]
+            mVideoArg = [Integer.toString(mMovieId), GlobalStaticVariables.MOVIE_VIDEO_SITE_YOUTUBE, GlobalStaticVariables.MOVIE_VIDEO_SITE_TYPE] as String[]
             mReleaseInfoArg = [Integer.toString(mMovieId), mLocale] as String[]
             mMovieImageArg = [Integer.toString(mMovieId), GlobalStaticVariables.IMAGE_TYPE_BACKDROP] as String[]
         } else {
@@ -790,6 +790,7 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
         }
         //init all the loaders for fresh start or restart (for restore cases)
         if (savedInstanceState == null) {
+            mBackdropViewPagerPos = 0
             LogDisplay.callLog(LOG_TAG, 'onActivityCreated:first time, so init loaders', LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
             getLoaderManager().initLoader(MOVIE_DETAIL_FRAGMENT_BASIC_DATA_LOADER_ID, null, this)
             getLoaderManager().initLoader(MOVIE_DETAIL_FRAGMENT_SIMILAR_MOVIE_LOADER_ID, null, this)
@@ -801,6 +802,7 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
             getLoaderManager().initLoader(MOVIE_DETAIL_FRAGMENT_MOVIE_REVIEW_LOADER_ID, null, this)
             getLoaderManager().initLoader(MOVIE_DETAIL_FRAGMENT_MOVIE_USER_LIST_FLAG_LOADER_ID, null, this)
         } else {
+            mBackdropViewPagerPos = savedInstanceState.getInt(GlobalStaticVariables.DETAIL_BACKDROP_VIEWPAGER_POSITION,0)
             LogDisplay.callLog(LOG_TAG, 'onActivityCreated:not first time, so restart loaders', LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
             getLoaderManager().restartLoader(MOVIE_DETAIL_FRAGMENT_BASIC_DATA_LOADER_ID, null, this)
             getLoaderManager().restartLoader(MOVIE_DETAIL_FRAGMENT_SIMILAR_MOVIE_LOADER_ID, null, this)
@@ -819,6 +821,7 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
         //save the mMovieId, so that in case the fragment restores it can retrieve the value properly
         //TODO: looks like this is not needed, so commented out
 //        outState.putInt(GlobalStaticVariables.MOVIE_BASIC_INFO_MOVIE_ID,mMovieId)
+        outState.putInt(GlobalStaticVariables.DETAIL_BACKDROP_VIEWPAGER_POSITION,mBackdropViewPagerPos)
         // Now call the superclass so it can save the view hierarchy state
         super.onSaveInstanceState(outState)
     }
@@ -1224,8 +1227,13 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
             //If the flag is zero then all movie data not present, so go and fetch it
             if (detailDataPresentFlag == GlobalStaticVariables.MOVIE_MAGIC_FLAG_FALSE) {
                 LogDisplay.callLog(LOG_TAG, 'handleMovieBasicOnLoadFinished.Additional movie data not present, go and fetch it', LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
-                final Integer[] movieIdArray = [mMovieId, _ID_movie_basic_info] as Integer[]
-                new LoadMovieDetails(getActivity()).execute(movieIdArray)
+                final ArrayList<Integer> mMovieIdList = new ArrayList<>(1)
+                final ArrayList<Integer> mMovieRowIdList = new ArrayList<>(1)
+                mMovieIdList.add(0,mMovieId)
+                mMovieRowIdList.add(0,_ID_movie_basic_info)
+                final ArrayList<Integer>[] loadMovieDetailsArg = [mMovieIdList, mMovieRowIdList] as ArrayList<Integer>[]
+//                final Integer[] loadMovieDetailsArg = [mMovieId, _ID_movie_basic_info] as Integer[]
+                new LoadMovieDetails(getActivity()).execute(loadMovieDetailsArg)
 //                new LoadMovieDetails(getActivity(), mMovieIdUri).execute(movieIdArray)
             } else {
                 LogDisplay.callLog(LOG_TAG, 'handleMovieBasicOnLoadFinished.Additional movie data already present', LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
@@ -1235,9 +1243,14 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
             if(mMovieCategory == GlobalStaticVariables.MOVIE_CATEGORY_PERSON) {
                 //Movie does not exists, go and fetch then insert into movie basic info table
                 LogDisplay.callLog(LOG_TAG, 'handleMovieBasicOnLoadFinished.Movie does not exists, go and fetch then insert into movie basic info table', LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
-                new LoadMovieDetails(getActivity()).execute([mMovieId,0] as Integer[])
+                final ArrayList<Integer> mMovieIdList = new ArrayList<>(1)
+                final ArrayList<Integer> mMovieRowIdList = new ArrayList<>(1)
+                mMovieIdList.add(0,mMovieId)
+                mMovieRowIdList.add(0,0)
+                final ArrayList<Integer>[] loadMovieDetailsArg = [mMovieIdList, mMovieRowIdList] as ArrayList<Integer>[]
+                new LoadMovieDetails(getActivity()).execute(loadMovieDetailsArg)
             } else {
-                LogDisplay.callLog(LOG_TAG, "Investigate how reached here - Movie id:$mMovieId, Category:$mMovieCategory", LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
+                LogDisplay.callLog(LOG_TAG, "Investigate how it reached here - Movie id:$mMovieId, Category:$mMovieCategory", LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
             }
         }
     }
@@ -1263,9 +1276,9 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
 
     void initiateYouTubeVideo(Cursor data) {
         LogDisplay.callLog(LOG_TAG, "initiateYouTubeVideo.Cursor rec count -> ${data.getCount()}", LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
-        List<String> youtubeVideoKey
+//        List<String> youtubeVideoKey
         if (data.moveToFirst()) {
-            youtubeVideoKey = new ArrayList<>()
+            final List<String> youtubeVideoKey = new ArrayList<>()
             for (i in 0..(data.count - 1)) {
                 youtubeVideoKey.add(data.getString(COL_MOVIE_VIDEO_KEY))
                 LogDisplay.callLog(LOG_TAG, "YouTube now_playing key= $youtubeVideoKey", LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
@@ -1326,37 +1339,53 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
             LogDisplay.callLog(LOG_TAG, "backdropImageArray-> $mBackdropList", LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
 //            mBackdropCallback.initializeActivityHostedBackdrop(mBackdropList)
 //            initializeBackdrop(mBackdropList)
+            //This initialize ensures the pager is at position zero if the loader is executed due to change in data
+            //TODO: This initialize causing view pager to start from zero on orientation change, need to fix it
+//            mBackdropViewPagerPos = 0
             final DetailFragmentPagerAdapter adapter = new DetailFragmentPagerAdapter(getActivity(), mBackdropList as String[],
                                 new DetailFragmentPagerAdapter.DetailFragmentPagerAdapterOnClickHandler() {
                                     @Override
                                     void onClick(int position) {
                                         LogDisplay.callLog(LOG_TAG, "DetailFragmentPagerAdapter clicked.Position->$position", LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
+                                        mCallbackForBackdropImageClick.onBackdropImageClicked(mMovieTitle, position, mBackdropList as ArrayList<String>)
+
                                     }
                                 })
             mBackdropViewPager.setAdapter(adapter)
             final int dotsCount = adapter.getCount()
-            final TextView[] dots = new TextView[dotsCount]
+//            final TextView[] dots = new TextView[dotsCount]
+            final ImageButton[] dots = new ImageButton[dotsCount]
             setBackDropViewPagerDots(dotsCount, dots)
             final OnPageChangeListener onPageChangeListener = new OnPageChangeListener() {
                 @Override
                 void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-
                 }
 
                 @Override
                 void onPageSelected(int position) {
 //                    mBackdropDotHolderLayout.removeAllViews()
+                    final LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(25,25)
+                    final ColorStateList greyColorStateList = ColorStateList.valueOf(ContextCompat.getColor(getActivity(), R.color.grey_600_color))
                     for (i in 0..(dotsCount - 1)) {
                         if (i != position) {
+                            dots[i].setLayoutParams(layoutParams)
+                            ViewCompat.setBackgroundTintList(dots[i], greyColorStateList)
+//                            dots[i].setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.grey_color))
 //                            dots[i].setText(Html.fromHtml("&#8226;"))
-                            dots[i].setTextSize(30)
-                            dots[i].setTextColor(ContextCompat.getColor(getActivity(), R.color.grey_color))
+//                            dots[i].setTextSize(30)
+//                            dots[i].setTextColor(ContextCompat.getColor(getActivity(), R.color.grey_color))
 //                            mBackdropDotHolderLayout.addView(dots[i])
 //                        dots[i].setGravity(17)
                         } else {
+//                            layoutParams.width = 40
+//                            layoutParams.height = 40
+                            dots[position].setLayoutParams(new LinearLayout.LayoutParams(40,40))
+                            final ColorStateList accentColorStateList = ColorStateList.valueOf(ContextCompat.getColor(getActivity(), R.color.accent))
+                            ViewCompat.setBackgroundTintList(dots[position], accentColorStateList)
+//                            dots[position].setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.accent))
 //                            dots[position].setText(Html.fromHtml("&#8226;"))
-                            dots[position].setTextSize(50)
-                            dots[position].setTextColor(ContextCompat.getColor(getActivity(), R.color.accent))
+//                            dots[position].setTextSize(50)
+//                            dots[position].setTextColor(ContextCompat.getColor(getActivity(), R.color.accent))
 //                            mBackdropDotHolderLayout.addView(dots[position])
 //                            dots[position].setTextColor(ContextCompat.getColor(getActivity(), R.color.accent))
 //                    dots[position].setText(Html.fromHtml("&#8226;"))
@@ -1365,35 +1394,50 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
 //                    mBackdropDotHolderLayout.updateViewLayout(dots[position],ViewGroup.LayoutParams.si)
                         }
                     }
+                    mBackdropViewPagerPos = position
                 }
 
                 @Override
                 void onPageScrollStateChanged(int state) {
-
                 }
             }
             mBackdropViewPager.removeOnPageChangeListener(onPageChangeListener)
             mBackdropViewPager.addOnPageChangeListener(onPageChangeListener)
-            mBackdropViewPager.setCurrentItem(0)
+            mBackdropViewPager.setCurrentItem(mBackdropViewPagerPos)
         }
     }
 
-    void setBackDropViewPagerDots(int dotsCount, TextView[] dots) {
+    void setBackDropViewPagerDots(int dotsCount, ImageButton[] dots) {
+//    void setBackDropViewPagerDots(int dotsCount, TextView[] dots) {
+        final LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(25,25)
+        final ColorStateList greyColorStateList = ColorStateList.valueOf(ContextCompat.getColor(getActivity(), R.color.grey_600_color))
+        layoutParams.setMargins(1,0,1,0)
         for(i in 0..(dotsCount - 1)) {
-            dots[i] = new TextView(getActivity())
-            dots[i].setText(Html.fromHtml("&#8226;"))
-            dots[i].setTextSize(30)
+//            dots[i] = new TextView(getActivity())
+            dots[i] = new ImageButton(getActivity())
+            dots[i].setBackgroundResource(R.drawable.view_pager_dot)
+//            dots[i].setText(Html.fromHtml("&#8226;"))
+//            dots[i].setTextSize(30)
 //            dots[i].setGravity(17)
-            dots[i].setTextColor(ContextCompat.getColor(getActivity(), R.color.grey_color))
-            mBackdropDotHolderLayout.addView(dots[i])
-//            LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,
-//                    ViewGroup.LayoutParams.WRAP_CONTENT)
+//            dots[i].setTextColor(ContextCompat.getColor(getActivity(), R.color.grey_color))
 //            layoutParams.gravity = Gravity.BOTTOM
-//            dots[i].setLayoutParams(layoutParams)
+            dots[i].setLayoutParams(layoutParams)
+            ViewCompat.setBackgroundTintList(dots[i], greyColorStateList)
+//            dots[i].setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.grey_color))
+            mBackdropDotHolderLayout.addView(dots[i])
         }
         //Set the first one's color
-        dots[0].setTextSize(50)
-        dots[0].setTextColor(ContextCompat.getColor(getActivity(), R.color.accent))
+//        layoutParams.width = 40
+//        layoutParams.height = 40
+        dots[mBackdropViewPagerPos].setLayoutParams(new LinearLayout.LayoutParams(40,40))
+//        dots[0].setColorFilter(ContextCompat.getColor(getActivity(), R.color.accent))
+        final ColorStateList accentColorStateList = ColorStateList.valueOf(ContextCompat.getColor(getActivity(), R.color.accent))
+        ViewCompat.setBackgroundTintList(dots[mBackdropViewPagerPos], accentColorStateList)
+//        dots[0].setBackgroundTintList(new ColorStateList())
+//        dots[0].setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.accent))
+
+//        dots[0].setTextSize(50)
+//        dots[0].setTextColor(ContextCompat.getColor(getActivity(), R.color.accent))
     }
 
     void handleMovieReviewOnLoadFinished(Cursor data) {
@@ -1740,16 +1784,16 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
     void onResume() {
         LogDisplay.callLog(LOG_TAG, 'onResume is called', LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
         super.onResume()
-        mHandler.postDelayed(mRunnable,10000)
+//        mHandler.postDelayed(mRunnable,5000)
     }
 
     @Override
     void onStop() {
         LogDisplay.callLog(LOG_TAG, 'onStop is called', LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
         super.onStop()
-        if(mHandler) {
-            mHandler.removeCallbacksAndMessages(null)
-        }
+//        if(mHandler) {
+//            mHandler.removeCallbacksAndMessages(null)
+//        }
         //Cancel Picasso requests - required where callback (hard reference) is used
         //TODO this is not done everywhere, so need to do in other places
         Picasso.with(getActivity()).cancelRequest(mPosterImageView)

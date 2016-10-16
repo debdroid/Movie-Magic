@@ -48,6 +48,11 @@
     <dimen name="movie_detail_collection_backdrop_height">240dp</dimen>
     <dimen name="grid_overlapping_text_padding">4dp</dimen>
     <dimen name="person_biography_collapse_icon_size">48dp</dimen>
+    <dimen name="home_movie_view_pager_height">250dp</dimen>
+    <dimen name="home_movie_pager_title_strip_padding">4dp</dimen>
+    <dimen name="home_movie_backdrop_image_height">250dp</dimen>
+    <dimen name="home_movie_poster_image_width">140dp</dimen>
+    <dimen name="home_movie_poster_image_height">190dp</dimen>
 
     <item name="movie_detail_user_list_drawable_alpha_value" type="dimen" format="float">0.4</item>
 </resources>

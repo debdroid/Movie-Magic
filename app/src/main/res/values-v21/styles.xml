@@ -6,7 +6,10 @@
         <item name="android:statusBarColor">@android:color/transparent</item>
         <!--<item name="android:statusBarColor">@color/primary</item>-->
     </style>
-
+    <style name="ImageViewerTheme" parent="BaseTheme">
+        <item name="android:windowDrawsSystemBarBackgrounds">true</item>
+        <item name="android:statusBarColor">@color/primary_dark</item>
+    </style>
         <!--<style name="AppTheme.MovieCollection" parent="@style/AppTheme">-->
         <!--<item name="android:windowContentTransitions">true</item>-->
         <!--<item name="android:windowEnterTransition">@transition/enter_transition</item>-->

@@ -40,7 +40,7 @@ class PicassoLoadImage {
                 .load(imagePath)
                 .fit()
                 .placeholder(R.drawable.grid_image_placeholder)
-                .error(R.drawable.na_person_icon)
+                .error(R.drawable.grid_image_error)
                 .into(imageView, callback)
     }
 
@@ -98,7 +98,7 @@ class PicassoLoadImage {
         Picasso.with(context)
                 .load(imagePath)
                 .placeholder(R.drawable.grid_image_placeholder)
-                .error(R.drawable.na_person_icon)
+                .error(R.drawable.grid_image_error)
                 .into(imageView)
     }
 }

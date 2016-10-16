@@ -297,7 +297,7 @@ class GridMovieFragment extends Fragment implements LoaderManager.LoaderCallback
 
 
     @Override
-    public void onActivityCreated(Bundle savedInstanceState) {
+    void onActivityCreated(Bundle savedInstanceState) {
         LogDisplay.callLog(LOG_TAG, 'onActivityCreated is called', LogDisplay.GRID_MOVIE_FRAGMENT_LOG_FLAG)
         super.onActivityCreated(savedInstanceState)
         //If savedInstanceState (i.e. in case of restore), restore the value of mMovieCategory

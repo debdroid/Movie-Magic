@@ -6,16 +6,20 @@
         <item name="colorPrimary">@color/primary</item>
         <item name="colorPrimaryDark">@color/primary_dark</item>
         <item name="colorAccent">@color/accent</item>
-        <item name="toolbarStyle">@style/Toolbar</item>
+        <!--<item name="toolbarStyle">@style/Toolbar</item>-->
     </style>
 
     <style name="AppTheme" parent="BaseTheme">
     </style>
 
-    <!-- Toolbar theme -->
-    <style name="Toolbar" parent="Widget.AppCompat.Toolbar">
-        <item name="popupTheme">@style/Theme.AppCompat.Light</item>
+    <style name="ImageViewerTheme" parent="BaseTheme">
+
     </style>
+
+    <!-- Toolbar theme -->
+    <!--<style name="Toolbar" parent="Widget.AppCompat.Toolbar">-->
+        <!--<item name="popupTheme">@style/Theme.AppCompat.Light</item>-->
+    <!--</style>-->
 
     <!--<style name="AppTheme.NoActionBar">-->
         <!--<item name="windowActionBar">false</item>-->
@@ -49,6 +53,6 @@
     <style name="AppTheme.MovieCollection" parent="@style/AppTheme"/>
     <style name="AppTheme.MoviePerson" parent="@style/AppTheme"/>
     <!--<style name="AppTheme.ImageViewer" parent="Theme.AppCompat.DayNight.NoActionBar"/>-->
-    <style name="AppTheme.ImageViewer" parent="@style/BaseTheme"/>
+    <style name="AppTheme.ImageViewer" parent="@style/ImageViewerTheme"/>
     <!--<style name="AppTheme.ImageViewer" parent="@style/AppTheme"/>-->
 </resources>

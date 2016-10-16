@@ -11,6 +11,7 @@ import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import com.moviemagic.dpaul.android.app.BuildConfig
+import com.moviemagic.dpaul.android.app.backgroundmodules.LoadMovieDetails
 import com.moviemagic.dpaul.android.app.contentprovider.MovieMagicContract
 import com.moviemagic.dpaul.android.app.backgroundmodules.GlobalStaticVariables
 import com.moviemagic.dpaul.android.app.backgroundmodules.JsonParse
@@ -35,6 +36,13 @@ class MovieMagicSyncAdapter extends AbstractThreadedSyncAdapter {
 
     //Define a flag to control the record insertion / deletion
     private boolean deleteRecords = true
+
+    //Columns to fetch from movie_basic_info table
+    private static final String[] MOVIE_BASIC_INFO_COLUMNS = [MovieMagicContract.MovieBasicInfo._ID,
+                                                              MovieMagicContract.MovieBasicInfo.COLUMN_MOVIE_ID]
+    //These are indices of the above columns, if projection array changes then this needs to be changed
+    final static int COL_MOVIE_BASIC_ID = 0
+    final static int COL_MOVIE_BASIC_MOVIE_ID = 1
 
     MovieMagicSyncAdapter(Context context, boolean autoInitialize) {
         super(context, autoInitialize)
@@ -87,6 +95,8 @@ class MovieMagicSyncAdapter extends AbstractThreadedSyncAdapter {
             contentValues = []
         }
         deleteRecords = true
+        //Now load details for home page items
+        loadMovieDetailsForHomePageItems()
     }
 
     private List<ContentValues> downloadMovieList (String category, int page) {
@@ -105,7 +115,7 @@ class MovieMagicSyncAdapter extends AbstractThreadedSyncAdapter {
                     .build()
 
             URL url = new URL(uri.toString())
-            LogDisplay.callLog(LOG_TAG,"Movie url-> ${uri.toString()}",LogDisplay.MOVIE_MAGIC_SYNC_ADAPTER_LOG_FLAG)
+            LogDisplay.callLog(LOG_TAG,"Movie url for $category & page# $page -> ${uri.toString()}",LogDisplay.MOVIE_MAGIC_SYNC_ADAPTER_LOG_FLAG)
 
             //This is intentional so that at lest one page is not loaded in order to make sure
             //at least one (i.e. first) LoadMoreMovies call is always successful
@@ -125,6 +135,7 @@ class MovieMagicSyncAdapter extends AbstractThreadedSyncAdapter {
                 LogDisplay.callLog(LOG_TAG,"Total records deleted->$deleteCount",LogDisplay.MOVIE_MAGIC_SYNC_ADAPTER_LOG_FLAG)
                 deleteRecords = false
             }
+
         } catch (URISyntaxException e) {
             Log.e(LOG_TAG, e.message, e)
         } catch (JsonException e) {
@@ -147,6 +158,68 @@ class MovieMagicSyncAdapter extends AbstractThreadedSyncAdapter {
             }
         } else {
             LogDisplay.callLog(LOG_TAG,'cv is null. JsonParse.parseMovieListJson returned null',LogDisplay.MOVIE_MAGIC_SYNC_ADAPTER_LOG_FLAG)
+        }
+    }
+
+    //Load movie details for the movies which are used for Home page (Now playing & upcoming)
+    private void loadMovieDetailsForHomePageItems() {
+        LogDisplay.callLog(LOG_TAG,'loadMovieDetailsForHomePageItems is called',LogDisplay.MOVIE_MAGIC_SYNC_ADAPTER_LOG_FLAG)
+        final movieDataCursor
+        final ArrayList<Integer> mMovieIdList = new ArrayList<>()
+        final ArrayList<Integer> mMovieRowIdList = new ArrayList<>()
+        //First load for now playing
+        movieDataCursor = mContentResolver.query(
+                MovieMagicContract.MovieBasicInfo.CONTENT_URI,
+                MOVIE_BASIC_INFO_COLUMNS,
+                """$MovieMagicContract.MovieBasicInfo.COLUMN_MOVIE_CATEGORY = ? and
+                        $MovieMagicContract.MovieBasicInfo.COLUMN_POSTER_PATH <> ? and
+                        $MovieMagicContract.MovieBasicInfo.COLUMN_BACKDROP_PATH <> ? """,
+                [GlobalStaticVariables.MOVIE_CATEGORY_NOW_PLAYING, '', ''] as String[],
+                "$MovieMagicContract.MovieBasicInfo.COLUMN_RELEASE_DATE desc limit $GlobalStaticVariables.HOME_PAGE_MAX_MOVIE_SHOW_COUNTER")
+
+        if(movieDataCursor.moveToFirst()) {
+            for (i in 0..(movieDataCursor.getCount() - 1)) {
+                mMovieIdList.add(i, movieDataCursor.getInt(COL_MOVIE_BASIC_MOVIE_ID))
+                mMovieRowIdList.add(i, movieDataCursor.getInt(COL_MOVIE_BASIC_ID))
+                movieDataCursor.moveToNext()
+            }
+            //Close the cursor
+            movieDataCursor.close()
+            LogDisplay.callLog(LOG_TAG, 'Add data for now playing movies', LogDisplay.MOVIE_MAGIC_SYNC_ADAPTER_LOG_FLAG)
+            LogDisplay.callLog(LOG_TAG, "Now playing.Movie ID list-> $mMovieIdList", LogDisplay.MOVIE_MAGIC_SYNC_ADAPTER_LOG_FLAG)
+            LogDisplay.callLog(LOG_TAG, "Now playing.Movie row id list-> $mMovieRowIdList", LogDisplay.MOVIE_MAGIC_SYNC_ADAPTER_LOG_FLAG)
+        } else {
+            LogDisplay.callLog(LOG_TAG, 'Empty cursor returned by movie-basic_info for now playing', LogDisplay.MOVIE_MAGIC_SYNC_ADAPTER_LOG_FLAG)
+        }
+        //Now load for upcoming
+        movieDataCursor = mContentResolver.query(
+                MovieMagicContract.MovieBasicInfo.CONTENT_URI,
+                MOVIE_BASIC_INFO_COLUMNS,
+                """$MovieMagicContract.MovieBasicInfo.COLUMN_MOVIE_CATEGORY = ? and
+                        $MovieMagicContract.MovieBasicInfo.COLUMN_POSTER_PATH <> ? and
+                        $MovieMagicContract.MovieBasicInfo.COLUMN_BACKDROP_PATH <> ? """,
+                [GlobalStaticVariables.MOVIE_CATEGORY_UPCOMING, '', ''] as String[],
+                "$MovieMagicContract.MovieBasicInfo.COLUMN_RELEASE_DATE desc limit $GlobalStaticVariables.HOME_PAGE_MAX_MOVIE_SHOW_COUNTER")
+
+        if(movieDataCursor.moveToFirst()) {
+            for (i in 0..(movieDataCursor.getCount() - 1)) {
+                mMovieIdList.add(i, movieDataCursor.getInt(COL_MOVIE_BASIC_MOVIE_ID))
+                mMovieRowIdList.add(i, movieDataCursor.getInt(COL_MOVIE_BASIC_ID))
+                movieDataCursor.moveToNext()
+            }
+            //Close the cursor
+            movieDataCursor.close()
+            LogDisplay.callLog(LOG_TAG, 'Add data for up coming movies', LogDisplay.MOVIE_MAGIC_SYNC_ADAPTER_LOG_FLAG)
+            LogDisplay.callLog(LOG_TAG, "Up coming.Movie ID list-> $mMovieIdList", LogDisplay.MOVIE_MAGIC_SYNC_ADAPTER_LOG_FLAG)
+            LogDisplay.callLog(LOG_TAG, "Up coming.Movie row id list-> $mMovieRowIdList", LogDisplay.MOVIE_MAGIC_SYNC_ADAPTER_LOG_FLAG)
+        } else {
+            LogDisplay.callLog(LOG_TAG, 'Empty cursor returned by movie-basic_info for up coming', LogDisplay.MOVIE_MAGIC_SYNC_ADAPTER_LOG_FLAG)
+        }
+
+        if(mMovieIdList.size() > 0 && mMovieRowIdList.size() > 0) {
+            LogDisplay.callLog(LOG_TAG, 'Now go and load the details of the movies', LogDisplay.MOVIE_MAGIC_SYNC_ADAPTER_LOG_FLAG)
+            final ArrayList<Integer>[] loadMovieDetailsArg = [mMovieIdList, mMovieRowIdList] as ArrayList<Integer>[]
+            new LoadMovieDetails(mContext).execute(loadMovieDetailsArg)
         }
     }
 }

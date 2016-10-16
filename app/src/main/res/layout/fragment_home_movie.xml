@@ -1,0 +1,200 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v4.widget.NestedScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/primary"
+        android:orientation="vertical">
+        <FrameLayout
+            android:id="@+id/home_youtube_fragment_container"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:paddingBottom="@dimen/m_design_space_between_content_area"
+            android:visibility="visible" />
+        <!--<android.support.v4.view.ViewPager-->
+            <!--android:id="@+id/home_movie_viewpager"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="@dimen/home_movie_view_pager_height"-->
+            <!--android:paddingBottom="@dimen/m_design_space_between_content_area">-->
+            <!--<android.support.v4.view.PagerTitleStrip-->
+                <!--android:id="@+id/home_movie_viewpager_title_strip"-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_gravity="top"-->
+                <!--android:background="@color/primary_dark"-->
+                <!--android:textColor="@color/white_color"-->
+                <!--android:alpha="0.5"-->
+                <!--android:paddingTop="@dimen/home_movie_pager_title_strip_padding"-->
+                <!--android:paddingBottom="@dimen/home_movie_pager_title_strip_padding" />-->
+        <!--</android.support.v4.view.ViewPager>-->
+        <!-- line divider -->
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/devider_color"
+            android:paddingTop="@dimen/m_design_space_between_content_area" />
+        <!-- Layout for In Cinemas movies -->
+        <LinearLayout
+            android:id="@+id/home_movie_in_cinema_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingBottom="@dimen/m_design_space_between_content_area"
+            android:paddingTop="@dimen/m_design_space_between_content_area">
+
+            <TextView
+                android:id="@+id/home_movie_in_cinema_header"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="left"
+                android:paddingEnd="@dimen/m_design_screen_edge_left_right_margin"
+                android:paddingLeft="@dimen/m_design_screen_edge_left_right_margin"
+                android:paddingRight="@dimen/m_design_screen_edge_left_right_margin"
+                android:paddingStart="@dimen/m_design_screen_edge_left_right_margin"
+                android:fontFamily="sans-serif-condensed"
+                android:text="@string/home_movie_in_cinema_title"
+                android:textAppearance="@style/TextAppearance.AppCompat.Headline"
+                android:textColor="@color/white_color" />
+
+            <FrameLayout
+                android:id="@+id/home_movie_in_cinema_recycler_view_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingBottom="@dimen/m_design_space_between_content_area">
+
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/home_movie_in_cinema_recycler_view"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                </android.support.v7.widget.RecyclerView>
+                <!-- this is to display a message when the recyclerview is empty -->
+                <TextView
+                    android:id="@+id/home_movie_in_cinema_recycler_view_empty_msg_text_view"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="left"
+                    android:paddingEnd="@dimen/m_design_screen_edge_left_right_margin"
+                    android:paddingLeft="@dimen/m_design_screen_edge_left_right_margin"
+                    android:paddingRight="@dimen/m_design_screen_edge_left_right_margin"
+                    android:paddingStart="@dimen/m_design_screen_edge_left_right_margin"
+                    android:text="@string/movie_data_not_available"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                    android:textColor="@color/grey_color" />
+            </FrameLayout>
+        </LinearLayout>
+        <!-- line divider -->
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/devider_color"
+            android:paddingTop="@dimen/m_design_space_between_content_area" />
+        <!-- Layout for Coming Soon movies -->
+        <LinearLayout
+            android:id="@+id/home_movie_coming_soon_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingBottom="@dimen/m_design_space_between_content_area"
+            android:paddingTop="@dimen/m_design_space_between_content_area">
+
+            <TextView
+                android:id="@+id/home_movie_coming_soon_header"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="left"
+                android:paddingEnd="@dimen/m_design_screen_edge_left_right_margin"
+                android:paddingLeft="@dimen/m_design_screen_edge_left_right_margin"
+                android:paddingRight="@dimen/m_design_screen_edge_left_right_margin"
+                android:paddingStart="@dimen/m_design_screen_edge_left_right_margin"
+                android:fontFamily="sans-serif-condensed"
+                android:text="@string/home_movie_coming_soon_title"
+                android:textAppearance="@style/TextAppearance.AppCompat.Headline"
+                android:textColor="@color/white_color" />
+
+            <FrameLayout
+                android:id="@+id/home_movie_coming_soon_recycler_view_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingBottom="@dimen/m_design_space_between_content_area">
+
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/home_movie_coming_soon_recycler_view"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                </android.support.v7.widget.RecyclerView>
+                <!-- this is to display a message when the recyclerview is empty -->
+                <TextView
+                    android:id="@+id/home_movie_coming_soon_recycler_view_empty_msg_text_view"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="left"
+                    android:paddingEnd="@dimen/m_design_screen_edge_left_right_margin"
+                    android:paddingLeft="@dimen/m_design_screen_edge_left_right_margin"
+                    android:paddingRight="@dimen/m_design_screen_edge_left_right_margin"
+                    android:paddingStart="@dimen/m_design_screen_edge_left_right_margin"
+                    android:text="@string/movie_data_not_available"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                    android:textColor="@color/grey_color" />
+            </FrameLayout>
+        </LinearLayout>
+        <!-- line divider -->
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/devider_color"
+            android:paddingTop="@dimen/m_design_space_between_content_area" />
+        <!-- Layout for recently added movies -->
+        <LinearLayout
+            android:id="@+id/home_movie_recently_added_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingBottom="@dimen/m_design_space_between_content_area"
+            android:paddingTop="@dimen/m_design_space_between_content_area">
+
+            <TextView
+                android:id="@+id/home_movie_recently_added_header"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="left"
+                android:paddingEnd="@dimen/m_design_screen_edge_left_right_margin"
+                android:paddingLeft="@dimen/m_design_screen_edge_left_right_margin"
+                android:paddingRight="@dimen/m_design_screen_edge_left_right_margin"
+                android:paddingStart="@dimen/m_design_screen_edge_left_right_margin"
+                android:fontFamily="sans-serif-condensed"
+                android:text="@string/home_movie_recently_added_title"
+                android:textAppearance="@style/TextAppearance.AppCompat.Headline"
+                android:textColor="@color/white_color" />
+
+            <FrameLayout
+                android:id="@+id/home_movie_recently_added_recycler_view_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingBottom="@dimen/m_design_space_between_content_area">
+
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/home_movie_recently_added_recycler_view"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                </android.support.v7.widget.RecyclerView>
+                <!-- this is to display a message when the recyclerview is empty -->
+                <TextView
+                    android:id="@+id/home_movie_recently_added_recycler_view_empty_msg_text_view"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="left"
+                    android:paddingEnd="@dimen/m_design_screen_edge_left_right_margin"
+                    android:paddingLeft="@dimen/m_design_screen_edge_left_right_margin"
+                    android:paddingRight="@dimen/m_design_screen_edge_left_right_margin"
+                    android:paddingStart="@dimen/m_design_screen_edge_left_right_margin"
+                    android:text="@string/movie_data_not_available"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                    android:textColor="@color/grey_color" />
+            </FrameLayout>
+        </LinearLayout>
+    </LinearLayout>
+</android.support.v4.widget.NestedScrollView>

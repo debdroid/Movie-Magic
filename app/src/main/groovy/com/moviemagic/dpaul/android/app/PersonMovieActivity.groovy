@@ -69,8 +69,8 @@ class PersonMovieActivity extends AppCompatActivity implements PersonMovieFragme
 
     /**
      * Fragment callback method for PersonCast - called when a movie item is clicked for person cast
-     * @param movieId   Movie id of the selected movie
-     * @param viewHolder    PersonCastAdapterViewHolder
+     * @param movieId Movie id of the selected movie
+     * @param viewHolder PersonCastAdapterViewHolder
      */
     @Override
     void onCastMovieItemSelected(int movieId, PersonCastAdapter.PersonCastAdapterViewHolder viewHolder) {
@@ -86,8 +86,8 @@ class PersonMovieActivity extends AppCompatActivity implements PersonMovieFragme
 
     /**
      * Fragment callback method for PersonCrew - called when a movie item is clicked for person crew
-     * @param movieId   Movie id of the selected movie
-     * @param viewHolder    PersonCrewAdapterViewHolder
+     * @param movieId Movie id of the selected movie
+     * @param viewHolder PersonCrewAdapterViewHolder
      */
     @Override
     void onCrewMovieItemSelected(int movieId, PersonCrewAdapter.PersonCrewAdapterViewHolder viewHolder) {
@@ -103,9 +103,9 @@ class PersonMovieActivity extends AppCompatActivity implements PersonMovieFragme
 
     /**
      * Fragment callback method for PersonImage - called when a image item is clicked for person image
-     * @param title   person name
-     * @param imageFilePath   array of image profile path of the person
-     * @param viewHolder    PersonImageAdapterViewHolder
+     * @param title person name
+     * @param imageFilePath array of image profile path of the person
+     * @param viewHolder PersonImageAdapterViewHolder
      */
     @Override
     void onImageMovieItemSelected(String title, int adapterPosition, String[] imageFilePath, PersonImageAdapter.PersonImageAdapterViewHolder viewHolder) {
