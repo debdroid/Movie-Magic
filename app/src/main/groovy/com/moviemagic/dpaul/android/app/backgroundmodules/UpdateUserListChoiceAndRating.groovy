@@ -21,8 +21,7 @@ class UpdateUserListChoiceAndRating extends AsyncTask<String, Void, Integer> {
     private final ContentResolver mContentResolver
     private final Context mContext
     private final LinearLayout mUserDrawableLayout
-//    private final int mMovieBasicInfo_ID
-    private final int mBackgroundColor, mBodyTextColor
+    private final int mBodyTextColor
     private final int mMovieId
     private final String mMovieTitle
     private String mUserListMsg
@@ -53,7 +52,6 @@ class UpdateUserListChoiceAndRating extends AsyncTask<String, Void, Integer> {
         mContext = ctx
         mContentResolver = mContext.getContentResolver()
         mUserDrawableLayout = userDrawableLayout
-//        mMovieBasicInfo_ID = _ID_movieBasicInfo
         mMovieId = movieId
         mMovieTitle = movieTitle
         mBodyTextColor = backgroundColor
@@ -70,12 +68,9 @@ class UpdateUserListChoiceAndRating extends AsyncTask<String, Void, Integer> {
         final String userListCategory
         final ContentValues movieBasicInfoContentValues = new ContentValues()
         final ContentValues movieUserListFlagContentValues = new ContentValues()
-//        final String[] _IDArg = [Integer.toString(mMovieBasicInfo_ID)]
         final movieBasicInfoCursor
         //Build the URIs
-//        final Uri movieBasicUri = MovieMagicContract.MovieBasicInfo.buildMovieUriWithMovieId(mMovieId)
         final Uri movieUserListFlagUri = MovieMagicContract.MovieUserListFlag.buildMovieUserListFlagUriWithMovieId(mMovieId)
-
         //Get the record from movie_user_list_flag
         final Cursor movieUSerListFlagCursor = mContentResolver.query(movieUserListFlagUri,MOVIE_USER_LIST_FLAG_COLUMNS,null,null,null)
 
@@ -107,7 +102,7 @@ class UpdateUserListChoiceAndRating extends AsyncTask<String, Void, Integer> {
             //"-1" indicates that it's rating and we need to deal with (later use for SnackBar message)
             mUserFlag = -1
         } else if(operationType == GlobalStaticVariables.USER_RATING_REMOVE_FLAG) {
-            //just update mUserFlag with "-1" (indicates that it's rating) and we need to deal with (later use for SnackBar message)
+            //Just update mUserFlag with "-1" (indicates that it's rating) and we need to deal with (later use for SnackBar message)
             mUserFlag = -1
         } else {
             LogDisplay.callLog(LOG_TAG,"Unknown operation type->$operationType",LogDisplay.UPDATE_USER_LIST_LOG_FLAG)
@@ -137,7 +132,6 @@ class UpdateUserListChoiceAndRating extends AsyncTask<String, Void, Integer> {
                 break
             case GlobalStaticVariables.USER_LIST_USER_RATING:
                 movieUserListFlagContentValues.put(MovieMagicContract.MovieUserListFlag.COLUMN_USER_LIST_USER_RATING,mUserRating)
-//                mUserListMsg = mContext.getString(R.string.drawer_menu_user_collection)
                 break
             default:
                 LogDisplay.callLog(LOG_TAG,"Unknown user list type->$listType",LogDisplay.UPDATE_USER_LIST_LOG_FLAG)
@@ -161,7 +155,6 @@ class UpdateUserListChoiceAndRating extends AsyncTask<String, Void, Integer> {
                 //Same record of movie_user_list_flag can be updated from public category or user category, so COLUMN_FOREIGN_KEY_ID usage
                 //is irrelevant here. So updating it as 0 (could have been removed also but kept - feeling lazy :) )
                 movieUserListFlagContentValues.put(MovieMagicContract.MovieUserListFlag.COLUMN_FOREIGN_KEY_ID,0)
-//                movieUserListFlagContentValues.put(MovieMagicContract.MovieUserListFlag.COLUMN_FOREIGN_KEY_ID,mMovieBasicInfo_ID)
                 movieUserListFlagContentValues.put(MovieMagicContract.MovieUserListFlag.COLUMN_USER_LIST_FLAG_ORIG_MOVIE_ID,mMovieId)
                 final Uri uri = mContentResolver.insert(MovieMagicContract.MovieUserListFlag.CONTENT_URI,movieUserListFlagContentValues)
                 if(ContentUris.parseId(uri) == -1) {
@@ -267,12 +260,6 @@ class UpdateUserListChoiceAndRating extends AsyncTask<String, Void, Integer> {
                         LogDisplay.callLog(LOG_TAG,"Update in movie_user_list_flag successful. Update Count->$retValue",LogDisplay.UPDATE_USER_LIST_LOG_FLAG)
                     }
                 }
-                //Now delete the user record from movie_basic_info table
-//                final rowCount = mContentResolver.delete(
-//                        MovieMagicContract.MovieBasicInfo.CONTENT_URI,
-//                        """$MovieMagicContract.MovieBasicInfo.COLUMN_MOVIE_ID = ? and
-//                            $MovieMagicContract.MovieBasicInfo.COLUMN_MOVIE_CATEGORY = ? """,
-//                        [Integer.toString(mMovieId),userListCategory] as String[])
 
                 //When user remove the movie from the list it should be ideally deleted but due to the logic
                 //of the application, the user can still see the details of the movie even after the delete. So in order
@@ -340,16 +327,6 @@ class UpdateUserListChoiceAndRating extends AsyncTask<String, Void, Integer> {
         if(result == 1) {
             Snackbar.make(mUserDrawableLayout.findViewById(R.id.movie_detail_user_list_drawable_layout),
                     snackBarMsg, Snackbar.LENGTH_LONG).show()
-//            final Snackbar snackbar
-//            snackbar = Snackbar.make(mUserDrawableLayout.findViewById(R.id.movie_detail_user_list_drawable_layout),
-//                    snackBarMsg, Snackbar.LENGTH_LONG)
-//            final snackbarView = snackbar.getView()
-//            snackbarView.setBackgroundColorolor(ContextCompat.getColor(mContext, R.color.accent))
-//            snackbarView.setBackgroundColor(mBackgroundColor)
-//            snackbarView.setAlpha(0.6f)
-//            final TextView snackbarTextView = snackbarView.findViewById(android.support.design.R.id.snackbar_text) as TextView
-//            snackbarTextView.setTextColor(mBodyTextColor)
-//            snackbar.show()
         } else {
             LogDisplay.callLog(LOG_TAG,"Something went wrong during user list update.Result value->$result",LogDisplay.UPDATE_USER_LIST_LOG_FLAG)
         }

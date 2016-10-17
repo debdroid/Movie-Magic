@@ -12,26 +12,6 @@
         android:layout_height="wrap_content"
         android:elevation="0dp"
         app:theme="@style/AppTheme.AppBarOverlay">
-
-        <!--<android.support.design.widget.CollapsingToolbarLayout-->
-            <!--android:id="@+id/person_collapsing_toolbar"-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="@dimen/poster_image_height_detail_view"-->
-            <!--app:contentScrim="?attr/colorPrimary"-->
-            <!--android:fitsSystemWindows="true"-->
-            <!--app:layout_scrollFlags="scroll|exitUntilCollapsed">-->
-
-            <!--<TextView-->
-                <!--android:layout_width="match_parent"-->
-                <!--android:layout_height="wrap_content" -->
-                <!--android:text="This is test"/>-->
-            <!--<ImageView-->
-                <!--android:id="@+id/person_poster_image"-->
-                <!--android:layout_width="match_parent"-->
-                <!--android:layout_height="@dimen/poster_image_height_detail_view"-->
-                <!--android:scaleType="centerCrop"-->
-                <!--android:fitsSystemWindows="true"-->
-                <!--android:src="@drawable/grid_image_placeholder" />-->
         <!-- setting itsSystemWindows="true" for toolbar moves home up and setting buttons to status bar -->
         <android.support.v7.widget.Toolbar
                 android:id="@+id/person_toolbar"

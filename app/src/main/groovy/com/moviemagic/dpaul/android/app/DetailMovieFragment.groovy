@@ -32,37 +32,15 @@ import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.support.v7.widget.RecyclerView.LayoutManager
 import android.support.v7.widget.Toolbar
-import android.text.Html
-import android.view.Gravity
-import android.view.LayoutInflater
-import android.view.Menu
-import android.view.MenuInflater
-import android.view.MenuItem
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import android.view.animation.AlphaAnimation
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
 import android.view.animation.DecelerateInterpolator
-import android.widget.Button
-import android.widget.FrameLayout
-import android.widget.ImageButton
-import android.widget.ImageView
-import android.widget.LinearLayout
-import android.widget.RatingBar
-import android.widget.TextView
-import com.moviemagic.dpaul.android.app.adapter.DetailFragmentPagerAdapter
-import com.moviemagic.dpaul.android.app.adapter.MovieCastAdapter
-import com.moviemagic.dpaul.android.app.adapter.MovieCrewAdapter
-import com.moviemagic.dpaul.android.app.adapter.MovieReviewAdapter
-import com.moviemagic.dpaul.android.app.adapter.SimilarMovieAdapter
+import android.widget.*
+import com.moviemagic.dpaul.android.app.adapter.*
+import com.moviemagic.dpaul.android.app.backgroundmodules.*
 import com.moviemagic.dpaul.android.app.contentprovider.MovieMagicContract
-import com.moviemagic.dpaul.android.app.backgroundmodules.GlobalStaticVariables
-import com.moviemagic.dpaul.android.app.backgroundmodules.LoadMovieDetails
-import com.moviemagic.dpaul.android.app.backgroundmodules.LogDisplay
-import com.moviemagic.dpaul.android.app.backgroundmodules.PicassoLoadImage
-import com.moviemagic.dpaul.android.app.backgroundmodules.UpdateUserListChoiceAndRating
-import com.moviemagic.dpaul.android.app.backgroundmodules.Utility
 import com.moviemagic.dpaul.android.app.youtube.MovieMagicYoutubeFragment
 import com.squareup.picasso.Callback
 import com.squareup.picasso.Picasso
@@ -84,19 +62,13 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
                      mUserListDrawableTitle, mCastGridEmptyMsgTextView, mCrewGridEmptyMsgTextView, mSimilarMovieGridEmptyMsgTextView,
                      mMovieTrailerEmptyMsgTextView
     private ImageView mMpaaRatingImageView, mPosterImageView, mCollectionBackdropImageView
-    private LinearLayout mDetailMovieLayout,mBackdropDotHolderLayout, mDetailTitleLayout, mDetailPosterLayout, mDetailTmdbRatingLayout, mDetailUserRatingLayout,
-                         mDetailSynopsisLayout, mDetailTrailerLayout, mDetailProductionInfoLayout, mDetailCastHeaderLayout,
-                         mDetailCrewHeaderLayout, mDetailSimilarMovieHeaderLayout, mUserListDrawableLayout,
-                         mDetailCollectionLayout, mDetailWebLinkLayout, mDetailReviewHeaderLayout
+    private LinearLayout mDetailMovieLayout,mBackdropDotHolderLayout, mUserListDrawableLayout
     private ImageButton mImageButtonWatched, mImageButtonWishList, mImageButtonFavourite, mImageButtonCollection
     private RatingBar mTmdbRatingBar, mUserRatingBar
-    private FrameLayout mDetailsCastGridLayout, mDetailCrewGridLayout, mDetailSimilarMovieGridLayout, mDetailReviewRecyclerViewLayout
     private Button mHomePageButton, mImdbLinkButton
-    private Uri mMovieMagicMovieIdUri
     private int _ID_movie_basic_info
     private int mMovieId
     private int mCollectionId
-//    private String[] mMovieRowIdArg
     private String[] mMovieIdArg
     private String[] mMovieIdCategoryArg
     private String[] mVideoArg
@@ -107,10 +79,6 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
     private MovieCastAdapter mMovieCastAdapter
     private MovieCrewAdapter mMovieCrewAdapter
     private HorizontalGridView mHorizontalSimilarMovieGridView, mHorizontalMovieCastGridView, mHorizontalMovieCrewGridView
-//    private RecyclerView.LayoutManager mSimilarMovieLayoutManager, mMovieCastLayoutManager, mMovieCrewLayoutManager
-//    private MovieTitleAndColorCallback mMovieTitleAndColorCallback
-//    private BackdropCallback mBackdropCallback
-//    private UserListButtonClickCallback mUserListButtonClickCallback
     private String mLocale
     private int mPalletePrimaryColor
     private int mPalletePrimaryDarkColor
@@ -118,9 +86,7 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
     private int mPalleteBodyTextColor
     private int mPalleteAccentColor
     private RecyclerView mMovieReviewRecyclerView
-//    private RecyclerView.LayoutManager mMovieReviewLayoutManager
     private MovieReviewAdapter mMovieReviewAdapter
-    private String mMovieListType
     private String mMovieCategory
     private boolean mUserListWatchedFlag = false
     private boolean mUserListWishListdFlag = false
@@ -129,16 +95,10 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
     private CollapsingToolbarLayout mCollapsingToolbar
     private Toolbar mToolbar
     private AppBarLayout mAppBarLayout
-//    private ImageView mBackdropImage1, mBackdropImage2
-//    private ImageSwitcher mBackdropImageSwitcher
     private ViewPager mBackdropViewPager
-    private static boolean picasoLoadComplete = true
-    private static boolean setBackdropAnimation = true
-    private final android.os.Handler mHandler = new android.os.Handler()
+//    private final android.os.Handler mHandler = new android.os.Handler()
     private Runnable mRunnable
-    private static final String MOVIE_TITLE = 'movie_title'
     private GridLayoutManager mSimilarMovieGridLayoutManager
-    private int mBackdropImageCounter = 0
     private List<String> mBackdropList
     private CallbackForBackdropImageClick mCallbackForBackdropImageClick
     private int mBackdropViewPagerPos = 0
@@ -376,72 +336,27 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
         if (args) {
             mMovieId = args.getInt(GlobalStaticVariables.MOVIE_BASIC_INFO_MOVIE_ID)
             mMovieCategory = args.getString(GlobalStaticVariables.MOVIE_BASIC_INFO_CATEGORY)
-//            mMovieMagicMovieIdUri = args.getParcelable(GlobalStaticVariables.MOVIE_BASIC_INFO_URI) as Uri
-//            mMovieId = MovieMagicContract.MovieBasicInfo.getMovieIdFromUri(mMovieMagicMovieIdUri)
-//            mMovieId = args.getInt(GlobalStaticVariables.MOVIE_BASIC_INFO_MOVIE_ID)
-            //_ID_movie_basic_info is used as Integer in the subsequent calls, so it's also defined as
-            //integer even though actually it's long
-//            _ID_movie_basic_info = args.getLong(GlobalStaticVariables.MOVIE_BASIC_INFO_ROW_ID) as Integer
-//            LogDisplay.callLog(LOG_TAG, "Fragment arguments.Movie Uri -> ${mMovieMagicMovieIdUri.toString()}", LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
             LogDisplay.callLog(LOG_TAG, "Fragment arguments.Movie ID -> $mMovieId", LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
             LogDisplay.callLog(LOG_TAG, "Fragment arguments.Movie Category -> $mMovieCategory", LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
-//            LogDisplay.callLog(LOG_TAG,"Fragment arguments.Movie Row ID -> $_ID_movie_basic_info",LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
         } else {
             LogDisplay.callLog(LOG_TAG, 'Could not parse fragment data', LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
         }
-        //inflate the view before referring any view using id
+        //Inflate the view before referring any view using id
         View mRootView = inflater.inflate(R.layout.fragment_detail_movie, container, false)
         //TODO: Need to verify if this animation is working or not
         //Set a fade animation
         final Animation fadeIn = new AlphaAnimation(0, 1)
         fadeIn.setInterpolator(new DecelerateInterpolator())
         fadeIn.setDuration(2000)
-//        fadeIn.setFillAfter(true)
         mRootView.setAnimation(fadeIn)
 
         mAppBarLayout = mRootView.findViewById(R.id.movie_detail_app_bar_layout) as AppBarLayout
-//        mBackdropImage1 = mRootView.findViewById(R.id.movie_detail_backdrop_image_1) as ImageView
-//        mBackdropImage2 = mRootView.findViewById(R.id.movie_detail_backdrop_image_2) as ImageView
         mBackdropViewPager = mRootView.findViewById(R.id.movie_detail_backdrop_viewpager) as ViewPager
         mBackdropDotHolderLayout = mRootView.findViewById(R.id.view_pager_dots_holder) as LinearLayout
         mUserListDrawableTitle = mRootView.findViewById(R.id.movie_detail_user_list_drawable_title) as TextView
-        /**
-         * Image switcher onClick handling
-         */
-//        mBackdropImageSwitcher = mRootView.findViewById(R.id.movie_detail_backdrop_image_switcher) as ImageSwitcher
-//        mBackdropImageSwitcher.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            void onClick(View v) {
-//                LogDisplay.callLog(LOG_TAG, 'Backdrop imageSwitcher is clicked', LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
-//                LogDisplay.callLog(LOG_TAG, "Backdrop imageSwitcher is clicked.mBackdropImageCounter-> $mBackdropImageCounter", LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
-//                mBackdropImageCounter--
-//                if(mBackdropList && mBackdropImageCounter >= 0) {
-//                    mCallbackForBackdropImageClick.onBackdropImageClicked(mMovieTitle, mBackdropImageCounter, mBackdropList as ArrayList<String>)
-//                } else {
-//                    LogDisplay.callLog(LOG_TAG, 'Backdrop image list is null or image loading not started', LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
-//                }
-//            }
-//        })
 
         //All the layouts
         mDetailMovieLayout = mRootView.findViewById(R.id.fragment_detail_movie_layout) as LinearLayout
-//        mDetailTitleLayout = mRootView.findViewById(R.id.movie_detail_title_layout) as LinearLayout
-//        mDetailPosterLayout = mRootView.findViewById(R.id.movie_detail_poster_layout) as LinearLayout
-//        mDetailTmdbRatingLayout = mRootView.findViewById(R.id.movie_detail_tmdb_rating_layout) as LinearLayout
-//        mDetailUserRatingLayout = mRootView.findViewById(R.id.movie_detail_user_rating_layout) as LinearLayout
-//        mDetailSynopsisLayout = mRootView.findViewById(R.id.movie_detail_synopsis_layout) as LinearLayout
-//        mDetailTrailerLayout = mRootView.findViewById(R.id.movie_detail_trailer_layout) as LinearLayout
-//        mDetailProductionInfoLayout = mRootView.findViewById(R.id.movie_detail_production_info_layout) as LinearLayout
-//        mDetailCastHeaderLayout = mRootView.findViewById(R.id.movie_detail_cast_header_layout) as LinearLayout
-//        mDetailsCastGridLayout = mRootView.findViewById(R.id.movie_detail_cast_grid_layout) as FrameLayout
-//        mDetailCrewHeaderLayout = mRootView.findViewById(R.id.movie_detail_crew_header_layout) as LinearLayout
-//        mDetailCrewGridLayout = mRootView.findViewById(R.id.movie_detail_crew_grid_layout) as FrameLayout
-//        mDetailSimilarMovieHeaderLayout = mRootView.findViewById(R.id.movie_detail_similar_movie_header_layout) as LinearLayout
-//        mDetailSimilarMovieGridLayout = mRootView.findViewById(R.id.movie_detail_similar_movie_grid_layout) as FrameLayout
-//        mDetailCollectionLayout = mRootView.findViewById(R.id.movie_detail_collection_layout) as LinearLayout
-//        mDetailWebLinkLayout = mRootView.findViewById(R.id.movie_detail_web_links_layout) as LinearLayout
-//        mDetailReviewHeaderLayout = mRootView.findViewById(R.id.movie_detail_review_header_layout) as LinearLayout
-//        mDetailReviewRecyclerViewLayout = mRootView.findViewById(R.id.movie_detail_review_recycler_view_layout) as FrameLayout
         mUserListDrawableLayout = mRootView.findViewById(R.id.movie_detail_user_list_drawable_layout) as LinearLayout
 
         //All the header (fixed text) fields & buttons
@@ -665,8 +580,6 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
          */
         mHorizontalMovieCastGridView = mRootView.findViewById(R.id.movie_detail_cast_grid) as HorizontalGridView
         mCastGridEmptyMsgTextView = mRootView.findViewById(R.id.movie_detail_cast_grid_empty_msg_text_view) as TextView
-//        mMovieCastLayoutManager = new GridLayoutManager(getActivity(), 1, GridLayoutManager.HORIZONTAL, false)
-//        mHorizontalMovieCastGridView.setLayoutManager(mMovieCastLayoutManager)
         final GridLayoutManager castGridLayoutManager = new GridLayoutManager(getActivity(), 1, GridLayoutManager.HORIZONTAL, false)
         mHorizontalMovieCastGridView.setLayoutManager(castGridLayoutManager)
         mMovieCastAdapter = new MovieCastAdapter(getActivity(), mCastGridEmptyMsgTextView)
@@ -678,8 +591,6 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
         //Create a layout manager which is used for similar movie, movie cast & crew grid
         mHorizontalMovieCrewGridView = mRootView.findViewById(R.id.movie_detail_crew_grid) as HorizontalGridView
         mCrewGridEmptyMsgTextView = mRootView.findViewById(R.id.movie_detail_crew_grid_empty_msg_text_view) as TextView
-//        mMovieCrewLayoutManager = new GridLayoutManager(getActivity(), 1, GridLayoutManager.HORIZONTAL, false)
-//        mHorizontalMovieCrewGridView.setLayoutManager(mMovieCrewLayoutManager)
         final GridLayoutManager crewGridLayoutManager = new GridLayoutManager(getActivity(), 1, GridLayoutManager.HORIZONTAL, false)
         mHorizontalMovieCrewGridView.setLayoutManager(crewGridLayoutManager)
         mMovieCrewAdapter = new MovieCrewAdapter(getActivity(), mCrewGridEmptyMsgTextView)
@@ -690,8 +601,6 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
          */
         mHorizontalSimilarMovieGridView = mRootView.findViewById(R.id.movie_detail_similar_movie_grid) as HorizontalGridView
         mSimilarMovieGridEmptyMsgTextView = mRootView.findViewById(R.id.movie_detail_similar_movie_grid_empty_msg_text_view) as TextView
-//        mSimilarMovieLayoutManager = new GridLayoutManager(getActivity(), 1, GridLayoutManager.HORIZONTAL, false)
-//        mHorizontalSimilarMovieGridView.setLayoutManager(mSimilarMovieLayoutManager)
         mSimilarMovieGridLayoutManager = new GridLayoutManager(getActivity(), 1, GridLayoutManager.HORIZONTAL, false)
         mHorizontalSimilarMovieGridView.setLayoutManager(mSimilarMovieGridLayoutManager)
         mSimilarMovieAdapter = new SimilarMovieAdapter(getActivity(), mSimilarMovieGridEmptyMsgTextView)
@@ -734,9 +643,6 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
         mMovieReviewRecyclerView = mRootView.findViewById(R.id.movie_detail_review_recycler_view) as RecyclerView
         //Set this to false for smooth scrolling of recyclerview
         mMovieReviewRecyclerView.setNestedScrollingEnabled(false)
-//        mMovieReviewLayoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false)
-//        mMovieReviewLayoutManager.setAutoMeasureEnabled(true)
-//        mMovieReviewRecyclerView.setLayoutManager(mMovieReviewLayoutManager)
         final LayoutManager linearLayoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false)
         linearLayoutManager.setAutoMeasureEnabled(true)
         mMovieReviewRecyclerView.setLayoutManager(linearLayoutManager)
@@ -773,15 +679,13 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
         mLocale = context.getResources().getConfiguration().locale.getCountry()
         LogDisplay.callLog(LOG_TAG, "Locale: $mLocale", LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
         if (mMovieId && mMovieCategory) {
-//            mMovieRowIdArg = [Integer.toString(_ID_movie_basic_info)] as String[]
             mMovieIdArg = [Integer.toString(mMovieId)] as String[]
             mMovieIdCategoryArg = [Integer.toString(mMovieId), mMovieCategory] as String[]
             mVideoArg = [Integer.toString(mMovieId), GlobalStaticVariables.MOVIE_VIDEO_SITE_YOUTUBE, GlobalStaticVariables.MOVIE_VIDEO_SITE_TYPE] as String[]
             mReleaseInfoArg = [Integer.toString(mMovieId), mLocale] as String[]
             mMovieImageArg = [Integer.toString(mMovieId), GlobalStaticVariables.IMAGE_TYPE_BACKDROP] as String[]
         } else {
-            //this is to safeguard any unwanted data fetch
-//            mMovieRowIdArg = ['ZZZZZZ'] as String[]
+            //This is to safeguard any unwanted data fetch
             mMovieIdArg = ['ZZZZZZ'] as String[]
             mMovieIdCategoryArg = ['XXXXXX', 'YYYYY'] as String[]
             mVideoArg = ['XXXXXX', 'YYYYY', 'ZZZZZZ'] as String[]
@@ -834,15 +738,10 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
                 //TODO: this cursor can still return more than one row for similar movies
                 return new CursorLoader(
                         getActivity(),                                  //Parent Activity Context
-//                        mMovieMagicMovieIdUri,                          //Uri of the movie id
                         MovieMagicContract.MovieBasicInfo.CONTENT_URI,  //Table to query
                         MOVIE_BASIC_INFO_COLUMNS,                       //Projection to return
-//                        null,                                           //null as used movie id Uri
-//                        "$MovieMagicContract.MovieBasicInfo.COLUMN_MOVIE_ID = ? ",  //Selection Clause
                         """$MovieMagicContract.MovieBasicInfo.COLUMN_MOVIE_ID = ? and
                            $MovieMagicContract.MovieBasicInfo.COLUMN_MOVIE_CATEGORY = ? """,  //Selection Clause
-//                        null,                                           //null as used movie id Uri
-//                        mMovieIdArg,                                 //Selection Arg
                         mMovieIdCategoryArg,                                 //Selection Arg
                         null)                                           //Only a single row is expected, so not sorted
 
@@ -974,27 +873,17 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
         mMovieReviewAdapter.swapCursor(null)
     }
 
+    /**
+     * This method is called when the loader is finished for movie basic info table
+     * @param data Cursor
+     */
     void handleMovieBasicOnLoadFinished(Cursor data) {
         LogDisplay.callLog(LOG_TAG, "handleMovieBasicOnLoadFinished.Cursor rec count -> ${data.getCount()}", LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
         if (data.moveToFirst()) {
-            //_ID_movie_basic_info is used as Integer in the subsequent calls, so it's also defined as
-            //integer even though actually it's long
             _ID_movie_basic_info = data.getInt(COL_MOVIE_BASIC_ID)
             LogDisplay.callLog(LOG_TAG, "handleMovieBasicOnLoadFinished.Movie row id -> $_ID_movie_basic_info", LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
-//            mMovieListType = data.getString(COL_MOVIE_BASIC_MOVIE_LIST_TYPE)
-//            mMovieCategory = data.getString(COL_MOVIE_BASIC_MOVIE_CATEGORY)
             LogDisplay.callLog(LOG_TAG, "handleMovieBasicOnLoadFinished.Movie Category -> ${data.getString(COL_MOVIE_BASIC_MOVIE_CATEGORY)}", LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
             mOriginalBackdropPath = data.getString(COL_MOVIE_BASIC_BACKDROP_PATH)
-            //TODO: some optimisation is needed here for this picasso call
-            //Load the first backdrop, so that there is not much lag while displaying the first image
-            //also it is cached
-//            Picasso.with(getActivity())
-//                    .load(mOriginalBackdropPath)
-//                    .fit()
-//                    .placeholder(R.drawable.grid_image_placeholder)
-//                    .error(R.drawable.grid_image_error)
-//                    .into(mBackdropImageSwitcher.getChildAt(0) as ImageView)
-//
             mMovieTitle = data.getString(COL_MOVIE_BASIC_TITLE)
             mMovieTitleTextView.setText(mMovieTitle)
             if (data.getString(COL_MOVIE_BASIC_GENRE)) {
@@ -1012,22 +901,6 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
                     "${data.getString(COL_MOVIE_BASIC_POSTER_PATH)}"
             //Create a picasso Callback
             final Callback picassoPosterCallback = new Callback() {
-//                @Override
-//                void onSuccess() {
-//
-//                }
-//
-//                @Override
-//                void onError() {
-//
-//                }
-//            }
-//            Picasso.with(getActivity())
-//                    .load(posterPath)
-//                    .fit()
-//                    .placeholder(R.drawable.grid_image_placeholder)
-//                    .error(R.drawable.grid_image_error)
-//                    .into(mPosterImageView, new Callback() {
                 @Override
                 void onSuccess() {
                     //TODO: Future change - provide a setting option to user to chose if they want this or will use default theme
@@ -1092,25 +965,12 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
                                 }
                             }
                             changeLayoutAndTextColor()
-//                            mMovieTitleAndColorCallback.initializeActivityHostedTitleAndColor(mMovieTitle, mPalettePrimaryColor, mPalettePrimaryDarkColor, mPaletteTitleColor)
                             initializeTitleAndColor()
-                            //Set the color for adapter fields and call method which in turn calls notifyDatasetChanged
-//                            MovieCastAdapter.mPrimaryDarkColor = mPalletePrimaryDarkColor
-//                            MovieCastAdapter.mBodyTextColor = mPalleteBodyTextColor
+                            //Set the color for adapters
                             mMovieCastAdapter.changeColor(mPalletePrimaryDarkColor, mPalleteBodyTextColor)
-//                            MovieCrewAdapter.mPrimaryDarkColor = mPalletePrimaryDarkColor
-//                            MovieCrewAdapter.mBodyTextColor = mPalleteBodyTextColor
                             mMovieCrewAdapter.changeColor(mPalletePrimaryDarkColor, mPalleteBodyTextColor)
-//                            SimilarMovieAdapter.mPrimaryDarkColor = mPalletePrimaryDarkColor
-//                            SimilarMovieAdapter.mBodyTextColor = mPalleteBodyTextColor
-//                            mSimilarMovieAdapter.changeColor()
                             mSimilarMovieAdapter.changeColor(mPalletePrimaryDarkColor, mPalleteBodyTextColor)
-//                            MovieReviewAdapter.mPrimaryColor = mPalletePrimaryColor
-//                            MovieReviewAdapter.mPrimaryDarkColor = mPalletePrimaryDarkColor
-//                            MovieReviewAdapter.mTitleTextColor = mPalleteTitleColor
-//                            MovieReviewAdapter.mBodyTextColor = mPalleteBodyTextColor
                             mMovieReviewAdapter.changeColor(mPalletePrimaryColor, mPalleteTitleColor, mPalleteBodyTextColor)
-                            //Set the image button color
                             setImageButtonColor()
                         }
                     })
@@ -1123,10 +983,6 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
             }
             //Pass the Picasso Callback and load the image
             PicassoLoadImage.loadDetailFragmentPosterImage(getActivity(),posterPath,mPosterImageView,picassoPosterCallback)
-//            final Animation fadeIn = new AlphaAnimation(0,1)
-//            fadeIn.setInterpolator(new DecelerateInterpolator())
-//            fadeIn.setDuration(2000)
-//            mPosterImageView.setAnimation(fadeIn)
             //Default date is 1900-01-01 which is less than Unix epoc 1st Jan 1970, so converted milliseconds is negative
             if (data.getLong(COL_MOVIE_BASIC_RELEASE_DATE) > 0) {
                 mReleaseDateTextView.setText(Utility.formatMilliSecondsToDate(data.getLong(COL_MOVIE_BASIC_RELEASE_DATE)))
@@ -1224,7 +1080,7 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
                 }
             }
             int detailDataPresentFlag = data.getInt(COL_MOVIE_BASIC_DETAIL_DATA_PRESENT_FLAG)
-            //If the flag is zero then all movie data not present, so go and fetch it
+            //If the flag is zero then all the movie data are not present, so go and fetch it
             if (detailDataPresentFlag == GlobalStaticVariables.MOVIE_MAGIC_FLAG_FALSE) {
                 LogDisplay.callLog(LOG_TAG, 'handleMovieBasicOnLoadFinished.Additional movie data not present, go and fetch it', LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
                 final ArrayList<Integer> movieIdList = new ArrayList<>(1)
@@ -1234,14 +1090,12 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
                 movieRowIdList.add(0,_ID_movie_basic_info)
                 isForHomeList.add(0,GlobalStaticVariables.MOVIE_MAGIC_FLAG_FALSE)
                 final ArrayList<Integer>[] loadMovieDetailsArg = [movieIdList, movieRowIdList, isForHomeList] as ArrayList<Integer>[]
-//                final Integer[] loadMovieDetailsArg = [mMovieId, _ID_movie_basic_info] as Integer[]
                 new LoadMovieDetails(getActivity()).execute(loadMovieDetailsArg)
-//                new LoadMovieDetails(getActivity(), mMovieIdUri).execute(movieIdArray)
             } else {
                 LogDisplay.callLog(LOG_TAG, 'handleMovieBasicOnLoadFinished.Additional movie data already present', LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
             }
         } else {
-            LogDisplay.callLog(LOG_TAG, "handleMovieBasicOnLoadFinished.Record not found, should reach here only when movie is clicked on person screen - Movie id:$mMovieId, Category:$mMovieCategory", LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
+            LogDisplay.callLog(LOG_TAG, "handleMovieBasicOnLoadFinished.Record not found, should reach here only when movie is clicked on person screen & new scenario? - Movie id:$mMovieId, Category:$mMovieCategory", LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
             if(mMovieCategory == GlobalStaticVariables.MOVIE_CATEGORY_PERSON) {
                 //Movie does not exists, go and fetch then insert into movie basic info table
                 LogDisplay.callLog(LOG_TAG, 'handleMovieBasicOnLoadFinished.Movie does not exists, go and fetch then insert into movie basic info table', LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
@@ -1259,6 +1113,10 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
         }
     }
 
+    /**
+     * This method is called when the loader is finished for similar movies in movie basic info table
+     * @param data Cursor
+     */
     void handleSimilarMovieOnLoadFinished(Cursor data) {
         LogDisplay.callLog(LOG_TAG, "handleSimilarMovieOnLoadFinished.Cursor rec count -> ${data.getCount()}", LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
         //Show two rows if the count is greater than 6 otherwise show single row
@@ -1268,19 +1126,30 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
         mSimilarMovieAdapter.swapCursor(data)
     }
 
+    /**
+     * This method is called when the loader is finished for movie cast table
+     * @param data Cursor
+     */
     void handleMovieCastOnLoadFinished(Cursor data) {
         LogDisplay.callLog(LOG_TAG, "handleMovieCastOnLoadFinished.Cursor rec count -> ${data.getCount()}", LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
         mMovieCastAdapter.swapCursor(data)
     }
 
+    /**
+     * This method is called when the loader is finished for movie crew table
+     * @param data Cursor
+     */
     void handleMovieCrewOnLoadFinished(Cursor data) {
         LogDisplay.callLog(LOG_TAG, "handleMovieCrewOnLoadFinished.Cursor rec count -> ${data.getCount()}", LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
         mMovieCrewAdapter.swapCursor(data)
     }
 
+    /**
+     * This method is called when the loader is finished for movie video table
+     * @param data Cursor
+     */
     void initiateYouTubeVideo(Cursor data) {
         LogDisplay.callLog(LOG_TAG, "initiateYouTubeVideo.Cursor rec count -> ${data.getCount()}", LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
-//        List<String> youtubeVideoKey
         if (data.moveToFirst()) {
             final List<String> youtubeVideoKey = new ArrayList<>()
             for (i in 0..(data.count - 1)) {
@@ -1299,17 +1168,13 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
                 mMovieTrailerEmptyMsgTextView.setVisibility(TextView.VISIBLE)
                 LogDisplay.callLog(LOG_TAG, 'Youtube video id is null', LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
             }
-//            final MovieMagicYoutubeFragment movieMagicYoutubeFragment = getChildFragmentManager()
-//                    .findFragmentById(R.id.movie_detail_trailer_fragment_youtube) as MovieMagicYoutubeFragment
-//            if (movieMagicYoutubeFragment) {
-//                LogDisplay.callLog(LOG_TAG, 'Youtube Fragment id is NOT null', LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
-//                movieMagicYoutubeFragment.setVideoId(youtubeVideoKey)
-//            } else {
-//                LogDisplay.callLog(LOG_TAG, 'Youtube Fragment id is null', LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
-//            }
         }
     }
 
+    /**
+     * This method is called when the loader is finished for movie release info table
+     * @param data Cursor
+     */
     void populateMpaaImage(Cursor data) {
         LogDisplay.callLog(LOG_TAG, "populateMpaaImage.Cursor rec count -> ${data.getCount()}", LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
         if (data.moveToFirst()) {
@@ -1328,8 +1193,14 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
         }
     }
 
+    /**
+     * This method is called when the loader is finished for movie image table
+     * @param data
+     */
     void processBackdropImages(Cursor data) {
         LogDisplay.callLog(LOG_TAG, "processBackdropImages.Cursor rec count -> ${data.getCount()}", LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
+        //TODO: Future change - provide a setting option to user to chose single backdrop for mobile data
+        //TODO: Future change - provide a setting option to user to chose no image download over mobile data & for better
         if (data.moveToFirst()) {
             mBackdropList = new ArrayList<String>()
             //Add the main_activity_menu backdrop first
@@ -1341,23 +1212,20 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
                 data.moveToNext()
             }
             LogDisplay.callLog(LOG_TAG, "backdropImageArray-> $mBackdropList", LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
-//            mBackdropCallback.initializeActivityHostedBackdrop(mBackdropList)
-//            initializeBackdrop(mBackdropList)
             //This initialize ensures the pager is at position zero if the loader is executed due to change in data
             //TODO: This initialize causing view pager to start from zero on orientation change, need to fix it
 //            mBackdropViewPagerPos = 0
             final DetailFragmentPagerAdapter adapter = new DetailFragmentPagerAdapter(getActivity(), mBackdropList as String[],
-                                new DetailFragmentPagerAdapter.DetailFragmentPagerAdapterOnClickHandler() {
-                                    @Override
-                                    void onClick(int position) {
-                                        LogDisplay.callLog(LOG_TAG, "DetailFragmentPagerAdapter clicked.Position->$position", LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
-                                        mCallbackForBackdropImageClick.onBackdropImageClicked(mMovieTitle, position, mBackdropList as ArrayList<String>)
+                    new DetailFragmentPagerAdapter.DetailFragmentPagerAdapterOnClickHandler() {
+                        @Override
+                        void onClick(int position) {
+                            LogDisplay.callLog(LOG_TAG, "DetailFragmentPagerAdapter clicked.Position->$position", LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
+                            mCallbackForBackdropImageClick.onBackdropImageClicked(mMovieTitle, position, mBackdropList as ArrayList<String>)
 
-                                    }
-                                })
+                        }
+                    })
             mBackdropViewPager.setAdapter(adapter)
             final int dotsCount = adapter.getCount()
-//            final TextView[] dots = new TextView[dotsCount]
             final ImageButton[] dots = new ImageButton[dotsCount]
             setBackDropViewPagerDots(dotsCount, dots)
             final OnPageChangeListener onPageChangeListener = new OnPageChangeListener() {
@@ -1374,28 +1242,10 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
                         if (i != position) {
                             dots[i].setLayoutParams(layoutParams)
                             ViewCompat.setBackgroundTintList(dots[i], greyColorStateList)
-//                            dots[i].setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.grey_color))
-//                            dots[i].setText(Html.fromHtml("&#8226;"))
-//                            dots[i].setTextSize(30)
-//                            dots[i].setTextColor(ContextCompat.getColor(getActivity(), R.color.grey_color))
-//                            mBackdropDotHolderLayout.addView(dots[i])
-//                        dots[i].setGravity(17)
                         } else {
-//                            layoutParams.width = 40
-//                            layoutParams.height = 40
                             dots[position].setLayoutParams(new LinearLayout.LayoutParams(40,40))
                             final ColorStateList accentColorStateList = ColorStateList.valueOf(ContextCompat.getColor(getActivity(), R.color.accent))
                             ViewCompat.setBackgroundTintList(dots[position], accentColorStateList)
-//                            dots[position].setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.accent))
-//                            dots[position].setText(Html.fromHtml("&#8226;"))
-//                            dots[position].setTextSize(50)
-//                            dots[position].setTextColor(ContextCompat.getColor(getActivity(), R.color.accent))
-//                            mBackdropDotHolderLayout.addView(dots[position])
-//                            dots[position].setTextColor(ContextCompat.getColor(getActivity(), R.color.accent))
-//                    dots[position].setText(Html.fromHtml("&#8226;"))
-//                            dots[position].setTextSize(35)
-//                    dots[position].setGravity(17)
-//                    mBackdropDotHolderLayout.updateViewLayout(dots[position],ViewGroup.LayoutParams.si)
                         }
                     }
                     mBackdropViewPagerPos = position
@@ -1411,44 +1261,19 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
         }
     }
 
-    void setBackDropViewPagerDots(int dotsCount, ImageButton[] dots) {
-//    void setBackDropViewPagerDots(int dotsCount, TextView[] dots) {
-        final LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(25,25)
-        final ColorStateList greyColorStateList = ColorStateList.valueOf(ContextCompat.getColor(getActivity(), R.color.grey_600_color))
-        layoutParams.setMargins(1,0,1,0)
-        for(i in 0..(dotsCount - 1)) {
-//            dots[i] = new TextView(getActivity())
-            dots[i] = new ImageButton(getActivity())
-            dots[i].setBackgroundResource(R.drawable.view_pager_dot)
-//            dots[i].setText(Html.fromHtml("&#8226;"))
-//            dots[i].setTextSize(30)
-//            dots[i].setGravity(17)
-//            dots[i].setTextColor(ContextCompat.getColor(getActivity(), R.color.grey_color))
-//            layoutParams.gravity = Gravity.BOTTOM
-            dots[i].setLayoutParams(layoutParams)
-            ViewCompat.setBackgroundTintList(dots[i], greyColorStateList)
-//            dots[i].setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.grey_color))
-            mBackdropDotHolderLayout.addView(dots[i])
-        }
-        //Set the first one's color
-//        layoutParams.width = 40
-//        layoutParams.height = 40
-        dots[mBackdropViewPagerPos].setLayoutParams(new LinearLayout.LayoutParams(40,40))
-//        dots[0].setColorFilter(ContextCompat.getColor(getActivity(), R.color.accent))
-        final ColorStateList accentColorStateList = ColorStateList.valueOf(ContextCompat.getColor(getActivity(), R.color.accent))
-        ViewCompat.setBackgroundTintList(dots[mBackdropViewPagerPos], accentColorStateList)
-//        dots[0].setBackgroundTintList(new ColorStateList())
-//        dots[0].setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.accent))
-
-//        dots[0].setTextSize(50)
-//        dots[0].setTextColor(ContextCompat.getColor(getActivity(), R.color.accent))
-    }
-
+    /**
+     * This method is called when the loader is finished for movie review table
+     * @param data Cursor
+     */
     void handleMovieReviewOnLoadFinished(Cursor data) {
         LogDisplay.callLog(LOG_TAG, "handleMovieReviewOnLoadFinished.Cursor rec count -> ${data.getCount()}", LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
         mMovieReviewAdapter.swapCursor(data)
     }
 
+    /**
+     * This method is called when the loader is finished for movie user list flag table
+     * @param data Cursor
+     */
     void handleMovieUSerListFlagOnLoadFinished(Cursor data) {
         LogDisplay.callLog(LOG_TAG, "handleMovieUSerListFlagOnLoadFinished.Cursor rec count -> ${data.getCount()}", LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
         //TODO: need to add the rest of the logic later
@@ -1479,42 +1304,12 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
         }
     }
 
-//    @Override
-//    public void onAttach(Activity activity) {
-//        super.onAttach(activity)
-//        // This makes sure that the container activity has implemented
-//        // the callback interface. If not, it throws an exception
-//        try {
-//            mBackdropCallback = (BackdropCallback) activity
-//            mMovieTitleAndColorCallback = (MovieTitleAndColorCallback) activity
-//            mUserListButtonClickCallback = (UserListButtonClickCallback) activity
-//        } catch (ClassCastException e) {
-//            throw new ClassCastException(activity.toString()
-//                    + " must implement Callback interface")
-//        }
-//    }
-
+    /**
+     * This method is called to apply the color once that is determined from the poster image
+     */
     void changeLayoutAndTextColor() {
         //Change color for all the layouts
         mDetailMovieLayout.setBackgroundColor(mPalletePrimaryColor)
-//        mDetailTitleLayout.setBackgroundColor(mPalletePrimaryColor)
-//        mDetailPosterLayout.setBackgroundColor(mPalletePrimaryColor)
-//        mDetailTmdbRatingLayout.setBackgroundColor(mPalletePrimaryColor)
-//        mDetailUserRatingLayout.setBackgroundColor(mPalletePrimaryColor)
-//        mDetailSynopsisLayout.setBackgroundColor(mPalletePrimaryColor)
-//        mDetailTrailerLayout.setBackgroundColor(mPalletePrimaryColor)
-//        mDetailProductionInfoLayout.setBackgroundColor(mPalletePrimaryColor)
-//        mDetailCastHeaderLayout.setBackgroundColor(mPalletePrimaryColor)
-//        mDetailsCastGridLayout.setBackgroundColor(mPalletePrimaryColor)
-//        mDetailCrewHeaderLayout.setBackgroundColor(mPalletePrimaryColor)
-//        mDetailCrewGridLayout.setBackgroundColor(mPalletePrimaryColor)
-//        mDetailSimilarMovieHeaderLayout.setBackgroundColor(mPalletePrimaryColor)
-//        mDetailSimilarMovieGridLayout.setBackgroundColor(mPalletePrimaryColor)
-//        mDetailCollectionLayout.setBackgroundColor(mPalletePrimaryColor)
-//        mDetailWebLinkLayout.setBackgroundColor(mPalletePrimaryColor)
-//        mDetailReviewHeaderLayout.setBackgroundColor(mPalletePrimaryColor)
-//        mDetailReviewRecyclerViewLayout.setBackgroundColor(mPalletePrimaryColor)
-//        mUserListDrawableLayout.setBackgroundColor(mPalletePrimaryColor)
 
         //Change color for header text fields
         mReleaseDateHeaderTextView.setTextColor(mPalleteTitleColor)
@@ -1566,22 +1361,12 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
         mImageButtonCollection.setBackgroundColor(mPalletePrimaryDarkColor)
 
         //Set button color
-        final ColorStateList colorStateList = ColorStateList.valueOf(mPalletePrimaryDarkColor)
-        //Somehow while running in Jelly bean & KITKAT it cannot find Build.VERSION_CODES.LOLLIPOP, yet to figure out why!
-        //So using the API number (21 - LOLLIPOP)itself here
-//        if (Build.VERSION.SDK_INT >= 21) {
-//            mHomePageButton.setBackgroundTintList(colorStateList)
-//            mImdbLinkButton.setBackgroundTintList(colorStateList)
-//        } else {
-//            ViewCompat.setBackgroundTintList(mHomePageButton, colorStateList)
-//            ViewCompat.setBackgroundTintList(mImdbLinkButton, colorStateList)
-//        }
         mHomePageButton.setBackgroundColor(mPalletePrimaryDarkColor)
         mImdbLinkButton.setBackgroundColor(mPalletePrimaryDarkColor)
         mHomePageButton.setTextColor(mPalleteBodyTextColor)
         mImdbLinkButton.setTextColor(mPalleteBodyTextColor)
 
-        //Set ratingbar color. Used Compat so that can work below lollipop.
+        //Set ratingbar color. Used Compat so that it can work below lollipop.
         //Above one - didn't use. No reason, just an example how to handle lollipop and below separately
         final Drawable tmdbRatingdrawable = mTmdbRatingBar.getProgressDrawable()
         DrawableCompat.setTint(tmdbRatingdrawable, mPalleteAccentColor)
@@ -1589,6 +1374,9 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
         DrawableCompat.setTint(userRatingDrawable, mPalleteAccentColor)
     }
 
+    /**
+     * This method is called to apply the color to image button (used for user list selection)
+     */
     void setImageButtonColor() {
         if (mUserListWatchedFlag) {
             mImageButtonWatched.setColorFilter(mPalleteAccentColor)
@@ -1603,6 +1391,60 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
             mImageButtonCollection.setColorFilter(mPalleteAccentColor)
         }
     }
+
+    /**
+     * This method is called to set the title and apply the appropriate color once that is determined from poster image
+     */
+    void initializeTitleAndColor() {
+        LogDisplay.callLog(LOG_TAG, 'initializeTitleAndColor is called', LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
+        mCollapsingToolbar.setStatusBarScrimColor(mPalletePrimaryDarkColor)
+        mCollapsingToolbar.setContentScrimColor(mPalletePrimaryColor)
+        mCollapsingToolbar.setBackgroundColor(mPalletePrimaryColor)
+        mCollapsingToolbar.setCollapsedTitleTextColor(mPalleteTitleColor)
+
+        //Show the title only when image is collapsed
+        mAppBarLayout.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
+            boolean isShow = false
+            int scrollRange = -1
+
+            @Override
+            void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
+                if (scrollRange == -1) {
+                    scrollRange = appBarLayout.getTotalScrollRange()
+                }
+                if (scrollRange + verticalOffset == 0) {
+                    mCollapsingToolbar.setTitle(mMovieTitle)
+                    isShow = true
+                } else if (isShow) {
+                    mCollapsingToolbar.setTitle(" ")
+                    isShow = false
+                }
+            }
+        })
+    }
+
+    /**
+     * This method is called to set the dots for backdrop image ViewPager
+     * @param dotsCount
+     * @param dots
+     */
+    void setBackDropViewPagerDots(int dotsCount, ImageButton[] dots) {
+        final LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(25,25)
+        final ColorStateList greyColorStateList = ColorStateList.valueOf(ContextCompat.getColor(getActivity(), R.color.grey_600_color))
+        layoutParams.setMargins(1,0,1,0)
+        for(i in 0..(dotsCount - 1)) {
+            dots[i] = new ImageButton(getActivity())
+            dots[i].setBackgroundResource(R.drawable.view_pager_dot)
+            dots[i].setLayoutParams(layoutParams)
+            ViewCompat.setBackgroundTintList(dots[i], greyColorStateList)
+            mBackdropDotHolderLayout.addView(dots[i])
+        }
+        //Set the first one's color
+        dots[mBackdropViewPagerPos].setLayoutParams(new LinearLayout.LayoutParams(40,40))
+        final ColorStateList accentColorStateList = ColorStateList.valueOf(ContextCompat.getColor(getActivity(), R.color.accent))
+        ViewCompat.setBackgroundTintList(dots[mBackdropViewPagerPos], accentColorStateList)
+    }
+
 
     /**
      * Intent to open a web browser when user clicks on movie home page button
@@ -1623,167 +1465,6 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
         startActivity(intent)
     }
 
-//    /**
-//     * A callback interface that all activities containing this fragment must
-//     * implement. This mechanism allows activities to be notified when movie title and color value
-//     * are determined and ready for activity to update
-//     */
-//    public interface MovieTitleAndColorCallback {
-//        /**
-//         * DetailFragmentCallback for updating the Movie Title and Theme Color in Activity
-//         */
-//        public void initializeActivityHostedTitleAndColor(String movieTitle, int primaryColor, int primaryDarkColor, int titleColor)
-//    }
-
-//    /**
-//     * A callback interface that all activities containing this fragment must
-//     * implement. This mechanism allows activities to be notified when Backdrop image loader
-//     * is finished and processed
-//     */
-//    public interface BackdropCallback {
-//        /**
-//         * DetailFragmentCallback for updating the Backdrop images in Activity
-//         */
-//        public void initializeActivityHostedBackdrop(List<String> backdropImagePathList)
-//    }
-
-//    /**
-//     * A callback interface that all activities containing this fragment must
-//     * implement. This mechanism allows activities to be notified when user list button is clicked
-//     */
-//    public interface UserListButtonClickCallback {
-//        /**
-//         * DetailFragmentCallback for updating the Backdrop images in Activity
-//         */
-//        //TODO:not using this, so may need cleanup at the end
-//        public void finishCurrentActivity()
-//    }
-
-    void initializeTitleAndColor() {
-        LogDisplay.callLog(LOG_TAG, 'initializeTitleAndColor is called', LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
-//        mCollapsingToolbar.setTitle(movieTitle)
-        mCollapsingToolbar.setStatusBarScrimColor(mPalletePrimaryDarkColor)
-        mCollapsingToolbar.setContentScrimColor(mPalletePrimaryColor)
-        mCollapsingToolbar.setBackgroundColor(mPalletePrimaryColor)
-        mCollapsingToolbar.setCollapsedTitleTextColor(mPalleteTitleColor)
-
-        //Show the title only when image is collapsed
-        mAppBarLayout.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
-            boolean isShow = false
-            int scrollRange = -1
-
-            @Override
-            void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
-//                LogDisplay.callLog(LOG_TAG, 'onOffsetChanged is called', LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
-                if (scrollRange == -1) {
-                    scrollRange = appBarLayout.getTotalScrollRange()
-                }
-//                LogDisplay.callLog(LOG_TAG, "scrollRange + verticalOffset:$scrollRange & $verticalOffset", LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
-                if (scrollRange + verticalOffset == 0) {
-                    mCollapsingToolbar.setTitle(mMovieTitle)
-                    isShow = true
-                } else if (isShow) {
-                    mCollapsingToolbar.setTitle(" ")
-                    isShow = false
-                }
-            }
-        })
-    }
-
-
-//    void initializeBackdrop(List<String> backdropImagePathList) {
-//        LogDisplay.callLog(LOG_TAG, 'initializeBackdrop is called', LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
-//        setBackdropAnimation = true
-//        final Animation fadeInAnimation = new AlphaAnimation(0, 1)
-//        fadeInAnimation.setInterpolator(new DecelerateInterpolator())
-//        fadeInAnimation.setDuration(3000)
-//        final int counter = 0
-////        mBackdropImageCounter = 0
-//        Callback backdropPicassoCallback = new Callback() {
-//            @Override
-//            void onSuccess() {
-//                LogDisplay.callLog(LOG_TAG, 'Picasso:onSuccess is called', LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
-//                mBackdropImageSwitcher.startAnimation(fadeInAnimation)
-//                mBackdropImageSwitcher.showNext()
-//                mBackdropImageCounter++
-//            }
-//
-//            @Override
-//            void onError() {
-//                //TODO: need to identify if anything is needed
-//                LogDisplay.callLog(LOG_TAG, 'Picasso:onError is called', LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
-//            }
-//        }
-//        mRunnable = new Runnable() {
-//            @Override
-//            void run() {
-////                LogDisplay.callLog(LOG_TAG,"initializeBackdrop:picasoLoadComplete:$picasoLoadComplete",LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
-////                if (picasoLoadComplete) {
-////                }
-//                final String backdropPath = "$GlobalStaticVariables.TMDB_IMAGE_BASE_URL/$GlobalStaticVariables.TMDB_IMAGE_SIZE_W500" +
-//                        "${backdropImagePathList[counter]}"
-//                final int evenOrOdd = counter % 2
-////                    LogDisplay.callLog(LOG_TAG, "evenOrOdd value:$evenOrOdd", LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
-//                final ImageView imageView
-//                //The order is important, do not alter - otherwise imageswitcher will not work properly!
-//                if (evenOrOdd == 0) {
-//                    imageView = mBackdropImageSwitcher.getChildAt(1) as ImageView
-//                } else {
-//                    imageView = mBackdropImageSwitcher.getChildAt(0) as ImageView
-//                }
-//                loadBackdropImage(backdropPath, imageView, counter, backdropPicassoCallback)
-////                loadBackdropImage(backdropPath, fadeInAnimation, imageView, counter)
-//                counter++
-//                if (counter >= backdropImagePathList.size()) {
-//                    //Do not cycle through if the backdrop image count is 1
-//                    if (backdropImagePathList.size() > 1) {
-//                        counter = 0
-//                    }
-//                }
-//                mHandler.postDelayed(this, 10000) //Interval time is 10 seconds
-//            }
-//        }
-//        mHandler.postDelayed(mRunnable, 10) //Initial delay is 10 mili seconds
-//    }
-//
-//    //TODO: Future change - provide a setting option to user to chose single backdrop for mobile data
-//    //TODO: Future change - provide a setting option to user to chose no image donwload over mobile data & fo better
-//    //TODO: implementation, put all picasso call in a single place(class that exists)
-//    void loadBackdropImage(String backdropPath, ImageView imageView, int counter, Callback callback) {
-////    void loadBackdropImage(String backdropPath, Animation animation, ImageView imageView, int counter) {
-//        LogDisplay.callLog(LOG_TAG, 'loadBackdropImage is called', LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
-//        //This is to avoid abrupt flipping of first 2 / 3 images - it happens because of Picasso background call timing
-//        //So for first three images no slide animation is used and it ensures no cluttering
-//        if (setBackdropAnimation && counter > 3) {
-//            mBackdropImageSwitcher.setInAnimation(AnimationUtils.loadAnimation(getActivity(), R.anim.slide_right_in_animation))
-//            mBackdropImageSwitcher.setOutAnimation(AnimationUtils.loadAnimation(getActivity(), R.anim.slide_left_out_animation))
-//            setBackdropAnimation = false
-//        }
-//        //Load the backdrop using Picasso
-//        PicassoLoadImage.loadDetailFragmentBackdropImage(getActivity(),backdropPath,imageView,callback)
-////        Picasso.with(getActivity())
-////                .load(backdropPath)
-////                .noPlaceholder()
-////                .centerInside()
-////                .fit()
-////                .memoryPolicy(MemoryPolicy.NO_STORE, MemoryPolicy.NO_CACHE)
-////                .networkPolicy(NetworkPolicy.NO_STORE, NetworkPolicy.NO_CACHE)
-////                .into(imageView, new Callback() {
-////            @Override
-////            void onSuccess() {
-////                LogDisplay.callLog(LOG_TAG, 'Picasso:onSuccess is called', LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
-////                mBackdropImageSwitcher.startAnimation(animation)
-////                mBackdropImageSwitcher.showNext()
-////            }
-////
-////            @Override
-////            void onError() {
-////                //TODO: need to identify if anything is needed
-////                LogDisplay.callLog(LOG_TAG, 'Picasso:onError is called', LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
-////            }
-////        })
-//    }
-
     @Override
     void onResume() {
         LogDisplay.callLog(LOG_TAG, 'onResume is called', LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
@@ -1801,26 +1482,6 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
         //Cancel Picasso requests - required where callback (hard reference) is used
         //TODO this is not done everywhere, so need to do in other places
         Picasso.with(getActivity()).cancelRequest(mPosterImageView)
-//        Picasso.with(getActivity()).cancelRequest(mBackdropImageSwitcher.getChildAt(0) as ImageView)
-//        Picasso.with(getActivity()).cancelRequest(mBackdropImageSwitcher.getChildAt(1) as ImageView)
-    }
-
-    @Override
-    void onDetach() {
-        LogDisplay.callLog(LOG_TAG, 'onDetach is called', LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
-        super.onDetach()
-    }
-
-    @Override
-    void onDestroyView() {
-        LogDisplay.callLog(LOG_TAG, 'onDestroyView is called', LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
-        super.onDestroyView()
-    }
-
-    @Override
-    void onDestroy() {
-        LogDisplay.callLog(LOG_TAG, 'onDestroy is called', LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
-        super.onDestroy()
     }
 
     //Overriding the animation for better performance

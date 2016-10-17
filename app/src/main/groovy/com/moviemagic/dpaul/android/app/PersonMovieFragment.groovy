@@ -3,7 +3,6 @@ package com.moviemagic.dpaul.android.app
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
-import android.content.res.ColorStateList
 import android.database.Cursor
 import android.graphics.Bitmap
 import android.graphics.Color
@@ -17,34 +16,19 @@ import android.support.v4.app.LoaderManager
 import android.support.v4.content.ContextCompat
 import android.support.v4.content.CursorLoader
 import android.support.v4.content.Loader
-import android.support.v4.view.ViewCompat
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.graphics.Palette
 import android.support.v7.widget.GridLayoutManager
 import android.support.v7.widget.Toolbar
-import android.view.LayoutInflater
-import android.view.Menu
-import android.view.MenuInflater
-import android.view.MenuItem
-import android.view.View
-import android.view.ViewGroup
-import android.view.Window
-import android.widget.Button
-import android.widget.ImageButton
-import android.widget.ImageView
-import android.widget.LinearLayout
-import android.widget.TextView
-import com.moviemagic.dpaul.android.app.adapter.MovieGridRecyclerAdapter
+import android.view.*
+import android.widget.*
 import com.moviemagic.dpaul.android.app.adapter.PersonCastAdapter
 import com.moviemagic.dpaul.android.app.adapter.PersonCrewAdapter
 import com.moviemagic.dpaul.android.app.adapter.PersonImageAdapter
-import com.moviemagic.dpaul.android.app.backgroundmodules.GlobalStaticVariables
-import com.moviemagic.dpaul.android.app.backgroundmodules.LoadPersonData
-import com.moviemagic.dpaul.android.app.backgroundmodules.LogDisplay
-import com.moviemagic.dpaul.android.app.backgroundmodules.PicassoLoadImage
-import com.moviemagic.dpaul.android.app.backgroundmodules.Utility
+import com.moviemagic.dpaul.android.app.backgroundmodules.*
 import com.moviemagic.dpaul.android.app.contentprovider.MovieMagicContract
-import com.squareup.picasso.Callback;
+import com.squareup.picasso.Callback
+import com.squareup.picasso.Picasso
 import groovy.transform.CompileStatic
 
 @CompileStatic
@@ -192,14 +176,14 @@ class PersonMovieFragment extends Fragment implements LoaderManager.LoaderCallba
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         LogDisplay.callLog(LOG_TAG, 'onCreateView is called', LogDisplay.PERSON_MOVIE_FRAGMENT_LOG_FLAG)
-        //Get the bundle from the Fragment
+        // Get the bundle from the Fragment
         Bundle args = getArguments()
         if (args) {
             mPersonInfoUri = args.getParcelable(GlobalStaticVariables.MOVIE_PERSON_URI) as Uri
             LogDisplay.callLog(LOG_TAG, "Person Fragment arguments.Uri -> $mPersonInfoUri", LogDisplay.PERSON_MOVIE_FRAGMENT_LOG_FLAG)
             mPersonId = MovieMagicContract.MoviePersonInfo.getPersonIdFromMoviePersonInfoUri(mPersonInfoUri)
         }
-        //inflate the view before referring any view using id
+        // Inflate the view before referring any view using id
         View mRootView = inflater.inflate(R.layout.fragment_person_movie, container, false)
         mPersonLinLayout = mRootView.findViewById(R.id.person_info_layout) as LinearLayout
         mPosterImageView = mRootView.findViewById(R.id.person_poster_image) as ImageView
@@ -243,7 +227,6 @@ class PersonMovieFragment extends Fragment implements LoaderManager.LoaderCallba
                 mBiographyTextView.setMaxLines(getActivity().getResources().getString(R.string.person_biography_collapse_line_item_count) as Integer)
             }
         })
-//        mPosterGridLayout = mRootView.findViewById(R.id.movie_person_poster_layout) as GridLayout
         /**
          * Person Cast Grid handling
          */
@@ -332,7 +315,7 @@ class PersonMovieFragment extends Fragment implements LoaderManager.LoaderCallba
         if (mPersonId) {
             mPersonIdArg = [Integer.toString(mPersonId)] as String[]
         } else {
-            //this is to safeguard any unwanted data fetch
+            // This is to safeguard any unwanted data fetch
             mPersonIdArg = ['ZZZZZZ'] as String[]
         }
 
@@ -424,6 +407,10 @@ class PersonMovieFragment extends Fragment implements LoaderManager.LoaderCallba
         mPersonImageAdapter.swapCursor(null)
     }
 
+    /**
+     * This method is called loader is finished for movie person info table
+     * @param data Cursor
+     */
     void handlePersonInfoOnLoadFinished(Cursor data) {
         LogDisplay.callLog(LOG_TAG, "handlePersonInfoOnLoadFinished.Cursor rec count -> ${data.getCount()}", LogDisplay.PERSON_MOVIE_FRAGMENT_LOG_FLAG)
         if(data.moveToFirst()) {
@@ -523,17 +510,7 @@ class PersonMovieFragment extends Fragment implements LoaderManager.LoaderCallba
                                 Window window = getActivity().getWindow()
                                 window.setStatusBarColor(mPalettePrimaryDarkColor)
                             }
-//                            //Set button color
-//                            final ColorStateList colorStateList = ColorStateList.valueOf(mPalettePrimaryDarkColor)
-//                            //Somehow while running in Jelly bean & KITKAT it cannot find Build.VERSION_CODES.LOLLIPOP, yet to figure out why!
-//                            //So using the API number (21 - LOLLIPOP)itself here
-//                            if (Build.VERSION.SDK_INT >= 21) {
-//                                mHomePageButton.setBackgroundTintList(colorStateList)
-//                                mImdbLinkButton.setBackgroundTintList(colorStateList)
-//                            } else {
-//                                ViewCompat.setBackgroundTintList(mHomePageButton, colorStateList)
-//                                ViewCompat.setBackgroundTintList(mImdbLinkButton, colorStateList)
-//                            }
+
                             mHomePageButton.setBackgroundColor(mPalettePrimaryDarkColor)
                             mImdbLinkButton.setBackgroundColor(mPalettePrimaryDarkColor)
                             mHomePageButton.setTextColor(mPaletteBodyTextColor)
@@ -545,7 +522,6 @@ class PersonMovieFragment extends Fragment implements LoaderManager.LoaderCallba
                             mPersonImageAdapter.changeColor(mPalettePrimaryDarkColor, mPaletteBodyTextColor)
                         }
                     })
-
                 }
 
                 @Override
@@ -586,11 +562,6 @@ class PersonMovieFragment extends Fragment implements LoaderManager.LoaderCallba
                 mDeathDayHdrTextView.setVisibility(TextView.GONE)
                 mDeathDayTextView.setVisibility(TextView.GONE)
                 mDeathDayDivider.setVisibility(View.GONE)
-//                mPosterImageView.setLayoutParams(new GridLayout.LayoutParams(GridLayout.Spec(),2))
-//                final android.widget.GridLayout.LayoutParams layoutParams = mPosterImageView.getLayoutParams() as android.widget.GridLayout.LayoutParams
-//                layoutParams.spa
-//                android.widget.GridLayout.Spec spec = layoutParams.get
-//                spec
             }
             if (data.getFloat(COL_PERSON_INFO_PERSON_POPULARITY) > 0) {
                 mPopularityTextView.setText(Float.toString(data.getFloat(COL_PERSON_INFO_PERSON_POPULARITY)))
@@ -598,7 +569,6 @@ class PersonMovieFragment extends Fragment implements LoaderManager.LoaderCallba
                 mPopularityTextView.setText(getActivity().getString(R.string.movie_data_not_available))
             }
             //Remove all empty lines, blanks and tabs from biography text
-//            final String contentText = data.getString(COL_PERSON_INFO_PERSON_BIOGRAPHY).replaceAll("(?m)^[ \t]*\r?\n", "")
             if(data.getString(COL_PERSON_INFO_PERSON_BIOGRAPHY)) {
                 final String contentText = data.getString(COL_PERSON_INFO_PERSON_BIOGRAPHY).replaceAll("\n", "")
                 mBiographyTextView.setText(contentText)
@@ -645,6 +615,10 @@ class PersonMovieFragment extends Fragment implements LoaderManager.LoaderCallba
         }
     }
 
+    /**
+     * This method is called loader is finished for movie person cast table
+     * @param data Cursor
+     */
     void handlePersonCastOnLoadFinished(Cursor data) {
         LogDisplay.callLog(LOG_TAG, "handlePersonCastOnLoadFinished.Cursor rec count -> ${data.getCount()}", LogDisplay.PERSON_MOVIE_FRAGMENT_LOG_FLAG)
         //Show two rows if the count is greater than 6 otherwise show single row
@@ -654,6 +628,10 @@ class PersonMovieFragment extends Fragment implements LoaderManager.LoaderCallba
         mPersonCastAdapter.swapCursor(data)
     }
 
+    /**
+     * This method is called loader is finished for movie person crew table
+     * @param data Cursor
+     */
     void handlePersonCrewOnLoadFinished(Cursor data) {
         LogDisplay.callLog(LOG_TAG, "handlePersonCrewOnLoadFinished.Cursor rec count -> ${data.getCount()}", LogDisplay.PERSON_MOVIE_FRAGMENT_LOG_FLAG)
         //Show two rows if the count is greater than 6 otherwise show single row
@@ -663,6 +641,10 @@ class PersonMovieFragment extends Fragment implements LoaderManager.LoaderCallba
         mPersonCrewAdapter.swapCursor(data)
     }
 
+    /**
+     * This method is called loader is finished for movie person image table
+     * @param data Cursor
+     */
     void handlePersonImageOnLoadFinished(Cursor data) {
         LogDisplay.callLog(LOG_TAG, "handlePersonImageOnLoadFinished.Cursor rec count -> ${data.getCount()}", LogDisplay.PERSON_MOVIE_FRAGMENT_LOG_FLAG)
         //Show two rows if the count is greater than 6 otherwise show single row
@@ -688,6 +670,13 @@ class PersonMovieFragment extends Fragment implements LoaderManager.LoaderCallba
         final Intent intent = new Intent(Intent.ACTION_VIEW)
         intent.setData(Uri.parse(imdbUrl))
         startActivity(intent)
+    }
+
+    @Override
+    void onStop() {
+        LogDisplay.callLog(LOG_TAG, 'onStop is called', LogDisplay.PERSON_MOVIE_FRAGMENT_LOG_FLAG)
+        super.onStop()
+        Picasso.with(getActivity()).cancelRequest(mPosterImageView)
     }
 
     @Override

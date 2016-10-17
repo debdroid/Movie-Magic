@@ -77,10 +77,10 @@ class MovieReviewAdapter extends RecyclerView.Adapter<MovieReviewAdapter.MovieRe
     @Override
     void onBindViewHolder(MovieReviewAdapterViewHolder holder, int position) {
         LogDisplay.callLog(LOG_TAG,'onBindViewHolder is called',LogDisplay.MOVIE_REVIEW_ADAPTER_LOG_FLAG)
-        // move the cursor to correct position
+        //Move the cursor to correct position
         mCursor.moveToPosition(position)
         holder.movieReviewAuthor.setText("By ${mCursor.getString(DetailMovieFragment.COL_MOVIE_REVIEW_AUTHOR)}")
-        //remove all empty lines, blanks and tabs
+        //Remove all empty lines, blanks and tabs
         final String contentText = mCursor.getString(DetailMovieFragment.COL_MOVIE_REVIEW_CONTENT).replaceAll("(?m)^[ \t]*\r?\n", "")
         holder.movieReviewContent.setText(contentText)
         //Apply color only it has got a value
@@ -94,7 +94,6 @@ class MovieReviewAdapter extends RecyclerView.Adapter<MovieReviewAdapter.MovieRe
 
     @Override
     int getItemCount() {
-//        LogDisplay.callLog(LOG_TAG, 'Cursor item count is called', LogDisplay.MOVIE_REVIEW_ADAPTER_LOG_FLAG)
         if (null == mCursor) {
             LogDisplay.callLog(LOG_TAG, "Cursor item count = 0", LogDisplay.MOVIE_REVIEW_ADAPTER_LOG_FLAG)
             return 0

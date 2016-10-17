@@ -53,7 +53,6 @@ class LogDisplay {
     public static final boolean DETAIL_FRAGMENT_PAGER_ADAPTER_LOG_FLAG = false
     public static final boolean HOME_MOVIE_FRAGMENT_LOG_FLAG = true
     public static final boolean HOME_MOVIE_ADAPTER_LOG_FLAG = false
-    public static final boolean HOME_VIDEO_PAGER_ADAPTER_LOG_FLAG = true
 
     static void callLog(String tag, String msg, Boolean logFlag) {
         if(SHOW_ALL_LOG_FLAG) {

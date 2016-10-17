@@ -24,7 +24,7 @@ class LoadCollectionData extends AsyncTask<Integer, Void, Void> {
         mContext = ctx
         mContentResolver = mContext.getContentResolver()
     }
-    //TODO - need to do housekeeping with collection data later
+    //TODO - need to do housekeeping with collection data (i.e. regular update) later
     @Override
     protected Void doInBackground(Integer... params) {
         final int collectionId = params[0]
@@ -119,12 +119,10 @@ class LoadCollectionData extends AsyncTask<Integer, Void, Void> {
                     final ContentValues collectionData = new ContentValues()
                     collectionData.put(MovieMagicContract.MovieCollection.COLUMN_COLLECTION_MOVIE_PRESENT_FLAG, GlobalStaticVariables.MOVIE_MAGIC_FLAG_FALSE)
                     final long collectionRowId = MovieMagicContract.MovieCollection.getCollectionRpwIdFromMovieCollectionUri(collectionDataUri)
-//                final String[] args = Long.toString(collectionRowId) as String[]
                     final String[] args = [Long.toString(collectionRowId)]
                     final int updateCount = mContentResolver.update(
                             MovieMagicContract.MovieCollection.CONTENT_URI,
                             collectionData,
-//                                        MovieMagicContract.MovieCollection.COLUMN_COLLECTION_ID + "= ?",
                             MovieMagicContract.MovieCollection._ID + "= ?",
                             args)
                     if (updateCount == 1) {

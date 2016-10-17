@@ -366,15 +366,11 @@ public class MovieMagicMainActivity extends AppCompatActivity implements Navigat
 
     //Override the callback method of GridMovieFragment
     @Override
-//    public void onItemSelected(int movieId, long movie_magic_row_ID, ImageView gridImageView) {
-//    public void onItemSelected(int movieId, ImageView gridImageView) {
     public void onMovieGridItemSelected(int movieId, String movieCategory, MovieGridRecyclerAdapter.MovieGridRecyclerAdapterViewHolder viewHolder) {
         final Intent intent = new Intent(this, DetailMovieActivity.class)
         final Bundle bundle = new Bundle()
-//        final Uri movieMagicMovieIdUri = MovieMagicContract.MovieBasicInfo.buildMovieUriWithMovieId(movieId)
         bundle.putInt(GlobalStaticVariables.MOVIE_BASIC_INFO_MOVIE_ID,movieId)
         bundle.putString(GlobalStaticVariables.MOVIE_BASIC_INFO_CATEGORY,movieCategory)
-//        intent.setData(movieMagicMovieIdUri)
         intent.putExtras(bundle)
         startActivity(intent)
         //Start the animation

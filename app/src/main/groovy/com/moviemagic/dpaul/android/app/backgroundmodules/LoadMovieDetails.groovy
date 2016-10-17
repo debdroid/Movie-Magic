@@ -20,12 +20,9 @@ class LoadMovieDetails extends AsyncTask<ArrayList<Integer>, Void, Void> {
     private static final String LOG_TAG = LoadMovieDetails.class.getSimpleName()
     private final ContentResolver mContentResolver
     private final Context mContext
-//    private final Uri mMovieBasicMovieIdUri
 
     public LoadMovieDetails(Context ctx) {
-//    public LoadMovieDetails(Context ctx, Uri movieUri) {
         mContext = ctx
-//        mMovieBasicMovieIdUri = movieUri
         mContentResolver = mContext.getContentResolver()
     }
 
@@ -69,7 +66,6 @@ class LoadMovieDetails extends AsyncTask<ArrayList<Integer>, Void, Void> {
                 LogDisplay.callLog(LOG_TAG, "JSON DATA for movie id ${movieIdList.get(i)} & row id ${movieBasicRowIdList.get(i)} -> $jsonData", LogDisplay.LOAD_MOVIE_DETAILS_LOG_FLAG)
                 final ContentValues contentMovieBasicInfoValues = JsonParse.parseAdditionalBasicMovieData(jsonData)
 //            //Update the indicator to indicate data is loaded
-//            contentMovieBasicInfoValues.put(MovieMagicContract.MovieBasicInfo.COLUMN_DETAIL_DATA_PRESENT_FLAG,GlobalStaticVariables.MOVIE_MAGIC_FLAG_TRUE)
                 if (contentMovieBasicInfoValues) {
                     if (movieIdList && movieBasicRowIdList == 0) {
                         //This part of the code will be executed for person's crew and cast movie only, so safe to use the
@@ -89,15 +85,11 @@ class LoadMovieDetails extends AsyncTask<ArrayList<Integer>, Void, Void> {
                             LogDisplay.callLog(LOG_TAG, "movieBasicRowIdList->$movieBasicRowIdList", LogDisplay.LOAD_MOVIE_DETAILS_LOG_FLAG)
                         }
                     } else {
-//                final String[] movieBasicInfoMovieRowId = [Integer.toString(movieBasicRowIdList)]
-//              final String[] movieBasicInfoMovieId =  [Integer.toString(MovieMagicContract.MovieBasicInfo.getMovieIdFromUri(mMovieBasicMovieIdUri))]
                         final int movieBasicInfoUpdateCount = mContentResolver.update(
                                 MovieMagicContract.MovieBasicInfo.CONTENT_URI,
                                 contentMovieBasicInfoValues,
                                 "$MovieMagicContract.MovieBasicInfo._ID = ?",
-//                    MovieMagicContract.MovieBasicInfo.COLUMN_MOVIE_ID + "= ?",
                                 [Integer.toString(movieBasicRowIdList.get(i))] as String[])
-//                    movieBasicInfoMovieId)
                         if (movieBasicInfoUpdateCount != 1) {
                             LogDisplay.callLog(LOG_TAG, "Additional details Update in movie_basic_info failed. Update Count->$movieBasicInfoUpdateCount. Movie row id->${movieBasicRowIdList.get(i)}", LogDisplay.LOAD_MOVIE_DETAILS_LOG_FLAG)
                         } else { //If the return value is 1, indicate successful insert

@@ -43,27 +43,6 @@
                     android:orientation="horizontal" >
                 </LinearLayout>
             </LinearLayout>
-            <!--<ImageSwitcher-->
-                <!--android:id="@+id/movie_detail_backdrop_image_switcher"-->
-                <!--android:layout_width="match_parent"-->
-                <!--android:layout_height="@dimen/backdrop_image_height_detail_view"-->
-                <!--android:fitsSystemWindows="true"-->
-                <!--app:layout_collapseMode="parallax">-->
-                <!--<ImageView-->
-                    <!--android:id="@+id/movie_detail_backdrop_image_1"-->
-                    <!--android:layout_width="match_parent"-->
-                    <!--android:layout_height="@dimen/backdrop_image_height_detail_view"-->
-                    <!--android:scaleType="centerCrop"-->
-                    <!--android:fitsSystemWindows="true"-->
-                    <!--android:src="@drawable/grid_image_placeholder" />-->
-                <!--&lt;!&ndash; ImageSrc not used for the following one to avoid cluttering in imageswitcher &ndash;&gt;-->
-                <!--<ImageView-->
-                    <!--android:id="@+id/movie_detail_backdrop_image_2"-->
-                    <!--android:layout_width="match_parent"-->
-                    <!--android:layout_height="@dimen/backdrop_image_height_detail_view"-->
-                    <!--android:fitsSystemWindows="true"-->
-                    <!--android:scaleType="centerCrop"/>-->
-            <!--</ImageSwitcher>-->
             <!-- setting itsSystemWindows="true" for toolbar moves home up and setting buttons to status bar -->
             <android.support.v7.widget.Toolbar
                 android:id="@+id/movie_detail_toolbar"

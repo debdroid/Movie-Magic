@@ -167,10 +167,11 @@ class MovieMagicSyncAdapter extends AbstractThreadedSyncAdapter {
         final movieDataCursor
         final ArrayList<Integer> mMovieIdList = new ArrayList<>()
         final ArrayList<Integer> mMovieRowIdList = new ArrayList<>()
-        //First load for now playing
+        //First finalise the date to be loaded for now playing
         movieDataCursor = mContentResolver.query(
                 MovieMagicContract.MovieBasicInfo.CONTENT_URI,
                 MOVIE_BASIC_INFO_COLUMNS,
+                //The conditions used here are same as what used in Home Fragment loader. If that changes then change this
                 """$MovieMagicContract.MovieBasicInfo.COLUMN_MOVIE_CATEGORY = ? and
                         $MovieMagicContract.MovieBasicInfo.COLUMN_POSTER_PATH <> ? and
                         $MovieMagicContract.MovieBasicInfo.COLUMN_BACKDROP_PATH <> ? """,
@@ -191,10 +192,11 @@ class MovieMagicSyncAdapter extends AbstractThreadedSyncAdapter {
         } else {
             LogDisplay.callLog(LOG_TAG, 'Empty cursor returned by movie-basic_info for now playing', LogDisplay.MOVIE_MAGIC_SYNC_ADAPTER_LOG_FLAG)
         }
-        //Now load for upcoming
+        //Now finalise the date to be loaded for upcoming
         movieDataCursor = mContentResolver.query(
                 MovieMagicContract.MovieBasicInfo.CONTENT_URI,
                 MOVIE_BASIC_INFO_COLUMNS,
+                //The conditions used here are same as what used in Home Fragment loader. If that changes then change this
                 """$MovieMagicContract.MovieBasicInfo.COLUMN_MOVIE_CATEGORY = ? and
                         $MovieMagicContract.MovieBasicInfo.COLUMN_POSTER_PATH <> ? and
                         $MovieMagicContract.MovieBasicInfo.COLUMN_BACKDROP_PATH <> ? """,
@@ -216,9 +218,11 @@ class MovieMagicSyncAdapter extends AbstractThreadedSyncAdapter {
             LogDisplay.callLog(LOG_TAG, 'Empty cursor returned by movie-basic_info for up coming', LogDisplay.MOVIE_MAGIC_SYNC_ADAPTER_LOG_FLAG)
         }
 
+        //Now go and load the data
         if(mMovieIdList.size() > 0 && mMovieRowIdList.size() > 0) {
             LogDisplay.callLog(LOG_TAG, 'Now go and load the details of the movies', LogDisplay.MOVIE_MAGIC_SYNC_ADAPTER_LOG_FLAG)
             final ArrayList<Integer> isForHomeList = new ArrayList<>(1)
+            //Set this flag to true as the Home page videos are retrieved based on this indicator
             isForHomeList.add(0,GlobalStaticVariables.MOVIE_MAGIC_FLAG_TRUE)
             final ArrayList<Integer>[] loadMovieDetailsArg = [mMovieIdList, mMovieRowIdList, isForHomeList] as ArrayList<Integer>[]
             new LoadMovieDetails(mContext).execute(loadMovieDetailsArg)

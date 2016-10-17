@@ -738,9 +738,9 @@ class MovieMagicProvider extends ContentProvider {
                 throw new UnsupportedOperationException("Unknown uri: $uri")
         }
         getContext().getContentResolver().notifyChange(uri, null)
-        //Was facing issues while accessing database during inserting data into different tables,
-        //found in one Stackoverflow that db.close shouldn't be used as content provider handles that
-        //automatically, so commenting this here in other places!!
+        //Was facing issues while accessing database during inserting data into multiple tables in a single asynctask,
+        //found in Stackoverflow that db.close shouldn't be used as content provider handles that
+        //automatically, so commenting this here and in other places!!
         //db.close()
         return returnUri
     }
@@ -754,7 +754,7 @@ class MovieMagicProvider extends ContentProvider {
         final SQLiteDatabase db = mOpenHelper.getWritableDatabase()
         final int match = sUriMatcher.match(uri)
         int count
-        //this makes delete all rows return the number of rows deleted
+        //This makes delete all rows return the number of rows deleted
         if(selection == null) selection = "1"
         switch (match) {
             case MOVIE_BASIC_INFO:
@@ -803,7 +803,7 @@ class MovieMagicProvider extends ContentProvider {
             getContext().getContentResolver().notifyChange(uri, null)
             //db.close()
         }
-        //return the actual rows deleted
+        //Return the actual # of rows deleted
         return count
     }
 
@@ -1073,9 +1073,12 @@ class MovieMagicProvider extends ContentProvider {
                 return super.bulkInsert(uri, values)
         }
     }
+
     /**
-        Covert the movie release date string to numeric value
+     * Convert the movie release date string to numeric value (milliseconds)
+     * @param values The date value to be converted to
      */
+
     private void convertDate(ContentValues values) {
         // Covert the movie release date
         if (values.containsKey(MovieMagicContract.MovieBasicInfo.COLUMN_RELEASE_DATE)) {

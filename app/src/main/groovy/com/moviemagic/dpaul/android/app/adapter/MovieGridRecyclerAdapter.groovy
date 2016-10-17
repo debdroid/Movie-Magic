@@ -78,14 +78,6 @@ class MovieGridRecyclerAdapter extends RecyclerView.Adapter<MovieGridRecyclerAda
             holder.movieNameView.setBackgroundColor(mPrimaryDarkColor)
             holder.movieNameView.setTextColor(mBodyTextColor)
         }
-//        if(collectionGridFlag) {
-//            holder.movieNameView.setBackgroundColor(mPrimaryDarkColor)
-//            holder.movieNameView.setTextColor(mBodyTextColor)
-//        } else {
-//            //This is to ensure the correct color is used when grid is used for main browsing (i.e. popular, upcoming, etc)
-//            holder.movieNameView.setBackgroundColor(mContext.getColor(R.color.primary_dark))
-//            holder.movieNameView.setTextColor(mContext.getColor(R.color.white_color))
-//        }
     }
 
     @Override
@@ -94,7 +86,6 @@ class MovieGridRecyclerAdapter extends RecyclerView.Adapter<MovieGridRecyclerAda
             LogDisplay.callLog(LOG_TAG, "Cursor item count = 0", LogDisplay.GRID_RECYCLER_ADAPTER_LOG_FLAG)
             return 0
         }
-//        LogDisplay.callLog(LOG_TAG, "Cursor item count = ${mCursor.getCount()}", LogDisplay.GRID_RECYCLER_ADAPTER_LOG_FLAG)
         return mCursor.getCount()
     }
 

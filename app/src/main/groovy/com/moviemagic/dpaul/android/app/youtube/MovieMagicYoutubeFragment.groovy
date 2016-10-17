@@ -62,7 +62,7 @@ class MovieMagicYoutubeFragment extends YouTubePlayerSupportFragment implements 
     /**
      * Set the now_playing id and initialize the player
      * This can be used when including the Fragment in an XML layout
-     * @param videoId The ID of the now_playing to play
+     * @param videoIds The IDs of the YouTube now_playing to play
      */
     public void setVideoId(final List<String> videoIds) {
         LogDisplay.callLog(LOG_TAG,'setVideoId is called',LogDisplay.MOVIE_MAGIC_YOUTUBE_FRAGMENT_LOG_FLAG)
@@ -107,7 +107,6 @@ class MovieMagicYoutubeFragment extends YouTubePlayerSupportFragment implements 
     void setUserVisibleHint(boolean isVisibleToUser) {
         super.setUserVisibleHint(isVisibleToUser)
         LogDisplay.callLog(LOG_TAG,'setUserVisibleHint is called',LogDisplay.MOVIE_MAGIC_YOUTUBE_FRAGMENT_LOG_FLAG)
-//        initialize(BuildConfig.YOUTUBE_API_KEY, this)
     }
 
     @Override

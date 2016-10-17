@@ -67,7 +67,6 @@ class MovieCastAdapter extends RecyclerView.Adapter<MovieCastAdapter.MovieCastAd
             //Set the animation
             final Bundle bundle = ActivityOptions.makeCustomAnimation(mContext,R.anim.slide_bottom_in_animation,0).toBundle()
             mContext.startActivity(mIntent,bundle)
-//            mContext.startActivity(mIntent)
         }
     }
 
@@ -81,7 +80,7 @@ class MovieCastAdapter extends RecyclerView.Adapter<MovieCastAdapter.MovieCastAd
 
     @Override
     void onBindViewHolder(MovieCastAdapterViewHolder holder, int position) {
-        // move the cursor to correct position
+        //Move the cursor to correct position
         mCursor.moveToPosition(position)
         LogDisplay.callLog(LOG_TAG, 'onBindViewHolder is called', LogDisplay.MOVIE_CAST_ADAPTER_LOG_FLAG)
         final String profilePath = "$GlobalStaticVariables.TMDB_IMAGE_BASE_URL/$GlobalStaticVariables.TMDB_IMAGE_SIZE_W185" +
@@ -102,7 +101,6 @@ class MovieCastAdapter extends RecyclerView.Adapter<MovieCastAdapter.MovieCastAd
 
     @Override
     int getItemCount() {
-//        LogDisplay.callLog(LOG_TAG,'Cursor item count is called',LogDisplay.MOVIE_CAST_ADAPTER_LOG_FLAG)
         if (null == mCursor) return 0
         return mCursor.getCount()
     }

@@ -1,16 +1,13 @@
 package com.moviemagic.dpaul.android.app.adapter
 
 import android.content.Context
-import android.content.Intent
 import android.database.Cursor
-import android.os.Bundle
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
-import com.moviemagic.dpaul.android.app.DetailMovieActivity
 import com.moviemagic.dpaul.android.app.HomeMovieFragment
 import com.moviemagic.dpaul.android.app.R
 import com.moviemagic.dpaul.android.app.backgroundmodules.GlobalStaticVariables
@@ -18,7 +15,7 @@ import com.moviemagic.dpaul.android.app.backgroundmodules.LogDisplay
 import com.moviemagic.dpaul.android.app.backgroundmodules.PicassoLoadImage
 import com.moviemagic.dpaul.android.app.backgroundmodules.Utility
 import com.squareup.picasso.Callback
-import com.squareup.picasso.Picasso;
+import com.squareup.picasso.Picasso
 import groovy.transform.CompileStatic
 
 @CompileStatic
@@ -160,12 +157,9 @@ class HomeMovieAdapter extends RecyclerView.Adapter<HomeMovieAdapter.HomeMovieAd
 
     @Override
     int getItemCount() {
-//        LogDisplay.callLog(LOG_TAG,'Cursor item count is called',LogDisplay.HOME_MOVIE_ADAPTER_LOG_FLAG)
         if (null == mCursor) {
-//            LogDisplay.callLog(LOG_TAG, "Cursor item count = 0", LogDisplay.HOME_MOVIE_ADAPTER_LOG_FLAG)
             return 0
         }
-//        LogDisplay.callLog(LOG_TAG, "Cursor item count = ${mCursor.getCount()}", LogDisplay.HOME_MOVIE_ADAPTER_LOG_FLAG)
         return mCursor.getCount()
     }
 

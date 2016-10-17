@@ -59,19 +59,6 @@ class PersonImageAdapter extends RecyclerView.Adapter<PersonImageAdapter.PersonI
             LogDisplay.callLog(LOG_TAG,"onClick:imagePath array count ${imagePath.size()}",LogDisplay.PERSON_IMAGE_ADAPTER_LOG_FLAG)
             final int adapterPosition = getAdapterPosition()
             mMoviePersonImageAdapterOnClickHandler.onClick(adapterPosition, imagePath, this)
-//            final int adapterPosition = getAdapterPosition()
-//            mCursor.moveToPosition(adapterPosition)
-//            final int movieId = mCursor.getInt(PersonMovieFragment.COL_PERSON_CREW_MOVIE_ID)
-//            mMoviePersonImageAdapterOnClickHandler.onClick(movieId, this)
-//            mCursor.moveToPosition(getAdapterPosition())
-//            final int movieId = mCursor.getInt(PersonMovieFragment.COL_PERSON_CREW_MOVIE_ID)
-//            LogDisplay.callLog(LOG_TAG,"Movie id is $movieId",LogDisplay.PERSON_CREW_ADAPTER_LOG_FLAG)
-//            final Bundle bundle = new Bundle()
-//            bundle.putInt(GlobalStaticVariables.MOVIE_BASIC_INFO_MOVIE_ID,movieId)
-//            bundle.putString(GlobalStaticVariables.MOVIE_BASIC_INFO_CATEGORY,GlobalStaticVariables.MOVIE_CATEGORY_PERSON)
-//            final Intent intent = new Intent(mContext, DetailMovieActivity.class)
-//            intent.putExtras(bundle)
-//            mContext.startActivity(intent)
         }
     }
 
@@ -85,7 +72,7 @@ class PersonImageAdapter extends RecyclerView.Adapter<PersonImageAdapter.PersonI
 
     @Override
     void onBindViewHolder(PersonImageAdapterViewHolder holder, int position) {
-        // move the cursor to correct position
+        //Move the cursor to correct position
         mCursor.moveToPosition(position)
         LogDisplay.callLog(LOG_TAG,'onBindViewHolder is called',LogDisplay.PERSON_IMAGE_ADAPTER_LOG_FLAG)
         final String imagePath = "$GlobalStaticVariables.TMDB_IMAGE_BASE_URL/$GlobalStaticVariables.TMDB_IMAGE_SIZE_W185" +
@@ -95,12 +82,9 @@ class PersonImageAdapter extends RecyclerView.Adapter<PersonImageAdapter.PersonI
 
     @Override
     int getItemCount() {
-//        LogDisplay.callLog(LOG_TAG,'Cursor item count is called',LogDisplay.PERSON_IMAGE_ADAPTER_LOG_FLAG)
         if (null == mCursor) {
-//            LogDisplay.callLog(LOG_TAG, "Cursor item count = 0", LogDisplay.PERSON_IMAGE_ADAPTER_LOG_FLAG)
             return 0
         }
-//        LogDisplay.callLog(LOG_TAG, "Cursor item count = ${mCursor.getCount()}", LogDisplay.PERSON_IMAGE_ADAPTER_LOG_FLAG)
         return mCursor.getCount()
     }
 

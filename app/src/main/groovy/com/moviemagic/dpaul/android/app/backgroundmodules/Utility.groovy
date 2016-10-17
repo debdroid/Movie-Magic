@@ -11,6 +11,10 @@ import java.text.SimpleDateFormat
 class Utility {
     private static final String LOG_TAG = JsonParse.class.getSimpleName()
 
+    /**
+     * This utility method returns the current date
+     * @return Today's date
+     */
     static String getTodayDate() {
         final SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSSZ")
         final String todayDate = simpleDateFormat.format(new Date())
@@ -18,12 +22,22 @@ class Utility {
         return todayDate
     }
 
-    static String convertMilliSecsToOrigReleaseDate(long timeInMilis) {
+    /**
+     * This utility method converts the date representation of milliseconds to regular date format
+     * @param timeInMillis Date represented in milliseconds
+     * @return Formatted date value
+     */
+    static String convertMilliSecsToOrigReleaseDate(long timeInMillis) {
         final SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd")
-        String dateString = simpleDateFormat.format(new Date(timeInMilis))
+        String dateString = simpleDateFormat.format(new Date(timeInMillis))
         return dateString
     }
 
+    /**
+     * This utility method formats the date for friendly user display
+     * @param date Date to be formatted
+     * @return Formatted date value
+     */
     static String formatFriendlyDate(String date) {
         final SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd MMM yyyy")
         if(date.size() == 10) {
@@ -36,6 +50,12 @@ class Utility {
             return date
     }
 
+    /**
+     * This utility method converts the minutes to hour and minutes
+     * @param ctx Application context
+     * @param runTime Minute value
+     * @return Converted hour and minute value
+     */
     public static String formatRunTime(Context ctx, int runTime) {
         int hourVal
         def minVal
@@ -44,18 +64,34 @@ class Utility {
         return String.format(ctx.getString(R.string.movie_run_time),hourVal,minVal)
     }
 
+    /**
+     * This utility method formats the dollar value in US currency
+     * @param val Dollar value to be formatted
+     * @return Formattd dollar value in us currency
+     */
     public static String formatCurrencyInDollar(int val) {
         NumberFormat formatter = NumberFormat.getCurrencyInstance(Locale.US)
         def formattedValue = formatter.format(val)
         return formattedValue
     }
 
+    /**
+     * This utility method converts the date representation of milliseconds to formatted date
+     * @param timeInMilliSeconds Date represented in milliseconds
+     * @return Formatted friendly display date
+     */
     public static String formatMilliSecondsToDate(long timeInMilliSeconds) {
         SimpleDateFormat formatter = new SimpleDateFormat("dd MMM yyyy")
         String dateString = formatter.format(new Date(timeInMilliSeconds))
         return dateString
     }
 
+    /**
+     * This utility method determines the mpaa for different countries - at this moment it only supports US & UK
+     * @param mpaa MPAA indicator
+     * @param locale Country
+     * @return Logo to be displayed as determined by mpaa indicator and locale
+     */
     public static int getIconResourceForMpaaRating(String mpaa, String locale) {
         //Remove any white spaces from mpaa and locale string
         if(mpaa) {

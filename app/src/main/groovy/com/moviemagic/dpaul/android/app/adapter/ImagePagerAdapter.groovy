@@ -1,7 +1,5 @@
 package com.moviemagic.dpaul.android.app.adapter
 
-import android.animation.Animator
-import android.app.ActionBar
 import android.content.Context
 import android.support.v4.view.PagerAdapter
 import android.support.v4.view.ViewPager
@@ -13,14 +11,11 @@ import android.view.animation.Animation
 import android.view.animation.AnimationUtils
 import android.widget.FrameLayout
 import android.widget.ImageView
-import android.widget.LinearLayout
-import android.widget.RelativeLayout
 import android.widget.TextView
-import com.moviemagic.dpaul.android.app.PersonMovieFragment
 import com.moviemagic.dpaul.android.app.R
 import com.moviemagic.dpaul.android.app.backgroundmodules.GlobalStaticVariables
 import com.moviemagic.dpaul.android.app.backgroundmodules.LogDisplay
-import com.moviemagic.dpaul.android.app.backgroundmodules.PicassoLoadImage;
+import com.moviemagic.dpaul.android.app.backgroundmodules.PicassoLoadImage
 import groovy.transform.CompileStatic
 
 @CompileStatic
@@ -123,12 +118,6 @@ class ImagePagerAdapter extends PagerAdapter {
         LogDisplay.callLog(LOG_TAG,'destroyItem is called',LogDisplay.IMAGE_PAGER_ADAPTER_LOG_FLAG)
         ((ViewPager) container).removeView((FrameLayout) object)
     }
-//
-//    @Override
-//    void notifyDataSetChanged() {
-//        LogDisplay.callLog(LOG_TAG,'notifyDataSetChanged is called',LogDisplay.IMAGE_PAGER_ADAPTER_LOG_FLAG)
-//        super.notifyDataSetChanged()
-//    }
 
     @Override
     int getItemPosition(Object object) {

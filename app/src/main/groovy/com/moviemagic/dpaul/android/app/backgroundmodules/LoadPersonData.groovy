@@ -93,7 +93,7 @@ class LoadPersonData extends AsyncTask<Integer, Void, Void> {
                 LogDisplay.callLog(LOG_TAG,"Person info row id is not valid.->$personInfoRowId",LogDisplay.LOAD_PERSON_DATA_LOG_FLAG)
             }
 
-            //URL for person images is different and TMDb currently does not provide the images as part of append_to_reponse
+            //URL for person images is different and TMDb currently does not provide the images as part of append_to_response
             //TMDB api example (person with appended response)
             //http://api.themoviedb.org/3/person/1158/images?api_key=key5&append_to_response=movie_credits
             final Uri.Builder personUriBuilder = Uri.parse(GlobalStaticVariables.TMDB_MOVIE_BASE_URL).buildUpon()

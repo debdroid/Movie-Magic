@@ -9,7 +9,6 @@ import android.view.MenuItem
 import com.moviemagic.dpaul.android.app.adapter.MovieGridRecyclerAdapter
 import com.moviemagic.dpaul.android.app.backgroundmodules.GlobalStaticVariables
 import com.moviemagic.dpaul.android.app.backgroundmodules.LogDisplay
-import com.moviemagic.dpaul.android.app.contentprovider.MovieMagicContract;
 import groovy.transform.CompileStatic
 
 @CompileStatic
@@ -69,22 +68,21 @@ class CollectionMovieActivity extends AppCompatActivity implements GridMovieFrag
         overridePendingTransition(0, R.anim.slide_bottom_out_animation)
     }
 
-    //Override the GridMovieFragment Callback
+    //Override the GridMovieFragment interface method
     @Override
     public void onMovieGridItemSelected(int movieId, String movieCategory, MovieGridRecyclerAdapter.MovieGridRecyclerAdapterViewHolder viewHolder) {
         LogDisplay.callLog(LOG_TAG, 'onItemSelected is called', LogDisplay.COLLECTION_MOVIE_FRAGMENT_LOG_FLAG)
         final Intent intent = new Intent(this, DetailMovieActivity.class)
-//        final Uri movieMagicMovieIdUri = MovieMagicContract.MovieBasicInfo.buildMovieUriWithMovieId(movieId)
-//        intent.setData(movieMagicMovieIdUri)
         final Bundle bundle = new Bundle()
         bundle.putInt(GlobalStaticVariables.MOVIE_BASIC_INFO_MOVIE_ID,movieId)
         bundle.putString(GlobalStaticVariables.MOVIE_BASIC_INFO_CATEGORY,movieCategory)
         intent.putExtras(bundle)
         startActivity(intent)
         //Start the animation
-//        overridePendingTransition(R.anim.slide_bottom_in_animation,0)
+        overridePendingTransition(R.anim.slide_bottom_in_animation,0)
     }
 
+    //Override the CollectionMovieFragment interface method
     @Override
     public void notifyCollectionColorChange() {
         LogDisplay.callLog(LOG_TAG, 'notifyCollectionColorChange is called', LogDisplay.COLLECTION_MOVIE_FRAGMENT_LOG_FLAG)
@@ -95,5 +93,4 @@ class CollectionMovieActivity extends AppCompatActivity implements GridMovieFrag
             LogDisplay.callLog(LOG_TAG, 'notifyCollectionColorChange: CollectionMovieFragment reference is null', LogDisplay.COLLECTION_MOVIE_FRAGMENT_LOG_FLAG)
         }
     }
-
 }

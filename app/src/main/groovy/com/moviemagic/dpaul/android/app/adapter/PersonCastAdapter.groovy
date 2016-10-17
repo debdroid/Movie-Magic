@@ -1,19 +1,13 @@
 package com.moviemagic.dpaul.android.app.adapter
 
 import android.content.Context
-import android.content.Intent
 import android.database.Cursor
-import android.os.Bundle
-import android.support.v4.app.FragmentActivity
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
-import com.moviemagic.dpaul.android.app.DetailMovieActivity
-import com.moviemagic.dpaul.android.app.DetailMovieFragment
-import com.moviemagic.dpaul.android.app.GridMovieFragment
 import com.moviemagic.dpaul.android.app.PersonMovieFragment
 import com.moviemagic.dpaul.android.app.R
 import com.moviemagic.dpaul.android.app.backgroundmodules.GlobalStaticVariables
@@ -62,28 +56,6 @@ class PersonCastAdapter extends RecyclerView.Adapter<PersonCastAdapter.PersonCas
             mCursor.moveToPosition(adapterPosition)
             final int movieId = mCursor.getInt(PersonMovieFragment.COL_PERSON_CAST_MOVIE_ID)
             mMoviePersonCastAdapterOnClickHandler.onClick(movieId, this)
-
-//            mCursor.moveToPosition(getAdapterPosition())
-//            final int movieId = mCursor.getInt(PersonMovieFragment.COL_PERSON_CAST_MOVIE_ID)
-//            LogDisplay.callLog(LOG_TAG,"Movie id is $movieId",LogDisplay.PERSON_CAST_ADAPTER_LOG_FLAG)
-//            final Bundle bundle = new Bundle()
-//            bundle.putInt(GlobalStaticVariables.MOVIE_BASIC_INFO_MOVIE_ID,movieId)
-//            bundle.putString(GlobalStaticVariables.MOVIE_BASIC_INFO_CATEGORY,GlobalStaticVariables.MOVIE_CATEGORY_PERSON)
-//            final Intent intent = new Intent(mContext, DetailMovieActivity.class)
-//            intent.putExtras(bundle)
-//            mContext.startActivity(intent)
-//            //Start the animation
-//            mContext.overridePendingTransition(R.anim.slide_bottom_in_animation,0)
-
-//            final DetailMovieFragment movieDetailFragment = new DetailMovieFragment()
-//            movieDetailFragment.setArguments(bundle)
-//            ((FragmentActivity)mContext).getSupportFragmentManager().beginTransaction()
-//            //Used the method enter,exit,popEnter,popExit custom animation. Our cases are enter & popExit
-//                    .setCustomAnimations(R.anim.slide_bottom_in_animation,0,0,R.anim.slide_bottom_out_animation)
-//                    .replace(R.id.detail_movie_fragment_container,movieDetailFragment)
-//            // Add this transaction to the back stack
-//                    .addToBackStack(null) //Parameter is optional, so used null
-//                    .commit()
         }
     }
 
@@ -97,7 +69,7 @@ class PersonCastAdapter extends RecyclerView.Adapter<PersonCastAdapter.PersonCas
 
     @Override
     void onBindViewHolder(PersonCastAdapterViewHolder holder, int position) {
-        // move the cursor to correct position
+        //Move the cursor to correct position
         mCursor.moveToPosition(position)
         LogDisplay.callLog(LOG_TAG,'onBindViewHolder is called',LogDisplay.PERSON_CAST_ADAPTER_LOG_FLAG)
         final String posterPath = "$GlobalStaticVariables.TMDB_IMAGE_BASE_URL/$GlobalStaticVariables.TMDB_IMAGE_SIZE_W185" +
@@ -118,12 +90,9 @@ class PersonCastAdapter extends RecyclerView.Adapter<PersonCastAdapter.PersonCas
 
     @Override
     int getItemCount() {
-//        LogDisplay.callLog(LOG_TAG,'Cursor item count is called',LogDisplay.PERSON_CAST_ADAPTER_LOG_FLAG)
         if (null == mCursor) {
-//            LogDisplay.callLog(LOG_TAG, "Cursor item count = 0", LogDisplay.PERSON_CAST_ADAPTER_LOG_FLAG)
             return 0
         }
-//        LogDisplay.callLog(LOG_TAG, "Cursor item count = ${mCursor.getCount()}", LogDisplay.PERSON_CAST_ADAPTER_LOG_FLAG)
         return mCursor.getCount()
     }
 

@@ -5,12 +5,9 @@ import android.content.Context
 import android.database.Cursor
 import android.os.Bundle
 import android.support.v4.app.Fragment
-import android.support.v4.app.FragmentManager
 import android.support.v4.app.LoaderManager
 import android.support.v4.content.CursorLoader
 import android.support.v4.content.Loader
-import android.support.v4.view.PagerTitleStrip
-import android.support.v4.view.ViewPager
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
@@ -21,11 +18,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import com.moviemagic.dpaul.android.app.adapter.HomeMovieAdapter
-import com.moviemagic.dpaul.android.app.adapter.HomeVideoDummyAdapter
-import com.moviemagic.dpaul.android.app.adapter.HomeVideoPagerAdapter
-import com.moviemagic.dpaul.android.app.adapter.PersonCastAdapter
 import com.moviemagic.dpaul.android.app.backgroundmodules.GlobalStaticVariables
-import com.moviemagic.dpaul.android.app.backgroundmodules.LoadMovieDetails
 import com.moviemagic.dpaul.android.app.backgroundmodules.LogDisplay
 import com.moviemagic.dpaul.android.app.contentprovider.MovieMagicContract
 import com.moviemagic.dpaul.android.app.youtube.MovieMagicYoutubeFragment;
@@ -35,8 +28,6 @@ import groovy.transform.CompileStatic
 class HomeMovieFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
     private static final String LOG_TAG = HomeMovieFragment.class.getSimpleName()
 
-//    private ViewPager mViewPager
-//    private PagerTitleStrip mPagerTitleStrip
     private RecyclerView mInCinemaRecyclerView
     private RecyclerView mComingSoonRecyclerView
     private RecyclerView mRecentlyAddedUserListRecyclerView
@@ -123,16 +114,13 @@ class HomeMovieFragment extends Fragment implements LoaderManager.LoaderCallback
     View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         LogDisplay.callLog(LOG_TAG,'onCreateView is called',LogDisplay.HOME_MOVIE_FRAGMENT_LOG_FLAG)
         View mRootView = inflater.inflate(R.layout.fragment_home_movie,container,false)
-//        mViewPager = mRootView.findViewById(R.id.home_movie_viewpager) as ViewPager
-//        mPagerTitleStrip = mRootView.findViewById(R.id.home_movie_viewpager_title_strip) as PagerTitleStrip
         mInCinemaRecyclerView = mRootView.findViewById(R.id.home_movie_in_cinema_recycler_view) as RecyclerView
         mInCinemaRecyclerViewEmptyTextView = mRootView.findViewById(R.id.home_movie_in_cinema_recycler_view_empty_msg_text_view) as TextView
         mComingSoonRecyclerView = mRootView.findViewById(R.id.home_movie_coming_soon_recycler_view) as RecyclerView
         mComingSoonRecyclerViewEmptyTextView = mRootView.findViewById(R.id.home_movie_coming_soon_recycler_view_empty_msg_text_view) as TextView
         mRecentlyAddedUserListRecyclerView = mRootView.findViewById(R.id.home_movie_recently_added_recycler_view) as RecyclerView
         mRecentlyAddedUserListRecyclerViewEmptyTextView = mRootView.findViewById(R.id.home_movie_recently_added_recycler_view_empty_msg_text_view) as TextView
-        //Set this to false for smooth scrolling of recyclerview
-        mInCinemaRecyclerView.setNestedScrollingEnabled(false)
+        //Set this to false so that activity starts the page from the beginning
         mComingSoonRecyclerView.setFocusable(false)
         mRecentlyAddedUserListRecyclerView.setNestedScrollingEnabled(false)
         /**
@@ -141,6 +129,8 @@ class HomeMovieFragment extends Fragment implements LoaderManager.LoaderCallback
         final RecyclerView.LayoutManager inCinemaLinearLayoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false)
         inCinemaLinearLayoutManager.setAutoMeasureEnabled(true)
         mInCinemaRecyclerView.setLayoutManager(inCinemaLinearLayoutManager)
+        //Set this to false for smooth scrolling of recyclerview
+        mInCinemaRecyclerView.setNestedScrollingEnabled(false)
         mInCinemaRecyclerView.setFocusable(false)
         mInCinemaAdapter = new HomeMovieAdapter(getActivity(), mInCinemaRecyclerViewEmptyTextView,
                 new HomeMovieAdapter.HomeMovieAdapterOnClickHandler(){
@@ -156,6 +146,9 @@ class HomeMovieFragment extends Fragment implements LoaderManager.LoaderCallback
         final RecyclerView.LayoutManager comingSoonLinearLayoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false)
         comingSoonLinearLayoutManager.setAutoMeasureEnabled(true)
         mComingSoonRecyclerView.setLayoutManager(comingSoonLinearLayoutManager)
+        //Set this to false for smooth scrolling of recyclerview
+        mComingSoonRecyclerView.setNestedScrollingEnabled(false)
+        //Set this to false so that activity starts the page from the beginning
         mComingSoonRecyclerView.setFocusable(false)
         mComingSoonAdapter = new HomeMovieAdapter(getActivity(), mComingSoonRecyclerViewEmptyTextView,
                 new HomeMovieAdapter.HomeMovieAdapterOnClickHandler(){
@@ -171,7 +164,10 @@ class HomeMovieFragment extends Fragment implements LoaderManager.LoaderCallback
         final RecyclerView.LayoutManager recentlyAddedUserListLinearLayoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false)
         recentlyAddedUserListLinearLayoutManager.setAutoMeasureEnabled(true)
         mRecentlyAddedUserListRecyclerView.setLayoutManager(recentlyAddedUserListLinearLayoutManager)
+        //Set this to false for smooth scrolling of recyclerview
         mRecentlyAddedUserListRecyclerView.setNestedScrollingEnabled(false)
+        //Set this to false so that activity starts the page from the beginning
+        mRecentlyAddedUserListRecyclerView.setFocusable(false)
         mRecentlyAddedUserListAdapter = new HomeMovieAdapter(getActivity(), mRecentlyAddedUserListRecyclerViewEmptyTextView,
                 new HomeMovieAdapter.HomeMovieAdapterOnClickHandler(){
                     @Override
@@ -225,14 +221,16 @@ class HomeMovieFragment extends Fragment implements LoaderManager.LoaderCallback
                         """$MovieMagicContract.MovieVideo.COLUMN_VIDEO_FOR_HOME_PAGE_USE_FLAG = ? and
                             $MovieMagicContract.MovieVideo.COLUMN_VIDEO_SITE = ? and
                             $MovieMagicContract.MovieVideo.COLUMN_VIDEO_TYPE = ? """,         //Selection Clause
-                        mMovieVideoArg,                                                            //Selection Arg
-                        "$MovieMagicContract.MovieVideo.COLUMN_FOREIGN_KEY_ID asc ")                                                                 //Not bother on sorting
+                        mMovieVideoArg,                                                       //Selection Arg
+                        "$MovieMagicContract.MovieVideo.COLUMN_FOREIGN_KEY_ID asc ")          //Sorted on foreign key which ensures now playing entries comes first
 
             case HOME_MOVIE_FRAGMENT_IN_CINEMA_LOADER_ID:
                 return new CursorLoader(
                         getActivity(),                                                          //Parent Activity Context
                         MovieMagicContract.MovieBasicInfo.CONTENT_URI,                          //Table to query
                         MOVIE_BASIC_INFO_COLUMNS,                                               //Projection to return
+                        // The conditions used here are same as what used in loadMovieDetailsForHomePageItems
+                        // method of MovieMagicSyncAdapter . If this changes then change that
                         """$MovieMagicContract.MovieBasicInfo.COLUMN_MOVIE_CATEGORY = ? and
                         $MovieMagicContract.MovieBasicInfo.COLUMN_BACKDROP_PATH <> ? """,       //Selection Clause
                         [GlobalStaticVariables.MOVIE_CATEGORY_NOW_PLAYING, ''] as String[],     //Selection Arg
@@ -243,10 +241,12 @@ class HomeMovieFragment extends Fragment implements LoaderManager.LoaderCallback
                         getActivity(),                                                          //Parent Activity Context
                         MovieMagicContract.MovieBasicInfo.CONTENT_URI,                          //Table to query
                         MOVIE_BASIC_INFO_COLUMNS,                                               //Projection to return
+                        // The conditions used here are same as what used in loadMovieDetailsForHomePageItems
+                        // method of MovieMagicSyncAdapter . If this changes then change that
                         """$MovieMagicContract.MovieBasicInfo.COLUMN_MOVIE_CATEGORY = ? and
                         $MovieMagicContract.MovieBasicInfo.COLUMN_POSTER_PATH <> ? and
                         $MovieMagicContract.MovieBasicInfo.COLUMN_BACKDROP_PATH <> ? """,       //Selection Clause
-                        [GlobalStaticVariables.MOVIE_CATEGORY_UPCOMING, '', ''] as String[],        //Selection Arg
+                        [GlobalStaticVariables.MOVIE_CATEGORY_UPCOMING, '', ''] as String[],    //Selection Arg
                         "$MovieMagicContract.MovieBasicInfo.COLUMN_RELEASE_DATE desc limit $GlobalStaticVariables.HOME_PAGE_MAX_MOVIE_SHOW_COUNTER") //Sorted on release date
 
             case HOME_MOVIE_FRAGMENT_RECENTLY_ADDED_USER_LIST_LOADER_ID:
@@ -256,8 +256,8 @@ class HomeMovieFragment extends Fragment implements LoaderManager.LoaderCallback
                         MOVIE_BASIC_INFO_COLUMNS,                                                   //Projection to return
                         """$MovieMagicContract.MovieBasicInfo.COLUMN_MOVIE_LIST_TYPE = ? and
                         $MovieMagicContract.MovieBasicInfo.COLUMN_POSTER_PATH <> ? and
-                        $MovieMagicContract.MovieBasicInfo.COLUMN_BACKDROP_PATH <> ? """,           //Selection Clause
-                        [GlobalStaticVariables.MOVIE_LIST_TYPE_USER_LOCAL_LIST, '', ''] as String[],    //Selection Arg
+                        $MovieMagicContract.MovieBasicInfo.COLUMN_BACKDROP_PATH <> ? """,            //Selection Clause
+                        [GlobalStaticVariables.MOVIE_LIST_TYPE_USER_LOCAL_LIST, '', ''] as String[], //Selection Arg
                         "$MovieMagicContract.MovieBasicInfo.COLUMN_CREATE_TIMESTAMP desc limit $GlobalStaticVariables.HOME_PAGE_MAX_MOVIE_SHOW_COUNTER") //Sorted on release date
         }
     }
@@ -307,21 +307,9 @@ class HomeMovieFragment extends Fragment implements LoaderManager.LoaderCallback
             }
             LogDisplay.callLog(LOG_TAG, "YouTube now_playing key= $youtubeVideoKey", LogDisplay.HOME_MOVIE_FRAGMENT_LOG_FLAG)
         }
-        final int videoCount = data.getCount()
-//        final HomeVideoPagerAdapter homeVideoPagerAdapter = new HomeVideoPagerAdapter(getChildFragmentManager(),
-//            videoCount,youtubeVideoKey)
-//        final HomeVideoDummyAdapter homeVideoPagerAdapter = new HomeVideoDummyAdapter(getActivity() ,getChildFragmentManager(),
-//        videoCount,youtubeVideoKey)
-//        mViewPager.setAdapter(homeVideoPagerAdapter)
-//        mViewPager.setOffscreenPageLimit(1)
-//        final View view = getView()
         final MovieMagicYoutubeFragment movieMagicYoutubeFragment = MovieMagicYoutubeFragment
                 .createMovieMagicYouTubeFragment(youtubeVideoKey)
         getChildFragmentManager().beginTransaction().replace(R.id.home_youtube_fragment_container, movieMagicYoutubeFragment).commit()
-
-//        mViewPager.setCurrentItem(0)
-//        MovieMagicYoutubeFragment.set
-//        mViewPager.setVisibility(ViewPager.INVISIBLE)
     }
 
     /**
@@ -330,30 +318,6 @@ class HomeMovieFragment extends Fragment implements LoaderManager.LoaderCallback
      */
     void handleInCinemaOnLoadFinished(Cursor data) {
         LogDisplay.callLog(LOG_TAG, "handleInCinemaOnLoadFinished.Cursor rec count -> ${data.getCount()}", LogDisplay.HOME_MOVIE_FRAGMENT_LOG_FLAG)
-        //Load details - needed to populate genre, run time & video ids
-//        final ArrayList<Integer> mMovieIdList = new ArrayList<>()
-//        final ArrayList<Integer> mMovieRowIdList = new ArrayList<>()
-//
-//        final counter = 0
-//        if(data.moveToFirst()) {
-//            for (i in 0..(data.getCount() - 1)) {
-//                if(data.getInt(COL_MOVIE_BASIC_DETAIL_DATA_PRESENT_FLAG) == GlobalStaticVariables.MOVIE_MAGIC_FLAG_FALSE) {
-//                    mMovieIdList.add(counter, data.getInt(COL_MOVIE_BASIC_MOVIE_ID))
-//                    mMovieRowIdList.add(counter, data.getInt(COL_MOVIE_BASIC_ID))
-//                    counter++
-//                }
-//                data.moveToNext()
-//            }
-//            if(counter > 0) {
-//                LogDisplay.callLog(LOG_TAG, "Going to load data for $counter records", LogDisplay.HOME_MOVIE_FRAGMENT_LOG_FLAG)
-//                final ArrayList<Integer>[] loadMovieDetailsArg = [mMovieIdList, mMovieRowIdList] as ArrayList<Integer>[]
-//                new LoadMovieDetails(getActivity()).execute(loadMovieDetailsArg)
-//
-//            }
-//            mInCinemaAdapter.swapCursor(data)
-//        } else {
-//            LogDisplay.callLog(LOG_TAG, 'handleInCinemaOnLoadFinished: empty cursor', LogDisplay.HOME_MOVIE_FRAGMENT_LOG_FLAG)
-//        }
         mInCinemaAdapter.swapCursor(data)
     }
 

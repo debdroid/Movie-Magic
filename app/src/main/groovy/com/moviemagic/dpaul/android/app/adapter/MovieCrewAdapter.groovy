@@ -74,7 +74,7 @@ class MovieCrewAdapter extends RecyclerView.Adapter<MovieCrewAdapter.MovieCrewAd
 
     @Override
     void onBindViewHolder(MovieCrewAdapterViewHolder holder, int position) {
-        // move the cursor to correct position
+        //Move the cursor to correct position
         mCursor.moveToPosition(position)
         LogDisplay.callLog(LOG_TAG,'onBindViewHolder is called',LogDisplay.MOVIE_CREW_ADAPTER_LOG_FLAG)
         final String profilePath = "$GlobalStaticVariables.TMDB_IMAGE_BASE_URL/$GlobalStaticVariables.TMDB_IMAGE_SIZE_W185" +
@@ -93,7 +93,6 @@ class MovieCrewAdapter extends RecyclerView.Adapter<MovieCrewAdapter.MovieCrewAd
 
     @Override
     int getItemCount() {
-//        LogDisplay.callLog(LOG_TAG,'Cursor item count is called',LogDisplay.MOVIE_CREW_ADAPTER_LOG_FLAG)
         if ( null == mCursor ) return 0
         return mCursor.getCount()
     }

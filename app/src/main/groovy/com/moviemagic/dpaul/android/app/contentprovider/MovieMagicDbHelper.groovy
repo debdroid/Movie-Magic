@@ -339,7 +339,7 @@ class MovieMagicDbHelper extends SQLiteOpenHelper {
         // It does NOT depend on the version number for the application.
 
         //Drop all the tables
-        //TODO: Currently just dropping the tables in case of DB upgrade but need to find out a different way
+        //TODO: Currently just dropping the tables in case of DB upgrade but need to find out a different way for future
         sqLiteDatabase.execSQL("DROP TABLE IF EXISTS $MovieMagicContract.MovieBasicInfo.TABLE_NAME")
         sqLiteDatabase.execSQL("DROP TABLE IF EXISTS $MovieMagicContract.MovieCast.TABLE_NAME")
         sqLiteDatabase.execSQL("DROP TABLE IF EXISTS $MovieMagicContract.MovieCrew.TABLE_NAME")
@@ -347,11 +347,11 @@ class MovieMagicDbHelper extends SQLiteOpenHelper {
         sqLiteDatabase.execSQL("DROP TABLE IF EXISTS $MovieMagicContract.MovieVideo.TABLE_NAME")
         sqLiteDatabase.execSQL("DROP TABLE IF EXISTS $MovieMagicContract.MovieReview.TABLE_NAME")
         sqLiteDatabase.execSQL("DROP TABLE IF EXISTS $MovieMagicContract.MovieReleaseDate.TABLE_NAME")
+        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS $MovieMagicContract.MovieUserListFlag.TABLE_NAME")
         sqLiteDatabase.execSQL("DROP TABLE IF EXISTS $MovieMagicContract.MoviePersonInfo.TABLE_NAME")
         sqLiteDatabase.execSQL("DROP TABLE IF EXISTS $MovieMagicContract.MoviePersonCast.TABLE_NAME")
         sqLiteDatabase.execSQL("DROP TABLE IF EXISTS $MovieMagicContract.MoviePersonCrew.TABLE_NAME")
         sqLiteDatabase.execSQL("DROP TABLE IF EXISTS $MovieMagicContract.MoviePersonImage.TABLE_NAME")
-        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS $MovieMagicContract.MovieUserListFlag.TABLE_NAME")
         sqLiteDatabase.execSQL("DROP TABLE IF EXISTS $MovieMagicContract.MovieCollection.TABLE_NAME")
 
         //Call onCreate to re-create the tables

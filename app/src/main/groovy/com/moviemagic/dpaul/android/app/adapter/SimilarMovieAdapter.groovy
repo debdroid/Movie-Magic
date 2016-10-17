@@ -25,7 +25,6 @@ class SimilarMovieAdapter extends RecyclerView.Adapter<SimilarMovieAdapter.Simil
     private final Context mContext
     private final TextView mSimilarMovieGridEmptyTextView
     private int mPrimaryDarkColor, mBodyTextColor
-//    public static int mPrimaryDarkColor, mBodyTextColor
 
     //Empty constructor
     public SimilarMovieAdapter(){
@@ -54,32 +53,18 @@ class SimilarMovieAdapter extends RecyclerView.Adapter<SimilarMovieAdapter.Simil
             LogDisplay.callLog(LOG_TAG,"onClick is called.LayoutPos=${getLayoutPosition()}.AdapterPos=${getAdapterPosition()}",LogDisplay.SIMILAR_MOVIE_ADAPTER_LOG_FLAG)
             mCursor.moveToPosition(getAdapterPosition())
             final int movieId = mCursor.getInt(DetailMovieFragment.COL_SIMILAR_MOVIE_MOVIE_ID)
-//            final int movieId = mCursor.getInt(DetailMovieFragment.COL_MOVIE_BASIC_MOVIE_ID)
-//            final long movieRowId = mCursor.getLong(DetailMovieFragment.COL_MOVIE_BASIC_ID)
-//            LogDisplay.callLog(LOG_TAG,"Movie row id is $movieRowId & Movie id is $movieId",LogDisplay.SIMILAR_MOVIE_ADAPTER_LOG_FLAG)
             LogDisplay.callLog(LOG_TAG,"Movie id is $movieId",LogDisplay.SIMILAR_MOVIE_ADAPTER_LOG_FLAG)
             //Create an intent for DetailMovieActivity
-//            final Intent intent = new Intent(mContext, DetailMovieActivity.class)
             final Bundle bundle = new Bundle()
             bundle.putInt(GlobalStaticVariables.MOVIE_BASIC_INFO_MOVIE_ID,movieId)
             bundle.putString(GlobalStaticVariables.MOVIE_BASIC_INFO_CATEGORY,GlobalStaticVariables.MOVIE_CATEGORY_SIMILAR)
-//            intent.putExtras(bundle)
-//            mContext.startActivity(intent)
-            //Get a reference of the activity and start the animation
-//            AppCompatActivity appCompatActivity = (AppCompatActivity)mContext
-//            appCompatActivity. overridePendingTransition(R.anim.slide_bottom_in_animation,0)
-//            final Uri movieMagicMovieIdUri = MovieMagicContract.MovieBasicInfo.buildMovieUriWithMovieId(movieId)
-//            bundle.putParcelable(GlobalStaticVariables.MOVIE_BASIC_INFO_URI,movieMagicMovieIdUri)
-//            final Intent mIntent = new Intent(mContext, DetailMovieActivity.class)
-//                    .setData(movieIdUri)
-//            mContext.startActivity(mIntent)
             final DetailMovieFragment movieDetailFragment = new DetailMovieFragment()
             movieDetailFragment.setArguments(bundle)
             ((FragmentActivity)mContext).getSupportFragmentManager().beginTransaction()
                     //Used the method enter,exit,popEnter,popExit custom animation. Our cases are enter & popExit
                     .setCustomAnimations(R.anim.slide_bottom_in_animation,0,0,R.anim.slide_bottom_out_animation)
                     .replace(R.id.detail_movie_fragment_container,movieDetailFragment)
-                    // Add this transaction to the back stack
+                    //Add this transaction to the back stack
                     .addToBackStack(null) //Parameter is optional, so used null
                     .commit()
         }
@@ -111,12 +96,9 @@ class SimilarMovieAdapter extends RecyclerView.Adapter<SimilarMovieAdapter.Simil
 
     @Override
     int getItemCount() {
-//        LogDisplay.callLog(LOG_TAG,'Cursor item count is called',LogDisplay.SIMILAR_MOVIE_ADAPTER_LOG_FLAG)
         if (null == mCursor) {
-//            LogDisplay.callLog(LOG_TAG, "Cursor item count = 0", LogDisplay.SIMILAR_MOVIE_ADAPTER_LOG_FLAG)
             return 0
         }
-//        LogDisplay.callLog(LOG_TAG, "Cursor item count = ${mCursor.getCount()}", LogDisplay.SIMILAR_MOVIE_ADAPTER_LOG_FLAG)
         return mCursor.getCount()
     }
 
@@ -133,7 +115,6 @@ class SimilarMovieAdapter extends RecyclerView.Adapter<SimilarMovieAdapter.Simil
     //Since the color is decided once the poster is downloaded by Picasso
     //but by then adapter might got loaded with data. Hence call notifyDataSetChanged
     //so that it get's recreated with correct color
-//    public void changeColor() {
     public void changeColor(int primaryDarkColor, int bodyTextColor) {
         mPrimaryDarkColor = primaryDarkColor
         mBodyTextColor = bodyTextColor

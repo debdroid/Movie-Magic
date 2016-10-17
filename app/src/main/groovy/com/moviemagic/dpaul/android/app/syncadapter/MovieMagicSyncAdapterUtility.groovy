@@ -88,7 +88,7 @@ class MovieMagicSyncAdapterUtility {
         /*
          * Finally, let's do a sync to get things started
          */
-        //commenting this out as it seems when the application is fresh installed the sync adapter is called it self
+        //Commenting this out as it seems when the application is fresh installed the sync adapter is called it self
         //and this is causing duplicate call. In immmediate sync is needed tehn anyhow that can be called from
         //MovieMagicMainActivity during testing phase
         //syncImmediately(context)

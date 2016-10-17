@@ -70,16 +70,12 @@ class GlobalStaticVariables {
     public static final String IMAGE_TYPE_POSTER = 'poster'
     public static final String MOVIE_BASIC_INFO_MOVIE_ID = 'movie_basic_info_movie_id'
     public static final String MOVIE_BASIC_INFO_CATEGORY = 'movie_basic_info_category'
-    public static final String MOVIE_BASIC_INFO_ROW_ID = 'movie_basic_info_row_id'
-    public static final String MOVIE_BASIC_INFO_COLL_ID = 'movie_basic_info_collection_id'
     public static final int MOVIE_MAGIC_FLAG_TRUE = 1
     public static final int MOVIE_MAGIC_FLAG_FALSE = 0
     public static final float MOVIE_MAGIC_ELEVATION = 4f
     public static final float MOVIE_MAGIC_ELEVATION_RESET = 0f
     public static final float MOVIE_MAGIC_ALPHA_FULL_OPAQUE = 1f
     public static final float MOVIE_MAGIC_ALPHA_OPAQUE_40_PERCENT = 0.4f
-    public static final String MOVIE_COLLECTION_ID = 'collection_id'
-    public static final String MOVIE_BASIC_INFO_URI = 'movie_basic_info_uri'
     public static final String MOVIE_COLLECTION_URI = 'collection_uri'
     public static final String MOVIE_CATEGORY_AND_COLL_ID_URI = 'category_and_collection_id_uri'
     public static final String PICASSO_POSTER_IMAGE_TAG = 'picasso_poster_image_tag'
