@@ -1,8 +1,9 @@
-package com.moviemagic.dpaul.android.app.syncadapter
+package com.moviemagic.dpaul.android.app.authentication
 
 import android.app.Service
 import android.content.Intent
 import android.os.IBinder
+import com.moviemagic.dpaul.android.app.backgroundmodules.LogDisplay
 import groovy.transform.CompileStatic
 
 /**
@@ -19,6 +20,7 @@ class MovieMagicAuthenticatorService extends Service {
     @Override
     void onCreate() {
         // Create a new authenticator object
+        LogDisplay.callLog(LOG_TAG,'onCreate is called',LogDisplay.MOVIE_MAGIC_AUTHENTICATOR_SERVICE_LOG_FLAG)
         mAuthenticator = new MovieMagicAuthenticator(this)
     }
 
@@ -28,6 +30,7 @@ class MovieMagicAuthenticatorService extends Service {
      */
     @Override
     IBinder onBind(Intent intent) {
+        LogDisplay.callLog(LOG_TAG,'onBind is called',LogDisplay.MOVIE_MAGIC_AUTHENTICATOR_SERVICE_LOG_FLAG)
         return mAuthenticator.getIBinder()
     }
 }

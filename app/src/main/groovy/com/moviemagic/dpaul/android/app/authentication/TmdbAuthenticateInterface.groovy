@@ -1,0 +1,11 @@
+package com.moviemagic.dpaul.android.app.authentication;
+
+import groovy.transform.CompileStatic
+
+@CompileStatic
+/**
+ * An interface which will be implemented by the ServerAuthenticate Class
+ */
+public interface TmdbAuthenticateInterface {
+    public String tmdbUserSignIn(final String userName, final String password, String authTokenType) throws Exception
+}

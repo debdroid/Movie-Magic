@@ -30,7 +30,7 @@ class MovieMagicSyncService extends Service {
          * Set the sync adapter as syncable
          * Disallow parallel syncs
          */
-        LogDisplay.callLog(LOG_TAG,'onCreate - MovieMagicSyncService',LogDisplay.MOVIE_MAGIC_SYNC_ADAPTER_LOG_FLAG)
+        LogDisplay.callLog(LOG_TAG,'onCreate is called',LogDisplay.MOVIE_MAGIC_SYNC_SERVICE_LOG_FLAG)
         synchronized (sSyncAdapterLock) {
             if (sMovieMagicSyncAdapter == null) {
                 sMovieMagicSyncAdapter = new MovieMagicSyncAdapter(getApplicationContext(), true)
@@ -51,6 +51,7 @@ class MovieMagicSyncService extends Service {
          * in the base class code when the SyncAdapter
          * constructors call super()
          */
+        LogDisplay.callLog(LOG_TAG,'onBind is called',LogDisplay.MOVIE_MAGIC_SYNC_SERVICE_LOG_FLAG)
         return sMovieMagicSyncAdapter.getSyncAdapterBinder()
     }
 }

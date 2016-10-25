@@ -67,9 +67,9 @@ class LoadMovieDetails extends AsyncTask<ArrayList<Integer>, Void, Void> {
                 final ContentValues contentMovieBasicInfoValues = JsonParse.parseAdditionalBasicMovieData(jsonData)
 //            //Update the indicator to indicate data is loaded
                 if (contentMovieBasicInfoValues) {
-                    if (movieIdList && movieBasicRowIdList == 0) {
+                    if (movieIdList.get(i) && movieBasicRowIdList.get(i) == 0) {
                         //This part of the code will be executed for person's crew and cast movie only, so safe to use the
-                        //following 3 lines
+                        //following 3 lines. If this part is to be executed for other scenario then needs modification
                         contentMovieBasicInfoValues.put(MovieMagicContract.MovieBasicInfo.COLUMN_MOVIE_CATEGORY, GlobalStaticVariables.MOVIE_CATEGORY_PERSON)
                         contentMovieBasicInfoValues.put(MovieMagicContract.MovieBasicInfo.COLUMN_MOVIE_LIST_TYPE, GlobalStaticVariables.MOVIE_LIST_TYPE_TMDB_PERSON)
                         contentMovieBasicInfoValues.put(MovieMagicContract.MovieBasicInfo.COLUMN_PAGE_NUMBER, 0)

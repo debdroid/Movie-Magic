@@ -8,6 +8,7 @@ import android.content.SyncRequest
 import android.os.Build
 import android.os.Bundle
 import com.moviemagic.dpaul.android.app.R
+import com.moviemagic.dpaul.android.app.backgroundmodules.LogDisplay
 import groovy.transform.CompileStatic
 
 @CompileStatic
@@ -26,7 +27,8 @@ class MovieMagicSyncAdapterUtility {
      *
      * @param context The context used to initialise the SyncAdapter
      */
-    static void initializeSyncAdapter(Context context) {
+    public static void initializeSyncAdapter(Context context) {
+        LogDisplay.callLog(LOG_TAG,'initializeSyncAdapter is called',LogDisplay.MOVIE_MAGIC_SYNC_ADAPTER_UTILITY_LOG_FLAG)
         getSyncAccount(context)
     }
 
@@ -39,31 +41,58 @@ class MovieMagicSyncAdapterUtility {
      * @return a fake account.
      */
     private static Account getSyncAccount(Context context) {
+        LogDisplay.callLog(LOG_TAG,'getSyncAccount is called',LogDisplay.MOVIE_MAGIC_SYNC_ADAPTER_UTILITY_LOG_FLAG)
         // Get an instance of the Android account manager
-        AccountManager accountManager =
+        final AccountManager accountManager =
                 (AccountManager) context.getSystemService(Context.ACCOUNT_SERVICE)
 
-        // Create the account type and default account
-        Account newAccount = new Account(
-                context.getString(R.string.app_name), context.getString(R.string.sync_account_type))
-
-        // If the password doesn't exist, the account doesn't exist
-        if (accountManager.getPassword(newAccount) == null) {
+        //Check if any account exists
+        final Account[] accounts = accountManager.getAccountsByType(context.getString(R.string.authenticator_account_type))
+        final Account newAccount
+        if(accounts.size() == 1) {
+            LogDisplay.callLog(LOG_TAG,"Existing account. Account name->${accounts[0].name}",LogDisplay.MOVIE_MAGIC_SYNC_ADAPTER_UTILITY_LOG_FLAG)
+            //Application can have only one account, so safe to use the following line
+            newAccount = accounts[0]
+        } else if (accounts.size() > 1) {
+            LogDisplay.callLog(LOG_TAG,"Got more than one account, investigate. Accounts->${accounts.toString()}",LogDisplay.MOVIE_MAGIC_SYNC_ADAPTER_UTILITY_LOG_FLAG)
+            return null
+        } else {
+            LogDisplay.callLog(LOG_TAG,'Create a new dummy account',LogDisplay.MOVIE_MAGIC_SYNC_ADAPTER_UTILITY_LOG_FLAG)
+            // Create a dummy account - for the first time use
+            newAccount = new Account(
+                    context.getString(R.string.app_name), context.getString(R.string.authenticator_account_type))
             /*
-             * Add the account and account type, no password or user data
-             * If successful, return the Account object, otherwise report an error.
-             */
+            * Add the account and account type, no password or user data
+            * If successful, return the Account object, otherwise report an error.
+            */
             if (!accountManager.addAccountExplicitly(newAccount, "", null)) {
                 return null
             }
             /*
-             * If you don't set android:syncable="true" in
-             * in your <provider> element in the manifest,
-             * then call ContentResolver.setIsSyncable(account, AUTHORITY, 1)
-             * here.
-             */
+            * If you don't set android:syncable="true" in
+            * in your <provider> element in the manifest,
+            * then call ContentResolver.setIsSyncable(account, AUTHORITY, 1)
+            * here.
+            */
             onAccountCreated(newAccount, context)
         }
+//        // If the password doesn't exist, the account doesn't exist
+//        if (accountManager.getPassword(newAccount) == null) {
+//            /*
+//             * Add the account and account type, no password or user data
+//             * If successful, return the Account object, otherwise report an error.
+//             */
+//            if (!accountManager.addAccountExplicitly(newAccount, "", null)) {
+//                return null
+//            }
+//            /*
+//             * If you don't set android:syncable="true" in
+//             * in your <provider> element in the manifest,
+//             * then call ContentResolver.setIsSyncable(account, AUTHORITY, 1)
+//             * here.
+//             */
+//            onAccountCreated(newAccount, context)
+//        }
         return newAccount
     }
 
@@ -72,13 +101,13 @@ class MovieMagicSyncAdapterUtility {
      *
      * @param newAccount The account used for SyncAdapter
      * @param context The context used to setup the execution frequency
-     * @return a fake account.
      */
-    private static void onAccountCreated(Account newAccount, Context context) {
+    public static void onAccountCreated(Account newAccount, Context context) {
+        LogDisplay.callLog(LOG_TAG,'onAccountCreated is called',LogDisplay.MOVIE_MAGIC_SYNC_ADAPTER_UTILITY_LOG_FLAG)
         /*
          * Account is set, so now configure periodic sync
          */
-        configurePeriodicSync(context, SYNC_INTERVAL, SYNC_FLEXTIME)
+        configurePeriodicSync(context, newAccount)
 
         /*
          * Without calling setSyncAutomatically, periodic sync will not be enabled.
@@ -89,17 +118,20 @@ class MovieMagicSyncAdapterUtility {
          * Finally, let's do a sync to get things started
          */
         //Commenting this out as it seems when the application is fresh installed the sync adapter is called it self
-        //and this is causing duplicate call. In immmediate sync is needed tehn anyhow that can be called from
+        //and this is causing duplicate call. In immediate sync is needed then anyhow that can be called from
         //MovieMagicMainActivity during testing phase
         //syncImmediately(context)
     }
 
     /**
      * Helper method to schedule the sync adapter periodic execution
+     * @param context The context used to setup the execution frequency
+     * @param account The account for which the Periodic Sync is to be set
      */
-    public static void configurePeriodicSync(Context context, int syncInterval, int flexTime) {
-        Account account = getSyncAccount(context)
-        String authority = context.getString(R.string.content_authority)
+    public static void configurePeriodicSync(Context context, Account account) {
+        LogDisplay.callLog(LOG_TAG,'configurePeriodicSync is called',LogDisplay.MOVIE_MAGIC_SYNC_ADAPTER_UTILITY_LOG_FLAG)
+//        Account account = getSyncAccount(context)
+        final String authority = context.getString(R.string.content_authority)
         //TODO: Need to look into this Build.VERSION_CODES later
 //        LogDisplay.callLog(LOG_TAG,"Build.VERSION_CODES.JELLY_BEAN= $Build.VERSION_CODES.JELLY_BEAN",LogDisplay.MOVIE_MAGIC_SYNC_ADAPTER_UTILITY_LOG_FLAG)
 //        LogDisplay.callLog(LOG_TAG,"Build.VERSION_CODES.KITKAT= $Build.VERSION_CODES.KITKAT",LogDisplay.MOVIE_MAGIC_SYNC_ADAPTER_UTILITY_LOG_FLAG)
@@ -109,14 +141,14 @@ class MovieMagicSyncAdapterUtility {
         if (Build.VERSION.SDK_INT >= 19) {
 //        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
             // we can enable inexact timers in our periodic sync
-            SyncRequest request = new SyncRequest.Builder().
-                    syncPeriodic(syncInterval, flexTime).
-                    setSyncAdapter(account, authority).
-                    setExtras(new Bundle()).build()
+            final SyncRequest request = new SyncRequest.Builder()
+                    .syncPeriodic(SYNC_INTERVAL, SYNC_FLEXTIME)
+                    .setSyncAdapter(account, authority)
+                    .setExtras(new Bundle())
+                    .build()
             ContentResolver.requestSync(request)
         } else {
-            ContentResolver.addPeriodicSync(account,
-                    authority, new Bundle(), syncInterval)
+            ContentResolver.addPeriodicSync(account, authority, new Bundle(), SYNC_INTERVAL)
         }
     }
 
@@ -126,10 +158,32 @@ class MovieMagicSyncAdapterUtility {
      * @param context The context used to access the account service
      */
     public static void syncImmediately(Context context) {
-        Bundle bundle = new Bundle()
+        LogDisplay.callLog(LOG_TAG,'syncImmediately is called',LogDisplay.MOVIE_MAGIC_SYNC_ADAPTER_UTILITY_LOG_FLAG)
+        final Bundle bundle = new Bundle()
         bundle.putBoolean(ContentResolver.SYNC_EXTRAS_EXPEDITED, true)
         bundle.putBoolean(ContentResolver.SYNC_EXTRAS_MANUAL, true)
         ContentResolver.requestSync(getSyncAccount(context),
                 context.getString(R.string.content_authority), bundle)
+    }
+
+    /**
+     * Helper method to remove periodic sync for a particular account
+     *
+     * @param account The account for which the Periodic sync needs to be removed
+     * @param context The context used to retrieve string value (authority)
+     */
+    public static void removePeriodicSync(Account account, Context context) {
+        LogDisplay.callLog(LOG_TAG,'removePeriodicSync is called',LogDisplay.MOVIE_MAGIC_SYNC_ADAPTER_UTILITY_LOG_FLAG)
+        final String authority = context.getString(R.string.content_authority)
+        if (Build.VERSION.SDK_INT >= 21) {
+            final SyncRequest request = new SyncRequest.Builder()
+                    .syncPeriodic(SYNC_INTERVAL, SYNC_FLEXTIME)
+                    .setSyncAdapter(account, authority)
+                    .setExtras(new Bundle())
+                    .build()
+            ContentResolver.cancelSync(request)
+        } else {
+            ContentResolver.removePeriodicSync(account, authority, new Bundle())
+        }
     }
 }

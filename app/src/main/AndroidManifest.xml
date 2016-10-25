@@ -8,7 +8,12 @@
     <!-- Permissions required by the sync adapter -->
     <uses-permission android:name="android.permission.READ_SYNC_SETTINGS" />
     <uses-permission android:name="android.permission.WRITE_SYNC_SETTINGS" />
+
+    <!-- Permissions required by the Authenticator -->
+    <uses-permission android:name="android.permission.GET_ACCOUNTS" />
+    <uses-permission android:name="android.permission.MANAGE_ACCOUNTS" />
     <uses-permission android:name="android.permission.AUTHENTICATE_ACCOUNTS" />
+    <uses-permission android:name="android.permission.USE_CREDENTIALS" />
 
     <application
         android:allowBackup="true"
@@ -16,12 +21,15 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+
         <!-- Main Activity -->
-        <activity android:name=".MovieMagicMainActivity"
+        <activity
+            android:name=".MovieMagicMainActivity"
             android:label="@string/title_activity_main_movie"
             android:theme="@style/AppTheme.MovieMain">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
@@ -34,7 +42,7 @@
             android:theme="@style/AppTheme.MovieDetail">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".MovieMagicMainActivity"/>
+                android:value=".MovieMagicMainActivity" />
         </activity>
 
         <!-- Collection movie Activity -->
@@ -45,7 +53,7 @@
             android:theme="@style/AppTheme.MoviePerson">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".MovieMagicMainActivity"/>
+                android:value=".MovieMagicMainActivity" />
         </activity>
 
         <!-- Person movie Activity -->
@@ -56,7 +64,7 @@
             android:theme="@style/AppTheme.MoviePerson">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".MovieMagicMainActivity"/>
+                android:value=".MovieMagicMainActivity" />
         </activity>
 
         <!-- Image Viewer movie Activity -->
@@ -66,7 +74,14 @@
             android:theme="@style/AppTheme.ImageViewer">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".MovieMagicMainActivity"/>
+                android:value=".MovieMagicMainActivity" />
+        </activity>
+
+        <!-- Login Activity -->
+        <activity
+            android:name=".authentication.MovieMagicAuthenticatorActivity"
+            android:label="@string/title_activity_movie_magic_authenticator"
+            android:theme="@style/AppTheme.Login">
         </activity>
 
         <!-- Register the content provider -->
@@ -77,7 +92,7 @@
             android:syncable="true" />
 
         <!-- SyncAdapter's dummy authentication service -->
-        <service android:name=".syncadapter.MovieMagicAuthenticatorService">
+        <service android:name=".authentication.MovieMagicAuthenticatorService">
             <intent-filter>
                 <action android:name="android.accounts.AccountAuthenticator" />
             </intent-filter>
@@ -99,7 +114,6 @@
                 android:name="android.content.SyncAdapter"
                 android:resource="@xml/syncadapter" />
         </service>
-
     </application>
 
 </manifest>

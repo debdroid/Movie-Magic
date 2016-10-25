@@ -2,7 +2,9 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <group android:checkableBehavior="single">
+    <group
+        android:id="@+id/nav_menu_group_public"
+        android:checkableBehavior="single">
         <item
             android:id="@+id/nav_home"
             android:icon="@drawable/home"
@@ -29,7 +31,9 @@
 
     <item android:title="@string/drawer_menu_user_header">
         <menu>
-            <group android:checkableBehavior="single">
+            <group
+                android:id="@+id/nav_menu_group_user"
+                android:checkableBehavior="single">
                 <item
                     android:id="@+id/nav_user_watched"
                     android:icon="@drawable/watched"
@@ -55,4 +59,44 @@
             </group>
         </menu>
     </item>
+
+    <item
+        android:id="@+id/nav_tmdb_user_menu_items"
+        android:title="@string/drawer_menu_tmdb_header"
+        android:visible="false">
+        <menu>
+            <group
+                android:id="@+id/nav_menu_group_tmdb_user"
+                android:checkableBehavior="single">
+                <item
+                    android:id="@+id/nav_tmdb_user_watchlist"
+                    android:icon="@drawable/ic_bookmark_white_48dp"
+                    android:title="@string/drawer_menu_tmdb_user_watchlist"
+                    app:actionLayout="@layout/menu_counter" /> <!-- Needed to populate counter -->
+                <item
+                    android:id="@+id/nav_tmdb_user_favourite"
+                    android:icon="@drawable/favourite"
+                    android:title="@string/drawer_menu_tmdb_user_favourite"
+                    app:actionLayout="@layout/menu_counter" /> <!-- Needed to populate counter -->
+
+                <item
+                    android:id="@+id/nav_tmdb_user_rated"
+                    android:icon="@drawable/top_rated"
+                    android:title="@string/drawer_menu_tmdb_user_rated"
+                    app:actionLayout="@layout/menu_counter" /> <!-- Needed to populate counter -->
+            </group>
+        </menu>
+    </item>
+    <group android:id="@+id/nav_menu_group_other"
+        android:checkableBehavior="single">
+            <item
+                android:id="@+id/nav_menu_settings"
+                android:icon="@drawable/ic_settings_black_48dp"
+                android:title="@string/drawer_menu_settings" />
+            <item
+                android:id="@+id/nav_menu_logout"
+                android:icon="@drawable/logout"
+                android:title="@string/drawer_menu_logout"
+                android:visible="false"/>
+    </group>
 </menu>

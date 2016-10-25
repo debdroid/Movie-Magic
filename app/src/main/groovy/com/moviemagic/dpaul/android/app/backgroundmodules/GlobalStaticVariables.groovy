@@ -1,5 +1,7 @@
 package com.moviemagic.dpaul.android.app.backgroundmodules
 
+import com.moviemagic.dpaul.android.app.authentication.TmdbAuthenticateInterface
+import com.moviemagic.dpaul.android.app.authentication.TmdbServerAuthenticate
 import groovy.transform.CompileStatic
 
 @CompileStatic
@@ -50,11 +52,11 @@ class GlobalStaticVariables {
     public static final String TMDB_IMAGE_SIZE_W500 = 'w500'
     public static final String TMDB_IMAGE_SIZE_W780 = 'w780'
 
-    //IMDb URL - used to create the IMDB intent
+    //Static variables for IMDb URL - used to create the IMDb intent
     public static final String IMDB_BASE_MOVIE_TITLE_URL = 'http://www.imdb.com/title/'
     public static final String IMDB_BASE_PERSON_URL = 'http://www.imdb.com/name/'
 
-    //Static variable for user list
+    //Static variables for user list
     public static final String USER_LIST_WATCHED = 'watched'
     public static final String USER_LIST_WISH_LIST = 'wish_list'
     public static final String USER_LIST_FAVOURITE = 'favourite'
@@ -64,6 +66,13 @@ class GlobalStaticVariables {
     public static final String USER_LIST_REMOVE_FLAG = 'user_list_remove'
     public static final String USER_RATING_ADD_FLAG = 'rating_add'
     public static final String USER_RATING_REMOVE_FLAG = 'rating_remove'
+
+    //Static variables for Authentication
+    public static final String AUTHTOKEN_TYPE_READ_ONLY = 'Read only'
+    public static final String AUTHTOKEN_TYPE_READ_ONLY_LABEL = 'Read only access to a MovieMagic account'
+    public static final String AUTHTOKEN_TYPE_FULL_ACCESS = 'Full access'
+    public static final String AUTHTOKEN_TYPE_FULL_ACCESS_LABEL = 'Full access to a MovieMagic account'
+    public static final TmdbAuthenticateInterface sTmdbAuthenticateInterface = new TmdbServerAuthenticate()
 
     //Misc variables
     public static final String IMAGE_TYPE_BACKDROP = 'backdrop'
