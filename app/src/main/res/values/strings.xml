@@ -145,7 +145,7 @@
     <string name="error_incorrect_password">This password is incorrect</string>
     <string name="error_field_required">This field is required</string>
     <string name="tmdb_login_header">Login to TMDb Account</string>
-    <string name="tmdb_login_body">To get more out of this application, please login with your TMDb credentials and enjoy TMDb experience. This will let you do things like rate movie, download TMDb lists and add movies to TMDb lists. </string>
+    <string name="tmdb_login_body">To get more out of this application, please login with your TMDb credentials and enjoy TMDb experience. This will let you do things like rate movie, access your TMDb lists and add movies to  your TMDb lists. If you do not have a TMDb account then click on SIGN UP and create an account.</string>
     <string name="tmdb_sign_up_page">https://www.themoviedb.org/account/signup</string>
     <string name="nav_drawer_log_out">Logout</string>
     <string name="nav_drawer_log_in">Login</string>

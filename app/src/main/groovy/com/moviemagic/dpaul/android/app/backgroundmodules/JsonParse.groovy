@@ -1,6 +1,7 @@
 package com.moviemagic.dpaul.android.app.backgroundmodules
 
 import android.content.ContentValues
+import android.os.Bundle
 import com.moviemagic.dpaul.android.app.contentprovider.MovieMagicContract
 import com.moviemagic.dpaul.android.app.contentprovider.MovieMagicContract.MovieBasicInfo
 import com.moviemagic.dpaul.android.app.contentprovider.MovieMagicContract.MovieCast
@@ -14,6 +15,7 @@ import com.moviemagic.dpaul.android.app.contentprovider.MovieMagicContract.Movie
 import com.moviemagic.dpaul.android.app.contentprovider.MovieMagicContract.MoviePersonCast
 import com.moviemagic.dpaul.android.app.contentprovider.MovieMagicContract.MoviePersonCrew
 import com.moviemagic.dpaul.android.app.contentprovider.MovieMagicContract.MoviePersonImage
+import org.json.JSONObject
 
 //Since the json field is used dynamically, so this class is not compiled as CompileStatic
 //@CompileStatic
@@ -945,5 +947,162 @@ class JsonParse {
             return personImageList
         }
         return null
+    }
+
+    /**
+     * Helper method to parse JSON data for TMDb request token for login
+     * @param jsonData The JSON data to be parsed
+     * @param respCode The response code of Http call
+     * @return The Bundle with parsed data or error message & error flag
+     */
+    static Bundle parseTmdbToken(def jsonData, int respCode) {
+        LogDisplay.callLog(LOG_TAG, 'parseTmdbToken is called', LogDisplay.JSON_PARSE_LOG_FLAG)
+        LogDisplay.callLog(LOG_TAG, "respCode -> $respCode", LogDisplay.JSON_PARSE_LOG_FLAG)
+        LogDisplay.callLog(LOG_TAG, "jsonData -> $jsonData", LogDisplay.JSON_PARSE_LOG_FLAG)
+        final Bundle bundle = new Bundle()
+        if(respCode == 200) {
+            bundle.putString(GlobalStaticVariables.TMDB_REQ_TOKEN,jsonData.request_token)
+            bundle.putBoolean(GlobalStaticVariables.TMDB_AUTH_ERROR_FLAG,false)
+            return bundle
+        } else {
+            bundle.putString(GlobalStaticVariables.TMDB_AUTH_ERROR_MSG, jsonData.status_message)
+            bundle.putBoolean(GlobalStaticVariables.TMDB_AUTH_ERROR_FLAG,true)
+            return bundle
+        }
+//        final Bundle bundle = new Bundle()
+//        final JSONObject obj = new JSONObject(jsonData)
+//        // TMDb return status_message when there is an error
+//        if(obj.isNull('status_message')) {
+//            if (jsonData.success) {
+//                bundle.putBoolean(GlobalStaticVariables.TMDB_AUTH_ERROR_FLAG,false)
+//                bundle.putString(GlobalStaticVariables.TMDB_REQ_TOKEN,obj.getString("request_token"))
+//                return bundle
+//            } else {
+//                bundle.putBoolean(GlobalStaticVariables.TMDB_AUTH_ERROR_FLAG,true)
+//                LogDisplay.callLog(LOG_TAG, 'Unexpected TMDb request error while token request', LogDisplay.JSON_PARSE_LOG_FLAG)
+//                return bundle
+//            }
+//        } else {
+//            LogDisplay.callLog(LOG_TAG, "TMDb returned error for token request-> ${obj.getString("request_token")}", LogDisplay.JSON_PARSE_LOG_FLAG)
+//            bundle.putBoolean(GlobalStaticVariables.TMDB_AUTH_ERROR_FLAG,true)
+//            bundle.putString(GlobalStaticVariables.TMDB_AUTH_ERROR_MSG, 'Cannot perform the login now, please try after some time.')
+//            return bundle
+//        }
+    }
+
+    /**
+     * Helper method to parse JSON data for TMDb authenticated token after successful login
+     * @param jsonData The JSON data to be parsed
+     * @param respCode The response code of Http call
+     * @return The Bundle with parsed data or error message & error flag
+     */
+    static Bundle parseTmdbAuthenticatedToken(def jsonData, int respCode) {
+        LogDisplay.callLog(LOG_TAG, 'parseTmdbAuthenticatedToken is called', LogDisplay.JSON_PARSE_LOG_FLAG)
+        LogDisplay.callLog(LOG_TAG, "respCode -> $respCode", LogDisplay.JSON_PARSE_LOG_FLAG)
+        LogDisplay.callLog(LOG_TAG, "jsonData -> $jsonData", LogDisplay.JSON_PARSE_LOG_FLAG)
+        final Bundle bundle = new Bundle()
+        if(respCode == 200) {
+            bundle.putString(GlobalStaticVariables.TMDB_AUTHENTICATED_TOKEN,jsonData.request_token)
+            bundle.putBoolean(GlobalStaticVariables.TMDB_AUTH_ERROR_FLAG,false)
+            return bundle
+        } else {
+            bundle.putString(GlobalStaticVariables.TMDB_AUTH_ERROR_MSG, jsonData.status_message)
+            bundle.putBoolean(GlobalStaticVariables.TMDB_AUTH_ERROR_FLAG,true)
+            return bundle
+        }
+
+//        final Bundle bundle = new Bundle()
+//        final JSONObject obj = new JSONObject(jsonData)
+//        // TMDb return status_message when there is an error
+//        if(obj.isNull('status_message')) {
+//            if (jsonData.success) {
+//                bundle.putBoolean(GlobalStaticVariables.TMDB_AUTH_ERROR_FLAG,false)
+//                bundle.putString(GlobalStaticVariables.TMDB_AUTHENTICATED_TOKEN,obj.getString("request_token"))
+//                return bundle
+//            } else {
+//                bundle.putBoolean(GlobalStaticVariables.TMDB_AUTH_ERROR_FLAG,true)
+//                LogDisplay.callLog(LOG_TAG, 'Unexpected TMDb request error while login', LogDisplay.JSON_PARSE_LOG_FLAG)
+//                return bundle
+//            }
+//        } else {
+//            LogDisplay.callLog(LOG_TAG, "TMDb returned error while authenticate user-> ${obj.getString("request_token")}", LogDisplay.JSON_PARSE_LOG_FLAG)
+//            bundle.putBoolean(GlobalStaticVariables.TMDB_AUTH_ERROR_FLAG,true)
+//            bundle.putString(GlobalStaticVariables.TMDB_AUTH_ERROR_MSG, obj.getString("status_message"))
+//            return bundle
+//        }
+    }
+
+    /**
+     * Helper method to parse JSON data for TMDb session id
+     * @param jsonData The JSON data to be parsed
+     * @param respCode The response code of Http call
+     * @return The Bundle with parsed data or error message & error flag
+     */
+    static Bundle parseTmdbSessionId(def jsonData, int respCode) {
+        LogDisplay.callLog(LOG_TAG, 'parseTmdbSessionId is called', LogDisplay.JSON_PARSE_LOG_FLAG)
+        LogDisplay.callLog(LOG_TAG, "respCode -> $respCode", LogDisplay.JSON_PARSE_LOG_FLAG)
+        LogDisplay.callLog(LOG_TAG, "jsonData -> $jsonData", LogDisplay.JSON_PARSE_LOG_FLAG)
+        final Bundle bundle = new Bundle()
+        if(respCode == 200) {
+            bundle.putString(GlobalStaticVariables.TMDB_SESSION_ID,jsonData.session_id)
+            bundle.putBoolean(GlobalStaticVariables.TMDB_AUTH_ERROR_FLAG,false)
+            return bundle
+        } else {
+            bundle.putString(GlobalStaticVariables.TMDB_AUTH_ERROR_MSG, jsonData.status_message)
+            bundle.putBoolean(GlobalStaticVariables.TMDB_AUTH_ERROR_FLAG,true)
+            return bundle
+        }
+
+//        final Bundle bundle = new Bundle()
+//        final JSONObject obj = new JSONObject(jsonData)
+//        // TMDb return status_message when there is an error
+//        if(obj.isNull('status_message')) {
+//            if (jsonData.success) {
+//                bundle.putBoolean(GlobalStaticVariables.TMDB_AUTH_ERROR_FLAG,false)
+//                bundle.putString(GlobalStaticVariables.TMDB_SESSION_ID,obj.getString("session_id"))
+//                return bundle
+//            } else {
+//                bundle.putBoolean(GlobalStaticVariables.TMDB_AUTH_ERROR_FLAG,true)
+//                LogDisplay.callLog(LOG_TAG, 'Unexpected TMDb request error while creating session id', LogDisplay.JSON_PARSE_LOG_FLAG)
+//                return bundle
+//            }
+//        } else {
+//            LogDisplay.callLog(LOG_TAG, "TMDb returned error while creating session id-> ${obj.getString("session_id")}", LogDisplay.JSON_PARSE_LOG_FLAG)
+//            bundle.putBoolean(GlobalStaticVariables.TMDB_AUTH_ERROR_FLAG,true)
+//            bundle.putString(GlobalStaticVariables.TMDB_AUTH_ERROR_MSG, 'Cannot perform the login now, please try after some time.')
+//            return bundle
+//        }
+    }
+
+    /**
+     * Helper method to parse JSON data for TMDb account information
+     * @param jsonData The JSON data to be parsed
+     * @param respCode The response code of Http call
+     * @return The Bundle with parsed data or error message & error flag
+     */
+    static Bundle parseTmdbAccountInfo(def jsonData, int respCode) {
+        LogDisplay.callLog(LOG_TAG, 'parseTmdbAccountInfo is called', LogDisplay.JSON_PARSE_LOG_FLAG)
+        LogDisplay.callLog(LOG_TAG, "respCode -> $respCode", LogDisplay.JSON_PARSE_LOG_FLAG)
+        LogDisplay.callLog(LOG_TAG, "jsonData -> $jsonData", LogDisplay.JSON_PARSE_LOG_FLAG)
+        final Bundle bundle = new Bundle()
+        if(respCode == 200) {
+            if(jsonData.name)
+                bundle.putString(GlobalStaticVariables.TMDB_USER_NAME,jsonData.name)
+            else
+                bundle.putString(GlobalStaticVariables.TMDB_USER_NAME,'')
+            bundle.putBoolean(GlobalStaticVariables.TMDB_AUTH_ERROR_FLAG,false)
+            return bundle
+        } else {
+            bundle.putString(GlobalStaticVariables.TMDB_AUTH_ERROR_MSG, jsonData.status_message)
+            bundle.putBoolean(GlobalStaticVariables.TMDB_AUTH_ERROR_FLAG,true)
+            return bundle
+        }
+//        LogDisplay.callLog(LOG_TAG, "jsonData.username -> ${jsonData.username}", LogDisplay.JSON_PARSE_LOG_FLAG)
+//        final JSONObject obj = new JSONObject(jsonData)
+//        if(!obj.isNull('name')) {
+//            return obj.getString("name")
+//        } else {
+//            return null
+//        }
     }
 }

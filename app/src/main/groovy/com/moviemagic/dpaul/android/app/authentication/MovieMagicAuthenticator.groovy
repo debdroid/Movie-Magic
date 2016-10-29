@@ -8,6 +8,7 @@ import android.accounts.NetworkErrorException
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import com.moviemagic.dpaul.android.app.backgroundmodules.GlobalStaticVariables
 import com.moviemagic.dpaul.android.app.backgroundmodules.LogDisplay
 import groovy.transform.CompileStatic
@@ -80,9 +81,11 @@ class MovieMagicAuthenticator extends AbstractAccountAuthenticator {
             if (password != null) {
                 try {
                     LogDisplay.callLog(LOG_TAG,'Re-attempt to authenticate user',LogDisplay.MOVIE_MAGIC_AUTHENTICATOR_LOG_FLAG)
-                    authToken = GlobalStaticVariables.sTmdbAuthenticateInterface.tmdbUserSignIn(account.name, password, authTokenType)
+                    final Bundle bundle = GlobalStaticVariables.sTmdbAuthenticateInterface.tmdbUserSignIn(account.name, password, authTokenType)
+                    authToken = bundle.getString(GlobalStaticVariables.TMDB_AUTH_TOKEN)
                 } catch (Exception e) {
-                    e.printStackTrace();
+                    LogDisplay.callLog(LOG_TAG,'Re-attempt to authenticate user failed',LogDisplay.MOVIE_MAGIC_AUTHENTICATOR_LOG_FLAG)
+                    Log.e(LOG_TAG, "Error: ${e.message}", e)
                 }
             }
         }

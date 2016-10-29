@@ -19,11 +19,13 @@ import android.support.v4.widget.DrawerLayout
 import android.support.v7.app.ActionBarDrawerToggle
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.Toolbar
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.widget.Button
 import android.widget.TextView
+import android.widget.Toast
 import com.google.android.youtube.player.YouTubeApiServiceUtil
 import com.google.android.youtube.player.YouTubeInitializationResult
 import com.moviemagic.dpaul.android.app.adapter.HomeMovieAdapter
@@ -42,12 +44,17 @@ public class MovieMagicMainActivity extends AppCompatActivity implements Navigat
     private NavigationView mNavigationView
     private TextView mNavPanelUserNameTextView, mNavPanelUserIdTextView
     private Button mNavPanelLoginButton, mNavPanelLogoutButton
+    private AccountManager mAccountManager
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState)
         LogDisplay.callLog(LOG_TAG,'onCreate is called',LogDisplay.MOVIE_MAGIC_MAIN_LOG_FLAG)
         setContentView(R.layout.activity_movie_magic_main)
+        // Create an instance of AccountManager
+        mAccountManager = AccountManager.get(this)
+        // Initialize the SyncAdapter
         MovieMagicSyncAdapterUtility.initializeSyncAdapter(this)
         //*** Comment before release **********************
         //MovieMagicSyncAdapterUtility.syncImmediately(this)
@@ -84,6 +91,10 @@ public class MovieMagicMainActivity extends AppCompatActivity implements Navigat
                 loginToTmdbAccount()
             }
         })
+        
+        // Check if user already logged in to TMDb account. If yes then perform the required steps
+        checkUserLoginAndPerformAction()
+        
 //        mNavPanelLogoutButton = navigationHeader.findViewById(R.id.nav_drawer_log_out) as Button
 
 //        setMenuCounter(R.id.nav_home,40)
@@ -244,8 +255,8 @@ public class MovieMagicMainActivity extends AppCompatActivity implements Navigat
             showSnackBar(getString(R.string.drawer_menu_settings) + " is clicked")
             setItemTitle(getString(R.string.drawer_menu_settings))
         } else if (id == R.id.nav_menu_logout) {
-            showSnackBar(getString(R.string.drawer_menu_logout) + " is clicked")
-            setItemTitle(getString(R.string.drawer_menu_logout))
+//            showSnackBar(getString(R.string.drawer_menu_logout) + " is clicked")
+//            setItemTitle(getString(R.string.drawer_menu_home)) /* set the appbar text to home */
             logoutFromTmdbAccount()
         }
 
@@ -254,20 +265,24 @@ public class MovieMagicMainActivity extends AppCompatActivity implements Navigat
         return true
     }
 
+    
     /**
      * Login logic to allow user to login to TMDb account
      */
     private void loginToTmdbAccount() {
-        final AccountManager accountManager = AccountManager.get(this)
-        final AccountManagerFuture<Bundle> amFuture= accountManager.addAccount(getString(R.string.authenticator_account_type),
+        LogDisplay.callLog(LOG_TAG,'loginToTmdbAccount is called',LogDisplay.MOVIE_MAGIC_MAIN_LOG_FLAG)
+        final AccountManagerFuture<Bundle> amFuture= mAccountManager.addAccount(getString(R.string.authenticator_account_type),
                 GlobalStaticVariables.AUTHTOKEN_TYPE_FULL_ACCESS,null,null,this,new AccountManagerCallback<Bundle>() {
             @Override
             void run(AccountManagerFuture<Bundle> future) {
                 try { //getResult will throw exception if login is not successful
                     final Bundle bundle = future.getResult()
-                    // Set the name to the TMDb user name
-                    //TODO need to populate the name later
-                    mNavPanelUserNameTextView.setText('Set Name Here')
+                    // Set the name to the TMDb user name, if it's not present then set the app name
+                    if(bundle.getString(AccountManager.KEY_USERDATA)) {
+                        mNavPanelUserNameTextView.setText(bundle.getString(AccountManager.KEY_USERDATA))
+                    } else {
+                        mNavPanelUserNameTextView.setText(getString(R.string.app_name))
+                    }
                     // Show the user id TextView and set the correct value
                     mNavPanelUserIdTextView.setVisibility(TextView.VISIBLE)
                     mNavPanelUserIdTextView.setText(bundle.getString(AccountManager.KEY_ACCOUNT_NAME))
@@ -278,61 +293,68 @@ public class MovieMagicMainActivity extends AppCompatActivity implements Navigat
                     tmdbMenu.findItem(R.id.nav_tmdb_user_menu_items).setVisible(true)
                     tmdbMenu.findItem(R.id.nav_menu_logout).setVisible(true)
                     // Now show a message to the user
-                    showSnackBar('You have successfully logged in to TMDb account')
+                    Toast.makeText(getBaseContext(),'You have successfully logged in to TMDb account',Toast.LENGTH_SHORT).show()
                     LogDisplay.callLog(LOG_TAG,"Login successful, accout bundle: $bundle",LogDisplay.MOVIE_MAGIC_MAIN_LOG_FLAG)
                 } catch (Exception e) {
                     LogDisplay.callLog(LOG_TAG,"Login failed, error message: ${e.getMessage()}",LogDisplay.MOVIE_MAGIC_MAIN_LOG_FLAG)
-                    e.printStackTrace()
+                    Log.e(LOG_TAG, "Error: ${e.message}", e)
                 }
             }
         }, null)
     }
 
     /**
-     * Login logic to allow user to logout from TMDb account
+     * Logout logic to allow user to logout from TMDb account
      */
     private void logoutFromTmdbAccount() {
-        final AccountManager accountManager = AccountManager.get(this)
+        LogDisplay.callLog(LOG_TAG,'logoutFromTmdbAccount is called',LogDisplay.MOVIE_MAGIC_MAIN_LOG_FLAG)
         final String accountType = getString(R.string.authenticator_account_type)
         // Application supports only a single account, so safe to use this logic
-        final Account[] accounts = accountManager.getAccountsByType(accountType)
+        final Account[] accounts = mAccountManager.getAccountsByType(accountType)
+        final Context context = getApplicationContext()
         if( accounts && accounts.size() == 1) {
             LogDisplay.callLog(LOG_TAG,"Removing account -> ${accounts[0].name}",LogDisplay.MOVIE_MAGIC_MAIN_LOG_FLAG)
-            // Remove the Periodic Sync for the account
-            MovieMagicSyncAdapterUtility.removePeriodicSync(accounts[0], getApplicationContext())
             // Remove the account
             if (Build.VERSION.SDK_INT >= 21) {
-                accountManager.removeAccount(accounts[0], this, new AccountManagerCallback<Bundle>() {
+                mAccountManager.removeAccount(accounts[0], this, new AccountManagerCallback<Bundle>() {
                     @Override
                     void run(AccountManagerFuture<Bundle> future) {
                         try { //getResult will throw exception if login is not successful
+                            // Remove the Periodic Sync for the account
+                            MovieMagicSyncAdapterUtility.removePeriodicSync(accounts[0], context)
                             final Bundle bundle = future.getResult()
                             finishLogout()
                             LogDisplay.callLog(LOG_TAG,"Remove account successful, accout bundle: $bundle",LogDisplay.MOVIE_MAGIC_MAIN_LOG_FLAG)
                         } catch (Exception e) {
                             LogDisplay.callLog(LOG_TAG,"Remove account failed, error message: ${e.getMessage()}",LogDisplay.MOVIE_MAGIC_MAIN_LOG_FLAG)
-                            e.printStackTrace()
+                            Toast.makeText(getBaseContext(), 'Cannot perform the operation, please try again later.', Toast.LENGTH_SHORT).show()
+                            Log.e(LOG_TAG, "Error: ${e.message}", e)
                         }
                     }
                 }, null)
             } else {
-                accountManager.removeAccount(accounts[0], new AccountManagerCallback<Boolean>() {
+                mAccountManager.removeAccount(accounts[0], new AccountManagerCallback<Boolean>() {
                     @Override
                     void run(AccountManagerFuture<Boolean> future) {
                         final boolean returnStatus = future.getResult()
                         if(returnStatus) {
+                            // Remove the Periodic Sync for the account
+                            MovieMagicSyncAdapterUtility.removePeriodicSync(accounts[0], context)
                             finishLogout()
                             LogDisplay.callLog(LOG_TAG,'Remove account successful',LogDisplay.MOVIE_MAGIC_MAIN_LOG_FLAG)
                         } else {
                             LogDisplay.callLog(LOG_TAG,'Remove account failed',LogDisplay.MOVIE_MAGIC_MAIN_LOG_FLAG)
+                            Toast.makeText(getBaseContext(), 'Cannot perform the operation, please try again later.', Toast.LENGTH_SHORT).show()
                         }
                     }
                 }, null)
             }
         } else if (accounts.size() > 1) {
-            LogDisplay.callLog(LOG_TAG,"Error.More than or account, number of accounts -> ${accounts.size()}",LogDisplay.MOVIE_MAGIC_MAIN_LOG_FLAG)
+            LogDisplay.callLog(LOG_TAG,"Error.More than one account, number of accounts -> ${accounts.size()}",LogDisplay.MOVIE_MAGIC_MAIN_LOG_FLAG)
+            Toast.makeText(getBaseContext(), 'Cannot perform the operation, please try again later.', Toast.LENGTH_SHORT).show()
         } else {
             LogDisplay.callLog(LOG_TAG,'Error.No account found',LogDisplay.MOVIE_MAGIC_MAIN_LOG_FLAG)
+            Toast.makeText(getBaseContext(), 'Cannot perform the operation, please try again later.', Toast.LENGTH_SHORT).show()
         }
     }
 
@@ -340,9 +362,10 @@ public class MovieMagicMainActivity extends AppCompatActivity implements Navigat
      * Finish the logout activities
      */
     private void finishLogout() {
+        LogDisplay.callLog(LOG_TAG,'finishLogout is called',LogDisplay.MOVIE_MAGIC_MAIN_LOG_FLAG)
         // Hide the user id TextView
         mNavPanelUserIdTextView.setVisibility(TextView.GONE)
-        // Hide the tmdb menu & logout
+        // Hide the TMDb user menu & logout menu
         final Menu tmdbMenu = mNavigationView.getMenu()
         tmdbMenu.findItem(R.id.nav_tmdb_user_menu_items).setVisible(false)
         tmdbMenu.findItem(R.id.nav_menu_logout).setVisible(false)
@@ -356,6 +379,41 @@ public class MovieMagicMainActivity extends AppCompatActivity implements Navigat
         showSnackBar('You have successfully logged out from TMDb account')
     }
 
+    /**
+     * Check if the user is already logged in to TMDb (valid account exist or not)
+     */
+    private void checkUserLoginAndPerformAction() {
+        LogDisplay.callLog(LOG_TAG,'checkUserLoginAndPerformAction is called',LogDisplay.MOVIE_MAGIC_MAIN_LOG_FLAG)
+        //Check if any account exists
+        final Account[] accounts = mAccountManager.getAccountsByType(getString(R.string.authenticator_account_type))
+        final Account newAccount
+        if(accounts.size() == 1) {
+            LogDisplay.callLog(LOG_TAG,"Existing account. Account name->${accounts[0].name}",LogDisplay.MOVIE_MAGIC_MAIN_LOG_FLAG)
+            //Application can have only one account, so safe to use the following line
+            if(accounts[0].name == getString(R.string.app_name)) {
+                LogDisplay.callLog(LOG_TAG, 'Default SyncAdapter account, so user is not logged in & no action needed', LogDisplay.MOVIE_MAGIC_MAIN_LOG_FLAG)
+            } else { //Application can have only one account, so if it's not SyncAdapter then must be user's account
+                if(mAccountManager.getUserData(accounts[0],AccountManager.KEY_USERDATA)) {
+                    mNavPanelUserNameTextView.setText(mAccountManager.getUserData(accounts[0],AccountManager.KEY_USERDATA))
+                } else {
+                    mNavPanelUserNameTextView.setText(getString(R.string.app_name))
+                }
+                // Show the user id TextView and set the correct value
+                mNavPanelUserIdTextView.setVisibility(TextView.VISIBLE)
+                mNavPanelUserIdTextView.setText(accounts[0].name)
+                // Hide the Login button
+                mNavPanelLoginButton.setVisibility(Button.GONE)
+                // Show the tmdb menu & logout
+                final Menu tmdbMenu = mNavigationView.getMenu()
+                tmdbMenu.findItem(R.id.nav_tmdb_user_menu_items).setVisible(true)
+                tmdbMenu.findItem(R.id.nav_menu_logout).setVisible(true)
+            }
+        } else if (accounts.size() > 1) {
+            LogDisplay.callLog(LOG_TAG,"Error.More than one account, number of accounts -> ${accounts.size()}",LogDisplay.MOVIE_MAGIC_MAIN_LOG_FLAG)
+        } else {
+            LogDisplay.callLog(LOG_TAG,'Error.No account found',LogDisplay.MOVIE_MAGIC_MAIN_LOG_FLAG)
+        }
+    }
     /**
      * Load the Home Fragment
      */
@@ -428,12 +486,12 @@ public class MovieMagicMainActivity extends AppCompatActivity implements Navigat
         //Start the animation
         overridePendingTransition(R.anim.slide_bottom_in_animation,0)
     }
-/**
+    /**
      * Updating of menu counter is tightly coupled with main_activity_menu activity, so no separate class is
      * created for the AsyncTask
      */
 
-    public class UpdateMenuCounter extends AsyncTask<String, Void, Integer[]> {
+    protected class UpdateMenuCounter extends AsyncTask<String, Void, Integer[]> {
         private final Context mContext
 
         public UpdateMenuCounter(Context ctx) {
@@ -504,7 +562,8 @@ public class MovieMagicMainActivity extends AppCompatActivity implements Navigat
         }
     }
 
-    //Override the callback method of GridMovieFragment
+    // Override the callback method of GridMovieFragment
+    // Once an item is clicked then it will be called and it will launch the DetailMovie activity
     @Override
     public void onMovieGridItemSelected(int movieId, String movieCategory, MovieGridRecyclerAdapter.MovieGridRecyclerAdapterViewHolder viewHolder) {
         final Intent intent = new Intent(this, DetailMovieActivity.class)

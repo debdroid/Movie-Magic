@@ -56,7 +56,7 @@ class MovieMagicSyncAdapterUtility {
         } else if (accounts.size() > 1) {
             LogDisplay.callLog(LOG_TAG,"Got more than one account, investigate. Accounts->${accounts.toString()}",LogDisplay.MOVIE_MAGIC_SYNC_ADAPTER_UTILITY_LOG_FLAG)
             return null
-        } else {
+        } else { // This part will be executed only once - first install of the app
             LogDisplay.callLog(LOG_TAG,'Create a new dummy account',LogDisplay.MOVIE_MAGIC_SYNC_ADAPTER_UTILITY_LOG_FLAG)
             // Create a dummy account - for the first time use
             newAccount = new Account(

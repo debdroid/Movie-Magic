@@ -43,6 +43,16 @@ class GlobalStaticVariables {
     public static final String TMDB_COLLECTION_PATH = 'collection'
     public static final String TMDB_PERSON_PATH = 'person'
     public static final String TMDB_PERSON_IMAGE_PATH = 'images'
+    public static final String TMDB_AUTHENTICATION_PATH = 'authentication'
+    public static final String TMDB_TOKEN_PATH = 'token'
+    public static final String TMDB_NEW_PATH = 'new'
+    public static final String TMDB_SESSION_PATH = 'session'
+    public static final String TMDB_ACCOUNT_PATH = 'account'
+    public static final String TMDB_VALIDATE_WITH_LOGIN_PATH = 'validate_with_login'
+    public static final String TMDB_AUTHENTICATE_TOKEN_KEY = 'request_token'
+    public static final String TMDB_AUTHENTICATE_USER_NAME_KEY = 'username'
+    public static final String TMDB_AUTHENTICATE_PASSWORD_KEY = 'password'
+    public static final String TMDB_SESSION_ID_KEY = 'session_id'
 
 
     //Static variables for TMDB movie image url and parameters
@@ -73,6 +83,13 @@ class GlobalStaticVariables {
     public static final String AUTHTOKEN_TYPE_FULL_ACCESS = 'Full access'
     public static final String AUTHTOKEN_TYPE_FULL_ACCESS_LABEL = 'Full access to a MovieMagic account'
     public static final TmdbAuthenticateInterface sTmdbAuthenticateInterface = new TmdbServerAuthenticate()
+    public static final String TMDB_AUTH_TOKEN = 'tmdb_auth_token'
+    public static final String TMDB_USER_NAME = 'tmdb_user_name'
+    public static final String TMDB_AUTH_ERROR_MSG = 'tmdb_error_msg'
+    public static final String TMDB_AUTH_ERROR_FLAG = 'tmdb_error_flag'
+    public static final String TMDB_REQ_TOKEN = 'tmdb_req_token'
+    public static final String TMDB_AUTHENTICATED_TOKEN = 'tmdb_authenticated_token'
+    public static final String TMDB_SESSION_ID = 'tmdb_authenticated_token'
 
     //Misc variables
     public static final String IMAGE_TYPE_BACKDROP = 'backdrop'
