@@ -10,6 +10,7 @@ class GlobalStaticVariables {
     public static final String MOVIE_LIST_TYPE_TMDB_PUBLIC = 'tmdb_public'
     public static final String MOVIE_LIST_TYPE_TMDB_USER = 'tmdb_user'
     public static final String MOVIE_LIST_TYPE_TMDB_SIMILAR = 'tmdb_similar'
+    public static final String MOVIE_LIST_TYPE_TMDB_RECOMMENDATIONS = 'tmdb_recommendations'
     public static final String MOVIE_LIST_TYPE_TMDB_COLLECTION = 'tmdb_collection'
     public static final String MOVIE_LIST_TYPE_TMDB_PERSON = 'tmdb_person'
     public static final String MOVIE_LIST_TYPE_USER_LOCAL_LIST = 'user_local_list'
@@ -21,16 +22,17 @@ class GlobalStaticVariables {
     public static final String MOVIE_CATEGORY_UPCOMING = 'upcoming' //tmdb upcoming category
     public static final String MOVIE_CATEGORY_NOW_PLAYING = 'now_playing' //tmdb now_playing category
     public static final String MOVIE_CATEGORY_SIMILAR = 'similar_category' //category to store similar movie, internal use only
+    public static final String MOVIE_CATEGORY_RECOMMENDATIONS = 'recommendations_category' //category to store similar movie, internal use only
     public static final String MOVIE_CATEGORY_COLLECTION = 'collection_category' //category to store collection movie, internal use only
     public static final String MOVIE_CATEGORY_PERSON = 'person_category' //category to store person cast & crew movie, internal use only
-    public static final String MOVIE_CATEGORY_TMDB_USER_FAVOURITE = 'tmdb_user_favourite_category' //category to store tmdb user movies, internal use only
-    public static final String MOVIE_CATEGORY_TMDB_USER_WATCH = 'tmdb_user_watch_category' //category to store tmdb user movies, internal use only
-    public static final String MOVIE_CATEGORY_TMDB_USER_RATED = 'tmdb_user_rated_category' //category to store tmdb user movies, internal use only
+    public static final String MOVIE_CATEGORY_TMDB_USER_FAVOURITE = 'favorite' //category to store tmdb user movies, internal use only
+    public static final String MOVIE_CATEGORY_TMDB_USER_WATCHLIST = 'watchlist' //category to store tmdb user movies, internal use only
+    public static final String MOVIE_CATEGORY_TMDB_USER_RATED = 'rated' //category to store tmdb user movies, internal use only
     public static final String MOVIE_CATEGORY_LOCAL_USER_WATCHED = 'local_user_watched_category' //category to store user wathced movies, internal use only
     public static final String MOVIE_CATEGORY_LOCAL_USER_WISH_LIST = 'local_user_wish_list_category' //category to store user wish list movies, internal use only
     public static final String MOVIE_CATEGORY_LOCAL_USER_FAVOURITE = 'local_user_favourite_category' //category to store user favourite movies, internal use only
     public static final String MOVIE_CATEGORY_LOCAL_USER_COLLECTION = 'local_user_collection_category' //category to store user collection movies, internal use only
-    public static final String MOVIE_CATEGORY_ORPHANED = 'oprphaned_category' //category for orphaned records (not needed user list movie)
+    public static final String MOVIE_CATEGORY_ORPHANED = 'orphaned_category' //category for orphaned records (not needed user list movie)
 
     //Static variables for TMDB URL and parameters
     public static final String TMDB_MOVIE_BASE_URL = 'https://api.themoviedb.org/3/'
@@ -38,7 +40,7 @@ class GlobalStaticVariables {
     public static final String TMDB_MOVIE_API_KEY = 'api_key'
     public static final String TMDB_MOVIE_PAGE = 'page'
     public static final String TMDB_APPEND_TO_RESPONSE_KEY = 'append_to_response'
-    public static final String TMDB_MOVIE_APPEND_TO_RESPONSE_PARAM = 'similar,credits,images,videos,release_dates,reviews'
+    public static final String TMDB_MOVIE_APPEND_TO_RESPONSE_PARAM = 'similar,credits,images,videos,release_dates,reviews,recommendations'
     public static final String TMDB_PERSON_APPEND_TO_RESPONSE_PARAM = 'movie_credits'
     public static final String TMDB_COLLECTION_PATH = 'collection'
     public static final String TMDB_PERSON_PATH = 'person'
@@ -53,6 +55,8 @@ class GlobalStaticVariables {
     public static final String TMDB_AUTHENTICATE_USER_NAME_KEY = 'username'
     public static final String TMDB_AUTHENTICATE_PASSWORD_KEY = 'password'
     public static final String TMDB_SESSION_ID_KEY = 'session_id'
+    public static final String TMDB_USER_MOVIES_PATH = 'movies'
+
 
 
     //Static variables for TMDB movie image url and parameters
@@ -89,7 +93,9 @@ class GlobalStaticVariables {
     public static final String TMDB_AUTH_ERROR_FLAG = 'tmdb_error_flag'
     public static final String TMDB_REQ_TOKEN = 'tmdb_req_token'
     public static final String TMDB_AUTHENTICATED_TOKEN = 'tmdb_authenticated_token'
-    public static final String TMDB_SESSION_ID = 'tmdb_authenticated_token'
+    public static final String TMDB_SESSION_ID = 'tmdb_session_id'
+    public static final String TMDB_USER_ACCOUNT_ID = 'tmdb_user_account_id'
+    public static final String TMDB_USERDATA_ACCOUNT_ID = 'tmdb_userdata_account_id'
 
     //Misc variables
     public static final String IMAGE_TYPE_BACKDROP = 'backdrop'

@@ -81,19 +81,22 @@ class TmdbServerAuthenticate implements TmdbAuthenticateInterface {
                                 .build()
                         final URL accountInfoUrl = new URL(accountInfoUri.toString())
                         LogDisplay.callLog(LOG_TAG,"Account info url -> ${accountInfoUri.toString()}",LogDisplay.TMDB_SERVER_AUTHENTICATE_LOG_FLAG)
-                        final Bundle nameBundle = getNameOfUser(accountInfoUrl)
-                        LogDisplay.callLog(LOG_TAG,"nameBundle -> $nameBundle",LogDisplay.TMDB_SERVER_AUTHENTICATE_LOG_FLAG)
-                        if(!nameBundle.getBoolean(GlobalStaticVariables.TMDB_AUTH_ERROR_FLAG)) {
+                        final Bundle accountInfoBundle = getAccountDetails(accountInfoUrl)
+                        LogDisplay.callLog(LOG_TAG,"accountInfoBundle -> $accountInfoBundle",LogDisplay.TMDB_SERVER_AUTHENTICATE_LOG_FLAG)
+                        if(!accountInfoBundle.getBoolean(GlobalStaticVariables.TMDB_AUTH_ERROR_FLAG)) {
                             LogDisplay.callLog(LOG_TAG,'TMDb login successful..',LogDisplay.TMDB_SERVER_AUTHENTICATE_LOG_FLAG)
                             /** Set the authToken to session id which will be used later to get data for the user **/
                             bundle.putString(GlobalStaticVariables.TMDB_AUTH_TOKEN,
                                     sessionIdBundle.getString(GlobalStaticVariables.TMDB_SESSION_ID))
                             /** Set the name of the TMDb user which will be used later to display on Nav drawer **/
                             bundle.putString(GlobalStaticVariables.TMDB_USER_NAME,
-                                    nameBundle.getString(GlobalStaticVariables.TMDB_USER_NAME))
+                                    accountInfoBundle.getString(GlobalStaticVariables.TMDB_USER_NAME))
+                            /** Set the account id of TMDb user account which will be used later in SyncAdapter **/
+                            bundle.putString(GlobalStaticVariables.TMDB_USER_ACCOUNT_ID,
+                                    accountInfoBundle.getString(GlobalStaticVariables.TMDB_USER_ACCOUNT_ID))
                         } else {
                             LogDisplay.callLog(LOG_TAG,'TMDb account information retrieval failed',LogDisplay.TMDB_SERVER_AUTHENTICATE_LOG_FLAG)
-                            bundle = nameBundle
+                            bundle = accountInfoBundle
                         }
                     } else {
                         LogDisplay.callLog(LOG_TAG,'TMDb session id creation failed',LogDisplay.TMDB_SERVER_AUTHENTICATE_LOG_FLAG)
@@ -235,7 +238,7 @@ class TmdbServerAuthenticate implements TmdbAuthenticateInterface {
      * @param url The TMDb URL
      * @return Bundle with Name of the user of the TMDb account & error flag
      */
-    private Bundle getNameOfUser(URL url) {
+    private Bundle getAccountDetails(URL url) {
         final InputStream inputStream
         final HttpURLConnection conn = (HttpURLConnection) url.openConnection()
         final Bundle nameOfUser

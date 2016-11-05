@@ -16,6 +16,7 @@ import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import android.widget.TextView
 import com.moviemagic.dpaul.android.app.adapter.HomeMovieAdapter
 import com.moviemagic.dpaul.android.app.backgroundmodules.GlobalStaticVariables
@@ -31,20 +32,26 @@ class HomeMovieFragment extends Fragment implements LoaderManager.LoaderCallback
     private RecyclerView mInCinemaRecyclerView
     private RecyclerView mComingSoonRecyclerView
     private RecyclerView mRecentlyAddedUserListRecyclerView
+    private RecyclerView mRecommendationRecyclerView
     private TextView mInCinemaRecyclerViewEmptyTextView
     private TextView mComingSoonRecyclerViewEmptyTextView
     private TextView mRecentlyAddedUserListRecyclerViewEmptyTextView
+    private TextView mRecommendationRecyclerViewEmptyTextView
+    private Button mShowAllInCinemaButton
+    private Button mShowAllComingSoonButton
     private HomeMovieAdapter mInCinemaAdapter
     private HomeMovieAdapter mComingSoonAdapter
     private HomeMovieAdapter mRecentlyAddedUserListAdapter
-    private CallbackForHomeMovieClick mCallbackForHomeMovieClick
+    private HomeMovieAdapter mRecommendationAdapter
     private String[] mMovieVideoArg
-
+    private CallbackForHomeMovieClick mCallbackForHomeMovieClick
+    private CallbackForShowAllButtonClick mCallbackForShowAllButtonClick
 
     private static final int HOME_MOVIE_FRAGMENT_VIEW_PAGER_LOADER_ID = 0
     private static final int HOME_MOVIE_FRAGMENT_IN_CINEMA_LOADER_ID = 1
     private static final int HOME_MOVIE_FRAGMENT_COMING_SOON_LOADER_ID = 2
     private static final int HOME_MOVIE_FRAGMENT_RECENTLY_ADDED_USER_LIST_LOADER_ID = 3
+    private static final int HOME_MOVIE_FRAGMENT_RECOMMENDATION_LOADER_ID = 4
 
     //Columns to fetch from movie_video table
     private static final String[] MOVIE_VIDEO_COLUMNS = [MovieMagicContract.MovieVideo._ID,
@@ -90,7 +97,7 @@ class HomeMovieFragment extends Fragment implements LoaderManager.LoaderCallback
     final static int COL_MOVIE_BASIC_DETAIL_DATA_PRESENT_FLAG = 11
 
     //An empty constructor is needed so that lifecycle is properly handled
-    public GridMovieFragment(){
+    public HomeMovieFragment(){
         LogDisplay.callLog(LOG_TAG,'HomeMovieFragment empty constructor is called',LogDisplay.HOME_MOVIE_FRAGMENT_LOG_FLAG)
     }
 
@@ -120,6 +127,8 @@ class HomeMovieFragment extends Fragment implements LoaderManager.LoaderCallback
         mComingSoonRecyclerViewEmptyTextView = mRootView.findViewById(R.id.home_movie_coming_soon_recycler_view_empty_msg_text_view) as TextView
         mRecentlyAddedUserListRecyclerView = mRootView.findViewById(R.id.home_movie_recently_added_recycler_view) as RecyclerView
         mRecentlyAddedUserListRecyclerViewEmptyTextView = mRootView.findViewById(R.id.home_movie_recently_added_recycler_view_empty_msg_text_view) as TextView
+        mRecommendationRecyclerView = mRootView.findViewById(R.id.home_movie_recommendation_recycler_view) as RecyclerView
+        mRecommendationRecyclerViewEmptyTextView = mRootView.findViewById(R.id.home_movie_recommendation_recycler_view_empty_msg_text_view) as TextView
         //Set this to false so that activity starts the page from the beginning
         mComingSoonRecyclerView.setFocusable(false)
         mRecentlyAddedUserListRecyclerView.setNestedScrollingEnabled(false)
@@ -176,6 +185,46 @@ class HomeMovieFragment extends Fragment implements LoaderManager.LoaderCallback
                     }
                 })
         mRecentlyAddedUserListRecyclerView.setAdapter(mRecentlyAddedUserListAdapter)
+        /**
+         * Recommendation Recycler View
+         */
+        final RecyclerView.LayoutManager recommendationLinearLayoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false)
+        recommendationLinearLayoutManager.setAutoMeasureEnabled(true)
+        mRecommendationRecyclerView.setLayoutManager(recommendationLinearLayoutManager)
+        //Set this to false for smooth scrolling of recyclerview
+        mRecommendationRecyclerView.setNestedScrollingEnabled(false)
+        //Set this to false so that activity starts the page from the beginning
+        mRecommendationRecyclerView.setFocusable(false)
+        mRecommendationAdapter = new HomeMovieAdapter(getActivity(), mRecommendationRecyclerViewEmptyTextView,
+                new HomeMovieAdapter.HomeMovieAdapterOnClickHandler(){
+                    @Override
+                    void onClick(int movieId, String movieCategory, HomeMovieAdapter.HomeMovieAdapterViewHolder viewHolder) {
+                        mCallbackForHomeMovieClick.onHomeMovieItemSelected(movieId,movieCategory,viewHolder)
+                    }
+                })
+        mRecommendationRecyclerView.setAdapter(mRecommendationAdapter)
+
+        mShowAllInCinemaButton = mRootView.findViewById(R.id.show_all_in_cinema_button) as Button
+        /**
+         * Show all In Cinemas Button click handling
+         */
+        mShowAllInCinemaButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            void onClick(View v) {
+                mCallbackForShowAllButtonClick.onShowAllButtonClicked(GlobalStaticVariables.MOVIE_CATEGORY_NOW_PLAYING)
+            }
+        })
+
+        mShowAllComingSoonButton = mRootView.findViewById(R.id.show_all_coming_soon_button) as Button
+        /**
+         * Show all Coming Soon Button click handling
+         */
+        mShowAllComingSoonButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            void onClick(View v) {
+                mCallbackForShowAllButtonClick.onShowAllButtonClicked(GlobalStaticVariables.MOVIE_CATEGORY_UPCOMING)
+            }
+        })
 
         return mRootView
     }
@@ -192,12 +241,14 @@ class HomeMovieFragment extends Fragment implements LoaderManager.LoaderCallback
             getLoaderManager().initLoader(HOME_MOVIE_FRAGMENT_IN_CINEMA_LOADER_ID, null, this)
             getLoaderManager().initLoader(HOME_MOVIE_FRAGMENT_COMING_SOON_LOADER_ID, null, this)
             getLoaderManager().initLoader(HOME_MOVIE_FRAGMENT_RECENTLY_ADDED_USER_LIST_LOADER_ID, null, this)
+            getLoaderManager().initLoader(HOME_MOVIE_FRAGMENT_RECOMMENDATION_LOADER_ID, null, this)
         } else {        //If it's restore then restart the loader
             LogDisplay.callLog(LOG_TAG, 'onActivityCreated:not first time, so restart loaders', LogDisplay.HOME_MOVIE_FRAGMENT_LOG_FLAG)
             getLoaderManager().restartLoader(HOME_MOVIE_FRAGMENT_VIEW_PAGER_LOADER_ID, null, this)
             getLoaderManager().restartLoader(HOME_MOVIE_FRAGMENT_IN_CINEMA_LOADER_ID, null, this)
             getLoaderManager().restartLoader(HOME_MOVIE_FRAGMENT_COMING_SOON_LOADER_ID, null, this)
             getLoaderManager().restartLoader(HOME_MOVIE_FRAGMENT_RECENTLY_ADDED_USER_LIST_LOADER_ID, null, this)
+            getLoaderManager().restartLoader(HOME_MOVIE_FRAGMENT_RECOMMENDATION_LOADER_ID, null, this)
         }
     }
 
@@ -259,6 +310,19 @@ class HomeMovieFragment extends Fragment implements LoaderManager.LoaderCallback
                         $MovieMagicContract.MovieBasicInfo.COLUMN_BACKDROP_PATH <> ? """,            //Selection Clause
                         [GlobalStaticVariables.MOVIE_LIST_TYPE_USER_LOCAL_LIST, '', ''] as String[], //Selection Arg
                         "$MovieMagicContract.MovieBasicInfo.COLUMN_CREATE_TIMESTAMP desc limit $GlobalStaticVariables.HOME_PAGE_MAX_MOVIE_SHOW_COUNTER") //Sorted on release date
+
+            case HOME_MOVIE_FRAGMENT_RECOMMENDATION_LOADER_ID:
+                return new CursorLoader(
+                        getActivity(),                                                              //Parent Activity Context
+                        MovieMagicContract.MovieBasicInfo.CONTENT_URI,                              //Table to query
+                        MOVIE_BASIC_INFO_COLUMNS,                                                   //Projection to return
+                        """$MovieMagicContract.MovieBasicInfo.COLUMN_MOVIE_LIST_TYPE = ? and
+                        $MovieMagicContract.MovieBasicInfo.COLUMN_POSTER_PATH <> ? and
+                        $MovieMagicContract.MovieBasicInfo.COLUMN_BACKDROP_PATH <> ? and
+                        $MovieMagicContract.MovieBasicInfo.COLUMN_GENRE <> ? """, //Selection Clause
+                        [GlobalStaticVariables.MOVIE_LIST_TYPE_TMDB_RECOMMENDATIONS, '', '', ''] as String[],                    //Selection Arg
+                        /** Recommendations has no grid page, so showing 10 instead of standard 6 **/
+                        "$MovieMagicContract.MovieBasicInfo.COLUMN_CREATE_TIMESTAMP desc limit 10") //Sorted on release date
         }
     }
 
@@ -279,6 +343,9 @@ class HomeMovieFragment extends Fragment implements LoaderManager.LoaderCallback
             case HOME_MOVIE_FRAGMENT_RECENTLY_ADDED_USER_LIST_LOADER_ID:
                 recentlyAddedUserListOnLoadFinished(data)
                 break
+            case HOME_MOVIE_FRAGMENT_RECOMMENDATION_LOADER_ID:
+                recommendationOnLoadFinished(data)
+                break
             default:
                 LogDisplay.callLog(LOG_TAG, "Unknown loader id. id->$loaderId", LogDisplay.HOME_MOVIE_FRAGMENT_LOG_FLAG)
         }
@@ -291,6 +358,7 @@ class HomeMovieFragment extends Fragment implements LoaderManager.LoaderCallback
         mInCinemaAdapter.swapCursor(null)
         mComingSoonAdapter.swapCursor(null)
         mRecentlyAddedUserListAdapter.swapCursor(null)
+        mRecommendationAdapter.swapCursor(null)
     }
 
     /**
@@ -339,6 +407,15 @@ class HomeMovieFragment extends Fragment implements LoaderManager.LoaderCallback
         mRecentlyAddedUserListAdapter.swapCursor(data)
     }
 
+    /**
+     * This method handles the recommendation (i.e. recommended movies loaded when user views movie detail) movie cursor
+     * @param data Cursor
+     */
+    void recommendationOnLoadFinished(Cursor data) {
+        LogDisplay.callLog(LOG_TAG, "recommendationOnLoadFinished.Cursor rec count -> ${data.getCount()}", LogDisplay.HOME_MOVIE_FRAGMENT_LOG_FLAG)
+        mRecommendationAdapter.swapCursor(data)
+    }
+
     @Override
     public void onAttach(Context context) {
         LogDisplay.callLog(LOG_TAG,'onAttach is called',LogDisplay.PERSON_MOVIE_FRAGMENT_LOG_FLAG)
@@ -351,7 +428,15 @@ class HomeMovieFragment extends Fragment implements LoaderManager.LoaderCallback
             }
         } catch (ClassCastException e) {
             throw new ClassCastException(getActivity().toString()
-                    + " must implement CallbackForCastClick interface")
+                    + " must implement CallbackForHomeMovieClick interface")
+        }
+        try {
+            if(context instanceof Activity) {
+                mCallbackForShowAllButtonClick = (CallbackForShowAllButtonClick) context
+            }
+        } catch (ClassCastException e) {
+            throw new ClassCastException(getActivity().toString()
+                    + " must implement CallbackForShowAllButtonClick interface")
         }
     }
 
@@ -362,8 +447,20 @@ class HomeMovieFragment extends Fragment implements LoaderManager.LoaderCallback
      */
     public interface CallbackForHomeMovieClick {
         /**
-         * PersonCastFragmentCallback when a movie item has been clicked for cast.
+         * HomeMovieFragmentCallback when a movie item has been clicked on home page
          */
         public void onHomeMovieItemSelected(int movieId, String movieCategory, HomeMovieAdapter.HomeMovieAdapterViewHolder viewHolder)
+    }
+
+    /**
+     * A callback interface that all activities containing this fragment must
+     * implement. This mechanism allows activities to be notified of show all
+     * button clicked for in cinemas or upcoming
+     */
+    public interface CallbackForShowAllButtonClick {
+        /**
+         * HomeMovieFragmentCallback when a movie item has been clicked on home page
+         */
+        public void onShowAllButtonClicked(String movieCategory)
     }
 }

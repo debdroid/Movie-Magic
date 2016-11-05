@@ -1088,6 +1088,7 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
                 final ArrayList<Integer> isForHomeList = new ArrayList<>(1)
                 movieIdList.add(0,mMovieId)
                 movieRowIdList.add(0,_ID_movie_basic_info)
+                // Set the flag to false to indicate it's not for home page
                 isForHomeList.add(0,GlobalStaticVariables.MOVIE_MAGIC_FLAG_FALSE)
                 final ArrayList<Integer>[] loadMovieDetailsArg = [movieIdList, movieRowIdList, isForHomeList] as ArrayList<Integer>[]
                 new LoadMovieDetails(getActivity()).execute(loadMovieDetailsArg)
@@ -1527,7 +1528,7 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
             }
         } catch (ClassCastException e) {
             throw new ClassCastException(getActivity().toString()
-                    + " must implement CallbackForImageClick interface")
+                    + " must implement CallbackForBackdropImageClick interface")
         }
     }
 

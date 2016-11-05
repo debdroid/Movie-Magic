@@ -71,9 +71,9 @@ class LoadCollectionData extends AsyncTask<Integer, Void, Void> {
                            $MovieMagicContract.MovieBasicInfo.COLUMN_MOVIE_CATEGORY= ? """,
                         movieBasicArgs)
                 if (movieBasicDelCount == 1) {
-                    LogDisplay.callLog(LOG_TAG, "Delete from movie basic info table successful. Total deleted fcount->$movieBasicDelCount", LogDisplay.LOAD_COLLECTION_DATA_LOG_FLAG)
+                    LogDisplay.callLog(LOG_TAG, "Delete from movie basic info table successful. Total deleted count->$movieBasicDelCount", LogDisplay.LOAD_COLLECTION_DATA_LOG_FLAG)
                 } else {
-                    LogDisplay.callLog(LOG_TAG, "Delete from movie basic info table failed. Total deleted fcount->$movieBasicDelCount", LogDisplay.LOAD_COLLECTION_DATA_LOG_FLAG)
+                    LogDisplay.callLog(LOG_TAG, "Delete from movie basic info table failed. Total deleted count->$movieBasicDelCount", LogDisplay.LOAD_COLLECTION_DATA_LOG_FLAG)
                 }
             } else {
                 /**

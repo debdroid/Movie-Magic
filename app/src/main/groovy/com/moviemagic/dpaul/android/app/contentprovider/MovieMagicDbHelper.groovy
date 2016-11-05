@@ -49,6 +49,7 @@ class MovieMagicDbHelper extends SQLiteOpenHelper {
                 $MovieMagicContract.MovieBasicInfo.COLUMN_MOVIE_LIST_TYPE TEXT NOT NULL,
                 $MovieMagicContract.MovieBasicInfo.COLUMN_DETAIL_DATA_PRESENT_FLAG INTEGER DEFAULT 0,
                 $MovieMagicContract.MovieBasicInfo.COLUMN_SIMILAR_MOVIE_LINK_ID INTEGER DEFAULT 0,
+                $MovieMagicContract.MovieBasicInfo.COLUMN_RECOMMENDATION_MOVIE_LINK_ID INTEGER DEFAULT 0,
                 $MovieMagicContract.MovieBasicInfo.COLUMN_COLLECTION_ID INTEGER DEFAULT 0,
                 $MovieMagicContract.MovieBasicInfo.COLUMN_COLLECTION_NAME TEXT NULL,
                 $MovieMagicContract.MovieBasicInfo.COLUMN_COLLECTION_POSTER_PATH TEXT NULL,
@@ -76,6 +77,9 @@ class MovieMagicDbHelper extends SQLiteOpenHelper {
                 $MovieMagicContract.MovieBasicInfo.COLUMN_MOVIE_LIST_TYPE,
                 $MovieMagicContract.MovieBasicInfo.COLUMN_SIMILAR_MOVIE_LINK_ID) ON CONFLICT REPLACE)
                 """
+                /** Using COLUMN_RECOMMENDATION_MOVIE_LINK_ID caused duplicate entries for recommended movies
+                 * on the home page, so removed it from the UNIQUE replace logic. Since recommended movies
+                 * are not used in detail movie page, so there is no harm if one gets replaced by other**/
 
         //Create the SQL to create movie_cast table
         final  String SQL_CREATE_MOVIE_CAST_TABLE = """
@@ -225,7 +229,7 @@ class MovieMagicDbHelper extends SQLiteOpenHelper {
                 $MovieMagicContract.MoviePersonInfo.COLUMN_PERSON_PROFILE_PATH TEXT NULL,
                 $MovieMagicContract.MoviePersonInfo.COLUMN_PERSON_IMDB_ID TEXT NULL,
                 $MovieMagicContract.MoviePersonInfo.COLUMN_PERSON_POPULARITY REAL DEFAULT 0.0,
-                $MovieMagicContract.MoviePersonInfo.COLUMN_CPERSON_PRESENT_FLAG INTEGER DEFAULT 0,
+                $MovieMagicContract.MoviePersonInfo.COLUMN_PERSON_PRESENT_FLAG INTEGER DEFAULT 0,
                 $MovieMagicContract.MoviePersonInfo.COLUMN_PERSON_CREATE_TIMESTAMP TEXT NOT NULL,
                 $MovieMagicContract.MoviePersonInfo.COLUMN_PERSON_UPDATE_TIMESTAMP TEXT NOT NULL,
                 UNIQUE ($MovieMagicContract.MoviePersonInfo.COLUMN_PERSON_ID,

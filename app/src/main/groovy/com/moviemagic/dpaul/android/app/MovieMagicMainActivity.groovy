@@ -38,14 +38,15 @@ import groovy.transform.CompileStatic
 
 @CompileStatic
 public class MovieMagicMainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener,
-        GridMovieFragment.Callback, GridMovieFragment.CollectionColorChangeCallback, HomeMovieFragment.CallbackForHomeMovieClick {
+        GridMovieFragment.CallbackForGridItemClick, GridMovieFragment.CollectionColorChangeCallback,
+        HomeMovieFragment.CallbackForHomeMovieClick, HomeMovieFragment.CallbackForShowAllButtonClick {
     private static final String LOG_TAG = MovieMagicMainActivity.class.getSimpleName()
     private static final String STATE_APP_TITLE = 'app_title'
     private NavigationView mNavigationView
     private TextView mNavPanelUserNameTextView, mNavPanelUserIdTextView
     private Button mNavPanelLoginButton, mNavPanelLogoutButton
     private AccountManager mAccountManager
-
+    private static boolean isUserLoggedIn = false
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -99,12 +100,10 @@ public class MovieMagicMainActivity extends AppCompatActivity implements Navigat
 
 //        setMenuCounter(R.id.nav_home,40)
         //Update the user list menu counter
-        final UpdateMenuCounter updateMenuCounter = new UpdateMenuCounter(this)
-        //Execute the asynctask
-        //program fails if 'Void' is used for parameter, could be because of groovy compiler??
+        //Program fails if 'Void' is used for parameter, could be because of groovy compiler??
         //So to get rid of the problem a 'dummy' value is passed
         //TODO: Need to fix this later
-        updateMenuCounter.execute(['dummy'] as String[])
+         new UpdateMenuCounter(this).execute(['dummy'] as String[])
         //Check to ensure Youtube exists on the device
         final YouTubeInitializationResult result = YouTubeApiServiceUtil.isYouTubeApiServiceAvailable(this)
         if (result != YouTubeInitializationResult.SUCCESS) {
@@ -164,6 +163,11 @@ public class MovieMagicMainActivity extends AppCompatActivity implements Navigat
     protected void onRestart() {
         super.onRestart()
         LogDisplay.callLog(LOG_TAG,'onRestart is called',LogDisplay.MOVIE_MAGIC_MAIN_LOG_FLAG)
+        //Update the user list menu counter
+        //Program fails if 'Void' is used for parameter, could be because of groovy compiler??
+        //So to get rid of the problem a 'dummy' value is passed
+        //TODO: Need to fix this later
+        new UpdateMenuCounter(this).execute(['dummy'] as String[])
     }
 
     @Override
@@ -244,13 +248,16 @@ public class MovieMagicMainActivity extends AppCompatActivity implements Navigat
             loadGridFragment(GlobalStaticVariables.MOVIE_CATEGORY_LOCAL_USER_COLLECTION)
         } else if (id == R.id.nav_tmdb_user_watchlist) {
             showSnackBar(getString(R.string.drawer_menu_tmdb_user_watchlist) + " is clicked")
-            setItemTitle(getString(R.string.drawer_menu_tmdb_user_watchlist))
+            setItemTitle(getString(R.string.drawer_menu_tmdb_user_watchlist) +" (TMDb)")
+            loadGridFragment(GlobalStaticVariables.MOVIE_CATEGORY_TMDB_USER_WATCHLIST)
         } else if (id == R.id.nav_tmdb_user_favourite) {
             showSnackBar(getString(R.string.drawer_menu_tmdb_user_favourite) + " is clicked")
-            setItemTitle(getString(R.string.drawer_menu_tmdb_user_favourite))
+            setItemTitle(getString(R.string.drawer_menu_tmdb_user_favourite) +" (TMDb)")
+            loadGridFragment(GlobalStaticVariables.MOVIE_CATEGORY_TMDB_USER_FAVOURITE)
         } else if (id == R.id.nav_tmdb_user_rated) {
             showSnackBar(getString(R.string.drawer_menu_tmdb_user_rated) + " is clicked")
-            setItemTitle(getString(R.string.drawer_menu_tmdb_user_rated))
+            setItemTitle(getString(R.string.drawer_menu_tmdb_user_rated) +" (TMDb)")
+            loadGridFragment(GlobalStaticVariables.MOVIE_CATEGORY_TMDB_USER_RATED)
         } else if (id == R.id.nav_menu_settings) {
             showSnackBar(getString(R.string.drawer_menu_settings) + " is clicked")
             setItemTitle(getString(R.string.drawer_menu_settings))
@@ -265,7 +272,6 @@ public class MovieMagicMainActivity extends AppCompatActivity implements Navigat
         return true
     }
 
-    
     /**
      * Login logic to allow user to login to TMDb account
      */
@@ -280,21 +286,23 @@ public class MovieMagicMainActivity extends AppCompatActivity implements Navigat
                     // Set the name to the TMDb user name, if it's not present then set the app name
                     if(bundle.getString(AccountManager.KEY_USERDATA)) {
                         mNavPanelUserNameTextView.setText(bundle.getString(AccountManager.KEY_USERDATA))
+                        // Show the user id TextView and set the correct value
+                        mNavPanelUserIdTextView.setVisibility(TextView.VISIBLE)
+                        mNavPanelUserIdTextView.setText(bundle.getString(AccountManager.KEY_ACCOUNT_NAME))
+                        // Hide the Login button
+                        mNavPanelLoginButton.setVisibility(Button.GONE)
+                        // Show the tmdb menu & logout
+                        final Menu tmdbMenu = mNavigationView.getMenu()
+                        tmdbMenu.findItem(R.id.nav_tmdb_user_menu_items).setVisible(true)
+                        tmdbMenu.findItem(R.id.nav_menu_logout).setVisible(true)
+                        // Set the login flag to true
+                        isUserLoggedIn = true
+                        // Now show a message to the user
+                        Toast.makeText(getBaseContext(),'You have successfully logged in to TMDb account',Toast.LENGTH_SHORT).show()
+                        LogDisplay.callLog(LOG_TAG,"Login successful, accout bundle: $bundle",LogDisplay.MOVIE_MAGIC_MAIN_LOG_FLAG)
                     } else {
                         mNavPanelUserNameTextView.setText(getString(R.string.app_name))
                     }
-                    // Show the user id TextView and set the correct value
-                    mNavPanelUserIdTextView.setVisibility(TextView.VISIBLE)
-                    mNavPanelUserIdTextView.setText(bundle.getString(AccountManager.KEY_ACCOUNT_NAME))
-                    // Hide the Login button
-                    mNavPanelLoginButton.setVisibility(Button.GONE)
-                    // Show the tmdb menu & logout
-                    final Menu tmdbMenu = mNavigationView.getMenu()
-                    tmdbMenu.findItem(R.id.nav_tmdb_user_menu_items).setVisible(true)
-                    tmdbMenu.findItem(R.id.nav_menu_logout).setVisible(true)
-                    // Now show a message to the user
-                    Toast.makeText(getBaseContext(),'You have successfully logged in to TMDb account',Toast.LENGTH_SHORT).show()
-                    LogDisplay.callLog(LOG_TAG,"Login successful, accout bundle: $bundle",LogDisplay.MOVIE_MAGIC_MAIN_LOG_FLAG)
                 } catch (Exception e) {
                     LogDisplay.callLog(LOG_TAG,"Login failed, error message: ${e.getMessage()}",LogDisplay.MOVIE_MAGIC_MAIN_LOG_FLAG)
                     Log.e(LOG_TAG, "Error: ${e.message}", e)
@@ -319,7 +327,7 @@ public class MovieMagicMainActivity extends AppCompatActivity implements Navigat
                 mAccountManager.removeAccount(accounts[0], this, new AccountManagerCallback<Bundle>() {
                     @Override
                     void run(AccountManagerFuture<Bundle> future) {
-                        try { //getResult will throw exception if login is not successful
+                        try { //getResult will throw exception if logout is not successful
                             // Remove the Periodic Sync for the account
                             MovieMagicSyncAdapterUtility.removePeriodicSync(accounts[0], context)
                             final Bundle bundle = future.getResult()
@@ -375,6 +383,13 @@ public class MovieMagicMainActivity extends AppCompatActivity implements Navigat
         mNavPanelUserNameTextView.setText(getString(R.string.app_name))
         // Now call this method so that a dummy account gets created and setup for sync adapter
         MovieMagicSyncAdapterUtility.initializeSyncAdapter(this)
+        // Take the user to home screen
+        setItemTitle(getString(R.string.drawer_menu_home))
+        loadHomeFragment()
+        // Set the corresponding item in nav drawer
+        mNavigationView.getMenu().getItem(0).setChecked(true)
+        // Reset the login flag
+        isUserLoggedIn = false
         // Show a message to the user
         showSnackBar('You have successfully logged out from TMDb account')
     }
@@ -386,7 +401,7 @@ public class MovieMagicMainActivity extends AppCompatActivity implements Navigat
         LogDisplay.callLog(LOG_TAG,'checkUserLoginAndPerformAction is called',LogDisplay.MOVIE_MAGIC_MAIN_LOG_FLAG)
         //Check if any account exists
         final Account[] accounts = mAccountManager.getAccountsByType(getString(R.string.authenticator_account_type))
-        final Account newAccount
+//        final Account newAccount
         if(accounts.size() == 1) {
             LogDisplay.callLog(LOG_TAG,"Existing account. Account name->${accounts[0].name}",LogDisplay.MOVIE_MAGIC_MAIN_LOG_FLAG)
             //Application can have only one account, so safe to use the following line
@@ -407,6 +422,8 @@ public class MovieMagicMainActivity extends AppCompatActivity implements Navigat
                 final Menu tmdbMenu = mNavigationView.getMenu()
                 tmdbMenu.findItem(R.id.nav_tmdb_user_menu_items).setVisible(true)
                 tmdbMenu.findItem(R.id.nav_menu_logout).setVisible(true)
+                // Set the login flag
+                isUserLoggedIn = true
             }
         } else if (accounts.size() > 1) {
             LogDisplay.callLog(LOG_TAG,"Error.More than one account, number of accounts -> ${accounts.size()}",LogDisplay.MOVIE_MAGIC_MAIN_LOG_FLAG)
@@ -486,20 +503,41 @@ public class MovieMagicMainActivity extends AppCompatActivity implements Navigat
         //Start the animation
         overridePendingTransition(R.anim.slide_bottom_in_animation,0)
     }
+
+    /**
+     * Fragment callback method for HomeMovie Show All button for In Cinemas or Coming Soon
+     * @param movieCategory The movie category (now_playing or upcoming) of the corresponding button click
+     */
+    @Override
+    void onShowAllButtonClicked(String movieCategory) {
+        if(movieCategory == GlobalStaticVariables.MOVIE_CATEGORY_NOW_PLAYING) {
+            setItemTitle(getString(R.string.drawer_menu_tmdb_nowplaying))
+            // Set the corresponding item in nav drawer
+            mNavigationView.getMenu().getItem(3).setChecked(true)
+        } else if (movieCategory == GlobalStaticVariables.MOVIE_CATEGORY_UPCOMING) {
+            setItemTitle(getString(R.string.drawer_menu_tmdb_upcoming))
+            // Set the corresponding item in nav drawer
+            mNavigationView.getMenu().getItem(4).setChecked(true)
+        } else {
+            LogDisplay.callLog(LOG_TAG,"Unknow category sent by HomeFragment. Category->$movieCategory",LogDisplay.MOVIE_MAGIC_MAIN_LOG_FLAG)
+        }
+        loadGridFragment(movieCategory)
+    }
+
     /**
      * Updating of menu counter is tightly coupled with main_activity_menu activity, so no separate class is
      * created for the AsyncTask
      */
-
     protected class UpdateMenuCounter extends AsyncTask<String, Void, Integer[]> {
         private final Context mContext
 
         public UpdateMenuCounter(Context ctx) {
+            LogDisplay.callLog(LOG_TAG,'UpdateMenuCounter constructor is called',LogDisplay.MOVIE_MAGIC_MAIN_LOG_FLAG)
             mContext = ctx
         }
         @Override
         protected Integer[] doInBackground(String... params) {
-            final Integer[] result = new Integer[4]
+            final Integer[] result = new Integer[7]
             final cursor
             //Get the count for watched
             cursor = mContext.getContentResolver().query(
@@ -542,6 +580,40 @@ public class MovieMagicMainActivity extends AppCompatActivity implements Navigat
             //Close the cursor
             if(cursor) cursor.close()
 
+            // Set the counters for Tmdb List if user is logged in
+            if(isUserLoggedIn) {
+                //Get the count for TMDb Watchlists
+                cursor = mContext.getContentResolver().query(
+                        MovieMagicContract.MovieBasicInfo.CONTENT_URI,
+                        null,
+                        "$MovieMagicContract.MovieBasicInfo.COLUMN_MOVIE_CATEGORY = ? ",
+                        [GlobalStaticVariables.MOVIE_CATEGORY_TMDB_USER_WATCHLIST] as String[],
+                        null)
+                if(cursor.moveToFirst()) result[4] = cursor.getCount()
+                //Close the cursor
+                if(cursor) cursor.close()
+                //Get the count for TMDb Favourites
+                cursor = mContext.getContentResolver().query(
+                        MovieMagicContract.MovieBasicInfo.CONTENT_URI,
+                        null,
+                        "$MovieMagicContract.MovieBasicInfo.COLUMN_MOVIE_CATEGORY = ? ",
+                        [GlobalStaticVariables.MOVIE_CATEGORY_TMDB_USER_FAVOURITE] as String[],
+                        null)
+                if(cursor.moveToFirst()) result[5] = cursor.getCount()
+                //Close the cursor
+                if(cursor) cursor.close()
+                //Get the count for TMDb Rated
+                cursor = mContext.getContentResolver().query(
+                        MovieMagicContract.MovieBasicInfo.CONTENT_URI,
+                        null,
+                        "$MovieMagicContract.MovieBasicInfo.COLUMN_MOVIE_CATEGORY = ? ",
+                        [GlobalStaticVariables.MOVIE_CATEGORY_TMDB_USER_RATED] as String[],
+                        null)
+                if(cursor.moveToFirst()) result[6] = cursor.getCount()
+                //Close the cursor
+                if(cursor) cursor.close()
+            }
+
             return result
         }
 
@@ -559,6 +631,19 @@ public class MovieMagicMainActivity extends AppCompatActivity implements Navigat
             //Set the collection counter
             final TextView collectionView = (TextView) mNavigationView.getMenu().findItem(R.id.nav_user_collection).getActionView()
             collectionView.setText(result[3] > 0 ? String.valueOf(result[3]) : null)
+
+            // Set the TMDb lists counter only if the user is logged in
+            if(isUserLoggedIn) {
+                //Set the TMDb Watchlists counter
+                final TextView tmdbWatchlistView = (TextView) mNavigationView.getMenu().findItem(R.id.nav_tmdb_user_watchlist).getActionView()
+                tmdbWatchlistView.setText(result[4] > 0 ? String.valueOf(result[4]) : null)
+                //Set the TMDb Favourites counter
+                final TextView tmdbFavouriteView = (TextView) mNavigationView.getMenu().findItem(R.id.nav_tmdb_user_favourite).getActionView()
+                tmdbFavouriteView.setText(result[5] > 0 ? String.valueOf(result[5]) : null)
+                //Set the TMDb Rated counter
+                final TextView tmdbRatedView = (TextView) mNavigationView.getMenu().findItem(R.id.nav_tmdb_user_rated).getActionView()
+                tmdbRatedView.setText(result[6] > 0 ? String.valueOf(result[6]) : null)
+            }
         }
     }
 

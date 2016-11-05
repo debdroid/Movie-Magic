@@ -89,6 +89,7 @@ class TestMovieMagicDatabase extends AndroidTestCase {
         columeList << MovieMagicContract.MovieBasicInfo.COLUMN_MOVIE_LIST_TYPE
         columeList << MovieMagicContract.MovieBasicInfo.COLUMN_DETAIL_DATA_PRESENT_FLAG
         columeList << MovieMagicContract.MovieBasicInfo.COLUMN_SIMILAR_MOVIE_LINK_ID
+        columeList << MovieMagicContract.MovieBasicInfo.COLUMN_RECOMMENDATION_MOVIE_LINK_ID
         columeList << MovieMagicContract.MovieBasicInfo.COLUMN_COLLECTION_ID
         columeList << MovieMagicContract.MovieBasicInfo.COLUMN_COLLECTION_NAME
         columeList << MovieMagicContract.MovieBasicInfo.COLUMN_COLLECTION_POSTER_PATH
@@ -308,7 +309,7 @@ class TestMovieMagicDatabase extends AndroidTestCase {
         columeList << MovieMagicContract.MoviePersonInfo.COLUMN_PERSON_PROFILE_PATH
         columeList << MovieMagicContract.MoviePersonInfo.COLUMN_PERSON_IMDB_ID
         columeList << MovieMagicContract.MoviePersonInfo.COLUMN_PERSON_POPULARITY
-        columeList << MovieMagicContract.MoviePersonInfo.COLUMN_CPERSON_PRESENT_FLAG
+        columeList << MovieMagicContract.MoviePersonInfo.COLUMN_PERSON_PRESENT_FLAG
         columeList << MovieMagicContract.MoviePersonInfo.COLUMN_PERSON_CREATE_TIMESTAMP
         columeList << MovieMagicContract.MoviePersonInfo.COLUMN_PERSON_UPDATE_TIMESTAMP
 

@@ -12,7 +12,7 @@ import com.moviemagic.dpaul.android.app.backgroundmodules.LogDisplay
 import groovy.transform.CompileStatic
 
 @CompileStatic
-class CollectionMovieActivity extends AppCompatActivity implements GridMovieFragment.Callback, GridMovieFragment.CollectionColorChangeCallback {
+class CollectionMovieActivity extends AppCompatActivity implements GridMovieFragment.CallbackForGridItemClick, GridMovieFragment.CollectionColorChangeCallback {
 
     private static final String LOG_TAG = CollectionMovieActivity.class.getSimpleName()
 

@@ -48,11 +48,11 @@ class MovieMagicContract {
     static final String PATH_MOVIE_REVIEW = 'movie_review'
     static final String PATH_MOVIE_RELEASE_DATE = 'movie_release_date'
     static final String PATH_MOVIE_USER_LIST_FLAG = 'movie_user_list_flag'
-    static final String PATH_MOVIE_COLLECTION = 'movie_collection'
     static final String PATH_MOVIE_PERSON_INFO = 'movie_person_info'
     static final String PATH_MOVIE_PERSON_CAST = 'movie_person_cast'
     static final String PATH_MOVIE_PERSON_CREW = 'movie_person_crew'
     static final String PATH_MOVIE_PERSON_IMAGE = 'movie_person_image'
+    static final String PATH_MOVIE_COLLECTION = 'movie_collection'
 
     /**
         Inner class that defines the table contents of the movie_basic_info table
@@ -96,6 +96,8 @@ class MovieMagicContract {
         static final String COLUMN_DETAIL_DATA_PRESENT_FLAG = 'detail_data_present_flag'
         //Column to track similar movies (Zero for original movie id)
         static final String COLUMN_SIMILAR_MOVIE_LINK_ID = 'similar_movie_link_id'
+        //Column to track recommendation movies (Zero for original movie id)
+        static final String COLUMN_RECOMMENDATION_MOVIE_LINK_ID = 'recommendation_movie_link_id'
 
         //Following fields are fetched for each movie (part of detail) and added later
         //Column to store collection id
@@ -492,7 +494,7 @@ class MovieMagicContract {
         static final String COLUMN_PERSON_PROFILE_PATH = 'person_profile_path'
         static final String COLUMN_PERSON_IMDB_ID = 'person_imdb_id'
         static final String COLUMN_PERSON_POPULARITY = 'person_popularity'
-        static final String COLUMN_CPERSON_PRESENT_FLAG = 'cperson_info_present_flag'
+        static final String COLUMN_PERSON_PRESENT_FLAG = 'person_info_present_flag'
         //Column to store record creation date
         static final String COLUMN_PERSON_CREATE_TIMESTAMP = 'create_timestamp'
         //Column to store record update date

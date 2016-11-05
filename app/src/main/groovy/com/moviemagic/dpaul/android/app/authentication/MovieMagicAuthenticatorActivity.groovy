@@ -227,6 +227,7 @@ class MovieMagicAuthenticatorActivity extends AccountAuthenticatorActivity {
                         .tmdbUserSignIn(username, password, mAuthTokenType)
                 final String authtoken = bundle.getString(GlobalStaticVariables.TMDB_AUTH_TOKEN)
                 final String tmdbUserName = bundle.getString(GlobalStaticVariables.TMDB_USER_NAME)
+                final String tmdbAccountId = bundle.getString(GlobalStaticVariables.TMDB_USER_ACCOUNT_ID)
                 final String accountType = getIntent().getStringExtra(AccountManager.KEY_ACCOUNT_TYPE)
                 if(!bundle.getBoolean(GlobalStaticVariables.TMDB_AUTH_ERROR_FLAG)) {
                     LogDisplay.callLog(LOG_TAG,"AuthToken recevied successfully->$authtoken",LogDisplay.MOVIE_MAGIC_AUTHENTICATOR_ACTIVITY_LOG_FLAG)
@@ -235,6 +236,7 @@ class MovieMagicAuthenticatorActivity extends AccountAuthenticatorActivity {
                     data.putString(AccountManager.KEY_AUTHTOKEN, authtoken)
                     data.putString(AccountManager.KEY_PASSWORD, password)
                     data.putString(AccountManager.KEY_USERDATA, tmdbUserName)
+                    data.putString(GlobalStaticVariables.TMDB_USERDATA_ACCOUNT_ID, tmdbAccountId)
                 } else {
                     LogDisplay.callLog(LOG_TAG,"Not able retrive AuthToken. Error message->${bundle.getString(GlobalStaticVariables.TMDB_AUTH_ERROR_MSG)}",LogDisplay.MOVIE_MAGIC_AUTHENTICATOR_ACTIVITY_LOG_FLAG)
                     data.putString(AccountManager.KEY_ERROR_MESSAGE, bundle.getString(GlobalStaticVariables.TMDB_AUTH_ERROR_MSG))
@@ -280,6 +282,7 @@ class MovieMagicAuthenticatorActivity extends AccountAuthenticatorActivity {
         final String accountPassword = intent.getStringExtra(AccountManager.KEY_PASSWORD)
         final String accountType = intent.getStringExtra(AccountManager.KEY_ACCOUNT_TYPE)
         final String tmdbUSerName = intent.getStringExtra(AccountManager.KEY_USERDATA)
+        final String tmdbAccountId = intent.getStringExtra(GlobalStaticVariables.TMDB_USERDATA_ACCOUNT_ID)
         LogDisplay.callLog(LOG_TAG,"finishLogin:Account name->$accountName & Account Type->$accountType",LogDisplay.MOVIE_MAGIC_AUTHENTICATOR_ACTIVITY_LOG_FLAG)
         final Account account = new Account(accountName, accountType)
 
@@ -302,7 +305,7 @@ class MovieMagicAuthenticatorActivity extends AccountAuthenticatorActivity {
                                 // Remove the Periodic Sync for the account
                                 MovieMagicSyncAdapterUtility.removePeriodicSync(accounts[i], context)
                                 // Add the account and authToken
-                                addAcountAndAuthToken(intent, account, authtoken, tmdbUSerName, accountPassword)
+                                addAcountAndAuthToken(intent, account, authtoken, tmdbUSerName, tmdbAccountId, accountPassword)
                             } catch (Exception e) {
                                 LogDisplay.callLog(LOG_TAG,"Remove account failed, error message: ${e.getMessage()}",LogDisplay.MOVIE_MAGIC_AUTHENTICATOR_ACTIVITY_LOG_FLAG)
                                 Toast.makeText(getBaseContext(), 'Cannot perform the operation, please try again later.', Toast.LENGTH_SHORT).show()
@@ -320,7 +323,7 @@ class MovieMagicAuthenticatorActivity extends AccountAuthenticatorActivity {
                                 // Remove the Periodic Sync for the account
                                 MovieMagicSyncAdapterUtility.removePeriodicSync(accounts[i], context)
                                 // Add the account and authToken
-                                addAcountAndAuthToken(intent, account, authtoken, tmdbUSerName, accountPassword)
+                                addAcountAndAuthToken(intent, account, authtoken, tmdbUSerName, tmdbAccountId, accountPassword)
                             } else {
                                 LogDisplay.callLog(LOG_TAG,'Remove account failed',LogDisplay.MOVIE_MAGIC_AUTHENTICATOR_ACTIVITY_LOG_FLAG)
                                 Toast.makeText(getBaseContext(), 'Cannot perform the operation, please try again later.', Toast.LENGTH_SHORT).show()
@@ -340,13 +343,15 @@ class MovieMagicAuthenticatorActivity extends AccountAuthenticatorActivity {
      * @param account The account to be added
      * @param authtoken The authToken to set for the account
      * @param tmdbUSerName Name of the TMDb user which is stored as user data
+     * @param tmdbAccountId Account id of Tmdb account which is stored as user data
      * @param accountPassword Password of the account
      */
-    private addAcountAndAuthToken(Intent intent, Account account, String authtoken, String tmdbUSerName, String accountPassword) {
+    private addAcountAndAuthToken(Intent intent, Account account, String authtoken, String tmdbUSerName, String tmdbAccountId, String accountPassword) {
         // Since it's a new account so create the account and set the authToken
         // (Not setting the auth token will cause another call to the server to authenticate the user)
         final Bundle userDataBundle = new Bundle()
         userDataBundle.putString(AccountManager.KEY_USERDATA,tmdbUSerName)
+        userDataBundle.putString(GlobalStaticVariables.TMDB_USERDATA_ACCOUNT_ID,tmdbAccountId)
         mAccountManager.addAccountExplicitly(account, accountPassword, userDataBundle)
         mAccountManager.setAuthToken(account, mAuthTokenType, authtoken)
         //Now configure the Periodic Sync for the new account

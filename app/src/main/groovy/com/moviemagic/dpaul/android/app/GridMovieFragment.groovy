@@ -45,7 +45,7 @@ class GridMovieFragment extends Fragment implements LoaderManager.LoaderCallback
     //Re-try counter in case API call failed
     private int mReTryCounter = 0
 
-    private Callback mCallback
+    private CallbackForGridItemClick mCallbackForGridItemClick
     private CollectionColorChangeCallback mCollectionColorChangeCallback
     private boolean mCollectionGridFlag = false
     private RecyclerView mRecyclerView
@@ -123,7 +123,7 @@ class GridMovieFragment extends Fragment implements LoaderManager.LoaderCallback
                 new MovieGridRecyclerAdapter.MovieGridRecyclerAdapterOnClickHandler(){
                     @Override
                     void onClick(int movieId, MovieGridRecyclerAdapter.MovieGridRecyclerAdapterViewHolder viewHolder) {
-                        mCallback.onMovieGridItemSelected(movieId, mMovieCategory, viewHolder)
+                        mCallbackForGridItemClick.onMovieGridItemSelected(movieId, mMovieCategory, viewHolder)
                     }
                 })
         mRecyclerView.setAdapter(mGridRecyclerAdapter)
@@ -300,11 +300,11 @@ class GridMovieFragment extends Fragment implements LoaderManager.LoaderCallback
         // the callback interface. If not, it throws an exception
         try {
             if(context instanceof Activity) {
-                mCallback = (Callback) context
+                mCallbackForGridItemClick = (CallbackForGridItemClick) context
             }
         } catch (ClassCastException e) {
             throw new ClassCastException(getActivity().toString()
-                    + " must implement Callback interface")
+                    + " must implement CallbackForGridItemClick interface")
         }
         try {
             if(context instanceof Activity) {
@@ -312,7 +312,7 @@ class GridMovieFragment extends Fragment implements LoaderManager.LoaderCallback
             }
         } catch (ClassCastException e) {
             throw new ClassCastException(getActivity().toString()
-                    + " must implement Callback interface")
+                    + " must implement CollectionColorChangeCallback interface")
         }
     }
     /**
@@ -320,9 +320,9 @@ class GridMovieFragment extends Fragment implements LoaderManager.LoaderCallback
      * implement. This mechanism allows activities to be notified of item
      * selection.
      */
-    public interface Callback {
+    public interface CallbackForGridItemClick {
         /**
-         * GridFragmentCallback when an item has been selected.
+         * GridFragment Callback when an item has been selected.
          */
         public void onMovieGridItemSelected(int movieId, String movieCategory, MovieGridRecyclerAdapter.MovieGridRecyclerAdapterViewHolder viewHolder)
     }
@@ -334,7 +334,7 @@ class GridMovieFragment extends Fragment implements LoaderManager.LoaderCallback
      */
     public interface CollectionColorChangeCallback {
         /**
-         * GridFragmentCallback to change color for collection grid when data is loaded
+         * GridFragment Callback to change color for collection grid when data is loaded
          */
         public void notifyCollectionColorChange()
     }

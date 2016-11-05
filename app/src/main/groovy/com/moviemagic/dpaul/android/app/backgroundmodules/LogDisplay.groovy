@@ -31,9 +31,9 @@ class LogDisplay {
     public static final boolean GRID_ADAPTER_LOG_FLAG = false
     public static final boolean GRID_RECYCLER_ADAPTER_LOG_FLAG = false
     public static final boolean LOAD_MORE_MOVIES_LOG_FLAG = false
-    public static final boolean DETAIL_MOVIE_ACTIVITY_LOG_FLAG = false
-    public static final boolean DETAIL_MOVIE_FRAGMENT_LOG_FLAG = false
-    public static final boolean LOAD_MOVIE_DETAILS_LOG_FLAG = false
+    public static final boolean DETAIL_MOVIE_ACTIVITY_LOG_FLAG = true
+    public static final boolean DETAIL_MOVIE_FRAGMENT_LOG_FLAG = true
+    public static final boolean LOAD_MOVIE_DETAILS_LOG_FLAG = true
     public static final boolean MOVIE_MAGIC_YOUTUBE_FRAGMENT_LOG_FLAG = false
     public static final boolean SIMILAR_MOVIE_ADAPTER_LOG_FLAG = false
     public static final boolean MOVIE_CAST_ADAPTER_LOG_FLAG = false

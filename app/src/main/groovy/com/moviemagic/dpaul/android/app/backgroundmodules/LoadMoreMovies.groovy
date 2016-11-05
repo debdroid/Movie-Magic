@@ -52,7 +52,7 @@ class LoadMoreMovies extends AsyncTask<String, Void, Void>{
             //This is to ensure we have valid data page
             if (mCurrentPage <= totalPage) {
                 LogDisplay.callLog(LOG_TAG, "JSON DATA for $movieCategory -> $jsonData",LogDisplay.LOAD_MORE_MOVIES_LOG_FLAG)
-                movieList = JsonParse.parseMovieListJson(jsonData, movieCategory,GlobalStaticVariables.MOVIE_LIST_TYPE_TMDB_PUBLIC)
+                movieList = JsonParse.parseMovieListJson(jsonData, movieCategory,GlobalStaticVariables.MOVIE_LIST_TYPE_TMDB_PUBLIC,Utility.getTodayDate())
                 if(movieList) {
                     final ContentValues[] cv = movieList as ContentValues[]
                     final int insertCount = mContentResolver.bulkInsert(MovieMagicContract.MovieBasicInfo.CONTENT_URI, cv)

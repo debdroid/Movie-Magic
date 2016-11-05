@@ -36,6 +36,7 @@ class LoadMovieDetails extends AsyncTask<ArrayList<Integer>, Void, Void> {
         isForHomeList = params[2]
         LogDisplay.callLog(LOG_TAG, "Movie ID list param-> $movieIdList", LogDisplay.LOAD_MOVIE_DETAILS_LOG_FLAG)
         LogDisplay.callLog(LOG_TAG, "Movie row id list param-> $movieBasicRowIdList", LogDisplay.LOAD_MOVIE_DETAILS_LOG_FLAG)
+        LogDisplay.callLog(LOG_TAG, "isForHomeList param-> ${isForHomeList.get(0)}", LogDisplay.LOAD_MOVIE_DETAILS_LOG_FLAG)
 
         //We expect same number of arguments in both the ArrayList. If that is not the case then return null
         if (movieIdList.size() > 0 && (movieIdList.size() != movieBasicRowIdList.size())) {
@@ -45,7 +46,7 @@ class LoadMovieDetails extends AsyncTask<ArrayList<Integer>, Void, Void> {
         for (i in 0..(movieIdList.size() - 1)) {
             LogDisplay.callLog(LOG_TAG, "i -> $i & item count is -> ${movieIdList.size()}", LogDisplay.LOAD_MOVIE_DETAILS_LOG_FLAG)
             //TMDb api example (movie with appended response)
-            //https://api.themoviedb.org/3/movie/240?api_key=key&append_to_response=similar,credits,images,videos,release_dates,reviews
+            //https://api.themoviedb.org/3/movie/240?api_key=key&append_to_response=similar,credits,images,videos,release_dates,reviews,recommendations
 
             try {
                 final Uri.Builder uriBuilder = Uri.parse(GlobalStaticVariables.TMDB_MOVIE_BASE_URL).buildUpon()
@@ -65,7 +66,7 @@ class LoadMovieDetails extends AsyncTask<ArrayList<Integer>, Void, Void> {
                  * **/
                 LogDisplay.callLog(LOG_TAG, "JSON DATA for movie id ${movieIdList.get(i)} & row id ${movieBasicRowIdList.get(i)} -> $jsonData", LogDisplay.LOAD_MOVIE_DETAILS_LOG_FLAG)
                 final ContentValues contentMovieBasicInfoValues = JsonParse.parseAdditionalBasicMovieData(jsonData)
-//            //Update the indicator to indicate data is loaded
+                //Update the indicator to indicate data is loaded
                 if (contentMovieBasicInfoValues) {
                     if (movieIdList.get(i) && movieBasicRowIdList.get(i) == 0) {
                         //This part of the code will be executed for person's crew and cast movie only, so safe to use the
@@ -91,27 +92,27 @@ class LoadMovieDetails extends AsyncTask<ArrayList<Integer>, Void, Void> {
                                 "$MovieMagicContract.MovieBasicInfo._ID = ?",
                                 [Integer.toString(movieBasicRowIdList.get(i))] as String[])
                         if (movieBasicInfoUpdateCount != 1) {
-                            LogDisplay.callLog(LOG_TAG, "Additional details Update in movie_basic_info failed. Update Count->$movieBasicInfoUpdateCount. Movie row id->${movieBasicRowIdList.get(i)}", LogDisplay.LOAD_MOVIE_DETAILS_LOG_FLAG)
-                        } else { //If the return value is 1, indicate successful insert
-                            LogDisplay.callLog(LOG_TAG, "Additional details Update in movie_basic_info successful. Update Count->$movieBasicInfoUpdateCount", LogDisplay.LOAD_MOVIE_DETAILS_LOG_FLAG)
+                            LogDisplay.callLog(LOG_TAG, "Additional details update in movie_basic_info failed. Update Count->$movieBasicInfoUpdateCount. Movie row id->${movieBasicRowIdList.get(i)}", LogDisplay.LOAD_MOVIE_DETAILS_LOG_FLAG)
+                        } else { //If the return value is 1, indicate successful update
+                            LogDisplay.callLog(LOG_TAG, "Additional details update in movie_basic_info successful. Update Count->$movieBasicInfoUpdateCount", LogDisplay.LOAD_MOVIE_DETAILS_LOG_FLAG)
                         }
                     }
                 } else {
                     LogDisplay.callLog(LOG_TAG, 'JsonParse.parseAdditionalBasicMovieData returned null', LogDisplay.LOAD_MOVIE_DETAILS_LOG_FLAG)
                 }
 
-                final boolean allOperationSuccessullFlag = true
+                final boolean allOperationSuccessfulFlag = true
                 /**
                  * Process and load (insert) the similar movies
                  * **/
                 final ContentValues[] similarMovieContentValues = JsonParse.parseSimilarMovieListJson(jsonData, movieIdList.get(i)) as ContentValues[]
-                if (similarMovieContentValues && allOperationSuccessullFlag) {
+                if (similarMovieContentValues && allOperationSuccessfulFlag) {
                     final int similarMovieCount = mContentResolver.bulkInsert(MovieMagicContract.MovieBasicInfo.CONTENT_URI, similarMovieContentValues)
                     if (similarMovieCount > 0) {
                         LogDisplay.callLog(LOG_TAG, "Insert similar movie in movie_basic_info successful. Insert count->$similarMovieCount", LogDisplay.LOAD_MOVIE_DETAILS_LOG_FLAG)
                     } else {
                         LogDisplay.callLog(LOG_TAG, "Insert similar movie in movie_basic_info failed. Insert count->$similarMovieCount", LogDisplay.LOAD_MOVIE_DETAILS_LOG_FLAG)
-                        allOperationSuccessullFlag = false
+                        allOperationSuccessfulFlag = false
                     }
                 } else {
                     LogDisplay.callLog(LOG_TAG, 'JsonParse.parseSimilarMovieListJson returned null', LogDisplay.LOAD_MOVIE_DETAILS_LOG_FLAG)
@@ -120,101 +121,124 @@ class LoadMovieDetails extends AsyncTask<ArrayList<Integer>, Void, Void> {
                 /**
                  * Process and load (insert) the movie cast data
                  * **/
-                final ContentValues[] movieCastContentValues = JsonParse.praseMovieCastJson(jsonData, movieIdList.get(i), movieBasicRowIdList.get(i)) as ContentValues[]
-                if (movieCastContentValues && allOperationSuccessullFlag) {
+                final ContentValues[] movieCastContentValues = JsonParse.parseMovieCastJson(jsonData, movieIdList.get(i), movieBasicRowIdList.get(i)) as ContentValues[]
+                if (movieCastContentValues && allOperationSuccessfulFlag) {
                     final int movieCastCount = mContentResolver.bulkInsert(MovieMagicContract.MovieCast.CONTENT_URI, movieCastContentValues)
                     if (movieCastCount > 0) {
                         LogDisplay.callLog(LOG_TAG, "Insert in movie_cast successful. Insert count->$movieCastCount", LogDisplay.LOAD_MOVIE_DETAILS_LOG_FLAG)
                     } else {
                         LogDisplay.callLog(LOG_TAG, "Insert in movie_cast failed. Insert count->$movieCastCount", LogDisplay.LOAD_MOVIE_DETAILS_LOG_FLAG)
-                        allOperationSuccessullFlag = false
+                        allOperationSuccessfulFlag = false
                     }
                 } else {
-                    LogDisplay.callLog(LOG_TAG, 'JsonParse.praseMovieCastJson returned null', LogDisplay.LOAD_MOVIE_DETAILS_LOG_FLAG)
+                    LogDisplay.callLog(LOG_TAG, 'JsonParse.parseMovieCastJson returned null', LogDisplay.LOAD_MOVIE_DETAILS_LOG_FLAG)
                 }
 
                 /**
                  * Process and load (insert) the movie crew data
                  * **/
-                final ContentValues[] movieCrewContentValues = JsonParse.praseMovieCrewJson(jsonData, movieIdList.get(i), movieBasicRowIdList.get(i)) as ContentValues[]
-                if (movieCrewContentValues && allOperationSuccessullFlag) {
+                final ContentValues[] movieCrewContentValues = JsonParse.parseMovieCrewJson(jsonData, movieIdList.get(i), movieBasicRowIdList.get(i)) as ContentValues[]
+                if (movieCrewContentValues && allOperationSuccessfulFlag) {
                     final int movieCrewCount = mContentResolver.bulkInsert(MovieMagicContract.MovieCrew.CONTENT_URI, movieCrewContentValues)
                     if (movieCrewCount > 0) {
                         LogDisplay.callLog(LOG_TAG, "Insert in movie_crew successful. Insert count->$movieCrewCount", LogDisplay.LOAD_MOVIE_DETAILS_LOG_FLAG)
                     } else {
                         LogDisplay.callLog(LOG_TAG, "Insert in movie_crew failed. Insert count->$movieCrewCount", LogDisplay.LOAD_MOVIE_DETAILS_LOG_FLAG)
-                        allOperationSuccessullFlag = false
+                        allOperationSuccessfulFlag = false
                     }
                 } else {
-                    LogDisplay.callLog(LOG_TAG, 'JsonParse.praseMovieCrewJson returned null', LogDisplay.LOAD_MOVIE_DETAILS_LOG_FLAG)
+                    LogDisplay.callLog(LOG_TAG, 'JsonParse.parseMovieCrewJson returned null', LogDisplay.LOAD_MOVIE_DETAILS_LOG_FLAG)
                 }
 
                 /**
                  * Process and load (insert) the movie image data
                  * **/
-                final ContentValues[] movieImageContentValues = JsonParse.praseMovieImageJson(jsonData, movieIdList.get(i), movieBasicRowIdList.get(i)) as ContentValues[]
-                if (movieImageContentValues && allOperationSuccessullFlag) {
+                final ContentValues[] movieImageContentValues = JsonParse.parseMovieImageJson(jsonData, movieIdList.get(i), movieBasicRowIdList.get(i)) as ContentValues[]
+                if (movieImageContentValues && allOperationSuccessfulFlag) {
                     final int movieImageCount = mContentResolver.bulkInsert(MovieMagicContract.MovieImage.CONTENT_URI, movieImageContentValues)
                     if (movieImageCount > 0) {
                         LogDisplay.callLog(LOG_TAG, "Insert in movie_image successful. Insert count->$movieImageCount", LogDisplay.LOAD_MOVIE_DETAILS_LOG_FLAG)
                     } else {
                         LogDisplay.callLog(LOG_TAG, "Insert in movie_image failed. Insert count->$movieImageCount", LogDisplay.LOAD_MOVIE_DETAILS_LOG_FLAG)
-                        allOperationSuccessullFlag = false
+                        allOperationSuccessfulFlag = false
                     }
                 } else {
-                    LogDisplay.callLog(LOG_TAG, 'JsonParse.praseMovieImageJson returned null', LogDisplay.LOAD_MOVIE_DETAILS_LOG_FLAG)
+                    LogDisplay.callLog(LOG_TAG, 'JsonParse.parseMovieImageJson returned null', LogDisplay.LOAD_MOVIE_DETAILS_LOG_FLAG)
                 }
 
                 /**
                  * Process and load (insert) the movie video data
                  * **/
-                final ContentValues[] movieVideoContentValues = JsonParse.praseMovieVideoJson(jsonData, movieIdList.get(i), movieBasicRowIdList.get(i), isForHomeList.get(0)) as ContentValues[]
-                if (movieVideoContentValues && allOperationSuccessullFlag) {
+                final ContentValues[] movieVideoContentValues = JsonParse.parseMovieVideoJson(jsonData, movieIdList.get(i), movieBasicRowIdList.get(i), isForHomeList.get(0)) as ContentValues[]
+                if (movieVideoContentValues && allOperationSuccessfulFlag) {
                     final int movieVideoCount = mContentResolver.bulkInsert(MovieMagicContract.MovieVideo.CONTENT_URI, movieVideoContentValues)
                     if (movieVideoCount > 0) {
                         LogDisplay.callLog(LOG_TAG, "Insert in movie_video successful. Insert count->$movieVideoCount", LogDisplay.LOAD_MOVIE_DETAILS_LOG_FLAG)
                     } else {
                         LogDisplay.callLog(LOG_TAG, "Insert in movie_video failed. Insert count->$movieVideoCount", LogDisplay.LOAD_MOVIE_DETAILS_LOG_FLAG)
-                        allOperationSuccessullFlag = false
+                        allOperationSuccessfulFlag = false
                     }
                 } else {
-                    LogDisplay.callLog(LOG_TAG, 'JsonParse.praseMovieVideoJson returned null', LogDisplay.LOAD_MOVIE_DETAILS_LOG_FLAG)
+                    LogDisplay.callLog(LOG_TAG, 'JsonParse.parseMovieVideoJson returned null', LogDisplay.LOAD_MOVIE_DETAILS_LOG_FLAG)
                 }
 
                 /**
                  * Process and load (insert) the movie release date data
                  * **/
-                final ContentValues[] movieReleaseContentValues = JsonParse.praseMovieReleaseDateJson(jsonData, movieIdList.get(i), movieBasicRowIdList.get(i)) as ContentValues[]
-                if (movieReleaseContentValues && allOperationSuccessullFlag) {
+                final ContentValues[] movieReleaseContentValues = JsonParse.parseMovieReleaseDateJson(jsonData, movieIdList.get(i), movieBasicRowIdList.get(i)) as ContentValues[]
+                if (movieReleaseContentValues && allOperationSuccessfulFlag) {
                     final int movieReleaseCount = mContentResolver.bulkInsert(MovieMagicContract.MovieReleaseDate.CONTENT_URI, movieReleaseContentValues)
                     if (movieReleaseCount > 0) {
                         LogDisplay.callLog(LOG_TAG, "Insert in movie_release_date successful. Insert count->$movieReleaseCount", LogDisplay.LOAD_MOVIE_DETAILS_LOG_FLAG)
                     } else {
                         LogDisplay.callLog(LOG_TAG, "Insert in movie_release_date failed. Insert count->$movieReleaseCount", LogDisplay.LOAD_MOVIE_DETAILS_LOG_FLAG)
-                        allOperationSuccessullFlag = false
+                        allOperationSuccessfulFlag = false
                     }
                 } else {
-                    LogDisplay.callLog(LOG_TAG, 'JsonParse.praseMovieReleaseDateJson returned null', LogDisplay.LOAD_MOVIE_DETAILS_LOG_FLAG)
+                    LogDisplay.callLog(LOG_TAG, 'JsonParse.parseMovieReleaseDateJson returned null', LogDisplay.LOAD_MOVIE_DETAILS_LOG_FLAG)
                 }
 
                 /**
                  * Process and load (insert) the movie review data
                  * **/
-                final ContentValues[] movieReviewContentValues = JsonParse.praseMovieReviewJson(jsonData, movieIdList.get(i), movieBasicRowIdList.get(i)) as ContentValues[]
-                if (movieReviewContentValues && allOperationSuccessullFlag) {
+                final ContentValues[] movieReviewContentValues = JsonParse.parseMovieReviewJson(jsonData, movieIdList.get(i), movieBasicRowIdList.get(i)) as ContentValues[]
+                if (movieReviewContentValues && allOperationSuccessfulFlag) {
                     final int movieReviewCount = mContentResolver.bulkInsert(MovieMagicContract.MovieReview.CONTENT_URI, movieReviewContentValues)
                     if (movieReviewCount > 0) {
                         LogDisplay.callLog(LOG_TAG, "Insert in movie_review successful. Insert count->$movieReviewCount", LogDisplay.LOAD_MOVIE_DETAILS_LOG_FLAG)
                     } else {
                         LogDisplay.callLog(LOG_TAG, "Insert in movie_review failed. Insert count->$movieReviewCount", LogDisplay.LOAD_MOVIE_DETAILS_LOG_FLAG)
-                        allOperationSuccessullFlag = false
+                        allOperationSuccessfulFlag = false
                     }
                 } else {
-                    LogDisplay.callLog(LOG_TAG, 'JsonParse.praseMovieReviewJson returned null', LogDisplay.LOAD_MOVIE_DETAILS_LOG_FLAG)
+                    LogDisplay.callLog(LOG_TAG, 'JsonParse.parseMovieReviewJson returned null', LogDisplay.LOAD_MOVIE_DETAILS_LOG_FLAG)
+                }
+
+                /**
+                 * Process and load (insert) the recommendations movies only when user check the details of the movie
+                 * (i.e. not load anything while loading data for home page. It also ensures we do not download recommendations of recommended movie!)
+                 * **/
+                if(isForHomeList.get(0) == GlobalStaticVariables.MOVIE_MAGIC_FLAG_FALSE) {
+                    final ContentValues[] recommendationsMovieContentValues = JsonParse.parseRecommendationsMovieListJson(jsonData, movieIdList.get(i)) as ContentValues[]
+                    if (recommendationsMovieContentValues && allOperationSuccessfulFlag) {
+                        final int recommendationsMovieCount = mContentResolver.bulkInsert(MovieMagicContract.MovieBasicInfo.CONTENT_URI, recommendationsMovieContentValues)
+                        if (recommendationsMovieCount > 0) {
+                            LogDisplay.callLog(LOG_TAG, "Insert recommendations movie in movie_basic_info successful. Insert count->$recommendationsMovieCount", LogDisplay.LOAD_MOVIE_DETAILS_LOG_FLAG)
+                            // Now go and load the details of recommendations movies
+                            loadRecommendationMovieDetails(recommendationsMovieContentValues)
+                        } else {
+                            LogDisplay.callLog(LOG_TAG, "Insert recommendations movie in movie_basic_info failed. Insert count->$recommendationsMovieCount", LogDisplay.LOAD_MOVIE_DETAILS_LOG_FLAG)
+                            allOperationSuccessfulFlag = false
+                        }
+                    } else {
+                        LogDisplay.callLog(LOG_TAG, 'JsonParse.parseRecommendationsMovieListJson returned null', LogDisplay.LOAD_MOVIE_DETAILS_LOG_FLAG)
+                    }
+                } else {
+                    LogDisplay.callLog(LOG_TAG, "isForHomeList is true (flag value ->${isForHomeList.get(0)}), so skipped recommendations movie processing.", LogDisplay.LOAD_MOVIE_DETAILS_LOG_FLAG)
                 }
 
                 //Reset the data present flag of movie_basic_info if any problem faced during operation
-                if (!allOperationSuccessullFlag) {
+                if (!allOperationSuccessfulFlag) {
                     final ContentValues movieBasicInfoUpdateData = new ContentValues()
                     movieBasicInfoUpdateData.put(MovieMagicContract.MovieBasicInfo.COLUMN_DETAIL_DATA_PRESENT_FLAG, GlobalStaticVariables.MOVIE_MAGIC_FLAG_FALSE)
                     final int movieBasicInfoFlagResetCount = mContentResolver.update(
@@ -252,6 +276,59 @@ class LoadMovieDetails extends AsyncTask<ArrayList<Integer>, Void, Void> {
             }
         }
         return null
+    }
+
+    /**
+     * This method loads the details of recommendation movies. Since recommendation movies are only used for home page display purpose,
+     * so the details needs to be updated while loading the movies to the table
+     * @param contentValues
+     */
+    private void loadRecommendationMovieDetails(ContentValues[] contentValues) {
+        LogDisplay.callLog(LOG_TAG, 'loadRecommendationMovieDetails is called', LogDisplay.LOAD_MOVIE_DETAILS_LOG_FLAG)
+        //TMDb api example (movie with appended response)
+        //https://api.themoviedb.org/3/movie/240?api_key=key
+        for(i in 0..(contentValues.length - 1)) {
+//            contentValues.
+            final int recomMovieId = contentValues[i].getAsInteger(MovieMagicContract.MovieBasicInfo.COLUMN_MOVIE_ID)
+            try {
+                final Uri.Builder recomUriBuilder = Uri.parse(GlobalStaticVariables.TMDB_MOVIE_BASE_URL).buildUpon()
+
+                final Uri recomUri = recomUriBuilder.appendPath(GlobalStaticVariables.TMDB_MOVIE_PATH)
+                        .appendPath(Integer.toString(recomMovieId))
+                        .appendQueryParameter(GlobalStaticVariables.TMDB_MOVIE_API_KEY, BuildConfig.TMDB_API_KEY)
+                        .build()
+
+                final URL url = new URL(recomUri.toString())
+                LogDisplay.callLog(LOG_TAG, "Recommendation movie id url-> ${recomUri.toString()}", LogDisplay.LOAD_MOVIE_DETAILS_LOG_FLAG)
+                def recomJsonData = new JsonSlurper(type: JsonParserType.INDEX_OVERLAY).parse(url)
+                LogDisplay.callLog(LOG_TAG, "JSON DATA for recommendation movie id $recomMovieId -> $recomJsonData", LogDisplay.LOAD_MOVIE_DETAILS_LOG_FLAG)
+                final ContentValues recomContentValues = JsonParse.parseAdditionalBasicMovieData(recomJsonData)
+                //Reset the detail data present flag because we are not loading other details like similar, cast, crew, etc
+                //So when user will click the movie on home screen for detail view it will load all data
+                recomContentValues.put(MovieMagicContract.MovieBasicInfo.COLUMN_DETAIL_DATA_PRESENT_FLAG,GlobalStaticVariables.MOVIE_MAGIC_FLAG_FALSE)
+                final int recomUpdateCount = mContentResolver.update(
+                        MovieMagicContract.MovieBasicInfo.CONTENT_URI,
+                        recomContentValues,
+                        """$MovieMagicContract.MovieBasicInfo.COLUMN_MOVIE_ID = ? and
+                        $MovieMagicContract.MovieBasicInfo.COLUMN_MOVIE_LIST_TYPE = ?""",
+                        [Integer.toString(recomMovieId), GlobalStaticVariables.MOVIE_LIST_TYPE_TMDB_RECOMMENDATIONS] as String[])
+                if (recomUpdateCount != 1) {
+                    LogDisplay.callLog(LOG_TAG, "Recommendation movie additional details Update in movie_basic_info failed. Update Count->$recomUpdateCount", LogDisplay.LOAD_MOVIE_DETAILS_LOG_FLAG)
+                } else { //If the return value is 1, indicate successful update
+                    LogDisplay.callLog(LOG_TAG, "Recommendation movie additional details Update in movie_basic_info successful. Update Count->$recomUpdateCount", LogDisplay.LOAD_MOVIE_DETAILS_LOG_FLAG)
+                }
+            } catch (URISyntaxException e) {
+                Log.e(LOG_TAG, "URISyntaxException: $e.message", e)
+            } catch (JsonException e) {
+                Log.e(LOG_TAG, "JsonException: $e.message", e)
+            } catch (IOException e) {
+                Log.e(LOG_TAG, "IOException: $e.message")
+            } catch (android.database.sqlite.SQLiteConstraintException e) {
+                Log.e(LOG_TAG, "SQLiteConstraintException: $e.message")
+            } catch (android.database.sqlite.SQLiteException e) {
+                Log.e(LOG_TAG, "SQLiteException: $e.message")
+            }
+        }
     }
 
     @Override

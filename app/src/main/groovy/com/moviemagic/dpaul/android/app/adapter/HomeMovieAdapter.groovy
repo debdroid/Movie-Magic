@@ -149,8 +149,12 @@ class HomeMovieAdapter extends RecyclerView.Adapter<HomeMovieAdapter.HomeMovieAd
                 listType = mContext.getResources().getString(R.string.home_movie_collection_list_text)
                 break
 
+            case GlobalStaticVariables.MOVIE_CATEGORY_RECOMMENDATIONS:
+                listType = mContext.getResources().getString(R.string.home_movie_recommended_list_text)
+                break
+
             default:
-                LogDisplay.callLog(LOG_TAG, "Unknown category. category->${Cursor.getString(HomeMovieFragment.COL_MOVIE_BASIC_MOVIE_CATEGORY)}", LogDisplay.HOME_MOVIE_ADAPTER_LOG_FLAG)
+                LogDisplay.callLog(LOG_TAG, "Unknown category. category->${mCursor.getString(HomeMovieFragment.COL_MOVIE_BASIC_MOVIE_CATEGORY)}", LogDisplay.HOME_MOVIE_ADAPTER_LOG_FLAG)
         }
         holder.movieUserListTextView.setText(listType)
     }

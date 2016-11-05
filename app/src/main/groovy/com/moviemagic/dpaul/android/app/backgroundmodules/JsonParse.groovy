@@ -15,7 +15,6 @@ import com.moviemagic.dpaul.android.app.contentprovider.MovieMagicContract.Movie
 import com.moviemagic.dpaul.android.app.contentprovider.MovieMagicContract.MoviePersonCast
 import com.moviemagic.dpaul.android.app.contentprovider.MovieMagicContract.MoviePersonCrew
 import com.moviemagic.dpaul.android.app.contentprovider.MovieMagicContract.MoviePersonImage
-import org.json.JSONObject
 
 //Since the json field is used dynamically, so this class is not compiled as CompileStatic
 //@CompileStatic
@@ -24,7 +23,7 @@ class JsonParse {
 
     /**
      * Helper method to determine the total number of pages of particular movie category
-     * @param jsonData JSON data ot be parsed
+     * @param jsonData JSON data to be parsed
      * @return total page count
      */
     static int getTotalPages(def jsonData) {
@@ -39,10 +38,11 @@ class JsonParse {
      * Helper method to parse movie JSON data
      * @param jsonData JSON data to be parsed
      * @param category Movie category (i.e. popular, now playing, etc)
-     * @param movieListType Indicate the type (i.e. public tmdb or user)
+     * @param movieListType Indicate the type (i.e. public tmdb or user list or user Tmdb list)
+     * @param dateTimeStamp The Date & Time stamp to use while inserting the records
      * @return formatted list of movies as content values
      */
-    static List<ContentValues> parseMovieListJson(def jsonData, String category, String movieListType) {
+    static List<ContentValues> parseMovieListJson(def jsonData, String category, String movieListType, String dateTimeStamp) {
         List<ContentValues> movieList = []
         def cnt = jsonData.results.size() - 1
         //Ensure that the results is not Null
@@ -109,9 +109,9 @@ class JsonParse {
                 //category and movieListType are supplied in the program, so always null safe
                 movieValue.put(MovieBasicInfo.COLUMN_MOVIE_CATEGORY, category)
                 movieValue.put(MovieBasicInfo.COLUMN_MOVIE_LIST_TYPE, movieListType)
-                //Set create date and update date
-                movieValue.put(MovieBasicInfo.COLUMN_CREATE_TIMESTAMP,Utility.getTodayDate())
-                movieValue.put(MovieBasicInfo.COLUMN_UPDATE_TIMESTAMP,Utility.getTodayDate())
+                //Set create date and update date - Same value used for all so that house keeping can work properly
+                movieValue.put(MovieBasicInfo.COLUMN_CREATE_TIMESTAMP,dateTimeStamp)
+                movieValue.put(MovieBasicInfo.COLUMN_UPDATE_TIMESTAMP,dateTimeStamp)
 
                 //add to the list
                 movieList << movieValue
@@ -290,7 +290,7 @@ class JsonParse {
         List<ContentValues> similarMovies
         LogDisplay.callLog(LOG_TAG, "Similar -> $jsonData.similar", LogDisplay.JSON_PARSE_LOG_FLAG)
         similarMovies = parseMovieListJson(jsonData.similar,GlobalStaticVariables.MOVIE_CATEGORY_SIMILAR,
-                GlobalStaticVariables.MOVIE_LIST_TYPE_TMDB_SIMILAR)
+                GlobalStaticVariables.MOVIE_LIST_TYPE_TMDB_SIMILAR, Utility.getTodayDate())
         //Some groovy magic - Closure
         similarMovies.each {it.put(MovieBasicInfo.COLUMN_SIMILAR_MOVIE_LINK_ID,movieId)}
 
@@ -307,7 +307,7 @@ class JsonParse {
      * @param foreignKey Row id of primary movie table (movie_basic_info)
      * @return formatted list of movie cast as content values
      */
-    static List<ContentValues> praseMovieCastJson(def jsonData, int movieId, int foreignKey) {
+    static List<ContentValues> parseMovieCastJson(def jsonData, int movieId, int foreignKey) {
         List<ContentValues> movieCastList = []
         def castCounter = jsonData.credits.cast.size() - 1
         if (jsonData.credits.cast) {
@@ -354,7 +354,7 @@ class JsonParse {
      * @param foreignKey Row id of primary movie table (movie_basic_info)
      * @return formatted list of movie crew as content values
      */
-    static List<ContentValues> praseMovieCrewJson(def jsonData, int movieId, int foreignKey) {
+    static List<ContentValues> parseMovieCrewJson(def jsonData, int movieId, int foreignKey) {
         List<ContentValues> movieCrewList = []
         def crewCounter = jsonData.credits.crew.size() - 1
         if (jsonData.credits.crew) {
@@ -399,7 +399,7 @@ class JsonParse {
      * @param foreignKey Row id of primary movie table (movie_basic_info)
      * @return formatted list of movie image as content values
      */
-    static List<ContentValues> praseMovieImageJson(def jsonData, int movieId, int foreignKey) {
+    static List<ContentValues> parseMovieImageJson(def jsonData, int movieId, int foreignKey) {
         List<ContentValues> movieImageList = []
         def imageCounter = jsonData.images.backdrops.size() - 1
         if (jsonData.images.backdrops) {
@@ -461,7 +461,7 @@ class JsonParse {
      * @param foreignKey Row id of primary movie table (movie_basic_info)
      * @return formatted list of movie now_playing as content values
      */
-    static List<ContentValues> praseMovieVideoJson(def jsonData, int movieId, int foreignKey, int isForHomePage) {
+    static List<ContentValues> parseMovieVideoJson(def jsonData, int movieId, int foreignKey, int isForHomePage) {
         List<ContentValues> movieVideoList = []
         def videoCounter = jsonData.videos.results.size() - 1
         if (jsonData.videos.results) {
@@ -507,7 +507,7 @@ class JsonParse {
      * @param foreignKey Row id of primary movie table (movie_basic_info)
      * @return formatted list of movie release date as content values
      */
-    static List<ContentValues> praseMovieReleaseDateJson(def jsonData, int movieId, int foreignKey) {
+    static List<ContentValues> parseMovieReleaseDateJson(def jsonData, int movieId, int foreignKey) {
         List<ContentValues> movieReleaseDateList = []
         def releaseDateCounter = jsonData.release_dates.results.size() - 1
         if (jsonData.release_dates.results) {
@@ -559,7 +559,7 @@ class JsonParse {
      * @param foreignKey Row id of primary movie table (movie_basic_info)
      * @return formatted list of movie review as content values
      */
-    static List<ContentValues> praseMovieReviewJson(def jsonData, int movieId, int foreignKey) {
+    static List<ContentValues> parseMovieReviewJson(def jsonData, int movieId, int foreignKey) {
         List<ContentValues> movieReviewList = []
         def reviewCounter = jsonData.reviews.results.size() - 1
         if (jsonData.reviews.results) {
@@ -593,6 +593,34 @@ class JsonParse {
             return movieReviewList
         }
         return null
+    }
+
+    /**
+     * Helper method to parse recommendations movie JSON data
+     * @param jsonData JSON data to be parsed
+     * @param movieId Original movie id for which recommendations movies are fetched
+     * @return formatted list of recommendations movies as content values
+     */
+    static List<ContentValues> parseRecommendationsMovieListJson(def jsonData, int movieId) {
+        LogDisplay.callLog(LOG_TAG, "Recommendations -> $jsonData.recommendations", LogDisplay.JSON_PARSE_LOG_FLAG)
+        final List<ContentValues> recommendationsMovies = parseMovieListJson(jsonData.recommendations,
+                GlobalStaticVariables.MOVIE_CATEGORY_RECOMMENDATIONS, GlobalStaticVariables.MOVIE_LIST_TYPE_TMDB_RECOMMENDATIONS,
+                Utility.getTodayDate())
+        // We just need 2 items of the recommended movies, so remove rest of the items
+        // We could have just parsed two records, but better to reuse the code which is already tested and proven
+        List<ContentValues> returnValue = []
+        if (recommendationsMovies) {
+            for (i in 0..1) {
+                LogDisplay.callLog(LOG_TAG, "Index $i and value ${recommendationsMovies[i]}", LogDisplay.JSON_PARSE_LOG_FLAG)
+                returnValue << recommendationsMovies.get(i)
+            }
+            //Some groovy magic - Closure
+            returnValue.each {it.put(MovieBasicInfo.COLUMN_RECOMMENDATION_MOVIE_LINK_ID,movieId)}
+
+            return returnValue
+        } else {
+            return null
+        }
     }
 
     /**
@@ -766,7 +794,7 @@ class JsonParse {
                 personInfoData.put(MoviePersonInfo.COLUMN_PERSON_POPULARITY,jsonData.popularity)
             if(jsonData.profile_path)
                 personInfoData.put(MoviePersonInfo.COLUMN_PERSON_PROFILE_PATH,jsonData.profile_path)
-            personInfoData.put(MoviePersonInfo.COLUMN_CPERSON_PRESENT_FLAG,GlobalStaticVariables.MOVIE_MAGIC_FLAG_TRUE)
+            personInfoData.put(MoviePersonInfo.COLUMN_PERSON_PRESENT_FLAG,GlobalStaticVariables.MOVIE_MAGIC_FLAG_TRUE)
             personInfoData.put(MoviePersonInfo.COLUMN_PERSON_CREATE_TIMESTAMP,Utility.getTodayDate())
             personInfoData.put(MoviePersonInfo.COLUMN_PERSON_UPDATE_TIMESTAMP,Utility.getTodayDate())
             return personInfoData
@@ -969,25 +997,6 @@ class JsonParse {
             bundle.putBoolean(GlobalStaticVariables.TMDB_AUTH_ERROR_FLAG,true)
             return bundle
         }
-//        final Bundle bundle = new Bundle()
-//        final JSONObject obj = new JSONObject(jsonData)
-//        // TMDb return status_message when there is an error
-//        if(obj.isNull('status_message')) {
-//            if (jsonData.success) {
-//                bundle.putBoolean(GlobalStaticVariables.TMDB_AUTH_ERROR_FLAG,false)
-//                bundle.putString(GlobalStaticVariables.TMDB_REQ_TOKEN,obj.getString("request_token"))
-//                return bundle
-//            } else {
-//                bundle.putBoolean(GlobalStaticVariables.TMDB_AUTH_ERROR_FLAG,true)
-//                LogDisplay.callLog(LOG_TAG, 'Unexpected TMDb request error while token request', LogDisplay.JSON_PARSE_LOG_FLAG)
-//                return bundle
-//            }
-//        } else {
-//            LogDisplay.callLog(LOG_TAG, "TMDb returned error for token request-> ${obj.getString("request_token")}", LogDisplay.JSON_PARSE_LOG_FLAG)
-//            bundle.putBoolean(GlobalStaticVariables.TMDB_AUTH_ERROR_FLAG,true)
-//            bundle.putString(GlobalStaticVariables.TMDB_AUTH_ERROR_MSG, 'Cannot perform the login now, please try after some time.')
-//            return bundle
-//        }
     }
 
     /**
@@ -1010,26 +1019,6 @@ class JsonParse {
             bundle.putBoolean(GlobalStaticVariables.TMDB_AUTH_ERROR_FLAG,true)
             return bundle
         }
-
-//        final Bundle bundle = new Bundle()
-//        final JSONObject obj = new JSONObject(jsonData)
-//        // TMDb return status_message when there is an error
-//        if(obj.isNull('status_message')) {
-//            if (jsonData.success) {
-//                bundle.putBoolean(GlobalStaticVariables.TMDB_AUTH_ERROR_FLAG,false)
-//                bundle.putString(GlobalStaticVariables.TMDB_AUTHENTICATED_TOKEN,obj.getString("request_token"))
-//                return bundle
-//            } else {
-//                bundle.putBoolean(GlobalStaticVariables.TMDB_AUTH_ERROR_FLAG,true)
-//                LogDisplay.callLog(LOG_TAG, 'Unexpected TMDb request error while login', LogDisplay.JSON_PARSE_LOG_FLAG)
-//                return bundle
-//            }
-//        } else {
-//            LogDisplay.callLog(LOG_TAG, "TMDb returned error while authenticate user-> ${obj.getString("request_token")}", LogDisplay.JSON_PARSE_LOG_FLAG)
-//            bundle.putBoolean(GlobalStaticVariables.TMDB_AUTH_ERROR_FLAG,true)
-//            bundle.putString(GlobalStaticVariables.TMDB_AUTH_ERROR_MSG, obj.getString("status_message"))
-//            return bundle
-//        }
     }
 
     /**
@@ -1052,26 +1041,6 @@ class JsonParse {
             bundle.putBoolean(GlobalStaticVariables.TMDB_AUTH_ERROR_FLAG,true)
             return bundle
         }
-
-//        final Bundle bundle = new Bundle()
-//        final JSONObject obj = new JSONObject(jsonData)
-//        // TMDb return status_message when there is an error
-//        if(obj.isNull('status_message')) {
-//            if (jsonData.success) {
-//                bundle.putBoolean(GlobalStaticVariables.TMDB_AUTH_ERROR_FLAG,false)
-//                bundle.putString(GlobalStaticVariables.TMDB_SESSION_ID,obj.getString("session_id"))
-//                return bundle
-//            } else {
-//                bundle.putBoolean(GlobalStaticVariables.TMDB_AUTH_ERROR_FLAG,true)
-//                LogDisplay.callLog(LOG_TAG, 'Unexpected TMDb request error while creating session id', LogDisplay.JSON_PARSE_LOG_FLAG)
-//                return bundle
-//            }
-//        } else {
-//            LogDisplay.callLog(LOG_TAG, "TMDb returned error while creating session id-> ${obj.getString("session_id")}", LogDisplay.JSON_PARSE_LOG_FLAG)
-//            bundle.putBoolean(GlobalStaticVariables.TMDB_AUTH_ERROR_FLAG,true)
-//            bundle.putString(GlobalStaticVariables.TMDB_AUTH_ERROR_MSG, 'Cannot perform the login now, please try after some time.')
-//            return bundle
-//        }
     }
 
     /**
@@ -1091,18 +1060,12 @@ class JsonParse {
             else
                 bundle.putString(GlobalStaticVariables.TMDB_USER_NAME,'')
             bundle.putBoolean(GlobalStaticVariables.TMDB_AUTH_ERROR_FLAG,false)
+            bundle.putString(GlobalStaticVariables.TMDB_USER_ACCOUNT_ID,Integer.toString(jsonData.id))
             return bundle
         } else {
             bundle.putString(GlobalStaticVariables.TMDB_AUTH_ERROR_MSG, jsonData.status_message)
             bundle.putBoolean(GlobalStaticVariables.TMDB_AUTH_ERROR_FLAG,true)
             return bundle
         }
-//        LogDisplay.callLog(LOG_TAG, "jsonData.username -> ${jsonData.username}", LogDisplay.JSON_PARSE_LOG_FLAG)
-//        final JSONObject obj = new JSONObject(jsonData)
-//        if(!obj.isNull('name')) {
-//            return obj.getString("name")
-//        } else {
-//            return null
-//        }
     }
 }
