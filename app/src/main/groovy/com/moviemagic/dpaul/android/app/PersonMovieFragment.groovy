@@ -580,6 +580,7 @@ class PersonMovieFragment extends Fragment implements LoaderManager.LoaderCallba
                 mPersonHomePageUrl = data.getString(COL_PERSON_INFO_PERSON_HOMEPAGE)
                 mHomePageButton.setText(getActivity().getString(R.string.person_web_links_home_page))
                 mHomePageButton.setClickable(true)
+                mHomePageButton.setAlpha(GlobalStaticVariables.MOVIE_MAGIC_ALPHA_FULL_OPAQUE)
                 //TODO: Need to look into this Build.VERSION_CODES issue later
                 //Somehow while running in Jelly bean & KITKAT it cannot find Build.VERSION_CODES.LOLLIPOP, yet to figure out why!
                 //So using the API number (21 - LOLLIPOP)itself here and other places below
@@ -589,6 +590,7 @@ class PersonMovieFragment extends Fragment implements LoaderManager.LoaderCallba
             } else {
                 mHomePageButton.setText(getActivity().getString(R.string.movie_detail_web_links_home_page_not_available))
                 mHomePageButton.setClickable(false)
+                mHomePageButton.setAlpha(GlobalStaticVariables.MOVIE_MAGIC_ALPHA_OPAQUE_40_PERCENT)
                 if (Build.VERSION.SDK_INT >= 21) {
                     mHomePageButton.setElevation(GlobalStaticVariables.MOVIE_MAGIC_ELEVATION_RESET)
                 }
@@ -598,12 +600,14 @@ class PersonMovieFragment extends Fragment implements LoaderManager.LoaderCallba
                 mPersonImdbId = data.getString(COL_PERSON_INFO_PERSON_IMDB_ID)
                 mImdbLinkButton.setText(getActivity().getString(R.string.detail_web_links_imdb_link))
                 mImdbLinkButton.setClickable(true)
+                mImdbLinkButton.setAlpha(GlobalStaticVariables.MOVIE_MAGIC_ALPHA_FULL_OPAQUE)
                 if (Build.VERSION.SDK_INT >= 21) {
                     mImdbLinkButton.setElevation(GlobalStaticVariables.MOVIE_MAGIC_ELEVATION)
                 }
             } else {
                 mImdbLinkButton.setText(getActivity().getString(R.string.movie_detail_web_links_imdb_link_not_available))
                 mImdbLinkButton.setClickable(false)
+                mImdbLinkButton.setAlpha(GlobalStaticVariables.MOVIE_MAGIC_ALPHA_OPAQUE_40_PERCENT)
                 if (Build.VERSION.SDK_INT >= 21) {
                     mImdbLinkButton.setElevation(GlobalStaticVariables.MOVIE_MAGIC_ELEVATION_RESET)
                 }

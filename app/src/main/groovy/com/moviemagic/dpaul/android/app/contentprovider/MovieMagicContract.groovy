@@ -11,7 +11,7 @@ import groovy.transform.CompileStatic
 
 
 @CompileStatic
-class MovieMagicContract {
+final class MovieMagicContract {
     private static final String LOG_TAG = MovieMagicContract.class.getSimpleName()
     // To make it easy to sort the list by movie release date, we store the date
     // in the database in milliseconds format using SimpleDateFormat and Date
@@ -128,6 +128,8 @@ class MovieMagicContract {
         static final String COLUMN_RELEASE_STATUS = 'release_status'
         //Column to store movie tagline
         static final String COLUMN_TAGLINE = 'tagline'
+        //Column to store rating - applicable for only Tmdb user rated movies
+        static final String COLUMN_TMDB_USER_RATED_RATING = 'tmdb_user_rated_rating'
 
         //Column to store record creation date
         static final String COLUMN_CREATE_TIMESTAMP = 'create_timestamp'

@@ -57,7 +57,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
                 android:layout_marginLeft="@dimen/poster_image_data_fields_margin"
-                android:background="@color/devider_color" />
+                android:background="@color/divider_color" />
             <TextView
                 android:id="@+id/person_dob_header"
                 android:layout_width="match_parent"
@@ -86,7 +86,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
                 android:layout_marginLeft="@dimen/poster_image_data_fields_margin"
-                android:background="@color/devider_color" />
+                android:background="@color/divider_color" />
             <TextView
                 android:id="@+id/person_place_of_birth_header"
                 android:layout_width="match_parent"
@@ -115,7 +115,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
                 android:layout_marginLeft="@dimen/poster_image_data_fields_margin"
-                android:background="@color/devider_color" />
+                android:background="@color/divider_color" />
             <TextView
                 android:id="@+id/person_also_known_as_header"
                 android:layout_width="match_parent"
@@ -145,7 +145,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
                 android:layout_marginLeft="@dimen/poster_image_data_fields_margin"
-                android:background="@color/devider_color" />
+                android:background="@color/divider_color" />
             <TextView
                 android:id="@+id/person_death_day_header"
                 android:layout_width="match_parent"
@@ -175,7 +175,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
                 android:layout_marginLeft="@dimen/poster_image_data_fields_margin"
-                android:background="@color/devider_color" />
+                android:background="@color/divider_color" />
             <TextView
                 android:id="@+id/person_popularity_header"
                 android:layout_width="match_parent"
@@ -206,7 +206,7 @@
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:background="@color/devider_color" />
+        android:background="@color/divider_color" />
 
     <!-- Person biography section -->
     <RelativeLayout
@@ -249,7 +249,7 @@
             android:clickable="true"
             android:layout_alignParentRight="true"
             android:layout_alignParentEnd="true"
-            android:backgroundTint="@color/devider_color"
+            android:backgroundTint="@color/divider_color"
             android:background="@drawable/ic_keyboard_arrow_down_white_24dp"/>
         <ImageButton
             android:id="@+id/person_biography_hide_button"
@@ -257,7 +257,7 @@
             android:layout_height="@dimen/person_biography_collapse_icon_size"
             android:layout_below="@+id/person_biography"
             android:clickable="true"
-            android:backgroundTint="@color/devider_color"
+            android:backgroundTint="@color/divider_color"
             android:layout_alignParentRight="true"
             android:layout_alignParentEnd="true"
             android:visibility="invisible"
@@ -268,7 +268,7 @@
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:background="@color/devider_color" />
+        android:background="@color/divider_color" />
 
     <!-- Person images grid view section -->
     <LinearLayout
@@ -318,7 +318,7 @@
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:background="@color/devider_color" />
+        android:background="@color/divider_color" />
 
     <!-- Person as actor grid view section -->
     <LinearLayout
@@ -367,7 +367,7 @@
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:background="@color/devider_color" />
+        android:background="@color/divider_color" />
 
     <!-- Person as crew grid view section -->
     <LinearLayout
@@ -417,7 +417,7 @@
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:background="@color/devider_color" />
+        android:background="@color/divider_color" />
 
     <!-- Person external web links (home page & imdb link) section -->
     <LinearLayout

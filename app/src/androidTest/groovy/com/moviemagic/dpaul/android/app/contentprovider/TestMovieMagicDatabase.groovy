@@ -104,6 +104,7 @@ class TestMovieMagicDatabase extends AndroidTestCase {
         columeList << MovieMagicContract.MovieBasicInfo.COLUMN_RUNTIME
         columeList << MovieMagicContract.MovieBasicInfo.COLUMN_RELEASE_STATUS
         columeList << MovieMagicContract.MovieBasicInfo.COLUMN_TAGLINE
+        columeList << MovieMagicContract.MovieBasicInfo.COLUMN_TMDB_USER_RATED_RATING
         columeList << MovieMagicContract.MovieBasicInfo.COLUMN_CREATE_TIMESTAMP
         columeList << MovieMagicContract.MovieBasicInfo.COLUMN_UPDATE_TIMESTAMP
         columeList << MovieMagicContract.MovieBasicInfo.COLUMN_USER_EXPORTED

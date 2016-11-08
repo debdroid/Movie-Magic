@@ -46,7 +46,7 @@ public class MovieMagicMainActivity extends AppCompatActivity implements Navigat
     private TextView mNavPanelUserNameTextView, mNavPanelUserIdTextView
     private Button mNavPanelLoginButton, mNavPanelLogoutButton
     private AccountManager mAccountManager
-    private static boolean isUserLoggedIn = false
+    public static boolean isUserLoggedIn = false
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

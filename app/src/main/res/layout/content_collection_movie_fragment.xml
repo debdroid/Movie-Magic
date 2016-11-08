@@ -29,7 +29,7 @@
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:background="@color/devider_color" />
+        android:background="@color/divider_color" />
 
     <TextView
         android:id="@+id/collection_overview_header"
@@ -65,7 +65,7 @@
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:background="@color/devider_color" />
+        android:background="@color/divider_color" />
     <!-- Container for collection movies -->
     <FrameLayout
         android:id="@+id/collection_movie_grid"

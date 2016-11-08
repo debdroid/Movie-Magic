@@ -49,7 +49,7 @@
     <string name="movie_detail_synopsis">Synopsis</string>
     <string name="movie_detail_collection_header_text">Collection</string>
     <string name="movie_detail_collection_name_data">God Father Collection</string>
-    <string name="movie_detail_web_links_home_page">Movie Home Page</string>
+    <string name="movie_detail_web_links_home_page">Home Page</string>
     <string name="movie_detail_web_links_home_page_not_available">No Home Page</string>
     <string name="detail_web_links_imdb_link">IMDb Link</string>
     <string name="movie_detail_web_links_imdb_link_not_available">No IMDb Link</string>
@@ -72,14 +72,15 @@
     <string name="person_biography_collapse_line_item_count">3</string>
     <string name="movie_detail_review_recycler_view_empty_msg">No review available</string>
     <string name="movie_detail_web_links_header">External Links</string>
-    <string name="movie_detail_user_list_drawable_title_value">My List</string>
+    <string name="movie_detail_user_list_drawable_title_value">My Local Lists</string>
+    <string name="movie_detail_user_tmdb_list_drawable_title_value">My TMDb Lists</string>
     <string name="cannot_perform_operation_msg">Selected operation cannot be performed now</string>
     <string name="poster_icon_transition_name" translatable="false">poster_transition</string>
 
     <!-- formatted string for display -->
     <string name="movie_run_time"><xliff:g id="hour">%d</xliff:g> hr <xliff:g id="min">%d</xliff:g> min</string>
-    <string name="user_list_add_message">%1$s movie added to %2$s</string>
-    <string name="user_list_del_message">%1$s movie removed from %2$s</string>
+    <string name="user_list_add_message">%1$s added to %2$s</string>
+    <string name="user_list_del_message">%1$s removed from %2$s</string>
     <string name="user_rating_add_message">Rating updated successfully for %1$s</string>
     <string name="title_activity_collection_movie">Collection</string>
     <string name="title_activity_person_movie">Person</string>
@@ -108,7 +109,7 @@
     <string name="person_activity_menu">PersonActivity</string>
     <string name="person_fragment_menu">PersonFragment</string>
     <string name="person_web_links_header">External Links</string>
-    <string name="person_web_links_home_page">Person Home Page</string>
+    <string name="person_web_links_home_page">Home Page</string>
     <string name="title_activity_main_movie">Movie Main</string>
     <string name="movie_collection_title_text">Collection Title</string>
     <string name="person_image_grid">Images</string>
@@ -158,5 +159,11 @@
     <string name="drawer_menu_logout">Logout</string>
     <string name="show_all_button_text">Show All</string>
     <string name="home_movie_recommendation_title">Recommend For You</string>
+
+    <!-- String for Tmdb rating update dialog -->
+    <string name="tmdb_rating_dialog_title">Do you want to update the rating value to TMDb?</string>
+    <string name="tmdb_rating_dialog_message">This movie is present in your TMDb Rated movie list. To update the Tmdb rating value click OK (recommended). Otherwise this rating will be overwritten by your TMDb rating when you will browse this movie next time.</string>
+    <string name="tmdb_rating_dialog_ok_button">OK</string>
+    <string name="tmdb_rating_dialog_cancel_button">CANCEL</string>
 
 </resources>

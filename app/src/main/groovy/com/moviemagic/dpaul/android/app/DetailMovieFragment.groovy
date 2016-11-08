@@ -1,17 +1,20 @@
 package com.moviemagic.dpaul.android.app
 
 import android.app.Activity
+import android.app.AlertDialog
 import android.content.Context
+import android.content.DialogInterface
 import android.content.Intent
 import android.content.res.ColorStateList
 import android.database.Cursor
 import android.graphics.Bitmap
 import android.graphics.Color
+import android.graphics.PorterDuff
 import android.graphics.drawable.BitmapDrawable
-import android.graphics.drawable.Drawable
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
+import android.preference.DialogPreference
 import android.support.design.widget.AppBarLayout
 import android.support.design.widget.CollapsingToolbarLayout
 import android.support.design.widget.Snackbar
@@ -21,7 +24,6 @@ import android.support.v4.app.LoaderManager
 import android.support.v4.content.ContextCompat
 import android.support.v4.content.CursorLoader
 import android.support.v4.content.Loader
-import android.support.v4.graphics.drawable.DrawableCompat
 import android.support.v4.view.ViewCompat
 import android.support.v4.view.ViewPager
 import android.support.v4.view.ViewPager.OnPageChangeListener
@@ -59,11 +61,12 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
                      mUserRatingHeaderTextView, mTaglineHeaderTextView, mSynopsisHeaderTextView, mMovieTrailerHeaderTextView,
                      mProdCompanyHeaderTextView, mProdCountryHeaderTextView, mCastHeaderTextView, mCrewHeaderTextView,
                      mSimilarMovieHeaderTextView, mCollectionNameHeaderTextView, mReviewHeaderTextView, mRecyclerViewEmptyMsgTextView,
-                     mUserListDrawableTitle, mCastGridEmptyMsgTextView, mCrewGridEmptyMsgTextView, mSimilarMovieGridEmptyMsgTextView,
-                     mMovieTrailerEmptyMsgTextView
+                     mUserListDrawableTitle, mUserTmdbListDrawableTitle, mCastGridEmptyMsgTextView, mCrewGridEmptyMsgTextView,
+                     mSimilarMovieGridEmptyMsgTextView, mMovieTrailerEmptyMsgTextView
     private ImageView mMpaaRatingImageView, mPosterImageView, mCollectionBackdropImageView
-    private LinearLayout mDetailMovieLayout,mBackdropDotHolderLayout, mUserListDrawableLayout
+    private LinearLayout mDetailMovieLayout,mBackdropDotHolderLayout, mUserListDrawableLayout, mUserTmdbListDrawableLayout
     private ImageButton mImageButtonWatched, mImageButtonWishList, mImageButtonFavourite, mImageButtonCollection
+    private ImageButton mTmdbImageButtonWatchlist, mTmdbImageButtonFavourite, mTmdbImageButtonRated
     private RatingBar mTmdbRatingBar, mUserRatingBar
     private Button mHomePageButton, mImdbLinkButton
     private int _ID_movie_basic_info
@@ -92,20 +95,21 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
     private boolean mUserListWishListdFlag = false
     private boolean mUserListFavouriteFlag = false
     private boolean mUserListCollectionFlag = false
+    private boolean mUserTmdbListWatchlistFlag = false
+    private boolean mUserTmdbListFavouriteFlag = false
+    private boolean mUserTmdbListRatedFlag = false
     private CollapsingToolbarLayout mCollapsingToolbar
     private Toolbar mToolbar
     private AppBarLayout mAppBarLayout
     private ViewPager mBackdropViewPager
 //    private final android.os.Handler mHandler = new android.os.Handler()
-    private Runnable mRunnable
+//    private Runnable mRunnable
     private GridLayoutManager mSimilarMovieGridLayoutManager
     private List<String> mBackdropList
     private CallbackForBackdropImageClick mCallbackForBackdropImageClick
     private int mBackdropViewPagerPos = 0
+    private boolean firstTimeLocalRatingUpdateWithTmdbRating = true
 
-
-
-//    public static final String MOVIE_BASIC_INFO_MOVIE_ID_URI = 'movie_basic_info_movie_id_uri'
     private static final int MOVIE_DETAIL_FRAGMENT_BASIC_DATA_LOADER_ID = 0
     private static final int MOVIE_DETAIL_FRAGMENT_SIMILAR_MOVIE_LOADER_ID = 1
     private static final int MOVIE_DETAIL_FRAGMENT_MOVIE_VIDEO_LOADER_ID = 2
@@ -115,6 +119,8 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
     private static final int MOVIE_DETAIL_FRAGMENT_MOVIE_IMAGE_LOADER_ID = 6
     private static final int MOVIE_DETAIL_FRAGMENT_MOVIE_REVIEW_LOADER_ID = 7
     private static final int MOVIE_DETAIL_FRAGMENT_MOVIE_USER_LIST_FLAG_LOADER_ID = 8
+    private static final int MOVIE_DETAIL_FRAGMENT_BASIC_TMDB_DATA_LOADER_ID = 9
+
 
     //Columns to fetch from movie_basic_info table
     private static final String[] MOVIE_BASIC_INFO_COLUMNS = [MovieMagicContract.MovieBasicInfo._ID,
@@ -299,6 +305,20 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
     final static int COL_MOVIE_USER_LIST_FLAG_COLLECTION_FLAG = 5
     final static int COL_MOVIE_USER_LIST_FLAG_USER_RATING = 6
 
+    //Columns to fetch from movie_basic_info for user's Tmdb list table
+    private static
+    final String[] MOVIE_BASIC_INFO_TMDB_COLUMNS = [MovieMagicContract.MovieBasicInfo._ID,
+                                                   MovieMagicContract.MovieBasicInfo.COLUMN_MOVIE_ID,
+                                                   MovieMagicContract.MovieBasicInfo.COLUMN_MOVIE_CATEGORY,
+                                                   MovieMagicContract.MovieBasicInfo.COLUMN_TMDB_USER_RATED_RATING,
+                                                   MovieMagicContract.MovieBasicInfo.COLUMN_MOVIE_LIST_TYPE]
+    //These are indices of the above columns, if projection array changes then this needs to be changed
+    final static int COL_MOVIE_BASIC_TMDB_ID = 0
+    final static int COL_MOVIE_BASIC_TMDB_MOVIE_ID = 1
+    final static int COL_MOVIE_BASIC_TMDB_MOVIE_CATEGORY = 2
+    final static int COL_MOVIE_BASIC_TMDB_MOVIE_RATING = 3
+    final static int COL_MOVIE_BASIC_TMDB_MOVIE_LIST_TYPE = 4
+
     //An empty constructor is needed so that lifecycle is properly handled
     public DetailMovieFragment() {
         LogDisplay.callLog(LOG_TAG, 'DetailMovieFragment empty constructor is called', LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
@@ -353,11 +373,11 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
         mAppBarLayout = mRootView.findViewById(R.id.movie_detail_app_bar_layout) as AppBarLayout
         mBackdropViewPager = mRootView.findViewById(R.id.movie_detail_backdrop_viewpager) as ViewPager
         mBackdropDotHolderLayout = mRootView.findViewById(R.id.view_pager_dots_holder) as LinearLayout
-        mUserListDrawableTitle = mRootView.findViewById(R.id.movie_detail_user_list_drawable_title) as TextView
 
         //All the layouts
         mDetailMovieLayout = mRootView.findViewById(R.id.fragment_detail_movie_layout) as LinearLayout
         mUserListDrawableLayout = mRootView.findViewById(R.id.movie_detail_user_list_drawable_layout) as LinearLayout
+        mUserTmdbListDrawableLayout = mRootView.findViewById(R.id.movie_detail_user_tmdb_list_drawable_layout) as LinearLayout
 
         //All the header (fixed text) fields & buttons
         mReleaseDateHeaderTextView = mRootView.findViewById(R.id.movie_detail_poster_release_date_header) as TextView
@@ -368,6 +388,8 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
         mTmdbTotalVoteCountHeaderTextView = mRootView.findViewById(R.id.movie_detail_tmdb_rating_vote_count_header) as TextView
         mTmdbTotalVoteCountTrailerTextView = mRootView.findViewById(R.id.movie_detail_tmdb_rating_vote_count_trailer) as TextView
         mUserRatingHeaderTextView = mRootView.findViewById(R.id.movie_detail_user_rating_header) as TextView
+        mUserListDrawableTitle = mRootView.findViewById(R.id.movie_detail_user_list_drawable_title) as TextView
+        mUserTmdbListDrawableTitle = mRootView.findViewById(R.id.movie_detail_user_tmdb_list_drawable_title) as TextView
         mTaglineHeaderTextView = mRootView.findViewById(R.id.movie_detail_synopsis_tagline_header) as TextView
         mSynopsisHeaderTextView = mRootView.findViewById(R.id.movie_detail_synopsis_header) as TextView
         mMovieTrailerHeaderTextView = mRootView.findViewById(R.id.movie_detail_trailer_header) as TextView
@@ -382,7 +404,6 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
         mReviewHeaderTextView = mRootView.findViewById(R.id.movie_detail_review_header) as TextView
         mRecyclerViewEmptyMsgTextView = mRootView.findViewById(R.id.movie_detail_review_recycler_view_empty_msg_text_view) as TextView
         mExternalLinkHeader = mRootView.findViewById(R.id.movie_detail_web_links_header) as TextView
-        mUserListDrawableTitle = mRootView.findViewById(R.id.movie_detail_user_list_drawable_title) as TextView
         /**
          * User list button handling
          */
@@ -393,7 +414,7 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
                 LogDisplay.callLog(LOG_TAG, 'ImageButton Watched Button is clicked', LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
                 if (mMovieTitle && mMovieId) {
                     final UpdateUserListChoiceAndRating updateUserList = new UpdateUserListChoiceAndRating(getActivity(), mUserListDrawableLayout,
-                            mMovieId, mMovieTitle, mPalletePrimaryColor, mPalleteBodyTextColor)
+                            mMovieId, mMovieTitle, mPalletePrimaryColor, mPalleteBodyTextColor, true)
                     final String[] updateUserListArgs
                     //If full opaque then already selected, so remove it
                     if (mImageButtonWatched.getAlpha() == GlobalStaticVariables.MOVIE_MAGIC_ALPHA_FULL_OPAQUE) {
@@ -427,7 +448,7 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
                 LogDisplay.callLog(LOG_TAG, 'ImageButton WishList Button is clicked', LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
                 if (mMovieTitle && mMovieId) {
                     final UpdateUserListChoiceAndRating updateUserList = new UpdateUserListChoiceAndRating(getActivity(), mUserListDrawableLayout,
-                            mMovieId, mMovieTitle, mPalletePrimaryColor, mPalleteBodyTextColor)
+                            mMovieId, mMovieTitle, mPalletePrimaryColor, mPalleteBodyTextColor, true)
                     final String[] updateUserListArgs
                     //If full opaque then already selected, so remove it
                     if (mImageButtonWishList.getAlpha() == GlobalStaticVariables.MOVIE_MAGIC_ALPHA_FULL_OPAQUE) {
@@ -445,8 +466,7 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
                     }
                 } else {
                     Snackbar.make(mRootView.findViewById(R.id.movie_detail_user_list_drawable_layout),
-                            getActivity().getString(R.string.cannot_perform_operation_msg), Snackbar.LENGTH_LONG)
-                            .setAction("Action", null).show()
+                            getActivity().getString(R.string.cannot_perform_operation_msg), Snackbar.LENGTH_LONG).show()
                 }
             }
         })
@@ -457,7 +477,7 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
                 LogDisplay.callLog(LOG_TAG, 'ImageButton Favourite Button is clicked', LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
                 if (mMovieTitle && mMovieId) {
                     final UpdateUserListChoiceAndRating updateUserList = new UpdateUserListChoiceAndRating(getActivity(), mUserListDrawableLayout,
-                            mMovieId, mMovieTitle, mPalletePrimaryColor, mPalleteBodyTextColor)
+                            mMovieId, mMovieTitle, mPalletePrimaryColor, mPalleteBodyTextColor, true)
                     final String[] updateUserListArgs
                     //If full opaque then already selected, so remove it
                     if (mImageButtonFavourite.getAlpha() == GlobalStaticVariables.MOVIE_MAGIC_ALPHA_FULL_OPAQUE) {
@@ -475,8 +495,7 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
                     }
                 } else {
                     Snackbar.make(mRootView.findViewById(R.id.movie_detail_user_list_drawable_layout),
-                            getActivity().getString(R.string.cannot_perform_operation_msg), Snackbar.LENGTH_LONG)
-                            .setAction("Action", null).show()
+                            getActivity().getString(R.string.cannot_perform_operation_msg), Snackbar.LENGTH_LONG).show()
                 }
             }
         })
@@ -487,7 +506,7 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
                 LogDisplay.callLog(LOG_TAG, 'ImageButton Favourite Button is clicked', LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
                 if (mMovieTitle && mMovieId) {
                     final UpdateUserListChoiceAndRating updateUserList = new UpdateUserListChoiceAndRating(getActivity(), mUserListDrawableLayout,
-                            mMovieId, mMovieTitle, mPalletePrimaryColor, mPalleteBodyTextColor)
+                            mMovieId, mMovieTitle, mPalletePrimaryColor, mPalleteBodyTextColor, true)
                     final String[] updateUserListArgs
                     //If full opaque then already selected, so remove it
                     if (mImageButtonCollection.getAlpha() == GlobalStaticVariables.MOVIE_MAGIC_ALPHA_FULL_OPAQUE) {
@@ -505,11 +524,17 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
                     }
                 } else {
                     Snackbar.make(mRootView.findViewById(R.id.movie_detail_user_list_drawable_layout),
-                            getActivity().getString(R.string.cannot_perform_operation_msg), Snackbar.LENGTH_LONG)
-                            .setAction("Action", null).show()
+                            getActivity().getString(R.string.cannot_perform_operation_msg), Snackbar.LENGTH_LONG).show()
                 }
             }
         })
+        /**
+         * User's TMDb list button handling
+         */
+        mTmdbImageButtonWatchlist = mRootView.findViewById(R.id.movie_detail_user_tmdb_list_drawable_watchlist) as ImageButton
+        mTmdbImageButtonFavourite = mRootView.findViewById(R.id.movie_detail_user_tmdb_list_drawable_favourite) as ImageButton
+        mTmdbImageButtonRated = mRootView.findViewById(R.id.movie_detail_user_tmdb_list_drawable_rated) as ImageButton
+
         //All the dynamic fields (data fields) & ratingbar
         mMovieTitleTextView = mRootView.findViewById(R.id.movie_detail_title) as TextView
         mMpaaRatingImageView = mRootView.findViewById(R.id.movie_detail_mpaa_image) as ImageView
@@ -531,7 +556,7 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
                 LogDisplay.callLog(LOG_TAG, "onRatingChanged:User rating bar value->$rating", LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
                 if (mMovieTitle && mMovieId) {
                     final UpdateUserListChoiceAndRating updateUserList = new UpdateUserListChoiceAndRating(getActivity(), mUserListDrawableLayout,
-                            mMovieId, mMovieTitle, mPalletePrimaryColor, mPalleteBodyTextColor)
+                            mMovieId, mMovieTitle, mPalletePrimaryColor, mPalleteBodyTextColor, true)
                     final String[] updateUserListArgs
                     //If the rating value is zero then remove it
                     if (rating == 0.0) {
@@ -545,6 +570,7 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
                         updateUserListArgs = [GlobalStaticVariables.USER_LIST_USER_RATING, GlobalStaticVariables.USER_RATING_ADD_FLAG, String.valueOf(rating)]
                         updateUserList.execute(updateUserListArgs)
                     }
+                    createDialogForTmdbRatingConfirmation()
                 }
             }
         })
@@ -588,7 +614,6 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
         /**
          * Movie Crew Grid handling
          */
-        //Create a layout manager which is used for similar movie, movie cast & crew grid
         mHorizontalMovieCrewGridView = mRootView.findViewById(R.id.movie_detail_crew_grid) as HorizontalGridView
         mCrewGridEmptyMsgTextView = mRootView.findViewById(R.id.movie_detail_crew_grid_empty_msg_text_view) as TextView
         final GridLayoutManager crewGridLayoutManager = new GridLayoutManager(getActivity(), 1, GridLayoutManager.HORIZONTAL, false)
@@ -605,19 +630,19 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
         mHorizontalSimilarMovieGridView.setLayoutManager(mSimilarMovieGridLayoutManager)
         mSimilarMovieAdapter = new SimilarMovieAdapter(getActivity(), mSimilarMovieGridEmptyMsgTextView)
         mHorizontalSimilarMovieGridView.setAdapter(mSimilarMovieAdapter)
-        mHorizontalSimilarMovieGridView.setOnScrollListener(new RecyclerView.OnScrollListener() {
-            @Override
-            void onScrollStateChanged(RecyclerView recyclerView, int newState) {
-                super.onScrollStateChanged(recyclerView, newState)
-                LogDisplay.callLog(LOG_TAG, "onScrollStateChanged is called.", LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
-            }
-
-            @Override
-            void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-                super.onScrolled(recyclerView, dx, dy)
-                LogDisplay.callLog(LOG_TAG, "onScrolled is called.dx=$dx & dy=$dy", LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
-            }
-        })
+//        mHorizontalSimilarMovieGridView.setOnScrollListener(new RecyclerView.OnScrollListener() {
+//            @Override
+//            void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+//                super.onScrollStateChanged(recyclerView, newState)
+//                LogDisplay.callLog(LOG_TAG, "onScrollStateChanged is called.", LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
+//            }
+//
+//            @Override
+//            void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+//                super.onScrolled(recyclerView, dx, dy)
+//                LogDisplay.callLog(LOG_TAG, "onScrolled is called.dx=$dx & dy=$dy", LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
+//            }
+//        })
         /**
          * External web link button handling
          */
@@ -649,6 +674,12 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
         mMovieReviewAdapter = new MovieReviewAdapter(getActivity(), mRecyclerViewEmptyMsgTextView)
         mMovieReviewRecyclerView.setAdapter(mMovieReviewAdapter)
 
+        /** If the user is not logged in to Tmdb account then hide the Tmdb user list layout **/
+        if (MovieMagicMainActivity.isUserLoggedIn) {
+            mUserTmdbListDrawableLayout.setVisibility(LinearLayout.VISIBLE)
+        } else {
+            mUserTmdbListDrawableLayout.setVisibility(LinearLayout.GONE)
+        }
         return mRootView
     }
 
@@ -705,6 +736,10 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
             getLoaderManager().initLoader(MOVIE_DETAIL_FRAGMENT_MOVIE_IMAGE_LOADER_ID, null, this)
             getLoaderManager().initLoader(MOVIE_DETAIL_FRAGMENT_MOVIE_REVIEW_LOADER_ID, null, this)
             getLoaderManager().initLoader(MOVIE_DETAIL_FRAGMENT_MOVIE_USER_LIST_FLAG_LOADER_ID, null, this)
+            // Start Tmdb data loader only if user is logged in
+            if(MovieMagicMainActivity.isUserLoggedIn) {
+                getLoaderManager().initLoader(MOVIE_DETAIL_FRAGMENT_BASIC_TMDB_DATA_LOADER_ID, null, this)
+            }
         } else {
             mBackdropViewPagerPos = savedInstanceState.getInt(GlobalStaticVariables.DETAIL_BACKDROP_VIEWPAGER_POSITION,0)
             LogDisplay.callLog(LOG_TAG, 'onActivityCreated:not first time, so restart loaders', LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
@@ -717,6 +752,10 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
             getLoaderManager().restartLoader(MOVIE_DETAIL_FRAGMENT_MOVIE_IMAGE_LOADER_ID, null, this)
             getLoaderManager().restartLoader(MOVIE_DETAIL_FRAGMENT_MOVIE_REVIEW_LOADER_ID, null, this)
             getLoaderManager().restartLoader(MOVIE_DETAIL_FRAGMENT_MOVIE_USER_LIST_FLAG_LOADER_ID, null, this)
+            // Restart Tmdb loader only if user is logged in
+            if(MovieMagicMainActivity.isUserLoggedIn) {
+                getLoaderManager().restartLoader(MOVIE_DETAIL_FRAGMENT_BASIC_TMDB_DATA_LOADER_ID, null, this)
+            }
         }
     }
 
@@ -737,13 +776,13 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
             case MOVIE_DETAIL_FRAGMENT_BASIC_DATA_LOADER_ID:
                 //TODO: this cursor can still return more than one row for similar movies
                 return new CursorLoader(
-                        getActivity(),                                  //Parent Activity Context
-                        MovieMagicContract.MovieBasicInfo.CONTENT_URI,  //Table to query
-                        MOVIE_BASIC_INFO_COLUMNS,                       //Projection to return
+                        getActivity(),                                                        //Parent Activity Context
+                        MovieMagicContract.MovieBasicInfo.CONTENT_URI,                        //Table to query
+                        MOVIE_BASIC_INFO_COLUMNS,                                             //Projection to return
                         """$MovieMagicContract.MovieBasicInfo.COLUMN_MOVIE_ID = ? and
                            $MovieMagicContract.MovieBasicInfo.COLUMN_MOVIE_CATEGORY = ? """,  //Selection Clause
-                        mMovieIdCategoryArg,                                 //Selection Arg
-                        null)                                           //Only a single row is expected, so not sorted
+                        mMovieIdCategoryArg,                                                  //Selection Arg
+                        null)                                                                 //Only a single row is expected, so not sorted
 
             case MOVIE_DETAIL_FRAGMENT_SIMILAR_MOVIE_LOADER_ID:
                 return new CursorLoader(
@@ -809,7 +848,7 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
                         getActivity(),                                                      //Parent Activity Context
                         MovieMagicContract.MovieReview.CONTENT_URI,                         //Table to query
                         MOVIE_REVIEW_COLUMNS,                                               //Projection to return
-                        "$MovieMagicContract.MovieReview.COLUMN_REVIEW_ORIG_MOVIE_ID = ?", //Selection Clause
+                        "$MovieMagicContract.MovieReview.COLUMN_REVIEW_ORIG_MOVIE_ID = ?",  //Selection Clause
                         mMovieIdArg,                                                        //Selection Arg
                         MovieMagicContract.MovieReview.COLUMN_REVIEW_AUTHOR)                //Sorted on the author
 
@@ -821,6 +860,15 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
                         "$MovieMagicContract.MovieUserListFlag.COLUMN_USER_LIST_FLAG_ORIG_MOVIE_ID = ?", //Selection Clause
                         mMovieIdArg,                                                                     //Selection Arg
                         null)                                                                            //Sorting not used
+
+            case MOVIE_DETAIL_FRAGMENT_BASIC_TMDB_DATA_LOADER_ID:
+                return new CursorLoader(
+                        getActivity(),                                                    //Parent Activity Context
+                        MovieMagicContract.MovieBasicInfo.CONTENT_URI,                    //Table to query
+                        MOVIE_BASIC_INFO_TMDB_COLUMNS,                                    //Projection to return
+                        "$MovieMagicContract.MovieBasicInfo.COLUMN_MOVIE_LIST_TYPE = ?",  //Selection Clause
+                        [GlobalStaticVariables.MOVIE_LIST_TYPE_TMDB_USER] as String[],    //Selection Arg (select all Tmdb movies)
+                        null)                                                             //Sorting not used
             default:
                 return null
         }
@@ -858,6 +906,9 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
             case MOVIE_DETAIL_FRAGMENT_MOVIE_USER_LIST_FLAG_LOADER_ID:
                 handleMovieUSerListFlagOnLoadFinished(data)
                 break
+            case MOVIE_DETAIL_FRAGMENT_BASIC_TMDB_DATA_LOADER_ID:
+                handleTmdbMovieOnLoadFinished(data)
+                break
             default:
                 LogDisplay.callLog(LOG_TAG, "Unknown loader id. id->$loaderId", LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
         }
@@ -875,7 +926,7 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
 
     /**
      * This method is called when the loader is finished for movie basic info table
-     * @param data Cursor
+     * @param data Cursor The cursor returned by the loader
      */
     void handleMovieBasicOnLoadFinished(Cursor data) {
         LogDisplay.callLog(LOG_TAG, "handleMovieBasicOnLoadFinished.Cursor rec count -> ${data.getCount()}", LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
@@ -964,14 +1015,15 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
                                     mPalleteAccentColor = ContextCompat.getColor(getActivity(), R.color.accent)
                                 }
                             }
+                            // Apply the color to the layouts & texts
                             changeLayoutAndTextColor()
                             initializeTitleAndColor()
-                            //Set the color for adapters
+                            setImageButtonColor()
+                            // Apply the color for all attached adapters
                             mMovieCastAdapter.changeColor(mPalletePrimaryDarkColor, mPalleteBodyTextColor)
                             mMovieCrewAdapter.changeColor(mPalletePrimaryDarkColor, mPalleteBodyTextColor)
                             mSimilarMovieAdapter.changeColor(mPalletePrimaryDarkColor, mPalleteBodyTextColor)
                             mMovieReviewAdapter.changeColor(mPalletePrimaryColor, mPalleteTitleColor, mPalleteBodyTextColor)
-                            setImageButtonColor()
                         }
                     })
                 }
@@ -1047,6 +1099,7 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
                 mMovieHomePageUrl = data.getString(COL_MOVIE_BASIC_HOME_PAGE)
                 mHomePageButton.setText(getActivity().getString(R.string.movie_detail_web_links_home_page))
                 mHomePageButton.setClickable(true)
+                mHomePageButton.setAlpha(GlobalStaticVariables.MOVIE_MAGIC_ALPHA_FULL_OPAQUE)
                 //TODO: Need to look into this Build.VERSION_CODES issue later
                 //Somehow while running in Jelly bean & KITKAT it cannot find Build.VERSION_CODES.LOLLIPOP, yet to figure out why!
                 //So using the API number (21 - LOLLIPOP)itself here and other places below
@@ -1057,6 +1110,7 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
             } else {
                 mHomePageButton.setText(getActivity().getString(R.string.movie_detail_web_links_home_page_not_available))
                 mHomePageButton.setClickable(false)
+                mHomePageButton.setAlpha(GlobalStaticVariables.MOVIE_MAGIC_ALPHA_OPAQUE_40_PERCENT)
                 if (Build.VERSION.SDK_INT >= 21) {
 //                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                     mHomePageButton.setElevation(GlobalStaticVariables.MOVIE_MAGIC_ELEVATION_RESET)
@@ -1067,6 +1121,7 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
                 mMovieImdbId = data.getString(COL_MOVIE_BASIC_IMDB_ID)
                 mImdbLinkButton.setText(getActivity().getString(R.string.detail_web_links_imdb_link))
                 mImdbLinkButton.setClickable(true)
+                mImdbLinkButton.setAlpha(GlobalStaticVariables.MOVIE_MAGIC_ALPHA_FULL_OPAQUE)
                 if (Build.VERSION.SDK_INT >= 21) {
 //                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                     mImdbLinkButton.setElevation(GlobalStaticVariables.MOVIE_MAGIC_ELEVATION)
@@ -1074,6 +1129,7 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
             } else {
                 mImdbLinkButton.setText(getActivity().getString(R.string.movie_detail_web_links_imdb_link_not_available))
                 mImdbLinkButton.setClickable(false)
+                mImdbLinkButton.setAlpha(GlobalStaticVariables.MOVIE_MAGIC_ALPHA_OPAQUE_40_PERCENT)
                 if (Build.VERSION.SDK_INT >= 21) {
 //                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                     mImdbLinkButton.setElevation(GlobalStaticVariables.MOVIE_MAGIC_ELEVATION_RESET)
@@ -1096,10 +1152,10 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
                 LogDisplay.callLog(LOG_TAG, 'handleMovieBasicOnLoadFinished.Additional movie data already present', LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
             }
         } else {
-            LogDisplay.callLog(LOG_TAG, "handleMovieBasicOnLoadFinished.Record not found, should reach here only when movie is clicked on person screen & new scenario? - Movie id:$mMovieId, Category:$mMovieCategory", LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
+            LogDisplay.callLog(LOG_TAG, "handleMovieBasicOnLoadFinished.Record not found, should reach here only when movie is clicked on person screen - Movie id:$mMovieId, Category:$mMovieCategory", LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
             if(mMovieCategory == GlobalStaticVariables.MOVIE_CATEGORY_PERSON) {
                 //Movie does not exists, go and fetch then insert into movie basic info table
-                LogDisplay.callLog(LOG_TAG, 'handleMovieBasicOnLoadFinished.Movie does not exists, go and fetch then insert into movie basic info table', LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
+                LogDisplay.callLog(LOG_TAG, 'handleMovieBasicOnLoadFinished.Movie for person does not exists, go and fetch then insert into movie basic info table', LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
                 final ArrayList<Integer> movieIdList = new ArrayList<>(1)
                 final ArrayList<Integer> movieRowIdList = new ArrayList<>(1)
                 final ArrayList<Integer> isForHomeList = new ArrayList<>(1)
@@ -1109,14 +1165,14 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
                 final ArrayList<Integer>[] loadMovieDetailsArg = [movieIdList, movieRowIdList, isForHomeList] as ArrayList<Integer>[]
                 new LoadMovieDetails(getActivity()).execute(loadMovieDetailsArg)
             } else {
-                LogDisplay.callLog(LOG_TAG, "Investigate how it reached here - Movie id:$mMovieId, Category:$mMovieCategory", LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
+                LogDisplay.callLog(LOG_TAG, "New scenario, investigate how it reached here - Movie id:$mMovieId, Category:$mMovieCategory", LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
             }
         }
     }
 
     /**
      * This method is called when the loader is finished for similar movies in movie basic info table
-     * @param data Cursor
+     * @param data Cursor The cursor returned by the loader
      */
     void handleSimilarMovieOnLoadFinished(Cursor data) {
         LogDisplay.callLog(LOG_TAG, "handleSimilarMovieOnLoadFinished.Cursor rec count -> ${data.getCount()}", LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
@@ -1129,7 +1185,7 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
 
     /**
      * This method is called when the loader is finished for movie cast table
-     * @param data Cursor
+     * @param data Cursor The cursor returned by the loader
      */
     void handleMovieCastOnLoadFinished(Cursor data) {
         LogDisplay.callLog(LOG_TAG, "handleMovieCastOnLoadFinished.Cursor rec count -> ${data.getCount()}", LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
@@ -1138,7 +1194,7 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
 
     /**
      * This method is called when the loader is finished for movie crew table
-     * @param data Cursor
+     * @param data Cursor The cursor returned by the loader
      */
     void handleMovieCrewOnLoadFinished(Cursor data) {
         LogDisplay.callLog(LOG_TAG, "handleMovieCrewOnLoadFinished.Cursor rec count -> ${data.getCount()}", LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
@@ -1147,7 +1203,7 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
 
     /**
      * This method is called when the loader is finished for movie video table
-     * @param data Cursor
+     * @param data Cursor The cursor returned by the loader
      */
     void initiateYouTubeVideo(Cursor data) {
         LogDisplay.callLog(LOG_TAG, "initiateYouTubeVideo.Cursor rec count -> ${data.getCount()}", LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
@@ -1174,7 +1230,7 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
 
     /**
      * This method is called when the loader is finished for movie release info table
-     * @param data Cursor
+     * @param data Cursor The cursor returned by the loader
      */
     void populateMpaaImage(Cursor data) {
         LogDisplay.callLog(LOG_TAG, "populateMpaaImage.Cursor rec count -> ${data.getCount()}", LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
@@ -1196,7 +1252,7 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
 
     /**
      * This method is called when the loader is finished for movie image table
-     * @param data
+     * @param data Cursor The cursor returned by the loader
      */
     void processBackdropImages(Cursor data) {
         LogDisplay.callLog(LOG_TAG, "processBackdropImages.Cursor rec count -> ${data.getCount()}", LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
@@ -1204,7 +1260,7 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
         //TODO: Future change - provide a setting option to user to chose no image download over mobile data & for better
         if (data.moveToFirst()) {
             mBackdropList = new ArrayList<String>()
-            //Add the main_activity_menu backdrop first
+            // Add the original backrop image (i.e. which comes along with other movie details)
             if (mOriginalBackdropPath) {
                 mBackdropList.add(mOriginalBackdropPath)
             }
@@ -1222,13 +1278,12 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
                         void onClick(int position) {
                             LogDisplay.callLog(LOG_TAG, "DetailFragmentPagerAdapter clicked.Position->$position", LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
                             mCallbackForBackdropImageClick.onBackdropImageClicked(mMovieTitle, position, mBackdropList as ArrayList<String>)
-
                         }
                     })
             mBackdropViewPager.setAdapter(adapter)
             final int dotsCount = adapter.getCount()
-            final ImageButton[] dots = new ImageButton[dotsCount]
-            setBackDropViewPagerDots(dotsCount, dots)
+            final ImageButton[] dotsImage = new ImageButton[dotsCount]
+            setBackDropViewPagerDots(dotsCount, dotsImage)
             final OnPageChangeListener onPageChangeListener = new OnPageChangeListener() {
                 @Override
                 void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
@@ -1237,16 +1292,16 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
                 @Override
                 void onPageSelected(int position) {
 //                    mBackdropDotHolderLayout.removeAllViews()
-                    final LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(25,25)
+                    final LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(20,20)
                     final ColorStateList greyColorStateList = ColorStateList.valueOf(ContextCompat.getColor(getActivity(), R.color.grey_600_color))
                     for (i in 0..(dotsCount - 1)) {
                         if (i != position) {
-                            dots[i].setLayoutParams(layoutParams)
-                            ViewCompat.setBackgroundTintList(dots[i], greyColorStateList)
+                            dotsImage[i].setLayoutParams(layoutParams)
+                            ViewCompat.setBackgroundTintList(dotsImage[i], greyColorStateList)
                         } else {
-                            dots[position].setLayoutParams(new LinearLayout.LayoutParams(40,40))
+                            dotsImage[position].setLayoutParams(new LinearLayout.LayoutParams(30,30))
                             final ColorStateList accentColorStateList = ColorStateList.valueOf(ContextCompat.getColor(getActivity(), R.color.accent))
-                            ViewCompat.setBackgroundTintList(dots[position], accentColorStateList)
+                            ViewCompat.setBackgroundTintList(dotsImage[position], accentColorStateList)
                         }
                     }
                     mBackdropViewPagerPos = position
@@ -1256,7 +1311,8 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
                 void onPageScrollStateChanged(int state) {
                 }
             }
-            mBackdropViewPager.removeOnPageChangeListener(onPageChangeListener)
+            mBackdropViewPager.clearOnPageChangeListeners()
+//            mBackdropViewPager.removeOnPageChangeListener(onPageChangeListener)
             mBackdropViewPager.addOnPageChangeListener(onPageChangeListener)
             mBackdropViewPager.setCurrentItem(mBackdropViewPagerPos)
         }
@@ -1264,7 +1320,7 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
 
     /**
      * This method is called when the loader is finished for movie review table
-     * @param data Cursor
+     * @param data Cursor The cursor returned by the loader
      */
     void handleMovieReviewOnLoadFinished(Cursor data) {
         LogDisplay.callLog(LOG_TAG, "handleMovieReviewOnLoadFinished.Cursor rec count -> ${data.getCount()}", LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
@@ -1273,11 +1329,10 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
 
     /**
      * This method is called when the loader is finished for movie user list flag table
-     * @param data Cursor
+     * @param data Cursor The cursor returned by the loader
      */
     void handleMovieUSerListFlagOnLoadFinished(Cursor data) {
         LogDisplay.callLog(LOG_TAG, "handleMovieUSerListFlagOnLoadFinished.Cursor rec count -> ${data.getCount()}", LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
-        //TODO: need to add the rest of the logic later
         mUserListWatchedFlag = false
         mUserListWishListdFlag = false
         mUserListFavouriteFlag = false
@@ -1306,9 +1361,75 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
     }
 
     /**
+     * This method is called when the loader is finished for Tmdb movies
+     * @param data Cursor The cursor returned by the loader
+     */
+    void handleTmdbMovieOnLoadFinished(Cursor data) {
+        LogDisplay.callLog(LOG_TAG, "handleTmdbMovieOnLoadFinished.Cursor rec count -> ${data.getCount()}", LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
+        mUserTmdbListWatchlistFlag = false
+        mUserTmdbListFavouriteFlag = false
+        mUserTmdbListRatedFlag = false
+        // The associated loader is kicked off only when user is logged on, however the check is done here also to be on the safe side
+        if (data.moveToFirst() && MovieMagicMainActivity.isUserLoggedIn) {
+            final boolean isTmdbMovie = false
+            final float tmdbUserRating = 0.0
+            final ArrayList<String> categories = new ArrayList<>()
+            for (i in 0..(data.getCount() - 1)) {
+                if(mMovieId == data.getInt(COL_MOVIE_BASIC_TMDB_MOVIE_ID)) {
+                    categories.add(data.getString(COL_MOVIE_BASIC_TMDB_MOVIE_CATEGORY))
+                    isTmdbMovie = true
+                    if(data.getString(COL_MOVIE_BASIC_TMDB_MOVIE_CATEGORY) == GlobalStaticVariables.MOVIE_CATEGORY_TMDB_USER_RATED) {
+                        tmdbUserRating = data.getFloat(COL_MOVIE_BASIC_TMDB_MOVIE_RATING)
+                        LogDisplay.callLog(LOG_TAG, "Tmdb user rating -> $tmdbUserRating", LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
+                    }
+                }
+                data.moveToNext()
+            }
+
+            // If it's a Tmdb movie then see what we got and set the flags accordingly
+            if (isTmdbMovie) {
+                LogDisplay.callLog(LOG_TAG, "Movie is in Tmdb list. Categories -> $categories", LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
+                for (i in 0..(categories.size() -1)) {
+                    switch (categories.get(i)) {
+                        case GlobalStaticVariables.MOVIE_CATEGORY_TMDB_USER_WATCHLIST:
+                            mTmdbImageButtonWatchlist.setAlpha(GlobalStaticVariables.MOVIE_MAGIC_ALPHA_FULL_OPAQUE)
+                            mUserTmdbListWatchlistFlag = true
+                            break
+                        case GlobalStaticVariables.MOVIE_CATEGORY_TMDB_USER_FAVOURITE:
+                            mTmdbImageButtonFavourite.setAlpha(GlobalStaticVariables.MOVIE_MAGIC_ALPHA_FULL_OPAQUE)
+                            mUserTmdbListFavouriteFlag = true
+                            break
+                        case GlobalStaticVariables.MOVIE_CATEGORY_TMDB_USER_RATED:
+                            mTmdbImageButtonRated.setAlpha(GlobalStaticVariables.MOVIE_MAGIC_ALPHA_FULL_OPAQUE)
+                            mUserTmdbListRatedFlag = true
+                            // Flag firstTimeLocalRatingUpdateWithTmdbRating is used to restrict the call to one only
+                            if(tmdbUserRating > 0 && firstTimeLocalRatingUpdateWithTmdbRating) {
+                                mUserRatingBar.setRating(tmdbUserRating)
+                                // Now update the rating in the local list
+                                LogDisplay.callLog(LOG_TAG, 'Going to update local rating with Tmdb rating', LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
+                                final UpdateUserListChoiceAndRating updateUserList = new UpdateUserListChoiceAndRating(getActivity(), mUserListDrawableLayout,
+                                        mMovieId, mMovieTitle, mPalletePrimaryColor, mPalleteBodyTextColor, true)
+                                final String[] updateUserListArgs = [GlobalStaticVariables.USER_LIST_USER_RATING, GlobalStaticVariables.USER_RATING_ADD_FLAG, String.valueOf(tmdbUserRating)]
+                                updateUserList.execute(updateUserListArgs)
+                                firstTimeLocalRatingUpdateWithTmdbRating = false
+                            }
+                            break
+                        default:
+                            LogDisplay.callLog(LOG_TAG, "Unknown user Tmdb category -> ${categories.get(i)}", LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
+                    }
+                }
+            } else {
+                LogDisplay.callLog(LOG_TAG, "This movie is not in any user Tmdb list", LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
+            }
+        } else {
+            LogDisplay.callLog(LOG_TAG, "Either cursor is empty or isUserLoggedIn is false. Cursor size -> ${data.getCount()} & isUserLoggedIn falg is -> $MovieMagicMainActivity.isUserLoggedIn", LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
+        }
+    }
+
+    /**
      * This method is called to apply the color once that is determined from the poster image
      */
-    void changeLayoutAndTextColor() {
+    protected void changeLayoutAndTextColor() {
         //Change color for all the layouts
         mDetailMovieLayout.setBackgroundColor(mPalletePrimaryColor)
 
@@ -1333,6 +1454,7 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
         mReviewHeaderTextView.setTextColor(mPalleteTitleColor)
         mExternalLinkHeader.setTextColor(mPalleteTitleColor)
         mUserListDrawableTitle.setTextColor(mPalleteTitleColor)
+        mUserTmdbListDrawableTitle.setTextColor(mPalleteTitleColor)
 
         //Change color for data fields
         mMovieTitleTextView.setTextColor(mPalleteTitleColor) //Movie name is Title color
@@ -1361,7 +1483,16 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
         mImageButtonFavourite.setBackgroundColor(mPalletePrimaryDarkColor)
         mImageButtonCollection.setBackgroundColor(mPalletePrimaryDarkColor)
 
-        //Set button color
+        //Set user's Tmdb list ImageButton color
+        mTmdbImageButtonWatchlist.setBackgroundColor(mPalletePrimaryDarkColor)
+        mTmdbImageButtonFavourite.setBackgroundColor(mPalletePrimaryDarkColor)
+        mTmdbImageButtonRated.setBackgroundColor(mPalletePrimaryDarkColor)
+//        /** testing tint color**/
+//        final ColorStateList colorStateListImageButton = ColorStateList.valueOf(mPalleteAccentColor)
+//        mTmdbImageButtonWatchlist.setImageTintList(colorStateListImageButton)
+//        mTmdbImageButtonFavourite.setColorFilter(mPalleteAccentColor)
+
+        //Set homepage & Imdb button color
         mHomePageButton.setBackgroundColor(mPalletePrimaryDarkColor)
         mImdbLinkButton.setBackgroundColor(mPalletePrimaryDarkColor)
         mHomePageButton.setTextColor(mPalleteBodyTextColor)
@@ -1369,34 +1500,19 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
 
         //Set ratingbar color. Used Compat so that it can work below lollipop.
         //Above one - didn't use. No reason, just an example how to handle lollipop and below separately
-        final Drawable tmdbRatingdrawable = mTmdbRatingBar.getProgressDrawable()
-        DrawableCompat.setTint(tmdbRatingdrawable, mPalleteAccentColor)
-        final Drawable userRatingDrawable = mUserRatingBar.getProgressDrawable()
-        DrawableCompat.setTint(userRatingDrawable, mPalleteAccentColor)
-    }
-
-    /**
-     * This method is called to apply the color to image button (used for user list selection)
-     */
-    void setImageButtonColor() {
-        if (mUserListWatchedFlag) {
-            mImageButtonWatched.setColorFilter(mPalleteAccentColor)
-        }
-        if (mUserListWishListdFlag) {
-            mImageButtonWishList.setColorFilter(mPalleteAccentColor)
-        }
-        if (mUserListFavouriteFlag) {
-            mImageButtonFavourite.setColorFilter(mPalleteAccentColor)
-        }
-        if (mUserListCollectionFlag) {
-            mImageButtonCollection.setColorFilter(mPalleteAccentColor)
-        }
+//        final Drawable tmdbRatingdrawable = mTmdbRatingBar.getProgressDrawable()
+//        DrawableCompat.setTint(tmdbRatingdrawable, mPalleteAccentColor)
+        final ColorStateList colorStateListRatingBar = ColorStateList.valueOf(mPalleteAccentColor)
+        ViewCompat.setBackgroundTintList(mTmdbRatingBar,colorStateListRatingBar)
+//        final Drawable userRatingDrawable = mUserRatingBar.getProgressDrawable()
+//        DrawableCompat.setTint(userRatingDrawable, mPalleteAccentColor)
+        ViewCompat.setBackgroundTintList(mUserRatingBar,colorStateListRatingBar)
     }
 
     /**
      * This method is called to set the title and apply the appropriate color once that is determined from poster image
      */
-    void initializeTitleAndColor() {
+    protected void initializeTitleAndColor() {
         LogDisplay.callLog(LOG_TAG, 'initializeTitleAndColor is called', LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
         mCollapsingToolbar.setStatusBarScrimColor(mPalletePrimaryDarkColor)
         mCollapsingToolbar.setContentScrimColor(mPalletePrimaryColor)
@@ -1425,27 +1541,53 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
     }
 
     /**
-     * This method is called to set the dots for backdrop image ViewPager
-     * @param dotsCount
-     * @param dots
+     * This method is called to apply the color to image button (used for user list selection)
      */
-    void setBackDropViewPagerDots(int dotsCount, ImageButton[] dots) {
-        final LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(25,25)
+    protected void setImageButtonColor() {
+        if (mUserListWatchedFlag) {
+            mImageButtonWatched.setColorFilter(mPalleteAccentColor)
+        }
+        if (mUserListWishListdFlag) {
+            mImageButtonWishList.setColorFilter(mPalleteAccentColor)
+        }
+        if (mUserListFavouriteFlag) {
+            mImageButtonFavourite.setColorFilter(mPalleteAccentColor)
+        }
+        if (mUserListCollectionFlag) {
+            mImageButtonCollection.setColorFilter(mPalleteAccentColor)
+        }
+        if (mUserTmdbListWatchlistFlag) {
+            mTmdbImageButtonWatchlist.setColorFilter(mPalleteAccentColor)
+        }
+        if (mUserTmdbListFavouriteFlag) {
+            mTmdbImageButtonFavourite.setColorFilter(mPalleteAccentColor)
+        }
+        if (mUserTmdbListRatedFlag) {
+            mTmdbImageButtonRated.setColorFilter(mPalleteAccentColor)
+        }
+    }
+
+    /**
+     * This method is called to set the dots for backdrop image ViewPager
+     * @param dotsCount Total number of dots to be created
+     * @param dotsImage Array of Image Buttons
+     */
+    private void setBackDropViewPagerDots(int dotsCount, ImageButton[] dotsImage) {
+        final LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(20,20)
         final ColorStateList greyColorStateList = ColorStateList.valueOf(ContextCompat.getColor(getActivity(), R.color.grey_600_color))
         layoutParams.setMargins(1,0,1,0)
         for(i in 0..(dotsCount - 1)) {
-            dots[i] = new ImageButton(getActivity())
-            dots[i].setBackgroundResource(R.drawable.view_pager_dot)
-            dots[i].setLayoutParams(layoutParams)
-            ViewCompat.setBackgroundTintList(dots[i], greyColorStateList)
-            mBackdropDotHolderLayout.addView(dots[i])
+            dotsImage[i] = new ImageButton(getActivity())
+            dotsImage[i].setBackgroundResource(R.drawable.view_pager_dot)
+            dotsImage[i].setLayoutParams(layoutParams)
+            ViewCompat.setBackgroundTintList(dotsImage[i], greyColorStateList)
+            mBackdropDotHolderLayout.addView(dotsImage[i])
         }
-        //Set the first one's color
-        dots[mBackdropViewPagerPos].setLayoutParams(new LinearLayout.LayoutParams(40,40))
+        // Set the first one's color & size
+        dotsImage[mBackdropViewPagerPos].setLayoutParams(new LinearLayout.LayoutParams(30,30))
         final ColorStateList accentColorStateList = ColorStateList.valueOf(ContextCompat.getColor(getActivity(), R.color.accent))
-        ViewCompat.setBackgroundTintList(dots[mBackdropViewPagerPos], accentColorStateList)
+        ViewCompat.setBackgroundTintList(dotsImage[mBackdropViewPagerPos], accentColorStateList)
     }
-
 
     /**
      * Intent to open a web browser when user clicks on movie home page button
@@ -1483,6 +1625,31 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
         //Cancel Picasso requests - required where callback (hard reference) is used
         //TODO this is not done everywhere, so need to do in other places
         Picasso.with(getActivity()).cancelRequest(mPosterImageView)
+    }
+
+    void createDialogForTmdbRatingConfirmation() {
+        LogDisplay.callLog(LOG_TAG, 'createDialogForTmdbRatingConfirmation is called', LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
+        final AlertDialog.Builder builder = new AlertDialog.Builder(getActivity())
+        builder.setTitle(R.string.tmdb_rating_dialog_title)
+               .setMessage(R.string.tmdb_rating_dialog_message)
+
+        builder.setPositiveButton(R.string.tmdb_rating_dialog_ok_button, new DialogInterface.OnClickListener() {
+            @Override
+            void onClick(DialogInterface dialog, int which) {
+                LogDisplay.callLog(LOG_TAG, 'Dialog Ok is clicked', LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
+            }
+        })
+
+        builder.setNegativeButton(R.string.tmdb_rating_dialog_cancel_button, new DialogInterface.OnClickListener(){
+            @Override
+            void onClick(DialogInterface dialog, int which) {
+                LogDisplay.callLog(LOG_TAG, 'Dialog cancel is clicked', LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
+            }
+        })
+
+        // Create the AlertDialog
+        final AlertDialog dialog = builder.create()
+        dialog.show()
     }
 
     //Overriding the animation for better performance

@@ -58,7 +58,7 @@
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:background="@color/devider_color"/>
+        android:background="@color/divider_color"/>
     <!-- Layout for movie poster, release date, budget, revenue & popularity -->
     <LinearLayout
         android:id="@+id/movie_detail_poster_layout"
@@ -78,7 +78,7 @@
             android:scaleType="centerCrop"
             android:src="@drawable/grid_image_placeholder" />
         <LinearLayout
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:gravity="left"
             android:layout_weight="1"
@@ -111,7 +111,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
                 android:layout_marginLeft="@dimen/poster_image_data_fields_margin"
-                android:background="@color/devider_color" />
+                android:background="@color/divider_color" />
             <TextView
                 android:id="@+id/movie_detail_poster_budget_header"
                 android:layout_width="wrap_content"
@@ -140,7 +140,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
                 android:layout_marginLeft="@dimen/poster_image_data_fields_margin"
-                android:background="@color/devider_color" />
+                android:background="@color/divider_color" />
             <TextView
                 android:id="@+id/movie_detail_poster_revenue_header"
                 android:layout_width="wrap_content"
@@ -169,7 +169,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
                 android:layout_marginLeft="@dimen/poster_image_data_fields_margin"
-                android:background="@color/devider_color" />
+                android:background="@color/divider_color" />
             <TextView
                 android:id="@+id/movie_detail_poster_popularity_header"
                 android:layout_width="wrap_content"
@@ -198,7 +198,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
                 android:layout_marginLeft="@dimen/poster_image_data_fields_margin"
-                android:background="@color/devider_color" />
+                android:background="@color/divider_color" />
         </LinearLayout>
     </LinearLayout>
     <!-- Layout for TMDb rating -->
@@ -331,49 +331,114 @@
                 android:layout_width="0dp"
                 android:layout_height="@dimen/m_design_icon_size"
                 android:layout_weight="1"
-                android:alpha="@dimen/movie_detail_user_list_drawable_alpha_value"
+                android:alpha="@dimen/movie_detail_user_list_drawable_alpha_value_40_percent"
                 android:elevation="@dimen/card_view_elevation"
                 android:background="@color/primary_dark"
+                android:tint="@color/white_color"
                 android:src="@drawable/watched"/>
             <View
                 android:layout_width="2dp"
-                android:layout_height="match_parent"
-                android:background="@color/devider_color"/>
+                android:layout_height="match_parent"/>
             <ImageButton
                 android:id="@+id/movie_detail_user_list_drawable_wish_list"
                 android:layout_width="0dp"
                 android:layout_height="@dimen/m_design_icon_size"
                 android:layout_weight="1"
-                android:alpha="@dimen/movie_detail_user_list_drawable_alpha_value"
+                android:alpha="@dimen/movie_detail_user_list_drawable_alpha_value_40_percent"
                 android:elevation="@dimen/card_view_elevation"
                 android:background="@color/primary_dark"
+                android:tint="@color/white_color"
                 android:src="@drawable/wish_list"/>
             <View
                 android:layout_width="2dp"
-                android:layout_height="match_parent"
-                android:background="@color/devider_color"/>
+                android:layout_height="match_parent"/>
             <ImageButton
                 android:id="@+id/movie_detail_user_list_drawable_favourite"
                 android:layout_width="0dp"
                 android:layout_height="@dimen/m_design_icon_size"
                 android:layout_weight="1"
-                android:alpha="@dimen/movie_detail_user_list_drawable_alpha_value"
+                android:alpha="@dimen/movie_detail_user_list_drawable_alpha_value_40_percent"
                 android:elevation="@dimen/card_view_elevation"
                 android:background="@color/primary_dark"
+                android:tint="@color/white_color"
                 android:src="@drawable/favourite"/>
             <View
                 android:layout_width="2dp"
-                android:layout_height="match_parent"
-                android:background="@color/devider_color"/>
+                android:layout_height="match_parent"/>
             <ImageButton
                 android:id="@+id/movie_detail_user_list_drawable_collection"
                 android:layout_width="0dp"
                 android:layout_height="@dimen/m_design_icon_size"
                 android:layout_weight="1"
-                android:alpha="@dimen/movie_detail_user_list_drawable_alpha_value"
+                android:alpha="@dimen/movie_detail_user_list_drawable_alpha_value_40_percent"
                 android:elevation="@dimen/card_view_elevation"
                 android:background="@color/primary_dark"
+                android:tint="@color/white_color"
                 android:src="@drawable/collection"/>
+        </LinearLayout>
+    </LinearLayout>
+    <!-- Layout for user's TMDb list icons (i.e. wishlists, favourite & rated) -->
+    <LinearLayout
+        android:id="@+id/movie_detail_user_tmdb_list_drawable_layout"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        android:paddingEnd="@dimen/m_design_screen_edge_left_right_margin"
+        android:paddingLeft="@dimen/m_design_screen_edge_left_right_margin"
+        android:paddingRight="@dimen/m_design_screen_edge_left_right_margin"
+        android:paddingStart="@dimen/m_design_screen_edge_left_right_margin"
+        android:paddingBottom="@dimen/m_design_space_between_content_area"
+        android:paddingTop="@dimen/m_design_space_between_content_area">
+        <TextView
+            android:id="@+id/movie_detail_user_tmdb_list_drawable_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textAppearance="@style/TextAppearance.AppCompat.Title"
+            android:fontFamily="sans-serif-condensed"
+            android:textColor="@color/white_color"
+            android:paddingBottom="@dimen/m_design_space_between_content_area"
+            android:text="@string/movie_detail_user_tmdb_list_drawable_title_value"/>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+            <ImageButton
+                android:id="@+id/movie_detail_user_tmdb_list_drawable_watchlist"
+                android:layout_width="0dp"
+                android:layout_height="@dimen/m_design_icon_size"
+                android:layout_weight="1"
+                android:elevation="@dimen/card_view_elevation"
+                android:alpha="@dimen/movie_detail_user_list_drawable_alpha_value_40_percent"
+                android:background="@color/primary_dark"
+                android:tint="@color/white_color"
+                android:src="@drawable/bookmark"/>
+            <View
+                android:layout_width="2dp"
+                android:layout_height="match_parent"/>
+            <ImageButton
+                android:id="@+id/movie_detail_user_tmdb_list_drawable_favourite"
+                android:layout_width="0dp"
+                android:layout_height="@dimen/m_design_icon_size"
+                android:layout_weight="1"
+                android:elevation="@dimen/card_view_elevation"
+                android:alpha="@dimen/movie_detail_user_list_drawable_alpha_value_40_percent"
+                android:background="@color/primary_dark"
+                android:tint="@color/white_color"
+                android:src="@drawable/favourite"/>
+            <View
+                android:layout_width="2dp"
+                android:layout_height="match_parent"/>
+            <ImageButton
+                android:id="@+id/movie_detail_user_tmdb_list_drawable_rated"
+                android:layout_width="0dp"
+                android:layout_height="@dimen/m_design_icon_size"
+                android:layout_weight="1"
+                android:elevation="@dimen/card_view_elevation"
+                android:alpha="@dimen/movie_detail_user_list_drawable_alpha_value_40_percent"
+                android:background="@color/primary_dark"
+                android:tint="@color/white_color"
+                android:src="@drawable/top_rated"/>
         </LinearLayout>
     </LinearLayout>
     <!-- Layout for tagline and overview -->
@@ -428,7 +493,7 @@
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:background="@color/devider_color"/>
+        android:background="@color/divider_color"/>
     <!-- Layout for movie trailer (i.e. youtube fragment) -->
     <LinearLayout
         android:id="@+id/movie_detail_trailer_layout"
@@ -457,7 +522,6 @@
             android:id="@+id/youtube_fragment_container"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"
             android:visibility="visible" />
      <!-- this is to display a message when the movie trailer is empty -->
         <TextView
@@ -473,7 +537,7 @@
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:background="@color/devider_color"/>
+        android:background="@color/divider_color"/>
     <!-- Layout for production company and countries -->
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/movie_detail_production_info_layout"
@@ -528,7 +592,7 @@
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:background="@color/devider_color"/>
+        android:background="@color/divider_color"/>
     <!-- Layout for movie cast grid -->
     <LinearLayout
         android:id="@+id/movie_detail_cast_header_layout"
@@ -576,7 +640,7 @@
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:background="@color/devider_color"/>
+        android:background="@color/divider_color"/>
     <!-- Layout for movie crew grid -->
     <LinearLayout
         android:id="@+id/movie_detail_crew_header_layout"
@@ -624,7 +688,7 @@
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:background="@color/devider_color"/>
+        android:background="@color/divider_color"/>
     <!-- Layout for similar movie grid -->
     <LinearLayout
         android:id="@+id/movie_detail_similar_movie_header_layout"
@@ -672,7 +736,7 @@
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:background="@color/devider_color"/>
+        android:background="@color/divider_color"/>
     <!-- Layout for movie collection -->
     <LinearLayout
         android:id="@+id/movie_detail_collection_layout"
@@ -717,7 +781,7 @@
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:background="@color/devider_color"/>
+        android:background="@color/divider_color"/>
     <!-- Layout for movie home page and IMDb links -->
     <LinearLayout
         android:id="@+id/movie_detail_web_links_layout"
@@ -776,7 +840,7 @@
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:background="@color/devider_color"/>
+        android:background="@color/divider_color"/>
     <!-- Layout for review -->
     <LinearLayout
         android:id="@+id/movie_detail_review_header_layout"

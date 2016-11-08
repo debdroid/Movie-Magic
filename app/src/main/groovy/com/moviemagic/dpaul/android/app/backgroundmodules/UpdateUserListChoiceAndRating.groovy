@@ -28,6 +28,7 @@ class UpdateUserListChoiceAndRating extends AsyncTask<String, Void, Integer> {
     private int mUserFlag = 0
     private float mUserRating
     private final ProgressDialog mProgressDialog
+    private final boolean mShowNotification = false
 
     //Columns to fetch from movie_user_list_flag table
     private static final String[] MOVIE_USER_LIST_FLAG_COLUMNS = [MovieMagicContract.MovieUserListFlag._ID,
@@ -48,7 +49,7 @@ class UpdateUserListChoiceAndRating extends AsyncTask<String, Void, Integer> {
 
 
     public UpdateUserListChoiceAndRating(Context ctx, LinearLayout userDrawableLayout, int movieId, String movieTitle,
-                                         int backgroundColor, int bodyTextColor) {
+                                         int backgroundColor, int bodyTextColor, boolean showNotification) {
         mContext = ctx
         mContentResolver = mContext.getContentResolver()
         mUserDrawableLayout = userDrawableLayout
@@ -57,6 +58,7 @@ class UpdateUserListChoiceAndRating extends AsyncTask<String, Void, Integer> {
         mBodyTextColor = backgroundColor
         mBodyTextColor = bodyTextColor
         mProgressDialog = new ProgressDialog(mContext, ProgressDialog.STYLE_SPINNER)
+        mShowNotification = showNotification
     }
 
     @Override
@@ -325,8 +327,12 @@ class UpdateUserListChoiceAndRating extends AsyncTask<String, Void, Integer> {
         }
         //Expecting a single row update or insert only
         if(result == 1) {
-            Snackbar.make(mUserDrawableLayout.findViewById(R.id.movie_detail_user_list_drawable_layout),
-                    snackBarMsg, Snackbar.LENGTH_LONG).show()
+            if(mShowNotification) {
+                Snackbar.make(mUserDrawableLayout.findViewById(R.id.movie_detail_user_list_drawable_layout),
+                        snackBarMsg, Snackbar.LENGTH_LONG).show()
+            } else {
+                LogDisplay.callLog(LOG_TAG,"Show notification flag is not set.mShowNotification value->$mShowNotification",LogDisplay.UPDATE_USER_LIST_LOG_FLAG)
+            }
         } else {
             LogDisplay.callLog(LOG_TAG,"Something went wrong during user list update.Result value->$result",LogDisplay.UPDATE_USER_LIST_LOG_FLAG)
         }

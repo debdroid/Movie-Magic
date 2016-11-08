@@ -64,6 +64,7 @@ class MovieMagicDbHelper extends SQLiteOpenHelper {
                 $MovieMagicContract.MovieBasicInfo.COLUMN_RUNTIME INTEGER DEFAULT 0,
                 $MovieMagicContract.MovieBasicInfo.COLUMN_RELEASE_STATUS TEXT NULL,
                 $MovieMagicContract.MovieBasicInfo.COLUMN_TAGLINE TEXT NULL,
+                $MovieMagicContract.MovieBasicInfo.COLUMN_TMDB_USER_RATED_RATING REAL DEFAULT 0.0,
                 $MovieMagicContract.MovieBasicInfo.COLUMN_CREATE_TIMESTAMP TEXT NOT NULL,
                 $MovieMagicContract.MovieBasicInfo.COLUMN_UPDATE_TIMESTAMP TEXT NOT NULL,
                 $MovieMagicContract.MovieBasicInfo.COLUMN_USER_EXPORTED INTEGER DEFAULT 0,

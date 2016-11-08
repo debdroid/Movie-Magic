@@ -36,7 +36,7 @@
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
         android:clickable="true"
-        android:backgroundTint="@color/devider_color"
+        android:backgroundTint="@color/divider_color"
         android:layout_below="@+id/single_review_item_linear_layout"
         android:background="@drawable/ic_keyboard_arrow_down_white_24dp"/>
     <View
@@ -46,7 +46,7 @@
         android:layout_toLeftOf="@+id/single_review_item_show_button"
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:background="@color/devider_color" />
+        android:background="@color/divider_color" />
     <ImageButton
         android:id="@+id/single_review_item_hide_button"
         android:layout_width="wrap_content"
@@ -54,7 +54,7 @@
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
         android:clickable="true"
-        android:backgroundTint="@color/devider_color"
+        android:backgroundTint="@color/divider_color"
         android:visibility="invisible"
         android:layout_below="@+id/single_review_item_linear_layout"
         android:background="@drawable/ic_keyboard_arrow_up_white_24dp"/>

@@ -2,6 +2,7 @@ package com.moviemagic.dpaul.android.app.backgroundmodules
 
 import android.content.ContentValues
 import android.os.Bundle
+import android.text.TextUtils
 import com.moviemagic.dpaul.android.app.contentprovider.MovieMagicContract
 import com.moviemagic.dpaul.android.app.contentprovider.MovieMagicContract.MovieBasicInfo
 import com.moviemagic.dpaul.android.app.contentprovider.MovieMagicContract.MovieCast
@@ -106,6 +107,12 @@ class JsonParse {
                     movieValue.put(MovieBasicInfo.COLUMN_PAGE_NUMBER, jsonData.page)
                 else
                     movieValue.put(MovieBasicInfo.COLUMN_PAGE_NUMBER, 0)
+                // This one is for only Tmdb user Rated movies - for rest this filed does not exists
+                if(jsonData.results[i].rating)
+                    movieValue.put(MovieBasicInfo.COLUMN_TMDB_USER_RATED_RATING, jsonData.results[i].rating)
+                else
+                    movieValue.put(MovieBasicInfo.COLUMN_TMDB_USER_RATED_RATING, 0)
+
                 //category and movieListType are supplied in the program, so always null safe
                 movieValue.put(MovieBasicInfo.COLUMN_MOVIE_CATEGORY, category)
                 movieValue.put(MovieBasicInfo.COLUMN_MOVIE_LIST_TYPE, movieListType)
@@ -610,9 +617,13 @@ class JsonParse {
         // We could have just parsed two records, but better to reuse the code which is already tested and proven
         List<ContentValues> returnValue = []
         if (recommendationsMovies) {
-            for (i in 0..1) {
-                LogDisplay.callLog(LOG_TAG, "Index $i and value ${recommendationsMovies[i]}", LogDisplay.JSON_PARSE_LOG_FLAG)
-                returnValue << recommendationsMovies.get(i)
+            if(recommendationsMovies.size() > 1) {
+                for (i in 0..1) {
+                    LogDisplay.callLog(LOG_TAG, "Index $i and value ${recommendationsMovies[i]}", LogDisplay.JSON_PARSE_LOG_FLAG)
+                    returnValue << recommendationsMovies.get(i)
+                }
+            } else {
+                returnValue << recommendationsMovies.get(0)
             }
             //Some groovy magic - Closure
             returnValue.each {it.put(MovieBasicInfo.COLUMN_RECOMMENDATION_MOVIE_LINK_ID,movieId)}

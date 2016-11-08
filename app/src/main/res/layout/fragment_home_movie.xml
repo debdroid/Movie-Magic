@@ -12,14 +12,13 @@
             android:id="@+id/home_youtube_fragment_container"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"
             android:paddingBottom="@dimen/m_design_space_between_content_area"
             android:visibility="visible" />
         <!-- line divider -->
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:background="@color/devider_color"
+            android:background="@color/divider_color"
             android:paddingTop="@dimen/m_design_space_between_content_area" />
         <!-- Layout for In Cinemas movies -->
         <LinearLayout
@@ -55,7 +54,6 @@
                     style="?android:attr/borderlessButtonStyle"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_alignParentRight="true"
                     android:layout_weight="1"
                     android:text="@string/show_all_button_text"
                     android:textColor="@color/white_color"
@@ -71,7 +69,8 @@
                 <android.support.v7.widget.RecyclerView
                     android:id="@+id/home_movie_in_cinema_recycler_view"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"></android.support.v7.widget.RecyclerView>
+                    android:layout_height="wrap_content">
+                </android.support.v7.widget.RecyclerView>
                 <!-- this is to display a message when the recyclerview is empty -->
                 <TextView
                     android:id="@+id/home_movie_in_cinema_recycler_view_empty_msg_text_view"
@@ -91,7 +90,7 @@
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:background="@color/devider_color"
+            android:background="@color/divider_color"
             android:paddingTop="@dimen/m_design_space_between_content_area" />
         <!-- Layout for Coming Soon movies -->
         <LinearLayout
@@ -127,7 +126,6 @@
                     style="?android:attr/borderlessButtonStyle"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_alignParentRight="true"
                     android:layout_weight="1"
                     android:text="@string/show_all_button_text"
                     android:textColor="@color/white_color"
@@ -143,7 +141,8 @@
                 <android.support.v7.widget.RecyclerView
                     android:id="@+id/home_movie_coming_soon_recycler_view"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"></android.support.v7.widget.RecyclerView>
+                    android:layout_height="wrap_content">
+                </android.support.v7.widget.RecyclerView>
                 <!-- this is to display a message when the recyclerview is empty -->
                 <TextView
                     android:id="@+id/home_movie_coming_soon_recycler_view_empty_msg_text_view"
@@ -163,7 +162,7 @@
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:background="@color/devider_color"
+            android:background="@color/divider_color"
             android:paddingTop="@dimen/m_design_space_between_content_area" />
         <!-- Layout for recommendation movies -->
         <LinearLayout
@@ -197,7 +196,8 @@
                 <android.support.v7.widget.RecyclerView
                     android:id="@+id/home_movie_recommendation_recycler_view"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"></android.support.v7.widget.RecyclerView>
+                    android:layout_height="wrap_content">
+                </android.support.v7.widget.RecyclerView>
                 <!-- this is to display a message when the recyclerview is empty -->
                 <TextView
                     android:id="@+id/home_movie_recommendation_recycler_view_empty_msg_text_view"
@@ -217,7 +217,7 @@
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:background="@color/devider_color"
+            android:background="@color/divider_color"
             android:paddingTop="@dimen/m_design_space_between_content_area" />
         <!-- Layout for recently added movies -->
         <LinearLayout
@@ -251,7 +251,8 @@
                 <android.support.v7.widget.RecyclerView
                     android:id="@+id/home_movie_recently_added_recycler_view"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"></android.support.v7.widget.RecyclerView>
+                    android:layout_height="wrap_content">
+                </android.support.v7.widget.RecyclerView>
                 <!-- this is to display a message when the recyclerview is empty -->
                 <TextView
                     android:id="@+id/home_movie_recently_added_recycler_view_empty_msg_text_view"

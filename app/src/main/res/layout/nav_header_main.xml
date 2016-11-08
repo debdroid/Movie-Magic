@@ -46,6 +46,7 @@
         android:layout_alignParentRight="true"
         android:layout_alignParentBottom="true"
         style="?android:attr/borderlessButtonStyle"
+        android:textColor="@color/white_color"
         android:textStyle="normal"
         android:text="@string/nav_drawer_log_in"/>
     <!--<Button-->
