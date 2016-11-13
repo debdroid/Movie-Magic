@@ -1079,4 +1079,17 @@ class JsonParse {
             return bundle
         }
     }
+
+    /**
+     * Helper method to parse JSON data for TMDb's POST request for user list
+     * @param jsonData The JSON data to be parsed
+     * @param respCode The response code of Http call
+     * @return The Status meesage of the request
+     */
+    static String parseTmdbUserListPostResponse(def jsonData, int respCode) {
+        LogDisplay.callLog(LOG_TAG, 'parseTmdbUserListPostResponse is called', LogDisplay.JSON_PARSE_LOG_FLAG)
+        LogDisplay.callLog(LOG_TAG, "respCode -> $respCode", LogDisplay.JSON_PARSE_LOG_FLAG)
+        LogDisplay.callLog(LOG_TAG, "jsonData -> $jsonData", LogDisplay.JSON_PARSE_LOG_FLAG)
+        return jsonData.status_message
+    }
 }

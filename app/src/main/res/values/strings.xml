@@ -159,11 +159,17 @@
     <string name="drawer_menu_logout">Logout</string>
     <string name="show_all_button_text">Show All</string>
     <string name="home_movie_recommendation_title">Recommend For You</string>
+    <string name="progress_dialog_wait_title">Please wait...</string>
 
     <!-- String for Tmdb rating update dialog -->
     <string name="tmdb_rating_dialog_title">Do you want to update the rating value to TMDb?</string>
     <string name="tmdb_rating_dialog_message">This movie is present in your TMDb Rated movie list. To update the Tmdb rating value click OK (recommended). Otherwise this rating will be overwritten by your TMDb rating when you will browse this movie next time.</string>
     <string name="tmdb_rating_dialog_ok_button">OK</string>
     <string name="tmdb_rating_dialog_cancel_button">CANCEL</string>
+    <string name="tmdb_rating_user_prompt_empty_msg">Please set your rating first then try to add the movie to your TMDb Rated list.</string>
+    <string name="tmdb_watchlist_user_prompt_msg">You cannot remove this movie from TMDb Watchlist using the application. Please visit TMDb website to do so.</string>
+    <string name="tmdb_favourite_user_prompt_msg">You cannot remove this movie from TMDb Favourite using the application. Please visit TMDb website to do so.</string>
+    <string name="tmdb_rating_user_prompt_msg">The movie is already in TMDb Rated list, to update the rating please change the rating.</string>
+    <string name="upload_tmdb_account_not_found_msg">Not able to perform the action. Please logout and login again to your TMDb account, then retry.</string>
 
 </resources>

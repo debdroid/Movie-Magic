@@ -419,7 +419,7 @@ class MovieMagicSyncAdapter extends AbstractThreadedSyncAdapter {
     private performHouseKeeping() {
         LogDisplay.callLog(LOG_TAG,'performHouseKeeping is called',LogDisplay.MOVIE_MAGIC_SYNC_ADAPTER_LOG_FLAG)
         LogDisplay.callLog(LOG_TAG,"performHouseKeeping: DateTimeStamp->$mDateTimeStamp",LogDisplay.MOVIE_MAGIC_SYNC_ADAPTER_LOG_FLAG)
-        // delete old data except user's records from movie_basic_info and recommendations movies (recommendations are deleted in the below step)
+        // Delete old data except user's records from movie_basic_info and recommendations movies (recommendations are deleted in the below step)
         int movieBasicInfoDeleteCount = mContentResolver.delete(MovieMagicContract.MovieBasicInfo.CONTENT_URI,
                 """$MovieMagicContract.MovieBasicInfo.COLUMN_MOVIE_LIST_TYPE != ? and
                    $MovieMagicContract.MovieBasicInfo.COLUMN_MOVIE_CATEGORY != ? and
@@ -432,6 +432,7 @@ class MovieMagicSyncAdapter extends AbstractThreadedSyncAdapter {
 //                null )
         LogDisplay.callLog(LOG_TAG,"Total records deleted from movie_basic_info (without recommendations) -> $movieBasicInfoDeleteCount",LogDisplay.MOVIE_MAGIC_SYNC_ADAPTER_LOG_FLAG)
 
+        //TODO need to implement housekeeping logic for recommended
 //        // Now delete all the recommendations for which details are not available (i.e. not used in home screen) - details loaded in loadMovieDetailsForHomePageItems()
 //        int movieBasicInfoRecommendationsDeleteCount = mContentResolver.delete(MovieMagicContract.MovieBasicInfo.CONTENT_URI,
 //                """$MovieMagicContract.MovieBasicInfo.COLUMN_MOVIE_CATEGORY = ? and

@@ -299,7 +299,7 @@
             android:minHeight="32dp"
             android:numStars="10"
             android:rating="0"
-            android:stepSize="0.1" />
+            android:stepSize="0.5" />
     </LinearLayout>
     <!-- Layout for user list icons (i.e. watched, wishlist, favourite & collection) -->
     <LinearLayout

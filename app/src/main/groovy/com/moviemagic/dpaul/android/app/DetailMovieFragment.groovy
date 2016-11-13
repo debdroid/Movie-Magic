@@ -1,5 +1,7 @@
 package com.moviemagic.dpaul.android.app
 
+import android.accounts.Account
+import android.accounts.AccountManager
 import android.app.Activity
 import android.app.AlertDialog
 import android.content.Context
@@ -9,12 +11,10 @@ import android.content.res.ColorStateList
 import android.database.Cursor
 import android.graphics.Bitmap
 import android.graphics.Color
-import android.graphics.PorterDuff
 import android.graphics.drawable.BitmapDrawable
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
-import android.preference.DialogPreference
 import android.support.design.widget.AppBarLayout
 import android.support.design.widget.CollapsingToolbarLayout
 import android.support.design.widget.Snackbar
@@ -532,8 +532,73 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
          * User's TMDb list button handling
          */
         mTmdbImageButtonWatchlist = mRootView.findViewById(R.id.movie_detail_user_tmdb_list_drawable_watchlist) as ImageButton
+        mTmdbImageButtonWatchlist.setOnClickListener(new View.OnClickListener() {
+            @Override
+            void onClick(View v) {
+                LogDisplay.callLog(LOG_TAG, 'Tmdb user watchlist button is clicked', LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
+//                boolean flagValue
+                //If full opaque then already selected, so show user that they cannot remove it using the app
+                if (mTmdbImageButtonWatchlist.getAlpha() == GlobalStaticVariables.MOVIE_MAGIC_ALPHA_FULL_OPAQUE) {
+//                    Snackbar.make(mTmdbImageButtonWatchlist, R.string.tmdb_watchlist_user_prompt_msg, Snackbar.LENGTH_LONG).show()
+                    new UploadTmdbRequest(getActivity(), GlobalStaticVariables.MOVIE_CATEGORY_TMDB_USER_WATCHLIST, 0,
+                            false, mMovieCategory, mUserTmdbListDrawableLayout, mPalleteAccentColor).execute([mMovieId] as Integer[])
+//                    mTmdbImageButtonWatchlist.setAlpha(GlobalStaticVariables.MOVIE_MAGIC_ALPHA_OPAQUE_40_PERCENT)
+//                    mTmdbImageButtonWatchlist.setColorFilter(null)
+                } else { //If 40% opaque then not selected, so add the movie to TMDb list
+                    LogDisplay.callLog(LOG_TAG, 'User wants to add to TMDb Watchlist, go ahead and do that', LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
+//                    flagValue = true
+                    new UploadTmdbRequest(getActivity(), GlobalStaticVariables.MOVIE_CATEGORY_TMDB_USER_WATCHLIST, 0,
+                            true, mMovieCategory, mUserTmdbListDrawableLayout, mPalleteAccentColor).execute([mMovieId] as Integer[])
+//                    mTmdbImageButtonWatchlist.setAlpha(GlobalStaticVariables.MOVIE_MAGIC_ALPHA_FULL_OPAQUE)
+//                    mTmdbImageButtonWatchlist.setColorFilter(mPalleteAccentColor)
+                }
+            }
+        })
         mTmdbImageButtonFavourite = mRootView.findViewById(R.id.movie_detail_user_tmdb_list_drawable_favourite) as ImageButton
+        mTmdbImageButtonFavourite.setOnClickListener(new View.OnClickListener() {
+            @Override
+            void onClick(View v) {
+                LogDisplay.callLog(LOG_TAG, 'Tmdb user favourite button is clicked', LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
+                //If full opaque then already selected, so show user that they cannot remove it using the app
+                if (mTmdbImageButtonFavourite.getAlpha() == GlobalStaticVariables.MOVIE_MAGIC_ALPHA_FULL_OPAQUE) {
+//                    Snackbar.make(mTmdbImageButtonFavourite, R.string.tmdb_watchlist_user_prompt_msg, Snackbar.LENGTH_LONG).show()
+                    new UploadTmdbRequest(getActivity(),GlobalStaticVariables.MOVIE_CATEGORY_TMDB_USER_FAVOURITE, 0,
+                            false, mMovieCategory, mUserTmdbListDrawableLayout, mPalleteAccentColor).execute([mMovieId] as Integer[])
+//                    mTmdbImageButtonFavourite.setAlpha(GlobalStaticVariables.MOVIE_MAGIC_ALPHA_OPAQUE_40_PERCENT)
+//                    mTmdbImageButtonFavourite.setColorFilter(null)
+                } else { //If 40% opaque then not selected, so add the movie to TMDb list
+                    LogDisplay.callLog(LOG_TAG, 'User wants to add to TMDb Favourite, go ahead and do that', LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
+                    new UploadTmdbRequest(getActivity(),GlobalStaticVariables.MOVIE_CATEGORY_TMDB_USER_FAVOURITE, 0,
+                            true, mMovieCategory, mUserTmdbListDrawableLayout, mPalleteAccentColor).execute([mMovieId] as Integer[])
+//                    mTmdbImageButtonFavourite.setAlpha(GlobalStaticVariables.MOVIE_MAGIC_ALPHA_FULL_OPAQUE)
+//                    mTmdbImageButtonFavourite.setColorFilter(mPalleteAccentColor)
+                }
+            }
+        })
         mTmdbImageButtonRated = mRootView.findViewById(R.id.movie_detail_user_tmdb_list_drawable_rated) as ImageButton
+        mTmdbImageButtonRated.setOnClickListener(new View.OnClickListener() {
+            @Override
+            void onClick(View v) {
+                LogDisplay.callLog(LOG_TAG, 'Tmdb user rated button is clicked', LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
+                //If full opaque then already selected, so show user that they need to change the rating value
+                if (mTmdbImageButtonRated.getAlpha() == GlobalStaticVariables.MOVIE_MAGIC_ALPHA_FULL_OPAQUE) {
+                    Snackbar.make(mTmdbImageButtonRated, R.string.tmdb_rating_user_prompt_msg, Snackbar.LENGTH_LONG).show()
+                } else { //If 40% opaque then not selected, so add the movie to TMDb list
+                    LogDisplay.callLog(LOG_TAG, 'User wants to add to TMDb Rated, try for that..', LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
+                    final float userRatingVal = mUserRatingBar.getRating()
+                    if(userRatingVal > 0.0) {
+                        LogDisplay.callLog(LOG_TAG, 'Tmdb user rating is greater than zero, so post that to Tmdb', LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
+                        // Rating is driven by value, so fourth parameter does not matter
+                        new UploadTmdbRequest(getActivity(),GlobalStaticVariables.MOVIE_CATEGORY_TMDB_USER_RATED, userRatingVal,
+                                false, mMovieCategory, mUserTmdbListDrawableLayout, mPalleteAccentColor).execute([mMovieId] as Integer[])
+//                        mTmdbImageButtonRated.setAlpha(GlobalStaticVariables.MOVIE_MAGIC_ALPHA_FULL_OPAQUE)
+//                        mTmdbImageButtonRated.setColorFilter(mPalleteAccentColor)
+                    } else {
+                        Snackbar.make(mTmdbImageButtonRated, R.string.tmdb_rating_user_prompt_empty_msg, Snackbar.LENGTH_LONG).show()
+                    }
+                }
+            }
+        })
 
         //All the dynamic fields (data fields) & ratingbar
         mMovieTitleTextView = mRootView.findViewById(R.id.movie_detail_title) as TextView
@@ -570,7 +635,10 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
                         updateUserListArgs = [GlobalStaticVariables.USER_LIST_USER_RATING, GlobalStaticVariables.USER_RATING_ADD_FLAG, String.valueOf(rating)]
                         updateUserList.execute(updateUserListArgs)
                     }
-                    createDialogForTmdbRatingConfirmation()
+                    // Create alert dialog and take action only if the movie is part of user's TMDb Rated list
+                    if(mUserTmdbListRatedFlag) {
+                        createDialogForTmdbRatingConfirmation(rating)
+                    }
                 }
             }
         })
@@ -1426,6 +1494,26 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
         }
     }
 
+//    /**
+//     * This method is used to retrieve the account information and send the Tmdb POST request to AsyncTask thread
+//     * @param movieType The type of TMDb movie
+//     * @param ratingVal The rating value (0 if the movie type is watchlist or favourite)
+//     */
+//    protected void postTmdbRequest(String movieType, float ratingVal) {
+//        LogDisplay.callLog(LOG_TAG, 'postTmdbRequest is called', LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
+//        String authToken
+//        String accountId
+//        final AccountManager accountManager = AccountManager.get(getActivity())
+//        final Account[] accounts = accountManager.getAccountsByType(getString(R.string.authenticator_account_type))
+//        if(accounts.size() == 1) {
+//            authToken = accountManager.blockingGetAuthToken(accounts[0],GlobalStaticVariables.AUTHTOKEN_TYPE_FULL_ACCESS,true)
+//            accountId = accountManager.getUserData(accounts[0], GlobalStaticVariables.TMDB_USERDATA_ACCOUNT_ID)
+//            new UploadTmdbRequest(getActivity(),movieType, ratingVal, false, mUserTmdbListDrawableLayout).execute([mMovieId] as Integer[])
+//        } else {
+//            LogDisplay.callLog(LOG_TAG,"Error.More than one account, number of accounts -> ${accounts.size()}",LogDisplay.MOVIE_MAGIC_MAIN_LOG_FLAG)
+//        }
+//    }
+
     /**
      * This method is called to apply the color once that is determined from the poster image
      */
@@ -1599,13 +1687,44 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
     }
 
     /**
-     * Intent to open the movie in imdb app(if installed) or in web browser when user clicks on imdb button
+     * Intent to open the movie in IMDb app(if installed) or in web browser when user clicks on Imdb button
      */
     void startImdbIntent() {
         final String imdbUrl = "$GlobalStaticVariables.IMDB_BASE_MOVIE_TITLE_URL$mMovieImdbId/"
         final Intent intent = new Intent(Intent.ACTION_VIEW)
         intent.setData(Uri.parse(imdbUrl))
         startActivity(intent)
+    }
+
+    /**
+     * This method is used to create a alert dialog when user changes the rating of a movie which is present in user's
+     * TMDb rated movie list
+     */
+    void createDialogForTmdbRatingConfirmation(float userRatingVal) {
+        LogDisplay.callLog(LOG_TAG, 'createDialogForTmdbRatingConfirmation is called', LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
+        final AlertDialog.Builder builder = new AlertDialog.Builder(getActivity())
+        builder.setTitle(R.string.tmdb_rating_dialog_title)
+                .setMessage(R.string.tmdb_rating_dialog_message)
+
+        builder.setPositiveButton(R.string.tmdb_rating_dialog_ok_button, new DialogInterface.OnClickListener() {
+            @Override
+            void onClick(DialogInterface dialog, int which) {
+                LogDisplay.callLog(LOG_TAG, 'Dialog Ok is clicked, go and update the TMDb rating', LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
+                new UploadTmdbRequest(getActivity(),GlobalStaticVariables.MOVIE_CATEGORY_TMDB_USER_RATED, userRatingVal,
+                        false, mMovieCategory, mUserTmdbListDrawableLayout, mPalleteAccentColor).execute([mMovieId] as Integer[])
+            }
+        })
+
+        builder.setNegativeButton(R.string.tmdb_rating_dialog_cancel_button, new DialogInterface.OnClickListener(){
+            @Override
+            void onClick(DialogInterface dialog, int which) {
+                LogDisplay.callLog(LOG_TAG, 'Dialog cancel is clicked. No action needed.', LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
+            }
+        })
+
+        // Create the AlertDialog
+        final AlertDialog dialog = builder.create()
+        dialog.show()
     }
 
     @Override
@@ -1625,31 +1744,6 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
         //Cancel Picasso requests - required where callback (hard reference) is used
         //TODO this is not done everywhere, so need to do in other places
         Picasso.with(getActivity()).cancelRequest(mPosterImageView)
-    }
-
-    void createDialogForTmdbRatingConfirmation() {
-        LogDisplay.callLog(LOG_TAG, 'createDialogForTmdbRatingConfirmation is called', LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
-        final AlertDialog.Builder builder = new AlertDialog.Builder(getActivity())
-        builder.setTitle(R.string.tmdb_rating_dialog_title)
-               .setMessage(R.string.tmdb_rating_dialog_message)
-
-        builder.setPositiveButton(R.string.tmdb_rating_dialog_ok_button, new DialogInterface.OnClickListener() {
-            @Override
-            void onClick(DialogInterface dialog, int which) {
-                LogDisplay.callLog(LOG_TAG, 'Dialog Ok is clicked', LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
-            }
-        })
-
-        builder.setNegativeButton(R.string.tmdb_rating_dialog_cancel_button, new DialogInterface.OnClickListener(){
-            @Override
-            void onClick(DialogInterface dialog, int which) {
-                LogDisplay.callLog(LOG_TAG, 'Dialog cancel is clicked', LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
-            }
-        })
-
-        // Create the AlertDialog
-        final AlertDialog dialog = builder.create()
-        dialog.show()
     }
 
     //Overriding the animation for better performance

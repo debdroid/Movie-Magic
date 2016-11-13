@@ -56,6 +56,9 @@ class GlobalStaticVariables {
     public static final String TMDB_AUTHENTICATE_PASSWORD_KEY = 'password'
     public static final String TMDB_SESSION_ID_KEY = 'session_id'
     public static final String TMDB_USER_MOVIES_PATH = 'movies'
+    public static final String TMDB_WATCHLIST_PATH = 'watchlist'
+    public static final String TMDB_FAVOURITE_PATH = 'favorite'
+    public static final String TMDB_RATED_PATH = 'rating'
 
 
 

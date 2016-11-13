@@ -26,7 +26,7 @@ class UpdateUserListChoiceAndRating extends AsyncTask<String, Void, Integer> {
     private final String mMovieTitle
     private String mUserListMsg
     private int mUserFlag = 0
-    private float mUserRating
+    private float mUserRating = 0.0
     private final ProgressDialog mProgressDialog
     private final boolean mShowNotification = false
 
@@ -61,16 +61,24 @@ class UpdateUserListChoiceAndRating extends AsyncTask<String, Void, Integer> {
         mShowNotification = showNotification
     }
 
+
+    @Override
+    protected void onPreExecute() {
+        super.onPreExecute()
+        mProgressDialog.setMessage(mContext.getString(R.string.progress_dialog_wait_title))
+        mProgressDialog.show()
+    }
+
     @Override
     protected Integer doInBackground(String... params) {
         final String listType = params[0]
         final String operationType = params[1]
         final float ratingValue = params[2] as Float
-        final int retValue
-        final String userListCategory
+        int retValue
+        String userListCategory
         final ContentValues movieBasicInfoContentValues = new ContentValues()
         final ContentValues movieUserListFlagContentValues = new ContentValues()
-        final movieBasicInfoCursor
+        Cursor movieBasicInfoCursor
         //Build the URIs
         final Uri movieUserListFlagUri = MovieMagicContract.MovieUserListFlag.buildMovieUserListFlagUriWithMovieId(mMovieId)
         //Get the record from movie_user_list_flag
@@ -269,14 +277,14 @@ class UpdateUserListChoiceAndRating extends AsyncTask<String, Void, Integer> {
                 //detail fragment will not find the the corresponding movie and would return null. So instead of delete
                 //update the record with category "orphaned" which will ensure that it will not come in the user list but
                 //record will remain there in the table and later will be cleaned up by the sync adapter while loading new
-                //data as the sync adapter has logic to delete anything which is not user list
+                //data as the sync adapter has logic to delete anything which is not user local list
                 //TODO: Will see if a better solution can be found :)
                 //Remove the record from movie_basic_info is needed for user list and NOT for rating operation
                 if(operationType == GlobalStaticVariables.USER_LIST_REMOVE_FLAG) {
                     final ContentValues movieOrphanContentValue = new ContentValues()
                     movieOrphanContentValue.put(MovieMagicContract.MovieBasicInfo.COLUMN_MOVIE_CATEGORY, GlobalStaticVariables.MOVIE_CATEGORY_ORPHANED)
                     movieOrphanContentValue.put(MovieMagicContract.MovieBasicInfo.COLUMN_MOVIE_LIST_TYPE, GlobalStaticVariables.MOVIE_LIST_TYPE_ORPHANED)
-                    final rowCount = mContentResolver.update(
+                    final int rowCount = mContentResolver.update(
                             MovieMagicContract.MovieBasicInfo.CONTENT_URI,
                             movieOrphanContentValue,
                             """$MovieMagicContract.MovieBasicInfo.COLUMN_MOVIE_ID = ? and
@@ -305,17 +313,11 @@ class UpdateUserListChoiceAndRating extends AsyncTask<String, Void, Integer> {
     }
 
     @Override
-    protected void onPreExecute() {
-        super.onPreExecute()
-        mProgressDialog.show()
-    }
-
-    @Override
     protected void onPostExecute(Integer result) {
         if(mProgressDialog) {
             mProgressDialog.dismiss()
         }
-        final String snackBarMsg
+        String snackBarMsg
         if(mUserFlag == GlobalStaticVariables.MOVIE_MAGIC_FLAG_TRUE) {
             snackBarMsg = String.format(mContext.getString(R.string.user_list_add_message),mMovieTitle,mUserListMsg)
         } else if(mUserFlag == GlobalStaticVariables.MOVIE_MAGIC_FLAG_FALSE) {
@@ -328,8 +330,8 @@ class UpdateUserListChoiceAndRating extends AsyncTask<String, Void, Integer> {
         //Expecting a single row update or insert only
         if(result == 1) {
             if(mShowNotification) {
-                Snackbar.make(mUserDrawableLayout.findViewById(R.id.movie_detail_user_list_drawable_layout),
-                        snackBarMsg, Snackbar.LENGTH_LONG).show()
+//                Snackbar.make(mUserDrawableLayout.findViewById(R.id.movie_detail_user_list_drawable_layout),
+                Snackbar.make(mUserDrawableLayout, snackBarMsg, Snackbar.LENGTH_LONG).show()
             } else {
                 LogDisplay.callLog(LOG_TAG,"Show notification flag is not set.mShowNotification value->$mShowNotification",LogDisplay.UPDATE_USER_LIST_LOG_FLAG)
             }
