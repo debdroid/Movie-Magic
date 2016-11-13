@@ -200,7 +200,7 @@ class UpdateUserListChoiceAndRating extends AsyncTask<String, Void, Integer> {
             }
         } else if (operationType == GlobalStaticVariables.USER_LIST_REMOVE_FLAG ||
                     operationType == GlobalStaticVariables.USER_RATING_REMOVE_FLAG) {
-            final boolean deleteUserListRecordFlag = false
+            boolean deleteUserListRecordFlag = false
             //It's remove operation (i.e. record is already present in the movie_user_list_flag table
             if(movieUSerListFlagCursor.moveToFirst()) {
 //                LogDisplay.callLog(LOG_TAG,"COL_MOVIE_USER_LIST_FLAG_WATCHED_FLAG->${movieUSerListFlagCursor.getInt(COL_MOVIE_USER_LIST_FLAG_WATCHED_FLAG)}",LogDisplay.UPDATE_USER_LIST_LOG_FLAG)

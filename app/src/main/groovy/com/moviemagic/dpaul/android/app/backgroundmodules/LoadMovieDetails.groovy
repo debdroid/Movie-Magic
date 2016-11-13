@@ -101,7 +101,7 @@ class LoadMovieDetails extends AsyncTask<ArrayList<Integer>, Void, Void> {
                     LogDisplay.callLog(LOG_TAG, 'JsonParse.parseAdditionalBasicMovieData returned null', LogDisplay.LOAD_MOVIE_DETAILS_LOG_FLAG)
                 }
 
-                final boolean allOperationSuccessfulFlag = true
+                boolean allOperationSuccessfulFlag = true
                 /**
                  * Process and load (insert) the similar movies
                  * **/

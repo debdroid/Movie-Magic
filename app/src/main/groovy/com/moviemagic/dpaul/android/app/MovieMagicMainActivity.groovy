@@ -6,6 +6,7 @@ import android.accounts.AccountManagerCallback
 import android.accounts.AccountManagerFuture
 import android.content.Context
 import android.content.Intent
+import android.database.Cursor
 import android.net.Uri
 import android.os.AsyncTask
 import android.os.Build
@@ -537,8 +538,8 @@ public class MovieMagicMainActivity extends AppCompatActivity implements Navigat
         }
         @Override
         protected Integer[] doInBackground(String... params) {
-            final Integer[] result = new Integer[7]
-            final cursor
+            Integer[] result = new Integer[7]
+            Cursor cursor
             //Get the count for watched
             cursor = mContext.getContentResolver().query(
                     MovieMagicContract.MovieBasicInfo.CONTENT_URI,

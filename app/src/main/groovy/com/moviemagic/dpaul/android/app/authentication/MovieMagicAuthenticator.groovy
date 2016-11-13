@@ -71,7 +71,7 @@ class MovieMagicAuthenticator extends AbstractAccountAuthenticator {
         // Gets an auth token from the AccountManager's cache. If no auth token is cached for this account,
         // null will be returned. A new auth token will not be generated, and the server will not be contacted.
         // Intended for use by the authenticator, not directly by applications.
-        final String authToken = accountManager.peekAuthToken(account, authTokenType);
+        final String authToken = accountManager.peekAuthToken(account, authTokenType)
         LogDisplay.callLog(LOG_TAG,"Returned authToken -> $authToken",LogDisplay.MOVIE_MAGIC_AUTHENTICATOR_LOG_FLAG)
 
         // Lets give another try to authenticate the user

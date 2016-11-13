@@ -30,7 +30,7 @@ class LoadMoreMovies extends AsyncTask<String, Void, Void>{
     @Override
     protected Void doInBackground(String... params) {
         final String movieCategory = params[0]
-        final int totalPage
+        int totalPage
         List<ContentValues> movieList
         //TMDB api example
         //https://api.themoviedb.org/3/movie/popular?api_key=key&page=1

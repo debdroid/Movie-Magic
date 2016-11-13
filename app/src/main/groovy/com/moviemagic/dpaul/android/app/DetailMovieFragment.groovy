@@ -1,7 +1,5 @@
 package com.moviemagic.dpaul.android.app
 
-import android.accounts.Account
-import android.accounts.AccountManager
 import android.app.Activity
 import android.app.AlertDialog
 import android.content.Context
@@ -415,7 +413,7 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
                 if (mMovieTitle && mMovieId) {
                     final UpdateUserListChoiceAndRating updateUserList = new UpdateUserListChoiceAndRating(getActivity(), mUserListDrawableLayout,
                             mMovieId, mMovieTitle, mPalletePrimaryColor, mPalleteBodyTextColor, true)
-                    final String[] updateUserListArgs
+                    String[] updateUserListArgs
                     //If full opaque then already selected, so remove it
                     if (mImageButtonWatched.getAlpha() == GlobalStaticVariables.MOVIE_MAGIC_ALPHA_FULL_OPAQUE) {
                         //Pass the third parameter as "0.0" (i.e. user rating param)
@@ -449,7 +447,7 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
                 if (mMovieTitle && mMovieId) {
                     final UpdateUserListChoiceAndRating updateUserList = new UpdateUserListChoiceAndRating(getActivity(), mUserListDrawableLayout,
                             mMovieId, mMovieTitle, mPalletePrimaryColor, mPalleteBodyTextColor, true)
-                    final String[] updateUserListArgs
+                    String[] updateUserListArgs
                     //If full opaque then already selected, so remove it
                     if (mImageButtonWishList.getAlpha() == GlobalStaticVariables.MOVIE_MAGIC_ALPHA_FULL_OPAQUE) {
                         //Pass the third parameter as "0.0" (i.e. user rating param)
@@ -478,7 +476,7 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
                 if (mMovieTitle && mMovieId) {
                     final UpdateUserListChoiceAndRating updateUserList = new UpdateUserListChoiceAndRating(getActivity(), mUserListDrawableLayout,
                             mMovieId, mMovieTitle, mPalletePrimaryColor, mPalleteBodyTextColor, true)
-                    final String[] updateUserListArgs
+                    String[] updateUserListArgs
                     //If full opaque then already selected, so remove it
                     if (mImageButtonFavourite.getAlpha() == GlobalStaticVariables.MOVIE_MAGIC_ALPHA_FULL_OPAQUE) {
                         //Pass the third parameter as "0.0" (i.e. user rating param)
@@ -507,7 +505,7 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
                 if (mMovieTitle && mMovieId) {
                     final UpdateUserListChoiceAndRating updateUserList = new UpdateUserListChoiceAndRating(getActivity(), mUserListDrawableLayout,
                             mMovieId, mMovieTitle, mPalletePrimaryColor, mPalleteBodyTextColor, true)
-                    final String[] updateUserListArgs
+                    String[] updateUserListArgs
                     //If full opaque then already selected, so remove it
                     if (mImageButtonCollection.getAlpha() == GlobalStaticVariables.MOVIE_MAGIC_ALPHA_FULL_OPAQUE) {
                         //Pass the third parameter as "0.0" (i.e. user rating param)
@@ -622,7 +620,7 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
                 if (mMovieTitle && mMovieId) {
                     final UpdateUserListChoiceAndRating updateUserList = new UpdateUserListChoiceAndRating(getActivity(), mUserListDrawableLayout,
                             mMovieId, mMovieTitle, mPalletePrimaryColor, mPalleteBodyTextColor, true)
-                    final String[] updateUserListArgs
+                    String[] updateUserListArgs
                     //If the rating value is zero then remove it
                     if (rating == 0.0) {
                         //Pass the third parameter as rating param
@@ -1033,7 +1031,7 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
                             Palette.Swatch mutedSwatch = p.getMutedSwatch()
                             Palette.Swatch mutedLightSwatch = p.getLightMutedSwatch()
                             Palette.Swatch mutedDarkSwatch = p.getDarkMutedSwatch()
-                            final boolean pickSwatchColorFlag = false
+                            boolean pickSwatchColorFlag = false
                             //Pick primary, primaryDark, title and body text color
                             if (vibrantSwatch) {
                                 mPalletePrimaryColor = vibrantSwatch.getRgb()
@@ -1207,9 +1205,9 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
             //If the flag is zero then all the movie data are not present, so go and fetch it
             if (detailDataPresentFlag == GlobalStaticVariables.MOVIE_MAGIC_FLAG_FALSE) {
                 LogDisplay.callLog(LOG_TAG, 'handleMovieBasicOnLoadFinished.Additional movie data not present, go and fetch it', LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
-                final ArrayList<Integer> movieIdList = new ArrayList<>(1)
-                final ArrayList<Integer> movieRowIdList = new ArrayList<>(1)
-                final ArrayList<Integer> isForHomeList = new ArrayList<>(1)
+                ArrayList<Integer> movieIdList = new ArrayList<>(1)
+                ArrayList<Integer> movieRowIdList = new ArrayList<>(1)
+                ArrayList<Integer> isForHomeList = new ArrayList<>(1)
                 movieIdList.add(0,mMovieId)
                 movieRowIdList.add(0,_ID_movie_basic_info)
                 // Set the flag to false to indicate it's not for home page
@@ -1224,9 +1222,9 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
             if(mMovieCategory == GlobalStaticVariables.MOVIE_CATEGORY_PERSON) {
                 //Movie does not exists, go and fetch then insert into movie basic info table
                 LogDisplay.callLog(LOG_TAG, 'handleMovieBasicOnLoadFinished.Movie for person does not exists, go and fetch then insert into movie basic info table', LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
-                final ArrayList<Integer> movieIdList = new ArrayList<>(1)
-                final ArrayList<Integer> movieRowIdList = new ArrayList<>(1)
-                final ArrayList<Integer> isForHomeList = new ArrayList<>(1)
+                ArrayList<Integer> movieIdList = new ArrayList<>(1)
+                ArrayList<Integer> movieRowIdList = new ArrayList<>(1)
+                ArrayList<Integer> isForHomeList = new ArrayList<>(1)
                 movieIdList.add(0,mMovieId)
                 movieRowIdList.add(0,0)
                 isForHomeList.add(0,GlobalStaticVariables.MOVIE_MAGIC_FLAG_FALSE)
@@ -1276,7 +1274,7 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
     void initiateYouTubeVideo(Cursor data) {
         LogDisplay.callLog(LOG_TAG, "initiateYouTubeVideo.Cursor rec count -> ${data.getCount()}", LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
         if (data.moveToFirst()) {
-            final List<String> youtubeVideoKey = new ArrayList<>()
+            List<String> youtubeVideoKey = new ArrayList<>()
             for (i in 0..(data.count - 1)) {
                 youtubeVideoKey.add(data.getString(COL_MOVIE_VIDEO_KEY))
                 LogDisplay.callLog(LOG_TAG, "YouTube now_playing key= $youtubeVideoKey", LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
@@ -1441,7 +1439,7 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
         if (data.moveToFirst() && MovieMagicMainActivity.isUserLoggedIn) {
             final boolean isTmdbMovie = false
             final float tmdbUserRating = 0.0
-            final ArrayList<String> categories = new ArrayList<>()
+            ArrayList<String> categories = new ArrayList<>()
             for (i in 0..(data.getCount() - 1)) {
                 if(mMovieId == data.getInt(COL_MOVIE_BASIC_TMDB_MOVIE_ID)) {
                     categories.add(data.getString(COL_MOVIE_BASIC_TMDB_MOVIE_CATEGORY))

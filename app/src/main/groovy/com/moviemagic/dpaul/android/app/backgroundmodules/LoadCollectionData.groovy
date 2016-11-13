@@ -82,7 +82,7 @@ class LoadCollectionData extends AsyncTask<Integer, Void, Void> {
                 //TODO - need to add a logic to clean-up data (during sync load??). This is is needed because even though the flag is used
                 //TODO but it is observed that sometimes it is getting set without inserting data to main table!
                 final ContentValues collectionDataContentValue = JsonParse.parseCollectionDataJson(jsonData) as ContentValues
-                final Uri collectionDataUri
+                Uri collectionDataUri
                 if(collectionDataContentValue) {
                     collectionDataUri = mContentResolver.insert(MovieMagicContract.MovieCollection.CONTENT_URI, collectionDataContentValue)
                     LogDisplay.callLog(LOG_TAG, "Collection data inserted.Uri->$collectionDataUri", LogDisplay.LOAD_COLLECTION_DATA_LOG_FLAG)
@@ -99,7 +99,7 @@ class LoadCollectionData extends AsyncTask<Integer, Void, Void> {
                  * Process and load (insert) the collection movies
                  * **/
                 final ContentValues[] collectionMoviesContentValues = JsonParse.parseCollectionMovieJson(jsonData) as ContentValues[]
-                final int collectionMovieCount
+                int collectionMovieCount
                 if(collectionMoviesContentValues) {
                     collectionMovieCount = mContentResolver.bulkInsert(MovieMagicContract.MovieBasicInfo.CONTENT_URI, collectionMoviesContentValues)
                     LogDisplay.callLog(LOG_TAG, "Total collection movie inserted.->$collectionMovieCount", LogDisplay.LOAD_COLLECTION_DATA_LOG_FLAG)

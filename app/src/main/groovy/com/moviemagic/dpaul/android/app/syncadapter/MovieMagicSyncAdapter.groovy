@@ -8,6 +8,7 @@ import android.content.ContentResolver
 import android.content.ContentValues
 import android.content.Context
 import android.content.SyncResult
+import android.database.Cursor
 import android.net.Uri
 import android.os.Bundle
 import android.util.Log
@@ -74,7 +75,7 @@ class MovieMagicSyncAdapter extends AbstractThreadedSyncAdapter {
         LogDisplay.callLog(LOG_TAG,'onPerformSync is called',LogDisplay.MOVIE_MAGIC_SYNC_ADAPTER_LOG_FLAG)
 
         mDateTimeStamp = Utility.getTodayDate()
-        final List<ContentValues> contentValues = []
+        List<ContentValues> contentValues = []
         //totalPage is set to 1 so that at least first page is downloaded in downloadMovieList
         // later this variable is overridden by the total page value retrieved from the api
         totalPage = 1
@@ -158,7 +159,7 @@ class MovieMagicSyncAdapter extends AbstractThreadedSyncAdapter {
         //TMDB api example
         //https://api.themoviedb.org/3/movie/popular?api_key=key&page=1
 
-        final List<ContentValues> movieList
+        List<ContentValues> movieList
 
         try {
             final Uri.Builder uriBuilder = Uri.parse(GlobalStaticVariables.TMDB_MOVIE_BASE_URL).buildUpon()
@@ -224,7 +225,7 @@ class MovieMagicSyncAdapter extends AbstractThreadedSyncAdapter {
      */
     private void processTmdbLists(String sessionId, String accountId) {
         LogDisplay.callLog(LOG_TAG,"processTmdbLists:Session id found -> $sessionId",LogDisplay.MOVIE_MAGIC_SYNC_ADAPTER_LOG_FLAG)
-        final List<ContentValues> contentValues = []
+        List<ContentValues> contentValues = []
         // Download user's Tmdb Watchlist movies
         contentValues = downloadTmdbUserList(GlobalStaticVariables.MOVIE_CATEGORY_TMDB_USER_WATCHLIST, accountId, sessionId)
         if(contentValues) {
@@ -261,7 +262,7 @@ class MovieMagicSyncAdapter extends AbstractThreadedSyncAdapter {
     private List<ContentValues> downloadTmdbUserList (String category, String accountId, String sessionId) {
         //TMDB api example
         // https://api.themoviedb.org/3/account/<accountId>/watchlist/movies?api_key=apiKey&session_id=sessionId
-        final List<ContentValues> tmdbUserMovieList
+        List<ContentValues> tmdbUserMovieList
 
         try {
             final Uri.Builder tmdbUserUriBuilder = Uri.parse(GlobalStaticVariables.TMDB_MOVIE_BASE_URL).buildUpon()
@@ -315,9 +316,9 @@ class MovieMagicSyncAdapter extends AbstractThreadedSyncAdapter {
      */
     private void loadMovieDetailsForHomePageItems() {
         LogDisplay.callLog(LOG_TAG,'loadMovieDetailsForHomePageItems is called',LogDisplay.MOVIE_MAGIC_SYNC_ADAPTER_LOG_FLAG)
-        final movieDataCursor
-        final ArrayList<Integer> mMovieIdList = new ArrayList<>()
-        final ArrayList<Integer> mMovieRowIdList = new ArrayList<>()
+        Cursor movieDataCursor
+        ArrayList<Integer> mMovieIdList = new ArrayList<>()
+        ArrayList<Integer> mMovieRowIdList = new ArrayList<>()
         //First finalise the data to be loaded for now playing
         movieDataCursor = mContentResolver.query(
                 MovieMagicContract.MovieBasicInfo.CONTENT_URI,
@@ -405,7 +406,7 @@ class MovieMagicSyncAdapter extends AbstractThreadedSyncAdapter {
         //Now go and load the data
         if(mMovieIdList.size() > 0 && mMovieRowIdList.size() > 0) {
             LogDisplay.callLog(LOG_TAG, 'Now go and load the details of the movies', LogDisplay.MOVIE_MAGIC_SYNC_ADAPTER_LOG_FLAG)
-            final ArrayList<Integer> isForHomeList = new ArrayList<>(1)
+            ArrayList<Integer> isForHomeList = new ArrayList<>(1)
             //Set this flag to true as the Home page videos are retrieved based on this indicator
             isForHomeList.add(0,GlobalStaticVariables.MOVIE_MAGIC_FLAG_TRUE)
             final ArrayList<Integer>[] loadMovieDetailsArg = [mMovieIdList, mMovieRowIdList, isForHomeList] as ArrayList<Integer>[]

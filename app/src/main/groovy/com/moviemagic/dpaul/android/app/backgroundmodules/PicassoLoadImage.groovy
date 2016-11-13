@@ -35,7 +35,7 @@ class PicassoLoadImage {
 
     //To load the movie poster for detail fragment - used callback
     static void loadDetailFragmentPosterImage(final Context context, final String imagePath,
-                                              final ImageView imageView, Callback callback) {
+                                              final ImageView imageView, final Callback callback) {
         Picasso.with(context)
                 .load(imagePath)
                 .fit()
@@ -46,7 +46,7 @@ class PicassoLoadImage {
 
     //To load the movie poster for detail fragment - used callback
     static void loadDetailFragmentBackdropImage(final Context context, final String imagePath,
-                                                final ImageView imageView, Callback callback) {
+                                                final ImageView imageView, final Callback callback) {
         Picasso.with(context)
                 .load(imagePath)
                 .priority(Picasso.Priority.HIGH) //Picasso will treat this as high priority
@@ -84,7 +84,7 @@ class PicassoLoadImage {
 
     //To load the collection backdrop - used callback
     static void loadCollectionBackdropImage(final Context context, final String imagePath,
-                                            final ImageView imageView, Callback callback) {
+                                            final ImageView imageView, final Callback callback) {
         Picasso.with(context)
                 .load(imagePath)
                 .fit()

@@ -275,7 +275,7 @@ class CollectionMovieFragment extends Fragment implements LoaderManager.LoaderCa
                             Palette.Swatch mutedSwatch = p.getMutedSwatch()
                             Palette.Swatch mutedLightSwatch = p.getLightMutedSwatch()
                             Palette.Swatch mutedDarkSwatch = p.getDarkMutedSwatch()
-                            final boolean pickSwatchColorFlag = false
+                            boolean pickSwatchColorFlag = false
                             //Pick primary, primaryDark, title and body text color
                             if (vibrantSwatch) {
                                 mPalletePrimaryColor = vibrantSwatch.getRgb()

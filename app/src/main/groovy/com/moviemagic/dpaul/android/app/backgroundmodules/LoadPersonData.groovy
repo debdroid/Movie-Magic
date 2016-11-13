@@ -48,7 +48,7 @@ class LoadPersonData extends AsyncTask<Integer, Void, Void> {
              * Process and load (insert) the person info data
              * **/
             final ContentValues personInfoDataContentValue = JsonParse.parsePersonInfoDataJson(jsonData, personId) as ContentValues
-            final long personInfoRowId
+            long personInfoRowId
             if(personInfoDataContentValue) {
                 final Uri personDataUri = mContentResolver.insert(MovieMagicContract.MoviePersonInfo.CONTENT_URI, personInfoDataContentValue)
                 LogDisplay.callLog(LOG_TAG, "Person info data inserted.Uri->$personDataUri", LogDisplay.LOAD_PERSON_DATA_LOG_FLAG)

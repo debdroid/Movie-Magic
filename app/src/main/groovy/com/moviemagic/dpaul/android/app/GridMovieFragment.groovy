@@ -244,7 +244,7 @@ class GridMovieFragment extends Fragment implements LoaderManager.LoaderCallback
         //Build the URI with movie category
         final Uri movieCategoryUri = MovieMagicContract.MovieBasicInfo.buildMovieUriWithMovieCategory(mMovieCategory)
         //Decide the uri based on request type (i.e. collection movies or rest)
-        final Uri uri
+        Uri uri
         if(mMovieCollectionId == 0) {
             uri = movieCategoryUri
         } else {

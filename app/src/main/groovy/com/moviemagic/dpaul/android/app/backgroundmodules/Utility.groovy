@@ -29,7 +29,7 @@ class Utility {
      */
     static String convertMilliSecsToOrigReleaseDate(long timeInMillis) {
         final SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd")
-        String dateString = simpleDateFormat.format(new Date(timeInMillis))
+        final String dateString = simpleDateFormat.format(new Date(timeInMillis))
         return dateString
     }
 

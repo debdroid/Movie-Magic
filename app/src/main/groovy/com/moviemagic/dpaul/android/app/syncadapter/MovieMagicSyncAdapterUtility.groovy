@@ -48,7 +48,7 @@ class MovieMagicSyncAdapterUtility {
 
         //Check if any account exists
         final Account[] accounts = accountManager.getAccountsByType(context.getString(R.string.authenticator_account_type))
-        final Account newAccount
+        Account newAccount
         if(accounts.size() == 1) {
             LogDisplay.callLog(LOG_TAG,"Existing account. Account name->${accounts[0].name}",LogDisplay.MOVIE_MAGIC_SYNC_ADAPTER_UTILITY_LOG_FLAG)
             //Application can have only one account, so safe to use the following line

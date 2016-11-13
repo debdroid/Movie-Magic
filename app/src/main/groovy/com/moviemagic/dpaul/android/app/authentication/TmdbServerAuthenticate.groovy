@@ -122,9 +122,9 @@ class TmdbServerAuthenticate implements TmdbAuthenticateInterface {
  * @return Bundle with formatted JSON data or status message based on response code & error flag
  */
     private Bundle getNewRequestToken(URL url) {
-        final InputStream inputStream
+        InputStream inputStream
         final HttpURLConnection conn = (HttpURLConnection) url.openConnection()
-        final Bundle tokenBundle
+        Bundle tokenBundle
         try {
             conn.setReadTimeout(10000) /* milliseconds */
             conn.setConnectTimeout(15000) /* milliseconds */
@@ -161,9 +161,9 @@ class TmdbServerAuthenticate implements TmdbAuthenticateInterface {
      * @return Bundle with formatted JSON data or status message based on response code & error flag
      */
     private Bundle validateRequestToken(URL url) {
-        final InputStream inputStream
+        InputStream inputStream
         final HttpURLConnection conn = (HttpURLConnection) url.openConnection()
-        final Bundle authenticatedTokenBundle
+        Bundle authenticatedTokenBundle
         try {
             conn.setReadTimeout(10000) /* milliseconds */
             conn.setConnectTimeout(15000) /* milliseconds */
@@ -200,9 +200,9 @@ class TmdbServerAuthenticate implements TmdbAuthenticateInterface {
      * @return Bundle with formatted JSON data or status message based on response code & error flag
      */
     private Bundle getSessionId(URL url) {
-        final InputStream inputStream
+        InputStream inputStream
         final HttpURLConnection conn = (HttpURLConnection) url.openConnection()
-        final Bundle SessionIdBundle
+        Bundle SessionIdBundle
         try {
             conn.setReadTimeout(10000) /* milliseconds */
             conn.setConnectTimeout(15000) /* milliseconds */
@@ -239,9 +239,9 @@ class TmdbServerAuthenticate implements TmdbAuthenticateInterface {
      * @return Bundle with Name of the user of the TMDb account & error flag
      */
     private Bundle getAccountDetails(URL url) {
-        final InputStream inputStream
+        InputStream inputStream
         final HttpURLConnection conn = (HttpURLConnection) url.openConnection()
-        final Bundle nameOfUser
+        Bundle nameOfUser
         try {
             conn.setReadTimeout(10000) /* milliseconds */
             conn.setConnectTimeout(15000) /* milliseconds */

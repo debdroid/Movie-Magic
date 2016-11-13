@@ -433,7 +433,7 @@ class PersonMovieFragment extends Fragment implements LoaderManager.LoaderCallba
                             Palette.Swatch mutedSwatch = p.getMutedSwatch()
                             Palette.Swatch mutedLightSwatch = p.getLightMutedSwatch()
                             Palette.Swatch mutedDarkSwatch = p.getDarkMutedSwatch()
-                            final boolean pickSwatchColorFlag = false
+                            boolean pickSwatchColorFlag = false
                             //Pick primary, primaryDark, title and body text color
                             if (vibrantSwatch) {
                                 mPalettePrimaryColor = vibrantSwatch.getRgb()

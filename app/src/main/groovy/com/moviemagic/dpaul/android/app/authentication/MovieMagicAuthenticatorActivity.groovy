@@ -116,8 +116,8 @@ class MovieMagicAuthenticatorActivity extends AccountAuthenticatorActivity {
         final String password = mPasswordEditTextView.getText().toString()
         LogDisplay.callLog(LOG_TAG,"attemptLogin:Username->$username & Password->$password",LogDisplay.MOVIE_MAGIC_AUTHENTICATOR_ACTIVITY_LOG_FLAG)
 
-        final boolean cancel = false
-        final View focusView = null
+        boolean cancel = false
+        View focusView = null
 
         //Check that password is not blank
         if(!password) {

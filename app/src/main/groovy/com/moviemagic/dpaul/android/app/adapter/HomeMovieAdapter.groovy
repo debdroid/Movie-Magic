@@ -123,7 +123,7 @@ class HomeMovieAdapter extends RecyclerView.Adapter<HomeMovieAdapter.HomeMovieAd
         } else {
             holder.movieReleaseDateTextView.setText("${mContext.getResources().getString(R.string.home_movie_release_date_text)}: ${mContext.getResources().getString(R.string.movie_data_not_available)}")
         }
-        final String listType
+        String listType
         switch (mCursor.getString(HomeMovieFragment.COL_MOVIE_BASIC_MOVIE_CATEGORY)) {
             case GlobalStaticVariables.MOVIE_CATEGORY_NOW_PLAYING:
                 listType = mContext.getResources().getString(R.string.home_movie_in_cinema_text)
