@@ -55,7 +55,6 @@ class UploadTmdbRequest extends AsyncTask<Integer, Void, String> {
     @Override
     protected void onPreExecute() {
         super.onPreExecute()
-//        mProgressDialog.setTitle(mContext.getString(R.string.progress_dialog_wait_title))
         mProgressDialog.setMessage(mContext.getString(R.string.progress_dialog_wait_title))
         mProgressDialog.show()
     }
@@ -67,19 +66,6 @@ class UploadTmdbRequest extends AsyncTask<Integer, Void, String> {
         String bodyJsonData
         String authToken
         String accountId
-
-        //TMDb only accepts rating if it is multiple of 0.5 (don't know why!). Let's do some work
-        LogDisplay.callLog(LOG_TAG,"Received rating value is $mTmdbRatingValue",LogDisplay.MOVIE_MAGIC_MAIN_LOG_FLAG)
-//        final def remainder = (mTmdbRatingValue * 10) % 5
-//        LogDisplay.callLog(LOG_TAG,"Remainder value is $remainder",LogDisplay.MOVIE_MAGIC_MAIN_LOG_FLAG)
-//        if(remainder == 0) {
-//            LogDisplay.callLog(LOG_TAG,"Rating $mTmdbRatingValue is multiple of 0.5, so no action needed.",LogDisplay.MOVIE_MAGIC_MAIN_LOG_FLAG)
-//        } else {
-//            final def adjustmentValue = (5 - remainder) / 10
-//            LogDisplay.callLog(LOG_TAG,"Adjustment value is $adjustmentValue",LogDisplay.MOVIE_MAGIC_MAIN_LOG_FLAG)
-//            mTmdbRatingValue = mTmdbRatingValue + (adjustmentValue as float)
-//            LogDisplay.callLog(LOG_TAG,"Rating value after adjustment is $mTmdbRatingValue",LogDisplay.MOVIE_MAGIC_MAIN_LOG_FLAG)
-//        }
 
         // Get the account information - if not found then return null
         final AccountManager accountManager = AccountManager.get(mContext)
@@ -192,11 +178,11 @@ class UploadTmdbRequest extends AsyncTask<Integer, Void, String> {
             // Return the TMDb message
             return  statusMessage
         } catch (URISyntaxException e) {
-            Log.e(LOG_TAG, "Error: ${e.message}", e)
+            Log.e(LOG_TAG, "URISyntaxException: ${e.message}", e)
         } catch (JsonException e) {
-            Log.e(LOG_TAG, "Error: ${e.message}", e)
+            Log.e(LOG_TAG, "JsonException: ${e.message}", e)
         } catch (IOException e) {
-            Log.e(LOG_TAG, "Error: ${e.message}", e)
+            Log.e(LOG_TAG, "IOException: ${e.message}", e)
         } finally {
             // Close the connection and input stream
             conn.disconnect()
@@ -248,7 +234,11 @@ class UploadTmdbRequest extends AsyncTask<Integer, Void, String> {
                 mTmdbMovieType == GlobalStaticVariables.MOVIE_CATEGORY_TMDB_USER_FAVOURITE) {
             if(mOperationFlag) { // Add a new record
                 final ContentValues contentValues = getMovieBasicData()
-                addTmdbUserRecord(contentValues)
+                if(contentValues) {
+                    addTmdbUserRecord(contentValues)
+                } else {
+                    LogDisplay.callLog(LOG_TAG,'1->Not able to retrieve data from movie basic info table',LogDisplay.UPLOAD_TMDB_REQUEST_LOG_FLAG)
+                }
             } else { // Delete the existing record
                 deleteTmdbUserRecord()
             }
@@ -259,7 +249,11 @@ class UploadTmdbRequest extends AsyncTask<Integer, Void, String> {
                     updateTmdbUserRecord(rowId)
                 } else { // Insert a new record for rated Tmdb
                     final ContentValues contentValues = getMovieBasicData()
-                    addTmdbUserRecord(contentValues)
+                    if(contentValues) {
+                        addTmdbUserRecord(contentValues)
+                    } else {
+                        LogDisplay.callLog(LOG_TAG,'2->Not able to retrieve data from movie basic info table',LogDisplay.UPLOAD_TMDB_REQUEST_LOG_FLAG)
+                    }
                 }
             } else { // Delete the rated Tmdb record
                 deleteTmdbUserRecord()
@@ -285,7 +279,22 @@ class UploadTmdbRequest extends AsyncTask<Integer, Void, String> {
             //Convert the cursor to content values
             DatabaseUtils.cursorRowToContentValues(movieBasicInfoCursor, movieBasicInfoContentValues)
         } else {
-            LogDisplay.callLog(LOG_TAG,"Bad cursor from movie_basic_info.Movie id->$mTmdbMovieId",LogDisplay.UPLOAD_TMDB_REQUEST_LOG_FLAG)
+            LogDisplay.callLog(LOG_TAG,"Bad cursor from movie_basic_info, this can happen when a movie is removed then attempted to add again. So try and see if we can grab the orphaned record whic just got created using movie id->$mTmdbMovieId",LogDisplay.UPLOAD_TMDB_REQUEST_LOG_FLAG)
+            // Since it can happen when user remove then add the movie again - so try to get the details from orphaned (i.e. just removed, so marked as orphaned)
+            final Cursor movieBasicInfoCursorRetry = mContentResolver.query(
+                    MovieMagicContract.MovieBasicInfo.CONTENT_URI,
+                    null,
+                    """$MovieMagicContract.MovieBasicInfo.COLUMN_MOVIE_ID = ? and
+                   $MovieMagicContract.MovieBasicInfo.COLUMN_MOVIE_CATEGORY = ? """,
+                    [Integer.toString(mTmdbMovieId), GlobalStaticVariables.MOVIE_CATEGORY_ORPHANED] as String[],
+                    null)
+            //Position the cursor then convert the cursor to content values
+            if(movieBasicInfoCursorRetry.moveToFirst()) {
+                //Convert the cursor to content values
+                DatabaseUtils.cursorRowToContentValues(movieBasicInfoCursorRetry, movieBasicInfoContentValues)
+            } else {
+                LogDisplay.callLog(LOG_TAG, "Again bad cursor from movie_basic_info, please investigate. Movie id->$mTmdbMovieId", LogDisplay.UPLOAD_TMDB_REQUEST_LOG_FLAG)
+            }
         }
         //Close the cursor
         if(movieBasicInfoCursor) {

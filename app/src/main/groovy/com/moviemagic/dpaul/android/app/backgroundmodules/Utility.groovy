@@ -23,6 +23,21 @@ class Utility {
     }
 
     /**
+     * This utility method returns the timestamp 10 days prior to current date
+     * @return Today's date
+     */
+    static String getTenDayPriorDate() {
+        // Set the calendar to current date
+        final Calendar calendar = Calendar.getInstance()
+        calendar.add(Calendar.DAY_OF_YEAR, -10)
+        final Date date = calendar.getTime()
+        final SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSSZ")
+        final String tenDayPriorDate = simpleDateFormat.format(date)
+        LogDisplay.callLog(LOG_TAG, "Date stamp-> $tenDayPriorDate", LogDisplay.UTILITY_LIST_LOG_FLAG)
+        return tenDayPriorDate
+    }
+
+    /**
      * This utility method converts the date representation of milliseconds to regular date format
      * @param timeInMillis Date represented in milliseconds
      * @return Formatted date value

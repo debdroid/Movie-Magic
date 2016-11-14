@@ -330,7 +330,6 @@ class UpdateUserListChoiceAndRating extends AsyncTask<String, Void, Integer> {
         //Expecting a single row update or insert only
         if(result == 1) {
             if(mShowNotification) {
-//                Snackbar.make(mUserDrawableLayout.findViewById(R.id.movie_detail_user_list_drawable_layout),
                 Snackbar.make(mUserDrawableLayout, snackBarMsg, Snackbar.LENGTH_LONG).show()
             } else {
                 LogDisplay.callLog(LOG_TAG,"Show notification flag is not set.mShowNotification value->$mShowNotification",LogDisplay.UPDATE_USER_LIST_LOG_FLAG)

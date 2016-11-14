@@ -32,14 +32,40 @@ import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.support.v7.widget.RecyclerView.LayoutManager
 import android.support.v7.widget.Toolbar
-import android.view.*
+import android.view.LayoutInflater
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
+import android.view.View
+import android.view.ViewGroup
+
+//import android.view.*
 import android.view.animation.AlphaAnimation
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
 import android.view.animation.DecelerateInterpolator
-import android.widget.*
-import com.moviemagic.dpaul.android.app.adapter.*
-import com.moviemagic.dpaul.android.app.backgroundmodules.*
+import android.widget.Button
+import android.widget.ImageButton
+import android.widget.ImageView
+import android.widget.LinearLayout
+import android.widget.RatingBar
+import android.widget.TextView
+import com.moviemagic.dpaul.android.app.adapter.DetailFragmentPagerAdapter
+import com.moviemagic.dpaul.android.app.adapter.MovieCastAdapter
+import com.moviemagic.dpaul.android.app.adapter.MovieCrewAdapter
+import com.moviemagic.dpaul.android.app.adapter.MovieReviewAdapter
+import com.moviemagic.dpaul.android.app.adapter.SimilarMovieAdapter
+import com.moviemagic.dpaul.android.app.backgroundmodules.GlobalStaticVariables
+import com.moviemagic.dpaul.android.app.backgroundmodules.LoadMovieDetails
+import com.moviemagic.dpaul.android.app.backgroundmodules.LogDisplay
+import com.moviemagic.dpaul.android.app.backgroundmodules.PicassoLoadImage
+import com.moviemagic.dpaul.android.app.backgroundmodules.UpdateUserListChoiceAndRating
+import com.moviemagic.dpaul.android.app.backgroundmodules.UploadTmdbRequest
+import com.moviemagic.dpaul.android.app.backgroundmodules.Utility
+
+//import android.widget.*
+//import com.moviemagic.dpaul.android.app.adapter.*
+//import com.moviemagic.dpaul.android.app.backgroundmodules.*
 import com.moviemagic.dpaul.android.app.contentprovider.MovieMagicContract
 import com.moviemagic.dpaul.android.app.youtube.MovieMagicYoutubeFragment
 import com.squareup.picasso.Callback
@@ -62,7 +88,7 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
                      mUserListDrawableTitle, mUserTmdbListDrawableTitle, mCastGridEmptyMsgTextView, mCrewGridEmptyMsgTextView,
                      mSimilarMovieGridEmptyMsgTextView, mMovieTrailerEmptyMsgTextView
     private ImageView mMpaaRatingImageView, mPosterImageView, mCollectionBackdropImageView
-    private LinearLayout mDetailMovieLayout,mBackdropDotHolderLayout, mUserListDrawableLayout, mUserTmdbListDrawableLayout
+    private LinearLayout mDetailMovieLayout, mBackdropDotHolderLayout, mUserListDrawableLayout, mUserTmdbListDrawableLayout
     private ImageButton mImageButtonWatched, mImageButtonWishList, mImageButtonFavourite, mImageButtonCollection
     private ImageButton mTmdbImageButtonWatchlist, mTmdbImageButtonFavourite, mTmdbImageButtonRated
     private RatingBar mTmdbRatingBar, mUserRatingBar
@@ -421,11 +447,6 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
                         updateUserList.execute(updateUserListArgs)
                         mImageButtonWatched.setAlpha(GlobalStaticVariables.MOVIE_MAGIC_ALPHA_OPAQUE_40_PERCENT)
                         mImageButtonWatched.setColorFilter(null)
-                        //If user list movie then go back to previous activity as user already unchecked it
-                        if (mMovieCategory == GlobalStaticVariables.MOVIE_CATEGORY_LOCAL_USER_WATCHED) {
-                            //TODO: will decide later if this function is needed. If not needed then remove the callback
-//                            mUserListButtonClickCallback.finishCurrentActivity()
-                        }
                     } else { //If 40% opaque then not selected, so add it
                         //Pass the third parameter as "0.0" (i.e. user rating param)
                         updateUserListArgs = [GlobalStaticVariables.USER_LIST_WATCHED, GlobalStaticVariables.USER_LIST_ADD_FLAG, 0.0]
@@ -534,21 +555,14 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
             @Override
             void onClick(View v) {
                 LogDisplay.callLog(LOG_TAG, 'Tmdb user watchlist button is clicked', LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
-//                boolean flagValue
                 //If full opaque then already selected, so show user that they cannot remove it using the app
                 if (mTmdbImageButtonWatchlist.getAlpha() == GlobalStaticVariables.MOVIE_MAGIC_ALPHA_FULL_OPAQUE) {
-//                    Snackbar.make(mTmdbImageButtonWatchlist, R.string.tmdb_watchlist_user_prompt_msg, Snackbar.LENGTH_LONG).show()
                     new UploadTmdbRequest(getActivity(), GlobalStaticVariables.MOVIE_CATEGORY_TMDB_USER_WATCHLIST, 0,
                             false, mMovieCategory, mUserTmdbListDrawableLayout, mPalleteAccentColor).execute([mMovieId] as Integer[])
-//                    mTmdbImageButtonWatchlist.setAlpha(GlobalStaticVariables.MOVIE_MAGIC_ALPHA_OPAQUE_40_PERCENT)
-//                    mTmdbImageButtonWatchlist.setColorFilter(null)
                 } else { //If 40% opaque then not selected, so add the movie to TMDb list
                     LogDisplay.callLog(LOG_TAG, 'User wants to add to TMDb Watchlist, go ahead and do that', LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
-//                    flagValue = true
                     new UploadTmdbRequest(getActivity(), GlobalStaticVariables.MOVIE_CATEGORY_TMDB_USER_WATCHLIST, 0,
                             true, mMovieCategory, mUserTmdbListDrawableLayout, mPalleteAccentColor).execute([mMovieId] as Integer[])
-//                    mTmdbImageButtonWatchlist.setAlpha(GlobalStaticVariables.MOVIE_MAGIC_ALPHA_FULL_OPAQUE)
-//                    mTmdbImageButtonWatchlist.setColorFilter(mPalleteAccentColor)
                 }
             }
         })
@@ -559,17 +573,12 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
                 LogDisplay.callLog(LOG_TAG, 'Tmdb user favourite button is clicked', LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
                 //If full opaque then already selected, so show user that they cannot remove it using the app
                 if (mTmdbImageButtonFavourite.getAlpha() == GlobalStaticVariables.MOVIE_MAGIC_ALPHA_FULL_OPAQUE) {
-//                    Snackbar.make(mTmdbImageButtonFavourite, R.string.tmdb_watchlist_user_prompt_msg, Snackbar.LENGTH_LONG).show()
                     new UploadTmdbRequest(getActivity(),GlobalStaticVariables.MOVIE_CATEGORY_TMDB_USER_FAVOURITE, 0,
                             false, mMovieCategory, mUserTmdbListDrawableLayout, mPalleteAccentColor).execute([mMovieId] as Integer[])
-//                    mTmdbImageButtonFavourite.setAlpha(GlobalStaticVariables.MOVIE_MAGIC_ALPHA_OPAQUE_40_PERCENT)
-//                    mTmdbImageButtonFavourite.setColorFilter(null)
                 } else { //If 40% opaque then not selected, so add the movie to TMDb list
                     LogDisplay.callLog(LOG_TAG, 'User wants to add to TMDb Favourite, go ahead and do that', LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
                     new UploadTmdbRequest(getActivity(),GlobalStaticVariables.MOVIE_CATEGORY_TMDB_USER_FAVOURITE, 0,
                             true, mMovieCategory, mUserTmdbListDrawableLayout, mPalleteAccentColor).execute([mMovieId] as Integer[])
-//                    mTmdbImageButtonFavourite.setAlpha(GlobalStaticVariables.MOVIE_MAGIC_ALPHA_FULL_OPAQUE)
-//                    mTmdbImageButtonFavourite.setColorFilter(mPalleteAccentColor)
                 }
             }
         })
@@ -588,9 +597,7 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
                         LogDisplay.callLog(LOG_TAG, 'Tmdb user rating is greater than zero, so post that to Tmdb', LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
                         // Rating is driven by value, so fourth parameter does not matter
                         new UploadTmdbRequest(getActivity(),GlobalStaticVariables.MOVIE_CATEGORY_TMDB_USER_RATED, userRatingVal,
-                                false, mMovieCategory, mUserTmdbListDrawableLayout, mPalleteAccentColor).execute([mMovieId] as Integer[])
-//                        mTmdbImageButtonRated.setAlpha(GlobalStaticVariables.MOVIE_MAGIC_ALPHA_FULL_OPAQUE)
-//                        mTmdbImageButtonRated.setColorFilter(mPalleteAccentColor)
+                                true, mMovieCategory, mUserTmdbListDrawableLayout, mPalleteAccentColor).execute([mMovieId] as Integer[])
                     } else {
                         Snackbar.make(mTmdbImageButtonRated, R.string.tmdb_rating_user_prompt_empty_msg, Snackbar.LENGTH_LONG).show()
                     }
@@ -696,19 +703,7 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
         mHorizontalSimilarMovieGridView.setLayoutManager(mSimilarMovieGridLayoutManager)
         mSimilarMovieAdapter = new SimilarMovieAdapter(getActivity(), mSimilarMovieGridEmptyMsgTextView)
         mHorizontalSimilarMovieGridView.setAdapter(mSimilarMovieAdapter)
-//        mHorizontalSimilarMovieGridView.setOnScrollListener(new RecyclerView.OnScrollListener() {
-//            @Override
-//            void onScrollStateChanged(RecyclerView recyclerView, int newState) {
-//                super.onScrollStateChanged(recyclerView, newState)
-//                LogDisplay.callLog(LOG_TAG, "onScrollStateChanged is called.", LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
-//            }
-//
-//            @Override
-//            void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-//                super.onScrolled(recyclerView, dx, dy)
-//                LogDisplay.callLog(LOG_TAG, "onScrolled is called.dx=$dx & dy=$dy", LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
-//            }
-//        })
+
         /**
          * External web link button handling
          */
@@ -753,11 +748,6 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
     public void onActivityCreated(Bundle savedInstanceState) {
         LogDisplay.callLog(LOG_TAG, 'onActivityCreated is called', LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
         super.onActivityCreated(savedInstanceState)
-        //If savedInstanceState (i.e. in case of restore), restore the value of mMovieId
-        if (savedInstanceState) {
-            //TODO: looks like this is not needed, so commented out
-//            mMovieId = savedInstanceState.getInt(GlobalStaticVariables.MOVIE_BASIC_INFO_MOVIE_ID, 0)
-        }
 
         AppCompatActivity appCompatActivity = getActivity() as AppCompatActivity
         mToolbar = getView().findViewById(R.id.movie_detail_toolbar) as Toolbar
@@ -827,9 +817,6 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
 
     @Override
     void onSaveInstanceState(Bundle outState) {
-        //save the mMovieId, so that in case the fragment restores it can retrieve the value properly
-        //TODO: looks like this is not needed, so commented out
-//        outState.putInt(GlobalStaticVariables.MOVIE_BASIC_INFO_MOVIE_ID,mMovieId)
         outState.putInt(GlobalStaticVariables.DETAIL_BACKDROP_VIEWPAGER_POSITION,mBackdropViewPagerPos)
         // Now call the superclass so it can save the view hierarchy state
         super.onSaveInstanceState(outState)
@@ -845,9 +832,12 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
                         getActivity(),                                                        //Parent Activity Context
                         MovieMagicContract.MovieBasicInfo.CONTENT_URI,                        //Table to query
                         MOVIE_BASIC_INFO_COLUMNS,                                             //Projection to return
+                        /** Orphaned category is used to handle scenario where movie is opened from user or tmdb list
+                         * then movie is removed, moreover tried again to add to same list or other**/
                         """$MovieMagicContract.MovieBasicInfo.COLUMN_MOVIE_ID = ? and
-                           $MovieMagicContract.MovieBasicInfo.COLUMN_MOVIE_CATEGORY = ? """,  //Selection Clause
-                        mMovieIdCategoryArg,                                                  //Selection Arg
+                           $MovieMagicContract.MovieBasicInfo.COLUMN_MOVIE_CATEGORY in
+                          ('$mMovieCategory','$GlobalStaticVariables.MOVIE_CATEGORY_ORPHANED') """,  //Selection Clause
+                        mMovieIdArg,                                                          //Selection Arg
                         null)                                                                 //Only a single row is expected, so not sorted
 
             case MOVIE_DETAIL_FRAGMENT_SIMILAR_MOVIE_LOADER_ID:
@@ -997,6 +987,11 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
     void handleMovieBasicOnLoadFinished(Cursor data) {
         LogDisplay.callLog(LOG_TAG, "handleMovieBasicOnLoadFinished.Cursor rec count -> ${data.getCount()}", LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
         if (data.moveToFirst()) {
+            // If more than one record found then it's because of orphaned record (check loader section for details)
+            // So if the first record of the cursor is orphaned record then move to next and use that for displaying data
+            if(data.getCount() > 1 && data.getString(COL_MOVIE_BASIC_MOVIE_CATEGORY) != mMovieCategory) {
+                data.moveToNext()
+            }
             _ID_movie_basic_info = data.getInt(COL_MOVIE_BASIC_ID)
             LogDisplay.callLog(LOG_TAG, "handleMovieBasicOnLoadFinished.Movie row id -> $_ID_movie_basic_info", LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
             LogDisplay.callLog(LOG_TAG, "handleMovieBasicOnLoadFinished.Movie Category -> ${data.getString(COL_MOVIE_BASIC_MOVIE_CATEGORY)}", LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
@@ -1347,8 +1342,10 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
                         }
                     })
             mBackdropViewPager.setAdapter(adapter)
+            mBackdropViewPager.clearOnPageChangeListeners()
             final int dotsCount = adapter.getCount()
             final ImageButton[] dotsImage = new ImageButton[dotsCount]
+            mBackdropDotHolderLayout.removeAllViews()
             setBackDropViewPagerDots(dotsCount, dotsImage)
             final OnPageChangeListener onPageChangeListener = new OnPageChangeListener() {
                 @Override
@@ -1357,7 +1354,6 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
 
                 @Override
                 void onPageSelected(int position) {
-//                    mBackdropDotHolderLayout.removeAllViews()
                     final LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(20,20)
                     final ColorStateList greyColorStateList = ColorStateList.valueOf(ContextCompat.getColor(getActivity(), R.color.grey_600_color))
                     for (i in 0..(dotsCount - 1)) {
@@ -1377,8 +1373,6 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
                 void onPageScrollStateChanged(int state) {
                 }
             }
-            mBackdropViewPager.clearOnPageChangeListeners()
-//            mBackdropViewPager.removeOnPageChangeListener(onPageChangeListener)
             mBackdropViewPager.addOnPageChangeListener(onPageChangeListener)
             mBackdropViewPager.setCurrentItem(mBackdropViewPagerPos)
         }
@@ -1474,7 +1468,7 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
                                 // Now update the rating in the local list
                                 LogDisplay.callLog(LOG_TAG, 'Going to update local rating with Tmdb rating', LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
                                 final UpdateUserListChoiceAndRating updateUserList = new UpdateUserListChoiceAndRating(getActivity(), mUserListDrawableLayout,
-                                        mMovieId, mMovieTitle, mPalletePrimaryColor, mPalleteBodyTextColor, true)
+                                        mMovieId, mMovieTitle, mPalletePrimaryColor, mPalleteBodyTextColor, false)
                                 final String[] updateUserListArgs = [GlobalStaticVariables.USER_LIST_USER_RATING, GlobalStaticVariables.USER_RATING_ADD_FLAG, String.valueOf(tmdbUserRating)]
                                 updateUserList.execute(updateUserListArgs)
                                 firstTimeLocalRatingUpdateWithTmdbRating = false
@@ -1491,26 +1485,6 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
             LogDisplay.callLog(LOG_TAG, "Either cursor is empty or isUserLoggedIn is false. Cursor size -> ${data.getCount()} & isUserLoggedIn falg is -> $MovieMagicMainActivity.isUserLoggedIn", LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
         }
     }
-
-//    /**
-//     * This method is used to retrieve the account information and send the Tmdb POST request to AsyncTask thread
-//     * @param movieType The type of TMDb movie
-//     * @param ratingVal The rating value (0 if the movie type is watchlist or favourite)
-//     */
-//    protected void postTmdbRequest(String movieType, float ratingVal) {
-//        LogDisplay.callLog(LOG_TAG, 'postTmdbRequest is called', LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
-//        String authToken
-//        String accountId
-//        final AccountManager accountManager = AccountManager.get(getActivity())
-//        final Account[] accounts = accountManager.getAccountsByType(getString(R.string.authenticator_account_type))
-//        if(accounts.size() == 1) {
-//            authToken = accountManager.blockingGetAuthToken(accounts[0],GlobalStaticVariables.AUTHTOKEN_TYPE_FULL_ACCESS,true)
-//            accountId = accountManager.getUserData(accounts[0], GlobalStaticVariables.TMDB_USERDATA_ACCOUNT_ID)
-//            new UploadTmdbRequest(getActivity(),movieType, ratingVal, false, mUserTmdbListDrawableLayout).execute([mMovieId] as Integer[])
-//        } else {
-//            LogDisplay.callLog(LOG_TAG,"Error.More than one account, number of accounts -> ${accounts.size()}",LogDisplay.MOVIE_MAGIC_MAIN_LOG_FLAG)
-//        }
-//    }
 
     /**
      * This method is called to apply the color once that is determined from the poster image
@@ -1573,10 +1547,6 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
         mTmdbImageButtonWatchlist.setBackgroundColor(mPalletePrimaryDarkColor)
         mTmdbImageButtonFavourite.setBackgroundColor(mPalletePrimaryDarkColor)
         mTmdbImageButtonRated.setBackgroundColor(mPalletePrimaryDarkColor)
-//        /** testing tint color**/
-//        final ColorStateList colorStateListImageButton = ColorStateList.valueOf(mPalleteAccentColor)
-//        mTmdbImageButtonWatchlist.setImageTintList(colorStateListImageButton)
-//        mTmdbImageButtonFavourite.setColorFilter(mPalleteAccentColor)
 
         //Set homepage & Imdb button color
         mHomePageButton.setBackgroundColor(mPalletePrimaryDarkColor)
@@ -1585,13 +1555,8 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
         mImdbLinkButton.setTextColor(mPalleteBodyTextColor)
 
         //Set ratingbar color. Used Compat so that it can work below lollipop.
-        //Above one - didn't use. No reason, just an example how to handle lollipop and below separately
-//        final Drawable tmdbRatingdrawable = mTmdbRatingBar.getProgressDrawable()
-//        DrawableCompat.setTint(tmdbRatingdrawable, mPalleteAccentColor)
         final ColorStateList colorStateListRatingBar = ColorStateList.valueOf(mPalleteAccentColor)
         ViewCompat.setBackgroundTintList(mTmdbRatingBar,colorStateListRatingBar)
-//        final Drawable userRatingDrawable = mUserRatingBar.getProgressDrawable()
-//        DrawableCompat.setTint(userRatingDrawable, mPalleteAccentColor)
         ViewCompat.setBackgroundTintList(mUserRatingBar,colorStateListRatingBar)
     }
 

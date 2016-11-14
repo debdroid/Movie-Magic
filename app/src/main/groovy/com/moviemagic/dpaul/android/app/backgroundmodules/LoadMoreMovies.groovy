@@ -67,15 +67,15 @@ class LoadMoreMovies extends AsyncTask<String, Void, Void>{
         } catch (URISyntaxException e) {
             //Set the boolean to true to indicate API call failed
             GridMovieFragment.isDataLoadFailed = true
-            Log.e(LOG_TAG, e.message, e)
+            Log.e(LOG_TAG, "URISyntaxException: ${e.message}", e)
         } catch (JsonException e) {
             //Set the boolean to true to indicate API call failed
             GridMovieFragment.isDataLoadFailed = true
-            Log.e(LOG_TAG, e.message, e)
-        } catch (IOException e) {
+            Log.e(LOG_TAG, "JsonException: ${e.message}", e)
+        } catch (JsonException e) {
             //Set the boolean to true to indicate API call failed
             GridMovieFragment.isDataLoadFailed = true
-            Log.e(LOG_TAG, "Error:", e)
+            Log.e(LOG_TAG, "JsonException: ${e.message}", e)
         }
         return null
     }

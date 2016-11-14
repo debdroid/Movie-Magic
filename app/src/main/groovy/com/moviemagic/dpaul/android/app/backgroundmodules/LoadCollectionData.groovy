@@ -133,11 +133,11 @@ class LoadCollectionData extends AsyncTask<Integer, Void, Void> {
                 }
             }
         } catch (URISyntaxException e) {
-            Log.e(LOG_TAG, "Error: ${e.message}", e)
+            Log.e(LOG_TAG, "URISyntaxException: ${e.message}", e)
         } catch (JsonException e) {
-            Log.e(LOG_TAG, "Error: ${e.message}", e)
+            Log.e(LOG_TAG, "JsonException: ${e.message}", e)
         } catch (IOException e) {
-            Log.e(LOG_TAG, "Error: ${e.message}", e)
+            Log.e(LOG_TAG, "IOException: ${e.message}", e)
         }
         return null
     }

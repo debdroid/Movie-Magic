@@ -37,8 +37,8 @@ class TmdbServerAuthenticate implements TmdbAuthenticateInterface {
             LogDisplay.callLog(LOG_TAG,"tokenBundle -> $tokenBundle",LogDisplay.TMDB_SERVER_AUTHENTICATE_LOG_FLAG)
 
             if(!tokenBundle.getBoolean(GlobalStaticVariables.TMDB_AUTH_ERROR_FLAG)) {
-                // Authenticate user with imdb userid and password using request_token and get a authenticated token
-                // TMDB api example to authenticate user
+                // Authenticate user with Tmdb userid and password using request_token and get a authenticated token
+                // TMDb api example to authenticate user
                 // https://api.themoviedb.org/3/authentication/token/validate_with_login?api_key=key&request_token=token&username=user name&password=password
                 final Uri.Builder authenticateUriBuilder = Uri.parse(GlobalStaticVariables.TMDB_MOVIE_BASE_URL).buildUpon()
                 final Uri authenticateUri = authenticateUriBuilder.appendPath(GlobalStaticVariables.TMDB_AUTHENTICATION_PATH)
@@ -111,7 +111,7 @@ class TmdbServerAuthenticate implements TmdbAuthenticateInterface {
                 bundle = tokenBundle
             }
         } catch (URISyntaxException e) {
-            Log.e(LOG_TAG, "Error: ${e.message}", e)
+            Log.e(LOG_TAG, "URISyntaxException: ${e.message}", e)
         }
         return bundle
     }
@@ -143,9 +143,9 @@ class TmdbServerAuthenticate implements TmdbAuthenticateInterface {
             final def tokenJsonData = new JsonSlurper(type: JsonParserType.INDEX_OVERLAY).parse(inputStream)
             tokenBundle = JsonParse.parseTmdbToken(tokenJsonData, respCode)
         } catch (JsonException e) {
-            Log.e(LOG_TAG, "Error: ${e.message}", e)
+            Log.e(LOG_TAG, "JsonException: ${e.message}", e)
         } catch (IOException e) {
-            Log.e(LOG_TAG, "Error: ${e.message}", e)
+            Log.e(LOG_TAG, "IOException: ${e.message}", e)
         } finally {
             // Close the connection and input stream
             conn.disconnect()
@@ -182,9 +182,9 @@ class TmdbServerAuthenticate implements TmdbAuthenticateInterface {
             final def validateTokenJsonData = new JsonSlurper(type: JsonParserType.INDEX_OVERLAY).parse(inputStream)
             authenticatedTokenBundle = JsonParse.parseTmdbAuthenticatedToken(validateTokenJsonData, respCode)
         } catch (JsonException e) {
-            Log.e(LOG_TAG, "Error: ${e.message}", e)
+            Log.e(LOG_TAG, "JsonException: ${e.message}", e)
         } catch (IOException e) {
-            Log.e(LOG_TAG, "Error: ${e.message}", e)
+            Log.e(LOG_TAG, "IOException: ${e.message}", e)
         } finally {
             // Close the connection and input stream
             conn.disconnect()
@@ -221,9 +221,9 @@ class TmdbServerAuthenticate implements TmdbAuthenticateInterface {
             final def tokenJsonData = new JsonSlurper(type: JsonParserType.INDEX_OVERLAY).parse(inputStream)
             SessionIdBundle = JsonParse.parseTmdbSessionId(tokenJsonData, respCode)
         } catch (JsonException e) {
-            Log.e(LOG_TAG, "Error: ${e.message}", e)
+            Log.e(LOG_TAG, "JsonException: ${e.message}", e)
         } catch (IOException e) {
-            Log.e(LOG_TAG, "Error: ${e.message}", e)
+            Log.e(LOG_TAG, "IOException: ${e.message}", e)
         } finally {
             // Close the connection and input stream
             conn.disconnect()
@@ -259,10 +259,10 @@ class TmdbServerAuthenticate implements TmdbAuthenticateInterface {
             }
             final def tokenJsonData = new JsonSlurper(type: JsonParserType.INDEX_OVERLAY).parse(inputStream)
             nameOfUser = JsonParse.parseTmdbAccountInfo(tokenJsonData, respCode)
-        } catch (JsonException e) {
-            Log.e(LOG_TAG, "Error: ${e.message}", e)
         } catch (IOException e) {
-            Log.e(LOG_TAG, "Error: ${e.message}", e)
+            Log.e(LOG_TAG, "IOException: ${e.message}", e)
+        } catch (IOException e) {
+            Log.e(LOG_TAG, "IOException: ${e.message}", e)
         } finally {
             // Close the connection and input stream
             conn.disconnect()
