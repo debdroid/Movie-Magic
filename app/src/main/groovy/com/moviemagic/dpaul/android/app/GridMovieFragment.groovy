@@ -5,6 +5,7 @@ import android.content.Context
 import android.database.Cursor
 import android.net.Uri
 import android.os.Bundle
+import android.support.design.widget.Snackbar
 import android.support.v4.app.Fragment
 import android.support.v4.app.LoaderManager
 import android.support.v4.content.CursorLoader
@@ -18,6 +19,7 @@ import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import com.moviemagic.dpaul.android.app.adapter.MovieGridRecyclerAdapter
+import com.moviemagic.dpaul.android.app.backgroundmodules.Utility
 import com.moviemagic.dpaul.android.app.contentprovider.MovieMagicContract
 import com.moviemagic.dpaul.android.app.backgroundmodules.GlobalStaticVariables
 import com.moviemagic.dpaul.android.app.backgroundmodules.LoadMoreMovies
@@ -28,7 +30,7 @@ import groovy.transform.CompileStatic
 @CompileStatic
 class GridMovieFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
     private static final String LOG_TAG = GridMovieFragment.class.getSimpleName()
-    private static final String STATE_MOVIE_CATEGORY = 'movie_Category'
+//    private static final String STATE_MOVIE_CATEGORY = 'movie_Category'
     //This is to indicate the start page for the more load. Driven by the value used in syncadapter (i.e. total
     //number of pages already downloaded)
     private int mStartPage = 0
@@ -41,9 +43,9 @@ class GridMovieFragment extends Fragment implements LoaderManager.LoaderCallback
     //Boolean to indicate if more data is being loaded
     private boolean isMoreDataToLoad = true
     //Boolean to track if the API call was successful
-    public static boolean isDataLoadFailed = false
+//    public static boolean isDataLoadFailed = false
     //Re-try counter in case API call failed
-    private int mReTryCounter = 0
+//    private int mReTryCounter = 0
 
     private CallbackForGridItemClick mCallbackForGridItemClick
     private CollectionColorChangeCallback mCollectionColorChangeCallback
@@ -128,7 +130,7 @@ class GridMovieFragment extends Fragment implements LoaderManager.LoaderCallback
                 })
         mRecyclerView.setAdapter(mGridRecyclerAdapter)
         LogDisplay.callLog(LOG_TAG,"Movie Category->$mMovieCategory",LogDisplay.GRID_MOVIE_FRAGMENT_LOG_FLAG)
-        //The more load feature is not needed for user list
+        // The more load feature is needed for TMDb public list only
         if(mMovieCategory == GlobalStaticVariables.MOVIE_CATEGORY_POPULAR ||
            mMovieCategory == GlobalStaticVariables.MOVIE_CATEGORY_TOP_RATED ||
            mMovieCategory == GlobalStaticVariables.MOVIE_CATEGORY_UPCOMING ||
@@ -158,7 +160,7 @@ class GridMovieFragment extends Fragment implements LoaderManager.LoaderCallback
                         LogDisplay.callLog(LOG_TAG, 'List invalidated and reset took place.', LogDisplay.GRID_MOVIE_FRAGMENT_LOG_FLAG)
                         mCurrentPage = mStartPage
                         mPreviousRecordCount = totalItemCount
-                        mReTryCounter = 0
+//                        mReTryCounter = 0
                         if (totalItemCount == 0) {
                             isMoreDataToLoad = true
                         }
@@ -171,7 +173,7 @@ class GridMovieFragment extends Fragment implements LoaderManager.LoaderCallback
                         isMoreDataToLoad = false
                         mPreviousRecordCount = totalItemCount
                         mCurrentPage++
-                        mReTryCounter = 0
+//                        mReTryCounter = 0
                     }
                     // If it isn’t currently loading, we check to see if we have breached
                     // the visibleThreshold and need to reload more data.
@@ -182,19 +184,21 @@ class GridMovieFragment extends Fragment implements LoaderManager.LoaderCallback
                         if (mMovieCategory != 'error') {
                             String[] movieCategory = [mMovieCategory] as String[]
                             LogDisplay.callLog(LOG_TAG, 'Going to load more data...', LogDisplay.GRID_MOVIE_FRAGMENT_LOG_FLAG)
-                            new LoadMoreMovies(getActivity(), mCurrentPage).execute(movieCategory)
+                            if(Utility.isReadyToDownload(getActivity())) {
+                                new LoadMoreMovies(getActivity(), mCurrentPage).execute(movieCategory)
+//                                isDataLoadFailed = true
+                            }
                         }
                     }
 
                     //Last API called failed, so give it another try but try max 5 times only
                     //If still does not work, then stop
-                    if (isDataLoadFailed && mReTryCounter < 5) {
-                        isDataLoadFailed = false
-                        final String[] movieCategory = [mMovieCategory] as String[]
-                        mReTryCounter++
-                        LogDisplay.callLog(LOG_TAG, "Last API call failed, going to re-try...try # $mReTryCounter", LogDisplay.GRID_MOVIE_FRAGMENT_LOG_FLAG)
-                        new LoadMoreMovies(getActivity(), mCurrentPage).execute(movieCategory)
-                    }
+//                    if (isDataLoadFailed && mReTryCounter < 5) {
+//                        isDataLoadFailed = false
+//                        final String[] movieCategory = [mMovieCategory] as String[]
+//                        mReTryCounter++
+//                        LogDisplay.callLog(LOG_TAG, "Last API call failed, going to re-try...try # $mReTryCounter", LogDisplay.GRID_MOVIE_FRAGMENT_LOG_FLAG)
+//                    }
                 }
             })
         }  else {
@@ -221,6 +225,25 @@ class GridMovieFragment extends Fragment implements LoaderManager.LoaderCallback
         } else {        //If it's restore then restart the loader
             LogDisplay.callLog(LOG_TAG, 'onActivityCreated:not first time, so restart loaders', LogDisplay.GRID_MOVIE_FRAGMENT_LOG_FLAG)
             getLoaderManager().restartLoader(MOVIE_GRID_FRAGMENT_LOADER_ID, null, this)
+        }
+    }
+
+    @Override
+    void onStart() {
+        super.onStart()
+        // Check if the user is online or not, if not then show a message
+        // This is not needed for Collection grid as Collection Fragment itself has a Snackbar message for this condition
+        if(mMovieCategory != GlobalStaticVariables.MOVIE_CATEGORY_COLLECTION) {
+            final boolean isOnline = Utility.isOnline(getActivity())
+            if (!isOnline) {
+                Snackbar.make(mRecyclerView, getString(R.string.no_internet_connection_message), Snackbar.LENGTH_LONG).show()
+            } else if (Utility.isOnlyWifi(getActivity()) & !GlobalStaticVariables.WIFI_CONNECTED) {
+                // If user has selected only WiFi but user is online without WiFi then show a dialog
+                Snackbar.make(mRecyclerView, getString(R.string.internet_connection_without_wifi_message), Snackbar.LENGTH_LONG).show()
+            } else if (Utility.isReducedDataOn(getActivity())) {
+                // If user has selected reduced data
+                Snackbar.make(mRecyclerView, getString(R.string.reduced_data_use_on_message), Snackbar.LENGTH_LONG).show()
+            }
         }
     }
 

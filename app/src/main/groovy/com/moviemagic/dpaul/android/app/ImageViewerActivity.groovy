@@ -1,6 +1,7 @@
 package com.moviemagic.dpaul.android.app
 
 import android.os.Bundle
+import android.support.design.widget.Snackbar
 import android.support.v4.view.ViewPager
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.Toolbar
@@ -11,6 +12,7 @@ import android.widget.RelativeLayout
 import com.moviemagic.dpaul.android.app.adapter.ImagePagerAdapter
 import com.moviemagic.dpaul.android.app.backgroundmodules.GlobalStaticVariables
 import com.moviemagic.dpaul.android.app.backgroundmodules.LogDisplay
+import com.moviemagic.dpaul.android.app.backgroundmodules.Utility
 import groovy.transform.CompileStatic
 
 @CompileStatic
@@ -82,6 +84,21 @@ class ImageViewerActivity extends AppCompatActivity {
         viewPager.setAdapter(adapter)
         //Position it at correct place (the image which is clicked)
         viewPager.setCurrentItem(mAdapterPostion)
+    }
+
+    void onStart() {
+        super.onStart()
+        // Check if the user is online or not, if not then show a message
+        final boolean isOnline = Utility.isOnline(this)
+        if(!isOnline) {
+            Snackbar.make(mImageViewerMainLayout, getString(R.string.no_internet_connection_message), Snackbar.LENGTH_LONG).show()
+        } else if(Utility.isOnlyWifi(this) & !GlobalStaticVariables.WIFI_CONNECTED) {
+            // If user has selected only WiFi but user is online without WiFi then show a dialog
+            Snackbar.make(mImageViewerMainLayout, getString(R.string.internet_connection_without_wifi_message), Snackbar.LENGTH_LONG).show()
+        } else if (Utility.isReducedDataOn(this)) {
+            // If user has selected reduced data
+            Snackbar.make(mImageViewerMainLayout, getString(R.string.reduced_data_use_on_message), Snackbar.LENGTH_LONG).show()
+        }
     }
 
     @Override

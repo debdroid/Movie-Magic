@@ -53,7 +53,7 @@ class DetailFragmentPagerAdapter extends PagerAdapter {
         final String imagePath = "$GlobalStaticVariables.TMDB_IMAGE_BASE_URL/$GlobalStaticVariables.TMDB_IMAGE_SIZE_W500" +
                 "${mBackdropimageFilePaths[position]}"
         LogDisplay.callLog(LOG_TAG,"instantiateItem:imagePath-> $imagePath",LogDisplay.DETAIL_FRAGMENT_PAGER_ADAPTER_LOG_FLAG)
-        PicassoLoadImage.loadDetailFragmentPAgerAdapterImage(mContext,imagePath,imageView)
+        PicassoLoadImage.loadDetailFragmentPagerAdapterImage(mContext,imagePath,imageView)
 
         view.setOnClickListener(new View.OnClickListener() {
             @Override

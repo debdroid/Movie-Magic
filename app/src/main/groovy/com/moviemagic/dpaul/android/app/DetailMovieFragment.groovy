@@ -395,6 +395,26 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
         mRootView.setAnimation(fadeIn)
 
         mAppBarLayout = mRootView.findViewById(R.id.movie_detail_app_bar_layout) as AppBarLayout
+        //Show the title only when image is collapsed
+        mAppBarLayout.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
+            boolean isShow = false
+            int scrollRange = -1
+
+            @Override
+            void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
+                if (scrollRange == -1) {
+                    scrollRange = appBarLayout.getTotalScrollRange()
+                }
+                if (scrollRange + verticalOffset == 0) {
+                    mCollapsingToolbar.setTitle(mMovieTitle)
+                    isShow = true
+                } else if (isShow) {
+                    mCollapsingToolbar.setTitle(" ")
+                    isShow = false
+                }
+            }
+        })
+
         mBackdropViewPager = mRootView.findViewById(R.id.movie_detail_backdrop_viewpager) as ViewPager
         mBackdropDotHolderLayout = mRootView.findViewById(R.id.view_pager_dots_holder) as LinearLayout
 
@@ -438,7 +458,7 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
                 LogDisplay.callLog(LOG_TAG, 'ImageButton Watched Button is clicked', LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
                 if (mMovieTitle && mMovieId) {
                     final UpdateUserListChoiceAndRating updateUserList = new UpdateUserListChoiceAndRating(getActivity(), mUserListDrawableLayout,
-                            mMovieId, mMovieTitle, mPalletePrimaryColor, mPalleteBodyTextColor, true)
+                            mMovieId, mMovieTitle, true)
                     String[] updateUserListArgs
                     //If full opaque then already selected, so remove it
                     if (mImageButtonWatched.getAlpha() == GlobalStaticVariables.MOVIE_MAGIC_ALPHA_FULL_OPAQUE) {
@@ -456,7 +476,7 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
                     }
                 } else {
                     Snackbar.make(mRootView.findViewById(R.id.movie_detail_user_list_drawable_layout),
-                            getActivity().getString(R.string.cannot_perform_operation_msg), Snackbar.LENGTH_LONG).show()
+                            getString(R.string.cannot_perform_operation_msg), Snackbar.LENGTH_LONG).show()
                 }
             }
         })
@@ -467,7 +487,7 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
                 LogDisplay.callLog(LOG_TAG, 'ImageButton WishList Button is clicked', LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
                 if (mMovieTitle && mMovieId) {
                     final UpdateUserListChoiceAndRating updateUserList = new UpdateUserListChoiceAndRating(getActivity(), mUserListDrawableLayout,
-                            mMovieId, mMovieTitle, mPalletePrimaryColor, mPalleteBodyTextColor, true)
+                            mMovieId, mMovieTitle, true)
                     String[] updateUserListArgs
                     //If full opaque then already selected, so remove it
                     if (mImageButtonWishList.getAlpha() == GlobalStaticVariables.MOVIE_MAGIC_ALPHA_FULL_OPAQUE) {
@@ -485,7 +505,7 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
                     }
                 } else {
                     Snackbar.make(mRootView.findViewById(R.id.movie_detail_user_list_drawable_layout),
-                            getActivity().getString(R.string.cannot_perform_operation_msg), Snackbar.LENGTH_LONG).show()
+                            getString(R.string.cannot_perform_operation_msg), Snackbar.LENGTH_LONG).show()
                 }
             }
         })
@@ -496,7 +516,7 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
                 LogDisplay.callLog(LOG_TAG, 'ImageButton Favourite Button is clicked', LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
                 if (mMovieTitle && mMovieId) {
                     final UpdateUserListChoiceAndRating updateUserList = new UpdateUserListChoiceAndRating(getActivity(), mUserListDrawableLayout,
-                            mMovieId, mMovieTitle, mPalletePrimaryColor, mPalleteBodyTextColor, true)
+                            mMovieId, mMovieTitle, true)
                     String[] updateUserListArgs
                     //If full opaque then already selected, so remove it
                     if (mImageButtonFavourite.getAlpha() == GlobalStaticVariables.MOVIE_MAGIC_ALPHA_FULL_OPAQUE) {
@@ -514,7 +534,7 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
                     }
                 } else {
                     Snackbar.make(mRootView.findViewById(R.id.movie_detail_user_list_drawable_layout),
-                            getActivity().getString(R.string.cannot_perform_operation_msg), Snackbar.LENGTH_LONG).show()
+                            getString(R.string.cannot_perform_operation_msg), Snackbar.LENGTH_LONG).show()
                 }
             }
         })
@@ -525,7 +545,7 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
                 LogDisplay.callLog(LOG_TAG, 'ImageButton Favourite Button is clicked', LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
                 if (mMovieTitle && mMovieId) {
                     final UpdateUserListChoiceAndRating updateUserList = new UpdateUserListChoiceAndRating(getActivity(), mUserListDrawableLayout,
-                            mMovieId, mMovieTitle, mPalletePrimaryColor, mPalleteBodyTextColor, true)
+                            mMovieId, mMovieTitle, true)
                     String[] updateUserListArgs
                     //If full opaque then already selected, so remove it
                     if (mImageButtonCollection.getAlpha() == GlobalStaticVariables.MOVIE_MAGIC_ALPHA_FULL_OPAQUE) {
@@ -543,7 +563,7 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
                     }
                 } else {
                     Snackbar.make(mRootView.findViewById(R.id.movie_detail_user_list_drawable_layout),
-                            getActivity().getString(R.string.cannot_perform_operation_msg), Snackbar.LENGTH_LONG).show()
+                            getString(R.string.cannot_perform_operation_msg), Snackbar.LENGTH_LONG).show()
                 }
             }
         })
@@ -555,14 +575,18 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
             @Override
             void onClick(View v) {
                 LogDisplay.callLog(LOG_TAG, 'Tmdb user watchlist button is clicked', LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
-                //If full opaque then already selected, so show user that they cannot remove it using the app
-                if (mTmdbImageButtonWatchlist.getAlpha() == GlobalStaticVariables.MOVIE_MAGIC_ALPHA_FULL_OPAQUE) {
-                    new UploadTmdbRequest(getActivity(), GlobalStaticVariables.MOVIE_CATEGORY_TMDB_USER_WATCHLIST, 0,
-                            false, mMovieCategory, mUserTmdbListDrawableLayout, mPalleteAccentColor).execute([mMovieId] as Integer[])
-                } else { //If 40% opaque then not selected, so add the movie to TMDb list
-                    LogDisplay.callLog(LOG_TAG, 'User wants to add to TMDb Watchlist, go ahead and do that', LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
-                    new UploadTmdbRequest(getActivity(), GlobalStaticVariables.MOVIE_CATEGORY_TMDB_USER_WATCHLIST, 0,
-                            true, mMovieCategory, mUserTmdbListDrawableLayout, mPalleteAccentColor).execute([mMovieId] as Integer[])
+                if(Utility.isReadyToDownload(getActivity())) {
+                    //If full opaque then already selected, so show user that they cannot remove it using the app
+                    if (mTmdbImageButtonWatchlist.getAlpha() == GlobalStaticVariables.MOVIE_MAGIC_ALPHA_FULL_OPAQUE) {
+                        new UploadTmdbRequest(getActivity(), GlobalStaticVariables.MOVIE_CATEGORY_TMDB_USER_WATCHLIST, 0,
+                                false, mMovieCategory, mUserTmdbListDrawableLayout, mPalleteAccentColor).execute([mMovieId] as Integer[])
+                    } else { //If 40% opaque then not selected, so add the movie to TMDb list
+                        LogDisplay.callLog(LOG_TAG, 'User wants to add to TMDb Watchlist, go ahead and do that', LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
+                        new UploadTmdbRequest(getActivity(), GlobalStaticVariables.MOVIE_CATEGORY_TMDB_USER_WATCHLIST, 0,
+                                true, mMovieCategory, mUserTmdbListDrawableLayout, mPalleteAccentColor).execute([mMovieId] as Integer[])
+                    }
+                } else {
+                    Snackbar.make(mUserTmdbListDrawableLayout, getString(R.string.no_internet_cannot_perform_operation_message), Snackbar.LENGTH_LONG).show()
                 }
             }
         })
@@ -571,15 +595,20 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
             @Override
             void onClick(View v) {
                 LogDisplay.callLog(LOG_TAG, 'Tmdb user favourite button is clicked', LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
-                //If full opaque then already selected, so show user that they cannot remove it using the app
-                if (mTmdbImageButtonFavourite.getAlpha() == GlobalStaticVariables.MOVIE_MAGIC_ALPHA_FULL_OPAQUE) {
-                    new UploadTmdbRequest(getActivity(),GlobalStaticVariables.MOVIE_CATEGORY_TMDB_USER_FAVOURITE, 0,
-                            false, mMovieCategory, mUserTmdbListDrawableLayout, mPalleteAccentColor).execute([mMovieId] as Integer[])
-                } else { //If 40% opaque then not selected, so add the movie to TMDb list
-                    LogDisplay.callLog(LOG_TAG, 'User wants to add to TMDb Favourite, go ahead and do that', LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
-                    new UploadTmdbRequest(getActivity(),GlobalStaticVariables.MOVIE_CATEGORY_TMDB_USER_FAVOURITE, 0,
-                            true, mMovieCategory, mUserTmdbListDrawableLayout, mPalleteAccentColor).execute([mMovieId] as Integer[])
+                if(Utility.isReadyToDownload(getActivity())) {
+                    //If full opaque then already selected, so show user that they cannot remove it using the app
+                    if (mTmdbImageButtonFavourite.getAlpha() == GlobalStaticVariables.MOVIE_MAGIC_ALPHA_FULL_OPAQUE) {
+                        new UploadTmdbRequest(getActivity(), GlobalStaticVariables.MOVIE_CATEGORY_TMDB_USER_FAVOURITE, 0,
+                                false, mMovieCategory, mUserTmdbListDrawableLayout, mPalleteAccentColor).execute([mMovieId] as Integer[])
+                    } else { //If 40% opaque then not selected, so add the movie to TMDb list
+                        LogDisplay.callLog(LOG_TAG, 'User wants to add to TMDb Favourite, go ahead and do that', LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
+                        new UploadTmdbRequest(getActivity(), GlobalStaticVariables.MOVIE_CATEGORY_TMDB_USER_FAVOURITE, 0,
+                                true, mMovieCategory, mUserTmdbListDrawableLayout, mPalleteAccentColor).execute([mMovieId] as Integer[])
+                    }
+                } else {
+                    Snackbar.make(mUserTmdbListDrawableLayout, getString(R.string.no_internet_cannot_perform_operation_message), Snackbar.LENGTH_LONG).show()
                 }
+
             }
         })
         mTmdbImageButtonRated = mRootView.findViewById(R.id.movie_detail_user_tmdb_list_drawable_rated) as ImageButton
@@ -587,20 +616,24 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
             @Override
             void onClick(View v) {
                 LogDisplay.callLog(LOG_TAG, 'Tmdb user rated button is clicked', LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
-                //If full opaque then already selected, so show user that they need to change the rating value
-                if (mTmdbImageButtonRated.getAlpha() == GlobalStaticVariables.MOVIE_MAGIC_ALPHA_FULL_OPAQUE) {
-                    Snackbar.make(mTmdbImageButtonRated, R.string.tmdb_rating_user_prompt_msg, Snackbar.LENGTH_LONG).show()
-                } else { //If 40% opaque then not selected, so add the movie to TMDb list
-                    LogDisplay.callLog(LOG_TAG, 'User wants to add to TMDb Rated, try for that..', LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
-                    final float userRatingVal = mUserRatingBar.getRating()
-                    if(userRatingVal > 0.0) {
-                        LogDisplay.callLog(LOG_TAG, 'Tmdb user rating is greater than zero, so post that to Tmdb', LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
-                        // Rating is driven by value, so fourth parameter does not matter
-                        new UploadTmdbRequest(getActivity(),GlobalStaticVariables.MOVIE_CATEGORY_TMDB_USER_RATED, userRatingVal,
-                                true, mMovieCategory, mUserTmdbListDrawableLayout, mPalleteAccentColor).execute([mMovieId] as Integer[])
-                    } else {
-                        Snackbar.make(mTmdbImageButtonRated, R.string.tmdb_rating_user_prompt_empty_msg, Snackbar.LENGTH_LONG).show()
+                if(Utility.isReadyToDownload(getActivity())) {
+                    //If full opaque then already selected, so show user that they need to change the rating value
+                    if (mTmdbImageButtonRated.getAlpha() == GlobalStaticVariables.MOVIE_MAGIC_ALPHA_FULL_OPAQUE) {
+                        Snackbar.make(mTmdbImageButtonRated, getString(R.string.tmdb_rating_user_prompt_msg), Snackbar.LENGTH_LONG).show()
+                    } else { //If 40% opaque then not selected, so add the movie to TMDb list
+                        LogDisplay.callLog(LOG_TAG, 'User wants to add to TMDb Rated, try for that..', LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
+                        final float userRatingVal = mUserRatingBar.getRating()
+                        if (userRatingVal > 0.0) {
+                            LogDisplay.callLog(LOG_TAG, 'Tmdb user rating is greater than zero, so post that to Tmdb', LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
+                            // Rating is driven by value, so fourth parameter does not matter
+                            new UploadTmdbRequest(getActivity(), GlobalStaticVariables.MOVIE_CATEGORY_TMDB_USER_RATED, userRatingVal,
+                                    true, mMovieCategory, mUserTmdbListDrawableLayout, mPalleteAccentColor).execute([mMovieId] as Integer[])
+                        } else {
+                            Snackbar.make(mUserTmdbListDrawableLayout, getString(R.string.tmdb_rating_user_prompt_empty_msg), Snackbar.LENGTH_LONG).show()
+                        }
                     }
+                } else {
+                    Snackbar.make(mUserTmdbListDrawableLayout, getString(R.string.no_internet_cannot_perform_operation_message), Snackbar.LENGTH_LONG).show()
                 }
             }
         })
@@ -626,7 +659,7 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
                 LogDisplay.callLog(LOG_TAG, "onRatingChanged:User rating bar value->$rating", LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
                 if (mMovieTitle && mMovieId) {
                     final UpdateUserListChoiceAndRating updateUserList = new UpdateUserListChoiceAndRating(getActivity(), mUserListDrawableLayout,
-                            mMovieId, mMovieTitle, mPalletePrimaryColor, mPalleteBodyTextColor, true)
+                            mMovieId, mMovieTitle, true)
                     String[] updateUserListArgs
                     //If the rating value is zero then remove it
                     if (rating == 0.0) {
@@ -812,6 +845,22 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
             if(MovieMagicMainActivity.isUserLoggedIn) {
                 getLoaderManager().restartLoader(MOVIE_DETAIL_FRAGMENT_BASIC_TMDB_DATA_LOADER_ID, null, this)
             }
+        }
+    }
+
+    @Override
+    void onStart() {
+        super.onStart()
+        // Check if the user is online or not, if not then show a message
+        final boolean isOnline = Utility.isOnline(getActivity())
+        if(!isOnline) {
+            Snackbar.make(mAppBarLayout, getString(R.string.no_internet_connection_message), Snackbar.LENGTH_LONG).show()
+        } else if(Utility.isOnlyWifi(getActivity()) & !GlobalStaticVariables.WIFI_CONNECTED) {
+            // If user has selected only WiFi but user is online without WiFi then show a dialog
+             Snackbar.make(mAppBarLayout, getString(R.string.internet_connection_without_wifi_message), Snackbar.LENGTH_LONG).show()
+        } else if (Utility.isReducedDataOn(getActivity())) {
+            // If user has selected reduced data
+            Snackbar.make(mAppBarLayout, getString(R.string.reduced_data_use_on_message), Snackbar.LENGTH_LONG).show()
         }
     }
 
@@ -1015,85 +1064,102 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
             final Callback picassoPosterCallback = new Callback() {
                 @Override
                 void onSuccess() {
+                    LogDisplay.callLog(LOG_TAG, 'Picasso callback: onSuccess is called', LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
                     //TODO: Future change - provide a setting option to user to chose if they want this or will use default theme
-                    final Bitmap bitmapPoster = ((BitmapDrawable) mPosterImageView.getDrawable()).getBitmap()
-                    Palette.from(bitmapPoster).generate(new Palette.PaletteAsyncListener() {
-                        @Override
-                        public void onGenerated(Palette p) {
-                            Palette.Swatch vibrantSwatch = p.getVibrantSwatch()
-                            Palette.Swatch lightVibrantSwatch = p.getLightVibrantSwatch()
-                            Palette.Swatch darkVibrantSwatch = p.getDarkVibrantSwatch()
-                            Palette.Swatch mutedSwatch = p.getMutedSwatch()
-                            Palette.Swatch mutedLightSwatch = p.getLightMutedSwatch()
-                            Palette.Swatch mutedDarkSwatch = p.getDarkMutedSwatch()
-                            boolean pickSwatchColorFlag = false
-                            //Pick primary, primaryDark, title and body text color
-                            if (vibrantSwatch) {
-                                mPalletePrimaryColor = vibrantSwatch.getRgb()
-                                mPalleteTitleColor = vibrantSwatch.getTitleTextColor()
-                                mPalleteBodyTextColor = vibrantSwatch.getBodyTextColor()
-                                //Produce Dark color by changing the value (3rd parameter) of HSL value
-                                float[] primaryHsl = vibrantSwatch.getHsl()
-                                primaryHsl[2] = primaryHsl[2] * 0.9f
-                                mPalletePrimaryDarkColor = Color.HSVToColor(primaryHsl)
-                                pickSwatchColorFlag = true
-                            } else if (lightVibrantSwatch) { //Try another swatch
-                                mPalletePrimaryColor = lightVibrantSwatch.getRgb()
-                                mPalleteTitleColor = lightVibrantSwatch.getTitleTextColor()
-                                mPalleteBodyTextColor = lightVibrantSwatch.getBodyTextColor()
-                                //Produce Dark color by changing the value (3rd parameter) of HSL value
-                                float[] primaryHsl = lightVibrantSwatch.getHsl()
-                                primaryHsl[2] = primaryHsl[2] * 0.9f
-                                mPalletePrimaryDarkColor = Color.HSVToColor(primaryHsl)
-                                pickSwatchColorFlag = true
-                            } else if (darkVibrantSwatch) { //Try last swatch
-                                mPalletePrimaryColor = darkVibrantSwatch.getRgb()
-                                mPalleteTitleColor = darkVibrantSwatch.getTitleTextColor()
-                                mPalleteBodyTextColor = darkVibrantSwatch.getBodyTextColor()
-                                //Produce Dark color by changing the value (3rd parameter) of HSL value
-                                float[] primaryHsl = darkVibrantSwatch.getHsl()
-                                primaryHsl[2] = primaryHsl[2] * 0.9f
-                                mPalletePrimaryDarkColor = Color.HSVToColor(primaryHsl)
-                                pickSwatchColorFlag = true
-                            } else { //Fallback to default
-                                LogDisplay.callLog(LOG_TAG, 'onGenerated:not able to pick color, so fallback', LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
-                                mPalletePrimaryColor = ContextCompat.getColor(getActivity(), R.color.primary)
-                                mPalletePrimaryDarkColor = ContextCompat.getColor(getActivity(), R.color.primary_dark)
-                                mPalleteTitleColor = ContextCompat.getColor(getActivity(), R.color.white_color)
-                                mPalleteBodyTextColor = ContextCompat.getColor(getActivity(), R.color.grey_color)
-                                //This is needed as we are not going pick accent colour if falling back
-                                mPalleteAccentColor = ContextCompat.getColor(getActivity(), R.color.accent)
-                            }
-                            //Pick accent color only if Swatch color is picked, otherwise do not pick accent color
-                            if (pickSwatchColorFlag) {
-                                if (mutedSwatch) {
-                                    mPalleteAccentColor = mutedSwatch.getRgb()
-                                } else if (mutedLightSwatch) { //Try another swatch
-                                    mPalleteAccentColor = mutedLightSwatch.getRgb()
-                                } else if (mutedDarkSwatch) { //Try last swatch
-                                    mPalleteAccentColor = mutedDarkSwatch.getRgb()
+                    // If user does not select dynamic theme (default value) then do not change the color
+                    if (Utility.isDynamicTheme(getActivity())) {
+                        final Bitmap bitmapPoster = ((BitmapDrawable) mPosterImageView.getDrawable()).getBitmap()
+                        Palette.from(bitmapPoster).generate(new Palette.PaletteAsyncListener() {
+                            @Override
+                            public void onGenerated(Palette p) {
+                                Palette.Swatch vibrantSwatch = p.getVibrantSwatch()
+                                Palette.Swatch lightVibrantSwatch = p.getLightVibrantSwatch()
+                                Palette.Swatch darkVibrantSwatch = p.getDarkVibrantSwatch()
+                                Palette.Swatch mutedSwatch = p.getMutedSwatch()
+                                Palette.Swatch mutedLightSwatch = p.getLightMutedSwatch()
+                                Palette.Swatch mutedDarkSwatch = p.getDarkMutedSwatch()
+                                boolean pickSwatchColorFlag = false
+                                //Pick primary, primaryDark, title and body text color
+                                if (vibrantSwatch) {
+                                    mPalletePrimaryColor = vibrantSwatch.getRgb()
+                                    mPalleteTitleColor = vibrantSwatch.getTitleTextColor()
+                                    mPalleteBodyTextColor = vibrantSwatch.getBodyTextColor()
+                                    //Produce Dark color by changing the value (3rd parameter) of HSL value
+                                    float[] primaryHsl = vibrantSwatch.getHsl()
+                                    primaryHsl[2] = primaryHsl[2] * 0.9f
+                                    mPalletePrimaryDarkColor = Color.HSVToColor(primaryHsl)
+                                    pickSwatchColorFlag = true
+                                } else if (lightVibrantSwatch) { //Try another swatch
+                                    mPalletePrimaryColor = lightVibrantSwatch.getRgb()
+                                    mPalleteTitleColor = lightVibrantSwatch.getTitleTextColor()
+                                    mPalleteBodyTextColor = lightVibrantSwatch.getBodyTextColor()
+                                    //Produce Dark color by changing the value (3rd parameter) of HSL value
+                                    float[] primaryHsl = lightVibrantSwatch.getHsl()
+                                    primaryHsl[2] = primaryHsl[2] * 0.9f
+                                    mPalletePrimaryDarkColor = Color.HSVToColor(primaryHsl)
+                                    pickSwatchColorFlag = true
+                                } else if (darkVibrantSwatch) { //Try last swatch
+                                    mPalletePrimaryColor = darkVibrantSwatch.getRgb()
+                                    mPalleteTitleColor = darkVibrantSwatch.getTitleTextColor()
+                                    mPalleteBodyTextColor = darkVibrantSwatch.getBodyTextColor()
+                                    //Produce Dark color by changing the value (3rd parameter) of HSL value
+                                    float[] primaryHsl = darkVibrantSwatch.getHsl()
+                                    primaryHsl[2] = primaryHsl[2] * 0.9f
+                                    mPalletePrimaryDarkColor = Color.HSVToColor(primaryHsl)
+                                    pickSwatchColorFlag = true
                                 } else { //Fallback to default
+                                    LogDisplay.callLog(LOG_TAG, 'onGenerated:not able to pick color, so fallback', LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
+                                    mPalletePrimaryColor = ContextCompat.getColor(getActivity(), R.color.primary)
+                                    mPalletePrimaryDarkColor = ContextCompat.getColor(getActivity(), R.color.primary_dark)
+                                    mPalleteTitleColor = ContextCompat.getColor(getActivity(), R.color.white_color)
+                                    mPalleteBodyTextColor = ContextCompat.getColor(getActivity(), R.color.grey_color)
+                                    //This is needed as we are not going pick accent colour if falling back
                                     mPalleteAccentColor = ContextCompat.getColor(getActivity(), R.color.accent)
                                 }
+                                //Pick accent color only if Swatch color is picked, otherwise do not pick accent color
+                                if (pickSwatchColorFlag) {
+                                    if (mutedSwatch) {
+                                        mPalleteAccentColor = mutedSwatch.getRgb()
+                                    } else if (mutedLightSwatch) { //Try another swatch
+                                        mPalleteAccentColor = mutedLightSwatch.getRgb()
+                                    } else if (mutedDarkSwatch) { //Try last swatch
+                                        mPalleteAccentColor = mutedDarkSwatch.getRgb()
+                                    } else { //Fallback to default
+                                        mPalleteAccentColor = ContextCompat.getColor(getActivity(), R.color.accent)
+                                    }
+                                }
+                                // Apply the color to the layouts & texts
+                                changeLayoutAndTextColor()
+                                initializeTitleAndColor()
+                                setImageButtonColor()
+                                // Apply the color for all attached adapters
+                                mMovieCastAdapter.changeColor(mPalletePrimaryDarkColor, mPalleteBodyTextColor)
+                                mMovieCrewAdapter.changeColor(mPalletePrimaryDarkColor, mPalleteBodyTextColor)
+                                mSimilarMovieAdapter.changeColor(mPalletePrimaryDarkColor, mPalleteBodyTextColor)
+                                mMovieReviewAdapter.changeColor(mPalletePrimaryColor, mPalleteTitleColor, mPalleteBodyTextColor)
                             }
-                            // Apply the color to the layouts & texts
-                            changeLayoutAndTextColor()
-                            initializeTitleAndColor()
-                            setImageButtonColor()
-                            // Apply the color for all attached adapters
-                            mMovieCastAdapter.changeColor(mPalletePrimaryDarkColor, mPalleteBodyTextColor)
-                            mMovieCrewAdapter.changeColor(mPalletePrimaryDarkColor, mPalleteBodyTextColor)
-                            mSimilarMovieAdapter.changeColor(mPalletePrimaryDarkColor, mPalleteBodyTextColor)
-                            mMovieReviewAdapter.changeColor(mPalletePrimaryColor, mPalleteTitleColor, mPalleteBodyTextColor)
-                        }
-                    })
+                        })
+                    } else { // To ensure ImageButton color is set for static theme
+                        mPalleteAccentColor = ContextCompat.getColor(getActivity(), R.color.accent)
+                        setImageButtonColor()
+                        // To ensure the title is shown when image is collapsed
+//                        showCollapsedTitle()
+                    }
                 }
 
                 @Override
                 void onError() {
-
+                    LogDisplay.callLog(LOG_TAG, 'Picasso callback: onError is called', LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
                 }
             }
+
+            // When user selects reduce data usage option the Picasso call does not get called as Picasso just add a placeholder
+            // So ensure that the ImageButton color and accent color are properly set
+            if(Utility.isReducedDataOn(getActivity())) {
+                mPalleteAccentColor = ContextCompat.getColor(getActivity(), R.color.accent)
+                setImageButtonColor()
+            }
+
             //Pass the Picasso Callback and load the image
             PicassoLoadImage.loadDetailFragmentPosterImage(getActivity(),posterPath,mPosterImageView,picassoPosterCallback)
             //Default date is 1900-01-01 which is less than Unix epoc 1st Jan 1970, so converted milliseconds is negative
@@ -1208,7 +1274,11 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
                 // Set the flag to false to indicate it's not for home page
                 isForHomeList.add(0,GlobalStaticVariables.MOVIE_MAGIC_FLAG_FALSE)
                 final ArrayList<Integer>[] loadMovieDetailsArg = [movieIdList, movieRowIdList, isForHomeList] as ArrayList<Integer>[]
-                new LoadMovieDetails(getActivity()).execute(loadMovieDetailsArg)
+                if(Utility.isReadyToDownload(getActivity())) {
+                    new LoadMovieDetails(getActivity()).execute(loadMovieDetailsArg)
+                } else {
+                    LogDisplay.callLog(LOG_TAG, '1-> Device is offline or connected to internet without WiFi and user selected download only on WiFi', LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
+                }
             } else {
                 LogDisplay.callLog(LOG_TAG, 'handleMovieBasicOnLoadFinished.Additional movie data already present', LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
             }
@@ -1224,7 +1294,11 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
                 movieRowIdList.add(0,0)
                 isForHomeList.add(0,GlobalStaticVariables.MOVIE_MAGIC_FLAG_FALSE)
                 final ArrayList<Integer>[] loadMovieDetailsArg = [movieIdList, movieRowIdList, isForHomeList] as ArrayList<Integer>[]
-                new LoadMovieDetails(getActivity()).execute(loadMovieDetailsArg)
+                if(Utility.isReadyToDownload(getActivity())) {
+                    new LoadMovieDetails(getActivity()).execute(loadMovieDetailsArg)
+                } else {
+                    LogDisplay.callLog(LOG_TAG, '2-> Device is offline or connected to internet without WiFi and user selected download only on WiFi', LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
+                }
             } else {
                 LogDisplay.callLog(LOG_TAG, "New scenario, investigate how it reached here - Movie id:$mMovieId, Category:$mMovieCategory", LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
             }
@@ -1275,7 +1349,7 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
                 LogDisplay.callLog(LOG_TAG, "YouTube now_playing key= $youtubeVideoKey", LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
                 data.moveToNext()
             }
-            if(youtubeVideoKey.size() > 0) {
+            if(youtubeVideoKey.size() > 0 && !Utility.isReducedDataOn(getActivity())) {
                 mMovieTrailerEmptyMsgTextView.setVisibility(TextView.INVISIBLE)
                 final MovieMagicYoutubeFragment movieMagicYoutubeFragment = MovieMagicYoutubeFragment
                         .createMovieMagicYouTubeFragment(youtubeVideoKey)
@@ -1284,7 +1358,7 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
                         .commit()
             } else {
                 mMovieTrailerEmptyMsgTextView.setVisibility(TextView.VISIBLE)
-                LogDisplay.callLog(LOG_TAG, 'Youtube video id is null', LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
+                LogDisplay.callLog(LOG_TAG, 'Youtube video id is null or user selected reduced data use', LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
             }
         }
     }
@@ -1321,7 +1395,7 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
         //TODO: Future change - provide a setting option to user to chose no image download over mobile data & for better
         if (data.moveToFirst()) {
             mBackdropList = new ArrayList<String>()
-            // Add the original backrop image (i.e. which comes along with other movie details)
+            // Add the original backdrop image (i.e. which comes along with other movie details)
             if (mOriginalBackdropPath) {
                 mBackdropList.add(mOriginalBackdropPath)
             }
@@ -1468,7 +1542,7 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
                                 // Now update the rating in the local list
                                 LogDisplay.callLog(LOG_TAG, 'Going to update local rating with Tmdb rating', LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
                                 final UpdateUserListChoiceAndRating updateUserList = new UpdateUserListChoiceAndRating(getActivity(), mUserListDrawableLayout,
-                                        mMovieId, mMovieTitle, mPalletePrimaryColor, mPalleteBodyTextColor, false)
+                                        mMovieId, mMovieTitle, false)
                                 final String[] updateUserListArgs = [GlobalStaticVariables.USER_LIST_USER_RATING, GlobalStaticVariables.USER_RATING_ADD_FLAG, String.valueOf(tmdbUserRating)]
                                 updateUserList.execute(updateUserListArgs)
                                 firstTimeLocalRatingUpdateWithTmdbRating = false
@@ -1569,27 +1643,33 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
         mCollapsingToolbar.setContentScrimColor(mPalletePrimaryColor)
         mCollapsingToolbar.setBackgroundColor(mPalletePrimaryColor)
         mCollapsingToolbar.setCollapsedTitleTextColor(mPalleteTitleColor)
-
-        //Show the title only when image is collapsed
-        mAppBarLayout.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
-            boolean isShow = false
-            int scrollRange = -1
-
-            @Override
-            void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
-                if (scrollRange == -1) {
-                    scrollRange = appBarLayout.getTotalScrollRange()
-                }
-                if (scrollRange + verticalOffset == 0) {
-                    mCollapsingToolbar.setTitle(mMovieTitle)
-                    isShow = true
-                } else if (isShow) {
-                    mCollapsingToolbar.setTitle(" ")
-                    isShow = false
-                }
-            }
-        })
+//        showCollapsedTitle()
     }
+
+    /**
+     * This method sets the title when the backdrop image is collapsed
+     */
+//    protected void showCollapsedTitle() {
+//        //Show the title only when image is collapsed
+//        mAppBarLayout.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
+//            boolean isShow = false
+//            int scrollRange = -1
+//
+//            @Override
+//            void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
+//                if (scrollRange == -1) {
+//                    scrollRange = appBarLayout.getTotalScrollRange()
+//                }
+//                if (scrollRange + verticalOffset == 0) {
+//                    mCollapsingToolbar.setTitle(mMovieTitle)
+//                    isShow = true
+//                } else if (isShow) {
+//                    mCollapsingToolbar.setTitle(" ")
+//                    isShow = false
+//                }
+//            }
+//        })
+//    }
 
     /**
      * This method is called to apply the color to image button (used for user list selection)
@@ -1673,8 +1753,12 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
             @Override
             void onClick(DialogInterface dialog, int which) {
                 LogDisplay.callLog(LOG_TAG, 'Dialog Ok is clicked, go and update the TMDb rating', LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
-                new UploadTmdbRequest(getActivity(),GlobalStaticVariables.MOVIE_CATEGORY_TMDB_USER_RATED, userRatingVal,
-                        false, mMovieCategory, mUserTmdbListDrawableLayout, mPalleteAccentColor).execute([mMovieId] as Integer[])
+                if(Utility.isReadyToDownload(getActivity())) {
+                    new UploadTmdbRequest(getActivity(), GlobalStaticVariables.MOVIE_CATEGORY_TMDB_USER_RATED, userRatingVal,
+                            false, mMovieCategory, mUserTmdbListDrawableLayout, mPalleteAccentColor).execute([mMovieId] as Integer[])
+                } else {
+                    Snackbar.make(mUserTmdbListDrawableLayout, getString(R.string.no_internet_cannot_perform_operation_message), Snackbar.LENGTH_LONG).show()
+                }
             }
         })
 

@@ -14,6 +14,7 @@ import android.net.Uri
 import android.os.AsyncTask
 import android.os.Build
 import android.os.Bundle
+import android.support.design.widget.Snackbar
 import android.text.TextUtils
 import android.util.Log
 import android.view.View
@@ -27,6 +28,7 @@ import android.widget.Toast
 import com.moviemagic.dpaul.android.app.R
 import com.moviemagic.dpaul.android.app.backgroundmodules.GlobalStaticVariables
 import com.moviemagic.dpaul.android.app.backgroundmodules.LogDisplay
+import com.moviemagic.dpaul.android.app.backgroundmodules.Utility
 import com.moviemagic.dpaul.android.app.syncadapter.MovieMagicSyncAdapterUtility
 import groovy.transform.CompileStatic
 
@@ -45,6 +47,7 @@ class MovieMagicAuthenticatorActivity extends AccountAuthenticatorActivity {
     private ProgressBar mProgressView
     private LinearLayout mLoginFormView
     private String mAuthTokenType
+    private boolean isOnline
     /**
      * Keep track of the login task to ensure we can cancel it if requested.
      */
@@ -92,6 +95,15 @@ class MovieMagicAuthenticatorActivity extends AccountAuthenticatorActivity {
         // If accountName is not null then populate the username field
         if (accountName) {
             (findViewById(R.id.username) as TextView).setText(accountName)
+        }
+    }
+
+    void onStart() {
+        super.onStart()
+        // Check if the user is online or not, if not then show a message
+        isOnline = Utility.isOnline(this)
+        if(!isOnline) {
+            Snackbar.make(mLoginFormView, getString(R.string.no_internet_connection_message), Snackbar.LENGTH_LONG).show()
         }
     }
 
@@ -152,11 +164,15 @@ class MovieMagicAuthenticatorActivity extends AccountAuthenticatorActivity {
             // form field with an error.
             focusView.requestFocus()
         } else {
-            // Show a progress spinner, and kick off a background task to
-            // perform the user login attempt.
-            showProgress(true)
-            mUserLoginTask = new UserLoginTask()
-            mUserLoginTask.execute([username,password] as String[])
+            if(isOnline) {
+                // Show a progress spinner, and kick off a background task to
+                // perform the user login attempt.
+                showProgress(true)
+                mUserLoginTask = new UserLoginTask()
+                mUserLoginTask.execute([username,password] as String[])
+            } else { // Show error message
+                Toast.makeText(getBaseContext(), getString(R.string.no_internet_cannot_login_message), Toast.LENGTH_SHORT).show()
+            }
         }
     }
 
@@ -225,21 +241,26 @@ class MovieMagicAuthenticatorActivity extends AccountAuthenticatorActivity {
             try {
                 final Bundle bundle = GlobalStaticVariables.sTmdbAuthenticateInterface
                         .tmdbUserSignIn(username, password, mAuthTokenType)
-                final String authtoken = bundle.getString(GlobalStaticVariables.TMDB_AUTH_TOKEN)
-                final String tmdbUserName = bundle.getString(GlobalStaticVariables.TMDB_USER_NAME)
-                final String tmdbAccountId = bundle.getString(GlobalStaticVariables.TMDB_USER_ACCOUNT_ID)
-                final String accountType = getIntent().getStringExtra(AccountManager.KEY_ACCOUNT_TYPE)
-                if(!bundle.getBoolean(GlobalStaticVariables.TMDB_AUTH_ERROR_FLAG)) {
-                    LogDisplay.callLog(LOG_TAG,"AuthToken recevied successfully->$authtoken",LogDisplay.MOVIE_MAGIC_AUTHENTICATOR_ACTIVITY_LOG_FLAG)
-                    data.putString(AccountManager.KEY_ACCOUNT_NAME, username)
-                    data.putString(AccountManager.KEY_ACCOUNT_TYPE, accountType)
-                    data.putString(AccountManager.KEY_AUTHTOKEN, authtoken)
-                    data.putString(AccountManager.KEY_PASSWORD, password)
-                    data.putString(AccountManager.KEY_USERDATA, tmdbUserName)
-                    data.putString(GlobalStaticVariables.TMDB_USERDATA_ACCOUNT_ID, tmdbAccountId)
+                if(bundle) {
+                    final String authtoken = bundle.getString(GlobalStaticVariables.TMDB_AUTH_TOKEN)
+                    final String tmdbUserName = bundle.getString(GlobalStaticVariables.TMDB_USER_NAME)
+                    final String tmdbAccountId = bundle.getString(GlobalStaticVariables.TMDB_USER_ACCOUNT_ID)
+                    final String accountType = getIntent().getStringExtra(AccountManager.KEY_ACCOUNT_TYPE)
+                    if (!bundle.getBoolean(GlobalStaticVariables.TMDB_AUTH_ERROR_FLAG)) {
+                        LogDisplay.callLog(LOG_TAG, "AuthToken recevied successfully->$authtoken", LogDisplay.MOVIE_MAGIC_AUTHENTICATOR_ACTIVITY_LOG_FLAG)
+                        data.putString(AccountManager.KEY_ACCOUNT_NAME, username)
+                        data.putString(AccountManager.KEY_ACCOUNT_TYPE, accountType)
+                        data.putString(AccountManager.KEY_AUTHTOKEN, authtoken)
+                        data.putString(AccountManager.KEY_PASSWORD, password)
+                        data.putString(AccountManager.KEY_USERDATA, tmdbUserName)
+                        data.putString(GlobalStaticVariables.TMDB_USERDATA_ACCOUNT_ID, tmdbAccountId)
+                    } else {
+                        LogDisplay.callLog(LOG_TAG, "Not able to retrive AuthToken. Error message->${bundle.getString(GlobalStaticVariables.TMDB_AUTH_ERROR_MSG)}", LogDisplay.MOVIE_MAGIC_AUTHENTICATOR_ACTIVITY_LOG_FLAG)
+                        data.putString(AccountManager.KEY_ERROR_MESSAGE, bundle.getString(GlobalStaticVariables.TMDB_AUTH_ERROR_MSG))
+                    }
                 } else {
-                    LogDisplay.callLog(LOG_TAG,"Not able retrive AuthToken. Error message->${bundle.getString(GlobalStaticVariables.TMDB_AUTH_ERROR_MSG)}",LogDisplay.MOVIE_MAGIC_AUTHENTICATOR_ACTIVITY_LOG_FLAG)
-                    data.putString(AccountManager.KEY_ERROR_MESSAGE, bundle.getString(GlobalStaticVariables.TMDB_AUTH_ERROR_MSG))
+                    LogDisplay.callLog(LOG_TAG, 'Unexpected error..investigation needed', LogDisplay.MOVIE_MAGIC_AUTHENTICATOR_ACTIVITY_LOG_FLAG)
+                    data.putString(AccountManager.KEY_ERROR_MESSAGE, getString(R.string.authenticator_jellybean_error_message))
                 }
 
             } catch (Exception e) {
@@ -308,7 +329,7 @@ class MovieMagicAuthenticatorActivity extends AccountAuthenticatorActivity {
                                 addAcountAndAuthToken(intent, account, authtoken, tmdbUSerName, tmdbAccountId, accountPassword)
                             } catch (Exception e) {
                                 LogDisplay.callLog(LOG_TAG,"Remove account failed, error message: ${e.getMessage()}",LogDisplay.MOVIE_MAGIC_AUTHENTICATOR_ACTIVITY_LOG_FLAG)
-                                Toast.makeText(getBaseContext(), 'Cannot perform the operation, please try again later.', Toast.LENGTH_SHORT).show()
+                                Toast.makeText(getBaseContext(), getString(R.string.cannot_perform_operation_message), Toast.LENGTH_SHORT).show()
                                 Log.e(LOG_TAG, "Error: ${e.message}", e)
                             }
                         }
@@ -326,7 +347,7 @@ class MovieMagicAuthenticatorActivity extends AccountAuthenticatorActivity {
                                 addAcountAndAuthToken(intent, account, authtoken, tmdbUSerName, tmdbAccountId, accountPassword)
                             } else {
                                 LogDisplay.callLog(LOG_TAG,'Remove account failed',LogDisplay.MOVIE_MAGIC_AUTHENTICATOR_ACTIVITY_LOG_FLAG)
-                                Toast.makeText(getBaseContext(), 'Cannot perform the operation, please try again later.', Toast.LENGTH_SHORT).show()
+                                Toast.makeText(getBaseContext(), getString(R.string.cannot_perform_operation_message), Toast.LENGTH_SHORT).show()
                             }
                         }
                     }, null)
@@ -335,6 +356,10 @@ class MovieMagicAuthenticatorActivity extends AccountAuthenticatorActivity {
         } else {
             LogDisplay.callLog(LOG_TAG,'Existing account, update password',LogDisplay.MOVIE_MAGIC_AUTHENTICATOR_ACTIVITY_LOG_FLAG)
             mAccountManager.setPassword(account, accountPassword)
+            // Let the authenticator know that login is done
+            setAccountAuthenticatorResult(intent.getExtras())
+            setResult(RESULT_OK, intent)
+            finish()
         }
     }
 

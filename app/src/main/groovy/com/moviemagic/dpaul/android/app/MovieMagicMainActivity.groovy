@@ -4,13 +4,19 @@ import android.accounts.Account
 import android.accounts.AccountManager
 import android.accounts.AccountManagerCallback
 import android.accounts.AccountManagerFuture
+import android.app.AlertDialog
 import android.content.Context
+import android.content.DialogInterface
 import android.content.Intent
+import android.content.IntentFilter
 import android.database.Cursor
+import android.net.ConnectivityManager
 import android.net.Uri
 import android.os.AsyncTask
 import android.os.Build
 import android.os.Bundle
+import android.preference.PreferenceManager
+import android.provider.Settings
 import android.support.design.widget.FloatingActionButton
 import android.support.design.widget.NavigationView
 import android.support.design.widget.Snackbar
@@ -31,6 +37,8 @@ import com.google.android.youtube.player.YouTubeApiServiceUtil
 import com.google.android.youtube.player.YouTubeInitializationResult
 import com.moviemagic.dpaul.android.app.adapter.HomeMovieAdapter
 import com.moviemagic.dpaul.android.app.adapter.MovieGridRecyclerAdapter
+import com.moviemagic.dpaul.android.app.backgroundmodules.NetworkReceiver
+import com.moviemagic.dpaul.android.app.backgroundmodules.Utility
 import com.moviemagic.dpaul.android.app.contentprovider.MovieMagicContract
 import com.moviemagic.dpaul.android.app.syncadapter.MovieMagicSyncAdapterUtility
 import com.moviemagic.dpaul.android.app.backgroundmodules.GlobalStaticVariables
@@ -45,31 +53,24 @@ public class MovieMagicMainActivity extends AppCompatActivity implements Navigat
     private static final String STATE_APP_TITLE = 'app_title'
     private NavigationView mNavigationView
     private TextView mNavPanelUserNameTextView, mNavPanelUserIdTextView
-    private Button mNavPanelLoginButton, mNavPanelLogoutButton
+    private Button mNavPanelLoginButton
     private AccountManager mAccountManager
     public static boolean isUserLoggedIn = false
+    private NetworkReceiver networkReceiver
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState)
         LogDisplay.callLog(LOG_TAG,'onCreate is called',LogDisplay.MOVIE_MAGIC_MAIN_LOG_FLAG)
         setContentView(R.layout.activity_movie_magic_main)
-        // Create an instance of AccountManager
-        mAccountManager = AccountManager.get(this)
-        // Initialize the SyncAdapter
-        MovieMagicSyncAdapterUtility.initializeSyncAdapter(this)
-        //*** Comment before release **********************
-        //MovieMagicSyncAdapterUtility.syncImmediately(this)
-
-        final Toolbar toolbar = (Toolbar) findViewById(R.id.main_activity_toolbar)
+        final Toolbar toolbar = findViewById(R.id.main_activity_toolbar) as Toolbar
         setSupportActionBar(toolbar)
 
-        final FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab)
+        final FloatingActionButton fab = findViewById(R.id.fab) as FloatingActionButton
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show()
+                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG).setAction("Action", null).show()
             }
         })
 
@@ -77,7 +78,6 @@ public class MovieMagicMainActivity extends AppCompatActivity implements Navigat
         final ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close)
         drawer.addDrawerListener(toggle)
-//        drawer.setDrawerListener(toggle)
         toggle.syncState()
 
         mNavigationView = findViewById(R.id.nav_view) as NavigationView
@@ -93,18 +93,33 @@ public class MovieMagicMainActivity extends AppCompatActivity implements Navigat
                 loginToTmdbAccount()
             }
         })
+
+        // Create an instance of AccountManager
+        mAccountManager = AccountManager.get(this)
+
+        // Initialize the SyncAdapter
+        MovieMagicSyncAdapterUtility.initializeSyncAdapter(this)
+        //*** Comment before release **********************
+        //MovieMagicSyncAdapterUtility.syncImmediately(this)
+
+        // Registers BroadcastReceiver to track network connection changes. This is more lightweight
+        // than declaring a <receiver> in the manifest to avoid not waking up the app when not in use (less battery usage)
+        final IntentFilter filter = new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION)
+        networkReceiver = new NetworkReceiver()
+        this.registerReceiver(networkReceiver, filter)
+
+        // Set default values for Settings
+        PreferenceManager.setDefaultValues(this, R.xml.preference_xml, false)
         
         // Check if user already logged in to TMDb account. If yes then perform the required steps
         checkUserLoginAndPerformAction()
-        
-//        mNavPanelLogoutButton = navigationHeader.findViewById(R.id.nav_drawer_log_out) as Button
 
-//        setMenuCounter(R.id.nav_home,40)
         //Update the user list menu counter
         //Program fails if 'Void' is used for parameter, could be because of groovy compiler??
         //So to get rid of the problem a 'dummy' value is passed
         //TODO: Need to fix this later
          new UpdateMenuCounter(this).execute(['dummy'] as String[])
+
         //Check to ensure Youtube exists on the device
         final YouTubeInitializationResult result = YouTubeApiServiceUtil.isYouTubeApiServiceAvailable(this)
         if (result != YouTubeInitializationResult.SUCCESS) {
@@ -146,6 +161,22 @@ public class MovieMagicMainActivity extends AppCompatActivity implements Navigat
     protected void onStart() {
         super.onStart()
         LogDisplay.callLog(LOG_TAG,'onStart is called',LogDisplay.MOVIE_MAGIC_MAIN_LOG_FLAG)
+        // Check if the user is online or not, if not then open a dialog
+        final boolean isOnline = Utility.isOnline(this)
+        if(!isOnline) {
+            showNotConnectedErrorDialog()
+        } else {
+            LogDisplay.callLog(LOG_TAG,'Connected to network!!',LogDisplay.MOVIE_MAGIC_MAIN_LOG_FLAG)
+            LogDisplay.callLog(LOG_TAG,"WiFi connection flag: $GlobalStaticVariables.WIFI_CONNECTED",LogDisplay.MOVIE_MAGIC_MAIN_LOG_FLAG)
+            LogDisplay.callLog(LOG_TAG,"Mobile connection flag: $GlobalStaticVariables.MOBILE_CONNECTED",LogDisplay.MOVIE_MAGIC_MAIN_LOG_FLAG)
+            // If user has selected only WiFi but user is online without WiFi then show a dialog
+            if(Utility.isOnlyWifi(this) & !GlobalStaticVariables.WIFI_CONNECTED) {
+                showNotConnectedToWiFiErrorDialog()
+            }
+        }
+
+        // Test utility method "isReadyToDownload"
+//        LogDisplay.callLog(LOG_TAG,"Downalod flag test -> ${Utility.isReadyToDownload(this)}",LogDisplay.MOVIE_MAGIC_MAIN_LOG_FLAG)
     }
 
     @Override
@@ -181,6 +212,10 @@ public class MovieMagicMainActivity extends AppCompatActivity implements Navigat
     protected void onDestroy() {
         super.onDestroy()
         LogDisplay.callLog(LOG_TAG,'onDestroy is called',LogDisplay.MOVIE_MAGIC_MAIN_LOG_FLAG)
+        // Unregisters BroadcastReceiver when app is destroyed.
+        if(networkReceiver) {
+            this.unregisterReceiver(networkReceiver)
+        }
     }
 
     @Override
@@ -212,63 +247,48 @@ public class MovieMagicMainActivity extends AppCompatActivity implements Navigat
         final int id = item.getItemId()
 
         if (id == R.id.nav_home) {
-            showSnackBar(getString(R.string.drawer_menu_home) + " is clicked")
             setItemTitle(getString(R.string.drawer_menu_home))
             loadHomeFragment()
         } else if (id == R.id.nav_tmdb_popular) {
-            showSnackBar(getString(R.string.drawer_menu_tmdb_popular) + " is clicked")
             setItemTitle(getString(R.string.drawer_menu_tmdb_popular))
             loadGridFragment(GlobalStaticVariables.MOVIE_CATEGORY_POPULAR)
         } else if (id == R.id.nav_tmdb_toprated) {
-            showSnackBar(getString(R.string.drawer_menu_tmdb_toprated) + " is clicked")
             setItemTitle(getString(R.string.drawer_menu_tmdb_toprated))
             loadGridFragment(GlobalStaticVariables.MOVIE_CATEGORY_TOP_RATED)
         } else if (id == R.id.nav_tmdb_nowplaying) {
-            showSnackBar(getString(R.string.drawer_menu_tmdb_nowplaying) + " is clicked")
             setItemTitle(getString(R.string.drawer_menu_tmdb_nowplaying))
             loadGridFragment(GlobalStaticVariables.MOVIE_CATEGORY_NOW_PLAYING)
         } else if (id == R.id.nav_tmdb_upcoming) {
-            showSnackBar(getString(R.string.drawer_menu_tmdb_upcoming) + " is clicked")
             setItemTitle(getString(R.string.drawer_menu_tmdb_upcoming))
             loadGridFragment(GlobalStaticVariables.MOVIE_CATEGORY_UPCOMING)
         } else if (id == R.id.nav_user_watched) {
-            showSnackBar(getString(R.string.drawer_menu_user_watched) + " is clicked")
             setItemTitle(getString(R.string.drawer_menu_user_watched))
             loadGridFragment(GlobalStaticVariables.MOVIE_CATEGORY_LOCAL_USER_WATCHED)
         } else if (id == R.id.nav_user_wishlist) {
-            showSnackBar(getString(R.string.drawer_menu_user_wishlist) + " is clicked")
             setItemTitle(getString(R.string.drawer_menu_user_wishlist))
             loadGridFragment(GlobalStaticVariables.MOVIE_CATEGORY_LOCAL_USER_WISH_LIST)
         } else if (id == R.id.nav_user_favourite) {
-            showSnackBar(getString(R.string.drawer_menu_user_favourite) + " is clicked")
             setItemTitle(getString(R.string.drawer_menu_user_favourite))
             loadGridFragment(GlobalStaticVariables.MOVIE_CATEGORY_LOCAL_USER_FAVOURITE)
         } else if (id == R.id.nav_user_collection) {
-            showSnackBar(getString(R.string.drawer_menu_user_collection) + " is clicked")
             setItemTitle(getString(R.string.drawer_menu_user_collection))
             loadGridFragment(GlobalStaticVariables.MOVIE_CATEGORY_LOCAL_USER_COLLECTION)
         } else if (id == R.id.nav_tmdb_user_watchlist) {
-            showSnackBar(getString(R.string.drawer_menu_tmdb_user_watchlist) + " is clicked")
             setItemTitle(getString(R.string.drawer_menu_tmdb_user_watchlist) +" (TMDb)")
             loadGridFragment(GlobalStaticVariables.MOVIE_CATEGORY_TMDB_USER_WATCHLIST)
         } else if (id == R.id.nav_tmdb_user_favourite) {
-            showSnackBar(getString(R.string.drawer_menu_tmdb_user_favourite) + " is clicked")
             setItemTitle(getString(R.string.drawer_menu_tmdb_user_favourite) +" (TMDb)")
             loadGridFragment(GlobalStaticVariables.MOVIE_CATEGORY_TMDB_USER_FAVOURITE)
         } else if (id == R.id.nav_tmdb_user_rated) {
-            showSnackBar(getString(R.string.drawer_menu_tmdb_user_rated) + " is clicked")
             setItemTitle(getString(R.string.drawer_menu_tmdb_user_rated) +" (TMDb)")
             loadGridFragment(GlobalStaticVariables.MOVIE_CATEGORY_TMDB_USER_RATED)
         } else if (id == R.id.nav_menu_settings) {
-            showSnackBar(getString(R.string.drawer_menu_settings) + " is clicked")
-            setItemTitle(getString(R.string.drawer_menu_settings))
+            openSettingsActivity()
         } else if (id == R.id.nav_menu_logout) {
-//            showSnackBar(getString(R.string.drawer_menu_logout) + " is clicked")
-//            setItemTitle(getString(R.string.drawer_menu_home)) /* set the appbar text to home */
             logoutFromTmdbAccount()
         }
 
-        final DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout)
+        final DrawerLayout drawer = findViewById(R.id.drawer_layout) as DrawerLayout
         drawer.closeDrawer(GravityCompat.START)
         return true
     }
@@ -299,7 +319,7 @@ public class MovieMagicMainActivity extends AppCompatActivity implements Navigat
                         // Set the login flag to true
                         isUserLoggedIn = true
                         // Now show a message to the user
-                        Toast.makeText(getBaseContext(),'You have successfully logged in to TMDb account',Toast.LENGTH_SHORT).show()
+                        Toast.makeText(getBaseContext(),getString(R.string.tmdb_successful_login_message),Toast.LENGTH_SHORT).show()
                         LogDisplay.callLog(LOG_TAG,"Login successful, accout bundle: $bundle",LogDisplay.MOVIE_MAGIC_MAIN_LOG_FLAG)
                     } else {
                         mNavPanelUserNameTextView.setText(getString(R.string.app_name))
@@ -336,7 +356,7 @@ public class MovieMagicMainActivity extends AppCompatActivity implements Navigat
                             LogDisplay.callLog(LOG_TAG,"Remove account successful, accout bundle: $bundle",LogDisplay.MOVIE_MAGIC_MAIN_LOG_FLAG)
                         } catch (Exception e) {
                             LogDisplay.callLog(LOG_TAG,"Remove account failed, error message: ${e.getMessage()}",LogDisplay.MOVIE_MAGIC_MAIN_LOG_FLAG)
-                            Toast.makeText(getBaseContext(), 'Cannot perform the operation, please try again later.', Toast.LENGTH_SHORT).show()
+                            Toast.makeText(getBaseContext(), getString(R.string.cannot_perform_operation_message), Toast.LENGTH_SHORT).show()
                             Log.e(LOG_TAG, "Error: ${e.message}", e)
                         }
                     }
@@ -353,17 +373,17 @@ public class MovieMagicMainActivity extends AppCompatActivity implements Navigat
                             LogDisplay.callLog(LOG_TAG,'Remove account successful',LogDisplay.MOVIE_MAGIC_MAIN_LOG_FLAG)
                         } else {
                             LogDisplay.callLog(LOG_TAG,'Remove account failed',LogDisplay.MOVIE_MAGIC_MAIN_LOG_FLAG)
-                            Toast.makeText(getBaseContext(), 'Cannot perform the operation, please try again later.', Toast.LENGTH_SHORT).show()
+                            Toast.makeText(getBaseContext(), getString(R.string.cannot_perform_operation_message), Toast.LENGTH_SHORT).show()
                         }
                     }
                 }, null)
             }
         } else if (accounts.size() > 1) {
             LogDisplay.callLog(LOG_TAG,"Error.More than one account, number of accounts -> ${accounts.size()}",LogDisplay.MOVIE_MAGIC_MAIN_LOG_FLAG)
-            Toast.makeText(getBaseContext(), 'Cannot perform the operation, please try again later.', Toast.LENGTH_SHORT).show()
+            Toast.makeText(getBaseContext(), getString(R.string.cannot_perform_operation_message), Toast.LENGTH_SHORT).show()
         } else {
             LogDisplay.callLog(LOG_TAG,'Error.No account found',LogDisplay.MOVIE_MAGIC_MAIN_LOG_FLAG)
-            Toast.makeText(getBaseContext(), 'Cannot perform the operation, please try again later.', Toast.LENGTH_SHORT).show()
+            Toast.makeText(getBaseContext(), getString(R.string.cannot_perform_operation_message), Toast.LENGTH_SHORT).show()
         }
     }
 
@@ -387,12 +407,12 @@ public class MovieMagicMainActivity extends AppCompatActivity implements Navigat
         // Take the user to home screen
         setItemTitle(getString(R.string.drawer_menu_home))
         loadHomeFragment()
-        // Set the corresponding item in nav drawer
+        // Set the home item as selected
         mNavigationView.getMenu().getItem(0).setChecked(true)
         // Reset the login flag
         isUserLoggedIn = false
         // Show a message to the user
-        showSnackBar('You have successfully logged out from TMDb account')
+        Snackbar.make(findViewById(R.id.content_movie_magic_main_layout), getString(R.string.tmdb_successful_logout_message), Snackbar.LENGTH_LONG).show()
     }
 
     /**
@@ -432,6 +452,81 @@ public class MovieMagicMainActivity extends AppCompatActivity implements Navigat
             LogDisplay.callLog(LOG_TAG,'Error.No account found',LogDisplay.MOVIE_MAGIC_MAIN_LOG_FLAG)
         }
     }
+
+    /**
+     * Show a dialog when user is not connected to network
+     */
+    private void showNotConnectedErrorDialog() {
+        final AlertDialog.Builder builder = new AlertDialog.Builder(this)
+        builder.setTitle(R.string.not_connected_dialog_title)
+                .setMessage(R.string.not_connected_dialog_message)
+
+        builder.setPositiveButton(R.string.not_connected_open_settings_button, new DialogInterface.OnClickListener() {
+            @Override
+            void onClick(DialogInterface dialog, int which) {
+                LogDisplay.callLog(LOG_TAG, 'Dialog open network settings is clicked, go and open it', LogDisplay.MOVIE_MAGIC_MAIN_LOG_FLAG)
+                openSystemSettings()
+            }
+        })
+
+        builder.setNegativeButton(R.string.not_connected_dialog_cancel_button, new DialogInterface.OnClickListener(){
+            @Override
+            void onClick(DialogInterface dialog, int which) {
+                LogDisplay.callLog(LOG_TAG, 'Dialog cancel is clicked. No action needed.', LogDisplay.MOVIE_MAGIC_MAIN_LOG_FLAG)
+            }
+        })
+
+        // Create the AlertDialog
+        final AlertDialog dialog = builder.create()
+        dialog.show()
+    }
+
+    /**
+     * Show a dialog when user is online without WiFi and selected settings as to use only WiFi
+     */
+    private void showNotConnectedToWiFiErrorDialog() {
+        final AlertDialog.Builder builder = new AlertDialog.Builder(this)
+        builder.setTitle(R.string.not_wifi_connected_dialog_title)
+                .setMessage(R.string.not_wifi_connected_dialog_message)
+
+        builder.setPositiveButton(R.string.not_wifi_connected_open_settings_button, new DialogInterface.OnClickListener() {
+            @Override
+            void onClick(DialogInterface dialog, int which) {
+                LogDisplay.callLog(LOG_TAG, 'Dialog change settings is clicked, go and open settings activity', LogDisplay.MOVIE_MAGIC_MAIN_LOG_FLAG)
+                openSettingsActivity()
+            }
+        })
+
+        builder.setNegativeButton(R.string.not_wifi_connected_dialog_cancel_button, new DialogInterface.OnClickListener(){
+            @Override
+            void onClick(DialogInterface dialog, int which) {
+                LogDisplay.callLog(LOG_TAG, 'Dialog cancel is clicked. No action needed.', LogDisplay.MOVIE_MAGIC_MAIN_LOG_FLAG)
+            }
+        })
+
+        // Create the AlertDialog
+        final AlertDialog dialog = builder.create()
+        dialog.show()
+    }
+
+    /**
+     * Open the system settings if users selects so when there is no network
+     */
+    private void openSystemSettings() {
+        final Intent intent = new Intent(Settings.ACTION_SETTINGS)
+        startActivity(intent)
+    }
+
+    /**
+     * Open the system settings if users selects so when there is no network
+     */
+    private void openSettingsActivity() {
+        final Intent intent = new Intent(this, SettingsActivity.class)
+        startActivity(intent)
+        //Start the animation
+        overridePendingTransition(R.anim.slide_bottom_in_animation,0)
+    }
+
     /**
      * Load the Home Fragment
      */
@@ -448,21 +543,11 @@ public class MovieMagicMainActivity extends AppCompatActivity implements Navigat
      * @param category Movie category
      */
     private void loadGridFragment(String category) {
-//        final GridMovieFragment fragment = new GridMovieFragment(category, 0)
-//        final FragmentManager fragmentManager = getSupportFragmentManager()
-//        final FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction()
-//        //Set the custom animation
-//        fragmentTransaction.setCustomAnimations(R.anim.slide_bottom_in_animation,0)
-//        fragmentTransaction.replace(R.id.main_content_layout, fragment)
-//        fragmentTransaction.commit()
         //Set this flag as false so that theme primaryDark color is used in the grid
         MovieGridRecyclerAdapter.collectionGridFlag = false
         final Bundle bundle = new Bundle()
         //Since it's not for collection category, so collection id is passed as zero
         final Uri uri = MovieMagicContract.MovieBasicInfo.buildMovieUriWithMovieCategoryAndCollectionId(category,0)
-//        bundle.putString(GlobalStaticVariables.MOVIE_BASIC_INFO_CATEGORY,category)
-        //Collection id is not required here, so passed on as zero
-//        bundle.putInt(GlobalStaticVariables.MOVIE_BASIC_INFO_COLL_ID,0)
         bundle.putParcelable(GlobalStaticVariables.MOVIE_CATEGORY_AND_COLL_ID_URI,uri)
         final GridMovieFragment gridMovieFragment = new GridMovieFragment()
         gridMovieFragment.setArguments(bundle)
@@ -473,19 +558,13 @@ public class MovieMagicMainActivity extends AppCompatActivity implements Navigat
         fragmentTransaction.commit()
     }
 
-//    private void setMenuCounter(@IdRes int itemId, int count) {
-//        final TextView view = (TextView) mNavigationView.getMenu().findItem(itemId).getActionView()
-//        view.setText(count > 0 ? String.valueOf(count) : null)
-//    }
-
+    /**
+     * This method sets the Title of the Activity
+     * @param title Title to be set for the activity
+     */
     private void setItemTitle(CharSequence title){
         LogDisplay.callLog(LOG_TAG,"The drawer menu $title is called",LogDisplay.MOVIE_MAGIC_MAIN_LOG_FLAG)
         getSupportActionBar().setTitle(title)
-    }
-
-    private showSnackBar(String msg) {
-        Snackbar.make(findViewById(R.id.content_movie_magic_main_layout), msg, Snackbar.LENGTH_LONG)
-                .setAction("Action", null).show()
     }
 
     /**

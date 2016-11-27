@@ -13,7 +13,9 @@
     </style>
 
     <style name="ImageViewerTheme" parent="BaseTheme">
+    </style>
 
+    <style name="SettingsTheme" parent="BaseTheme">
     </style>
 
     <!-- Toolbar theme -->
@@ -57,4 +59,5 @@
     <!--<style name="AppTheme.ImageViewer" parent="Theme.AppCompat.DayNight.NoActionBar"/>-->
     <style name="AppTheme.ImageViewer" parent="@style/ImageViewerTheme"/>
     <!--<style name="AppTheme.ImageViewer" parent="@style/AppTheme"/>-->
+    <style name="AppTheme.Settings" parent="@style/SettingsTheme"/>
 </resources>

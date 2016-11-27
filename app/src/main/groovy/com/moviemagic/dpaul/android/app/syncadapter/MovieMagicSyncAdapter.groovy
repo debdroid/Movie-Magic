@@ -74,78 +74,82 @@ class MovieMagicSyncAdapter extends AbstractThreadedSyncAdapter {
     void onPerformSync(Account account, Bundle extras, String authority, ContentProviderClient provider, SyncResult syncResult) {
         LogDisplay.callLog(LOG_TAG,'onPerformSync is called',LogDisplay.MOVIE_MAGIC_SYNC_ADAPTER_LOG_FLAG)
 
-        mDateTimeStamp = Utility.getTodayDate()
-        List<ContentValues> contentValues = []
-        //totalPage is set to 1 so that at least first page is downloaded in downloadMovieList
-        // later this variable is overridden by the total page value retrieved from the api
-        totalPage = 1
-        for(i in 1..MAX_PAGE_DOWNLOAD) {
-            contentValues = downloadMovieList(GlobalStaticVariables.MOVIE_CATEGORY_POPULAR, i)
-            if(contentValues) {
-                insertBulkRecords(contentValues, GlobalStaticVariables.MOVIE_CATEGORY_POPULAR)
-                contentValues = []
-            } else {
-                LogDisplay.callLog(LOG_TAG,"No movie data for category -> $GlobalStaticVariables.MOVIE_CATEGORY_POPULAR",LogDisplay.MOVIE_MAGIC_SYNC_ADAPTER_LOG_FLAG)
+        if(Utility.isReadyToDownload(mContext)) {
+            mDateTimeStamp = Utility.getTodayDate()
+            List<ContentValues> contentValues = []
+            //totalPage is set to 1 so that at least first page is downloaded in downloadMovieList
+            // later this variable is overridden by the total page value retrieved from the api
+            totalPage = 1
+            for (i in 1..MAX_PAGE_DOWNLOAD) {
+                contentValues = downloadMovieList(GlobalStaticVariables.MOVIE_CATEGORY_POPULAR, i)
+                if (contentValues) {
+                    insertBulkRecords(contentValues, GlobalStaticVariables.MOVIE_CATEGORY_POPULAR)
+                    contentValues = []
+                } else {
+                    LogDisplay.callLog(LOG_TAG, "No movie data for category -> $GlobalStaticVariables.MOVIE_CATEGORY_POPULAR", LogDisplay.MOVIE_MAGIC_SYNC_ADAPTER_LOG_FLAG)
+                }
             }
-        }
-        totalPage = 1
-        for(i in 1..MAX_PAGE_DOWNLOAD) {
-            contentValues = downloadMovieList(GlobalStaticVariables.MOVIE_CATEGORY_TOP_RATED, i)
-            if(contentValues) {
-                insertBulkRecords(contentValues, GlobalStaticVariables.MOVIE_CATEGORY_TOP_RATED)
-                contentValues = []
-            } else {
-                LogDisplay.callLog(LOG_TAG,"No movie data for category -> $GlobalStaticVariables.MOVIE_CATEGORY_TOP_RATED",LogDisplay.MOVIE_MAGIC_SYNC_ADAPTER_LOG_FLAG)
+            totalPage = 1
+            for (i in 1..MAX_PAGE_DOWNLOAD) {
+                contentValues = downloadMovieList(GlobalStaticVariables.MOVIE_CATEGORY_TOP_RATED, i)
+                if (contentValues) {
+                    insertBulkRecords(contentValues, GlobalStaticVariables.MOVIE_CATEGORY_TOP_RATED)
+                    contentValues = []
+                } else {
+                    LogDisplay.callLog(LOG_TAG, "No movie data for category -> $GlobalStaticVariables.MOVIE_CATEGORY_TOP_RATED", LogDisplay.MOVIE_MAGIC_SYNC_ADAPTER_LOG_FLAG)
+                }
             }
-        }
-        totalPage = 1
-        for(i in 1..MAX_PAGE_DOWNLOAD) {
-            contentValues = downloadMovieList(GlobalStaticVariables.MOVIE_CATEGORY_UPCOMING, i)
-            if(contentValues) {
-                insertBulkRecords(contentValues, GlobalStaticVariables.MOVIE_CATEGORY_UPCOMING)
-                contentValues = []
-            } else {
-                LogDisplay.callLog(LOG_TAG,"No movie data for category -> $GlobalStaticVariables.MOVIE_CATEGORY_UPCOMING",LogDisplay.MOVIE_MAGIC_SYNC_ADAPTER_LOG_FLAG)
+            totalPage = 1
+            for (i in 1..MAX_PAGE_DOWNLOAD) {
+                contentValues = downloadMovieList(GlobalStaticVariables.MOVIE_CATEGORY_UPCOMING, i)
+                if (contentValues) {
+                    insertBulkRecords(contentValues, GlobalStaticVariables.MOVIE_CATEGORY_UPCOMING)
+                    contentValues = []
+                } else {
+                    LogDisplay.callLog(LOG_TAG, "No movie data for category -> $GlobalStaticVariables.MOVIE_CATEGORY_UPCOMING", LogDisplay.MOVIE_MAGIC_SYNC_ADAPTER_LOG_FLAG)
+                }
             }
-        }
-        totalPage = 1
-        for(i in 1..MAX_PAGE_DOWNLOAD) {
-            contentValues = downloadMovieList(GlobalStaticVariables.MOVIE_CATEGORY_NOW_PLAYING, i)
-            if(contentValues) {
-                insertBulkRecords(contentValues, GlobalStaticVariables.MOVIE_CATEGORY_NOW_PLAYING)
-                contentValues = []
-            } else {
-                LogDisplay.callLog(LOG_TAG,"No movie data for category -> $GlobalStaticVariables.MOVIE_CATEGORY_NOW_PLAYING",LogDisplay.MOVIE_MAGIC_SYNC_ADAPTER_LOG_FLAG)
+            totalPage = 1
+            for (i in 1..MAX_PAGE_DOWNLOAD) {
+                contentValues = downloadMovieList(GlobalStaticVariables.MOVIE_CATEGORY_NOW_PLAYING, i)
+                if (contentValues) {
+                    insertBulkRecords(contentValues, GlobalStaticVariables.MOVIE_CATEGORY_NOW_PLAYING)
+                    contentValues = []
+                } else {
+                    LogDisplay.callLog(LOG_TAG, "No movie data for category -> $GlobalStaticVariables.MOVIE_CATEGORY_NOW_PLAYING", LogDisplay.MOVIE_MAGIC_SYNC_ADAPTER_LOG_FLAG)
+                }
             }
-        }
-        //Now load details for home page movie items
-        loadMovieDetailsForHomePageItems()
+            //Now load details for home page movie items
+            loadMovieDetailsForHomePageItems()
 
-        // Check if the account is user's TMDb account(i.e. user is logged in to TMDb)
-        // or regular SyncAdapter dummy account
-        final boolean isUserAccount = checkAccountType(account)
-        if(isUserAccount) {
-            LogDisplay.callLog(LOG_TAG,'This is a user account',LogDisplay.MOVIE_MAGIC_SYNC_ADAPTER_LOG_FLAG)
-            // Get the authToken( TMDb session id) which is needed for TMDb call
-            final AccountManager accountManager = AccountManager.get(mContext)
-            // This convenience helper synchronously gets an auth token with getAuthToken(Account, String, boolean, AccountManagerCallback, Handler)
-            final String authToken = accountManager.blockingGetAuthToken(account,GlobalStaticVariables.AUTHTOKEN_TYPE_FULL_ACCESS,true)
-            // Get the account id from user data
-            final String accountId = accountManager.getUserData(account, GlobalStaticVariables.TMDB_USERDATA_ACCOUNT_ID)
-            LogDisplay.callLog(LOG_TAG,"AuthToken & AccountId. AuthToken -> $authToken " +
-                    "& AccountID -> $accountId",LogDisplay.MOVIE_MAGIC_SYNC_ADAPTER_LOG_FLAG)
-            if(authToken && accountId) {
-                processTmdbLists(authToken, accountId)
+            // Check if the account is user's TMDb account(i.e. user is logged in to TMDb)
+            // or regular SyncAdapter dummy account
+            final boolean isUserAccount = checkAccountType(account)
+            if (isUserAccount) {
+                LogDisplay.callLog(LOG_TAG, 'This is a user account', LogDisplay.MOVIE_MAGIC_SYNC_ADAPTER_LOG_FLAG)
+                // Get the authToken( TMDb session id) which is needed for TMDb call
+                final AccountManager accountManager = AccountManager.get(mContext)
+                // This convenience helper synchronously gets an auth token with getAuthToken(Account, String, boolean, AccountManagerCallback, Handler)
+                final String authToken = accountManager.blockingGetAuthToken(account, GlobalStaticVariables.AUTHTOKEN_TYPE_FULL_ACCESS, true)
+                // Get the account id from user data
+                final String accountId = accountManager.getUserData(account, GlobalStaticVariables.TMDB_USERDATA_ACCOUNT_ID)
+                LogDisplay.callLog(LOG_TAG, "AuthToken & AccountId. AuthToken -> $authToken " +
+                        "& AccountID -> $accountId", LogDisplay.MOVIE_MAGIC_SYNC_ADAPTER_LOG_FLAG)
+                if (authToken && accountId) {
+                    processTmdbLists(authToken, accountId)
+                } else {
+                    LogDisplay.callLog(LOG_TAG, 'Either authToken or accountId or both null. So tmdb library download skipped', LogDisplay.MOVIE_MAGIC_SYNC_ADAPTER_LOG_FLAG)
+                }
+
             } else {
-                LogDisplay.callLog(LOG_TAG,'Either authToken or accountId or both null. So tmdb library download skipped',LogDisplay.MOVIE_MAGIC_SYNC_ADAPTER_LOG_FLAG)
+                LogDisplay.callLog(LOG_TAG, 'This is SyncAdapter dummy account. So no further action', LogDisplay.MOVIE_MAGIC_SYNC_ADAPTER_LOG_FLAG)
             }
 
+            // Let's do some housekeeping now. This is done at the end so that new records get inserted before deleting existing records
+            performHouseKeeping()
         } else {
-            LogDisplay.callLog(LOG_TAG,'This is SyncAdapter dummy account. So no further action',LogDisplay.MOVIE_MAGIC_SYNC_ADAPTER_LOG_FLAG)
+            LogDisplay.callLog(LOG_TAG, 'Device is offline or connected to internet without WiFi and user selected download only on WiFi, so skipped data loading..', LogDisplay.MOVIE_MAGIC_SYNC_ADAPTER_LOG_FLAG)
         }
-
-        // Let's do some housekeeping now. This is done at the end so that new records get inserted before deleting existing records
-        performHouseKeeping()
     }
 
     /**

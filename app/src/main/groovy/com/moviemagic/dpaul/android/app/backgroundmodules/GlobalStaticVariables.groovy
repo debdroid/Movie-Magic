@@ -124,6 +124,7 @@ class GlobalStaticVariables {
     public static final int HOME_PAGE_MAX_MOVIE_SHOW_COUNTER = 6
     public static final String MOVIE_VIDEO_SITE_YOUTUBE = 'YouTube'
     public static final String MOVIE_VIDEO_SITE_TYPE = 'Trailer'
-
+    public static boolean WIFI_CONNECTED = false
+    public static boolean MOBILE_CONNECTED = false
 
 }

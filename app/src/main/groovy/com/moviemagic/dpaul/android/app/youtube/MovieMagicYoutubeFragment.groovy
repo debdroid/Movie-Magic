@@ -98,7 +98,7 @@ class MovieMagicYoutubeFragment extends YouTubePlayerSupportFragment implements 
             youTubeInitializationResult.getErrorDialog(getActivity(), RECOVERY_ERROR_DIALOG_ID).show()
         } else {
             //Handle the failure
-            Toast.makeText(getActivity(), R.string.youtube_initialization_error, Toast.LENGTH_LONG).show()
+            Toast.makeText(getActivity(), getString(R.string.youtube_initialization_error), Toast.LENGTH_LONG).show()
             LogDisplay.callLog(LOG_TAG,'onInitializationFailure:non-user recoverable',LogDisplay.MOVIE_MAGIC_YOUTUBE_FRAGMENT_LOG_FLAG)
         }
     }

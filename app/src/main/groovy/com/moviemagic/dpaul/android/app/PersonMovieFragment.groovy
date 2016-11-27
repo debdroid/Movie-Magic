@@ -10,6 +10,8 @@ import android.graphics.drawable.BitmapDrawable
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
+import android.support.design.widget.AppBarLayout
+import android.support.design.widget.Snackbar
 import android.support.v17.leanback.widget.HorizontalGridView
 import android.support.v4.app.Fragment
 import android.support.v4.app.LoaderManager
@@ -39,6 +41,7 @@ class PersonMovieFragment extends Fragment implements LoaderManager.LoaderCallba
     private int mPersonId
     private Toolbar mToolbar
     private String[] mPersonIdArg
+    private AppBarLayout mAppBarLayout
     private ImageView mPosterImageView
     private TextView mNameHdrTextView, mNameTextView, mDobHdrTextView, mDobTextView, mBirthPlaceHdrTextView, mBirthPlaceTextView,
             mAlsoKnownAsHdrTextView, mAlsoKnownAsTextView, mDeathDayHdrTextView, mDeathDayTextView, mPopularityHdrTextView, mPopularityTextView,
@@ -185,6 +188,7 @@ class PersonMovieFragment extends Fragment implements LoaderManager.LoaderCallba
         }
         // Inflate the view before referring any view using id
         View mRootView = inflater.inflate(R.layout.fragment_person_movie, container, false)
+        mAppBarLayout = mRootView.findViewById(R.id.person_app_bar_layout) as AppBarLayout
         mPersonLinLayout = mRootView.findViewById(R.id.person_info_layout) as LinearLayout
         mPosterImageView = mRootView.findViewById(R.id.person_poster_image) as ImageView
         mNameHdrTextView = mRootView.findViewById(R.id.person_name_header) as TextView
@@ -336,6 +340,22 @@ class PersonMovieFragment extends Fragment implements LoaderManager.LoaderCallba
     }
 
     @Override
+    void onStart() {
+        super.onStart()
+        // Check if the user is online or not, if not then show a message
+        final boolean isOnline = Utility.isOnline(getActivity())
+        if(!isOnline) {
+            Snackbar.make(mAppBarLayout, getString(R.string.no_internet_connection_message), Snackbar.LENGTH_LONG).show()
+        } else if(Utility.isOnlyWifi(getActivity()) & !GlobalStaticVariables.WIFI_CONNECTED) {
+            // If user has selected only WiFi but user is online without WiFi then show a dialog
+            Snackbar.make(mAppBarLayout, getString(R.string.internet_connection_without_wifi_message), Snackbar.LENGTH_LONG).show()
+        } else if (Utility.isReducedDataOn(getActivity())) {
+            // If user has selected reduced data
+            Snackbar.make(mAppBarLayout, getString(R.string.reduced_data_use_on_message), Snackbar.LENGTH_LONG).show()
+        }
+    }
+
+    @Override
     Loader<Cursor> onCreateLoader(int id, Bundle args) {
         LogDisplay.callLog(LOG_TAG, "onCreateLoader.loader id->$id", LogDisplay.PERSON_MOVIE_FRAGMENT_LOG_FLAG)
         switch (id) {
@@ -422,106 +442,109 @@ class PersonMovieFragment extends Fragment implements LoaderManager.LoaderCallba
                 void onSuccess() {
                     LogDisplay.callLog(LOG_TAG, 'Picasso onSuccess is called', LogDisplay.PERSON_MOVIE_FRAGMENT_LOG_FLAG)
                     //TODO: Future change - provide a setting option to user to chose if they want this or will use default theme
-                    final Bitmap bitmapPoster = ((BitmapDrawable) mPosterImageView.getDrawable()).getBitmap()
-                    Palette.from(bitmapPoster).generate(new Palette.PaletteAsyncListener() {
-                        @Override
-                        public void onGenerated(Palette p) {
-                            LogDisplay.callLog(LOG_TAG, 'onGenerated is called', LogDisplay.PERSON_MOVIE_FRAGMENT_LOG_FLAG)
-                            Palette.Swatch vibrantSwatch = p.getVibrantSwatch()
-                            Palette.Swatch lightVibrantSwatch = p.getLightVibrantSwatch()
-                            Palette.Swatch darkVibrantSwatch = p.getDarkVibrantSwatch()
-                            Palette.Swatch mutedSwatch = p.getMutedSwatch()
-                            Palette.Swatch mutedLightSwatch = p.getLightMutedSwatch()
-                            Palette.Swatch mutedDarkSwatch = p.getDarkMutedSwatch()
-                            boolean pickSwatchColorFlag = false
-                            //Pick primary, primaryDark, title and body text color
-                            if (vibrantSwatch) {
-                                mPalettePrimaryColor = vibrantSwatch.getRgb()
-                                mPaletteTitleColor = vibrantSwatch.getTitleTextColor()
-                                mPaletteBodyTextColor = vibrantSwatch.getBodyTextColor()
-                                //Produce Dark color by changing the value (3rd parameter) of HSL value
-                                float[] primaryHsl = vibrantSwatch.getHsl()
-                                primaryHsl[2] = primaryHsl[2] * 0.9f
-                                mPalettePrimaryDarkColor = Color.HSVToColor(primaryHsl)
-                                pickSwatchColorFlag = true
-                            } else if (lightVibrantSwatch) { //Try another swatch
-                                mPalettePrimaryColor = lightVibrantSwatch.getRgb()
-                                mPaletteTitleColor = lightVibrantSwatch.getTitleTextColor()
-                                mPaletteBodyTextColor = lightVibrantSwatch.getBodyTextColor()
-                                //Produce Dark color by changing the value (3rd parameter) of HSL value
-                                float[] primaryHsl = lightVibrantSwatch.getHsl()
-                                primaryHsl[2] = primaryHsl[2] * 0.9f
-                                mPalettePrimaryDarkColor = Color.HSVToColor(primaryHsl)
-                                pickSwatchColorFlag = true
-                            } else if (darkVibrantSwatch) { //Try last swatch
-                                mPalettePrimaryColor = darkVibrantSwatch.getRgb()
-                                mPaletteTitleColor = darkVibrantSwatch.getTitleTextColor()
-                                mPaletteBodyTextColor = darkVibrantSwatch.getBodyTextColor()
-                                //Produce Dark color by changing the value (3rd parameter) of HSL value
-                                float[] primaryHsl = darkVibrantSwatch.getHsl()
-                                primaryHsl[2] = primaryHsl[2] * 0.9f
-                                mPalettePrimaryDarkColor = Color.HSVToColor(primaryHsl)
-                                pickSwatchColorFlag = true
-                            } else { //Fallback to default
-                                LogDisplay.callLog(LOG_TAG, 'onGenerated:not able to pick color, so fallback', LogDisplay.COLLECTION_MOVIE_FRAGMENT_LOG_FLAG)
-                                mPalettePrimaryColor = ContextCompat.getColor(getActivity(), R.color.primary)
-                                mPalettePrimaryDarkColor = ContextCompat.getColor(getActivity(), R.color.primary_dark)
-                                mPaletteTitleColor = ContextCompat.getColor(getActivity(), R.color.white_color)
-                                mPaletteBodyTextColor = ContextCompat.getColor(getActivity(), R.color.grey_color)
-                                //This is needed as we are not going pick accent colour if falling back
-                                mPaletteAccentColor = ContextCompat.getColor(getActivity(), R.color.accent)
-                            }
-                            //Pick accent color only if Swatch color is picked, otherwise do not pick accent color
-                            if (pickSwatchColorFlag) {
-                                if (mutedSwatch) {
-                                    mPaletteAccentColor = mutedSwatch.getRgb()
-                                } else if (mutedLightSwatch) { //Try another swatch
-                                    mPaletteAccentColor = mutedLightSwatch.getRgb()
-                                } else if (mutedDarkSwatch) { //Try last swatch
-                                    mPaletteAccentColor = mutedDarkSwatch.getRgb()
+                    // If user does not select dynamic theme (default value) then do not change the color
+                    if (Utility.isDynamicTheme(getActivity())) {
+                        final Bitmap bitmapPoster = ((BitmapDrawable) mPosterImageView.getDrawable()).getBitmap()
+                        Palette.from(bitmapPoster).generate(new Palette.PaletteAsyncListener() {
+                            @Override
+                            public void onGenerated(Palette p) {
+                                LogDisplay.callLog(LOG_TAG, 'onGenerated is called', LogDisplay.PERSON_MOVIE_FRAGMENT_LOG_FLAG)
+                                Palette.Swatch vibrantSwatch = p.getVibrantSwatch()
+                                Palette.Swatch lightVibrantSwatch = p.getLightVibrantSwatch()
+                                Palette.Swatch darkVibrantSwatch = p.getDarkVibrantSwatch()
+                                Palette.Swatch mutedSwatch = p.getMutedSwatch()
+                                Palette.Swatch mutedLightSwatch = p.getLightMutedSwatch()
+                                Palette.Swatch mutedDarkSwatch = p.getDarkMutedSwatch()
+                                boolean pickSwatchColorFlag = false
+                                //Pick primary, primaryDark, title and body text color
+                                if (vibrantSwatch) {
+                                    mPalettePrimaryColor = vibrantSwatch.getRgb()
+                                    mPaletteTitleColor = vibrantSwatch.getTitleTextColor()
+                                    mPaletteBodyTextColor = vibrantSwatch.getBodyTextColor()
+                                    //Produce Dark color by changing the value (3rd parameter) of HSL value
+                                    float[] primaryHsl = vibrantSwatch.getHsl()
+                                    primaryHsl[2] = primaryHsl[2] * 0.9f
+                                    mPalettePrimaryDarkColor = Color.HSVToColor(primaryHsl)
+                                    pickSwatchColorFlag = true
+                                } else if (lightVibrantSwatch) { //Try another swatch
+                                    mPalettePrimaryColor = lightVibrantSwatch.getRgb()
+                                    mPaletteTitleColor = lightVibrantSwatch.getTitleTextColor()
+                                    mPaletteBodyTextColor = lightVibrantSwatch.getBodyTextColor()
+                                    //Produce Dark color by changing the value (3rd parameter) of HSL value
+                                    float[] primaryHsl = lightVibrantSwatch.getHsl()
+                                    primaryHsl[2] = primaryHsl[2] * 0.9f
+                                    mPalettePrimaryDarkColor = Color.HSVToColor(primaryHsl)
+                                    pickSwatchColorFlag = true
+                                } else if (darkVibrantSwatch) { //Try last swatch
+                                    mPalettePrimaryColor = darkVibrantSwatch.getRgb()
+                                    mPaletteTitleColor = darkVibrantSwatch.getTitleTextColor()
+                                    mPaletteBodyTextColor = darkVibrantSwatch.getBodyTextColor()
+                                    //Produce Dark color by changing the value (3rd parameter) of HSL value
+                                    float[] primaryHsl = darkVibrantSwatch.getHsl()
+                                    primaryHsl[2] = primaryHsl[2] * 0.9f
+                                    mPalettePrimaryDarkColor = Color.HSVToColor(primaryHsl)
+                                    pickSwatchColorFlag = true
                                 } else { //Fallback to default
+                                    LogDisplay.callLog(LOG_TAG, 'onGenerated:not able to pick color, so fallback', LogDisplay.COLLECTION_MOVIE_FRAGMENT_LOG_FLAG)
+                                    mPalettePrimaryColor = ContextCompat.getColor(getActivity(), R.color.primary)
+                                    mPalettePrimaryDarkColor = ContextCompat.getColor(getActivity(), R.color.primary_dark)
+                                    mPaletteTitleColor = ContextCompat.getColor(getActivity(), R.color.white_color)
+                                    mPaletteBodyTextColor = ContextCompat.getColor(getActivity(), R.color.grey_color)
+                                    //This is needed as we are not going pick accent colour if falling back
                                     mPaletteAccentColor = ContextCompat.getColor(getActivity(), R.color.accent)
                                 }
-                            }
-                            //Apply color to fields
-                            mPersonLinLayout.setBackgroundColor(mPalettePrimaryColor)
-                            mNameHdrTextView.setTextColor(mPaletteTitleColor)
-                            mNameTextView.setTextColor(mPaletteBodyTextColor)
-                            mDobHdrTextView.setTextColor(mPaletteTitleColor)
-                            mDobTextView.setTextColor(mPaletteBodyTextColor)
-                            mBirthPlaceHdrTextView.setTextColor(mPaletteTitleColor)
-                            mBirthPlaceTextView.setTextColor(mPaletteBodyTextColor)
-                            mAlsoKnownAsHdrTextView.setTextColor(mPaletteTitleColor)
-                            mAlsoKnownAsTextView.setTextColor(mPaletteBodyTextColor)
-                            mDeathDayHdrTextView.setTextColor(mPaletteTitleColor)
-                            mDeathDayTextView.setTextColor(mPaletteBodyTextColor)
-                            mPopularityHdrTextView.setTextColor(mPaletteTitleColor)
-                            mPopularityTextView.setTextColor(mPaletteBodyTextColor)
-                            mBiographyHdrTextView.setTextColor(mPaletteTitleColor)
-                            mBiographyTextView.setTextColor(mPaletteBodyTextColor)
-                            mCastGridHdrTextView.setTextColor(mPaletteTitleColor)
-                            mCrewGridHdrTextView.setTextColor(mPaletteTitleColor)
-                            mImageGridHdrTextView.setTextColor(mPaletteTitleColor)
-                            mWebLinksHdrTextView.setTextColor(mPaletteTitleColor)
-                            //Apply color to toolbar and status bar
-                            mToolbar.setBackgroundColor(mPalettePrimaryColor)
-                            mToolbar.setTitleTextColor(mPaletteTitleColor)
-                            if (Build.VERSION.SDK_INT >= 21) {
-                                Window window = getActivity().getWindow()
-                                window.setStatusBarColor(mPalettePrimaryDarkColor)
-                            }
+                                //Pick accent color only if Swatch color is picked, otherwise do not pick accent color
+                                if (pickSwatchColorFlag) {
+                                    if (mutedSwatch) {
+                                        mPaletteAccentColor = mutedSwatch.getRgb()
+                                    } else if (mutedLightSwatch) { //Try another swatch
+                                        mPaletteAccentColor = mutedLightSwatch.getRgb()
+                                    } else if (mutedDarkSwatch) { //Try last swatch
+                                        mPaletteAccentColor = mutedDarkSwatch.getRgb()
+                                    } else { //Fallback to default
+                                        mPaletteAccentColor = ContextCompat.getColor(getActivity(), R.color.accent)
+                                    }
+                                }
+                                //Apply color to fields
+                                mPersonLinLayout.setBackgroundColor(mPalettePrimaryColor)
+                                mNameHdrTextView.setTextColor(mPaletteTitleColor)
+                                mNameTextView.setTextColor(mPaletteBodyTextColor)
+                                mDobHdrTextView.setTextColor(mPaletteTitleColor)
+                                mDobTextView.setTextColor(mPaletteBodyTextColor)
+                                mBirthPlaceHdrTextView.setTextColor(mPaletteTitleColor)
+                                mBirthPlaceTextView.setTextColor(mPaletteBodyTextColor)
+                                mAlsoKnownAsHdrTextView.setTextColor(mPaletteTitleColor)
+                                mAlsoKnownAsTextView.setTextColor(mPaletteBodyTextColor)
+                                mDeathDayHdrTextView.setTextColor(mPaletteTitleColor)
+                                mDeathDayTextView.setTextColor(mPaletteBodyTextColor)
+                                mPopularityHdrTextView.setTextColor(mPaletteTitleColor)
+                                mPopularityTextView.setTextColor(mPaletteBodyTextColor)
+                                mBiographyHdrTextView.setTextColor(mPaletteTitleColor)
+                                mBiographyTextView.setTextColor(mPaletteBodyTextColor)
+                                mCastGridHdrTextView.setTextColor(mPaletteTitleColor)
+                                mCrewGridHdrTextView.setTextColor(mPaletteTitleColor)
+                                mImageGridHdrTextView.setTextColor(mPaletteTitleColor)
+                                mWebLinksHdrTextView.setTextColor(mPaletteTitleColor)
+                                //Apply color to toolbar and status bar
+                                mToolbar.setBackgroundColor(mPalettePrimaryColor)
+                                mToolbar.setTitleTextColor(mPaletteTitleColor)
+                                if (Build.VERSION.SDK_INT >= 21) {
+                                    Window window = getActivity().getWindow()
+                                    window.setStatusBarColor(mPalettePrimaryDarkColor)
+                                }
 
-                            mHomePageButton.setBackgroundColor(mPalettePrimaryDarkColor)
-                            mImdbLinkButton.setBackgroundColor(mPalettePrimaryDarkColor)
-                            mHomePageButton.setTextColor(mPaletteBodyTextColor)
-                            mImdbLinkButton.setTextColor(mPaletteBodyTextColor)
+                                mHomePageButton.setBackgroundColor(mPalettePrimaryDarkColor)
+                                mImdbLinkButton.setBackgroundColor(mPalettePrimaryDarkColor)
+                                mHomePageButton.setTextColor(mPaletteBodyTextColor)
+                                mImdbLinkButton.setTextColor(mPaletteBodyTextColor)
 
-                            //Apply color to adapter elements
-                            mPersonCastAdapter.changeColor(mPalettePrimaryDarkColor, mPaletteBodyTextColor)
-                            mPersonCrewAdapter.changeColor(mPalettePrimaryDarkColor, mPaletteBodyTextColor)
-                            mPersonImageAdapter.changeColor(mPalettePrimaryDarkColor, mPaletteBodyTextColor)
-                        }
-                    })
+                                //Apply color to adapter elements
+                                mPersonCastAdapter.changeColor(mPalettePrimaryDarkColor, mPaletteBodyTextColor)
+                                mPersonCrewAdapter.changeColor(mPalettePrimaryDarkColor, mPaletteBodyTextColor)
+                                mPersonImageAdapter.changeColor(mPalettePrimaryDarkColor, mPaletteBodyTextColor)
+                            }
+                        })
+                    }
                 }
 
                 @Override
@@ -615,7 +638,11 @@ class PersonMovieFragment extends Fragment implements LoaderManager.LoaderCallba
         } else {
             //Load the person info and associated tables
             LogDisplay.callLog(LOG_TAG, "handlePersonInfoOnLoadFinished.Data not present for person id $mPersonId, go and fetch it", LogDisplay.PERSON_MOVIE_FRAGMENT_LOG_FLAG)
-            new LoadPersonData(getActivity()).execute([mPersonId] as Integer[])
+            if(Utility.isReadyToDownload(getActivity())) {
+                new LoadPersonData(getActivity()).execute([mPersonId] as Integer[])
+            } else {
+                LogDisplay.callLog(LOG_TAG, 'Device is offline or connected to internet without WiFi and user selected download only on WiFi', LogDisplay.PERSON_MOVIE_FRAGMENT_LOG_FLAG)
+            }
         }
     }
 

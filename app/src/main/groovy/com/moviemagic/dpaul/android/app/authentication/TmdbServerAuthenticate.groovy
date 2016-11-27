@@ -54,7 +54,7 @@ class TmdbServerAuthenticate implements TmdbAuthenticateInterface {
                 final Bundle authenticatedTokenBundle = validateRequestToken(authenticateUrl)
                 LogDisplay.callLog(LOG_TAG,"authenticatedTokenBundle -> $authenticatedTokenBundle",LogDisplay.TMDB_SERVER_AUTHENTICATE_LOG_FLAG)
 
-                if(!authenticatedTokenBundle.getBoolean(GlobalStaticVariables.TMDB_AUTH_ERROR_FLAG)) {
+                if(authenticatedTokenBundle && !authenticatedTokenBundle.getBoolean(GlobalStaticVariables.TMDB_AUTH_ERROR_FLAG)) {
                     // Generate a session id using the authenticated token
                     // TMDB api example to generate session id
                     // https://api.themoviedb.org/3/authentication/session/new?api_key=key&request_token=authenticated token
@@ -70,7 +70,7 @@ class TmdbServerAuthenticate implements TmdbAuthenticateInterface {
                     final Bundle sessionIdBundle = getSessionId(sessionIdUrl)
                     LogDisplay.callLog(LOG_TAG,"sessionIdBundle -> $sessionIdBundle",LogDisplay.TMDB_SERVER_AUTHENTICATE_LOG_FLAG)
 
-                    if(!sessionIdBundle.getBoolean(GlobalStaticVariables.TMDB_AUTH_ERROR_FLAG)) {
+                    if(sessionIdBundle && !sessionIdBundle.getBoolean(GlobalStaticVariables.TMDB_AUTH_ERROR_FLAG)) {
                         // Now get basic information of the account using session id
                         // TMDB api example to get basic information of the account
                         // https://api.themoviedb.org/3/account?api_key=key&session_id=session id
@@ -83,7 +83,7 @@ class TmdbServerAuthenticate implements TmdbAuthenticateInterface {
                         LogDisplay.callLog(LOG_TAG,"Account info url -> ${accountInfoUri.toString()}",LogDisplay.TMDB_SERVER_AUTHENTICATE_LOG_FLAG)
                         final Bundle accountInfoBundle = getAccountDetails(accountInfoUrl)
                         LogDisplay.callLog(LOG_TAG,"accountInfoBundle -> $accountInfoBundle",LogDisplay.TMDB_SERVER_AUTHENTICATE_LOG_FLAG)
-                        if(!accountInfoBundle.getBoolean(GlobalStaticVariables.TMDB_AUTH_ERROR_FLAG)) {
+                        if(accountInfoBundle && !accountInfoBundle.getBoolean(GlobalStaticVariables.TMDB_AUTH_ERROR_FLAG)) {
                             LogDisplay.callLog(LOG_TAG,'TMDb login successful..',LogDisplay.TMDB_SERVER_AUTHENTICATE_LOG_FLAG)
                             /** Set the authToken to session id which will be used later to get data for the user **/
                             bundle.putString(GlobalStaticVariables.TMDB_AUTH_TOKEN,

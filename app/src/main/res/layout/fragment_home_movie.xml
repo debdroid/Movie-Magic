@@ -14,8 +14,19 @@
             android:layout_height="wrap_content"
             android:paddingBottom="@dimen/m_design_space_between_content_area"
             android:visibility="visible" />
+        <!-- this is to display a message when no movie trailer to show -->
+        <TextView
+            android:id="@+id/home_youtube_fragment_empty_msg"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="left"
+            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+            android:textColor="@color/grey_color"
+            android:paddingBottom="@dimen/m_design_space_between_content_area"
+            android:visibility="gone"/>
         <!-- line divider -->
         <View
+            android:id="@+id/home_youtube_fragment_divider"
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:background="@color/divider_color"
@@ -215,6 +226,7 @@
         </LinearLayout>
         <!-- line divider -->
         <View
+            android:id="@+id/home_movie_recommendation_divider"
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:background="@color/divider_color"

@@ -21,7 +21,6 @@ class UpdateUserListChoiceAndRating extends AsyncTask<String, Void, Integer> {
     private final ContentResolver mContentResolver
     private final Context mContext
     private final LinearLayout mUserDrawableLayout
-    private final int mBodyTextColor
     private final int mMovieId
     private final String mMovieTitle
     private String mUserListMsg
@@ -49,14 +48,12 @@ class UpdateUserListChoiceAndRating extends AsyncTask<String, Void, Integer> {
 
 
     public UpdateUserListChoiceAndRating(Context ctx, LinearLayout userDrawableLayout, int movieId, String movieTitle,
-                                         int backgroundColor, int bodyTextColor, boolean showNotification) {
+                                         boolean showNotification) {
         mContext = ctx
         mContentResolver = mContext.getContentResolver()
         mUserDrawableLayout = userDrawableLayout
         mMovieId = movieId
         mMovieTitle = movieTitle
-        mBodyTextColor = backgroundColor
-        mBodyTextColor = bodyTextColor
         mProgressDialog = new ProgressDialog(mContext, ProgressDialog.STYLE_SPINNER)
         mShowNotification = showNotification
     }

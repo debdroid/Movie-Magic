@@ -2,8 +2,10 @@ package com.moviemagic.dpaul.android.app
 
 import android.app.Activity
 import android.content.Context
+import android.content.SharedPreferences
 import android.database.Cursor
 import android.os.Bundle
+import android.preference.PreferenceManager
 import android.support.v4.app.Fragment
 import android.support.v4.app.LoaderManager
 import android.support.v4.content.CursorLoader
@@ -17,10 +19,12 @@ import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.LinearLayout
 import android.widget.TextView
 import com.moviemagic.dpaul.android.app.adapter.HomeMovieAdapter
 import com.moviemagic.dpaul.android.app.backgroundmodules.GlobalStaticVariables
 import com.moviemagic.dpaul.android.app.backgroundmodules.LogDisplay
+import com.moviemagic.dpaul.android.app.backgroundmodules.Utility
 import com.moviemagic.dpaul.android.app.contentprovider.MovieMagicContract
 import com.moviemagic.dpaul.android.app.youtube.MovieMagicYoutubeFragment;
 import groovy.transform.CompileStatic
@@ -37,6 +41,7 @@ class HomeMovieFragment extends Fragment implements LoaderManager.LoaderCallback
     private TextView mComingSoonRecyclerViewEmptyTextView
     private TextView mRecentlyAddedUserListRecyclerViewEmptyTextView
     private TextView mRecommendationRecyclerViewEmptyTextView
+    private TextView mYouTubeFragmentEmptyTextView
     private Button mShowAllInCinemaButton
     private Button mShowAllComingSoonButton
     private HomeMovieAdapter mInCinemaAdapter
@@ -46,6 +51,8 @@ class HomeMovieFragment extends Fragment implements LoaderManager.LoaderCallback
     private String[] mMovieVideoArg
     private CallbackForHomeMovieClick mCallbackForHomeMovieClick
     private CallbackForShowAllButtonClick mCallbackForShowAllButtonClick
+    private LinearLayout mRecommendationLayout
+    private View mRecommendationDivider
 
     private static final int HOME_MOVIE_FRAGMENT_VIEW_PAGER_LOADER_ID = 0
     private static final int HOME_MOVIE_FRAGMENT_IN_CINEMA_LOADER_ID = 1
@@ -121,6 +128,7 @@ class HomeMovieFragment extends Fragment implements LoaderManager.LoaderCallback
     View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         LogDisplay.callLog(LOG_TAG,'onCreateView is called',LogDisplay.HOME_MOVIE_FRAGMENT_LOG_FLAG)
         View mRootView = inflater.inflate(R.layout.fragment_home_movie,container,false)
+        mYouTubeFragmentEmptyTextView = mRootView.findViewById(R.id.home_youtube_fragment_empty_msg) as TextView
         mInCinemaRecyclerView = mRootView.findViewById(R.id.home_movie_in_cinema_recycler_view) as RecyclerView
         mInCinemaRecyclerViewEmptyTextView = mRootView.findViewById(R.id.home_movie_in_cinema_recycler_view_empty_msg_text_view) as TextView
         mComingSoonRecyclerView = mRootView.findViewById(R.id.home_movie_coming_soon_recycler_view) as RecyclerView
@@ -188,6 +196,8 @@ class HomeMovieFragment extends Fragment implements LoaderManager.LoaderCallback
         /**
          * Recommendation Recycler View
          */
+        mRecommendationLayout = mRootView.findViewById(R.id.home_movie_recommendation_layout) as LinearLayout
+        mRecommendationDivider = mRootView.findViewById(R.id.home_movie_recommendation_divider) as View
         final RecyclerView.LayoutManager recommendationLinearLayoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false)
         recommendationLinearLayoutManager.setAutoMeasureEnabled(true)
         mRecommendationRecyclerView.setLayoutManager(recommendationLinearLayoutManager)
@@ -375,9 +385,18 @@ class HomeMovieFragment extends Fragment implements LoaderManager.LoaderCallback
             }
             LogDisplay.callLog(LOG_TAG, "YouTube now_playing key= $youtubeVideoKey", LogDisplay.HOME_MOVIE_FRAGMENT_LOG_FLAG)
         }
-        final MovieMagicYoutubeFragment movieMagicYoutubeFragment = MovieMagicYoutubeFragment
-                .createMovieMagicYouTubeFragment(youtubeVideoKey)
-        getChildFragmentManager().beginTransaction().replace(R.id.home_youtube_fragment_container, movieMagicYoutubeFragment).commit()
+        if(youtubeVideoKey.size() > 0 && !Utility.isReducedDataOn(getActivity())) {
+            mYouTubeFragmentEmptyTextView.setVisibility(TextView.GONE)
+            final MovieMagicYoutubeFragment movieMagicYoutubeFragment = MovieMagicYoutubeFragment
+                    .createMovieMagicYouTubeFragment(youtubeVideoKey)
+            getChildFragmentManager().beginTransaction()
+                    .replace(R.id.home_youtube_fragment_container, movieMagicYoutubeFragment)
+                    .commit()
+        } else {
+            LogDisplay.callLog(LOG_TAG, 'Youtube video id is null or user selected reduced data use', LogDisplay.HOME_MOVIE_FRAGMENT_LOG_FLAG)
+            mYouTubeFragmentEmptyTextView.setVisibility(TextView.VISIBLE)
+            mYouTubeFragmentEmptyTextView.setText(getString(R.string.reduced_data_use_on_message))
+        }
     }
 
     /**
@@ -413,12 +432,23 @@ class HomeMovieFragment extends Fragment implements LoaderManager.LoaderCallback
      */
     void recommendationOnLoadFinished(Cursor data) {
         LogDisplay.callLog(LOG_TAG, "recommendationOnLoadFinished.Cursor rec count -> ${data.getCount()}", LogDisplay.HOME_MOVIE_FRAGMENT_LOG_FLAG)
-        mRecommendationAdapter.swapCursor(data)
+        // Read the user's preference and show / hide recommended movies accordingly
+        final SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getActivity())
+        final boolean recommendedFlag = sharedPreferences.getBoolean(getString(R.string.pref_recommendation_key),false)
+        if(recommendedFlag) {
+            mRecommendationLayout.setVisibility(LinearLayout.VISIBLE)
+            mRecommendationDivider.setVisibility(View.VISIBLE)
+            mRecommendationAdapter.swapCursor(data)
+        } else {
+            mRecommendationLayout.setVisibility(LinearLayout.GONE)
+            mRecommendationDivider.setVisibility(View.GONE)
+            mRecommendationAdapter.swapCursor(null)
+        }
     }
 
     @Override
     public void onAttach(Context context) {
-        LogDisplay.callLog(LOG_TAG,'onAttach is called',LogDisplay.PERSON_MOVIE_FRAGMENT_LOG_FLAG)
+        LogDisplay.callLog(LOG_TAG,'onAttach is called',LogDisplay.HOME_MOVIE_FRAGMENT_LOG_FLAG)
         super.onAttach(context)
         // This makes sure that the container activity has implemented
         // the callback interface. If not, it throws an exception

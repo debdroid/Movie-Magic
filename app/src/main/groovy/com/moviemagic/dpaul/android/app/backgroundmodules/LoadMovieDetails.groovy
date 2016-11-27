@@ -255,23 +255,23 @@ class LoadMovieDetails extends AsyncTask<ArrayList<Integer>, Void, Void> {
 
             } catch (URISyntaxException e) {
                 //Set the boolean to true to indicate API call failed
-                GridMovieFragment.isDataLoadFailed = true
+//                GridMovieFragment.isDataLoadFailed = true
                 Log.e(LOG_TAG, "URISyntaxException: $e.message", e)
             } catch (JsonException e) {
                 //Set the boolean to true to indicate API call failed
-                GridMovieFragment.isDataLoadFailed = true
+//                GridMovieFragment.isDataLoadFailed = true
                 Log.e(LOG_TAG, "JsonException: $e.message", e)
             } catch (IOException e) {
                 //Set the boolean to true to indicate API call failed
-                GridMovieFragment.isDataLoadFailed = true
+//                GridMovieFragment.isDataLoadFailed = true
                 Log.e(LOG_TAG, "IOException: $e.message")
             } catch (android.database.sqlite.SQLiteConstraintException e) {
                 //Set the boolean to true to indicate API call failed
-                GridMovieFragment.isDataLoadFailed = true
+//                GridMovieFragment.isDataLoadFailed = true
                 Log.e(LOG_TAG, "SQLiteConstraintException: $e.message")
             } catch (android.database.sqlite.SQLiteException e) {
                 //Set the boolean to true to indicate API call failed
-                GridMovieFragment.isDataLoadFailed = true
+//                GridMovieFragment.isDataLoadFailed = true
                 Log.e(LOG_TAG, "SQLiteException: $e.message")
             }
         }
@@ -289,33 +289,33 @@ class LoadMovieDetails extends AsyncTask<ArrayList<Integer>, Void, Void> {
         //https://api.themoviedb.org/3/movie/240?api_key=key
         for(i in 0..(contentValues.length - 1)) {
 //            contentValues.
-            final int recomMovieId = contentValues[i].getAsInteger(MovieMagicContract.MovieBasicInfo.COLUMN_MOVIE_ID)
+            final int recommMovieId = contentValues[i].getAsInteger(MovieMagicContract.MovieBasicInfo.COLUMN_MOVIE_ID)
             try {
-                final Uri.Builder recomUriBuilder = Uri.parse(GlobalStaticVariables.TMDB_MOVIE_BASE_URL).buildUpon()
+                final Uri.Builder recommUriBuilder = Uri.parse(GlobalStaticVariables.TMDB_MOVIE_BASE_URL).buildUpon()
 
-                final Uri recomUri = recomUriBuilder.appendPath(GlobalStaticVariables.TMDB_MOVIE_PATH)
-                        .appendPath(Integer.toString(recomMovieId))
+                final Uri recommUri = recommUriBuilder.appendPath(GlobalStaticVariables.TMDB_MOVIE_PATH)
+                        .appendPath(Integer.toString(recommMovieId))
                         .appendQueryParameter(GlobalStaticVariables.TMDB_MOVIE_API_KEY, BuildConfig.TMDB_API_KEY)
                         .build()
 
-                final URL url = new URL(recomUri.toString())
-                LogDisplay.callLog(LOG_TAG, "Recommendation movie id url-> ${recomUri.toString()}", LogDisplay.LOAD_MOVIE_DETAILS_LOG_FLAG)
-                def recomJsonData = new JsonSlurper(type: JsonParserType.INDEX_OVERLAY).parse(url)
-                LogDisplay.callLog(LOG_TAG, "JSON DATA for recommendation movie id $recomMovieId -> $recomJsonData", LogDisplay.LOAD_MOVIE_DETAILS_LOG_FLAG)
-                final ContentValues recomContentValues = JsonParse.parseAdditionalBasicMovieData(recomJsonData)
+                final URL recommUrl = new URL(recommUri.toString())
+                LogDisplay.callLog(LOG_TAG, "Recommendation movie id url-> ${recommUri.toString()}", LogDisplay.LOAD_MOVIE_DETAILS_LOG_FLAG)
+                def recommJsonData = new JsonSlurper(type: JsonParserType.INDEX_OVERLAY).parse(recommUrl)
+                LogDisplay.callLog(LOG_TAG, "JSON DATA for recommendation movie id $recommMovieId -> $recommJsonData", LogDisplay.LOAD_MOVIE_DETAILS_LOG_FLAG)
+                final ContentValues recommContentValues = JsonParse.parseAdditionalBasicMovieData(recommJsonData)
                 //Reset the detail data present flag because we are not loading other details like similar, cast, crew, etc
                 //So when user will click the movie on home screen for detail view it will load all data
-                recomContentValues.put(MovieMagicContract.MovieBasicInfo.COLUMN_DETAIL_DATA_PRESENT_FLAG,GlobalStaticVariables.MOVIE_MAGIC_FLAG_FALSE)
-                final int recomUpdateCount = mContentResolver.update(
+                recommContentValues.put(MovieMagicContract.MovieBasicInfo.COLUMN_DETAIL_DATA_PRESENT_FLAG,GlobalStaticVariables.MOVIE_MAGIC_FLAG_FALSE)
+                final int recommUpdateCount = mContentResolver.update(
                         MovieMagicContract.MovieBasicInfo.CONTENT_URI,
-                        recomContentValues,
+                        recommContentValues,
                         """$MovieMagicContract.MovieBasicInfo.COLUMN_MOVIE_ID = ? and
                         $MovieMagicContract.MovieBasicInfo.COLUMN_MOVIE_LIST_TYPE = ?""",
-                        [Integer.toString(recomMovieId), GlobalStaticVariables.MOVIE_LIST_TYPE_TMDB_RECOMMENDATIONS] as String[])
-                if (recomUpdateCount != 1) {
-                    LogDisplay.callLog(LOG_TAG, "Recommendation movie additional details Update in movie_basic_info failed. Update Count->$recomUpdateCount", LogDisplay.LOAD_MOVIE_DETAILS_LOG_FLAG)
+                        [Integer.toString(recommMovieId), GlobalStaticVariables.MOVIE_LIST_TYPE_TMDB_RECOMMENDATIONS] as String[])
+                if (recommUpdateCount != 1) {
+                    LogDisplay.callLog(LOG_TAG, "Recommendation movie additional details Update in movie_basic_info failed. Update Count->$recommUpdateCount", LogDisplay.LOAD_MOVIE_DETAILS_LOG_FLAG)
                 } else { //If the return value is 1, indicate successful update
-                    LogDisplay.callLog(LOG_TAG, "Recommendation movie additional details Update in movie_basic_info successful. Update Count->$recomUpdateCount", LogDisplay.LOAD_MOVIE_DETAILS_LOG_FLAG)
+                    LogDisplay.callLog(LOG_TAG, "Recommendation movie additional details Update in movie_basic_info successful. Update Count->$recommUpdateCount", LogDisplay.LOAD_MOVIE_DETAILS_LOG_FLAG)
                 }
             } catch (URISyntaxException e) {
                 Log.e(LOG_TAG, "URISyntaxException: $e.message", e)

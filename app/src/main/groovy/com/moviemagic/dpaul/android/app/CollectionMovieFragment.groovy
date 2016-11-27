@@ -11,6 +11,7 @@ import android.os.Message
 import android.support.design.widget.AppBarLayout
 import android.support.design.widget.CollapsingToolbarLayout
 import android.support.design.widget.CoordinatorLayout
+import android.support.design.widget.Snackbar
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentTransaction
 import android.support.v4.app.LoaderManager
@@ -36,6 +37,7 @@ import com.moviemagic.dpaul.android.app.backgroundmodules.GlobalStaticVariables
 import com.moviemagic.dpaul.android.app.backgroundmodules.LoadCollectionData
 import com.moviemagic.dpaul.android.app.backgroundmodules.LogDisplay
 import com.moviemagic.dpaul.android.app.backgroundmodules.PicassoLoadImage
+import com.moviemagic.dpaul.android.app.backgroundmodules.Utility
 import com.moviemagic.dpaul.android.app.contentprovider.MovieMagicContract
 import com.squareup.picasso.Callback
 import com.squareup.picasso.Picasso;
@@ -162,6 +164,22 @@ class CollectionMovieFragment extends Fragment implements LoaderManager.LoaderCa
     }
 
     @Override
+    void onStart() {
+        super.onStart()
+        // Check if the user is online or not, if not then show a message
+        final boolean isOnline = Utility.isOnline(getActivity())
+        if(!isOnline) {
+            Snackbar.make(mAppBarLayout, getString(R.string.no_internet_connection_message), Snackbar.LENGTH_LONG).show()
+        } else if(Utility.isOnlyWifi(getActivity()) & !GlobalStaticVariables.WIFI_CONNECTED) {
+            // If user has selected only WiFi but user is online without WiFi then show a dialog
+            Snackbar.make(mAppBarLayout, getString(R.string.internet_connection_without_wifi_message), Snackbar.LENGTH_LONG).show()
+        } else if (Utility.isReducedDataOn(getActivity())) {
+            // If user has selected reduced data
+            Snackbar.make(mAppBarLayout, getString(R.string.reduced_data_use_on_message), Snackbar.LENGTH_LONG).show()
+        }
+    }
+
+    @Override
     Loader<Cursor> onCreateLoader(int id, Bundle args) {
         LogDisplay.callLog(LOG_TAG, "onCreateLoader is called.loader id->$id", LogDisplay.COLLECTION_MOVIE_FRAGMENT_LOG_FLAG)
         switch (id) {
@@ -223,12 +241,20 @@ class CollectionMovieFragment extends Fragment implements LoaderManager.LoaderCa
 
             } else {
                 LogDisplay.callLog(LOG_TAG, "onLoadFinished.Collection movie flag is false for collection id $mCollectionId. So go clean up and re-load", LogDisplay.COLLECTION_MOVIE_FRAGMENT_LOG_FLAG)
-                new LoadCollectionData(getActivity()).execute([mCollectionId, GlobalStaticVariables.MOVIE_MAGIC_FLAG_TRUE] as Integer[])
+                if(Utility.isReadyToDownload(getActivity())) {
+                    new LoadCollectionData(getActivity()).execute([mCollectionId, GlobalStaticVariables.MOVIE_MAGIC_FLAG_TRUE] as Integer[])
+                } else {
+                    LogDisplay.callLog(LOG_TAG, '1-> Device is offline or connected to internet without WiFi and user selected download only on WiFi', LogDisplay.COLLECTION_MOVIE_FRAGMENT_LOG_FLAG)
+                }
             }
         } else {
             //Load the collection details and associated movies
             LogDisplay.callLog(LOG_TAG, "onLoadFinished.Data not present for collection id $mCollectionId, go and fetch it", LogDisplay.COLLECTION_MOVIE_FRAGMENT_LOG_FLAG)
-            new LoadCollectionData(getActivity()).execute([mCollectionId, GlobalStaticVariables.MOVIE_MAGIC_FLAG_FALSE] as Integer[])
+            if(Utility.isReadyToDownload(getActivity())) {
+                new LoadCollectionData(getActivity()).execute([mCollectionId, GlobalStaticVariables.MOVIE_MAGIC_FLAG_FALSE] as Integer[])
+            } else {
+                LogDisplay.callLog(LOG_TAG, '2-> Device is offline or connected to internet without WiFi and user selected download only on WiFi', LogDisplay.COLLECTION_MOVIE_FRAGMENT_LOG_FLAG)
+            }
         }
     }
 
@@ -264,90 +290,93 @@ class CollectionMovieFragment extends Fragment implements LoaderManager.LoaderCa
                 void onSuccess() {
                     LogDisplay.callLog(LOG_TAG, 'Picasso onSuccess is called', LogDisplay.COLLECTION_MOVIE_FRAGMENT_LOG_FLAG)
                     //TODO: Future change - provide a setting option to user to chose if they want this or will use default theme
-                    final Bitmap bitmapPoster = ((BitmapDrawable) mBackdropImageView.getDrawable()).getBitmap()
-                    Palette.from(bitmapPoster).generate(new Palette.PaletteAsyncListener() {
-                        @Override
-                        public void onGenerated(Palette p) {
-                            LogDisplay.callLog(LOG_TAG, 'onGenerated is called', LogDisplay.COLLECTION_MOVIE_FRAGMENT_LOG_FLAG)
-                            Palette.Swatch vibrantSwatch = p.getVibrantSwatch()
-                            Palette.Swatch lightVibrantSwatch = p.getLightVibrantSwatch()
-                            Palette.Swatch darkVibrantSwatch = p.getDarkVibrantSwatch()
-                            Palette.Swatch mutedSwatch = p.getMutedSwatch()
-                            Palette.Swatch mutedLightSwatch = p.getLightMutedSwatch()
-                            Palette.Swatch mutedDarkSwatch = p.getDarkMutedSwatch()
-                            boolean pickSwatchColorFlag = false
-                            //Pick primary, primaryDark, title and body text color
-                            if (vibrantSwatch) {
-                                mPalletePrimaryColor = vibrantSwatch.getRgb()
-                                mPalleteTitleColor = vibrantSwatch.getTitleTextColor()
-                                mPalleteBodyTextColor = vibrantSwatch.getBodyTextColor()
-                                //Produce Dark color by changing the value (3rd parameter) of HSL value
-                                float[] primaryHsl = vibrantSwatch.getHsl()
-                                primaryHsl[2] = primaryHsl[2] * 0.9f
-                                mPalletePrimaryDarkColor = Color.HSVToColor(primaryHsl)
-                                pickSwatchColorFlag = true
-                            } else if (lightVibrantSwatch) { //Try another swatch
-                                mPalletePrimaryColor = lightVibrantSwatch.getRgb()
-                                mPalleteTitleColor = lightVibrantSwatch.getTitleTextColor()
-                                mPalleteBodyTextColor = lightVibrantSwatch.getBodyTextColor()
-                                //Produce Dark color by changing the value (3rd parameter) of HSL value
-                                float[] primaryHsl = lightVibrantSwatch.getHsl()
-                                primaryHsl[2] = primaryHsl[2] * 0.9f
-                                mPalletePrimaryDarkColor = Color.HSVToColor(primaryHsl)
-                                pickSwatchColorFlag = true
-                            } else if (darkVibrantSwatch) { //Try last swatch
-                                mPalletePrimaryColor = darkVibrantSwatch.getRgb()
-                                mPalleteTitleColor = darkVibrantSwatch.getTitleTextColor()
-                                mPalleteBodyTextColor = darkVibrantSwatch.getBodyTextColor()
-                                //Produce Dark color by changing the value (3rd parameter) of HSL value
-                                float[] primaryHsl = darkVibrantSwatch.getHsl()
-                                primaryHsl[2] = primaryHsl[2] * 0.9f
-                                mPalletePrimaryDarkColor = Color.HSVToColor(primaryHsl)
-                                pickSwatchColorFlag = true
-                            } else { //Fallback to default
-                                LogDisplay.callLog(LOG_TAG, 'onGenerated:not able to pick color, so fallback', LogDisplay.COLLECTION_MOVIE_FRAGMENT_LOG_FLAG)
-                                mPalletePrimaryColor = ContextCompat.getColor(getActivity(), R.color.primary)
-                                mPalletePrimaryDarkColor = ContextCompat.getColor(getActivity(), R.color.primary_dark)
-                                mPalleteTitleColor = ContextCompat.getColor(getActivity(), R.color.white_color)
-                                mPalleteBodyTextColor = ContextCompat.getColor(getActivity(), R.color.grey_color)
-                                //This is needed as we are not going pick accent colour if falling back
-                                mPalleteAccentColor = ContextCompat.getColor(getActivity(), R.color.accent)
-                            }
-                            //Pick accent color only if Swatch color is picked, otherwise do not pick accent color
-                            if (pickSwatchColorFlag) {
-                                if (mutedSwatch) {
-                                    mPalleteAccentColor = mutedSwatch.getRgb()
-                                } else if (mutedLightSwatch) { //Try another swatch
-                                    mPalleteAccentColor = mutedLightSwatch.getRgb()
-                                } else if (mutedDarkSwatch) { //Try last swatch
-                                    mPalleteAccentColor = mutedDarkSwatch.getRgb()
+                    // If user does not select dynamic theme (default value) then do not change the color
+                    if (Utility.isDynamicTheme(getActivity())) {
+                        final Bitmap bitmapPoster = ((BitmapDrawable) mBackdropImageView.getDrawable()).getBitmap()
+                        Palette.from(bitmapPoster).generate(new Palette.PaletteAsyncListener() {
+                            @Override
+                            public void onGenerated(Palette p) {
+                                LogDisplay.callLog(LOG_TAG, 'onGenerated is called', LogDisplay.COLLECTION_MOVIE_FRAGMENT_LOG_FLAG)
+                                Palette.Swatch vibrantSwatch = p.getVibrantSwatch()
+                                Palette.Swatch lightVibrantSwatch = p.getLightVibrantSwatch()
+                                Palette.Swatch darkVibrantSwatch = p.getDarkVibrantSwatch()
+                                Palette.Swatch mutedSwatch = p.getMutedSwatch()
+                                Palette.Swatch mutedLightSwatch = p.getLightMutedSwatch()
+                                Palette.Swatch mutedDarkSwatch = p.getDarkMutedSwatch()
+                                boolean pickSwatchColorFlag = false
+                                //Pick primary, primaryDark, title and body text color
+                                if (vibrantSwatch) {
+                                    mPalletePrimaryColor = vibrantSwatch.getRgb()
+                                    mPalleteTitleColor = vibrantSwatch.getTitleTextColor()
+                                    mPalleteBodyTextColor = vibrantSwatch.getBodyTextColor()
+                                    //Produce Dark color by changing the value (3rd parameter) of HSL value
+                                    float[] primaryHsl = vibrantSwatch.getHsl()
+                                    primaryHsl[2] = primaryHsl[2] * 0.9f
+                                    mPalletePrimaryDarkColor = Color.HSVToColor(primaryHsl)
+                                    pickSwatchColorFlag = true
+                                } else if (lightVibrantSwatch) { //Try another swatch
+                                    mPalletePrimaryColor = lightVibrantSwatch.getRgb()
+                                    mPalleteTitleColor = lightVibrantSwatch.getTitleTextColor()
+                                    mPalleteBodyTextColor = lightVibrantSwatch.getBodyTextColor()
+                                    //Produce Dark color by changing the value (3rd parameter) of HSL value
+                                    float[] primaryHsl = lightVibrantSwatch.getHsl()
+                                    primaryHsl[2] = primaryHsl[2] * 0.9f
+                                    mPalletePrimaryDarkColor = Color.HSVToColor(primaryHsl)
+                                    pickSwatchColorFlag = true
+                                } else if (darkVibrantSwatch) { //Try last swatch
+                                    mPalletePrimaryColor = darkVibrantSwatch.getRgb()
+                                    mPalleteTitleColor = darkVibrantSwatch.getTitleTextColor()
+                                    mPalleteBodyTextColor = darkVibrantSwatch.getBodyTextColor()
+                                    //Produce Dark color by changing the value (3rd parameter) of HSL value
+                                    float[] primaryHsl = darkVibrantSwatch.getHsl()
+                                    primaryHsl[2] = primaryHsl[2] * 0.9f
+                                    mPalletePrimaryDarkColor = Color.HSVToColor(primaryHsl)
+                                    pickSwatchColorFlag = true
                                 } else { //Fallback to default
+                                    LogDisplay.callLog(LOG_TAG, 'onGenerated:not able to pick color, so fallback', LogDisplay.COLLECTION_MOVIE_FRAGMENT_LOG_FLAG)
+                                    mPalletePrimaryColor = ContextCompat.getColor(getActivity(), R.color.primary)
+                                    mPalletePrimaryDarkColor = ContextCompat.getColor(getActivity(), R.color.primary_dark)
+                                    mPalleteTitleColor = ContextCompat.getColor(getActivity(), R.color.white_color)
+                                    mPalleteBodyTextColor = ContextCompat.getColor(getActivity(), R.color.grey_color)
+                                    //This is needed as we are not going pick accent colour if falling back
                                     mPalleteAccentColor = ContextCompat.getColor(getActivity(), R.color.accent)
                                 }
+                                //Pick accent color only if Swatch color is picked, otherwise do not pick accent color
+                                if (pickSwatchColorFlag) {
+                                    if (mutedSwatch) {
+                                        mPalleteAccentColor = mutedSwatch.getRgb()
+                                    } else if (mutedLightSwatch) { //Try another swatch
+                                        mPalleteAccentColor = mutedLightSwatch.getRgb()
+                                    } else if (mutedDarkSwatch) { //Try last swatch
+                                        mPalleteAccentColor = mutedDarkSwatch.getRgb()
+                                    } else { //Fallback to default
+                                        mPalleteAccentColor = ContextCompat.getColor(getActivity(), R.color.accent)
+                                    }
+                                }
+                                //Change the color only if we are able to get hold of recyclerview, otherwise use default color
+                                final View view = getView()
+                                final AutoGridRecyclerView autoGridRecyclerView = view.findViewById(R.id.auto_grid_recycler_view) as AutoGridRecyclerView
+                                if (autoGridRecyclerView) {
+                                    LogDisplay.callLog(LOG_TAG, 'onGenerated:recycler view is NOT null', LogDisplay.COLLECTION_MOVIE_FRAGMENT_LOG_FLAG)
+                                    autoGridRecyclerView.setBackgroundColor(mPalletePrimaryColor)
+                                    mCollectionDetailLayout.setBackgroundColor(mPalletePrimaryColor)
+                                    mCollectionCoordLayout.setBackgroundColor(mPalletePrimaryColor)
+                                    mCollectionTitleTextView.setTextColor(mPalleteBodyTextColor)
+                                    mCollectionTitleTextView.setTextColor(mPalleteTitleColor)
+                                    mCollectionOverviewTextView.setTextColor(mPalleteBodyTextColor)
+                                    mCollectionOverviewTextViewHeader.setTextColor(mPalleteTitleColor)
+                                    mCollapsingToolbar.setStatusBarScrimColor(mPalletePrimaryDarkColor)
+                                    mCollapsingToolbar.setContentScrimColor(mPalletePrimaryColor)
+                                    mCollapsingToolbar.setBackgroundColor(mPalletePrimaryColor)
+                                    mCollapsingToolbar.setCollapsedTitleTextColor(mPalleteBodyTextColor)
+                                    final MovieGridRecyclerAdapter movieGridRecyclerAdapter = autoGridRecyclerView.getAdapter() as MovieGridRecyclerAdapter
+                                    movieGridRecyclerAdapter.changeColor(mPalletePrimaryDarkColor, mPalleteBodyTextColor)
+                                } else {
+                                    LogDisplay.callLog(LOG_TAG, 'onGenerated:recycler view is null, so use default color', LogDisplay.COLLECTION_MOVIE_FRAGMENT_LOG_FLAG)
+                                }
                             }
-                            //Change the color only if we are able to get hold of recyclerview, otherwise use default color
-                            final View view = getView()
-                            final AutoGridRecyclerView autoGridRecyclerView = view.findViewById(R.id.auto_grid_recycler_view) as AutoGridRecyclerView
-                            if(autoGridRecyclerView) {
-                                LogDisplay.callLog(LOG_TAG, 'onGenerated:recycler view is NOT null', LogDisplay.COLLECTION_MOVIE_FRAGMENT_LOG_FLAG)
-                                autoGridRecyclerView.setBackgroundColor(mPalletePrimaryColor)
-                                mCollectionDetailLayout.setBackgroundColor(mPalletePrimaryColor)
-                                mCollectionCoordLayout.setBackgroundColor(mPalletePrimaryColor)
-                                mCollectionTitleTextView.setTextColor(mPalleteBodyTextColor)
-                                mCollectionTitleTextView.setTextColor(mPalleteTitleColor)
-                                mCollectionOverviewTextView.setTextColor(mPalleteBodyTextColor)
-                                mCollectionOverviewTextViewHeader.setTextColor(mPalleteTitleColor)
-                                mCollapsingToolbar.setStatusBarScrimColor(mPalletePrimaryDarkColor)
-                                mCollapsingToolbar.setContentScrimColor(mPalletePrimaryColor)
-                                mCollapsingToolbar.setBackgroundColor(mPalletePrimaryColor)
-                                mCollapsingToolbar.setCollapsedTitleTextColor(mPalleteBodyTextColor)
-                                final MovieGridRecyclerAdapter movieGridRecyclerAdapter = autoGridRecyclerView.getAdapter() as MovieGridRecyclerAdapter
-                                movieGridRecyclerAdapter.changeColor(mPalletePrimaryDarkColor, mPalleteBodyTextColor)
-                            } else {
-                                LogDisplay.callLog(LOG_TAG, 'onGenerated:recycler view is null, so use default color', LogDisplay.COLLECTION_MOVIE_FRAGMENT_LOG_FLAG)
-                            }
-                        }
-                    })
+                        })
+                    }
                 }
 
                 @Override

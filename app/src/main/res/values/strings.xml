@@ -89,17 +89,17 @@
     <string name="detail_fragment_menu">DetailFragmentMenu</string>
     <string name="detail_activity_menu">DetailActivityMenu</string>
     <string name="collection_overview_text">Collection Overview</string>
-    <string name="collection_overview_data">This is the collection overview details of a particualr collection. This field can have multiple lines or null value.</string>
+    <string name="collection_overview_data">This is the collection overview details of a particular collection. This field can have multiple lines or null value.</string>
     <string name="collection_activity_menu">CollectionActivity</string>
     <string name="collection_fragment_menu">CollectionFragment</string>
     <string name="person_name">Name</string>
-    <string name="person_name_data">Al Pacino</string>
+    <string name="person_name_data">Name FNU</string>
     <string name="person_dob">Date of Birth</string>
     <string name="person_dob_data">13 Aug 1984</string>
     <string name="person_place_of_birth">Place of Birth</string>
     <string name="person_place_of_birth_data">Cittaranjan, Kolkata, India</string>
     <string name="person_also_known_as">Also Known As</string>
-    <string name="person_also_known_as_data">S**e**</string>
+    <string name="person_also_known_as_data">S**e*a</string>
     <string name="person_death_day">Death Day</string>
     <string name="person_death_day_data">Not Applicable</string>
     <string name="person_biography">Biography</string>
@@ -147,7 +147,7 @@
     <string name="error_incorrect_password">This password is incorrect</string>
     <string name="error_field_required">This field is required</string>
     <string name="tmdb_login_header">Login to TMDb Account</string>
-    <string name="tmdb_login_body">To get more out of this application, please login with your TMDb credentials and enjoy TMDb experience. This will let you do things like rate movie, access your TMDb lists and add movies to  your TMDb lists. If you do not have a TMDb account then click on SIGN UP and create an account.</string>
+    <string name="tmdb_login_body">To get more out of this application, please login with your TMDb credentials and enjoy TMDb experience. This will let you do things like rate movie, access your TMDb lists, add movies to  your TMDb lists or delete movies from your TMDb lists. If you do not have a TMDb account then click on SIGN UP and create an account.</string>
     <string name="tmdb_sign_up_page">https://www.themoviedb.org/account/signup</string>
     <string name="nav_drawer_log_out">Logout</string>
     <string name="nav_drawer_log_in">Login</string>
@@ -161,15 +161,64 @@
     <string name="home_movie_recommendation_title">Recommend For You</string>
     <string name="progress_dialog_wait_title">Please wait...</string>
 
+    <!-- String for not connected error dialog -->
+    <string name="not_connected_dialog_title">No internet connection</string>
+    <string name="not_connected_dialog_message">No internet connection is available and the application does not work properly without internet connection.</string>
+    <string name="not_connected_open_settings_button">Open Settings</string>
+    <string name="not_connected_dialog_cancel_button">Cancel</string>
+
+    <!-- String for not connected to WiFi error dialog -->
+    <string name="not_wifi_connected_dialog_title">Online on Mobile Data</string>
+    <string name="not_wifi_connected_dialog_message">You are online on Mobile data and you selected to use ONLY WiFi in settings to download data. The application needs an active internet connection to function properly.</string>
+    <string name="not_wifi_connected_open_settings_button">Change Settings</string>
+    <string name="not_wifi_connected_dialog_cancel_button">Cancel</string>
+
     <!-- String for Tmdb rating update dialog -->
     <string name="tmdb_rating_dialog_title">Do you want to update the rating value to TMDb?</string>
-    <string name="tmdb_rating_dialog_message">This movie is present in your TMDb Rated movie list. To update the Tmdb rating value click OK (recommended). Otherwise this rating will be overwritten by your TMDb rating when you will browse this movie next time.</string>
-    <string name="tmdb_rating_dialog_ok_button">OK</string>
-    <string name="tmdb_rating_dialog_cancel_button">CANCEL</string>
+    <string name="tmdb_rating_dialog_message">This movie is present in your TMDb Rated movie list. To update the TMDb rating value click OK (recommended). Otherwise this rating will be overwritten by your TMDb rating when you will browse this movie next time.</string>
+    <string name="tmdb_rating_dialog_ok_button">Ok</string>
+    <string name="tmdb_rating_dialog_cancel_button">Cancel</string>
+
     <string name="tmdb_rating_user_prompt_empty_msg">Please set your rating first then try to add the movie to your TMDb Rated list.</string>
     <string name="tmdb_watchlist_user_prompt_msg">You cannot remove this movie from TMDb Watchlist using the application. Please visit TMDb website to do so.</string>
     <string name="tmdb_favourite_user_prompt_msg">You cannot remove this movie from TMDb Favourite using the application. Please visit TMDb website to do so.</string>
     <string name="tmdb_rating_user_prompt_msg">The movie is already in TMDb Rated list, to update the rating please change the rating.</string>
     <string name="upload_tmdb_account_not_found_msg">Not able to perform the action. Please logout and login again to your TMDb account, then retry.</string>
+
+    <!-- String for Settings / Preference -->
+    <string name="pref_theme_key">theme_key</string>
+    <string name="pref_theme_title">Application Theme</string>
+    <string name="pref_theme_default_value">dynamic</string>
+    <string name="pref_wifi_download_key">wifi_download_key</string>
+    <string name="pref_wifi_download_title">Download Only on Wi-Fi</string>
+    <string name="pref_wifi_download_default_value" translatable="false">false</string>
+    <string name="pref_wifi_download_summary_on">On</string>
+    <string name="pref_wifi_download_summary_off">Off</string>
+    <string name="pref_notification_key">notification_key</string>
+    <string name="pref_notification_title">Notification</string>
+    <string name="pref_notification_default_value" translatable="false">true</string>
+    <string name="pref_notification_summary_on">On</string>
+    <string name="pref_notification_summary_off">Off</string>
+    <string name="pref_recommendation_key">recommendation_key</string>
+    <string name="pref_recommendation_title">Recommended Movie</string>
+    <string name="pref_recommendation_default_value" translatable="false">true</string>
+    <string name="pref_recommendation_summary_on">Recommended movies will be shown on Home screen</string>
+    <string name="pref_recommendation_summary_off">Recommended movies will not be shown on Home screen</string>
+    <string name="pref_reduce_data_use_key">reduce_data_use_key</string>
+    <string name="pref_reduce_data_use_title">Reduce data use</string>
+    <string name="pref_reduce_data_use_default_value" translatable="false">false</string>
+    <string name="pref_reduce_data_use_summary_on">Images and videos will not be downloaded and Dynamic Theme will not work (not recommended)</string>
+    <string name="pref_reduce_data_use_summary_off">All data including images and videos will be downloaded and Dynamic Theme will also work (recommended)</string>
+
+    <string name="title_activity_settings">Settings</string>
+    <string name="no_internet_connection_message">No internet connection available.</string>
+    <string name="internet_connection_without_wifi_message">You are online bon Mobile data and you selected WiFi ONLY in settings to download data.</string>
+    <string name="reduced_data_use_on_message">You have selected Reduced data use in settings, so no images or videos are being downloaded.</string>
+    <string name="no_internet_cannot_login_message">No internet connection available, cannot connect to the server.</string>
+    <string name="no_internet_cannot_perform_operation_message">Application has no internet connection. So the operation cannot be performed now.</string>
+    <string name="tmdb_successful_login_message">You have successfully logged in to TMDb account</string>
+    <string name="tmdb_successful_logout_message">You have successfully logged out from TMDb account</string>
+    <string name="cannot_perform_operation_message">Cannot perform the operation, please try again later</string>
+    <string name="authenticator_jellybean_error_message">Login failed, please ensure the user name and password are correct before re-try</string>
 
 </resources>
