@@ -2,17 +2,28 @@ package com.moviemagic.dpaul.android.app.syncadapter
 
 import android.accounts.Account
 import android.accounts.AccountManager
+import android.app.Notification
+import android.app.NotificationManager
+import android.app.PendingIntent
 import android.content.AbstractThreadedSyncAdapter
 import android.content.ContentProviderClient
 import android.content.ContentResolver
 import android.content.ContentValues
 import android.content.Context
+import android.content.Intent
+import android.content.SharedPreferences
 import android.content.SyncResult
 import android.database.Cursor
+import android.database.sqlite.SQLiteDatabase
+import android.graphics.Bitmap
 import android.net.Uri
 import android.os.Bundle
+import android.preference.PreferenceManager
+import android.support.v4.app.NotificationCompat
+import android.support.v4.app.TaskStackBuilder
 import android.util.Log
 import com.moviemagic.dpaul.android.app.BuildConfig
+import com.moviemagic.dpaul.android.app.DetailMovieActivity
 import com.moviemagic.dpaul.android.app.R
 import com.moviemagic.dpaul.android.app.backgroundmodules.LoadMovieDetails
 import com.moviemagic.dpaul.android.app.backgroundmodules.Utility
@@ -20,6 +31,8 @@ import com.moviemagic.dpaul.android.app.contentprovider.MovieMagicContract
 import com.moviemagic.dpaul.android.app.backgroundmodules.GlobalStaticVariables
 import com.moviemagic.dpaul.android.app.backgroundmodules.JsonParse
 import com.moviemagic.dpaul.android.app.backgroundmodules.LogDisplay
+import com.moviemagic.dpaul.android.app.contentprovider.MovieMagicDbHelper
+import com.squareup.picasso.Picasso
 import groovy.json.JsonException
 import groovy.json.JsonParserType
 import groovy.json.JsonSlurper
@@ -46,10 +59,20 @@ class MovieMagicSyncAdapter extends AbstractThreadedSyncAdapter {
 
     //Columns to fetch from movie_basic_info table
     private static final String[] MOVIE_BASIC_INFO_COLUMNS = [MovieMagicContract.MovieBasicInfo._ID,
-                                                              MovieMagicContract.MovieBasicInfo.COLUMN_MOVIE_ID]
+                                                              MovieMagicContract.MovieBasicInfo.COLUMN_MOVIE_ID,
+                                                              MovieMagicContract.MovieBasicInfo.COLUMN_RELEASE_DATE,
+                                                              MovieMagicContract.MovieBasicInfo.COLUMN_TITLE,
+                                                              MovieMagicContract.MovieBasicInfo.COLUMN_POSTER_PATH,
+                                                              MovieMagicContract.MovieBasicInfo.COLUMN_BACKDROP_PATH,
+                                                              MovieMagicContract.MovieBasicInfo.COLUMN_MOVIE_CATEGORY]
     //These are indices of the above columns, if projection array changes then this needs to be changed
     final static int COL_MOVIE_BASIC_ID = 0
     final static int COL_MOVIE_BASIC_MOVIE_ID = 1
+    final static int COL_MOVIE_BASIC_RELEASE_DATE = 2
+    final static int COL_MOVIE_BASIC_TITLE = 3
+    final static int COL_MOVIE_BASIC_POSTER_PATH = 4
+    final static int COL_MOVIE_BASIC_BACKDROP_PATH = 5
+    final static int COL_MOVIE_BASIC_MOVIE_CATEGORY = 6
 
     MovieMagicSyncAdapter(Context context, boolean autoInitialize) {
         super(context, autoInitialize)
@@ -150,6 +173,9 @@ class MovieMagicSyncAdapter extends AbstractThreadedSyncAdapter {
         } else {
             LogDisplay.callLog(LOG_TAG, 'Device is offline or connected to internet without WiFi and user selected download only on WiFi, so skipped data loading..', LogDisplay.MOVIE_MAGIC_SYNC_ADAPTER_LOG_FLAG)
         }
+
+        // Create notification
+        createNotification()
     }
 
     /**
@@ -337,7 +363,7 @@ class MovieMagicSyncAdapter extends AbstractThreadedSyncAdapter {
             LogDisplay.callLog(LOG_TAG, "Now playing.Movie ID list-> $mMovieIdList", LogDisplay.MOVIE_MAGIC_SYNC_ADAPTER_LOG_FLAG)
             LogDisplay.callLog(LOG_TAG, "Now playing.Movie row id list-> $mMovieRowIdList", LogDisplay.MOVIE_MAGIC_SYNC_ADAPTER_LOG_FLAG)
         } else {
-            LogDisplay.callLog(LOG_TAG, 'Empty cursor returned by movie-basic_info for now playing', LogDisplay.MOVIE_MAGIC_SYNC_ADAPTER_LOG_FLAG)
+            LogDisplay.callLog(LOG_TAG, 'Empty cursor returned by movie_basic_info for now playing', LogDisplay.MOVIE_MAGIC_SYNC_ADAPTER_LOG_FLAG)
         }
         //Now finalise the data to be loaded for upcoming
         movieDataCursor = mContentResolver.query(
@@ -381,7 +407,7 @@ class MovieMagicSyncAdapter extends AbstractThreadedSyncAdapter {
     /**
      * This method does the housekeeping of the application's data
      */
-    private performHouseKeeping() {
+    private void performHouseKeeping() {
         LogDisplay.callLog(LOG_TAG,'performHouseKeeping is called',LogDisplay.MOVIE_MAGIC_SYNC_ADAPTER_LOG_FLAG)
         LogDisplay.callLog(LOG_TAG,"performHouseKeeping: Today's DateTimeStamp->$mDateTimeStamp",LogDisplay.MOVIE_MAGIC_SYNC_ADAPTER_LOG_FLAG)
         // Delete old data except user's records from movie_basic_info and recommendations movies (recommendations are deleted in the next step)
@@ -424,5 +450,99 @@ class MovieMagicSyncAdapter extends AbstractThreadedSyncAdapter {
                 "$MovieMagicContract.MovieCollection.COLUMN_COLLECTION_CREATE_TIMESTAMP < ? ",
                 [mDateTimeStamp] as String [] )
         LogDisplay.callLog(LOG_TAG,"Total records deleted from movie_collection -> $collectionDeleteCount",LogDisplay.MOVIE_MAGIC_SYNC_ADAPTER_LOG_FLAG)
+    }
+
+    private void createNotification() {
+        LogDisplay.callLog(LOG_TAG, 'createNotification is called', LogDisplay.MOVIE_MAGIC_SYNC_ADAPTER_LOG_FLAG)
+        // Read the SharedPreferenc and see if notification is on or off
+        final SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(mContext)
+        final boolean notificationFlag = sharedPreferences.getBoolean(mContext.getString(R.string.pref_notification_key),false)
+        if(notificationFlag) {
+            final String releaseDateCondOne = Long.toString(MovieMagicContract.convertMovieReleaseDate(Utility.getSimpleTodayDate()))
+            final String releaseDateCondTwo = Long.toString(MovieMagicContract.convertMovieReleaseDate(Utility.getSimpleThreeDayFutureDate()))
+            final boolean distinct = true
+            final SQLiteDatabase sqLiteDatabase = new MovieMagicDbHelper(mContext).getReadableDatabase()
+            // Get the data to create the notification (to get unique record query with distinct is used)
+            final Cursor notificationDataCursor = sqLiteDatabase.query(
+                    distinct,
+                    MovieMagicContract.MovieBasicInfo.TABLE_NAME,
+                    MOVIE_BASIC_INFO_COLUMNS,
+                    """$MovieMagicContract.MovieBasicInfo.COLUMN_POSTER_PATH <> ? and
+                   $MovieMagicContract.MovieBasicInfo.COLUMN_BACKDROP_PATH <> ? and
+                   $MovieMagicContract.MovieBasicInfo.COLUMN_RELEASE_DATE >= ? and
+                   $MovieMagicContract.MovieBasicInfo.COLUMN_RELEASE_DATE < ? """,
+                    ['', '', releaseDateCondOne,releaseDateCondTwo] as String[],
+                    "$MovieMagicContract.MovieBasicInfo.COLUMN_MOVIE_ID", // Distinct on movie id
+                    null,
+                    "$MovieMagicContract.MovieBasicInfo.COLUMN_POPULARITY desc",
+                    "$GlobalStaticVariables.MAX_NOTIFICATION_COUNTER")
+
+            if(notificationDataCursor.moveToFirst()) {
+                for (i in 0..(notificationDataCursor.getCount() - 1)) {
+                    // Prepare data for notification
+                    final String releaseDate = Utility.formatFriendlyDate(Utility.convertMilliSecsToOrigReleaseDate(notificationDataCursor.getLong(COL_MOVIE_BASIC_RELEASE_DATE)))
+                    final String posterPath = "$GlobalStaticVariables.TMDB_IMAGE_BASE_URL/$GlobalStaticVariables.TMDB_IMAGE_SIZE_W92" +
+                            "${notificationDataCursor.getString(COL_MOVIE_BASIC_POSTER_PATH)}"
+                    final String backdropPath = "$GlobalStaticVariables.TMDB_IMAGE_BASE_URL/$GlobalStaticVariables.TMDB_IMAGE_SIZE_W500" +
+                            "${notificationDataCursor.getString(COL_MOVIE_BASIC_BACKDROP_PATH)}"
+                    final Bitmap posterBitmap = Picasso.with(mContext).load(posterPath).get()
+                    final Bitmap backdropBitmap = Picasso.with(mContext).load(backdropPath).get()
+
+                    LogDisplay.callLog(LOG_TAG,"Total records count: -> ${notificationDataCursor.getCount()}. " +
+                            "Movie name -> ${notificationDataCursor.getString(COL_MOVIE_BASIC_TITLE)}. " +
+                            "Release Date -> $releaseDate",LogDisplay.MOVIE_MAGIC_SYNC_ADAPTER_LOG_FLAG)
+
+                    // Create the style object with BigPictureStyle subclass.
+                    final NotificationCompat.BigPictureStyle notificationStyle = new NotificationCompat.BigPictureStyle()
+                    notificationStyle.setBigContentTitle(notificationDataCursor.getString(COL_MOVIE_BASIC_TITLE))
+                    //TODO: add more friendly day like - Today Tomorrow, Friday
+                    notificationStyle.setSummaryText(String.format(mContext.getString(R.string.format_release_date_notification),releaseDate))
+                    notificationStyle.bigPicture(backdropBitmap)
+
+                    // Creates an explicit intent for an ResultActivity to receive.
+                    final Intent resultIntent = new Intent(mContext, DetailMovieActivity.class)
+                    final Bundle bundle = new Bundle()
+                    bundle.putInt(GlobalStaticVariables.MOVIE_BASIC_INFO_MOVIE_ID,notificationDataCursor.getInt(COL_MOVIE_BASIC_MOVIE_ID))
+                    bundle.putString(GlobalStaticVariables.MOVIE_BASIC_INFO_CATEGORY,notificationDataCursor.getString(COL_MOVIE_BASIC_MOVIE_CATEGORY))
+                    resultIntent.putExtras(bundle)
+
+                    // The stack builder object will contain an artificial back stack for the
+                    // started Activity.
+                    // This ensures that navigating backward from the Activity leads out of
+                    // your application to the Home screen.
+                    final TaskStackBuilder stackBuilder = TaskStackBuilder.create(mContext)
+                    // Adds the back stack for the Intent (but not the Intent itself)
+                    stackBuilder.addParentStack(DetailMovieActivity.class)
+                    // Adds the Intent that starts the Activity to the top of the stack
+                    stackBuilder.addNextIntent(resultIntent)
+                    final PendingIntent resultPendingIntent = stackBuilder.getPendingIntent(i,PendingIntent.FLAG_UPDATE_CURRENT)
+
+                    // Build the Notification
+                    final Notification notification = new NotificationCompat.Builder(mContext)
+                            .setSmallIcon(R.mipmap.ic_launcher)
+                            .setAutoCancel(true)
+                            .setLargeIcon(posterBitmap)
+                            .setContentIntent(resultPendingIntent)
+                            .setContentTitle(notificationDataCursor.getString(COL_MOVIE_BASIC_TITLE))
+                            //TODO: add more friendly day like - Today Tomorrow, Friday
+                            .setContentText(String.format(mContext.getString(R.string.format_release_date_notification),releaseDate))
+                            .setStyle(notificationStyle).build()
+
+                    // Now send the notification
+                    final NotificationManager notificationManager = mContext.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+                    // mId allows you to update the notification later on.
+                    notificationManager.notify(i, notification)
+
+                    // Move to the next record
+                    notificationDataCursor.moveToNext()
+                }
+                //Close the cursor
+                notificationDataCursor.close()
+            } else {
+                LogDisplay.callLog(LOG_TAG, 'Empty cursor returned by movie_basic_info for notification data', LogDisplay.MOVIE_MAGIC_SYNC_ADAPTER_LOG_FLAG)
+            }
+        } else {
+            LogDisplay.callLog(LOG_TAG, 'User not selected notification, so skipped', LogDisplay.MOVIE_MAGIC_SYNC_ADAPTER_LOG_FLAG)
+        }
     }
 }

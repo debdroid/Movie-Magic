@@ -82,6 +82,8 @@
     <string name="user_list_add_message">%1$s added to %2$s</string>
     <string name="user_list_del_message">%1$s removed from %2$s</string>
     <string name="user_rating_add_message">Rating updated successfully for %1$s</string>
+    <string name="format_release_date_notification">Releasing on <xliff:g id="release_date">%1$s</xliff:g></string>
+
     <string name="title_activity_collection_movie">Collection</string>
     <string name="title_activity_person_movie">Person</string>
     <string name="title_activity_grid_movie">GridMovieActivity</string>

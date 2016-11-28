@@ -64,6 +64,7 @@ class GlobalStaticVariables {
 
     //Static variables for TMDB movie image url and parameters
     public static final String TMDB_IMAGE_BASE_URL = 'http://image.tmdb.org/t/p/'
+    public static final String TMDB_IMAGE_SIZE_W92 = 'w92'
     public static final String TMDB_IMAGE_SIZE_W185 = 'w185'
     public static final String TMDB_IMAGE_SIZE_W300 = 'w300'
     public static final String TMDB_IMAGE_SIZE_W500 = 'w500'
@@ -122,6 +123,7 @@ class GlobalStaticVariables {
     public static final String IMAGE_VIEWER_BACKDROP_IMAGE_FLAG = 'imageviewer_backdrop_image_flag'
     public static final String DETAIL_BACKDROP_VIEWPAGER_POSITION = 'detail_backdrop_viewpager_position'
     public static final int HOME_PAGE_MAX_MOVIE_SHOW_COUNTER = 6
+    public static final int MAX_NOTIFICATION_COUNTER = 3
     public static final String MOVIE_VIDEO_SITE_YOUTUBE = 'YouTube'
     public static final String MOVIE_VIDEO_SITE_TYPE = 'Trailer'
     public static boolean WIFI_CONNECTED = false

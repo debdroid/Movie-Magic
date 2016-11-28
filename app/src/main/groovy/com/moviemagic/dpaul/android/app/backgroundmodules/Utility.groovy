@@ -17,18 +17,44 @@ class Utility {
 
     /**
      * This utility method returns the current date
-     * @return Today's date
+     * @return Today's date in yyyy-MM-dd HH:mm:ss.SSSZ format
      */
     static String getTodayDate() {
         final SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSSZ")
         final String todayDate = simpleDateFormat.format(new Date())
-        LogDisplay.callLog(LOG_TAG, "Date stamp-> $todayDate", LogDisplay.UTILITY_LIST_LOG_FLAG)
+        LogDisplay.callLog(LOG_TAG, "Today date stamp-> $todayDate", LogDisplay.UTILITY_LIST_LOG_FLAG)
         return todayDate
     }
 
     /**
+     * This utility method returns the current date in simple yyyy-MM-dd format
+     * @return Today's date in yyyy-MM-dd format
+     */
+    static String getSimpleTodayDate() {
+        final SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd")
+        final String todayDate = simpleDateFormat.format(new Date())
+        LogDisplay.callLog(LOG_TAG, "Today date stamp-> $todayDate", LogDisplay.UTILITY_LIST_LOG_FLAG)
+        return todayDate
+    }
+
+    /**
+     * This utility method returns the date which is 3 days ahead of today's date  in simple yyyy-MM-dd format
+     * @return Date which is 3 days ahead of Today's date in yyyy-MM-dd format
+     */
+    static String getSimpleThreeDayFutureDate() {
+        // Set the calendar to current date
+        final Calendar calendar = Calendar.getInstance()
+        calendar.add(Calendar.DAY_OF_YEAR, 3)
+        final Date date = calendar.getTime()
+        final SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd")
+        final String threeDayFutureDate = simpleDateFormat.format(date)
+        LogDisplay.callLog(LOG_TAG, "Three days future date stamp-> $threeDayFutureDate", LogDisplay.UTILITY_LIST_LOG_FLAG)
+        return threeDayFutureDate
+    }
+
+    /**
      * This utility method returns the timestamp 10 days prior to current date
-     * @return Today's date
+     * @return Date 10 day's prior to Today's date in yyyy-MM-dd HH:mm:ss.SSSZ format
      */
     static String getTenDayPriorDate() {
         // Set the calendar to current date
@@ -37,7 +63,7 @@ class Utility {
         final Date date = calendar.getTime()
         final SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSSZ")
         final String tenDayPriorDate = simpleDateFormat.format(date)
-        LogDisplay.callLog(LOG_TAG, "Date stamp-> $tenDayPriorDate", LogDisplay.UTILITY_LIST_LOG_FLAG)
+        LogDisplay.callLog(LOG_TAG, "Ten days prior date stamp-> $tenDayPriorDate", LogDisplay.UTILITY_LIST_LOG_FLAG)
         return tenDayPriorDate
     }
 
