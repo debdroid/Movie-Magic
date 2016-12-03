@@ -460,6 +460,7 @@ class MovieMagicSyncAdapter extends AbstractThreadedSyncAdapter {
         if(notificationFlag) {
             final String releaseDateCondOne = Long.toString(MovieMagicContract.convertMovieReleaseDate(Utility.getSimpleTodayDate()))
             final String releaseDateCondTwo = Long.toString(MovieMagicContract.convertMovieReleaseDate(Utility.getSimpleThreeDayFutureDate()))
+            LogDisplay.callLog(LOG_TAG,"Date range -> $releaseDateCondOne to $releaseDateCondTwo",LogDisplay.MOVIE_MAGIC_SYNC_ADAPTER_LOG_FLAG)
             final boolean distinct = true
             final SQLiteDatabase sqLiteDatabase = new MovieMagicDbHelper(mContext).getReadableDatabase()
             // Get the data to create the notification (to get unique record query with distinct is used)
