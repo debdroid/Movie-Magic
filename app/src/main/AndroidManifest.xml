@@ -23,14 +23,15 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
 
+        <meta-data android:name="android.app.default_searchable" android:value=".SearchActivity"/>
+
         <!-- Main Activity -->
         <activity
             android:name=".MovieMagicMainActivity"
-            android:label="@string/title_activity_main_movie"
+            android:label="@string/app_name"
             android:theme="@style/AppTheme.MovieMain">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
@@ -39,33 +40,21 @@
         <activity
             android:name=".DetailMovieActivity"
             android:label="@string/title_activity_detail_movie"
-            android:parentActivityName=".MovieMagicMainActivity"
             android:theme="@style/AppTheme.MovieDetail">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value=".MovieMagicMainActivity" />
         </activity>
 
         <!-- Collection movie Activity -->
         <activity
             android:name=".CollectionMovieActivity"
-            android:label="@string/title_activity_person_movie"
-            android:parentActivityName=".MovieMagicMainActivity"
-            android:theme="@style/AppTheme.MoviePerson">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value=".MovieMagicMainActivity" />
+            android:label="@string/title_activity_collection_movie"
+            android:theme="@style/AppTheme.MovieCollection">
         </activity>
 
         <!-- Person movie Activity -->
         <activity
             android:name=".PersonMovieActivity"
             android:label="@string/title_activity_person_movie"
-            android:parentActivityName=".MovieMagicMainActivity"
             android:theme="@style/AppTheme.MoviePerson">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value=".MovieMagicMainActivity" />
         </activity>
 
         <!-- Image Viewer movie Activity -->
@@ -73,9 +62,6 @@
             android:name=".ImageViewerActivity"
             android:label="@string/title_activity_image_viewer"
             android:theme="@style/AppTheme.ImageViewer">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value=".MovieMagicMainActivity" />
         </activity>
 
         <!-- Login Activity -->
@@ -89,15 +75,23 @@
         <activity
             android:name=".SettingsActivity"
             android:label="@string/title_activity_settings"
-            android:parentActivityName=".MovieMagicMainActivity"
             android:theme="@style/AppTheme.Settings">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value=".MovieMagicMainActivity" />
             <intent-filter>
                 <action android:name="android.intent.action.MANAGE_NETWORK_USAGE" />
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
+        </activity>
+
+        <!-- Search Activity -->
+        <activity
+            android:name=".SearchActivity"
+            android:label="@string/title_activity_search"
+            android:theme="@style/AppTheme.Search">
+            <intent-filter>
+                <action android:name="android.intent.action.SEARCH" />
+            </intent-filter>
+            <meta-data android:name="android.app.searchable"
+                android:resource="@xml/searchable"/>
         </activity>
 
         <!-- Register the content provider -->

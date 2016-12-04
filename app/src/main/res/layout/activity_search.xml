@@ -1,0 +1,36 @@
+<android.support.design.widget.CoordinatorLayout
+xmlns:android="http://schemas.android.com/apk/res/android"
+xmlns:app="http://schemas.android.com/apk/res-auto"
+xmlns:tools="http://schemas.android.com/tools"
+android:layout_width="match_parent"
+android:layout_height="match_parent"
+android:fitsSystemWindows="true"
+tools:context=".SearchActivity">
+
+<android.support.design.widget.AppBarLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:theme="@style/AppTheme.AppBarOverlay">
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/search_activity_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="?attr/colorPrimary"
+        android:elevation="@dimen/m_design_toolbar_elevation"
+        app:popupTheme="@style/AppTheme.PopupOverlay" />
+</android.support.design.widget.AppBarLayout>
+
+    <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/content_movie_magic_search_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/primary"
+        android:paddingEnd="@dimen/m_design_grid_list_padding"
+        android:paddingLeft="@dimen/m_design_grid_list_padding"
+        android:paddingRight="@dimen/m_design_grid_list_padding"
+        android:paddingStart="@dimen/m_design_grid_list_padding"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+    </FrameLayout>
+</android.support.design.widget.CoordinatorLayout>

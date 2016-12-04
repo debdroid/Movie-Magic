@@ -5,6 +5,9 @@ import android.support.design.widget.Snackbar
 import android.support.v4.view.ViewPager
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.Toolbar
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
 import android.view.View
 import android.view.animation.Animation
 import android.view.animation.TranslateAnimation
@@ -84,6 +87,27 @@ class ImageViewerActivity extends AppCompatActivity {
         viewPager.setAdapter(adapter)
         //Position it at correct place (the image which is clicked)
         viewPager.setCurrentItem(mAdapterPostion)
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu, this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.image_viewer_activity_menu, menu)
+        return true
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        final int itemId = item.getItemId()
+        switch (itemId) {
+            case android.R.id.home:
+                finish()
+                return true
+            case R.id.menu_action_save:
+                return true
+            default:
+                return super.onOptionsItemSelected(item)
+        }
     }
 
     void onStart() {

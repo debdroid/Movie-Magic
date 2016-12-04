@@ -70,8 +70,9 @@ class ImagePagerAdapter extends PagerAdapter {
                 "${mImageFilePaths[position]}"
         LogDisplay.callLog(LOG_TAG,"instantiateItem:imagePath-> $imagePath",LogDisplay.IMAGE_PAGER_ADAPTER_LOG_FLAG)
         PicassoLoadImage.loadViewPagerImage(mContext,imagePath,imageView)
-        final String totCount = Integer.toString(mImageFilePaths.size())
-        footerTextView.setText("${position + 1} of $totCount : $mTitle")
+        final int totCount = mImageFilePaths.size()
+//        footerTextView.setText("${position + 1} of $totCount : $mTitle")
+        footerTextView.setText(String.format(mContext.getString(R.string.image_view_footer_value),(position + 1),totCount))
 
         view.setOnClickListener(new View.OnClickListener() {
             @Override

@@ -163,14 +163,19 @@ class PersonMovieFragment extends Fragment implements LoaderManager.LoaderCallba
     }
 
     @Override
-    public void onCreateOptionsMenu (Menu menu, MenuInflater inflater) {
-        // Inflate the menu, this adds items to the action bar if it is present.
-        inflater.inflate(R.menu.person_fragment_menu, menu)
+    public void onCreate(Bundle savedInstanceState) {
+        LogDisplay.callLog(LOG_TAG, 'onCreate is called', LogDisplay.PERSON_MOVIE_FRAGMENT_LOG_FLAG)
+        super.onCreate(savedInstanceState)
+        //Following line needed to let android know that Fragment has options menu
+        //If this line is not added then associated method (e.g. OnCreateOptionsMenu) does not get supported
+        //even in auto code completion
+        setHasOptionsMenu(true)
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if(item.getItemId() == R.id.person_fragment_menu) {
+        if (item.getItemId() == android.R.id.home) { // Press appbar back button to go to previous activity
+            getActivity().finish()
             return true
         }
         return super.onOptionsItemSelected(item)

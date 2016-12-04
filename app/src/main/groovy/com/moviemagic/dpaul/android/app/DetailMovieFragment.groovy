@@ -366,10 +366,21 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if(item.getItemId() == R.id.detail_fragment_menu) {
-            return true
+        final int itemId = item.getItemId()
+        switch (itemId) {
+            case android.R.id.home:
+//                getActivity().finish()
+                if(getActivity().getSupportFragmentManager().getBackStackEntryCount() > 0) {
+                    getActivity().getSupportFragmentManager().popBackStack()
+                } else {
+                    getActivity().finish()
+                }
+                return true
+            case R.id.menu_action_share:
+                return true
+            default:
+                return super.onOptionsItemSelected(item)
         }
-        return super.onOptionsItemSelected(item)
     }
 
     @Override

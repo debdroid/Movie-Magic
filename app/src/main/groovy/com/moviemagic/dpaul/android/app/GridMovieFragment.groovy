@@ -85,7 +85,7 @@ class GridMovieFragment extends Fragment implements LoaderManager.LoaderCallback
         //Following line needed to let android know that Fragment has options menu
         //If this line is not added then associated method (e.g. OnCreateOptionsMenu) does not get supported
         //even in auto code completion
-        setHasOptionsMenu(true)
+//        setHasOptionsMenu(true)
     }
 
     @Override
@@ -96,7 +96,7 @@ class GridMovieFragment extends Fragment implements LoaderManager.LoaderCallback
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if(item.getItemId() == R.id.grid_fragment_menu) {
+        if(item.getItemId() == R.id.menu_action_sort || R.id.menu_action_filter) {
             return true
         }
         return super.onOptionsItemSelected(item)
@@ -218,6 +218,15 @@ class GridMovieFragment extends Fragment implements LoaderManager.LoaderCallback
 //            mMovieCategory = savedInstanceState.getString(GlobalStaticVariables.MOVIE_BASIC_INFO_CATEGORY, 'error')
 //            mMovieCollectionId = savedInstanceState.getInt(GlobalStaticVariables.MOVIE_BASIC_INFO_COLL_ID, 0)
         }
+
+        // setHasOptionsMenu(true) is usually called from onCreate but due to the logic of the program it is being called
+        // from here. We want os show the GridFragment menu only when it's attached to main activity and NOT collection activity
+        if(mMovieCategory == GlobalStaticVariables.MOVIE_CATEGORY_COLLECTION) {
+            setHasOptionsMenu(false)
+        } else {
+            setHasOptionsMenu(true)
+        }
+
         //If it's a fresh start then call init loader
         if(savedInstanceState == null) {
             LogDisplay.callLog(LOG_TAG, 'onActivityCreated:first time, so init loaders', LogDisplay.GRID_MOVIE_FRAGMENT_LOG_FLAG)

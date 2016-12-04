@@ -2,6 +2,7 @@ package com.moviemagic.dpaul.android.app
 
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
+import android.view.MenuItem
 import com.moviemagic.dpaul.android.app.backgroundmodules.LogDisplay
 import groovy.transform.CompileStatic
 
@@ -13,11 +14,21 @@ class SettingsActivity extends AppCompatActivity {
     void onCreate(Bundle savedInstanceState) {
         LogDisplay.callLog(LOG_TAG,'onCreate is called',LogDisplay.SETTINGS_ACTIVITY_LOG_FLAG)
         super.onCreate(savedInstanceState)
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true)
 
         // Display the fragment as the main content.
         getFragmentManager().beginTransaction()
                 .replace(android.R.id.content, new SettingsFragment())
                 .commit()
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == android.R.id.home) { // Press appbar back button to go to previous activity
+            finish()
+            return true
+        }
+        return super.onOptionsItemSelected(item)
     }
 
     @Override

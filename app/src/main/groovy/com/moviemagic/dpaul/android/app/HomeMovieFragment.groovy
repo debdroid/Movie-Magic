@@ -115,14 +115,14 @@ class HomeMovieFragment extends Fragment implements LoaderManager.LoaderCallback
         //Following line needed to let android know that Fragment has options menu
         //If this line is not added then associated method (e.g. OnCreateOptionsMenu) does not get supported
         //even in auto code completion
-        setHasOptionsMenu(true)
+//        setHasOptionsMenu(true)
     }
 
-    @Override
-    public void onCreateOptionsMenu (Menu menu, MenuInflater inflater) {
-        // Inflate the menu, this adds items to the action bar if it is present.
-        inflater.inflate(R.menu.home_fragment_menu, menu)
-    }
+//    @Override
+//    public void onCreateOptionsMenu (Menu menu, MenuInflater inflater) {
+//        // Inflate the menu, this adds items to the action bar if it is present.
+//        inflater.inflate(R.menu.home_fragment_menu, menu)
+//    }
 
     @Override
     View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -262,13 +262,13 @@ class HomeMovieFragment extends Fragment implements LoaderManager.LoaderCallback
         }
     }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        if(item.getItemId() == R.id.home_fragment_menu) {
-            return true
-        }
-        return super.onOptionsItemSelected(item)
-    }
+//    @Override
+//    public boolean onOptionsItemSelected(MenuItem item) {
+//        if(item.getItemId() == R.id.home_fragment_menu) {
+//            return true
+//        }
+//        return super.onOptionsItemSelected(item)
+//    }
 
     @Override
     Loader<Cursor> onCreateLoader(int id, Bundle args) {

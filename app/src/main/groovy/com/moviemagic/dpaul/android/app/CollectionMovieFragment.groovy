@@ -103,14 +103,22 @@ class CollectionMovieFragment extends Fragment implements LoaderManager.LoaderCa
     public void onCreateOptionsMenu (Menu menu, MenuInflater inflater) {
         // Inflate the menu, this adds items to the action bar if it is present.
         inflater.inflate(R.menu.collection_fragment_menu, menu)
+
+        // Hide and Disable Grid
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if(item.getItemId() == R.id.collection_fragment_menu) {
-            return true
+        final int itemId = item.getItemId()
+        switch (itemId) {
+            case android.R.id.home:
+                getActivity().finish()
+                return true
+            case R.id.menu_action_share:
+                return true
+            default:
+                return super.onOptionsItemSelected(item)
         }
-        return super.onOptionsItemSelected(item)
     }
 
     @Override

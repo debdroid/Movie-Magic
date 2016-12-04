@@ -5,6 +5,7 @@ import android.accounts.AccountManager
 import android.accounts.AccountManagerCallback
 import android.accounts.AccountManagerFuture
 import android.app.AlertDialog
+import android.app.SearchManager
 import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
@@ -25,6 +26,7 @@ import android.support.v4.view.GravityCompat
 import android.support.v4.widget.DrawerLayout
 import android.support.v7.app.ActionBarDrawerToggle
 import android.support.v7.app.AppCompatActivity
+import android.support.v7.widget.SearchView
 import android.support.v7.widget.Toolbar
 import android.util.Log
 import android.view.Menu
@@ -65,14 +67,6 @@ public class MovieMagicMainActivity extends AppCompatActivity implements Navigat
         setContentView(R.layout.activity_movie_magic_main)
         final Toolbar toolbar = findViewById(R.id.main_activity_toolbar) as Toolbar
         setSupportActionBar(toolbar)
-
-        final FloatingActionButton fab = findViewById(R.id.fab) as FloatingActionButton
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG).setAction("Action", null).show()
-            }
-        })
 
         final DrawerLayout drawer = findViewById(R.id.drawer_layout) as DrawerLayout
         final ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -222,6 +216,14 @@ public class MovieMagicMainActivity extends AppCompatActivity implements Navigat
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu, this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.main_activity_menu, menu)
+
+        // Get the SearchView and set the searchable configuration
+        final SearchManager searchManager = getSystemService(Context.SEARCH_SERVICE) as SearchManager
+        final SearchView searchView = menu.findItem(R.id.menu_action_search).getActionView() as SearchView
+        searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()))
+        searchView.setIconifiedByDefault(false) // Do not iconify the widget; expand it by default
+        searchView.setSubmitButtonEnabled(true) // Enable submit button
+
         return true
     }
 
@@ -233,7 +235,8 @@ public class MovieMagicMainActivity extends AppCompatActivity implements Navigat
         final int id = item.getItemId()
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
+        if (id == R.id.menu_action_settings) {
+            openSettingsActivity()
             return true
         }
 
@@ -247,7 +250,7 @@ public class MovieMagicMainActivity extends AppCompatActivity implements Navigat
         final int id = item.getItemId()
 
         if (id == R.id.nav_home) {
-            setItemTitle(getString(R.string.drawer_menu_home))
+            setItemTitle(getString(R.string.app_name))
             loadHomeFragment()
         } else if (id == R.id.nav_tmdb_popular) {
             setItemTitle(getString(R.string.drawer_menu_tmdb_popular))
@@ -405,7 +408,7 @@ public class MovieMagicMainActivity extends AppCompatActivity implements Navigat
         // Now call this method so that a dummy account gets created and setup for sync adapter
         MovieMagicSyncAdapterUtility.initializeSyncAdapter(this)
         // Take the user to home screen
-        setItemTitle(getString(R.string.drawer_menu_home))
+        setItemTitle(getString(R.string.app_name))
         loadHomeFragment()
         // Set the home item as selected
         mNavigationView.getMenu().getItem(0).setChecked(true)

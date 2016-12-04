@@ -107,7 +107,7 @@ class JsonParse {
                     movieValue.put(MovieBasicInfo.COLUMN_PAGE_NUMBER, jsonData.page)
                 else
                     movieValue.put(MovieBasicInfo.COLUMN_PAGE_NUMBER, 0)
-                // This one is for only Tmdb user Rated movies - for rest this filed does not exists
+                // This one is for only Tmdb user Rated movies - for rest this filed does not exist
                 if(jsonData.results[i].rating)
                     movieValue.put(MovieBasicInfo.COLUMN_TMDB_USER_RATED_RATING, jsonData.results[i].rating)
                 else
