@@ -1280,11 +1280,13 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
                 ArrayList<Integer> movieIdList = new ArrayList<>(1)
                 ArrayList<Integer> movieRowIdList = new ArrayList<>(1)
                 ArrayList<Integer> isForHomeList = new ArrayList<>(1)
+                ArrayList<Integer> categoryFlag = new ArrayList<>(1)
                 movieIdList.add(0,mMovieId)
                 movieRowIdList.add(0,_ID_movie_basic_info)
                 // Set the flag to false to indicate it's not for home page
                 isForHomeList.add(0,GlobalStaticVariables.MOVIE_MAGIC_FLAG_FALSE)
-                final ArrayList<Integer>[] loadMovieDetailsArg = [movieIdList, movieRowIdList, isForHomeList] as ArrayList<Integer>[]
+                categoryFlag.add(0,GlobalStaticVariables.NULL_CATEGORY_FLAG)
+                final ArrayList<Integer>[] loadMovieDetailsArg = [movieIdList, movieRowIdList, isForHomeList, categoryFlag] as ArrayList<Integer>[]
                 if(Utility.isReadyToDownload(getActivity())) {
                     new LoadMovieDetails(getActivity()).execute(loadMovieDetailsArg)
                 } else {
@@ -1294,17 +1296,26 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
                 LogDisplay.callLog(LOG_TAG, 'handleMovieBasicOnLoadFinished.Additional movie data already present', LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
             }
         } else {
-            LogDisplay.callLog(LOG_TAG, "handleMovieBasicOnLoadFinished.Record not found, should reach here only when movie is clicked on person screen - Movie id:$mMovieId, Category:$mMovieCategory", LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
-            if(mMovieCategory == GlobalStaticVariables.MOVIE_CATEGORY_PERSON) {
+            LogDisplay.callLog(LOG_TAG, "handleMovieBasicOnLoadFinished.Record not found, should reach here only when movie is clicked on person or search screen - Movie id:$mMovieId, Category:$mMovieCategory", LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
+            if(mMovieCategory == GlobalStaticVariables.MOVIE_CATEGORY_PERSON || GlobalStaticVariables.MOVIE_CATEGORY_SEARCH) {
                 //Movie does not exists, go and fetch then insert into movie basic info table
-                LogDisplay.callLog(LOG_TAG, 'handleMovieBasicOnLoadFinished.Movie for person does not exists, go and fetch then insert into movie basic info table', LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
+                LogDisplay.callLog(LOG_TAG, 'handleMovieBasicOnLoadFinished.Movie for person or search does not exists, go and fetch then insert into movie basic info table', LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
                 ArrayList<Integer> movieIdList = new ArrayList<>(1)
                 ArrayList<Integer> movieRowIdList = new ArrayList<>(1)
                 ArrayList<Integer> isForHomeList = new ArrayList<>(1)
+                ArrayList<Integer> categoryFlag = new ArrayList<>(1)
                 movieIdList.add(0,mMovieId)
                 movieRowIdList.add(0,0)
                 isForHomeList.add(0,GlobalStaticVariables.MOVIE_MAGIC_FLAG_FALSE)
-                final ArrayList<Integer>[] loadMovieDetailsArg = [movieIdList, movieRowIdList, isForHomeList] as ArrayList<Integer>[]
+                if(mMovieCategory == GlobalStaticVariables.MOVIE_CATEGORY_PERSON) {
+                    categoryFlag.add(0,GlobalStaticVariables.PERSON_CATEGORY_FLAG)
+                } else if(mMovieCategory == GlobalStaticVariables.MOVIE_CATEGORY_SEARCH) {
+                    categoryFlag.add(0,GlobalStaticVariables.SEARCH_CATEGORY_FLAG)
+                } else {
+                    LogDisplay.callLog(LOG_TAG, "Shouldn't reach here. please investigate -> $mMovieCategory", LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
+                    categoryFlag.add(0,GlobalStaticVariables.NULL_CATEGORY_FLAG)
+                }
+                final ArrayList<Integer>[] loadMovieDetailsArg = [movieIdList, movieRowIdList, isForHomeList, categoryFlag] as ArrayList<Integer>[]
                 if(Utility.isReadyToDownload(getActivity())) {
                     new LoadMovieDetails(getActivity()).execute(loadMovieDetailsArg)
                 } else {

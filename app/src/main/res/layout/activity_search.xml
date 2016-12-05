@@ -2,6 +2,8 @@
 xmlns:android="http://schemas.android.com/apk/res/android"
 xmlns:app="http://schemas.android.com/apk/res-auto"
 xmlns:tools="http://schemas.android.com/tools"
+android:id="@+id/collection_coordinator_layout"
+android:background="@color/primary"
 android:layout_width="match_parent"
 android:layout_height="match_parent"
 android:fitsSystemWindows="true"
@@ -20,17 +22,11 @@ tools:context=".SearchActivity">
         android:elevation="@dimen/m_design_toolbar_elevation"
         app:popupTheme="@style/AppTheme.PopupOverlay" />
 </android.support.design.widget.AppBarLayout>
-
-    <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        android:id="@+id/content_movie_magic_search_layout"
+    <android.support.v4.widget.NestedScrollView
+        android:id="@+id/search_nested_scroll"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@color/primary"
-        android:paddingEnd="@dimen/m_design_grid_list_padding"
-        android:paddingLeft="@dimen/m_design_grid_list_padding"
-        android:paddingRight="@dimen/m_design_grid_list_padding"
-        android:paddingStart="@dimen/m_design_grid_list_padding"
+        android:layout_height="wrap_content"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
-    </FrameLayout>
+        <include layout="@layout/fragment_grid_movie" />
+    </android.support.v4.widget.NestedScrollView>
 </android.support.design.widget.CoordinatorLayout>

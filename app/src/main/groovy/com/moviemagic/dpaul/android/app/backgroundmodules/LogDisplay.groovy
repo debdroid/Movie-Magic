@@ -61,6 +61,7 @@ class LogDisplay {
     public static final boolean SETTINGS_ACTIVITY_LOG_FLAG = false
     public static final boolean NETWORK_RECEIVER_LOG_FLAG = false
     public static final boolean SEARCH_ACTIVITY_LOG_FLAG = true
+    public static final boolean SEARCH_DATABASE_TABLE_LOG_FLAG = true
 
     static void callLog(String tag, String msg, Boolean logFlag) {
         if(SHOW_ALL_LOG_FLAG) {

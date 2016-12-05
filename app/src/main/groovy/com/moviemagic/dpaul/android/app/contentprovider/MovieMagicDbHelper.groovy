@@ -3,6 +3,7 @@ package com.moviemagic.dpaul.android.app.contentprovider
 import android.content.Context
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
+import com.moviemagic.dpaul.android.app.backgroundmodules.LogDisplay
 import groovy.transform.CompileStatic
 
 /**
@@ -342,6 +343,9 @@ class MovieMagicDbHelper extends SQLiteOpenHelper {
         // should be the top priority before modifying this method.
         // Note that this only fires if the version number of database is changed.
         // It does NOT depend on the version number for the application.
+
+        LogDisplay.callLog(LOG_TAG,"Upgrading database from version $oldVersion to $newVersion," +
+                " which will destroy all old data",LogDisplay.MOVIE_MAGIC_DB_HELPER_LOG_FLAG)
 
         //Drop all the tables
         //TODO: Currently just dropping the tables in case of DB upgrade but need to find out a different way for future

@@ -1092,4 +1092,68 @@ class JsonParse {
         LogDisplay.callLog(LOG_TAG, "jsonData -> $jsonData", LogDisplay.JSON_PARSE_LOG_FLAG)
         return jsonData.status_message
     }
+
+    /**
+     * Helper method to parse movie JSON data
+     * @param jsonData JSON data to be parsed
+     * @return formatted list of movies as content values
+     */
+    static List<ContentValues> parseSearchMovieListJson(def jsonData, String queryString) {
+        List<ContentValues> movieList = []
+        def cnt = jsonData.results.size() - 1
+        //Ensure that the results is not Null
+        if (jsonData.results) {
+            for (i in 0..cnt) {
+                LogDisplay.callLog(LOG_TAG, "$i -> ${jsonData.results[i].title}", LogDisplay.JSON_PARSE_LOG_FLAG)
+                ContentValues movieValue = new ContentValues()
+                //if-else is used for all json fields for null safe
+                if (jsonData.results[i].id)
+                    movieValue.put(SearchDatabaseTable.SEARCH_FTS_COLUMN_MOVIE_ID, jsonData.results[i].id)
+                else {
+                    movieValue.put(SearchDatabaseTable.SEARCH_FTS_COLUMN_MOVIE_ID, 0)
+                    LogDisplay.callLog(LOG_TAG, 'Not a valid movie id', LogDisplay.JSON_PARSE_LOG_FLAG)
+                }
+                if (jsonData.results[i].adult)
+                    movieValue.put(SearchDatabaseTable.SEARCH_FTS_COLUMN_ADULT_FLAG, jsonData.results[i].adult)
+                else
+                    movieValue.put(SearchDatabaseTable.SEARCH_FTS_COLUMN_ADULT_FLAG, '')
+                if (jsonData.results[i].backdrop_path)
+                    movieValue.put(SearchDatabaseTable.SEARCH_FTS_COLUMN_BACKDROP_PATH, jsonData.results[i].backdrop_path)
+                else
+                    movieValue.put(SearchDatabaseTable.SEARCH_FTS_COLUMN_BACKDROP_PATH, '')
+                if (jsonData.results[i].original_title)
+                    movieValue.put(SearchDatabaseTable.SEARCH_FTS_COLUMN_ORIGINAL_TITLE, jsonData.results[i].original_title)
+                else
+                    movieValue.put(SearchDatabaseTable.SEARCH_FTS_COLUMN_ORIGINAL_TITLE, '')
+                //date format -> yyyy-mm-dd
+                if (jsonData.results[i].release_date)
+                    movieValue.put(SearchDatabaseTable.SEARCH_FTS_COLUMN_RELEASE_DATE, jsonData.results[i].release_date)
+                else
+                    movieValue.put(SearchDatabaseTable.SEARCH_FTS_COLUMN_RELEASE_DATE, '1900-01-01')
+                if (jsonData.results[i].poster_path)
+                    movieValue.put(SearchDatabaseTable.SEARCH_FTS_COLUMN_POSTER_PATH, jsonData.results[i].poster_path)
+                else
+                    movieValue.put(SearchDatabaseTable.SEARCH_FTS_COLUMN_POSTER_PATH, '')
+                if (jsonData.results[i].title)
+                    movieValue.put(SearchDatabaseTable.SEARCH_FTS_COLUMN_TITLE, jsonData.results[i].title)
+                else
+                    movieValue.put(SearchDatabaseTable.SEARCH_FTS_COLUMN_TITLE, '')
+                if (jsonData.page)
+                    movieValue.put(SearchDatabaseTable.SEARCH_FTS_COLUMN_PAGE_NUMBER, jsonData.page)
+                else
+                    movieValue.put(SearchDatabaseTable.SEARCH_FTS_COLUMN_PAGE_NUMBER, 0)
+
+                //category is supplied in the program, so always null safe
+                movieValue.put(SearchDatabaseTable.SEARCH_FTS_COLUMN_MOVIE_CATEGORY, GlobalStaticVariables.MOVIE_CATEGORY_SEARCH)
+                movieValue.put(SearchDatabaseTable.SEARCH_FTS_COLUMN_QUERY_STRING, queryString)
+
+                //add to the list
+                movieList << movieValue
+            }
+        }
+        if(movieList)
+            return movieList
+        else
+            return null
+    }
 }

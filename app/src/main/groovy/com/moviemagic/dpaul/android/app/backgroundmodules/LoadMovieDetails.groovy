@@ -31,12 +31,15 @@ class LoadMovieDetails extends AsyncTask<ArrayList<Integer>, Void, Void> {
         final ArrayList<Integer> movieIdList = new ArrayList<Integer>()
         final ArrayList<Integer> movieBasicRowIdList = new ArrayList<Integer>()
         final ArrayList<Integer> isForHomeList = new ArrayList<Integer>(1)
+        final ArrayList<Integer> categoryFlag = new ArrayList<Integer>(1)
         movieIdList = params[0]
         movieBasicRowIdList = params[1]
         isForHomeList = params[2]
+        categoryFlag = params[3]
         LogDisplay.callLog(LOG_TAG, "Movie ID list param-> $movieIdList", LogDisplay.LOAD_MOVIE_DETAILS_LOG_FLAG)
         LogDisplay.callLog(LOG_TAG, "Movie row id list param-> $movieBasicRowIdList", LogDisplay.LOAD_MOVIE_DETAILS_LOG_FLAG)
         LogDisplay.callLog(LOG_TAG, "isForHomeList param-> ${isForHomeList.get(0)}", LogDisplay.LOAD_MOVIE_DETAILS_LOG_FLAG)
+        LogDisplay.callLog(LOG_TAG, "categoryFlag param-> ${categoryFlag.get(0)}", LogDisplay.LOAD_MOVIE_DETAILS_LOG_FLAG)
 
         //We expect same number of arguments in both the ArrayList. If that is not the case then return null
         if (movieIdList.size() > 0 && (movieIdList.size() != movieBasicRowIdList.size())) {
@@ -69,10 +72,16 @@ class LoadMovieDetails extends AsyncTask<ArrayList<Integer>, Void, Void> {
                 //Update the indicator to indicate data is loaded
                 if (contentMovieBasicInfoValues) {
                     if (movieIdList.get(i) && movieBasicRowIdList.get(i) == 0) {
-                        //This part of the code will be executed for person's crew and cast movie only, so safe to use the
-                        //following 3 lines. If this part is to be executed for other scenario then needs modification
-                        contentMovieBasicInfoValues.put(MovieMagicContract.MovieBasicInfo.COLUMN_MOVIE_CATEGORY, GlobalStaticVariables.MOVIE_CATEGORY_PERSON)
-                        contentMovieBasicInfoValues.put(MovieMagicContract.MovieBasicInfo.COLUMN_MOVIE_LIST_TYPE, GlobalStaticVariables.MOVIE_LIST_TYPE_TMDB_PERSON)
+                        if(categoryFlag.get(i) == GlobalStaticVariables.PERSON_CATEGORY_FLAG) {
+                            contentMovieBasicInfoValues.put(MovieMagicContract.MovieBasicInfo.COLUMN_MOVIE_CATEGORY, GlobalStaticVariables.MOVIE_CATEGORY_PERSON)
+                            contentMovieBasicInfoValues.put(MovieMagicContract.MovieBasicInfo.COLUMN_MOVIE_LIST_TYPE, GlobalStaticVariables.MOVIE_LIST_TYPE_TMDB_PERSON)
+                        } else if(categoryFlag.get(i) == GlobalStaticVariables.SEARCH_CATEGORY_FLAG) {
+                            contentMovieBasicInfoValues.put(MovieMagicContract.MovieBasicInfo.COLUMN_MOVIE_CATEGORY, GlobalStaticVariables.MOVIE_CATEGORY_SEARCH)
+                            contentMovieBasicInfoValues.put(MovieMagicContract.MovieBasicInfo.COLUMN_MOVIE_LIST_TYPE, GlobalStaticVariables.MOVIE_LIST_TYPE_SEARCH)
+                        } else {
+                            LogDisplay.callLog(LOG_TAG, "Shouldn't reach here. Please investigate categoryFlag-> ${categoryFlag.get(i)}", LogDisplay.LOAD_MOVIE_DETAILS_LOG_FLAG)
+                            return null
+                        }
                         contentMovieBasicInfoValues.put(MovieMagicContract.MovieBasicInfo.COLUMN_PAGE_NUMBER, 0)
                         //Populate timestamp for new record
                         contentMovieBasicInfoValues.put(MovieMagicContract.MovieBasicInfo.COLUMN_CREATE_TIMESTAMP, Utility.getTodayDate())

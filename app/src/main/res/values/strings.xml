@@ -81,11 +81,13 @@
 
     <!-- formatted string for display -->
     <string name="movie_run_time"><xliff:g id="hour">%d</xliff:g> hr <xliff:g id="min">%d</xliff:g> min</string>
-    <string name="user_list_add_message">%1$s added to %2$s</string>
-    <string name="user_list_del_message">%1$s removed from %2$s</string>
+    <string name="user_list_add_message"><xliff:g id="movie">%1$s</xliff:g> added to <xliff:g id="list">%2$s</xliff:g></string>
+    <string name="user_list_del_message"><xliff:g id="lmovei">%1$s</xliff:g> removed from <xliff:g id="list">%2$s</xliff:g></string>
     <string name="user_rating_add_message">Rating updated successfully for %1$s</string>
     <string name="format_release_date_notification">Releasing on <xliff:g id="release_date">%1$s</xliff:g></string>
     <string name="image_view_footer_value"><xliff:g id="current">%d</xliff:g> of <xliff:g id="total">%d</xliff:g></string>
+    <string name="search_no_movie_found_message">No movie found for search query <xliff:g id="no_movie">%1$s</xliff:g></string>
+    <string name="search_activity_subtitle_record_count"><xliff:g id="movie_count">%d</xliff:g> movies found</string>
 
     <string name="title_activity_collection_movie">Collection</string>
     <string name="title_activity_person_movie">Person</string>

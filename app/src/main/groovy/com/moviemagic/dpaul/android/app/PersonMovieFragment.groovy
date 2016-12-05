@@ -584,7 +584,8 @@ class PersonMovieFragment extends Fragment implements LoaderManager.LoaderCallba
             if(data.getString(COL_PERSON_INFO_PERSON_DEATH_DAY)) {
                 mDeathDayHdrTextView.setVisibility(TextView.VISIBLE)
                 mDeathDayTextView.setVisibility(TextView.VISIBLE)
-                mDeathDayTextView.setText(data.getString(COL_PERSON_INFO_PERSON_DEATH_DAY))
+//                mDeathDayTextView.setText(data.getString(COL_PERSON_INFO_PERSON_DEATH_DAY))
+                mDeathDayTextView.setText(Utility.formatFriendlyDate(data.getString(COL_PERSON_INFO_PERSON_DEATH_DAY)))
                 mDeathDayDivider.setVisibility(View.VISIBLE)
             } else {
                 mDeathDayHdrTextView.setVisibility(TextView.GONE)

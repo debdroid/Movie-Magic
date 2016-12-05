@@ -15,6 +15,7 @@ class GlobalStaticVariables {
     public static final String MOVIE_LIST_TYPE_TMDB_PERSON = 'tmdb_person'
     public static final String MOVIE_LIST_TYPE_USER_LOCAL_LIST = 'user_local_list'
     public static final String MOVIE_LIST_TYPE_ORPHANED = 'orphaned_list'
+    public static final String MOVIE_LIST_TYPE_SEARCH = 'search_list'
 
     //Static variables for movie category
     public static final String MOVIE_CATEGORY_POPULAR = 'popular'  //tmdb popular category
@@ -33,6 +34,7 @@ class GlobalStaticVariables {
     public static final String MOVIE_CATEGORY_LOCAL_USER_FAVOURITE = 'local_user_favourite_category' //category to store user favourite movies, internal use only
     public static final String MOVIE_CATEGORY_LOCAL_USER_COLLECTION = 'local_user_collection_category' //category to store user collection movies, internal use only
     public static final String MOVIE_CATEGORY_ORPHANED = 'orphaned_category' //category for orphaned records (not needed user list movie)
+    public static final String MOVIE_CATEGORY_SEARCH = 'search_category' //category for search movie records
 
     //Static variables for TMDB URL and parameters
     public static final String TMDB_MOVIE_BASE_URL = 'https://api.themoviedb.org/3/'
@@ -59,6 +61,8 @@ class GlobalStaticVariables {
     public static final String TMDB_WATCHLIST_PATH = 'watchlist'
     public static final String TMDB_FAVOURITE_PATH = 'favorite'
     public static final String TMDB_RATED_PATH = 'rating'
+    public static final String TMDB_SEARCH_PATH = 'search'
+    public static final String TMDB_PARAMETER_QUERY = 'query'
 
 
 
@@ -128,5 +132,7 @@ class GlobalStaticVariables {
     public static final String MOVIE_VIDEO_SITE_TYPE = 'Trailer'
     public static boolean WIFI_CONNECTED = false
     public static boolean MOBILE_CONNECTED = false
-
+    public static final int NULL_CATEGORY_FLAG = 0
+    public static final int PERSON_CATEGORY_FLAG = 13
+    public static final int SEARCH_CATEGORY_FLAG = 8
 }

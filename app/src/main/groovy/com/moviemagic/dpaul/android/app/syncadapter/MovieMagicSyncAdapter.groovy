@@ -26,6 +26,7 @@ import com.moviemagic.dpaul.android.app.BuildConfig
 import com.moviemagic.dpaul.android.app.DetailMovieActivity
 import com.moviemagic.dpaul.android.app.R
 import com.moviemagic.dpaul.android.app.backgroundmodules.LoadMovieDetails
+import com.moviemagic.dpaul.android.app.backgroundmodules.SearchDatabaseTable
 import com.moviemagic.dpaul.android.app.backgroundmodules.Utility
 import com.moviemagic.dpaul.android.app.contentprovider.MovieMagicContract
 import com.moviemagic.dpaul.android.app.backgroundmodules.GlobalStaticVariables
@@ -53,6 +54,7 @@ class MovieMagicSyncAdapter extends AbstractThreadedSyncAdapter {
     // Set the Date & Time stamp which is used for all the new records, this is used while housekeeping so
     // a single constant value is used for all the records
     private String mDateTimeStamp
+    private boolean firstTotalPageRead = true
 
     //Define a flag to control the record insertion / deletion
 //    private boolean deleteRecords = true
@@ -203,12 +205,15 @@ class MovieMagicSyncAdapter extends AbstractThreadedSyncAdapter {
             LogDisplay.callLog(LOG_TAG,"Movie url for $category & page# $page -> ${uri.toString()}",LogDisplay.MOVIE_MAGIC_SYNC_ADAPTER_LOG_FLAG)
 
             //This is intentional so that at lest one page is not loaded in order to make sure
-            //at least one (i.e. first) LoadMoreMovies call is always successful
+            //at least one (i.e. first) LoadMoreMovies call is always successful (?? Think it's not true!! need to check later)
             if (page <= totalPage) {
                 def jsonData = new JsonSlurper(type: JsonParserType.INDEX_OVERLAY).parse(url)
                 LogDisplay.callLog(LOG_TAG, "JSON DATA for $category -> $jsonData",LogDisplay.MOVIE_MAGIC_SYNC_ADAPTER_LOG_FLAG)
                 movieList = JsonParse.parseMovieListJson(jsonData, category, GlobalStaticVariables.MOVIE_LIST_TYPE_TMDB_PUBLIC, mDateTimeStamp)
-                totalPage = JsonParse.getTotalPages(jsonData)
+                if(firstTotalPageRead) {
+                    totalPage = JsonParse.getTotalPages(jsonData)
+                    firstTotalPageRead = false
+                }
             }
 
         } catch (URISyntaxException e) {
@@ -397,9 +402,11 @@ class MovieMagicSyncAdapter extends AbstractThreadedSyncAdapter {
         if(mMovieIdList.size() > 0 && mMovieRowIdList.size() > 0) {
             LogDisplay.callLog(LOG_TAG, 'Now go and load the details of the movies for home page..', LogDisplay.MOVIE_MAGIC_SYNC_ADAPTER_LOG_FLAG)
             ArrayList<Integer> isForHomeList = new ArrayList<>(1)
+            ArrayList<Integer> categoryFlag = new ArrayList<>(1)
             //Set this flag to true as the Home page videos are retrieved based on this indicator
             isForHomeList.add(0,GlobalStaticVariables.MOVIE_MAGIC_FLAG_TRUE)
-            final ArrayList<Integer>[] loadMovieDetailsArg = [mMovieIdList, mMovieRowIdList, isForHomeList] as ArrayList<Integer>[]
+            categoryFlag.add(0,GlobalStaticVariables.NULL_CATEGORY_FLAG)
+            final ArrayList<Integer>[] loadMovieDetailsArg = [mMovieIdList, mMovieRowIdList, isForHomeList, categoryFlag] as ArrayList<Integer>[]
             new LoadMovieDetails(mContext).execute(loadMovieDetailsArg)
         }
     }
@@ -450,6 +457,13 @@ class MovieMagicSyncAdapter extends AbstractThreadedSyncAdapter {
                 "$MovieMagicContract.MovieCollection.COLUMN_COLLECTION_CREATE_TIMESTAMP < ? ",
                 [mDateTimeStamp] as String [] )
         LogDisplay.callLog(LOG_TAG,"Total records deleted from movie_collection -> $collectionDeleteCount",LogDisplay.MOVIE_MAGIC_SYNC_ADAPTER_LOG_FLAG)
+
+        /** Delete old data from search_movie_basic_info_table virtual (temporary) table  **/
+        final SQLiteDatabase sqLiteDatabase = new SearchDatabaseTable.SearchDatabaseOpenHelper(mContext).getWritableDatabase()
+        int searchMovieDeleteCount = sqLiteDatabase.delete(SearchDatabaseTable.SEARCH_FTS_VIRTUAL_TABLE_NAME, null, null)
+        // Close the database
+        sqLiteDatabase.close()
+        LogDisplay.callLog(LOG_TAG,"Total records deleted from virtual search_movie_basic_info_table -> $searchMovieDeleteCount",LogDisplay.MOVIE_MAGIC_SYNC_ADAPTER_LOG_FLAG)
     }
 
     private void createNotification() {
@@ -537,10 +551,14 @@ class MovieMagicSyncAdapter extends AbstractThreadedSyncAdapter {
                     // Move to the next record
                     notificationDataCursor.moveToNext()
                 }
-                //Close the cursor
+                // Close the cursor
                 notificationDataCursor.close()
+                // Close the database
+                sqLiteDatabase.close()
             } else {
                 LogDisplay.callLog(LOG_TAG, 'Empty cursor returned by movie_basic_info for notification data', LogDisplay.MOVIE_MAGIC_SYNC_ADAPTER_LOG_FLAG)
+                // Close the database
+                sqLiteDatabase.close()
             }
         } else {
             LogDisplay.callLog(LOG_TAG, 'User not selected notification, so skipped', LogDisplay.MOVIE_MAGIC_SYNC_ADAPTER_LOG_FLAG)
