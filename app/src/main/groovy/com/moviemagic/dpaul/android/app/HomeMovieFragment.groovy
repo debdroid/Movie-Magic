@@ -19,6 +19,7 @@ import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.FrameLayout
 import android.widget.LinearLayout
 import android.widget.TextView
 import com.moviemagic.dpaul.android.app.adapter.HomeMovieAdapter
@@ -53,6 +54,7 @@ class HomeMovieFragment extends Fragment implements LoaderManager.LoaderCallback
     private CallbackForShowAllButtonClick mCallbackForShowAllButtonClick
     private LinearLayout mRecommendationLayout
     private View mRecommendationDivider
+    private FrameLayout mYouTubeFragmentContainer
 
     private static final int HOME_MOVIE_FRAGMENT_VIEW_PAGER_LOADER_ID = 0
     private static final int HOME_MOVIE_FRAGMENT_IN_CINEMA_LOADER_ID = 1
@@ -137,6 +139,7 @@ class HomeMovieFragment extends Fragment implements LoaderManager.LoaderCallback
         mRecentlyAddedUserListRecyclerViewEmptyTextView = mRootView.findViewById(R.id.home_movie_recently_added_recycler_view_empty_msg_text_view) as TextView
         mRecommendationRecyclerView = mRootView.findViewById(R.id.home_movie_recommendation_recycler_view) as RecyclerView
         mRecommendationRecyclerViewEmptyTextView = mRootView.findViewById(R.id.home_movie_recommendation_recycler_view_empty_msg_text_view) as TextView
+        mYouTubeFragmentContainer = mRootView.findViewById(R.id.home_youtube_fragment_container) as FrameLayout
         //Set this to false so that activity starts the page from the beginning
         mComingSoonRecyclerView.setFocusable(false)
         mRecentlyAddedUserListRecyclerView.setNestedScrollingEnabled(false)
@@ -385,17 +388,24 @@ class HomeMovieFragment extends Fragment implements LoaderManager.LoaderCallback
             }
             LogDisplay.callLog(LOG_TAG, "YouTube now_playing key= $youtubeVideoKey", LogDisplay.HOME_MOVIE_FRAGMENT_LOG_FLAG)
         }
-        if(youtubeVideoKey.size() > 0 && !Utility.isReducedDataOn(getActivity())) {
-            mYouTubeFragmentEmptyTextView.setVisibility(TextView.GONE)
-            final MovieMagicYoutubeFragment movieMagicYoutubeFragment = MovieMagicYoutubeFragment
-                    .createMovieMagicYouTubeFragment(youtubeVideoKey)
-            getChildFragmentManager().beginTransaction()
-                    .replace(R.id.home_youtube_fragment_container, movieMagicYoutubeFragment)
-                    .commit()
+        if(youtubeVideoKey.size() > 0) {
+            if (!Utility.isReducedDataOn(getActivity())) {
+                mYouTubeFragmentEmptyTextView.setVisibility(TextView.GONE)
+                mYouTubeFragmentContainer.setVisibility(FrameLayout.VISIBLE)
+                final MovieMagicYoutubeFragment movieMagicYoutubeFragment = MovieMagicYoutubeFragment
+                        .createMovieMagicYouTubeFragment(youtubeVideoKey)
+                getChildFragmentManager().beginTransaction()
+                        .replace(R.id.home_youtube_fragment_container, movieMagicYoutubeFragment)
+//                        .commitAllowingStateLoss()
+                        .commit()
+            } else {
+                LogDisplay.callLog(LOG_TAG, 'User selected reduced data use', LogDisplay.HOME_MOVIE_FRAGMENT_LOG_FLAG)
+                mYouTubeFragmentContainer.setVisibility(FrameLayout.GONE)
+                mYouTubeFragmentEmptyTextView.setVisibility(TextView.VISIBLE)
+                mYouTubeFragmentEmptyTextView.setText(getString(R.string.reduced_data_use_on_message))
+            }
         } else {
-            LogDisplay.callLog(LOG_TAG, 'Youtube video id is null or user selected reduced data use', LogDisplay.HOME_MOVIE_FRAGMENT_LOG_FLAG)
-            mYouTubeFragmentEmptyTextView.setVisibility(TextView.VISIBLE)
-            mYouTubeFragmentEmptyTextView.setText(getString(R.string.reduced_data_use_on_message))
+            LogDisplay.callLog(LOG_TAG, 'Youtube video id is null', LogDisplay.HOME_MOVIE_FRAGMENT_LOG_FLAG)
         }
     }
 
@@ -445,6 +455,13 @@ class HomeMovieFragment extends Fragment implements LoaderManager.LoaderCallback
             mRecommendationAdapter.swapCursor(null)
         }
     }
+
+    @Override
+    void onSaveInstanceState(Bundle outState) {
+        LogDisplay.callLog(LOG_TAG,'onSaveInstanceState is called',LogDisplay.HOME_MOVIE_FRAGMENT_LOG_FLAG)
+        super.onSaveInstanceState(outState)
+    }
+
 
     @Override
     public void onAttach(Context context) {

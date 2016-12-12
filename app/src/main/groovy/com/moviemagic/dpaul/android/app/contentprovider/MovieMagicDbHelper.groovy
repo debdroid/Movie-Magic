@@ -17,7 +17,7 @@ class MovieMagicDbHelper extends SQLiteOpenHelper {
     //TODO:In my nexus4, somehow the database does not get deleted while uninstalling, so every change in db
     //TODO: is forcing me to upgrade the database.
     //TODO:Need to change before release
-    private static final int DATABASE_VERSION = 1
+    private static final int DATABASE_VERSION = 2
 
     //Define as public as used by TestMovieMagicDatabase.groovy
     public static final String DATABASE_NAME = 'movie_magic.db'

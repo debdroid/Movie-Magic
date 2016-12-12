@@ -38,6 +38,8 @@ class GlobalStaticVariables {
 
     //Static variables for TMDB URL and parameters
     public static final String TMDB_MOVIE_BASE_URL = 'https://api.themoviedb.org/3/'
+    public static final String TMDB_WEB_MOVIE_BASE_URL = 'https://www.themoviedb.org/movie/'
+    public static final String TMDB_WEB_COLLECTION_BASE_URL = 'https://www.themoviedb.org/collection/'
     public static final String TMDB_MOVIE_PATH = 'movie'
     public static final String TMDB_MOVIE_API_KEY = 'api_key'
     public static final String TMDB_MOVIE_PAGE = 'page'

@@ -82,7 +82,7 @@ class CollectionMovieActivity extends AppCompatActivity implements GridMovieFrag
         overridePendingTransition(R.anim.slide_bottom_in_animation,0)
     }
 
-    //Override the CollectionMovieFragment interface method
+    //Override the GridMovieFragment interface method
     @Override
     public void notifyCollectionColorChange() {
         LogDisplay.callLog(LOG_TAG, 'notifyCollectionColorChange is called', LogDisplay.COLLECTION_MOVIE_FRAGMENT_LOG_FLAG)

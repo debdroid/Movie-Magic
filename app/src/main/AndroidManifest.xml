@@ -16,6 +16,9 @@
     <uses-permission android:name="android.permission.AUTHENTICATE_ACCOUNTS" />
     <uses-permission android:name="android.permission.USE_CREDENTIALS" />
 
+    <!-- Permissions to write in public directory -->
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -39,8 +42,12 @@
         <!-- Detail movie Activity -->
         <activity
             android:name=".DetailMovieActivity"
+            android:parentActivityName=".MovieMagicMainActivity"
             android:label="@string/title_activity_detail_movie"
             android:theme="@style/AppTheme.MovieDetail">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".MovieMagicMainActivity" />
         </activity>
 
         <!-- Collection movie Activity -->

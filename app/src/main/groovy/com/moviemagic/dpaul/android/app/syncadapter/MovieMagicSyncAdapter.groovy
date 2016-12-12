@@ -24,6 +24,7 @@ import android.support.v4.app.TaskStackBuilder
 import android.util.Log
 import com.moviemagic.dpaul.android.app.BuildConfig
 import com.moviemagic.dpaul.android.app.DetailMovieActivity
+import com.moviemagic.dpaul.android.app.MovieMagicMainActivity
 import com.moviemagic.dpaul.android.app.R
 import com.moviemagic.dpaul.android.app.backgroundmodules.LoadMovieDetails
 import com.moviemagic.dpaul.android.app.backgroundmodules.SearchDatabaseTable
@@ -527,6 +528,7 @@ class MovieMagicSyncAdapter extends AbstractThreadedSyncAdapter {
                     // your application to the Home screen.
                     final TaskStackBuilder stackBuilder = TaskStackBuilder.create(mContext)
                     // Adds the back stack for the Intent (but not the Intent itself)
+                    //TODO: backstack of main is not working, need to fix this later
                     stackBuilder.addParentStack(DetailMovieActivity.class)
                     // Adds the Intent that starts the Activity to the top of the stack
                     stackBuilder.addNextIntent(resultIntent)

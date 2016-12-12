@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.SharedPreferences
 import android.net.ConnectivityManager
 import android.net.NetworkInfo
+import android.os.Environment
 import android.preference.PreferenceManager
 import com.moviemagic.dpaul.android.app.R;
 import groovy.transform.CompileStatic
@@ -212,6 +213,26 @@ class Utility {
         }
     }
 
+    /**
+     * Checks if external storage is available for read and write
+     * @return True if external storage is available otherwise False
+     */
+    public static boolean isExternalStorageWritable() {
+        final String state = Environment.getExternalStorageState()
+        if (Environment.MEDIA_MOUNTED.equals(state)) {
+            return true
+        }
+        return false
+    }
+
+    /**
+     * This method format the date and timestamp which is used for file name
+     * @return
+     */
+    public static String dateTimeForFileName() {
+        final String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date())
+        return timeStamp
+    }
     /**
      * This utility method determines the mpaa for different countries - at this moment it only supports US & UK
      * @param mpaa MPAA indicator

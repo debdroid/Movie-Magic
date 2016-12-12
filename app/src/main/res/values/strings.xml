@@ -2,7 +2,7 @@
     <string name="app_name">Movie Magic</string>
     <string name="movie_name">Movie Name</string>
     <string name="content_authority">com.moviemagic.dpaul.android.app</string>
-    <string name="search_hint">Search for movies..</string>
+    <string name="search_hint">Search for online movies..</string>
     <!-- Account type (for sync-adapter authenticator) -->
     <!-- SyncAdapter related -->
     <string name="authenticator_account_type">moviemagic.dpaul.com</string>
@@ -88,6 +88,8 @@
     <string name="image_view_footer_value"><xliff:g id="current">%d</xliff:g> of <xliff:g id="total">%d</xliff:g></string>
     <string name="search_no_movie_found_message">No movie found for search query <xliff:g id="no_movie">%1$s</xliff:g></string>
     <string name="search_activity_subtitle_record_count"><xliff:g id="movie_count">%d</xliff:g> movies found</string>
+    <string name="saved_image_folder_name"><xliff:g id="parent_folder">%1$s</xliff:g>/Media/<xliff:g id="image_path">%2$s</xliff:g> Images</string>
+
 
     <string name="title_activity_collection_movie">Collection</string>
     <string name="title_activity_person_movie">Person</string>
@@ -230,5 +232,14 @@
     <string name="cannot_perform_operation_message">Cannot perform the operation, please try again later</string>
     <string name="authenticator_jellybean_error_message">Login failed, please ensure the user name and password are correct before re-try</string>
     <string name="menu_action_save">Save</string>
+    <string name="successful_image_Save_msg">Image successfully saved in gallery</string>
+    <string name="insufficient_space_msg">Insufficient space, cannot save the image</string>
+    <string name="write_permission_missing_msg">Please grant write permission to save images.</string>
+    <string name="write_permission_not_given_msg">Application does not have write permission to save images to your phone</string>
+    <string name="app_pref_show_drawer_first_time_key">first_time_drawer</string>
+    <!--<string name="storage_permission_dialog_title">Permission required</string>-->
+    <!--<string name="storage_permission_dialog_message">The application needs write permission to save the images to your phone. Please click on ALLOW to grant the permission.</string>-->
+    <!--<string name="storage_permission_allow_button">Allow</string>-->
+    <!--<string name="storage_permission_deny_button">Deny</string>-->
 
 </resources>

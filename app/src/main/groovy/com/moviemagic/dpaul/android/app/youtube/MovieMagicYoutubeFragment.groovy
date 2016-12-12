@@ -20,7 +20,7 @@ class MovieMagicYoutubeFragment extends YouTubePlayerSupportFragment implements 
     public static final String YOUTUBE_VIDEO_ID_KEY = 'youtube_video_id_key'
 
     private List<String> mVideoIds
-    private ArrayList<String> videoIdsArrayList
+//    private ArrayList<String> videoIdsArrayList
 
     //Empty constructor, to be used by the system while creating the fragment when embedded in XML
     MovieMagicYoutubeFragment () {
@@ -49,8 +49,10 @@ class MovieMagicYoutubeFragment extends YouTubePlayerSupportFragment implements 
         final Bundle arguments = getArguments()
 
         if (bundle != null && bundle.containsKey(YOUTUBE_VIDEO_ID_KEY)) { // Restore case, so retrieve it from bundle
+            LogDisplay.callLog(LOG_TAG,'onCreate: restore case..',LogDisplay.MOVIE_MAGIC_YOUTUBE_FRAGMENT_LOG_FLAG)
             mVideoIds = bundle.getStringArrayList(YOUTUBE_VIDEO_ID_KEY)
         } else if (arguments != null && arguments.containsKey(YOUTUBE_VIDEO_ID_KEY)) { // First start
+            LogDisplay.callLog(LOG_TAG,'onCreate: first initial case..',LogDisplay.MOVIE_MAGIC_YOUTUBE_FRAGMENT_LOG_FLAG)
             //TODO: Strangely videoIdsArrayList is no where used but holds data! so changing it, will remove after testing
 //            videoIdsArrayList = arguments.getStringArrayList(YOUTUBE_VIDEO_ID_KEY)
             mVideoIds = arguments.getStringArrayList(YOUTUBE_VIDEO_ID_KEY)

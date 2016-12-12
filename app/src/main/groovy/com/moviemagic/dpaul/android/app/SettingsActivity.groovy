@@ -25,6 +25,7 @@ class SettingsActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == android.R.id.home) { // Press appbar back button to go to previous activity
+            LogDisplay.callLog(LOG_TAG,'App bar back button is called',LogDisplay.SETTINGS_ACTIVITY_LOG_FLAG)
             finish()
             return true
         }
@@ -34,6 +35,7 @@ class SettingsActivity extends AppCompatActivity {
     @Override
     void onBackPressed() {
         super.onBackPressed()
+        LogDisplay.callLog(LOG_TAG,'Regular back button is called',LogDisplay.SETTINGS_ACTIVITY_LOG_FLAG)
         //Start the animation
         overridePendingTransition(0, R.anim.slide_bottom_out_animation)
     }

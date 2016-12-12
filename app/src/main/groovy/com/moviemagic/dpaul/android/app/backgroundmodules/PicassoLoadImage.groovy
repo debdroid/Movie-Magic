@@ -132,7 +132,6 @@ class PicassoLoadImage {
         } else {
             Picasso.with(context)
                     .load(R.drawable.grid_image_placeholder)
-                    .fit()
                     .into(imageView)
         }
     }

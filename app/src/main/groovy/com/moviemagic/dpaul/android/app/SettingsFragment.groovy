@@ -62,6 +62,10 @@ class SettingsFragment extends PreferenceFragment implements SharedPreferences.O
         } else if(key.equals(getString(R.string.pref_recommendation_key))) {
             // Trigger a notify change so that home screen gets updated with recommended movie preference
             getActivity().getContentResolver().notifyChange(MovieMagicContract.MovieBasicInfo.CONTENT_URI,null)
+        } else if(key.equals(getString(R.string.pref_reduce_data_use_key))) {
+            // Trigger a notify change so that home screen gets refreshed
+            getActivity().getContentResolver().notifyChange(MovieMagicContract.MovieVideo.CONTENT_URI,null)
+            getActivity().getContentResolver().notifyChange(MovieMagicContract.MovieBasicInfo.CONTENT_URI,null)
         } else {
             // No action
             LogDisplay.callLog(LOG_TAG,"No action for key: $key",LogDisplay.SETTINGS_FRAGMENT_LOG_FLAG)

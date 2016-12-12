@@ -1,6 +1,8 @@
 package com.moviemagic.dpaul.android.app.adapter
 
 import android.content.Context
+import android.graphics.Bitmap
+import android.graphics.drawable.BitmapDrawable
 import android.support.v4.view.PagerAdapter
 import android.support.v4.view.ViewPager
 import android.view.LayoutInflater
@@ -28,6 +30,7 @@ class ImagePagerAdapter extends PagerAdapter {
     private final ImagePagerAdapterOnClickHandler mImagePagerAdapterOnClickHandler
     private LayoutInflater mLayoutInflater
     private final boolean mBackdropImageFlag
+    private int mPosition
 
     public ImagePagerAdapter() {
         LogDisplay.callLog(LOG_TAG,'ImagePagerAdapter empty constructor is called',LogDisplay.IMAGE_PAGER_ADAPTER_LOG_FLAG)
@@ -56,6 +59,7 @@ class ImagePagerAdapter extends PagerAdapter {
     @Override
     Object instantiateItem(ViewGroup container, int position) {
         LogDisplay.callLog(LOG_TAG,"instantiateItem is called:$position",LogDisplay.IMAGE_VIEWER_ACTIVITY_LOG_FLAG)
+        mPosition = position
         mLayoutInflater = LayoutInflater.from(mContext)
         final View view = mLayoutInflater.inflate(R.layout.single_image_viewer_item, container, false)
         final ImageView imageView = view.findViewById(R.id.image_viewer_image) as ImageView
@@ -85,6 +89,10 @@ class ImagePagerAdapter extends PagerAdapter {
                     visibilityFlag = true
                     notifyDataSetChanged()
                 }
+//                final Bitmap bitmap = ((BitmapDrawable)imageView.getDrawable()).getBitmap()
+//                final String fileName = (mImageFilePaths[position]).replaceAll('\\','')
+//                LogDisplay.callLog(LOG_TAG,"File name replaced from ${mImageFilePaths[position]} to $fileName",LogDisplay.IMAGE_VIEWER_ACTIVITY_LOG_FLAG)
+//                mImagePagerAdapterOnClickHandler.onClick(position, R.id.image_viewer_image, fileName)
                 mImagePagerAdapterOnClickHandler.onClick(position)
             }
         })
@@ -126,6 +134,9 @@ class ImagePagerAdapter extends PagerAdapter {
         return POSITION_NONE
     }
 
+//    public int getCurrentPosition() {
+//        return mPosition
+//    }
     /**
      * This is the interface which will be implemented by the host ImageViewerActivity
      */

@@ -1,5 +1,6 @@
 package com.moviemagic.dpaul.android.app
 
+import android.Manifest
 import android.accounts.Account
 import android.accounts.AccountManager
 import android.accounts.AccountManagerCallback
@@ -10,6 +11,8 @@ import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
 import android.content.IntentFilter
+import android.content.SharedPreferences
+import android.content.pm.PackageManager
 import android.database.Cursor
 import android.net.ConnectivityManager
 import android.net.Uri
@@ -18,10 +21,12 @@ import android.os.Build
 import android.os.Bundle
 import android.preference.PreferenceManager
 import android.provider.Settings
-import android.support.design.widget.FloatingActionButton
+import android.support.annotation.NonNull
 import android.support.design.widget.NavigationView
 import android.support.design.widget.Snackbar
+import android.support.v4.app.ActivityCompat
 import android.support.v4.app.FragmentTransaction
+import android.support.v4.content.ContextCompat
 import android.support.v4.view.GravityCompat
 import android.support.v4.widget.DrawerLayout
 import android.support.v7.app.ActionBarDrawerToggle
@@ -88,6 +93,20 @@ public class MovieMagicMainActivity extends AppCompatActivity implements Navigat
             }
         })
 
+        // Show the drawer when application is launched for the first time
+        final SharedPreferences sharedPref = getPreferences(Context.MODE_PRIVATE)
+        final boolean firstTimeDrawerShow = sharedPref.getBoolean(getString(R.string.app_pref_show_drawer_first_time_key),true)
+        if(firstTimeDrawerShow) {
+            drawer.openDrawer(GravityCompat.START)
+            // Now set the value to false, so that drawer is not shown next time
+            final SharedPreferences.Editor editor = sharedPref.edit()
+            editor.putBoolean(getString(R.string.app_pref_show_drawer_first_time_key), false)
+            editor.commit()
+        }
+
+        //TODO Need to handle orientation changes / currently not done
+
+
         // Create an instance of AccountManager
         mAccountManager = AccountManager.get(this)
 
@@ -122,7 +141,12 @@ public class MovieMagicMainActivity extends AppCompatActivity implements Navigat
         }
 
         //Load the Home Fragment
-        loadHomeFragment()
+        if(savedInstanceState == null) {
+            LogDisplay.callLog(LOG_TAG,'This is first time, so load homeFragment..',LogDisplay.MOVIE_MAGIC_MAIN_LOG_FLAG)
+            loadHomeFragment()
+        } else {
+            LogDisplay.callLog(LOG_TAG,'This is restore scenario..so need to load as',LogDisplay.MOVIE_MAGIC_MAIN_LOG_FLAG)
+        }
     }
 
     @Override
@@ -158,6 +182,7 @@ public class MovieMagicMainActivity extends AppCompatActivity implements Navigat
         // Check if the user is online or not, if not then open a dialog
         final boolean isOnline = Utility.isOnline(this)
         if(!isOnline) {
+            LogDisplay.callLog(LOG_TAG,'Not connected to network!!',LogDisplay.MOVIE_MAGIC_MAIN_LOG_FLAG)
             showNotConnectedErrorDialog()
         } else {
             LogDisplay.callLog(LOG_TAG,'Connected to network!!',LogDisplay.MOVIE_MAGIC_MAIN_LOG_FLAG)
@@ -246,6 +271,7 @@ public class MovieMagicMainActivity extends AppCompatActivity implements Navigat
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
+        LogDisplay.callLog(LOG_TAG, 'onNavigationItemSelected is called.', LogDisplay.MOVIE_MAGIC_MAIN_LOG_FLAG)
         // Handle navigation view item clicks here.
         final int id = item.getItemId()
 
@@ -534,6 +560,7 @@ public class MovieMagicMainActivity extends AppCompatActivity implements Navigat
      * Load the Home Fragment
      */
     private void loadHomeFragment() {
+        LogDisplay.callLog(LOG_TAG, 'loadHomeFragment is called.', LogDisplay.MOVIE_MAGIC_MAIN_LOG_FLAG)
         final HomeMovieFragment homeMovieFragment = new HomeMovieFragment()
         final FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction()
         //Set the custom animation

@@ -22,6 +22,7 @@ import android.support.v4.app.LoaderManager
 import android.support.v4.content.ContextCompat
 import android.support.v4.content.CursorLoader
 import android.support.v4.content.Loader
+import android.support.v4.view.MenuItemCompat
 import android.support.v4.view.ViewCompat
 import android.support.v4.view.ViewPager
 import android.support.v4.view.ViewPager.OnPageChangeListener
@@ -31,6 +32,7 @@ import android.support.v7.widget.GridLayoutManager
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.support.v7.widget.RecyclerView.LayoutManager
+import android.support.v7.widget.ShareActionProvider
 import android.support.v7.widget.Toolbar
 import android.view.LayoutInflater
 import android.view.Menu
@@ -38,8 +40,6 @@ import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
-
-//import android.view.*
 import android.view.animation.AlphaAnimation
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
@@ -62,10 +62,6 @@ import com.moviemagic.dpaul.android.app.backgroundmodules.PicassoLoadImage
 import com.moviemagic.dpaul.android.app.backgroundmodules.UpdateUserListChoiceAndRating
 import com.moviemagic.dpaul.android.app.backgroundmodules.UploadTmdbRequest
 import com.moviemagic.dpaul.android.app.backgroundmodules.Utility
-
-//import android.widget.*
-//import com.moviemagic.dpaul.android.app.adapter.*
-//import com.moviemagic.dpaul.android.app.backgroundmodules.*
 import com.moviemagic.dpaul.android.app.contentprovider.MovieMagicContract
 import com.moviemagic.dpaul.android.app.youtube.MovieMagicYoutubeFragment
 import com.squareup.picasso.Callback
@@ -133,6 +129,8 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
     private CallbackForBackdropImageClick mCallbackForBackdropImageClick
     private int mBackdropViewPagerPos = 0
     private boolean firstTimeLocalRatingUpdateWithTmdbRating = true
+    private ShareActionProvider mShareActionProvider
+    private boolean mMoviDataLoaded = false
 
     private static final int MOVIE_DETAIL_FRAGMENT_BASIC_DATA_LOADER_ID = 0
     private static final int MOVIE_DETAIL_FRAGMENT_SIMILAR_MOVIE_LOADER_ID = 1
@@ -360,8 +358,19 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
 
     @Override
     public void onCreateOptionsMenu (Menu menu, MenuInflater inflater) {
+        LogDisplay.callLog(LOG_TAG, 'onCreateOptionsMenu is called', LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
         // Inflate the menu, this adds items to the action bar if it is present.
         inflater.inflate(R.menu.detail_fragment_menu, menu)
+        // Locate MenuItem with ShareActionProvider
+        final MenuItem item = menu.findItem(R.id.menu_action_share)
+        // Fetch and store ShareActionProvider
+        mShareActionProvider = (ShareActionProvider) MenuItemCompat.getActionProvider(item)
+        //Show share option if onLoadFinished is complete for movie_basic_info and we have data
+        if(mMoviDataLoaded) {
+            shareMovie()
+        } else {
+            LogDisplay.callLog(LOG_TAG,'onCreateOptionsMenu: movie detail data not yet loaded!',LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
+        }
     }
 
     @Override
@@ -375,8 +384,6 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
                 } else {
                     getActivity().finish()
                 }
-                return true
-            case R.id.menu_action_share:
                 return true
             default:
                 return super.onOptionsItemSelected(item)
@@ -1295,6 +1302,14 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
             } else {
                 LogDisplay.callLog(LOG_TAG, 'handleMovieBasicOnLoadFinished.Additional movie data already present', LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
             }
+            mMoviDataLoaded = true
+            // If onCreateOptionsMenu already happened then do share this to share movie
+            if(mShareActionProvider) {
+                shareMovie()
+            } else {
+                LogDisplay.callLog(LOG_TAG, 'handleMovieBasicOnLoadFinished:mShareActionProvider is null because onCreateOptionsMenu is not' +
+                        ' yet called. shareMovie will be called from onCreateOptionsMenu.', LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
+            }
         } else {
             LogDisplay.callLog(LOG_TAG, "handleMovieBasicOnLoadFinished.Record not found, should reach here only when movie is clicked on person or search screen - Movie id:$mMovieId, Category:$mMovieCategory", LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
             if(mMovieCategory == GlobalStaticVariables.MOVIE_CATEGORY_PERSON || GlobalStaticVariables.MOVIE_CATEGORY_SEARCH) {
@@ -1762,6 +1777,19 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
     }
 
     /**
+     * Share the detail movie
+     */
+    protected void shareMovie() {
+        LogDisplay.callLog(LOG_TAG, 'shareMovie is called', LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
+        final String tmdbWebMovieUrl = "$GlobalStaticVariables.TMDB_WEB_MOVIE_BASE_URL${Integer.toString(mMovieId)}"
+        final Intent sendIntent = new Intent()
+        sendIntent.setAction(Intent.ACTION_SEND)
+        sendIntent.putExtra(Intent.EXTRA_TEXT, "$mMovieTitle, TMDb link - $tmdbWebMovieUrl #${getString(R.string.app_name)} app")
+        sendIntent.setType("text/plain")
+        mShareActionProvider.setShareIntent(sendIntent)
+    }
+
+    /**
      * This method is used to create a alert dialog when user changes the rating of a movie which is present in user's
      * TMDb rated movie list
      */
@@ -1800,6 +1828,12 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
     void onResume() {
         LogDisplay.callLog(LOG_TAG, 'onResume is called', LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
         super.onResume()
+        // This is to ensure when user used share in collection then came back to detail and share movie
+        if(mMoviDataLoaded) {
+            shareMovie()
+        } else {
+            LogDisplay.callLog(LOG_TAG,'onCreateOptionsMenu: movie detail data not yet loaded!',LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
+        }
 //        mHandler.postDelayed(mRunnable,5000)
     }
 
