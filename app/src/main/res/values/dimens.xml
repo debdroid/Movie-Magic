@@ -53,6 +53,7 @@
     <dimen name="home_movie_backdrop_image_height">250dp</dimen>
     <dimen name="home_movie_poster_image_width">140dp</dimen>
     <dimen name="home_movie_poster_image_height">190dp</dimen>
-    <dimen name="login_page_top_padding">100dp</dimen>
+    <dimen name="login_page_top_padding">80dp</dimen>
+    <dimen name="donate_page_top_padding">50dp</dimen>
     <item name="movie_detail_user_list_drawable_alpha_value_40_percent" format="float" type="dimen">0.4</item>
 </resources>

@@ -114,7 +114,7 @@ class LoadMovieDetails extends AsyncTask<ArrayList<Integer>, Void, Void> {
                 /**
                  * Process and load (insert) the similar movies
                  * **/
-                final ContentValues[] similarMovieContentValues = JsonParse.parseSimilarMovieListJson(jsonData, movieIdList.get(i)) as ContentValues[]
+                final ContentValues[] similarMovieContentValues = JsonParse.parseSimilarMovieListJson(mContext, jsonData, movieIdList.get(i)) as ContentValues[]
                 if (similarMovieContentValues && allOperationSuccessfulFlag) {
                     final int similarMovieCount = mContentResolver.bulkInsert(MovieMagicContract.MovieBasicInfo.CONTENT_URI, similarMovieContentValues)
                     if (similarMovieCount > 0) {
@@ -228,7 +228,7 @@ class LoadMovieDetails extends AsyncTask<ArrayList<Integer>, Void, Void> {
                  * (i.e. not load anything while loading data for home page. It also ensures we do not download recommendations of recommended movie!)
                  * **/
                 if(isForHomeList.get(0) == GlobalStaticVariables.MOVIE_MAGIC_FLAG_FALSE) {
-                    final ContentValues[] recommendationsMovieContentValues = JsonParse.parseRecommendationsMovieListJson(jsonData, movieIdList.get(i)) as ContentValues[]
+                    final ContentValues[] recommendationsMovieContentValues = JsonParse.parseRecommendationsMovieListJson(mContext,jsonData, movieIdList.get(i)) as ContentValues[]
                     if (recommendationsMovieContentValues && allOperationSuccessfulFlag) {
                         final int recommendationsMovieCount = mContentResolver.bulkInsert(MovieMagicContract.MovieBasicInfo.CONTENT_URI, recommendationsMovieContentValues)
                         if (recommendationsMovieCount > 0) {

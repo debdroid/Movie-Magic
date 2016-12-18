@@ -11,6 +11,7 @@ import android.graphics.Bitmap
 import android.graphics.drawable.BitmapDrawable
 import android.media.MediaScannerConnection
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import android.os.Environment
 import android.support.annotation.NonNull
@@ -172,8 +173,12 @@ class ImageViewerActivity extends AppCompatActivity {
                 } else {
                     LogDisplay.callLog(LOG_TAG,"Directory $mImagePath exists",LogDisplay.IMAGE_VIEWER_ACTIVITY_LOG_FLAG)
                 }
-
-                final long bitmapSize = bitmapImage.getAllocationByteCount() as long
+                final long bitmapSize
+                if (Build.VERSION.SDK_INT >= 19) {
+                    bitmapSize = bitmapImage.getAllocationByteCount() as long
+                } else {
+                    bitmapSize = bitmapImage.getByteCount() as long
+                }
                 final long freeSpace = mImagePath.getFreeSpace()
                 LogDisplay.callLog(LOG_TAG,"bitmap size -> $bitmapSize",LogDisplay.IMAGE_VIEWER_ACTIVITY_LOG_FLAG)
                 LogDisplay.callLog(LOG_TAG,"free sapce -> $freeSpace",LogDisplay.IMAGE_VIEWER_ACTIVITY_LOG_FLAG)

@@ -61,4 +61,5 @@
     <!--<style name="AppTheme.ImageViewer" parent="@style/AppTheme"/>-->
     <style name="AppTheme.Settings" parent="@style/SettingsTheme"/>
     <style name="AppTheme.Search" parent="@style/AppTheme"/>
+    <style name="AppTheme.Donate" parent="@style/AppTheme"/>
 </resources>

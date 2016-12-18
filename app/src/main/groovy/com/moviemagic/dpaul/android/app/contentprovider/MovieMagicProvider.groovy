@@ -7,7 +7,9 @@ import android.database.Cursor
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteQueryBuilder
 import android.net.Uri
+import groovy.json.internal.ArrayUtils
 import groovy.transform.CompileStatic
+import org.codehaus.groovy.runtime.ArrayUtil
 
 @CompileStatic
 class MovieMagicProvider extends ContentProvider {
@@ -136,14 +138,22 @@ class MovieMagicProvider extends ContentProvider {
     }
 
     //To get data from movie_basic_info where movie_basic_info.movie_category = ?
-    private Cursor getMovieBasicInfoByMovieCategory(Uri uri, String[] projection, String sortOrder) {
+    private Cursor getMovieBasicInfoByMovieCategory(Uri uri, String[] projection, String selection, String[] selectionArgs, String sortOrder) {
         sMovieMagicQueryBuilder.setTables("$MovieMagicContract.MovieBasicInfo.TABLE_NAME")
-        final String[] movieId = [MovieMagicContract.MovieBasicInfo.getMovieCategoryFromMovieUri(uri)]
-
+        final String[] movieCategory = [MovieMagicContract.MovieBasicInfo.getMovieCategoryFromMovieUri(uri)]
+        String querySelection
+        String[] queryArguments
+        if(selection) {
+            querySelection = "$sMovieBasicInfoWithCategorySelection and $selection"
+            queryArguments = movieCategory.plus(selectionArgs) // Groovy magic!!
+        } else {
+            querySelection = sMovieBasicInfoWithCategorySelection
+            queryArguments = movieCategory
+        }
         return sMovieMagicQueryBuilder.query(mOpenHelper.getReadableDatabase(),
                 projection,
-                sMovieBasicInfoWithCategorySelection,
-                movieId,
+                querySelection,
+                queryArguments,
                 null,
                 null,
                 sortOrder
@@ -488,7 +498,7 @@ class MovieMagicProvider extends ContentProvider {
                 break
         // "/movie_basic_info/*"
             case MOVIE_BASIC_INFO_WITH_CATEGORY:
-                retCursor = getMovieBasicInfoByMovieCategory(uri, projection, sortOrder)
+                retCursor = getMovieBasicInfoByMovieCategory(uri, projection, selection, selectionArgs, sortOrder)
                 break
         // "/movie_basic_info/#/*"
             case MOVIE_BASIC_INFO_WITH_CATEGORY_AND_COLLECTION_ID:

@@ -101,6 +101,13 @@
                 android:resource="@xml/searchable"/>
         </activity>
 
+        <!-- Donate Activity -->
+        <activity
+            android:name=".DonateActivity"
+            android:label="@string/title_activity_donate"
+            android:theme="@style/AppTheme.Donate">
+        </activity>
+
         <!-- Register the content provider -->
         <provider
             android:name=".contentprovider.MovieMagicProvider"

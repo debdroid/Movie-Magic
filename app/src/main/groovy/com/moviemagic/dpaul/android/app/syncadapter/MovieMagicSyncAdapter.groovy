@@ -24,7 +24,6 @@ import android.support.v4.app.TaskStackBuilder
 import android.util.Log
 import com.moviemagic.dpaul.android.app.BuildConfig
 import com.moviemagic.dpaul.android.app.DetailMovieActivity
-import com.moviemagic.dpaul.android.app.MovieMagicMainActivity
 import com.moviemagic.dpaul.android.app.R
 import com.moviemagic.dpaul.android.app.backgroundmodules.LoadMovieDetails
 import com.moviemagic.dpaul.android.app.backgroundmodules.SearchDatabaseTable
@@ -48,14 +47,14 @@ class MovieMagicSyncAdapter extends AbstractThreadedSyncAdapter {
     //used to determine the next page to download during more download
     private final static int MAX_PAGE_DOWNLOAD = 3
     //Define a variable for api page count
-    private static int totalPage = 0
+    private static int mTotalPage = 0
     // Define a variable to contain a content resolver instance
     private final ContentResolver mContentResolver
     private final Context mContext
     // Set the Date & Time stamp which is used for all the new records, this is used while housekeeping so
     // a single constant value is used for all the records
     private String mDateTimeStamp
-    private boolean firstTotalPageRead = true
+    private boolean mFirstTotalPageRead = true
 
     //Define a flag to control the record insertion / deletion
 //    private boolean deleteRecords = true
@@ -103,9 +102,9 @@ class MovieMagicSyncAdapter extends AbstractThreadedSyncAdapter {
         if(Utility.isReadyToDownload(mContext)) {
             mDateTimeStamp = Utility.getTodayDate()
             List<ContentValues> contentValues = []
-            //totalPage is set to 1 so that at least first page is downloaded in downloadMovieList
+            //mTotalPage is set to 1 so that at least first page is downloaded in downloadMovieList
             // later this variable is overridden by the total page value retrieved from the api
-            totalPage = 1
+            mTotalPage = 1
             for (i in 1..MAX_PAGE_DOWNLOAD) {
                 contentValues = downloadMovieList(GlobalStaticVariables.MOVIE_CATEGORY_POPULAR, i)
                 if (contentValues) {
@@ -115,7 +114,8 @@ class MovieMagicSyncAdapter extends AbstractThreadedSyncAdapter {
                     LogDisplay.callLog(LOG_TAG, "No movie data for category -> $GlobalStaticVariables.MOVIE_CATEGORY_POPULAR", LogDisplay.MOVIE_MAGIC_SYNC_ADAPTER_LOG_FLAG)
                 }
             }
-            totalPage = 1
+            mTotalPage = 1
+            mFirstTotalPageRead = true
             for (i in 1..MAX_PAGE_DOWNLOAD) {
                 contentValues = downloadMovieList(GlobalStaticVariables.MOVIE_CATEGORY_TOP_RATED, i)
                 if (contentValues) {
@@ -125,7 +125,8 @@ class MovieMagicSyncAdapter extends AbstractThreadedSyncAdapter {
                     LogDisplay.callLog(LOG_TAG, "No movie data for category -> $GlobalStaticVariables.MOVIE_CATEGORY_TOP_RATED", LogDisplay.MOVIE_MAGIC_SYNC_ADAPTER_LOG_FLAG)
                 }
             }
-            totalPage = 1
+            mTotalPage = 1
+            mFirstTotalPageRead = true
             for (i in 1..MAX_PAGE_DOWNLOAD) {
                 contentValues = downloadMovieList(GlobalStaticVariables.MOVIE_CATEGORY_UPCOMING, i)
                 if (contentValues) {
@@ -135,7 +136,8 @@ class MovieMagicSyncAdapter extends AbstractThreadedSyncAdapter {
                     LogDisplay.callLog(LOG_TAG, "No movie data for category -> $GlobalStaticVariables.MOVIE_CATEGORY_UPCOMING", LogDisplay.MOVIE_MAGIC_SYNC_ADAPTER_LOG_FLAG)
                 }
             }
-            totalPage = 1
+            mTotalPage = 1
+            mFirstTotalPageRead = true
             for (i in 1..MAX_PAGE_DOWNLOAD) {
                 contentValues = downloadMovieList(GlobalStaticVariables.MOVIE_CATEGORY_NOW_PLAYING, i)
                 if (contentValues) {
@@ -207,13 +209,13 @@ class MovieMagicSyncAdapter extends AbstractThreadedSyncAdapter {
 
             //This is intentional so that at lest one page is not loaded in order to make sure
             //at least one (i.e. first) LoadMoreMovies call is always successful (?? Think it's not true!! need to check later)
-            if (page <= totalPage) {
+            if (page <= mTotalPage) {
                 def jsonData = new JsonSlurper(type: JsonParserType.INDEX_OVERLAY).parse(url)
                 LogDisplay.callLog(LOG_TAG, "JSON DATA for $category -> $jsonData",LogDisplay.MOVIE_MAGIC_SYNC_ADAPTER_LOG_FLAG)
-                movieList = JsonParse.parseMovieListJson(jsonData, category, GlobalStaticVariables.MOVIE_LIST_TYPE_TMDB_PUBLIC, mDateTimeStamp)
-                if(firstTotalPageRead) {
-                    totalPage = JsonParse.getTotalPages(jsonData)
-                    firstTotalPageRead = false
+                movieList = JsonParse.parseMovieListJson(mContext,jsonData, category, GlobalStaticVariables.MOVIE_LIST_TYPE_TMDB_PUBLIC, mDateTimeStamp)
+                if(mFirstTotalPageRead) {
+                    mTotalPage = JsonParse.getTotalPages(jsonData)
+                    mFirstTotalPageRead = false
                 }
             }
 
@@ -305,7 +307,7 @@ class MovieMagicSyncAdapter extends AbstractThreadedSyncAdapter {
 
             def jsonData = new JsonSlurper(type: JsonParserType.INDEX_OVERLAY).parse(tmdbUserUrl)
             LogDisplay.callLog(LOG_TAG, "Tmdb user movie JSON data for $category -> $jsonData",LogDisplay.MOVIE_MAGIC_SYNC_ADAPTER_LOG_FLAG)
-            tmdbUserMovieList = JsonParse.parseMovieListJson(jsonData, category, GlobalStaticVariables.MOVIE_LIST_TYPE_TMDB_USER, mDateTimeStamp)
+            tmdbUserMovieList = JsonParse.parseMovieListJson(mContext, jsonData, category, GlobalStaticVariables.MOVIE_LIST_TYPE_TMDB_USER, mDateTimeStamp)
         } catch (URISyntaxException e) {
             Log.e(LOG_TAG, " URISyntaxException Error: ${e.message}", e)
         } catch (URISyntaxException e) {

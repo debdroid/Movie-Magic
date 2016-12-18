@@ -20,6 +20,7 @@ tools:context=".SearchActivity">
         android:layout_height="?attr/actionBarSize"
         android:background="?attr/colorPrimary"
         android:elevation="@dimen/m_design_toolbar_elevation"
+        app:subtitleTextColor="@color/accent"
         app:popupTheme="@style/AppTheme.PopupOverlay" />
 </android.support.design.widget.AppBarLayout>
     <android.support.v4.widget.NestedScrollView

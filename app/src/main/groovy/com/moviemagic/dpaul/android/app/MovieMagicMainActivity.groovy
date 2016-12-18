@@ -1,6 +1,5 @@
 package com.moviemagic.dpaul.android.app
 
-import android.Manifest
 import android.accounts.Account
 import android.accounts.AccountManager
 import android.accounts.AccountManagerCallback
@@ -12,7 +11,7 @@ import android.content.DialogInterface
 import android.content.Intent
 import android.content.IntentFilter
 import android.content.SharedPreferences
-import android.content.pm.PackageManager
+import android.content.pm.PackageInfo
 import android.database.Cursor
 import android.net.ConnectivityManager
 import android.net.Uri
@@ -21,12 +20,9 @@ import android.os.Build
 import android.os.Bundle
 import android.preference.PreferenceManager
 import android.provider.Settings
-import android.support.annotation.NonNull
 import android.support.design.widget.NavigationView
 import android.support.design.widget.Snackbar
-import android.support.v4.app.ActivityCompat
 import android.support.v4.app.FragmentTransaction
-import android.support.v4.content.ContextCompat
 import android.support.v4.view.GravityCompat
 import android.support.v4.widget.DrawerLayout
 import android.support.v7.app.ActionBarDrawerToggle
@@ -145,34 +141,8 @@ public class MovieMagicMainActivity extends AppCompatActivity implements Navigat
             LogDisplay.callLog(LOG_TAG,'This is first time, so load homeFragment..',LogDisplay.MOVIE_MAGIC_MAIN_LOG_FLAG)
             loadHomeFragment()
         } else {
-            LogDisplay.callLog(LOG_TAG,'This is restore scenario..so need to load as',LogDisplay.MOVIE_MAGIC_MAIN_LOG_FLAG)
+            LogDisplay.callLog(LOG_TAG,'This is restore scenario..so need to load as is',LogDisplay.MOVIE_MAGIC_MAIN_LOG_FLAG)
         }
-    }
-
-    @Override
-    public void onBackPressed() {
-        final DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout)
-        if (drawer.isDrawerOpen(GravityCompat.START)) {
-            drawer.closeDrawer(GravityCompat.START)
-        } else {
-            super.onBackPressed()
-        }
-    }
-
-    @Override
-    protected void onSaveInstanceState(Bundle outState) {
-        LogDisplay.callLog(LOG_TAG,'onSaveInstanceState is called',LogDisplay.MOVIE_MAGIC_MAIN_LOG_FLAG)
-        outState.putString(STATE_APP_TITLE,getSupportActionBar().getTitle().toString())
-        // Now call the superclass so it can save the view hierarchy state
-        super.onSaveInstanceState(outState)
-    }
-
-    @Override
-    protected void onRestoreInstanceState(Bundle savedInstanceState) {
-        LogDisplay.callLog(LOG_TAG,'onRestoreInstanceState is called',LogDisplay.MOVIE_MAGIC_MAIN_LOG_FLAG)
-        // Always call the superclass first, so that Bundle is retrieved properly
-        super.onRestoreInstanceState(savedInstanceState)
-        getSupportActionBar().setTitle(savedInstanceState.getCharSequence(STATE_APP_TITLE,'error'))
     }
 
     @Override
@@ -193,9 +163,24 @@ public class MovieMagicMainActivity extends AppCompatActivity implements Navigat
                 showNotConnectedToWiFiErrorDialog()
             }
         }
-
         // Test utility method "isReadyToDownload"
 //        LogDisplay.callLog(LOG_TAG,"Downalod flag test -> ${Utility.isReadyToDownload(this)}",LogDisplay.MOVIE_MAGIC_MAIN_LOG_FLAG)
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        LogDisplay.callLog(LOG_TAG,'onSaveInstanceState is called',LogDisplay.MOVIE_MAGIC_MAIN_LOG_FLAG)
+        outState.putString(STATE_APP_TITLE,getSupportActionBar().getTitle().toString())
+        // Now call the superclass so it can save the view hierarchy state
+        super.onSaveInstanceState(outState)
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        LogDisplay.callLog(LOG_TAG,'onRestoreInstanceState is called',LogDisplay.MOVIE_MAGIC_MAIN_LOG_FLAG)
+        // Always call the superclass first, so that Bundle is retrieved properly
+        super.onRestoreInstanceState(savedInstanceState)
+        getSupportActionBar().setTitle(savedInstanceState.getCharSequence(STATE_APP_TITLE,'error'))
     }
 
     @Override
@@ -238,6 +223,16 @@ public class MovieMagicMainActivity extends AppCompatActivity implements Navigat
     }
 
     @Override
+    public void onBackPressed() {
+        final DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout)
+        if (drawer.isDrawerOpen(GravityCompat.START)) {
+            drawer.closeDrawer(GravityCompat.START)
+        } else {
+            super.onBackPressed()
+        }
+    }
+
+    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu, this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.main_activity_menu, menu)
@@ -264,7 +259,6 @@ public class MovieMagicMainActivity extends AppCompatActivity implements Navigat
             openSettingsActivity()
             return true
         }
-
         return super.onOptionsItemSelected(item)
     }
 
@@ -276,45 +270,51 @@ public class MovieMagicMainActivity extends AppCompatActivity implements Navigat
         final int id = item.getItemId()
 
         if (id == R.id.nav_home) {
-            setItemTitle(getString(R.string.app_name))
+            setItemTitleAndSubTitle(getString(R.string.app_name))
             loadHomeFragment()
         } else if (id == R.id.nav_tmdb_popular) {
-            setItemTitle(getString(R.string.drawer_menu_tmdb_popular))
+            setItemTitleAndSubTitle(getString(R.string.drawer_menu_tmdb_popular))
             loadGridFragment(GlobalStaticVariables.MOVIE_CATEGORY_POPULAR)
         } else if (id == R.id.nav_tmdb_toprated) {
-            setItemTitle(getString(R.string.drawer_menu_tmdb_toprated))
+            setItemTitleAndSubTitle(getString(R.string.drawer_menu_tmdb_toprated))
             loadGridFragment(GlobalStaticVariables.MOVIE_CATEGORY_TOP_RATED)
         } else if (id == R.id.nav_tmdb_nowplaying) {
-            setItemTitle(getString(R.string.drawer_menu_tmdb_nowplaying))
+            setItemTitleAndSubTitle(getString(R.string.drawer_menu_tmdb_nowplaying))
             loadGridFragment(GlobalStaticVariables.MOVIE_CATEGORY_NOW_PLAYING)
         } else if (id == R.id.nav_tmdb_upcoming) {
-            setItemTitle(getString(R.string.drawer_menu_tmdb_upcoming))
+            setItemTitleAndSubTitle(getString(R.string.drawer_menu_tmdb_upcoming))
             loadGridFragment(GlobalStaticVariables.MOVIE_CATEGORY_UPCOMING)
         } else if (id == R.id.nav_user_watched) {
-            setItemTitle(getString(R.string.drawer_menu_user_watched))
+            setItemTitleAndSubTitle(getString(R.string.drawer_menu_user_watched))
             loadGridFragment(GlobalStaticVariables.MOVIE_CATEGORY_LOCAL_USER_WATCHED)
         } else if (id == R.id.nav_user_wishlist) {
-            setItemTitle(getString(R.string.drawer_menu_user_wishlist))
+            setItemTitleAndSubTitle(getString(R.string.drawer_menu_user_wishlist))
             loadGridFragment(GlobalStaticVariables.MOVIE_CATEGORY_LOCAL_USER_WISH_LIST)
         } else if (id == R.id.nav_user_favourite) {
-            setItemTitle(getString(R.string.drawer_menu_user_favourite))
+            setItemTitleAndSubTitle(getString(R.string.drawer_menu_user_favourite))
             loadGridFragment(GlobalStaticVariables.MOVIE_CATEGORY_LOCAL_USER_FAVOURITE)
         } else if (id == R.id.nav_user_collection) {
-            setItemTitle(getString(R.string.drawer_menu_user_collection))
+            setItemTitleAndSubTitle(getString(R.string.drawer_menu_user_collection))
             loadGridFragment(GlobalStaticVariables.MOVIE_CATEGORY_LOCAL_USER_COLLECTION)
         } else if (id == R.id.nav_tmdb_user_watchlist) {
-            setItemTitle(getString(R.string.drawer_menu_tmdb_user_watchlist) +" (TMDb)")
+            setItemTitleAndSubTitle(getString(R.string.drawer_menu_tmdb_user_watchlist) +" (TMDb)")
             loadGridFragment(GlobalStaticVariables.MOVIE_CATEGORY_TMDB_USER_WATCHLIST)
         } else if (id == R.id.nav_tmdb_user_favourite) {
-            setItemTitle(getString(R.string.drawer_menu_tmdb_user_favourite) +" (TMDb)")
+            setItemTitleAndSubTitle(getString(R.string.drawer_menu_tmdb_user_favourite) +" (TMDb)")
             loadGridFragment(GlobalStaticVariables.MOVIE_CATEGORY_TMDB_USER_FAVOURITE)
         } else if (id == R.id.nav_tmdb_user_rated) {
-            setItemTitle(getString(R.string.drawer_menu_tmdb_user_rated) +" (TMDb)")
+            setItemTitleAndSubTitle(getString(R.string.drawer_menu_tmdb_user_rated) +" (TMDb)")
             loadGridFragment(GlobalStaticVariables.MOVIE_CATEGORY_TMDB_USER_RATED)
         } else if (id == R.id.nav_menu_settings) {
             openSettingsActivity()
         } else if (id == R.id.nav_menu_logout) {
             logoutFromTmdbAccount()
+        } else if(id == R.id.nav_menu_rate_the_app) {
+            launchGooglePlayForRatingAndFeedback()
+        } else if(id == R.id.nav_menu_contact_developer) {
+            contactDeveloperAction()
+        } else if(id == R.id.nav_menu_donate) {
+            openDonateActivity()
         }
 
         final DrawerLayout drawer = findViewById(R.id.drawer_layout) as DrawerLayout
@@ -434,7 +434,7 @@ public class MovieMagicMainActivity extends AppCompatActivity implements Navigat
         // Now call this method so that a dummy account gets created and setup for sync adapter
         MovieMagicSyncAdapterUtility.initializeSyncAdapter(this)
         // Take the user to home screen
-        setItemTitle(getString(R.string.app_name))
+        setItemTitleAndSubTitle(getString(R.string.app_name))
         loadHomeFragment()
         // Set the home item as selected
         mNavigationView.getMenu().getItem(0).setChecked(true)
@@ -451,7 +451,6 @@ public class MovieMagicMainActivity extends AppCompatActivity implements Navigat
         LogDisplay.callLog(LOG_TAG,'checkUserLoginAndPerformAction is called',LogDisplay.MOVIE_MAGIC_MAIN_LOG_FLAG)
         //Check if any account exists
         final Account[] accounts = mAccountManager.getAccountsByType(getString(R.string.authenticator_account_type))
-//        final Account newAccount
         if(accounts.size() == 1) {
             LogDisplay.callLog(LOG_TAG,"Existing account. Account name->${accounts[0].name}",LogDisplay.MOVIE_MAGIC_MAIN_LOG_FLAG)
             //Application can have only one account, so safe to use the following line
@@ -487,25 +486,23 @@ public class MovieMagicMainActivity extends AppCompatActivity implements Navigat
      */
     private void showNotConnectedErrorDialog() {
         final AlertDialog.Builder builder = new AlertDialog.Builder(this)
-        builder.setTitle(R.string.not_connected_dialog_title)
-                .setMessage(R.string.not_connected_dialog_message)
-
-        builder.setPositiveButton(R.string.not_connected_open_settings_button, new DialogInterface.OnClickListener() {
+        builder.setTitle(getString(R.string.not_connected_dialog_title))
+                .setMessage(getString(R.string.not_connected_dialog_message))
+        builder.setPositiveButton(getString(R.string.not_connected_open_settings_button), new DialogInterface.OnClickListener() {
             @Override
             void onClick(DialogInterface dialog, int which) {
                 LogDisplay.callLog(LOG_TAG, 'Dialog open network settings is clicked, go and open it', LogDisplay.MOVIE_MAGIC_MAIN_LOG_FLAG)
                 openSystemSettings()
             }
         })
-
-        builder.setNegativeButton(R.string.not_connected_dialog_cancel_button, new DialogInterface.OnClickListener(){
+        builder.setNegativeButton(getString(R.string.action_cancel), new DialogInterface.OnClickListener(){
             @Override
             void onClick(DialogInterface dialog, int which) {
                 LogDisplay.callLog(LOG_TAG, 'Dialog cancel is clicked. No action needed.', LogDisplay.MOVIE_MAGIC_MAIN_LOG_FLAG)
+                dialog.dismiss()
             }
         })
-
-        // Create the AlertDialog
+        // Create the AlertDialog & show
         final AlertDialog dialog = builder.create()
         dialog.show()
     }
@@ -515,25 +512,22 @@ public class MovieMagicMainActivity extends AppCompatActivity implements Navigat
      */
     private void showNotConnectedToWiFiErrorDialog() {
         final AlertDialog.Builder builder = new AlertDialog.Builder(this)
-        builder.setTitle(R.string.not_wifi_connected_dialog_title)
-                .setMessage(R.string.not_wifi_connected_dialog_message)
-
-        builder.setPositiveButton(R.string.not_wifi_connected_open_settings_button, new DialogInterface.OnClickListener() {
+        builder.setTitle(getString(R.string.not_wifi_connected_dialog_title))
+                .setMessage(getString(R.string.not_wifi_connected_dialog_message))
+        builder.setPositiveButton(getString(R.string.not_wifi_connected_open_settings_button), new DialogInterface.OnClickListener() {
             @Override
             void onClick(DialogInterface dialog, int which) {
                 LogDisplay.callLog(LOG_TAG, 'Dialog change settings is clicked, go and open settings activity', LogDisplay.MOVIE_MAGIC_MAIN_LOG_FLAG)
                 openSettingsActivity()
             }
         })
-
-        builder.setNegativeButton(R.string.not_wifi_connected_dialog_cancel_button, new DialogInterface.OnClickListener(){
+        builder.setNegativeButton(getString(R.string.action_cancel), new DialogInterface.OnClickListener(){
             @Override
             void onClick(DialogInterface dialog, int which) {
                 LogDisplay.callLog(LOG_TAG, 'Dialog cancel is clicked. No action needed.', LogDisplay.MOVIE_MAGIC_MAIN_LOG_FLAG)
             }
         })
-
-        // Create the AlertDialog
+        // Create the AlertDialog & show
         final AlertDialog dialog = builder.create()
         dialog.show()
     }
@@ -592,9 +586,13 @@ public class MovieMagicMainActivity extends AppCompatActivity implements Navigat
      * This method sets the Title of the Activity
      * @param title Title to be set for the activity
      */
-    private void setItemTitle(CharSequence title){
+    private void setItemTitleAndSubTitle(CharSequence title){
         LogDisplay.callLog(LOG_TAG,"The drawer menu $title is called",LogDisplay.MOVIE_MAGIC_MAIN_LOG_FLAG)
         getSupportActionBar().setTitle(title)
+        // Filter menu of GridFragment can set the subtitle, so reset it
+        getSupportActionBar().setTitle(title)
+        // Filter menu of GridFragment can set the subtitle, so reset it
+        getSupportActionBar().setSubtitle('')
     }
 
     /**
@@ -621,17 +619,79 @@ public class MovieMagicMainActivity extends AppCompatActivity implements Navigat
     @Override
     void onShowAllButtonClicked(String movieCategory) {
         if(movieCategory == GlobalStaticVariables.MOVIE_CATEGORY_NOW_PLAYING) {
-            setItemTitle(getString(R.string.drawer_menu_tmdb_nowplaying))
+            setItemTitleAndSubTitle(getString(R.string.drawer_menu_tmdb_nowplaying))
             // Set the corresponding item in nav drawer
             mNavigationView.getMenu().getItem(3).setChecked(true)
         } else if (movieCategory == GlobalStaticVariables.MOVIE_CATEGORY_UPCOMING) {
-            setItemTitle(getString(R.string.drawer_menu_tmdb_upcoming))
+            setItemTitleAndSubTitle(getString(R.string.drawer_menu_tmdb_upcoming))
             // Set the corresponding item in nav drawer
             mNavigationView.getMenu().getItem(4).setChecked(true)
         } else {
             LogDisplay.callLog(LOG_TAG,"Unknow category sent by HomeFragment. Category->$movieCategory",LogDisplay.MOVIE_MAGIC_MAIN_LOG_FLAG)
         }
         loadGridFragment(movieCategory)
+    }
+
+    /**
+     * This method launches an intent to open the application in GooglePlay store
+     */
+    protected void launchGooglePlayForRatingAndFeedback() {
+        final String packageName = getPackageName()
+        final Intent intent = new Intent(Intent.ACTION_VIEW)
+        intent.setData(Uri.parse("market://details?id=$packageName"))
+        if (intent.resolveActivity(getPackageManager()) != null) {
+            startActivity(intent)
+        } else {
+            LogDisplay.callLog(LOG_TAG,'Google Playstore is not installed in this device',LogDisplay.MOVIE_MAGIC_MAIN_LOG_FLAG)
+        }
+    }
+
+    /**
+     * This method launches the email Intent to share feedback / comment
+     */
+    protected void contactDeveloperAction() {
+        final String codeName = Build.VERSION.CODENAME
+        final String release = Build.VERSION.RELEASE
+        final String brand = Build.BRAND
+        final String device = Build.DEVICE
+        final String manufacturer = Build.MANUFACTURER
+        final String model = Build.MODEL
+        final PackageInfo packageInfo = getPackageManager().getPackageInfo(getPackageName(),0)
+        final String versionCode = Integer.toString(packageInfo.versionCode)
+        final String versionName = packageInfo.versionName
+
+        final String[] emailAddress = ["${getString(R.string.developer_email_id)}"]
+        final String emailSubject = "${getString(R.string.app_name)} (Version $versionName) - Feedback"
+        final String emailBody = """Android Code Name: $codeName
+                                    Android Release: $release
+                                    Brand: $brand
+                                    Device: $device
+                                    Manufacturer: $manufacturer
+                                    Model: $model
+                                    App Version Code: $versionCode
+                                    App Version Name: $versionName
+
+                                    Feedback / Comments - """
+        final Intent intent = new Intent(Intent.ACTION_SENDTO)
+        intent.setData(Uri.parse("mailto:")) // only email apps should handle this
+        intent.putExtra(Intent.EXTRA_EMAIL, emailAddress)
+        intent.putExtra(Intent.EXTRA_SUBJECT, emailSubject)
+        intent.putExtra(Intent.EXTRA_TEXT, emailBody)
+        if (intent.resolveActivity(getPackageManager()) != null) {
+            startActivity(intent)
+        } else {
+            LogDisplay.callLog(LOG_TAG,'No email client installed in this device',LogDisplay.MOVIE_MAGIC_MAIN_LOG_FLAG)
+        }
+    }
+
+    /**
+     * Launch the Donate Activity
+     */
+    protected void openDonateActivity() {
+        final Intent intent = new Intent(this, DonateActivity.class)
+        startActivity(intent)
+        //Start the animation
+        overridePendingTransition(R.anim.slide_bottom_in_animation,0)
     }
 
     /**
@@ -723,7 +783,6 @@ public class MovieMagicMainActivity extends AppCompatActivity implements Navigat
                 //Close the cursor
                 if(cursor) cursor.close()
             }
-
             return result
         }
 

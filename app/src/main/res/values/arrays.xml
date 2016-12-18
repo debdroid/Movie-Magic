@@ -8,4 +8,18 @@
         <item>dynamic</item>
         <item>static</item>
     </string-array>
+    <!-- The order is important because program logic depends on this -->
+    <string-array name="sort_elements_public_or_tmdb_user">
+        <item>Reset</item>
+        <item>Movie Name</item>
+        <item>Release Date</item>
+        <item>Rating</item>
+    </string-array>
+    <string-array name="sort_elements_user_local">
+        <item>Reset</item>
+        <item>Movie Name</item>
+        <item>Release Date</item>
+        <item>Rating</item>
+        <item>Date Added</item>
+    </string-array>
 </resources>

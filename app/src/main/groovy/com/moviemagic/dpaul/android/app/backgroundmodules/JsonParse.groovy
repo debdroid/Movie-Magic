@@ -1,8 +1,11 @@
 package com.moviemagic.dpaul.android.app.backgroundmodules
 
 import android.content.ContentValues
+import android.content.Context
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.text.TextUtils
+import com.moviemagic.dpaul.android.app.R
 import com.moviemagic.dpaul.android.app.contentprovider.MovieMagicContract
 import com.moviemagic.dpaul.android.app.contentprovider.MovieMagicContract.MovieBasicInfo
 import com.moviemagic.dpaul.android.app.contentprovider.MovieMagicContract.MovieCast
@@ -43,7 +46,7 @@ class JsonParse {
      * @param dateTimeStamp The Date & Time stamp to use while inserting the records
      * @return formatted list of movies as content values
      */
-    static List<ContentValues> parseMovieListJson(def jsonData, String category, String movieListType, String dateTimeStamp) {
+    static List<ContentValues> parseMovieListJson(Context ctx, def jsonData, String category, String movieListType, String dateTimeStamp) {
         List<ContentValues> movieList = []
         def cnt = jsonData.results.size() - 1
         //Ensure that the results is not Null
@@ -120,6 +123,29 @@ class JsonParse {
                 movieValue.put(MovieBasicInfo.COLUMN_CREATE_TIMESTAMP,dateTimeStamp)
                 movieValue.put(MovieBasicInfo.COLUMN_UPDATE_TIMESTAMP,dateTimeStamp)
 
+                // Save the page number in SharedPreference
+                if(jsonData.page && jsonData.page > 0) {
+                    final SharedPreferences sharedPref = ctx.getSharedPreferences(
+                            ctx.getString(R.string.app_pref_tmdb_movie_page_number_file), Context.MODE_PRIVATE)
+                    final SharedPreferences.Editor editor = sharedPref.edit()
+                    switch (category) {
+                        case GlobalStaticVariables.MOVIE_CATEGORY_POPULAR:
+                            editor.putInt(ctx.getString(R.string.app_pref_tmdb_popular_page_key), jsonData.page)
+                            break
+                        case GlobalStaticVariables.MOVIE_CATEGORY_TOP_RATED:
+                            editor.putInt(ctx.getString(R.string.app_pref_tmdb_toprated_page_key), jsonData.page)
+                            break
+                        case GlobalStaticVariables.MOVIE_CATEGORY_NOW_PLAYING:
+                            editor.putInt(ctx.getString(R.string.app_pref_tmdb_nowplaying_page_key), jsonData.page)
+                            break
+                        case GlobalStaticVariables.MOVIE_CATEGORY_UPCOMING:
+                            editor.putInt(ctx.getString(R.string.app_pref_tmdb_upcoming_page_key), jsonData.page)
+                            break
+                        default:
+                            LogDisplay.callLog(LOG_TAG, "Not TMDb public category. Category -> $category", LogDisplay.JSON_PARSE_LOG_FLAG)
+                    }
+                    editor.commit()
+                }
                 //add to the list
                 movieList << movieValue
             }
@@ -293,10 +319,10 @@ class JsonParse {
      * @param movieId Original movie id for which similar movies are fetched
      * @return formatted list of similar movies as content values
      */
-    static List<ContentValues> parseSimilarMovieListJson(def jsonData, int movieId) {
+    static List<ContentValues> parseSimilarMovieListJson(Context ctx, def jsonData, int movieId) {
         List<ContentValues> similarMovies
         LogDisplay.callLog(LOG_TAG, "Similar -> $jsonData.similar", LogDisplay.JSON_PARSE_LOG_FLAG)
-        similarMovies = parseMovieListJson(jsonData.similar,GlobalStaticVariables.MOVIE_CATEGORY_SIMILAR,
+        similarMovies = parseMovieListJson(ctx, jsonData.similar,GlobalStaticVariables.MOVIE_CATEGORY_SIMILAR,
                 GlobalStaticVariables.MOVIE_LIST_TYPE_TMDB_SIMILAR, Utility.getTodayDate())
         //Some groovy magic - Closure
         similarMovies.each {it.put(MovieBasicInfo.COLUMN_SIMILAR_MOVIE_LINK_ID,movieId)}
@@ -608,9 +634,9 @@ class JsonParse {
      * @param movieId Original movie id for which recommendations movies are fetched
      * @return formatted list of recommendations movies as content values
      */
-    static List<ContentValues> parseRecommendationsMovieListJson(def jsonData, int movieId) {
+    static List<ContentValues> parseRecommendationsMovieListJson(Context ctx, def jsonData, int movieId) {
         LogDisplay.callLog(LOG_TAG, "Recommendations -> $jsonData.recommendations", LogDisplay.JSON_PARSE_LOG_FLAG)
-        final List<ContentValues> recommendationsMovies = parseMovieListJson(jsonData.recommendations,
+        final List<ContentValues> recommendationsMovies = parseMovieListJson(ctx, jsonData.recommendations,
                 GlobalStaticVariables.MOVIE_CATEGORY_RECOMMENDATIONS, GlobalStaticVariables.MOVIE_LIST_TYPE_TMDB_RECOMMENDATIONS,
                 Utility.getTodayDate())
         // We just need 2 items of the recommended movies, so remove rest of the items

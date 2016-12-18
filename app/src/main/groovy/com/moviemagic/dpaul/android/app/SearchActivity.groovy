@@ -55,6 +55,8 @@ class SearchActivity extends AppCompatActivity {
         getSupportActionBar().setTitle(getString(R.string.title_activity_search))
 
         mRecyclerView = findViewById(R.id.auto_grid_recycler_view) as RecyclerView
+        //Set this to false for smooth scrolling of recyclerview
+        mRecyclerView.setNestedScrollingEnabled(false)
         //Create a new interface member variable for MovieGridRecyclerAdapterOnClickHandler and the same is passed as
         //parameter to Adapter, this onClick method is called whenever onClick is called from MovieGridRecyclerAdapter
         mGridRecyclerAdapter = new MovieGridRecyclerAdapter(this,
@@ -190,7 +192,11 @@ class SearchActivity extends AppCompatActivity {
                 totalRecordCount = 0
                 Snackbar.make(mRecyclerView, String.format(getString(R.string.search_no_movie_found_message),queryString), Snackbar.LENGTH_LONG).show()
             }
-            getSupportActionBar().setSubtitle(String.format(getString(R.string.search_activity_subtitle_record_count),totalRecordCount))
+            if(totalRecordCount > 1) {
+                getSupportActionBar().setSubtitle(String.format(getString(R.string.search_activity_subtitle_record_count), totalRecordCount))
+            } else {
+                getSupportActionBar().setSubtitle(String.format(getString(R.string.search_activity_subtitle_record_count_single_or_zero), totalRecordCount))
+            }
         }
 
         protected List<ContentValues> downloadSearchMovies(String queryString, int page) {

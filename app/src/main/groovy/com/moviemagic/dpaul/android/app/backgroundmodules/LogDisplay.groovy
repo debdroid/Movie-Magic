@@ -31,7 +31,7 @@ class LogDisplay {
     public static final boolean GRID_MOVIE_FRAGMENT_LOG_FLAG = true
     public static final boolean GRID_ADAPTER_LOG_FLAG = false
     public static final boolean GRID_RECYCLER_ADAPTER_LOG_FLAG = false
-    public static final boolean LOAD_MORE_MOVIES_LOG_FLAG = false
+    public static final boolean LOAD_MORE_MOVIES_LOG_FLAG = true
     public static final boolean DETAIL_MOVIE_ACTIVITY_LOG_FLAG = true
     public static final boolean DETAIL_MOVIE_FRAGMENT_LOG_FLAG = true
     public static final boolean LOAD_MOVIE_DETAILS_LOG_FLAG = false
@@ -62,6 +62,7 @@ class LogDisplay {
     public static final boolean NETWORK_RECEIVER_LOG_FLAG = false
     public static final boolean SEARCH_ACTIVITY_LOG_FLAG = true
     public static final boolean SEARCH_DATABASE_TABLE_LOG_FLAG = true
+    public static final boolean DONATE_ACTIVITY_LOG_FLAG = true
 
     static void callLog(String tag, String msg, Boolean logFlag) {
         if(SHOW_ALL_LOG_FLAG) {
