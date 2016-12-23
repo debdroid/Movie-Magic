@@ -294,8 +294,11 @@
     <string name="nav_menu_donate">Donate</string>
     <string name="nav_menu_rate_the_app">Rate and Comment</string>
     <string name="developer_email_id">send2deb@gmail.com</string>
-    <string name="donate_header">Your help can make a big difference</string>
-    <string name="donate_body">The app is absolutely free and contains no add. If you like this app and would like to give the developer a big thumbs up then do so by making a small donation by visiting any of the sites mentioned below or any other charity or NGO you wish. Please do not forget to mention your donation in the comment section of the Google Playsotre, it will motivate the developer to develop more free app and surely inspire others to donate. Thanks for using the application.</string>
+    <string name="donate_header">Make an Impact</string>
+    <string name="donate_body">The app is absolutely free and contains no add. If you like this app and would want to give the developer a big thumbs up then do so by making a small donation by visiting any of the sites from the below list or any other charity or NGO you wish. Please do not forget to mention your donation in the comment section of the Google Play Store, it will motivate the developer to develop more free apps and surely inspire others to donate. Thanks for your donation.</string>
     <string name="title_activity_donate">Donate</string>
+    <string name="donate_item_header">Donate Item Header</string>
+    <string name="single_donate_item_link_address">hhtps://www.donateitemlink.com</string>
+    <string name="single_donate_item_donate_button">Donate</string>
 
 </resources>

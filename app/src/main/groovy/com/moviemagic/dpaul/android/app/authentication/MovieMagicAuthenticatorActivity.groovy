@@ -408,5 +408,13 @@ class MovieMagicAuthenticatorActivity extends AccountAuthenticatorActivity {
         setResult(AccountManager.ERROR_CODE_CANCELED, null)
         finish()
     }
+
+    @Override
+    void onBackPressed() {
+        LogDisplay.callLog(LOG_TAG, 'onBackPressed is called', LogDisplay.MOVIE_MAGIC_AUTHENTICATOR_ACTIVITY_LOG_FLAG)
+        super.onBackPressed()
+        //Start the animation
+        overridePendingTransition(0, R.anim.slide_bottom_out_animation)
+    }
 }
 

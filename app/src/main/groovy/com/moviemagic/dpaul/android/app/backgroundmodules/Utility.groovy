@@ -5,12 +5,11 @@ import android.content.SharedPreferences
 import android.net.ConnectivityManager
 import android.net.NetworkInfo
 import android.os.Environment
-import android.preference.PreferenceManager
-import com.moviemagic.dpaul.android.app.R;
-import groovy.transform.CompileStatic
-
+import android.support.v7.preference.PreferenceManager
+import com.moviemagic.dpaul.android.app.R
 import java.text.NumberFormat
 import java.text.SimpleDateFormat
+import groovy.transform.CompileStatic
 
 @CompileStatic
 class Utility {

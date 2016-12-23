@@ -262,6 +262,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="left"
             android:isIndicator="true"
+            android:max="10"
             android:numStars="10"
             android:rating="3.5"
             android:stepSize="0.1" />
@@ -295,8 +296,6 @@
             android:layout_gravity="left"
             android:isIndicator="false"
             android:max="10"
-            android:maxHeight="32dp"
-            android:minHeight="32dp"
             android:numStars="10"
             android:rating="0"
             android:stepSize="0.5" />

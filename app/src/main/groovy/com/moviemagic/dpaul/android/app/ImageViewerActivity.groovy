@@ -1,15 +1,10 @@
 package com.moviemagic.dpaul.android.app
 
 import android.Manifest
-import android.app.AlertDialog
-import android.content.Context
-import android.content.DialogInterface
 import android.content.Intent
-import android.content.SharedPreferences
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.drawable.BitmapDrawable
-import android.media.MediaScannerConnection
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
@@ -43,6 +38,7 @@ class ImageViewerActivity extends AppCompatActivity {
     private int mAdapterPostion
     private boolean mBackdropImageFlag
     private RelativeLayout mImageViewerMainLayout
+    protected ViewPager mViewPager
 //    private View decorView
     private ImagePagerAdapter mAdapter
 //    private int mCurrentImageId
@@ -53,7 +49,7 @@ class ImageViewerActivity extends AppCompatActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_image_viewer)
-        ViewPager viewPager = findViewById(R.id.image_viewer_pager) as ViewPager
+        mViewPager = findViewById(R.id.image_viewer_pager) as ViewPager
         mImageViewerMainLayout = findViewById(R.id.image_viewer_main_layout) as RelativeLayout
 
         if(savedInstanceState == null) {
@@ -105,9 +101,9 @@ class ImageViewerActivity extends AppCompatActivity {
                     }
                 }, mBackdropImageFlag)
 
-        viewPager.setAdapter(mAdapter)
+        mViewPager.setAdapter(mAdapter)
         //Position it at correct place (the image which is clicked)
-        viewPager.setCurrentItem(mAdapterPostion)
+        mViewPager.setCurrentItem(mAdapterPostion)
     }
 
     @Override
@@ -142,11 +138,14 @@ class ImageViewerActivity extends AppCompatActivity {
     protected void saveImageToExternalStorage() {
         LogDisplay.callLog(LOG_TAG, 'saveImageToExternalStorage is called', LogDisplay.IMAGE_VIEWER_ACTIVITY_LOG_FLAG)
 
+        final int imagePosition = mViewPager.getCurrentItem()
+        LogDisplay.callLog(LOG_TAG, "imagePosition -> $imagePosition", LogDisplay.IMAGE_VIEWER_ACTIVITY_LOG_FLAG)
+
         // Get the ImageView which is currently hosting the image
-        final ImageView imageView = findViewById(R.id.image_viewer_image) as ImageView
+        final ImageView imageView = mViewPager.findViewWithTag(ImagePagerAdapter.PAGER_CURRENT_IMAGE_TAG+imagePosition) as ImageView
         // Get the Bitmap from the ImageView
         Bitmap bitmapImage
-        if(imageView.getDrawable()) {
+        if(imageView && imageView.getDrawable()) {
             bitmapImage  = ((BitmapDrawable) imageView.getDrawable()).getBitmap()
         } else {
             LogDisplay.callLog(LOG_TAG,'Not able to retrieve the bitmap',LogDisplay.IMAGE_VIEWER_ACTIVITY_LOG_FLAG)

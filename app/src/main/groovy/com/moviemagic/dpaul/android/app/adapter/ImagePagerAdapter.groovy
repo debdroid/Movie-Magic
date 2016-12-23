@@ -31,6 +31,7 @@ class ImagePagerAdapter extends PagerAdapter {
     private LayoutInflater mLayoutInflater
     private final boolean mBackdropImageFlag
     private int mPosition
+    public static final String PAGER_CURRENT_IMAGE_TAG = 'pager_current_image_tag'
 
     public ImagePagerAdapter() {
         LogDisplay.callLog(LOG_TAG,'ImagePagerAdapter empty constructor is called',LogDisplay.IMAGE_PAGER_ADAPTER_LOG_FLAG)
@@ -63,6 +64,8 @@ class ImagePagerAdapter extends PagerAdapter {
         mLayoutInflater = LayoutInflater.from(mContext)
         final View view = mLayoutInflater.inflate(R.layout.single_image_viewer_item, container, false)
         final ImageView imageView = view.findViewById(R.id.image_viewer_image) as ImageView
+        // Set tag which will be used to retrieve this image while saving
+        imageView.setTag(PAGER_CURRENT_IMAGE_TAG+position)
         if(mBackdropImageFlag) {
             final LayoutParams layoutParams = imageView.getLayoutParams()
             layoutParams.width = ViewGroup.LayoutParams.MATCH_PARENT

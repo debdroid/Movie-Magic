@@ -16,6 +16,7 @@
     </style>
 
     <style name="SettingsTheme" parent="BaseTheme">
+        <item name="preferenceTheme">@style/PreferenceThemeOverlay</item>
     </style>
 
     <!-- Toolbar theme -->
@@ -31,6 +32,12 @@
     <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
 
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+
+    <!-- Ratingbar star color theme -->
+    <!--<style name="RatingBarTheme" parent="Theme.AppCompat">-->
+        <!--<item name="colorControlNormal">@color/grey_600_color</item>-->
+        <!--<item name="colorControlActivated">@color/accent</item>-->
+    <!--</style>-->
 
     <!--&lt;!&ndash; Main activity toolbar theme &ndash;&gt;-->
     <!--<style name="Toolbar" parent="Widget.AppCompat.Toolbar">-->

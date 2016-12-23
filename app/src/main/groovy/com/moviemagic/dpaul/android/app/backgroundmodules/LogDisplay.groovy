@@ -63,6 +63,7 @@ class LogDisplay {
     public static final boolean SEARCH_ACTIVITY_LOG_FLAG = true
     public static final boolean SEARCH_DATABASE_TABLE_LOG_FLAG = true
     public static final boolean DONATE_ACTIVITY_LOG_FLAG = true
+    public static final boolean DONATE_ADAPTER_LOG_FLAG = true
 
     static void callLog(String tag, String msg, Boolean logFlag) {
         if(SHOW_ALL_LOG_FLAG) {

@@ -1,7 +1,6 @@
 package com.moviemagic.dpaul.android.app
 
 import android.app.Activity
-import android.app.AlertDialog
 import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
@@ -9,10 +8,14 @@ import android.content.res.ColorStateList
 import android.database.Cursor
 import android.graphics.Bitmap
 import android.graphics.Color
+import android.graphics.PorterDuff
 import android.graphics.drawable.BitmapDrawable
+import android.graphics.drawable.Drawable
+import android.graphics.drawable.LayerDrawable
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
+import android.support.annotation.ColorInt
 import android.support.design.widget.AppBarLayout
 import android.support.design.widget.CollapsingToolbarLayout
 import android.support.design.widget.Snackbar
@@ -22,12 +25,15 @@ import android.support.v4.app.LoaderManager
 import android.support.v4.content.ContextCompat
 import android.support.v4.content.CursorLoader
 import android.support.v4.content.Loader
+import android.support.v4.graphics.drawable.DrawableCompat
 import android.support.v4.view.MenuItemCompat
 import android.support.v4.view.ViewCompat
 import android.support.v4.view.ViewPager
 import android.support.v4.view.ViewPager.OnPageChangeListener
+import android.support.v7.app.AlertDialog
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.graphics.Palette
+import android.support.v7.widget.AppCompatImageButton
 import android.support.v7.widget.GridLayoutManager
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
@@ -50,18 +56,8 @@ import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.RatingBar
 import android.widget.TextView
-import com.moviemagic.dpaul.android.app.adapter.DetailFragmentPagerAdapter
-import com.moviemagic.dpaul.android.app.adapter.MovieCastAdapter
-import com.moviemagic.dpaul.android.app.adapter.MovieCrewAdapter
-import com.moviemagic.dpaul.android.app.adapter.MovieReviewAdapter
-import com.moviemagic.dpaul.android.app.adapter.SimilarMovieAdapter
-import com.moviemagic.dpaul.android.app.backgroundmodules.GlobalStaticVariables
-import com.moviemagic.dpaul.android.app.backgroundmodules.LoadMovieDetails
-import com.moviemagic.dpaul.android.app.backgroundmodules.LogDisplay
-import com.moviemagic.dpaul.android.app.backgroundmodules.PicassoLoadImage
-import com.moviemagic.dpaul.android.app.backgroundmodules.UpdateUserListChoiceAndRating
-import com.moviemagic.dpaul.android.app.backgroundmodules.UploadTmdbRequest
-import com.moviemagic.dpaul.android.app.backgroundmodules.Utility
+import com.moviemagic.dpaul.android.app.adapter.*
+import com.moviemagic.dpaul.android.app.backgroundmodules.*
 import com.moviemagic.dpaul.android.app.contentprovider.MovieMagicContract
 import com.moviemagic.dpaul.android.app.youtube.MovieMagicYoutubeFragment
 import com.squareup.picasso.Callback
@@ -142,7 +138,6 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
     private static final int MOVIE_DETAIL_FRAGMENT_MOVIE_REVIEW_LOADER_ID = 7
     private static final int MOVIE_DETAIL_FRAGMENT_MOVIE_USER_LIST_FLAG_LOADER_ID = 8
     private static final int MOVIE_DETAIL_FRAGMENT_BASIC_TMDB_DATA_LOADER_ID = 9
-
 
     //Columns to fetch from movie_basic_info table
     private static final String[] MOVIE_BASIC_INFO_COLUMNS = [MovieMagicContract.MovieBasicInfo._ID,
@@ -404,7 +399,7 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
             LogDisplay.callLog(LOG_TAG, 'Could not parse fragment data', LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
         }
         //Inflate the view before referring any view using id
-        View mRootView = inflater.inflate(R.layout.fragment_detail_movie, container, false)
+        final View mRootView = inflater.inflate(R.layout.fragment_detail_movie, container, false)
         //TODO: Need to verify if this animation is working or not
         //Set a fade animation
         final Animation fadeIn = new AlphaAnimation(0, 1)
@@ -1083,7 +1078,6 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
                 @Override
                 void onSuccess() {
                     LogDisplay.callLog(LOG_TAG, 'Picasso callback: onSuccess is called', LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
-                    //TODO: Future change - provide a setting option to user to chose if they want this or will use default theme
                     // If user does not select dynamic theme (default value) then do not change the color
                     if (Utility.isDynamicTheme(getActivity())) {
                         final Bitmap bitmapPoster = ((BitmapDrawable) mPosterImageView.getDrawable()).getBitmap()
@@ -1131,21 +1125,26 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
                                     mPalletePrimaryDarkColor = ContextCompat.getColor(getActivity(), R.color.primary_dark)
                                     mPalleteTitleColor = ContextCompat.getColor(getActivity(), R.color.white_color)
                                     mPalleteBodyTextColor = ContextCompat.getColor(getActivity(), R.color.grey_color)
-                                    //This is needed as we are not going pick accent colour if falling back
+                                    //This is needed as we are not going to pick up accent colour if falling back
                                     mPalleteAccentColor = ContextCompat.getColor(getActivity(), R.color.accent)
                                 }
                                 //Pick accent color only if Swatch color is picked, otherwise do not pick accent color
-                                if (pickSwatchColorFlag) {
-                                    if (mutedSwatch) {
-                                        mPalleteAccentColor = mutedSwatch.getRgb()
-                                    } else if (mutedLightSwatch) { //Try another swatch
-                                        mPalleteAccentColor = mutedLightSwatch.getRgb()
-                                    } else if (mutedDarkSwatch) { //Try last swatch
-                                        mPalleteAccentColor = mutedDarkSwatch.getRgb()
-                                    } else { //Fallback to default
-                                        mPalleteAccentColor = ContextCompat.getColor(getActivity(), R.color.accent)
-                                    }
-                                }
+                                /** Commenting it out as some times the contrast is not good between accent and Primary Dark **/
+                                /** Let's set the accent color to default values **/
+                                /** Didn't cleanup the lines of code where accent color is applied, so there will be some
+                                 * redundant lines of code but kept it as is in case those are needed in future **/
+                                mPalleteAccentColor = ContextCompat.getColor(getActivity(), R.color.accent)
+//                                if (pickSwatchColorFlag) {
+//                                    if (mutedSwatch) {
+//                                        mPalleteAccentColor = mutedSwatch.getRgb()
+//                                    } else if (mutedLightSwatch) { //Try another swatch
+//                                        mPalleteAccentColor = mutedLightSwatch.getRgb()
+//                                    } else if (mutedDarkSwatch) { //Try last swatch
+//                                        mPalleteAccentColor = mutedDarkSwatch.getRgb()
+//                                    } else { //Fallback to default
+//                                        mPalleteAccentColor = ContextCompat.getColor(getActivity(), R.color.accent)
+//                                    }
+//                                }
                                 // Apply the color to the layouts & texts
                                 changeLayoutAndTextColor()
                                 initializeTitleAndColor()
@@ -1245,7 +1244,6 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
                 mHomePageButton.setText(getActivity().getString(R.string.movie_detail_web_links_home_page))
                 mHomePageButton.setClickable(true)
                 mHomePageButton.setAlpha(GlobalStaticVariables.MOVIE_MAGIC_ALPHA_FULL_OPAQUE)
-                //TODO: Need to look into this Build.VERSION_CODES issue later
                 //Somehow while running in Jelly bean & KITKAT it cannot find Build.VERSION_CODES.LOLLIPOP, yet to figure out why!
                 //So using the API number (21 - LOLLIPOP)itself here and other places below
                 if (Build.VERSION.SDK_INT >= 21) {
@@ -1428,8 +1426,6 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
      */
     void processBackdropImages(Cursor data) {
         LogDisplay.callLog(LOG_TAG, "processBackdropImages.Cursor rec count -> ${data.getCount()}", LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
-        //TODO: Future change - provide a setting option to user to chose single backdrop for mobile data
-        //TODO: Future change - provide a setting option to user to chose no image download over mobile data & for better
         if (data.moveToFirst()) {
             mBackdropList = new ArrayList<String>()
             // Add the original backdrop image (i.e. which comes along with other movie details)
@@ -1455,7 +1451,8 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
             mBackdropViewPager.setAdapter(adapter)
             mBackdropViewPager.clearOnPageChangeListeners()
             final int dotsCount = adapter.getCount()
-            final ImageButton[] dotsImage = new ImageButton[dotsCount]
+//            final ImageButton[] dotsImage = new ImageButton[dotsCount]
+            final AppCompatImageButton[] dotsImage = new AppCompatImageButton[dotsCount]
             mBackdropDotHolderLayout.removeAllViews()
             setBackDropViewPagerDots(dotsCount, dotsImage)
             final OnPageChangeListener onPageChangeListener = new OnPageChangeListener() {
@@ -1465,15 +1462,23 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
 
                 @Override
                 void onPageSelected(int position) {
-                    final LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(20,20)
-                    final ColorStateList greyColorStateList = ColorStateList.valueOf(ContextCompat.getColor(getActivity(), R.color.grey_600_color))
+                    final LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(18,18)
+                    final ColorStateList whiteColorStateList = ColorStateList.valueOf(ContextCompat.getColor(getActivity(), R.color.white_color))
                     for (i in 0..(dotsCount - 1)) {
                         if (i != position) {
                             dotsImage[i].setLayoutParams(layoutParams)
-                            ViewCompat.setBackgroundTintList(dotsImage[i], greyColorStateList)
+//                            dotsImage[i].setImageTintList(whiteColorStateList)
+//                            dotsImage[i].setColorFilter(ContextCompat.getColor(getActivity(), R.color.white_color))
+//                            final Drawable drawable = dotsImage[i].getDrawable()
+//                            DrawableCompat.setTint(drawable,ContextCompat.getColor(getActivity(), R.color.white_color))
+                            ViewCompat.setBackgroundTintList(dotsImage[i], whiteColorStateList)
                         } else {
                             dotsImage[position].setLayoutParams(new LinearLayout.LayoutParams(30,30))
                             final ColorStateList accentColorStateList = ColorStateList.valueOf(ContextCompat.getColor(getActivity(), R.color.accent))
+//                            dotsImage[position].setImageTintList(accentColorStateList)
+//                            dotsImage[position].setColorFilter(ContextCompat.getColor(getActivity(), R.color.accent))
+//                            final Drawable drawable = dotsImage[position].getDrawable()
+//                            DrawableCompat.setTint(drawable,ContextCompat.getColor(getActivity(), R.color.accent))
                             ViewCompat.setBackgroundTintList(dotsImage[position], accentColorStateList)
                         }
                     }
@@ -1665,10 +1670,40 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
         mHomePageButton.setTextColor(mPalleteBodyTextColor)
         mImdbLinkButton.setTextColor(mPalleteBodyTextColor)
 
-        //Set ratingbar color. Used Compat so that it can work below lollipop.
+        //Set Ratingbar color. Used Compat so that it can work below lollipop.
         final ColorStateList colorStateListRatingBar = ColorStateList.valueOf(mPalleteAccentColor)
-        ViewCompat.setBackgroundTintList(mTmdbRatingBar,colorStateListRatingBar)
-        ViewCompat.setBackgroundTintList(mUserRatingBar,colorStateListRatingBar)
+//        mTmdbRatingBar.setProgressTintList(colorStateListRatingBar)
+//        ViewCompat.setBackgroundTintList(mTmdbRatingBar,colorStateListRatingBar)
+//        ViewCompat.setBackgroundTintList(mUserRatingBar,colorStateListRatingBar)
+            //TODO: Rating bar color not working in pre lollipop
+//        DrawableCompat.setTint(mTmdbRatingBar.getProgressDrawable(),mPalleteAccentColor)
+//        DrawableCompat.setTint(mUserRatingBar.getProgressDrawable(),mPalleteAccentColor)
+//        final LayerDrawable tmdbRatingBarlayerDrawable = mTmdbRatingBar.getProgressDrawable() as LayerDrawable
+        final LayerDrawable tmdbRatingBarlayerDrawable = (LayerDrawable) mTmdbRatingBar.getProgressDrawable() as LayerDrawable
+        setRatingStarColor(tmdbRatingBarlayerDrawable.getDrawable(2), mPalleteAccentColor) // Filled stars
+        setRatingStarColor(tmdbRatingBarlayerDrawable.getDrawable(1), ContextCompat.getColor(getContext(), R.color.grey_600_color)) // Half filled stars
+        setRatingStarColor(tmdbRatingBarlayerDrawable.getDrawable(0), ContextCompat.getColor(getContext(), R.color.grey_600_color)) // Empty stars
+
+//        tmdbRatingBarlayerDrawable.setColorFilter(mPalleteAccentColor,PorterDuff.Mode.SRC_IN)
+//        tmdbRatingBarlayerDrawable.getDrawable(2).setColorFilter(mPalleteAccentColor,PorterDuff.Mode.SRC_IN) // Full star
+//        tmdbRatingBarlayerDrawable.getDrawable(1).setColorFilter(mPalleteAccentColor,PorterDuff.Mode.SRC_IN) // Partial star
+//        tmdbRatingBarlayerDrawable.getDrawable(0).setColorFilter(mPalleteAccentColor,PorterDuff.Mode.SRC_IN) // Empty star
+        final LayerDrawable userRatingBarlayerDrawable = mUserRatingBar.getProgressDrawable() as LayerDrawable
+        setRatingStarColor(userRatingBarlayerDrawable.getDrawable(2), mPalleteAccentColor) // Filled stars
+        setRatingStarColor(userRatingBarlayerDrawable.getDrawable(1), ContextCompat.getColor(getContext(), R.color.grey_600_color)) // Half filled stars
+        setRatingStarColor(userRatingBarlayerDrawable.getDrawable(0), ContextCompat.getColor(getContext(), R.color.grey_600_color)) // Empty stars
+//        userRatingBarlayerDrawable.getDrawable(2).setColorFilter(mPalleteAccentColor,PorterDuff.Mode.SRC_IN) // Full star
+//        userRatingBarlayerDrawable.getDrawable(1).setColorFilter(mPalleteAccentColor,PorterDuff.Mode.SRC_IN) // Partial star
+//        userRatingBarlayerDrawable.getDrawable(0).setColorFilter(mPalleteAccentColor,PorterDuff.Mode.SRC_IN) // Empty star
+//        final Drawable drawable = mTmdbRatingBar.getProgressDrawable()
+//        drawable.setColorFilter(mPalleteAccentColor,PorterDuff.Mode.SRC_ATOP)
+//        drawable = DrawableCompat.wrap(drawable)
+//        drawable.setTintList(colorStateListRatingBar)
+//        DrawableCompat.setTintList(drawable,colorStateListRatingBar)
+//        drawable.mutate().setColorFilter(mPalleteAccentColor,PorterDuff.Mode.SRC_ATOP)
+//        DrawableCompat.setTintMode(drawable,PorterDuff.Mode.DST_ATOP)
+//        DrawableCompat.setTint(drawable.mutate(), Color.BLACK)
+//        drawable.setColorFilter(mPalleteAccentColor,PorterDuff.Mode.SRC_ATOP)
     }
 
     /**
@@ -1681,6 +1716,20 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
         mCollapsingToolbar.setBackgroundColor(mPalletePrimaryColor)
         mCollapsingToolbar.setCollapsedTitleTextColor(mPalleteTitleColor)
 //        showCollapsedTitle()
+    }
+
+    private void setRatingStarColor(Drawable drawable, @ColorInt int color)
+    {
+        if (Build.VERSION.SDK_INT >= 21) { // Greater than equal Lollipop
+            // Do nothing as it automatically uses the accent color
+            // Following lines again works 99& times but not using as it picks up accent color in Lollipop and above
+//            drawable = DrawableCompat.wrap(drawable)
+//            DrawableCompat.setTint(drawable, color)
+        } else {
+            // This works 99% times in pre lollipop but there are cases where it's still bit buggy
+            // but does the job most of the times, so keeping it
+            drawable.setColorFilter(color, PorterDuff.Mode.SRC_IN)
+        }
     }
 
     /**
@@ -1740,20 +1789,31 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
      * @param dotsCount Total number of dots to be created
      * @param dotsImage Array of Image Buttons
      */
-    private void setBackDropViewPagerDots(int dotsCount, ImageButton[] dotsImage) {
-        final LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(20,20)
-        final ColorStateList greyColorStateList = ColorStateList.valueOf(ContextCompat.getColor(getActivity(), R.color.grey_600_color))
+//    private void setBackDropViewPagerDots(int dotsCount, ImageButton[] dotsImage) {
+    private void setBackDropViewPagerDots(int dotsCount, AppCompatImageButton[] dotsImage) {
+        final LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(18,18)
+        final ColorStateList whiteColorStateList = ColorStateList.valueOf(ContextCompat.getColor(getActivity(), R.color.white_color))
         layoutParams.setMargins(1,0,1,0)
         for(i in 0..(dotsCount - 1)) {
-            dotsImage[i] = new ImageButton(getActivity())
+//            dotsImage[i] = new ImageButton(getActivity())
+            dotsImage[i] = new AppCompatImageButton(getActivity())
             dotsImage[i].setBackgroundResource(R.drawable.view_pager_dot)
             dotsImage[i].setLayoutParams(layoutParams)
-            ViewCompat.setBackgroundTintList(dotsImage[i], greyColorStateList)
+//            dotsImage[i].setImageTintList(whiteColorStateList)
+            ViewCompat.setBackgroundTintList(dotsImage[i], whiteColorStateList)
+//            dotsImage[i].setColorFilter(ContextCompat.getColor(getActivity(), R.color.white_color))
             mBackdropDotHolderLayout.addView(dotsImage[i])
+//            final Drawable drawable = dotsImage[i].getDrawable()
+//            DrawableCompat.setTint(drawable,ContextCompat.getColor(getActivity(), R.color.white_color))
+//            dotsImage[i].setColorFilter(ContextCompat.getColor(getActivity(), R.color.white_color))
         }
         // Set the first one's color & size
         dotsImage[mBackdropViewPagerPos].setLayoutParams(new LinearLayout.LayoutParams(30,30))
         final ColorStateList accentColorStateList = ColorStateList.valueOf(ContextCompat.getColor(getActivity(), R.color.accent))
+//        dotsImage[mBackdropViewPagerPos].setImageTintList(accentColorStateList)
+//        dotsImage[mBackdropViewPagerPos].setColorFilter(ContextCompat.getColor(getActivity(), R.color.accent))
+//        final Drawable drawable = dotsImage[mBackdropViewPagerPos].getDrawable()
+//        DrawableCompat.setTint(drawable,ContextCompat.getColor(getActivity(), R.color.accent))
         ViewCompat.setBackgroundTintList(dotsImage[mBackdropViewPagerPos], accentColorStateList)
     }
 
@@ -1845,7 +1905,7 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
 //            mHandler.removeCallbacksAndMessages(null)
 //        }
         //Cancel Picasso requests - required where callback (hard reference) is used
-        //TODO this is not done everywhere, so need to do in other places
+        //TODO: this is not done everywhere, so need to do in other places
         Picasso.with(getActivity()).cancelRequest(mPosterImageView)
     }
 

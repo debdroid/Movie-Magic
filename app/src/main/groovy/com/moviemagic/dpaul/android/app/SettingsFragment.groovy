@@ -2,21 +2,45 @@ package com.moviemagic.dpaul.android.app
 
 import android.content.SharedPreferences
 import android.os.Bundle
-import android.preference.ListPreference
-import android.preference.Preference
-import android.preference.PreferenceFragment
-import android.preference.PreferenceManager
+import android.support.v7.preference.ListPreference
+import android.support.v7.preference.Preference
+import android.support.v7.preference.PreferenceFragmentCompat
 import com.moviemagic.dpaul.android.app.backgroundmodules.LogDisplay
 import com.moviemagic.dpaul.android.app.contentprovider.MovieMagicContract
 import groovy.transform.CompileStatic
 
 @CompileStatic
-class SettingsFragment extends PreferenceFragment implements SharedPreferences.OnSharedPreferenceChangeListener {
+class SettingsFragment extends PreferenceFragmentCompat implements SharedPreferences.OnSharedPreferenceChangeListener {
     private static final String LOG_TAG = SettingsFragment.class.getSimpleName()
 
+//    public SettingsFragment() {
+//        LogDisplay.callLog(LOG_TAG,'Empty constructor is called',LogDisplay.SETTINGS_FRAGMENT_LOG_FLAG)
+//    }
+
+//    @Override
+//    void onCreate(Bundle savedInstanceState) {
+//        super.onCreate(savedInstanceState)
+//        LogDisplay.callLog(LOG_TAG,'onCreate is called',LogDisplay.SETTINGS_FRAGMENT_LOG_FLAG)
+//
+//        //Add the preference (i.e. Settings) xml
+//        addPreferencesFromResource(R.xml.preference_xml)
+//
+//        // Set the correct summary for Theme
+//        final Preference preference = findPreference(getString(R.string.pref_theme_key)) as Preference
+//        if(preference instanceof ListPreference) {
+//            final ListPreference listPreference = preference as ListPreference
+//            final SharedPreferences sharedPreferences = preference.getSharedPreferences()
+//            final int prefIndex = listPreference.findIndexOfValue(sharedPreferences.getString(getString(R.string.pref_theme_key),''))
+//            if(prefIndex >= 0) {
+//                preference.setSummary(listPreference.getEntries()[prefIndex])
+//            }
+//        }
+//
+//    }
+
     @Override
-    void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState)
+    void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
+//        super.onCreate(savedInstanceState)
         LogDisplay.callLog(LOG_TAG,'onCreate is called',LogDisplay.SETTINGS_FRAGMENT_LOG_FLAG)
 
         //Add the preference (i.e. Settings) xml
@@ -32,7 +56,6 @@ class SettingsFragment extends PreferenceFragment implements SharedPreferences.O
                 preference.setSummary(listPreference.getEntries()[prefIndex])
             }
         }
-
     }
 
     @Override
@@ -50,7 +73,7 @@ class SettingsFragment extends PreferenceFragment implements SharedPreferences.O
     @Override
     void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
         LogDisplay.callLog(LOG_TAG,'onSharedPreferenceChanged is called',LogDisplay.SETTINGS_FRAGMENT_LOG_FLAG)
-        final Preference preference = findPreference(key)
+        final Preference preference = findPreference(key) as Preference
         // For list preferences, look up the correct display value in
         // the preference's 'entries' list (since they have separate labels/values).
         if(preference instanceof ListPreference) {

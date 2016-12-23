@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <!-- The ordering of layout is important. If ViewPager is added after Toolbar then ViewPager hides the Toolbar in pre lolipop version -->
+    <!-- The ordering of layout is important. If ViewPager is added after Toolbar then ViewPager hides the Toolbar in pre lollipop version -->
     <android.support.v4.view.ViewPager
         android:id="@+id/image_viewer_pager"
         android:layout_width="wrap_content"
