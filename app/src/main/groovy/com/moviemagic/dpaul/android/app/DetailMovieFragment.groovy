@@ -1824,7 +1824,6 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
 //            mHandler.removeCallbacksAndMessages(null)
 //        }
         //Cancel Picasso requests - required where callback (hard reference) is used
-        //TODO: this is not done everywhere, so need to do in other places
         Picasso.with(getActivity()).cancelRequest(mPosterImageView)
     }
 

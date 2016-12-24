@@ -34,6 +34,7 @@
                         android:layout_height="24dp"
                         android:layout_gravity="center"
                         android:src="@drawable/ic_favorite_border_white_48dp"
+                        android:contentDescription="@string/donate_background_image_content_description"
                         android:tint="@color/accent" />
 
                     <TextView
@@ -67,6 +68,7 @@
                 android:scaleType="fitEnd"
                 android:alpha="0.5"
                 android:baselineAlignBottom="true"
+                android:contentDescription="@string/donate_background_image_content_description"
                 android:src="@drawable/donate_volunteer_image" />
         </FrameLayout>
         <FrameLayout

@@ -1,6 +1,7 @@
 <android.support.design.widget.CoordinatorLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/collection_coordinator_layout"
     android:background="@color/primary"
     android:layout_width="match_parent"
@@ -28,6 +29,7 @@
                     android:layout_height="@dimen/backdrop_image_height_detail_view"
                     android:scaleType="centerCrop"
                     android:fitsSystemWindows="true"
+                    android:contentDescription="@string/collection_backdrop_image_content_description"
                     android:src="@drawable/grid_image_placeholder" />
             <!-- setting itsSystemWindows="true" for toolbar moves home up and setting buttons to status bar -->
             <android.support.v7.widget.Toolbar
@@ -37,7 +39,8 @@
                 android:elevation="@dimen/m_design_toolbar_elevation"
                 app:layout_collapseMode="pin"
                 android:fitsSystemWindows="false"
-                app:popupTheme="@style/AppTheme.PopupOverlay" />
+                app:popupTheme="@style/AppTheme.PopupOverlay"
+                tools:ignore="UnusedAttribute" />
         </android.support.design.widget.CollapsingToolbarLayout>
     </android.support.design.widget.AppBarLayout>
     <android.support.v4.widget.NestedScrollView

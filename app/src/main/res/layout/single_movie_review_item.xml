@@ -1,4 +1,5 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 <LinearLayout
@@ -38,7 +39,9 @@
         android:clickable="true"
         android:backgroundTint="@color/divider_color"
         android:layout_below="@+id/single_review_item_linear_layout"
-        android:background="@drawable/ic_keyboard_arrow_down_white_24dp"/>
+        android:contentDescription="@string/review_item_show_button_content_description"
+        android:background="@drawable/ic_keyboard_arrow_down_white_24dp"
+        tools:ignore="UnusedAttribute" />
     <View
         android:id="@+id/single_review_item_divider"
         android:layout_marginTop="@dimen/m_design_space_between_content_area"
@@ -55,7 +58,9 @@
         android:layout_alignParentEnd="true"
         android:clickable="true"
         android:backgroundTint="@color/divider_color"
+        android:contentDescription="@string/review_item_hide_button_content_description"
         android:visibility="invisible"
         android:layout_below="@+id/single_review_item_linear_layout"
-        android:background="@drawable/ic_keyboard_arrow_up_white_24dp"/>
+        android:background="@drawable/ic_keyboard_arrow_up_white_24dp"
+        tools:ignore="UnusedAttribute" />
 </RelativeLayout>

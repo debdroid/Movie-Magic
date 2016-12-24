@@ -14,6 +14,7 @@
             android:layout_height="match_parent"
             android:adjustViewBounds="true"
             android:scaleType="centerCrop"
+            android:contentDescription="@string/backdrop_viewpager_image_content_description"
             android:src="@drawable/view_pager_dot" />
     </LinearLayout>
 </RelativeLayout>

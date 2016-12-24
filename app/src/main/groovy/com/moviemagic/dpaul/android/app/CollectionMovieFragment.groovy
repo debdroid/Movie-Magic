@@ -435,6 +435,7 @@ class CollectionMovieFragment extends Fragment implements LoaderManager.LoaderCa
     void onStop() {
         LogDisplay.callLog(LOG_TAG, 'onStop is called', LogDisplay.COLLECTION_MOVIE_FRAGMENT_LOG_FLAG)
         super.onStop()
+        //Cancel Picasso requests - required where callback (hard reference) is used
         Picasso.with(getActivity()).cancelRequest(mBackdropImageView)
     }
 

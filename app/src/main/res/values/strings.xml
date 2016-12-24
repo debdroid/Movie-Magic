@@ -299,4 +299,36 @@
     <string name="notification_day_name_today">Today</string>
     <string name="notification_day_name_tomorrow">Tomorrow</string>
 
+    <!-- ImageView or ImageButton content description -->
+    <string name="backdrop_viewpager_image_content_description">Movie backdrop image</string>
+    <string name="image_viewer_image_content_description">Full screen image</string>
+    <string name="nav_drawer_imageView_content_description">App logo image</string>
+    <string name="home_movie_backdrop_image_content_description">Movie backdrop image</string>
+    <string name="home_movie_poster_image_content_description">Movie poster image</string>
+    <string name="person_poster_image_content_description">Person profile image</string>
+    <string name="grid_image_view_content_description">Movie poster image</string>
+    <string name="similar_movie_grid_image_content_description">Similar movie poster image</string>
+    <string name="person_image_grid_movie_image_content_description">Person image</string>
+    <string name="collection_backdrop_image_content_description">Collection backdrop image</string>
+    <string name="movie_cast_grid_image_content_description">Movie cast poster image</string>
+    <string name="movie_crew_grid_image_content_description">Movie crew poster image</string>
+    <string name="person_cast_grid_movie_image_content_description">Person cast poster image</string>
+    <string name="person_crew_grid_movie_image_content_description">Person crew poster image</string>
+    <string name="donate_background_image_content_description">Donate background image</string>
+    <string name="movie_detail_mpaa_image_content_description">Movie mpaa rating image</string>
+    <string name="review_item_show_button_content_description">Review expand image button</string>
+    <string name="review_item_hide_button_content_description">Review collapse image button</string>
+    <string name="movie_detail_poster_image_content_description">Movie poster</string>
+    <string name="donate_logo_image_content_description">Donate logo image</string>
+    <string name="person_biography_show_button_content_description">Person biography expand image button</string>
+    <string name="person_biography_hide_button_content_description">Person biography collapse image button</string>
+    <string name="movie_detail_user_list_drawable_watched_content_description">User list watched image button</string>
+    <string name="movie_detail_user_list_drawable_wish_list_content_description">User wish list image button</string>
+    <string name="movie_detail_user_list_drawable_favourite_content_description">User favourite image button</string>
+    <string name="movie_detail_user_list_drawable_collection_content_description">User list collection button</string>
+    <string name="movie_detail_user_tmdb_list_drawable_watchlist_content_description">User Tmdb watch list image button</string>
+    <string name="movie_detail_user_tmdb_list_drawable_favourite_content_description">User Tmdb favourite image button</string>
+    <string name="movie_detail_user_tmdb_list_drawable_rated_content_description">User Tmdb rated image button</string>
+
+
 </resources>

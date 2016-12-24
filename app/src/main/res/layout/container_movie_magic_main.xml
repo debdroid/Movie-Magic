@@ -19,7 +19,9 @@
             android:background="?attr/colorPrimary"
             android:elevation="@dimen/m_design_toolbar_elevation"
             app:subtitleTextColor="@color/accent"
-            app:popupTheme="@style/AppTheme.PopupOverlay" />
+            app:popupTheme="@style/AppTheme.PopupOverlay"
+            tools:ignore="UnusedAttribute"
+            tools:targetApi="lollipop" />
     </android.support.design.widget.AppBarLayout>
 
     <include layout="@layout/content_movie_magic_main" />

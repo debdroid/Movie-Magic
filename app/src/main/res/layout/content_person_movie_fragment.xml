@@ -1,5 +1,6 @@
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/person_info_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -22,7 +23,9 @@
             android:scaleType="centerCrop"
             android:layout_alignParentTop="true"
             android:elevation="@dimen/cardview_default_elevation"
-            android:src="@drawable/grid_image_placeholder" />
+            android:contentDescription="@string/person_poster_image_content_description"
+            android:src="@drawable/grid_image_placeholder"
+            tools:ignore="UnusedAttribute" />
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -243,7 +246,9 @@
             android:layout_alignParentRight="true"
             android:layout_alignParentEnd="true"
             android:backgroundTint="@color/divider_color"
-            android:background="@drawable/ic_keyboard_arrow_down_white_24dp"/>
+            android:contentDescription="@string/person_biography_show_button_content_description"
+            android:background="@drawable/ic_keyboard_arrow_down_white_24dp"
+            tools:ignore="UnusedAttribute" />
         <ImageButton
             android:id="@+id/person_biography_hide_button"
             android:layout_width="@dimen/person_biography_collapse_icon_size"
@@ -254,7 +259,9 @@
             android:layout_alignParentRight="true"
             android:layout_alignParentEnd="true"
             android:visibility="invisible"
-            android:background="@drawable/ic_keyboard_arrow_up_white_24dp"/>
+            android:contentDescription="@string/person_biography_hide_button_content_description"
+            android:background="@drawable/ic_keyboard_arrow_up_white_24dp"
+            tools:ignore="UnusedAttribute" />
     </RelativeLayout>
 
 

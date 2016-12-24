@@ -29,6 +29,7 @@
                     android:layout_width="@dimen/grid_image_width"
                     android:layout_height="@dimen/grid_image_height"
                     android:scaleType="centerCrop"
+                    android:contentDescription="@string/person_crew_grid_movie_image_content_description"
                     android:src="@mipmap/ic_launcher" />
                 <TextView
                     android:id="@+id/person_crew_grid_job_name"

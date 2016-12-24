@@ -14,6 +14,7 @@
             android:layout_height="match_parent"
             android:adjustViewBounds="true"
             android:scaleType="centerCrop"
+            android:contentDescription="@string/image_viewer_image_content_description"
             android:src="@mipmap/ic_launcher" />
     </LinearLayout>
 

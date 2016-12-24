@@ -25,6 +25,7 @@
                     android:id="@+id/person_image_grid_movie_image"
                     android:layout_width="@dimen/person_grid_image_width"
                     android:layout_height="@dimen/person_grid_image_height"
+                    android:contentDescription="@string/person_image_grid_movie_image_content_description"
                     android:scaleType="centerCrop"
                     android:src="@mipmap/ic_launcher" />
             </FrameLayout>
