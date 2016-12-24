@@ -16,11 +16,8 @@ class MovieMagicYoutubeFragment extends YouTubePlayerSupportFragment implements 
 
     //Error dialog id
     private static final int RECOVERY_ERROR_DIALOG_ID = 1
-
     public static final String YOUTUBE_VIDEO_ID_KEY = 'youtube_video_id_key'
-
     private List<String> mVideoIds
-//    private ArrayList<String> videoIdsArrayList
 
     //Empty constructor, to be used by the system while creating the fragment when embedded in XML
     MovieMagicYoutubeFragment () {
@@ -53,8 +50,6 @@ class MovieMagicYoutubeFragment extends YouTubePlayerSupportFragment implements 
             mVideoIds = bundle.getStringArrayList(YOUTUBE_VIDEO_ID_KEY)
         } else if (arguments != null && arguments.containsKey(YOUTUBE_VIDEO_ID_KEY)) { // First start
             LogDisplay.callLog(LOG_TAG,'onCreate: first initial case..',LogDisplay.MOVIE_MAGIC_YOUTUBE_FRAGMENT_LOG_FLAG)
-            //TODO: Strangely videoIdsArrayList is no where used but holds data! so changing it, will remove after testing
-//            videoIdsArrayList = arguments.getStringArrayList(YOUTUBE_VIDEO_ID_KEY)
             mVideoIds = arguments.getStringArrayList(YOUTUBE_VIDEO_ID_KEY)
         }
         initialize(BuildConfig.YOUTUBE_API_KEY, this)

@@ -99,7 +99,6 @@ class HomeMovieAdapter extends RecyclerView.Adapter<HomeMovieAdapter.HomeMovieAd
             void onError() {
                 //Hide the poster
                 holder.moviePosterImageView.setVisibility(ImageView.GONE)
-                //TODO: Need to check if this is the best way to do this - remove the hard ref of callback
                 Picasso.with(mContext).cancelRequest(holder.moviePosterImageView)
             }
         }

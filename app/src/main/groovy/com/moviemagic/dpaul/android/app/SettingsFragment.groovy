@@ -13,34 +13,8 @@ import groovy.transform.CompileStatic
 class SettingsFragment extends PreferenceFragmentCompat implements SharedPreferences.OnSharedPreferenceChangeListener {
     private static final String LOG_TAG = SettingsFragment.class.getSimpleName()
 
-//    public SettingsFragment() {
-//        LogDisplay.callLog(LOG_TAG,'Empty constructor is called',LogDisplay.SETTINGS_FRAGMENT_LOG_FLAG)
-//    }
-
-//    @Override
-//    void onCreate(Bundle savedInstanceState) {
-//        super.onCreate(savedInstanceState)
-//        LogDisplay.callLog(LOG_TAG,'onCreate is called',LogDisplay.SETTINGS_FRAGMENT_LOG_FLAG)
-//
-//        //Add the preference (i.e. Settings) xml
-//        addPreferencesFromResource(R.xml.preference_xml)
-//
-//        // Set the correct summary for Theme
-//        final Preference preference = findPreference(getString(R.string.pref_theme_key)) as Preference
-//        if(preference instanceof ListPreference) {
-//            final ListPreference listPreference = preference as ListPreference
-//            final SharedPreferences sharedPreferences = preference.getSharedPreferences()
-//            final int prefIndex = listPreference.findIndexOfValue(sharedPreferences.getString(getString(R.string.pref_theme_key),''))
-//            if(prefIndex >= 0) {
-//                preference.setSummary(listPreference.getEntries()[prefIndex])
-//            }
-//        }
-//
-//    }
-
     @Override
     void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
-//        super.onCreate(savedInstanceState)
         LogDisplay.callLog(LOG_TAG,'onCreate is called',LogDisplay.SETTINGS_FRAGMENT_LOG_FLAG)
 
         //Add the preference (i.e. Settings) xml

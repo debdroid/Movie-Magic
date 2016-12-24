@@ -22,7 +22,6 @@
             android:layout_height="wrap_content"
             android:fontFamily="sans-serif"
             android:gravity="left"
-            android:text="@string/movie_detail_title_text"
             android:textAppearance="@style/TextAppearance.AppCompat.Headline"
             android:textColor="@color/white_color" />
         <LinearLayout
@@ -42,14 +41,12 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:paddingLeft="@dimen/m_design_screen_edge_left_right_margin"
-                android:text="@string/movie_detail_genre"
                 android:textAppearance="@style/TextAppearance.AppCompat.Small"
                 android:textColor="@color/grey_color" />
             <TextView
                 android:id="@+id/movie_detail_title_runtime"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/movie_detail_runtime"
                 android:textAppearance="@style/TextAppearance.AppCompat.Small"
                 android:textColor="@color/grey_color" />
         </LinearLayout>
@@ -104,7 +101,6 @@
                 android:paddingRight="@dimen/m_design_screen_edge_left_right_margin"
                 android:paddingEnd="@dimen/m_design_screen_edge_left_right_margin"
                 android:fontFamily="sans-serif-condensed"
-                android:text="@string/movie_detail_release_date_data"
                 android:textAppearance="@style/TextAppearance.AppCompat.Medium"
                 android:textColor="@color/grey_color" />
             <View
@@ -133,7 +129,6 @@
                 android:paddingRight="@dimen/m_design_screen_edge_left_right_margin"
                 android:paddingEnd="@dimen/m_design_screen_edge_left_right_margin"
                 android:fontFamily="sans-serif-condensed"
-                android:text="@string/movie_detail_budget_data"
                 android:textAppearance="@style/TextAppearance.AppCompat.Medium"
                 android:textColor="@color/grey_color" />
             <View
@@ -162,7 +157,6 @@
                 android:paddingRight="@dimen/m_design_screen_edge_left_right_margin"
                 android:paddingEnd="@dimen/m_design_screen_edge_left_right_margin"
                 android:fontFamily="sans-serif-condensed"
-                android:text="@string/movie_detail_revenue_data"
                 android:textAppearance="@style/TextAppearance.AppCompat.Medium"
                 android:textColor="@color/grey_color" />
             <View
@@ -191,7 +185,6 @@
                 android:paddingRight="@dimen/m_design_screen_edge_left_right_margin"
                 android:paddingEnd="@dimen/m_design_screen_edge_left_right_margin"
                 android:fontFamily="sans-serif-condensed"
-                android:text="@string/person_popularity_data"
                 android:textAppearance="@style/TextAppearance.AppCompat.Medium"
                 android:textColor="@color/grey_color" />
             <View
@@ -241,7 +234,6 @@
                 android:layout_gravity="left"
                 android:fontFamily="sans-serif-condensed"
                 android:paddingLeft="@dimen/m_design_space_between_content_area"
-                android:text="@string/tmdb_rating_vote_count_val"
                 android:textAppearance="@style/TextAppearance.AppCompat.Title"
                 android:textColor="@color/white_color" />
             <TextView
@@ -467,7 +459,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:paddingBottom="@dimen/m_design_space_between_content_area"
-            android:text="Tag line of the movie go here"
             android:textAppearance="@style/TextAppearance.AppCompat.Medium"
             android:textColor="@color/grey_color" />
         <TextView
@@ -484,7 +475,6 @@
             android:id="@+id/movie_detail_synopsis"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="The description of the movie goes here. This will have multiple lines of text values based on amount of details available. Also this view will only has one TextView. The reason for creating in this way (i.e. a single text view) is to make it more modular"
             android:textAppearance="@style/TextAppearance.AppCompat.Medium"
             android:textColor="@color/grey_color" />
     </LinearLayout>
@@ -565,7 +555,6 @@
             android:layout_height="wrap_content"
             android:fontFamily="sans-serif-condensed"
             android:paddingBottom="@dimen/m_design_space_between_content_area"
-            android:text="@string/movie_detail_production_cmpy_data"
             android:textAppearance="@style/TextAppearance.AppCompat.Medium"
             android:textColor="@color/grey_color" />
         <TextView
@@ -583,7 +572,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:fontFamily="sans-serif-condensed"
-            android:text="@string/movie_detail_production_country_data"
             android:textAppearance="@style/TextAppearance.AppCompat.Medium"
             android:textColor="@color/grey_color" />
     </LinearLayout>
@@ -763,7 +751,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:fontFamily="sans-serif-condensed"
-            android:text="@string/movie_detail_collection_name_data"
             android:paddingBottom="@dimen/m_design_space_between_content_area"
             android:textAppearance="@style/TextAppearance.AppCompat.Medium"
             android:textColor="@color/grey_color" />

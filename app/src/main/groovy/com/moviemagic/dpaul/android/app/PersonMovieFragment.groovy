@@ -446,7 +446,6 @@ class PersonMovieFragment extends Fragment implements LoaderManager.LoaderCallba
                 @Override
                 void onSuccess() {
                     LogDisplay.callLog(LOG_TAG, 'Picasso onSuccess is called', LogDisplay.PERSON_MOVIE_FRAGMENT_LOG_FLAG)
-                    //TODO: Future change - provide a setting option to user to chose if they want this or will use default theme
                     // If user does not select dynamic theme (default value) then do not change the color
                     if (Utility.isDynamicTheme(getActivity())) {
                         final Bitmap bitmapPoster = ((BitmapDrawable) mPosterImageView.getDrawable()).getBitmap()
@@ -584,7 +583,6 @@ class PersonMovieFragment extends Fragment implements LoaderManager.LoaderCallba
             if(data.getString(COL_PERSON_INFO_PERSON_DEATH_DAY)) {
                 mDeathDayHdrTextView.setVisibility(TextView.VISIBLE)
                 mDeathDayTextView.setVisibility(TextView.VISIBLE)
-//                mDeathDayTextView.setText(data.getString(COL_PERSON_INFO_PERSON_DEATH_DAY))
                 mDeathDayTextView.setText(Utility.formatFriendlyDate(data.getString(COL_PERSON_INFO_PERSON_DEATH_DAY)))
                 mDeathDayDivider.setVisibility(View.VISIBLE)
             } else {
@@ -610,17 +608,14 @@ class PersonMovieFragment extends Fragment implements LoaderManager.LoaderCallba
                 mHomePageButton.setText(getActivity().getString(R.string.person_web_links_home_page))
                 mHomePageButton.setClickable(true)
                 mHomePageButton.setAlpha(GlobalStaticVariables.MOVIE_MAGIC_ALPHA_FULL_OPAQUE)
-                //TODO: Need to look into this Build.VERSION_CODES issue later
-                //Somehow while running in Jelly bean & KITKAT it cannot find Build.VERSION_CODES.LOLLIPOP, yet to figure out why!
-                //So using the API number (21 - LOLLIPOP)itself here and other places below
-                if (Build.VERSION.SDK_INT >= 21) {
+                if (Build.VERSION.SDK_INT >= 21) { // API number 21 -> LOLLIPOP
                     mHomePageButton.setElevation(GlobalStaticVariables.MOVIE_MAGIC_ELEVATION)
                 }
             } else {
                 mHomePageButton.setText(getActivity().getString(R.string.movie_detail_web_links_home_page_not_available))
                 mHomePageButton.setClickable(false)
                 mHomePageButton.setAlpha(GlobalStaticVariables.MOVIE_MAGIC_ALPHA_OPAQUE_40_PERCENT)
-                if (Build.VERSION.SDK_INT >= 21) {
+                if (Build.VERSION.SDK_INT >= 21) { // API number 21 -> LOLLIPOP
                     mHomePageButton.setElevation(GlobalStaticVariables.MOVIE_MAGIC_ELEVATION_RESET)
                 }
             }
@@ -630,14 +625,14 @@ class PersonMovieFragment extends Fragment implements LoaderManager.LoaderCallba
                 mImdbLinkButton.setText(getActivity().getString(R.string.detail_web_links_imdb_link))
                 mImdbLinkButton.setClickable(true)
                 mImdbLinkButton.setAlpha(GlobalStaticVariables.MOVIE_MAGIC_ALPHA_FULL_OPAQUE)
-                if (Build.VERSION.SDK_INT >= 21) {
+                if (Build.VERSION.SDK_INT >= 21) { // API number 21 -> LOLLIPOP
                     mImdbLinkButton.setElevation(GlobalStaticVariables.MOVIE_MAGIC_ELEVATION)
                 }
             } else {
                 mImdbLinkButton.setText(getActivity().getString(R.string.movie_detail_web_links_imdb_link_not_available))
                 mImdbLinkButton.setClickable(false)
                 mImdbLinkButton.setAlpha(GlobalStaticVariables.MOVIE_MAGIC_ALPHA_OPAQUE_40_PERCENT)
-                if (Build.VERSION.SDK_INT >= 21) {
+                if (Build.VERSION.SDK_INT >= 21) { // API number 21 -> LOLLIPOP
                     mImdbLinkButton.setElevation(GlobalStaticVariables.MOVIE_MAGIC_ELEVATION_RESET)
                 }
             }

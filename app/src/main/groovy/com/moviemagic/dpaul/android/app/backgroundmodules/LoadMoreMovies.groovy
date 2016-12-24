@@ -7,7 +7,6 @@ import android.net.Uri
 import android.os.AsyncTask
 import android.util.Log
 import com.moviemagic.dpaul.android.app.BuildConfig
-import com.moviemagic.dpaul.android.app.GridMovieFragment
 import com.moviemagic.dpaul.android.app.contentprovider.MovieMagicContract
 import groovy.json.JsonException
 import groovy.json.JsonParserType
@@ -33,7 +32,7 @@ class LoadMoreMovies extends AsyncTask<String, Void, Void>{
         int totalPage
         List<ContentValues> movieList
         //TMDB api example
-        //https://api.themoviedb.org/3/movie/popular?api_key=key&page=1
+        //https://api.themoviedb.org/3/movie/popular?api_key=key&page=<page_number>
 
         try {
             final Uri.Builder uriBuilder = Uri.parse(GlobalStaticVariables.TMDB_MOVIE_BASE_URL).buildUpon()
@@ -65,16 +64,10 @@ class LoadMoreMovies extends AsyncTask<String, Void, Void>{
                 }
             }
         } catch (URISyntaxException e) {
-            //Set the boolean to true to indicate API call failed
-//            GridMovieFragment.isDataLoadFailed = true
             Log.e(LOG_TAG, "URISyntaxException: ${e.message}", e)
         } catch (JsonException e) {
-            //Set the boolean to true to indicate API call failed
-//            GridMovieFragment.isDataLoadFailed = true
             Log.e(LOG_TAG, "JsonException: ${e.message}", e)
         } catch (JsonException e) {
-            //Set the boolean to true to indicate API call failed
-//            GridMovieFragment.isDataLoadFailed = true
             Log.e(LOG_TAG, "JsonException: ${e.message}", e)
         }
         return null

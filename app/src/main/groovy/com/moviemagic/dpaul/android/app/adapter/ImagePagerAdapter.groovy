@@ -1,8 +1,6 @@
 package com.moviemagic.dpaul.android.app.adapter
 
 import android.content.Context
-import android.graphics.Bitmap
-import android.graphics.drawable.BitmapDrawable
 import android.support.v4.view.PagerAdapter
 import android.support.v4.view.ViewPager
 import android.view.LayoutInflater
@@ -78,7 +76,6 @@ class ImagePagerAdapter extends PagerAdapter {
         LogDisplay.callLog(LOG_TAG,"instantiateItem:imagePath-> $imagePath",LogDisplay.IMAGE_PAGER_ADAPTER_LOG_FLAG)
         PicassoLoadImage.loadViewPagerImage(mContext,imagePath,imageView)
         final int totCount = mImageFilePaths.size()
-//        footerTextView.setText("${position + 1} of $totCount : $mTitle")
         footerTextView.setText(String.format(mContext.getString(R.string.image_view_footer_value),(position + 1),totCount))
 
         view.setOnClickListener(new View.OnClickListener() {
@@ -92,10 +89,6 @@ class ImagePagerAdapter extends PagerAdapter {
                     visibilityFlag = true
                     notifyDataSetChanged()
                 }
-//                final Bitmap bitmap = ((BitmapDrawable)imageView.getDrawable()).getBitmap()
-//                final String fileName = (mImageFilePaths[position]).replaceAll('\\','')
-//                LogDisplay.callLog(LOG_TAG,"File name replaced from ${mImageFilePaths[position]} to $fileName",LogDisplay.IMAGE_VIEWER_ACTIVITY_LOG_FLAG)
-//                mImagePagerAdapterOnClickHandler.onClick(position, R.id.image_viewer_image, fileName)
                 mImagePagerAdapterOnClickHandler.onClick(position)
             }
         })
@@ -137,9 +130,6 @@ class ImagePagerAdapter extends PagerAdapter {
         return POSITION_NONE
     }
 
-//    public int getCurrentPosition() {
-//        return mPosition
-//    }
     /**
      * This is the interface which will be implemented by the host ImageViewerActivity
      */

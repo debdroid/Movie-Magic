@@ -32,7 +32,7 @@
     <dimen name="person_poster_height">280dp</dimen>
     <dimen name="poster_image_data_fields_margin">8dp</dimen>
 
-
+    <!-- Misc parameter -->
     <dimen name="gridview_horizontal_vertical_spacing">2dp</dimen>
     <dimen name="gridview_column_width">120dp</dimen>
     <dimen name="poster_image_height_detail_view">320dp</dimen>

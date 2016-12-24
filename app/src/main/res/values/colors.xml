@@ -20,8 +20,10 @@
     <color name="primary_opacity_50">#80607D8B</color>
     <color name="accent_opacity_60">#99FF5252</color>
 
-    <color name="nav_header_gradient_start">#81C784</color>
-    <color name="nav_header_gradient_end">#2E7D32</color>
-    <color name="nav_header_gradient_center">#4CAF50</color>
-
+    <color name="nav_header_gradient_start">@color/primary_light</color>
+    <color name="nav_header_gradient_end">@color/primary_dark</color>
+    <color name="nav_header_gradient_center">@color/primary</color>
+    <!--<color name="nav_header_gradient_start">#81C784</color>-->
+    <!--<color name="nav_header_gradient_end">#2E7D32</color>-->
+    <!--<color name="nav_header_gradient_center">#4CAF50</color>-->
 </resources>

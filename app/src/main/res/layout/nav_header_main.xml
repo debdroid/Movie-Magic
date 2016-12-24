@@ -49,17 +49,5 @@
         android:textColor="@color/white_color"
         android:textStyle="normal"
         android:text="@string/nav_drawer_log_in"/>
-    <!--<Button-->
-        <!--android:id="@+id/nav_drawer_log_out"-->
-        <!--android:layout_width="wrap_content"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:layout_below="@id/nav_drawer_user_id"-->
-        <!--android:layout_toRightOf="@id/nav_drawer_user_id"-->
-        <!--android:layout_alignParentRight="true"-->
-        <!--android:layout_alignParentBottom="true"-->
-        <!--style="?android:attr/borderlessButtonStyle"-->
-        <!--android:textStyle="normal"-->
-        <!--android:text="@string/nav_drawer_log_out"-->
-        <!--android:visibility="gone"/>-->
 
 </RelativeLayout>

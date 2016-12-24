@@ -4,7 +4,6 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
-import android.support.v7.widget.DefaultItemAnimator
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.support.v7.widget.DividerItemDecoration
@@ -26,8 +25,6 @@ class DonateActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_donate)
         mRecyclerView = findViewById(R.id.donate_link_recycler_view) as RecyclerView
-        //Set this to false for smooth scrolling of recyclerview
-//        mRecyclerView.setNestedScrollingEnabled(false)
 
         // use this setting to improve performance if you know that changes
         // in content do not change the layout size of the RecyclerView

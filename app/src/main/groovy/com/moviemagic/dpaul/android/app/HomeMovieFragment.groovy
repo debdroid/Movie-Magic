@@ -13,9 +13,6 @@ import android.support.v7.preference.PreferenceManager
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
-import android.view.Menu
-import android.view.MenuInflater
-import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
@@ -119,12 +116,6 @@ class HomeMovieFragment extends Fragment implements LoaderManager.LoaderCallback
         //even in auto code completion
 //        setHasOptionsMenu(true)
     }
-
-//    @Override
-//    public void onCreateOptionsMenu (Menu menu, MenuInflater inflater) {
-//        // Inflate the menu, this adds items to the action bar if it is present.
-//        inflater.inflate(R.menu.home_fragment_menu, menu)
-//    }
 
     @Override
     View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -265,14 +256,6 @@ class HomeMovieFragment extends Fragment implements LoaderManager.LoaderCallback
         }
     }
 
-//    @Override
-//    public boolean onOptionsItemSelected(MenuItem item) {
-//        if(item.getItemId() == R.id.home_fragment_menu) {
-//            return true
-//        }
-//        return super.onOptionsItemSelected(item)
-//    }
-
     @Override
     Loader<Cursor> onCreateLoader(int id, Bundle args) {
         LogDisplay.callLog(LOG_TAG, "onCreateLoader.loader id->$id", LogDisplay.HOME_MOVIE_FRAGMENT_LOG_FLAG)
@@ -396,7 +379,6 @@ class HomeMovieFragment extends Fragment implements LoaderManager.LoaderCallback
                         .createMovieMagicYouTubeFragment(youtubeVideoKey)
                 getChildFragmentManager().beginTransaction()
                         .replace(R.id.home_youtube_fragment_container, movieMagicYoutubeFragment)
-//                        .commitAllowingStateLoss()
                         .commit()
             } else {
                 LogDisplay.callLog(LOG_TAG, 'User selected reduced data use', LogDisplay.HOME_MOVIE_FRAGMENT_LOG_FLAG)

@@ -25,7 +25,6 @@ import android.support.v4.app.LoaderManager
 import android.support.v4.content.ContextCompat
 import android.support.v4.content.CursorLoader
 import android.support.v4.content.Loader
-import android.support.v4.graphics.drawable.DrawableCompat
 import android.support.v4.view.MenuItemCompat
 import android.support.v4.view.ViewCompat
 import android.support.v4.view.ViewPager
@@ -400,7 +399,6 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
         }
         //Inflate the view before referring any view using id
         final View mRootView = inflater.inflate(R.layout.fragment_detail_movie, container, false)
-        //TODO: Need to verify if this animation is working or not
         //Set a fade animation
         final Animation fadeIn = new AlphaAnimation(0, 1)
         fadeIn.setInterpolator(new DecelerateInterpolator())
@@ -521,7 +519,7 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
                             getString(R.string.cannot_perform_operation_msg), Snackbar.LENGTH_LONG).show()
                 }
             }
-        })
+        } as View.OnClickListener)
         mImageButtonFavourite = mRootView.findViewById(R.id.movie_detail_user_list_drawable_favourite) as ImageButton
         mImageButtonFavourite.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -550,7 +548,7 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
                             getString(R.string.cannot_perform_operation_msg), Snackbar.LENGTH_LONG).show()
                 }
             }
-        })
+        } as View.OnClickListener)
         mImageButtonCollection = mRootView.findViewById(R.id.movie_detail_user_list_drawable_collection) as ImageButton
         mImageButtonCollection.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -579,7 +577,7 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
                             getString(R.string.cannot_perform_operation_msg), Snackbar.LENGTH_LONG).show()
                 }
             }
-        })
+        } as View.OnClickListener)
         /**
          * User's TMDb list button handling
          */
@@ -602,7 +600,7 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
                     Snackbar.make(mUserTmdbListDrawableLayout, getString(R.string.no_internet_cannot_perform_operation_message), Snackbar.LENGTH_LONG).show()
                 }
             }
-        })
+        } as View.OnClickListener)
         mTmdbImageButtonFavourite = mRootView.findViewById(R.id.movie_detail_user_tmdb_list_drawable_favourite) as ImageButton
         mTmdbImageButtonFavourite.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -623,7 +621,7 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
                 }
 
             }
-        })
+        } as View.OnClickListener)
         mTmdbImageButtonRated = mRootView.findViewById(R.id.movie_detail_user_tmdb_list_drawable_rated) as ImageButton
         mTmdbImageButtonRated.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -649,7 +647,7 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
                     Snackbar.make(mUserTmdbListDrawableLayout, getString(R.string.no_internet_cannot_perform_operation_message), Snackbar.LENGTH_LONG).show()
                 }
             }
-        })
+        } as View.OnClickListener)
 
         //All the dynamic fields (data fields) & ratingbar
         mMovieTitleTextView = mRootView.findViewById(R.id.movie_detail_title) as TextView
@@ -692,7 +690,7 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
                     }
                 }
             }
-        })
+        } as RatingBar.OnRatingBarChangeListener)
         mTotalVoteCountTextView = mRootView.findViewById(R.id.movie_detail_tmdb_rating_vote_count_val) as TextView
         mTaglineTextView = mRootView.findViewById(R.id.movie_detail_synopsis_tagline) as TextView
         mSynopsisTextView = mRootView.findViewById(R.id.movie_detail_synopsis) as TextView
@@ -719,7 +717,7 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
                     LogDisplay.callLog(LOG_TAG, "Invalid collection id.id->$mCollectionId", LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
                 }
             }
-        })
+        } as View.OnClickListener)
         /**
          * Movie Cast Grid handling
          */
@@ -760,7 +758,7 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
                 LogDisplay.callLog(LOG_TAG, 'Home Page Button is clicked', LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
                 startHomePageIntent()
             }
-        })
+        } as View.OnClickListener)
         mImdbLinkButton = mRootView.findViewById(R.id.movie_detail_web_links_imdb_link_button) as Button
         mImdbLinkButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -768,7 +766,7 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
                 LogDisplay.callLog(LOG_TAG, 'IMDb Button is clicked', LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
                 startImdbIntent()
             }
-        })
+        } as View.OnClickListener)
         /**
          * Review recycler view handling
          */
@@ -889,7 +887,7 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
         LogDisplay.callLog(LOG_TAG, "onCreateLoader.loader id->$id", LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
         switch (id) {
             case MOVIE_DETAIL_FRAGMENT_BASIC_DATA_LOADER_ID:
-                //TODO: this cursor can still return more than one row for similar movies
+                //** Warning ** -> this cursor can return more than one row for similar movies
                 return new CursorLoader(
                         getActivity(),                                                        //Parent Activity Context
                         MovieMagicContract.MovieBasicInfo.CONTENT_URI,                        //Table to query
@@ -1159,8 +1157,6 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
                     } else { // To ensure ImageButton color is set for static theme
                         mPalleteAccentColor = ContextCompat.getColor(getActivity(), R.color.accent)
                         setImageButtonColor()
-                        // To ensure the title is shown when image is collapsed
-//                        showCollapsedTitle()
                     }
                 }
 
@@ -1244,18 +1240,14 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
                 mHomePageButton.setText(getActivity().getString(R.string.movie_detail_web_links_home_page))
                 mHomePageButton.setClickable(true)
                 mHomePageButton.setAlpha(GlobalStaticVariables.MOVIE_MAGIC_ALPHA_FULL_OPAQUE)
-                //Somehow while running in Jelly bean & KITKAT it cannot find Build.VERSION_CODES.LOLLIPOP, yet to figure out why!
-                //So using the API number (21 - LOLLIPOP)itself here and other places below
-                if (Build.VERSION.SDK_INT >= 21) {
-//                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                if (Build.VERSION.SDK_INT >= 21) { // Version 21 -> Build.VERSION_CODES.LOLLIPOP
                     mHomePageButton.setElevation(GlobalStaticVariables.MOVIE_MAGIC_ELEVATION)
                 }
             } else {
                 mHomePageButton.setText(getActivity().getString(R.string.movie_detail_web_links_home_page_not_available))
                 mHomePageButton.setClickable(false)
                 mHomePageButton.setAlpha(GlobalStaticVariables.MOVIE_MAGIC_ALPHA_OPAQUE_40_PERCENT)
-                if (Build.VERSION.SDK_INT >= 21) {
-//                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                if (Build.VERSION.SDK_INT >= 21) { // Version 21 -> Build.VERSION_CODES.LOLLIPOP
                     mHomePageButton.setElevation(GlobalStaticVariables.MOVIE_MAGIC_ELEVATION_RESET)
                 }
             }
@@ -1265,16 +1257,14 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
                 mImdbLinkButton.setText(getActivity().getString(R.string.detail_web_links_imdb_link))
                 mImdbLinkButton.setClickable(true)
                 mImdbLinkButton.setAlpha(GlobalStaticVariables.MOVIE_MAGIC_ALPHA_FULL_OPAQUE)
-                if (Build.VERSION.SDK_INT >= 21) {
-//                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                if (Build.VERSION.SDK_INT >= 21) { // Version 21 -> Build.VERSION_CODES.LOLLIPOP
                     mImdbLinkButton.setElevation(GlobalStaticVariables.MOVIE_MAGIC_ELEVATION)
                 }
             } else {
                 mImdbLinkButton.setText(getActivity().getString(R.string.movie_detail_web_links_imdb_link_not_available))
                 mImdbLinkButton.setClickable(false)
                 mImdbLinkButton.setAlpha(GlobalStaticVariables.MOVIE_MAGIC_ALPHA_OPAQUE_40_PERCENT)
-                if (Build.VERSION.SDK_INT >= 21) {
-//                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                if (Build.VERSION.SDK_INT >= 21) { // Version 21 -> Build.VERSION_CODES.LOLLIPOP
                     mImdbLinkButton.setElevation(GlobalStaticVariables.MOVIE_MAGIC_ELEVATION_RESET)
                 }
             }
@@ -1438,8 +1428,6 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
             }
             LogDisplay.callLog(LOG_TAG, "backdropImageArray-> $mBackdropList", LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
             //This initialize ensures the pager is at position zero if the loader is executed due to change in data
-            //TODO: This initialize causing view pager to start from zero on orientation change, need to fix it
-//            mBackdropViewPagerPos = 0
             final DetailFragmentPagerAdapter adapter = new DetailFragmentPagerAdapter(getActivity(), mBackdropList as String[],
                     new DetailFragmentPagerAdapter.DetailFragmentPagerAdapterOnClickHandler() {
                         @Override
@@ -1451,7 +1439,6 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
             mBackdropViewPager.setAdapter(adapter)
             mBackdropViewPager.clearOnPageChangeListeners()
             final int dotsCount = adapter.getCount()
-//            final ImageButton[] dotsImage = new ImageButton[dotsCount]
             final AppCompatImageButton[] dotsImage = new AppCompatImageButton[dotsCount]
             mBackdropDotHolderLayout.removeAllViews()
             setBackDropViewPagerDots(dotsCount, dotsImage)
@@ -1467,18 +1454,10 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
                     for (i in 0..(dotsCount - 1)) {
                         if (i != position) {
                             dotsImage[i].setLayoutParams(layoutParams)
-//                            dotsImage[i].setImageTintList(whiteColorStateList)
-//                            dotsImage[i].setColorFilter(ContextCompat.getColor(getActivity(), R.color.white_color))
-//                            final Drawable drawable = dotsImage[i].getDrawable()
-//                            DrawableCompat.setTint(drawable,ContextCompat.getColor(getActivity(), R.color.white_color))
                             ViewCompat.setBackgroundTintList(dotsImage[i], whiteColorStateList)
                         } else {
                             dotsImage[position].setLayoutParams(new LinearLayout.LayoutParams(30,30))
                             final ColorStateList accentColorStateList = ColorStateList.valueOf(ContextCompat.getColor(getActivity(), R.color.accent))
-//                            dotsImage[position].setImageTintList(accentColorStateList)
-//                            dotsImage[position].setColorFilter(ContextCompat.getColor(getActivity(), R.color.accent))
-//                            final Drawable drawable = dotsImage[position].getDrawable()
-//                            DrawableCompat.setTint(drawable,ContextCompat.getColor(getActivity(), R.color.accent))
                             ViewCompat.setBackgroundTintList(dotsImage[position], accentColorStateList)
                         }
                     }
@@ -1670,40 +1649,16 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
         mHomePageButton.setTextColor(mPalleteBodyTextColor)
         mImdbLinkButton.setTextColor(mPalleteBodyTextColor)
 
-        //Set Ratingbar color. Used Compat so that it can work below lollipop.
-        final ColorStateList colorStateListRatingBar = ColorStateList.valueOf(mPalleteAccentColor)
-//        mTmdbRatingBar.setProgressTintList(colorStateListRatingBar)
-//        ViewCompat.setBackgroundTintList(mTmdbRatingBar,colorStateListRatingBar)
-//        ViewCompat.setBackgroundTintList(mUserRatingBar,colorStateListRatingBar)
-            //TODO: Rating bar color not working in pre lollipop
-//        DrawableCompat.setTint(mTmdbRatingBar.getProgressDrawable(),mPalleteAccentColor)
-//        DrawableCompat.setTint(mUserRatingBar.getProgressDrawable(),mPalleteAccentColor)
-//        final LayerDrawable tmdbRatingBarlayerDrawable = mTmdbRatingBar.getProgressDrawable() as LayerDrawable
+        //Set Ratingbar color.
         final LayerDrawable tmdbRatingBarlayerDrawable = (LayerDrawable) mTmdbRatingBar.getProgressDrawable() as LayerDrawable
         setRatingStarColor(tmdbRatingBarlayerDrawable.getDrawable(2), mPalleteAccentColor) // Filled stars
         setRatingStarColor(tmdbRatingBarlayerDrawable.getDrawable(1), ContextCompat.getColor(getContext(), R.color.grey_600_color)) // Half filled stars
         setRatingStarColor(tmdbRatingBarlayerDrawable.getDrawable(0), ContextCompat.getColor(getContext(), R.color.grey_600_color)) // Empty stars
 
-//        tmdbRatingBarlayerDrawable.setColorFilter(mPalleteAccentColor,PorterDuff.Mode.SRC_IN)
-//        tmdbRatingBarlayerDrawable.getDrawable(2).setColorFilter(mPalleteAccentColor,PorterDuff.Mode.SRC_IN) // Full star
-//        tmdbRatingBarlayerDrawable.getDrawable(1).setColorFilter(mPalleteAccentColor,PorterDuff.Mode.SRC_IN) // Partial star
-//        tmdbRatingBarlayerDrawable.getDrawable(0).setColorFilter(mPalleteAccentColor,PorterDuff.Mode.SRC_IN) // Empty star
         final LayerDrawable userRatingBarlayerDrawable = mUserRatingBar.getProgressDrawable() as LayerDrawable
         setRatingStarColor(userRatingBarlayerDrawable.getDrawable(2), mPalleteAccentColor) // Filled stars
         setRatingStarColor(userRatingBarlayerDrawable.getDrawable(1), ContextCompat.getColor(getContext(), R.color.grey_600_color)) // Half filled stars
         setRatingStarColor(userRatingBarlayerDrawable.getDrawable(0), ContextCompat.getColor(getContext(), R.color.grey_600_color)) // Empty stars
-//        userRatingBarlayerDrawable.getDrawable(2).setColorFilter(mPalleteAccentColor,PorterDuff.Mode.SRC_IN) // Full star
-//        userRatingBarlayerDrawable.getDrawable(1).setColorFilter(mPalleteAccentColor,PorterDuff.Mode.SRC_IN) // Partial star
-//        userRatingBarlayerDrawable.getDrawable(0).setColorFilter(mPalleteAccentColor,PorterDuff.Mode.SRC_IN) // Empty star
-//        final Drawable drawable = mTmdbRatingBar.getProgressDrawable()
-//        drawable.setColorFilter(mPalleteAccentColor,PorterDuff.Mode.SRC_ATOP)
-//        drawable = DrawableCompat.wrap(drawable)
-//        drawable.setTintList(colorStateListRatingBar)
-//        DrawableCompat.setTintList(drawable,colorStateListRatingBar)
-//        drawable.mutate().setColorFilter(mPalleteAccentColor,PorterDuff.Mode.SRC_ATOP)
-//        DrawableCompat.setTintMode(drawable,PorterDuff.Mode.DST_ATOP)
-//        DrawableCompat.setTint(drawable.mutate(), Color.BLACK)
-//        drawable.setColorFilter(mPalleteAccentColor,PorterDuff.Mode.SRC_ATOP)
     }
 
     /**
@@ -1715,12 +1670,11 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
         mCollapsingToolbar.setContentScrimColor(mPalletePrimaryColor)
         mCollapsingToolbar.setBackgroundColor(mPalletePrimaryColor)
         mCollapsingToolbar.setCollapsedTitleTextColor(mPalleteTitleColor)
-//        showCollapsedTitle()
     }
 
     private void setRatingStarColor(Drawable drawable, @ColorInt int color)
     {
-        if (Build.VERSION.SDK_INT >= 21) { // Greater than equal Lollipop
+        if (Build.VERSION.SDK_INT >= 21) { // Version 21 -> Build.VERSION_CODES.LOLLIPOP
             // Do nothing as it automatically uses the accent color
             // Following lines again works 99& times but not using as it picks up accent color in Lollipop and above
 //            drawable = DrawableCompat.wrap(drawable)
@@ -1731,31 +1685,6 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
             drawable.setColorFilter(color, PorterDuff.Mode.SRC_IN)
         }
     }
-
-    /**
-     * This method sets the title when the backdrop image is collapsed
-     */
-//    protected void showCollapsedTitle() {
-//        //Show the title only when image is collapsed
-//        mAppBarLayout.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
-//            boolean isShow = false
-//            int scrollRange = -1
-//
-//            @Override
-//            void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
-//                if (scrollRange == -1) {
-//                    scrollRange = appBarLayout.getTotalScrollRange()
-//                }
-//                if (scrollRange + verticalOffset == 0) {
-//                    mCollapsingToolbar.setTitle(mMovieTitle)
-//                    isShow = true
-//                } else if (isShow) {
-//                    mCollapsingToolbar.setTitle(" ")
-//                    isShow = false
-//                }
-//            }
-//        })
-//    }
 
     /**
      * This method is called to apply the color to image button (used for user list selection)
@@ -1795,25 +1724,15 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
         final ColorStateList whiteColorStateList = ColorStateList.valueOf(ContextCompat.getColor(getActivity(), R.color.white_color))
         layoutParams.setMargins(1,0,1,0)
         for(i in 0..(dotsCount - 1)) {
-//            dotsImage[i] = new ImageButton(getActivity())
             dotsImage[i] = new AppCompatImageButton(getActivity())
             dotsImage[i].setBackgroundResource(R.drawable.view_pager_dot)
             dotsImage[i].setLayoutParams(layoutParams)
-//            dotsImage[i].setImageTintList(whiteColorStateList)
             ViewCompat.setBackgroundTintList(dotsImage[i], whiteColorStateList)
-//            dotsImage[i].setColorFilter(ContextCompat.getColor(getActivity(), R.color.white_color))
             mBackdropDotHolderLayout.addView(dotsImage[i])
-//            final Drawable drawable = dotsImage[i].getDrawable()
-//            DrawableCompat.setTint(drawable,ContextCompat.getColor(getActivity(), R.color.white_color))
-//            dotsImage[i].setColorFilter(ContextCompat.getColor(getActivity(), R.color.white_color))
         }
         // Set the first one's color & size
         dotsImage[mBackdropViewPagerPos].setLayoutParams(new LinearLayout.LayoutParams(30,30))
         final ColorStateList accentColorStateList = ColorStateList.valueOf(ContextCompat.getColor(getActivity(), R.color.accent))
-//        dotsImage[mBackdropViewPagerPos].setImageTintList(accentColorStateList)
-//        dotsImage[mBackdropViewPagerPos].setColorFilter(ContextCompat.getColor(getActivity(), R.color.accent))
-//        final Drawable drawable = dotsImage[mBackdropViewPagerPos].getDrawable()
-//        DrawableCompat.setTint(drawable,ContextCompat.getColor(getActivity(), R.color.accent))
         ViewCompat.setBackgroundTintList(dotsImage[mBackdropViewPagerPos], accentColorStateList)
     }
 
@@ -1911,7 +1830,6 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
 
     //Overriding the animation for better performance
     //Reference - http://daniel-codes.blogspot.co.uk/2013/09/smoothing-performance-on-fragment.html
-    //TODO: need to perform and see if it improves the transition or not
     @Override
     Animation onCreateAnimation(int transit, boolean enter, int nextAnim) {
         LogDisplay.callLog(LOG_TAG, 'onCreateAnimation is called', LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)

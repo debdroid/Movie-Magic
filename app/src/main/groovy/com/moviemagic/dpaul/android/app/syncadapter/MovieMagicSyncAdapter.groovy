@@ -43,8 +43,7 @@ import groovy.transform.CompileStatic
 class MovieMagicSyncAdapter extends AbstractThreadedSyncAdapter {
     private static final String LOG_TAG = MovieMagicSyncAdapter.class.getSimpleName()
 
-    //This variable indicates the number of pages for initial load. It is also
-    //used to determine the next page to download during more download
+    //This variable indicates the number of pages for initial load.
     private final static int MAX_PAGE_DOWNLOAD = 3
     //Define a variable for api page count
     private static int mTotalPage = 0
@@ -55,9 +54,10 @@ class MovieMagicSyncAdapter extends AbstractThreadedSyncAdapter {
     // a single constant value is used for all the records
     private String mDateTimeStamp
     private boolean mFirstTotalPageRead = true
+    // Flags to track if exception happened
+    private boolean mPublicTmdbProcessingException = false
 
-    //Define a flag to control the record insertion / deletion
-//    private boolean deleteRecords = true
+
 
     //Columns to fetch from movie_basic_info table
     private static final String[] MOVIE_BASIC_INFO_COLUMNS = [MovieMagicContract.MovieBasicInfo._ID,
@@ -168,12 +168,12 @@ class MovieMagicSyncAdapter extends AbstractThreadedSyncAdapter {
                 } else {
                     LogDisplay.callLog(LOG_TAG, 'Either authToken or accountId or both null. So tmdb library download skipped', LogDisplay.MOVIE_MAGIC_SYNC_ADAPTER_LOG_FLAG)
                 }
-
             } else {
                 LogDisplay.callLog(LOG_TAG, 'This is SyncAdapter dummy account. So no further action', LogDisplay.MOVIE_MAGIC_SYNC_ADAPTER_LOG_FLAG)
             }
 
-            // Let's do some housekeeping now. This is done at the end so that new records get inserted before deleting existing records
+            // Let's do some housekeeping now. This is done at the end so that new records get inserted
+            // before deleting existing records
             performHouseKeeping()
         } else {
             LogDisplay.callLog(LOG_TAG, 'Device is offline or connected to internet without WiFi and user selected download only on WiFi, so skipped data loading..', LogDisplay.MOVIE_MAGIC_SYNC_ADAPTER_LOG_FLAG)
@@ -218,12 +218,14 @@ class MovieMagicSyncAdapter extends AbstractThreadedSyncAdapter {
                     mFirstTotalPageRead = false
                 }
             }
-
         } catch (URISyntaxException e) {
+            mPublicTmdbProcessingException = true
             Log.e(LOG_TAG, "URISyntaxException Error: ${e.message}", e)
         } catch (JsonException e) {
+            mPublicTmdbProcessingException = true
             Log.e(LOG_TAG, " JsonException Error: ${e.message}", e)
         } catch (IOException e) {
+            mPublicTmdbProcessingException = true
             Log.e(LOG_TAG, "IOException Error: ${e.message}", e)
         }
         return movieList
@@ -420,15 +422,17 @@ class MovieMagicSyncAdapter extends AbstractThreadedSyncAdapter {
     private void performHouseKeeping() {
         LogDisplay.callLog(LOG_TAG,'performHouseKeeping is called',LogDisplay.MOVIE_MAGIC_SYNC_ADAPTER_LOG_FLAG)
         LogDisplay.callLog(LOG_TAG,"performHouseKeeping: Today's DateTimeStamp->$mDateTimeStamp",LogDisplay.MOVIE_MAGIC_SYNC_ADAPTER_LOG_FLAG)
-        // Delete old data except user's records from movie_basic_info and recommendations movies (recommendations are deleted in the next step)
-        final int movieBasicInfoDeleteCount = mContentResolver.delete(MovieMagicContract.MovieBasicInfo.CONTENT_URI,
-                """$MovieMagicContract.MovieBasicInfo.COLUMN_MOVIE_LIST_TYPE != ? and
+        if(!mPublicTmdbProcessingException) {
+            // Delete old data except user's records from movie_basic_info and recommendations movies (recommendations are deleted in the next step)
+            final int movieBasicInfoDeleteCount = mContentResolver.delete(MovieMagicContract.MovieBasicInfo.CONTENT_URI,
+                    """$MovieMagicContract.MovieBasicInfo.COLUMN_MOVIE_LIST_TYPE != ? and
                    $MovieMagicContract.MovieBasicInfo.COLUMN_MOVIE_CATEGORY != ? and
                    $MovieMagicContract.MovieBasicInfo.COLUMN_CREATE_TIMESTAMP < ? """,
                     /** To ensure newly inserted records are not deleted, mDateTimeStamp is used and it ensures **/
                     /** that all old records except the one which just inserted as part of this execution are deleted **/
-                   [GlobalStaticVariables.MOVIE_LIST_TYPE_USER_LOCAL_LIST, GlobalStaticVariables.MOVIE_CATEGORY_RECOMMENDATIONS, mDateTimeStamp] as String [] )
-        LogDisplay.callLog(LOG_TAG,"Total records deleted from movie_basic_info (except recommendations) -> $movieBasicInfoDeleteCount",LogDisplay.MOVIE_MAGIC_SYNC_ADAPTER_LOG_FLAG)
+                    [GlobalStaticVariables.MOVIE_LIST_TYPE_USER_LOCAL_LIST, GlobalStaticVariables.MOVIE_CATEGORY_RECOMMENDATIONS, mDateTimeStamp] as String[])
+            LogDisplay.callLog(LOG_TAG, "Total records deleted from movie_basic_info (except recommendations) -> $movieBasicInfoDeleteCount", LogDisplay.MOVIE_MAGIC_SYNC_ADAPTER_LOG_FLAG)
+        }
 
         /** Delete recommendation records which are more than 10 days old **/
         String tenDayPriorTimestamp = Utility.getTenDayPriorDate()
@@ -469,6 +473,9 @@ class MovieMagicSyncAdapter extends AbstractThreadedSyncAdapter {
         LogDisplay.callLog(LOG_TAG,"Total records deleted from virtual search_movie_basic_info_table -> $searchMovieDeleteCount",LogDisplay.MOVIE_MAGIC_SYNC_ADAPTER_LOG_FLAG)
     }
 
+    /**
+     * This method creates the notification (only considers release date today or five days ahead)
+     */
     private void createNotification() {
         LogDisplay.callLog(LOG_TAG, 'createNotification is called', LogDisplay.MOVIE_MAGIC_SYNC_ADAPTER_LOG_FLAG)
         // Read the SharedPreferenc and see if notification is on or off
@@ -476,7 +483,7 @@ class MovieMagicSyncAdapter extends AbstractThreadedSyncAdapter {
         final boolean notificationFlag = sharedPreferences.getBoolean(mContext.getString(R.string.pref_notification_key),false)
         if(notificationFlag) {
             final String releaseDateCondOne = Long.toString(MovieMagicContract.convertMovieReleaseDate(Utility.getSimpleTodayDate()))
-            final String releaseDateCondTwo = Long.toString(MovieMagicContract.convertMovieReleaseDate(Utility.getSimpleThreeDayFutureDate()))
+            final String releaseDateCondTwo = Long.toString(MovieMagicContract.convertMovieReleaseDate(Utility.getSimpleFiveDayFutureDate()))
             LogDisplay.callLog(LOG_TAG,"Date range -> $releaseDateCondOne to $releaseDateCondTwo",LogDisplay.MOVIE_MAGIC_SYNC_ADAPTER_LOG_FLAG)
             final boolean distinct = true
             final SQLiteDatabase sqLiteDatabase = new MovieMagicDbHelper(mContext).getReadableDatabase()
@@ -498,6 +505,7 @@ class MovieMagicSyncAdapter extends AbstractThreadedSyncAdapter {
             if(notificationDataCursor.moveToFirst()) {
                 for (i in 0..(notificationDataCursor.getCount() - 1)) {
                     // Prepare data for notification
+                    final String releaseDayName = Utility.getDayNameForNotification(mContext, Utility.convertMilliSecsToOrigReleaseDate(notificationDataCursor.getLong(COL_MOVIE_BASIC_RELEASE_DATE)))
                     final String releaseDate = Utility.formatFriendlyDate(Utility.convertMilliSecsToOrigReleaseDate(notificationDataCursor.getLong(COL_MOVIE_BASIC_RELEASE_DATE)))
                     final String posterPath = "$GlobalStaticVariables.TMDB_IMAGE_BASE_URL/$GlobalStaticVariables.TMDB_IMAGE_SIZE_W92" +
                             "${notificationDataCursor.getString(COL_MOVIE_BASIC_POSTER_PATH)}"
@@ -513,8 +521,7 @@ class MovieMagicSyncAdapter extends AbstractThreadedSyncAdapter {
                     // Create the style object with BigPictureStyle subclass.
                     final NotificationCompat.BigPictureStyle notificationStyle = new NotificationCompat.BigPictureStyle()
                     notificationStyle.setBigContentTitle(notificationDataCursor.getString(COL_MOVIE_BASIC_TITLE))
-                    //TODO: add more friendly day like - Today Tomorrow, Friday
-                    notificationStyle.setSummaryText(String.format(mContext.getString(R.string.format_release_date_notification),releaseDate))
+                    notificationStyle.setSummaryText(String.format(mContext.getString(R.string.format_release_date_notification), releaseDayName, releaseDate))
                     notificationStyle.bigPicture(backdropBitmap)
 
                     // Creates an explicit intent for an ResultActivity to receive.
@@ -530,7 +537,6 @@ class MovieMagicSyncAdapter extends AbstractThreadedSyncAdapter {
                     // your application to the Home screen.
                     final TaskStackBuilder stackBuilder = TaskStackBuilder.create(mContext)
                     // Adds the back stack for the Intent (but not the Intent itself)
-                    //TODO: backstack of main is not working, need to fix this later
                     stackBuilder.addParentStack(DetailMovieActivity.class)
                     // Adds the Intent that starts the Activity to the top of the stack
                     stackBuilder.addNextIntent(resultIntent)
@@ -543,8 +549,7 @@ class MovieMagicSyncAdapter extends AbstractThreadedSyncAdapter {
                             .setLargeIcon(posterBitmap)
                             .setContentIntent(resultPendingIntent)
                             .setContentTitle(notificationDataCursor.getString(COL_MOVIE_BASIC_TITLE))
-                            //TODO: add more friendly day like - Today Tomorrow, Friday
-                            .setContentText(String.format(mContext.getString(R.string.format_release_date_notification),releaseDate))
+                            .setContentText(String.format(mContext.getString(R.string.format_release_date_notification),releaseDayName, releaseDate))
                             .setStyle(notificationStyle).build()
 
                     // Now send the notification

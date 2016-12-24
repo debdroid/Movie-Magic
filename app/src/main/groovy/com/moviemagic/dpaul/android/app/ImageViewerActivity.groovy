@@ -39,10 +39,7 @@ class ImageViewerActivity extends AppCompatActivity {
     private boolean mBackdropImageFlag
     private RelativeLayout mImageViewerMainLayout
     protected ViewPager mViewPager
-//    private View decorView
     private ImagePagerAdapter mAdapter
-//    private int mCurrentImageId
-//    private String mFileName
     private static final int REQUEST_EXTERNAL_STORAGE = 1
 
     @Override
@@ -125,10 +122,6 @@ class ImageViewerActivity extends AppCompatActivity {
                 if(verifyPermission()) {
                     saveImageToExternalStorage()
                 }
-//                } else if (getPreferences(Context.MODE_PRIVATE).getInt(getString(R.string.app_pref_storage_permission_user_resp_key),0)
-//                            == 1) { // Show message only after user denied the permission
-//                    Snackbar.make(mImageViewerMainLayout, getString(R.string.write_permission_missing_msg), Snackbar.LENGTH_LONG).show()
-//                }
                 return true
             default:
                 return super.onOptionsItemSelected(item)
@@ -151,14 +144,12 @@ class ImageViewerActivity extends AppCompatActivity {
             LogDisplay.callLog(LOG_TAG,'Not able to retrieve the bitmap',LogDisplay.IMAGE_VIEWER_ACTIVITY_LOG_FLAG)
         }
         final String imageFileName = (getString(R.string.app_name)).replaceAll(' ','_') + '_' + Utility.dateTimeForFileName() + '.jpg'
-//        final String imageFileName = 'IMG_' + Utility.dateTimeForFileName() + '.jpg'
         LogDisplay.callLog(LOG_TAG,"File name -> $imageFileName",LogDisplay.IMAGE_VIEWER_ACTIVITY_LOG_FLAG)
 
         if(bitmapImage && Utility.isExternalStorageWritable()) {
             // Create a path where we will place our picture in the user's
             // public pictures directory.  Note that you should be careful about
             // what you place here, since the user often manages these files.
-//            final File mImagePath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES)
             final File mImagePath = Environment.getExternalStoragePublicDirectory(
                     String.format(getString(R.string.saved_image_folder_name),getString(R.string.app_name),getString(R.string.app_name)))
             final File imageFile = new File(mImagePath, imageFileName)
@@ -198,18 +189,7 @@ class ImageViewerActivity extends AppCompatActivity {
                     is.close()
                     os.close()
 
-                    // Tell the media scanner about the new file so that it is
-                    // immediately available to the user.
-//                    MediaScannerConnection.MediaScannerConnectionClient client = new MyMediaScannerConnectionClient(this, imageFile, null)
-//                    sendBroadcast(new Intent(Intent.ACTION_MEDIA_MOUNTED, Uri.parse("file://"+ Environment.getExternalStorageDirectory())))
-//                    MediaScannerConnection.scanFile(this, imageFile.toString() as String[], null,
-//                            new MediaScannerConnection.OnScanCompletedListener() {
-//                                public void onScanCompleted(String path, Uri uri) {
-//                                    LogDisplay.callLog(LOG_TAG, "Scanned path -> $path -> uri= $uri", LogDisplay.IMAGE_VIEWER_ACTIVITY_LOG_FLAG)
-//                                }
-//                            })
                     final Intent mediaScanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE)
-//                    File f = new File(mCurrentPhotoPath)
                     final File file = new File(imageFile.getAbsolutePath())
                     LogDisplay.callLog(LOG_TAG,"File absolute path -> ${file.toString()}",LogDisplay.IMAGE_VIEWER_ACTIVITY_LOG_FLAG)
                     final Uri contentUri = Uri.fromFile(file)
@@ -289,57 +269,14 @@ class ImageViewerActivity extends AppCompatActivity {
                     // permission was granted, yay! Do the
                     // contacts-related task you need to do.
                     saveImageToExternalStorage()
-//                    // Write this to SharedPReferences - used to display message
-//                    final SharedPreferences sharedPref = getPreferences(Context.MODE_PRIVATE)
-//                    final SharedPreferences.Editor editor = sharedPref.edit()
-//                    editor.putInt(getString(R.string.app_pref_storage_permission_user_resp_key), 0)
-//                    editor.commit()
                 } else {
                     // permission denied, boo! Disable the
                     // functionality that depends on this permission.
                     Snackbar.make(mImageViewerMainLayout, getString(R.string.write_permission_not_given_msg), Snackbar.LENGTH_LONG).show()
-//                    // Write this to SharedPReferences - used to display message
-//                    final SharedPreferences sharedPref = getPreferences(Context.MODE_PRIVATE)
-//                    final SharedPreferences.Editor editor = sharedPref.edit()
-//                    editor.putInt(getString(R.string.app_pref_storage_permission_user_resp_key), 1)
-//                    editor.commit()
                 }
                 break
-        // other 'case' lines to check for other
-        // permissions this app might request
         }
     }
-
-
-//    /**
-//     * Show a dialog to the user explaining why permission is required
-//     */
-//    private void explainStoragePermission() {
-//        final AlertDialog.Builder builder = new AlertDialog.Builder(this)
-//        builder.setTitle(R.string.storage_permission_dialog_title)
-//                .setMessage(R.string.storage_permission_dialog_message)
-//
-//        builder.setPositiveButton(R.string.storage_permission_allow_button, new DialogInterface.OnClickListener() {
-//            @Override
-//            void onClick(DialogInterface dialog, int which) {
-//                LogDisplay.callLog(LOG_TAG, 'Dialog permission ALLOW is clicked', LogDisplay.IMAGE_VIEWER_ACTIVITY_LOG_FLAG)
-//                ActivityCompat.requestPermissions(getBaseContext(),
-//                        [Manifest.permission.WRITE_EXTERNAL_STORAGE] as String[],
-//                        REQUEST_EXTERNAL_STORAGE)
-//            }
-//        })
-//
-//        builder.setNegativeButton(R.string.storage_permission_deny_button, new DialogInterface.OnClickListener(){
-//            @Override
-//            void onClick(DialogInterface dialog, int which) {
-//                LogDisplay.callLog(LOG_TAG, 'Dialog permission DENY is clicked', LogDisplay.IMAGE_VIEWER_ACTIVITY_LOG_FLAG)
-//            }
-//        })
-//
-//        // Create the AlertDialog
-//        final AlertDialog dialog = builder.create()
-//        dialog.show()
-//    }
 
     @Override
     protected void onStart() {
@@ -373,27 +310,4 @@ class ImageViewerActivity extends AppCompatActivity {
         //Start the exit animation
         overridePendingTransition(0, R.anim.slide_bottom_out_animation)
     }
-
-//    final class MyMediaScannerConnectionClient
-//            implements MediaScannerConnection.MediaScannerConnectionClient {
-//
-//        private String mFilename
-//        private String mMimetype
-//        private MediaScannerConnection mConn
-//
-//        public MyMediaScannerConnectionClient(Context ctx, File file, String mimetype) {
-//            this.mFilename = file.getAbsolutePath()
-//            mConn = new MediaScannerConnection(ctx, this)
-//            mConn.connect()
-//        }
-//        @Override
-//        public void onMediaScannerConnected() {
-//            mConn.scanFile(mFilename, mMimetype)
-//        }
-//
-//        @Override
-//        public void onScanCompleted(String path, Uri uri) {
-//            mConn.disconnect()
-//        }
-//    }
 }

@@ -82,7 +82,6 @@ class MovieMagicAuthenticatorActivity extends AccountAuthenticatorActivity {
                 cancelLogin()
             }
         })
-//        mLoginFormView = findViewById(R.id.login_form_scrollview) as View
         mLoginFormView = findViewById(R.id.login_form_linearlayout) as LinearLayout
         mProgressView = findViewById(R.id.login_progress) as ProgressBar
 

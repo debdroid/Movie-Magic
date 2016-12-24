@@ -8,7 +8,6 @@ import android.net.Uri
 import android.os.AsyncTask
 import android.util.Log
 import com.moviemagic.dpaul.android.app.BuildConfig
-import com.moviemagic.dpaul.android.app.GridMovieFragment
 import com.moviemagic.dpaul.android.app.contentprovider.MovieMagicContract
 import groovy.json.JsonException
 import groovy.json.JsonParserType
@@ -71,7 +70,7 @@ class LoadMovieDetails extends AsyncTask<ArrayList<Integer>, Void, Void> {
                 final ContentValues contentMovieBasicInfoValues = JsonParse.parseAdditionalBasicMovieData(jsonData)
                 //Update the indicator to indicate data is loaded
                 if (contentMovieBasicInfoValues) {
-                    if (movieIdList.get(i) && movieBasicRowIdList.get(i) == 0) {
+                    if (movieIdList.get(i) && movieBasicRowIdList.get(i) == 0) { // rowid = 0 means, record does not exist, so insert
                         if(categoryFlag.get(i) == GlobalStaticVariables.PERSON_CATEGORY_FLAG) {
                             contentMovieBasicInfoValues.put(MovieMagicContract.MovieBasicInfo.COLUMN_MOVIE_CATEGORY, GlobalStaticVariables.MOVIE_CATEGORY_PERSON)
                             contentMovieBasicInfoValues.put(MovieMagicContract.MovieBasicInfo.COLUMN_MOVIE_LIST_TYPE, GlobalStaticVariables.MOVIE_LIST_TYPE_TMDB_PERSON)
@@ -82,6 +81,7 @@ class LoadMovieDetails extends AsyncTask<ArrayList<Integer>, Void, Void> {
                             LogDisplay.callLog(LOG_TAG, "Shouldn't reach here. Please investigate categoryFlag-> ${categoryFlag.get(i)}", LogDisplay.LOAD_MOVIE_DETAILS_LOG_FLAG)
                             return null
                         }
+                        // Page number not used for person movie or search, so use 0
                         contentMovieBasicInfoValues.put(MovieMagicContract.MovieBasicInfo.COLUMN_PAGE_NUMBER, 0)
                         //Populate timestamp for new record
                         contentMovieBasicInfoValues.put(MovieMagicContract.MovieBasicInfo.COLUMN_CREATE_TIMESTAMP, Utility.getTodayDate())
@@ -263,24 +263,14 @@ class LoadMovieDetails extends AsyncTask<ArrayList<Integer>, Void, Void> {
                 }
 
             } catch (URISyntaxException e) {
-                //Set the boolean to true to indicate API call failed
-//                GridMovieFragment.isDataLoadFailed = true
                 Log.e(LOG_TAG, "URISyntaxException: $e.message", e)
             } catch (JsonException e) {
-                //Set the boolean to true to indicate API call failed
-//                GridMovieFragment.isDataLoadFailed = true
                 Log.e(LOG_TAG, "JsonException: $e.message", e)
             } catch (IOException e) {
-                //Set the boolean to true to indicate API call failed
-//                GridMovieFragment.isDataLoadFailed = true
                 Log.e(LOG_TAG, "IOException: $e.message")
             } catch (android.database.sqlite.SQLiteConstraintException e) {
-                //Set the boolean to true to indicate API call failed
-//                GridMovieFragment.isDataLoadFailed = true
                 Log.e(LOG_TAG, "SQLiteConstraintException: $e.message")
             } catch (android.database.sqlite.SQLiteException e) {
-                //Set the boolean to true to indicate API call failed
-//                GridMovieFragment.isDataLoadFailed = true
                 Log.e(LOG_TAG, "SQLiteException: $e.message")
             }
         }
@@ -294,10 +284,9 @@ class LoadMovieDetails extends AsyncTask<ArrayList<Integer>, Void, Void> {
      */
     private void loadRecommendationMovieDetails(ContentValues[] contentValues) {
         LogDisplay.callLog(LOG_TAG, 'loadRecommendationMovieDetails is called', LogDisplay.LOAD_MOVIE_DETAILS_LOG_FLAG)
-        //TMDb api example (movie with appended response)
-        //https://api.themoviedb.org/3/movie/240?api_key=key
+        // TMDb api example
+        // https://api.themoviedb.org/3/movie/240?api_key=key
         for(i in 0..(contentValues.length - 1)) {
-//            contentValues.
             final int recommMovieId = contentValues[i].getAsInteger(MovieMagicContract.MovieBasicInfo.COLUMN_MOVIE_ID)
             try {
                 final Uri.Builder recommUriBuilder = Uri.parse(GlobalStaticVariables.TMDB_MOVIE_BASE_URL).buildUpon()
@@ -343,6 +332,6 @@ class LoadMovieDetails extends AsyncTask<ArrayList<Integer>, Void, Void> {
     @Override
     protected void onPostExecute(Void aVoid) {
         super.onPostExecute(aVoid)
-        LogDisplay.callLog(LOG_TAG, 'Additional movie data loaded finished', LogDisplay.LOAD_MOVIE_DETAILS_LOG_FLAG)
+        LogDisplay.callLog(LOG_TAG, 'Additional movie data load finished', LogDisplay.LOAD_MOVIE_DETAILS_LOG_FLAG)
     }
 }

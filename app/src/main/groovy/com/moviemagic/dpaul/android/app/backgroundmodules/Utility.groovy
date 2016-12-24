@@ -33,7 +33,7 @@ class Utility {
     static String getSimpleTodayDate() {
         final SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd")
         final String todayDate = simpleDateFormat.format(new Date())
-        LogDisplay.callLog(LOG_TAG, "Today date stamp-> $todayDate", LogDisplay.UTILITY_LIST_LOG_FLAG)
+        LogDisplay.callLog(LOG_TAG, "Today date -> $todayDate", LogDisplay.UTILITY_LIST_LOG_FLAG)
         return todayDate
     }
 
@@ -41,10 +41,10 @@ class Utility {
      * This utility method returns the date which is 3 days ahead of today's date  in simple yyyy-MM-dd format
      * @return Date which is 3 days ahead of Today's date in yyyy-MM-dd format
      */
-    static String getSimpleThreeDayFutureDate() {
+    static String getSimpleFiveDayFutureDate() {
         // Set the calendar to current date
         final Calendar calendar = Calendar.getInstance()
-        calendar.add(Calendar.DAY_OF_YEAR, 3)
+        calendar.add(Calendar.DAY_OF_YEAR, 5)
         final Date date = calendar.getTime()
         final SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd")
         final String threeDayFutureDate = simpleDateFormat.format(date)
@@ -93,6 +93,45 @@ class Utility {
                 return date
         } else
             return date
+    }
+
+    /**
+     * This method returns the day name (Today, Tomorrow, Monday, Tuesday, etc)
+     * @param ctx Context
+     * @param date Release date of the movie
+     * @return Formatted day name
+     */
+    static String getDayNameForNotification(Context ctx, String date) {
+        final String[] dayOfWeek = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday']
+        final GregorianCalendar currCalendar = new GregorianCalendar()
+        currCalendar.setTime(new SimpleDateFormat("yyyy-MM-dd").parse('2015-12-31'))
+        final int currentDayOfYear = currCalendar.get(Calendar.DAY_OF_YEAR)
+        final GregorianCalendar releaseCalendar = new GregorianCalendar()
+        releaseCalendar.setTime(new SimpleDateFormat("yyyy-MM-dd").parse(date))
+        final int releaseDayOfYear = releaseCalendar.get(Calendar.DAY_OF_YEAR)
+        String dayName
+        if(currentDayOfYear == releaseDayOfYear) {
+            dayName = ctx.getString(R.string.notification_day_name_today)
+        } else if (currentDayOfYear < 365) {
+            if (releaseDayOfYear == currentDayOfYear + 1) {
+                dayName = ctx.getString(R.string.notification_day_name_tomorrow)
+            } else {
+                dayName = 'on ' + dayOfWeek[(releaseCalendar.get(Calendar.DAY_OF_WEEK)) - 1]
+            }
+        } else if (!currCalendar.isLeapYear(currCalendar.get(Calendar.YEAR)) && currentDayOfYear == 365) {
+            if (releaseDayOfYear == 1) {
+                dayName = ctx.getString(R.string.notification_day_name_tomorrow)
+            } else {
+                dayName = 'on ' + dayOfWeek[(releaseCalendar.get(Calendar.DAY_OF_WEEK)) - 1]
+            }
+        } else if (currCalendar.isLeapYear(currCalendar.get(Calendar.YEAR)) && currentDayOfYear == 366) {
+            if (releaseDayOfYear == 1) {
+                dayName = ctx.getString(R.string.notification_day_name_tomorrow)
+            } else {
+                dayName = 'on ' + dayOfWeek[(releaseCalendar.get(Calendar.DAY_OF_WEEK)) - 1]
+            }
+        }
+        return dayName
     }
 
     /**
@@ -232,6 +271,7 @@ class Utility {
         final String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date())
         return timeStamp
     }
+
     /**
      * This utility method determines the mpaa for different countries - at this moment it only supports US & UK
      * @param mpaa MPAA indicator

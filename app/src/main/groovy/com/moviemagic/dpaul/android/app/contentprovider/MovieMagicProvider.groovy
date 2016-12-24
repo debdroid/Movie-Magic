@@ -137,7 +137,7 @@ class MovieMagicProvider extends ContentProvider {
         )
     }
 
-    //To get data from movie_basic_info where movie_basic_info.movie_category = ?
+    //To get data from movie_basic_info where movie_basic_info.movie_category = ? and also append passed on clause and arguments
     private Cursor getMovieBasicInfoByMovieCategory(Uri uri, String[] projection, String selection, String[] selectionArgs, String sortOrder) {
         sMovieMagicQueryBuilder.setTables("$MovieMagicContract.MovieBasicInfo.TABLE_NAME")
         final String[] movieCategory = [MovieMagicContract.MovieBasicInfo.getMovieCategoryFromMovieUri(uri)]

@@ -84,7 +84,7 @@
     <string name="user_list_add_message"><xliff:g id="movie_add">%1$s</xliff:g> added to <xliff:g id="list">%2$s</xliff:g></string>
     <string name="user_list_del_message"><xliff:g id="movie_del">%1$s</xliff:g> removed from <xliff:g id="list">%2$s</xliff:g></string>
     <string name="user_rating_add_message">Rating updated successfully for %1$s</string>
-    <string name="format_release_date_notification">Releasing on <xliff:g id="release_date">%1$s</xliff:g></string>
+    <string name="format_release_date_notification">Releasing <xliff:g id="release_day_name">%1$s</xliff:g> (<xliff:g id="release_date">%2$s</xliff:g>)</string>
     <string name="image_view_footer_value"><xliff:g id="current">%d</xliff:g> of <xliff:g id="total">%d</xliff:g></string>
     <string name="search_no_movie_found_message">No movie found for search query <xliff:g id="no_movie">%1$s</xliff:g></string>
     <string name="user_local_and_tmdb_list_subtitle_record_count"><xliff:g id="search_movie_count">%d</xliff:g> movies</string>
@@ -242,10 +242,6 @@
     <string name="write_permission_missing_msg">Please grant write permission to save images.</string>
     <string name="write_permission_not_given_msg">Application does not have write permission to save images to your phone</string>
     <string name="app_pref_show_drawer_first_time_key">first_time_drawer</string>
-    <!--<string name="storage_permission_dialog_title">Permission required</string>-->
-    <!--<string name="storage_permission_dialog_message">The application needs write permission to save the images to your phone. Please click on ALLOW to grant the permission.</string>-->
-    <!--<string name="storage_permission_allow_button">Allow</string>-->
-    <!--<string name="storage_permission_deny_button">Deny</string>-->
     <string name="app_pref_tmdb_movie_page_number_file">com.moviemagic.dpaul.android.app.TMDB_MOVIE_PAGE_FILE</string>
     <string name="app_pref_tmdb_popular_page_key">tmdb_popular_page_key</string>
     <string name="app_pref_tmdb_toprated_page_key">tmdb_toprated_page_key</string>
@@ -300,5 +296,7 @@
     <string name="donate_item_header">Donate Item Header</string>
     <string name="single_donate_item_link_address">hhtps://www.donateitemlink.com</string>
     <string name="single_donate_item_donate_button">Donate</string>
+    <string name="notification_day_name_today">Today</string>
+    <string name="notification_day_name_tomorrow">Tomorrow</string>
 
 </resources>

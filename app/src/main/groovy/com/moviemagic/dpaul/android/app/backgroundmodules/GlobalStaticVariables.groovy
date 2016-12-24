@@ -66,8 +66,6 @@ class GlobalStaticVariables {
     public static final String TMDB_SEARCH_PATH = 'search'
     public static final String TMDB_PARAMETER_QUERY = 'query'
 
-
-
     //Static variables for TMDB movie image url and parameters
     public static final String TMDB_IMAGE_BASE_URL = 'http://image.tmdb.org/t/p/'
     public static final String TMDB_IMAGE_SIZE_W92 = 'w92'

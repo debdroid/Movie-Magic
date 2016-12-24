@@ -100,9 +100,6 @@ public class MovieMagicMainActivity extends AppCompatActivity implements Navigat
             editor.commit()
         }
 
-        //TODO Need to handle orientation changes / currently not done
-
-
         // Create an instance of AccountManager
         mAccountManager = AccountManager.get(this)
 
@@ -126,7 +123,6 @@ public class MovieMagicMainActivity extends AppCompatActivity implements Navigat
         //Update the user list menu counter
         //Program fails if 'Void' is used for parameter, could be because of groovy compiler??
         //So to get rid of the problem a 'dummy' value is passed
-        //TODO: Need to fix this later
          new UpdateMenuCounter(this).execute(['dummy'] as String[])
 
         //Check to ensure Youtube exists on the device
@@ -163,8 +159,6 @@ public class MovieMagicMainActivity extends AppCompatActivity implements Navigat
                 showNotConnectedToWiFiErrorDialog()
             }
         }
-        // Test utility method "isReadyToDownload"
-//        LogDisplay.callLog(LOG_TAG,"Downalod flag test -> ${Utility.isReadyToDownload(this)}",LogDisplay.MOVIE_MAGIC_MAIN_LOG_FLAG)
     }
 
     @Override
@@ -202,7 +196,6 @@ public class MovieMagicMainActivity extends AppCompatActivity implements Navigat
         //Update the user list menu counter
         //Program fails if 'Void' is used for parameter, could be because of groovy compiler??
         //So to get rid of the problem a 'dummy' value is passed
-        //TODO: Need to fix this later
         new UpdateMenuCounter(this).execute(['dummy'] as String[])
     }
 

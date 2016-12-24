@@ -76,23 +76,6 @@ class MovieMagicSyncAdapterUtility {
             */
             onAccountCreated(newAccount, context)
         }
-//        // If the password doesn't exist, the account doesn't exist
-//        if (accountManager.getPassword(newAccount) == null) {
-//            /*
-//             * Add the account and account type, no password or user data
-//             * If successful, return the Account object, otherwise report an error.
-//             */
-//            if (!accountManager.addAccountExplicitly(newAccount, "", null)) {
-//                return null
-//            }
-//            /*
-//             * If you don't set android:syncable="true" in
-//             * in your <provider> element in the manifest,
-//             * then call ContentResolver.setIsSyncable(account, AUTHORITY, 1)
-//             * here.
-//             */
-//            onAccountCreated(newAccount, context)
-//        }
         return newAccount
     }
 
@@ -130,16 +113,8 @@ class MovieMagicSyncAdapterUtility {
      */
     public static void configurePeriodicSync(Context context, Account account) {
         LogDisplay.callLog(LOG_TAG,'configurePeriodicSync is called',LogDisplay.MOVIE_MAGIC_SYNC_ADAPTER_UTILITY_LOG_FLAG)
-//        Account account = getSyncAccount(context)
         final String authority = context.getString(R.string.content_authority)
-        //TODO: Need to look into this Build.VERSION_CODES later
-//        LogDisplay.callLog(LOG_TAG,"Build.VERSION_CODES.JELLY_BEAN= $Build.VERSION_CODES.JELLY_BEAN",LogDisplay.MOVIE_MAGIC_SYNC_ADAPTER_UTILITY_LOG_FLAG)
-//        LogDisplay.callLog(LOG_TAG,"Build.VERSION_CODES.KITKAT= $Build.VERSION_CODES.KITKAT",LogDisplay.MOVIE_MAGIC_SYNC_ADAPTER_UTILITY_LOG_FLAG)
-//        LogDisplay.callLog(LOG_TAG,"Build.VERSION_CODES.LOLLIPOP= $Build.VERSION_CODES.LOLLIPOP",LogDisplay.MOVIE_MAGIC_SYNC_ADAPTER_UTILITY_LOG_FLAG)
-       //Somehow while running in Jelly bean it cannot find Build.VERSION_CODES.KITKAT, yet to figure out why!
-        //So using the API number (19 - KITKAT)itself here
-        if (Build.VERSION.SDK_INT >= 19) {
-//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+        if (Build.VERSION.SDK_INT >= 19) { //API number 19 - KITKAT
             // we can enable inexact timers in our periodic sync
             final SyncRequest request = new SyncRequest.Builder()
                     .syncPeriodic(SYNC_INTERVAL, SYNC_FLEXTIME)

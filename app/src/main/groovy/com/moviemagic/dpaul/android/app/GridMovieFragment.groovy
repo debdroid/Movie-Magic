@@ -37,10 +37,6 @@ import groovy.transform.CompileStatic
 @CompileStatic
 class GridMovieFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
     private static final String LOG_TAG = GridMovieFragment.class.getSimpleName()
-//    private static final String STATE_MOVIE_CATEGORY = 'movie_Category'
-//    private int mStartPage = 0
-    //This is to hold the current page of the data.
-//    private int mCurrentPage = mStartPage
     private int mCurrentPage = 0
     //To hold the previous count of the total records
     private int mPreviousRecordCount = 0
@@ -48,14 +44,9 @@ class GridMovieFragment extends Fragment implements LoaderManager.LoaderCallback
     private final int mThreasholdCount = 20
     //Boolean to indicate if more data is being loaded
     private boolean isMoreDataToLoad = true
-    //Boolean to track if the API call was successful
-//    public static boolean isDataLoadFailed = false
-    //Re-try counter in case API call failed
-//    private int mReTryCounter = 0
     private mSortItemNumber = -1
     private String mSortParam
     private boolean mValidMenuSelection = false
-//    private boolean mResetMenuSelection = false
     private boolean mSortIsOn = false
     private boolean mFilterIsOn = false
     private String mQuerySelectionClause
@@ -186,10 +177,8 @@ class GridMovieFragment extends Fragment implements LoaderManager.LoaderCallback
                     // list is invalidated and should be reset back to initial state
                     if (totalItemCount < mPreviousRecordCount) {
                         LogDisplay.callLog(LOG_TAG, 'List invalidated and reset took place.', LogDisplay.GRID_MOVIE_FRAGMENT_LOG_FLAG)
-//                        mCurrentPage = mStartPage
                         mCurrentPage = getCurrentTmdbPage()
                         mPreviousRecordCount = totalItemCount
-//                        mReTryCounter = 0
                         if (totalItemCount == 0) {
                             isMoreDataToLoad = true
                         }
@@ -202,7 +191,6 @@ class GridMovieFragment extends Fragment implements LoaderManager.LoaderCallback
                         isMoreDataToLoad = false
                         mPreviousRecordCount = totalItemCount
                         mCurrentPage++
-//                        mReTryCounter = 0
                     }
                     // If it isn’t currently loading, we check to see if we have breached
                     // the visibleThreshold and need to reload more data.
@@ -215,19 +203,9 @@ class GridMovieFragment extends Fragment implements LoaderManager.LoaderCallback
                             LogDisplay.callLog(LOG_TAG, 'Going to load more data...', LogDisplay.GRID_MOVIE_FRAGMENT_LOG_FLAG)
                             if(Utility.isReadyToDownload(getActivity())) {
                                 new LoadMoreMovies(getActivity(), mCurrentPage).execute(movieCategory)
-//                                isDataLoadFailed = true
                             }
                         }
                     }
-
-                    //Last API called failed, so give it another try but try max 5 times only
-                    //If still does not work, then stop
-//                    if (isDataLoadFailed && mReTryCounter < 5) {
-//                        isDataLoadFailed = false
-//                        final String[] movieCategory = [mMovieCategory] as String[]
-//                        mReTryCounter++
-//                        LogDisplay.callLog(LOG_TAG, "Last API call failed, going to re-try...try # $mReTryCounter", LogDisplay.GRID_MOVIE_FRAGMENT_LOG_FLAG)
-//                    }
                 }
             })
         }  else {
@@ -322,8 +300,6 @@ class GridMovieFragment extends Fragment implements LoaderManager.LoaderCallback
                 return true
                 break
             case R.id.menu_action_filter_reset:
-                // Reset the filter
-//                mResetMenuSelection = true
                 mQuerySelectionClause = null
                 mQuerySelectionArguments = null
                 mFilterIsOn = false
@@ -558,11 +534,8 @@ class GridMovieFragment extends Fragment implements LoaderManager.LoaderCallback
         LogDisplay.callLog(LOG_TAG,"onLoadFinished is called. Total record count -> ${data.getCount()}",LogDisplay.GRID_MOVIE_FRAGMENT_LOG_FLAG)
         data.moveToLast()
         if(data.moveToFirst()) {
-//            mStartPage = data.getInt(COL_MOVIE_PAGE_NUM)
-//            mCurrentPage = mStartPage
             mCurrentPage = getCurrentTmdbPage()
             mMovieListType = data.getString(COL_MOVIE_LIST_TYPE)
-//            LogDisplay.callLog(LOG_TAG, "Start Page # $mStartPage", LogDisplay.GRID_MOVIE_FRAGMENT_LOG_FLAG)
             if(mCollectionGridFlag) {
                 //Call CollectionColorChangeCallback which Collection activity will use to change the grid color
                 mCollectionColorChangeCallback.notifyCollectionColorChange()
@@ -727,7 +700,6 @@ class GridMovieFragment extends Fragment implements LoaderManager.LoaderCallback
         String sortField = null
         switch (mSortItemNumber) {
             case 0: // This is the reset scenario
-//                mResetMenuSelection = true
                 mSortParam = "$MovieMagicContract.MovieBasicInfo._ID ASC"
                 mSortIsOn = false
                 setIconColor(mSortDrawableIcon, false)
@@ -806,13 +778,7 @@ class GridMovieFragment extends Fragment implements LoaderManager.LoaderCallback
         LogDisplay.callLog(LOG_TAG, "restartCursorLoader: mQuerySelectionClause -> $mQuerySelectionClause", LogDisplay.MOVIE_MAGIC_MAIN_LOG_FLAG)
         LogDisplay.callLog(LOG_TAG, "restartCursorLoader: mQuerySelectionArguments -> $mQuerySelectionArguments", LogDisplay.MOVIE_MAGIC_MAIN_LOG_FLAG)
         LogDisplay.callLog(LOG_TAG, "restartCursorLoader: mSortParam -> $mSortParam", LogDisplay.MOVIE_MAGIC_MAIN_LOG_FLAG)
-//        if(mResetMenuSelection) {
-//            // In case of reset, override the selection clause, selection arguments & sort parameter with default values
-//            mQuerySelectionClause = null
-//            mQuerySelectionArguments = null
-//            mSortParam = "$MovieMagicContract.MovieBasicInfo._ID ASC"
-//            mResetMenuSelection = false
-//        }
+
         if(mValidMenuSelection) {
             // Set the values for the fields which are used for more data load logic
             isMoreDataToLoad = true

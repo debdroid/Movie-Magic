@@ -4,7 +4,6 @@ import android.content.ContentValues
 import android.content.Context
 import android.content.SharedPreferences
 import android.os.Bundle
-import android.text.TextUtils
 import com.moviemagic.dpaul.android.app.R
 import com.moviemagic.dpaul.android.app.contentprovider.MovieMagicContract
 import com.moviemagic.dpaul.android.app.contentprovider.MovieMagicContract.MovieBasicInfo

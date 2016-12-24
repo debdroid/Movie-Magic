@@ -24,7 +24,6 @@ class LoadCollectionData extends AsyncTask<Integer, Void, Void> {
         mContext = ctx
         mContentResolver = mContext.getContentResolver()
     }
-    //TODO - need to do housekeeping with collection data (i.e. regular update) later
     @Override
     protected Void doInBackground(Integer... params) {
         final int collectionId = params[0]
@@ -79,8 +78,6 @@ class LoadCollectionData extends AsyncTask<Integer, Void, Void> {
                 /**
                  * Process and load (insert) the collection data
                  * **/
-                //TODO - need to add a logic to clean-up data (during sync load??). This is is needed because even though the flag is used
-                //TODO but it is observed that sometimes it is getting set without inserting data to main table!
                 final ContentValues collectionDataContentValue = JsonParse.parseCollectionDataJson(jsonData) as ContentValues
                 Uri collectionDataUri
                 if(collectionDataContentValue) {
@@ -114,6 +111,7 @@ class LoadCollectionData extends AsyncTask<Integer, Void, Void> {
 
                 /**
                  * Update the flag of collection table to false to indicate that collection movies are not inserted
+                 * (This is done to ensure if collection record got inserted but the associated movies are not inserted)
                  * **/
                 if (collectionDataUri && collectionMovieCount <= 0) {
                     final ContentValues collectionData = new ContentValues()

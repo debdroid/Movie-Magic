@@ -5,7 +5,6 @@ import android.content.Context
 import android.database.Cursor
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
-import android.database.sqlite.SQLiteQueryBuilder
 import com.moviemagic.dpaul.android.app.contentprovider.MovieMagicContract
 import groovy.transform.CompileStatic
 
@@ -113,8 +112,6 @@ class SearchDatabaseTable {
     }
 
     private Cursor queryResult(String selection, String[] selectionArgs, String[] columns) {
-//        SQLiteQueryBuilder builder = new SQLiteQueryBuilder()
-//        builder.setTables(SEARCH_FTS_VIRTUAL_TABLE_NAME)
         final SQLiteDatabase sqLiteDatabase = mSearchDatabaseOpenHelper.getReadableDatabase()
         final Cursor resultSet = sqLiteDatabase.query (true,                            // Indicate distinct records
                                                       SEARCH_FTS_VIRTUAL_TABLE_NAME,    // Table name
@@ -125,11 +122,6 @@ class SearchDatabaseTable {
                                                       null,                             // Having - Not used
                                                       null,                             // Order By - Not used
                                                       null)                             // Limit - Not used
-//        Cursor cursor = builder.query(mSearchDatabaseOpenHelper.getReadableDatabase(),
-//                columns, selection, selectionArgs, null, null, null)
-        // Close the database
-//        if(sqLiteDatabase) sqLiteDatabase.close()
-
         if (resultSet == null) {
             sqLiteDatabase.close()
             return null

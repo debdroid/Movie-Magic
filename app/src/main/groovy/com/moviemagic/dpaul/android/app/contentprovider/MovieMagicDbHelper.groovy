@@ -260,7 +260,7 @@ class MovieMagicDbHelper extends SQLiteOpenHelper {
                 $MovieMagicContract.MoviePersonCast.COLUMN_PERSON_CAST_CHARACTER) ON CONFLICT REPLACE)
                 """
 
-        //Create the SQL to create movie_person_cast table
+        //Create the SQL to create movie_person_crew table
         final  String SQL_CREATE_MOVIE_PERSON_CREW_TABLE = """
                 CREATE TABLE $MovieMagicContract.MoviePersonCrew.TABLE_NAME (
                 $MovieMagicContract.MoviePersonCrew._ID INTEGER PRIMARY KEY,

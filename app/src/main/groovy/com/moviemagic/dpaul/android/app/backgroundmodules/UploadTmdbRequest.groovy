@@ -263,7 +263,7 @@ class UploadTmdbRequest extends AsyncTask<Integer, Void, String> {
 
     /**
      * This method retrieves the details of the movie from movie basic info table
-     * @return The retrieved data in Contentvalues format
+     * @return The retrieved data in ContentValues format
      */
     protected ContentValues getMovieBasicData() {
         final ContentValues movieBasicInfoContentValues = new ContentValues()
@@ -392,7 +392,6 @@ class UploadTmdbRequest extends AsyncTask<Integer, Void, String> {
         //update the record with category "orphaned" which will ensure that it will not come in the user list but
         //record will remain there in the table and later will be cleaned up by the sync adapter while loading new
         //data as the sync adapter has logic to delete anything which is not user local list
-        //TODO: Will see if a better solution can be found :)
         //Remove the record from movie_basic_info is needed for user list and NOT for rating operation
         final ContentValues movieOrphanContentValue = new ContentValues()
         movieOrphanContentValue.put(MovieMagicContract.MovieBasicInfo.COLUMN_MOVIE_CATEGORY, GlobalStaticVariables.MOVIE_CATEGORY_ORPHANED)

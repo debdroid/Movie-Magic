@@ -304,8 +304,6 @@ class CollectionMovieFragment extends Fragment implements LoaderManager.LoaderCa
         final GridMovieFragment gridMovieFragment = new GridMovieFragment()
         gridMovieFragment.setArguments(bundle)
         final FragmentTransaction fragmentTransaction = getActivity().getSupportFragmentManager().beginTransaction()
-        //Set the custom animation
-//        fragmentTransaction.setCustomAnimations(R.anim.slide_bottom_in_animation,0)
         fragmentTransaction.replace(R.id.collection_movie_grid, gridMovieFragment)
         fragmentTransaction.commit()
     }
@@ -319,7 +317,6 @@ class CollectionMovieFragment extends Fragment implements LoaderManager.LoaderCa
                 @Override
                 void onSuccess() {
                     LogDisplay.callLog(LOG_TAG, 'Picasso onSuccess is called', LogDisplay.COLLECTION_MOVIE_FRAGMENT_LOG_FLAG)
-                    //TODO: Future change - provide a setting option to user to chose if they want this or will use default theme
                     // If user does not select dynamic theme (default value) then do not change the color
                     if (Utility.isDynamicTheme(getActivity())) {
                         final Bitmap bitmapPoster = ((BitmapDrawable) mBackdropImageView.getDrawable()).getBitmap()

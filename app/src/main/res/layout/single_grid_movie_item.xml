@@ -36,8 +36,7 @@
                 android:fontFamily="sans-serif"
                 android:gravity="center"
                 android:padding="@dimen/grid_text_padding"
-                android:singleLine="true"
-                android:text="@string/movie_name"
+                android:maxLines="1"
                 android:textAppearance="@style/TextAppearance.AppCompat.Body1"
                 android:textColor="@color/white_color"
                 android:textStyle="italic" />

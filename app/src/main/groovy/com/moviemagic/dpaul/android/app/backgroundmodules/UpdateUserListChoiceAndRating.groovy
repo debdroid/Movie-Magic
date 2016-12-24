@@ -46,7 +46,6 @@ class UpdateUserListChoiceAndRating extends AsyncTask<String, Void, Integer> {
     private final static int COL_MOVIE_USER_LIST_FLAG_COLLECTION_FLAG = 5
     private final static int COL_MOVIE_USER_LIST_FLAG_USER_RATING = 6
 
-
     public UpdateUserListChoiceAndRating(Context ctx, LinearLayout userDrawableLayout, int movieId, String movieTitle,
                                          boolean showNotification) {
         mContext = ctx
@@ -57,7 +56,6 @@ class UpdateUserListChoiceAndRating extends AsyncTask<String, Void, Integer> {
         mProgressDialog = new ProgressDialog(mContext, ProgressDialog.STYLE_SPINNER)
         mShowNotification = showNotification
     }
-
 
     @Override
     protected void onPreExecute() {
@@ -200,12 +198,6 @@ class UpdateUserListChoiceAndRating extends AsyncTask<String, Void, Integer> {
             boolean deleteUserListRecordFlag = false
             //It's remove operation (i.e. record is already present in the movie_user_list_flag table
             if(movieUSerListFlagCursor.moveToFirst()) {
-//                LogDisplay.callLog(LOG_TAG,"COL_MOVIE_USER_LIST_FLAG_WATCHED_FLAG->${movieUSerListFlagCursor.getInt(COL_MOVIE_USER_LIST_FLAG_WATCHED_FLAG)}",LogDisplay.UPDATE_USER_LIST_LOG_FLAG)
-//                LogDisplay.callLog(LOG_TAG,"COL_MOVIE_USER_LIST_FLAG_WISH_LIST_FLAG->${movieUSerListFlagCursor.getInt(COL_MOVIE_USER_LIST_FLAG_WISH_LIST_FLAG)}",LogDisplay.UPDATE_USER_LIST_LOG_FLAG)
-//                LogDisplay.callLog(LOG_TAG,"COL_MOVIE_USER_LIST_FLAG_FAVOURITE_FLAG->${movieUSerListFlagCursor.getInt(COL_MOVIE_USER_LIST_FLAG_FAVOURITE_FLAG)}",LogDisplay.UPDATE_USER_LIST_LOG_FLAG)
-//                LogDisplay.callLog(LOG_TAG,"COL_MOVIE_USER_LIST_FLAG_COLLECTION_FLAG->${movieUSerListFlagCursor.getInt(COL_MOVIE_USER_LIST_FLAG_COLLECTION_FLAG)}",LogDisplay.UPDATE_USER_LIST_LOG_FLAG)
-//                LogDisplay.callLog(LOG_TAG,"COL_MOVIE_USER_LIST_FLAG_USER_RATING->${movieUSerListFlagCursor.getInt(COL_MOVIE_USER_LIST_FLAG_USER_RATING)}",LogDisplay.UPDATE_USER_LIST_LOG_FLAG)
-//                LogDisplay.callLog(LOG_TAG,"mUserRating->$mUserRating",LogDisplay.UPDATE_USER_LIST_LOG_FLAG)
                 if(listType == GlobalStaticVariables.USER_LIST_WATCHED) {
                     if( movieUSerListFlagCursor.getInt(COL_MOVIE_USER_LIST_FLAG_WISH_LIST_FLAG) == GlobalStaticVariables.MOVIE_MAGIC_FLAG_FALSE &&
                         movieUSerListFlagCursor.getInt(COL_MOVIE_USER_LIST_FLAG_FAVOURITE_FLAG) == GlobalStaticVariables.MOVIE_MAGIC_FLAG_FALSE &&
@@ -271,11 +263,10 @@ class UpdateUserListChoiceAndRating extends AsyncTask<String, Void, Integer> {
                 //When user remove the movie from the list it should be ideally deleted but due to the logic
                 //of the application, the user can still see the details of the movie even after the delete. So in order
                 //to achieve that we need to keep that row in the table otherwise application will crash as the loader 0 of
-                //detail fragment will not find the the corresponding movie and would return null. So instead of delete
+                //detail fragment will not find the the corresponding movie and would return null. So instead of delete,
                 //update the record with category "orphaned" which will ensure that it will not come in the user list but
                 //record will remain there in the table and later will be cleaned up by the sync adapter while loading new
                 //data as the sync adapter has logic to delete anything which is not user local list
-                //TODO: Will see if a better solution can be found :)
                 //Remove the record from movie_basic_info is needed for user list and NOT for rating operation
                 if(operationType == GlobalStaticVariables.USER_LIST_REMOVE_FLAG) {
                     final ContentValues movieOrphanContentValue = new ContentValues()

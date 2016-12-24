@@ -24,7 +24,6 @@ class LoadPersonData extends AsyncTask<Integer, Void, Void> {
         mContext = ctx
         mContentResolver = mContext.getContentResolver()
     }
-    //TODO - need to do housekeeping with person data later
     @Override
     protected Void doInBackground(Integer... params) {
         final int personId = params[0]
@@ -94,7 +93,7 @@ class LoadPersonData extends AsyncTask<Integer, Void, Void> {
             }
 
             //URL for person images is different and TMDb currently does not provide the images as part of append_to_response
-            //TMDB api example (person with appended response)
+            //TMDb api example (person with appended response)
             //http://api.themoviedb.org/3/person/1158/images?api_key=key5&append_to_response=movie_credits
             final Uri.Builder personUriBuilder = Uri.parse(GlobalStaticVariables.TMDB_MOVIE_BASE_URL).buildUpon()
             final Uri personImageUri = personUriBuilder.appendPath(GlobalStaticVariables.TMDB_PERSON_PATH)
