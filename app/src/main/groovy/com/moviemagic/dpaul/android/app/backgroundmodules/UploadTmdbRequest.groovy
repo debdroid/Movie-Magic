@@ -26,7 +26,6 @@ import groovy.transform.CompileStatic
 
 @CompileStatic
 class UploadTmdbRequest extends AsyncTask<Integer, Void, String> {
-    @SuppressWarnings("GroovyConstantNamingConvention")
     private static final String LOG_TAG = UploadTmdbRequest.class.getSimpleName()
     private final ContentResolver mContentResolver
     private final Context mContext

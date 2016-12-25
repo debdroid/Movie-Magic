@@ -16,7 +16,6 @@ import groovy.transform.CompileStatic
 
 @CompileStatic
 class DetailFragmentPagerAdapter extends PagerAdapter {
-    @SuppressWarnings("GroovyConstantNamingConvention")
     private static final String LOG_TAG = DetailFragmentPagerAdapter.class.getSimpleName()
     private final Context mContext = null
     private final String[] mBackdropimageFilePaths = null

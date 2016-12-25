@@ -7,77 +7,42 @@ import groovy.transform.CompileStatic
 
 @CompileStatic
 class TestMovieMagicUriMatcher extends AndroidTestCase {
-    @SuppressWarnings("GroovyConstantNamingConvention")
     private static final int TEST_MOVIE_ID = 123
-    @SuppressWarnings("GroovyConstantNamingConvention")
     private static final int TEST_COLL_ID = 456
-    @SuppressWarnings("GroovyConstantNamingConvention")
     private static final int TEST_PERSON_ID = 789
-    @SuppressWarnings("GroovyConstantNamingConvention")
     private static final String TEST_MOVIE_CATEGORY = 'popular'
-    @SuppressWarnings("GroovyConstantNamingConvention")
     private static final String TEST_ISO_CNTRY = 'US'
-    @SuppressWarnings("GroovyConstantNamingConvention")
     private static final long TEST_RELEASE_DATE = 1471042800385L //2016-08-13
 
     // content://com.moviemagic.dpaul.android.app/<table name>"
-    @SuppressWarnings("GroovyConstantNamingConvention")
     private static final Uri TEST_MOVIE_BASIC_INFO_DIR = MovieMagicContract.MovieBasicInfo.CONTENT_URI
-    @SuppressWarnings("GroovyConstantNamingConvention")
     private static final Uri TEST_MOVIE_BASIC_INFO_WITH_ID_ITEM = MovieMagicContract.MovieBasicInfo.buildMovieUriWithMovieId(TEST_MOVIE_ID)
-    @SuppressWarnings("GroovyConstantNamingConvention")
     private static final Uri TEST_MOVIE_BASIC_INFO_WITH_CATEGORY_DIR = MovieMagicContract.MovieBasicInfo.buildMovieUriWithMovieCategory(TEST_MOVIE_CATEGORY)
-    @SuppressWarnings("GroovyConstantNamingConvention")
     private static final Uri TEST_MOVIE_BASIC_INFO_WITH_CATEGORY_AND_COLL_ID_ITEM = MovieMagicContract.MovieBasicInfo.buildMovieUriWithMovieCategoryAndCollectionId(TEST_MOVIE_CATEGORY,TEST_COLL_ID)
-    @SuppressWarnings("GroovyConstantNamingConvention")
     private static final Uri TEST_MOVIE_CAST_DIR = MovieMagicContract.MovieCast.CONTENT_URI
-    @SuppressWarnings("GroovyConstantNamingConvention")
     private static final Uri TEST_MOVIE_CAST_WITH_ID_DIR = MovieMagicContract.MovieCast.buildMovieCastUriWithMovieId(TEST_MOVIE_ID)
-    @SuppressWarnings("GroovyConstantNamingConvention")
     private static final Uri TEST_MOVIE_CREW_DIR = MovieMagicContract.MovieCrew.CONTENT_URI
-    @SuppressWarnings("GroovyConstantNamingConvention")
     private static final Uri TEST_MOVIE_CREW_WITH_ID_DIR = MovieMagicContract.MovieCrew.buildMovieCrewUriWithMovieId(TEST_MOVIE_ID)
-    @SuppressWarnings("GroovyConstantNamingConvention")
     private static final Uri TEST_MOVIE_IMAGE_DIR = MovieMagicContract.MovieImage.CONTENT_URI
-    @SuppressWarnings("GroovyConstantNamingConvention")
     private static final Uri TEST_MOVIE_IMAGE_WITH_ID_DIR = MovieMagicContract.MovieImage.buildMovieImageUriWithMovieId(TEST_MOVIE_ID)
-    @SuppressWarnings("GroovyConstantNamingConvention")
     private static final Uri TEST_MOVIE_VIDEO_DIR = MovieMagicContract.MovieVideo.CONTENT_URI
-    @SuppressWarnings("GroovyConstantNamingConvention")
     private static final Uri TEST_MOVIE_VIDEO_WITH_ID_DIR = MovieMagicContract.MovieVideo.buildMovieVideoUriWithMovieId(TEST_MOVIE_ID)
-    @SuppressWarnings("GroovyConstantNamingConvention")
     private static final Uri TEST_MOVIE_REVIEW_DIR = MovieMagicContract.MovieReview.CONTENT_URI
-    @SuppressWarnings("GroovyConstantNamingConvention")
     private static final Uri TEST_MOVIE_REVIEW_WITH_ID_DIR = MovieMagicContract.MovieReview.buildMovieReviewUriWithMovieId(TEST_MOVIE_ID)
-    @SuppressWarnings("GroovyConstantNamingConvention")
     private static final Uri TEST_MOVIE_RELEASE_DIR = MovieMagicContract.MovieReleaseDate.CONTENT_URI
-    @SuppressWarnings("GroovyConstantNamingConvention")
     private static final Uri TEST_MOVIE_RELEASE_WITH_ID_DIR = MovieMagicContract.MovieReleaseDate.buildMovieReleaseUriWithMovieId(TEST_MOVIE_ID)
-    @SuppressWarnings("GroovyConstantNamingConvention")
     private static final Uri TEST_MOVIE_RELEASE_WITH_ID_AND_ISO_DIR = MovieMagicContract.MovieReleaseDate.buildMovieReleaseUriWithMovieIdAndCountryIso(TEST_MOVIE_ID,TEST_ISO_CNTRY)
-    @SuppressWarnings("GroovyConstantNamingConvention")
     private static final Uri TEST_MOVIE_USER_LIST_FLAG_DIR = MovieMagicContract.MovieUserListFlag.CONTENT_URI
-    @SuppressWarnings("GroovyConstantNamingConvention")
     private static final Uri TEST_MOVIE_USER_LIST_FLAG_WITH_ID_DIR = MovieMagicContract.MovieUserListFlag.buildMovieUserListFlagUriWithMovieId(TEST_MOVIE_ID)
-    @SuppressWarnings("GroovyConstantNamingConvention")
     private static final Uri TEST_MOVIE_PERSON_INFO_DIR = MovieMagicContract.MoviePersonInfo.CONTENT_URI
-    @SuppressWarnings("GroovyConstantNamingConvention")
     private static final Uri TEST_MOVIE_PERSON_INFO_WITH_ID_ITEM = MovieMagicContract.MoviePersonInfo.buildMoviePersonInfoUriWithPersonId(TEST_PERSON_ID)
-    @SuppressWarnings("GroovyConstantNamingConvention")
     private static final Uri TEST_MOVIE_PERSON_CAST_DIR = MovieMagicContract.MoviePersonCast.CONTENT_URI
-    @SuppressWarnings("GroovyConstantNamingConvention")
     private static final Uri TEST_MOVIE_PERSON_CAST_WITH_ID_DIR = MovieMagicContract.MoviePersonCast.buildMoviePersonCastUriWithPersonId(TEST_PERSON_ID)
-    @SuppressWarnings("GroovyConstantNamingConvention")
     private static final Uri TEST_MOVIE_PERSON_CREW_DIR = MovieMagicContract.MoviePersonCrew.CONTENT_URI
-    @SuppressWarnings("GroovyConstantNamingConvention")
     private static final Uri TEST_MOVIE_PERSON_CREW_WITH_ID_DIR = MovieMagicContract.MoviePersonCrew.buildMoviePersonCrewUriWithPersonId(TEST_PERSON_ID)
-    @SuppressWarnings("GroovyConstantNamingConvention")
     private static final Uri TEST_MOVIE_PERSON_IMAGE_DIR = MovieMagicContract.MoviePersonImage.CONTENT_URI
-    @SuppressWarnings("GroovyConstantNamingConvention")
     private static final Uri TEST_MOVIE_PERSON_IMAGE_WITH_ID_DIR = MovieMagicContract.MoviePersonImage.buildMoviePersonImageUriWithPersonId(TEST_PERSON_ID)
-    @SuppressWarnings("GroovyConstantNamingConvention")
     private static final Uri TEST_MOVIE_COLL_DIR = MovieMagicContract.MovieCollection.CONTENT_URI
-    @SuppressWarnings("GroovyConstantNamingConvention")
     private static final Uri TEST_MOVIE_COLL_WITH_ID_ITEM = MovieMagicContract.MovieCollection.buildMovieCollectionUriWithCollectionId(TEST_COLL_ID)
 
     /*

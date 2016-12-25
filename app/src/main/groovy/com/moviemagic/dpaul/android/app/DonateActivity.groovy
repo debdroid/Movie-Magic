@@ -11,10 +11,8 @@ import com.moviemagic.dpaul.android.app.adapter.DonateLinkAdapter
 import com.moviemagic.dpaul.android.app.backgroundmodules.LogDisplay;
 import groovy.transform.CompileStatic
 
-@SuppressWarnings(["GroovyAssignabilityCheck", "GroovyAssignabilityCheck"])
 @CompileStatic
 class DonateActivity extends AppCompatActivity {
-    @SuppressWarnings("GroovyConstantNamingConvention")
     private static final String LOG_TAG = DonateActivity.class.getSimpleName()
 
     private RecyclerView mRecyclerView

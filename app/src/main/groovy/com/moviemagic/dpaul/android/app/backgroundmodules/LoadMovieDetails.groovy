@@ -16,7 +16,6 @@ import groovy.transform.CompileStatic
 
 @CompileStatic
 class LoadMovieDetails extends AsyncTask<ArrayList<Integer>, Void, Void> {
-    @SuppressWarnings("GroovyConstantNamingConvention")
     private static final String LOG_TAG = LoadMovieDetails.class.getSimpleName()
     private final ContentResolver mContentResolver
     private final Context mContext

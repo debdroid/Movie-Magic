@@ -16,15 +16,10 @@ import groovy.transform.CompileStatic
 @CompileStatic
 class TestMovieMagicProvider extends AndroidTestCase {
 
-    @SuppressWarnings("GroovyConstantNamingConvention")
     static final String TEST_UPDATED_MOVIE_CATEGORY = 'upcoming'
-    @SuppressWarnings("GroovyConstantNamingConvention")
     static final String TEST_UPDATED_MOVIE_ID = 90809
-    @SuppressWarnings("GroovyConstantNamingConvention")
     static final String TEST_UPDATED_COLL_ID = 10987
-    @SuppressWarnings("GroovyConstantNamingConvention")
     static final String TEST_UPDATED_PERSON_ID = 89704
-    @SuppressWarnings("GroovyConstantNamingConvention")
     static final String TEST_RELEASE_DATE = '2015-08-13'
 
     /*

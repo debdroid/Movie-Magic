@@ -36,13 +36,10 @@ import groovy.transform.CompileStatic
  * The Authenticator activity.
  * A login screen that offers TMDb login to user via user id/password.
  */
-@SuppressWarnings(["GroovyAssignabilityCheck", "GroovyAssignabilityCheck", "GroovyAssignabilityCheck", "GroovyAssignabilityCheck", "GroovyAssignabilityCheck", "GroovyAssignabilityCheck"])
 @CompileStatic
 class MovieMagicAuthenticatorActivity extends AccountAuthenticatorActivity {
-    @SuppressWarnings("GroovyConstantNamingConvention")
     private static final String LOG_TAG = MovieMagicAuthenticatorActivity.class.getSimpleName()
 
-    @SuppressWarnings("GroovyConstantNamingConvention")
     public static final String IS_NEW_ACCOUNT = 'is_new_account'
     private AccountManager mAccountManager
     private EditText mUserNameEditTextView,mPasswordEditTextView

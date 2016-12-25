@@ -12,7 +12,6 @@ import groovy.transform.CompileStatic
 
 @CompileStatic
 class MovieMagicAuthenticatorService extends Service {
-    @SuppressWarnings("GroovyConstantNamingConvention")
     private static final String LOG_TAG = MovieMagicAuthenticatorService.class.getSimpleName()
 
     // Instance field that stores the authenticator object

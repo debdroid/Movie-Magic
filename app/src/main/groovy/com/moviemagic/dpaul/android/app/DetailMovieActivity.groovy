@@ -9,7 +9,6 @@ import groovy.transform.CompileStatic
 
 @CompileStatic
 class DetailMovieActivity extends AppCompatActivity implements DetailMovieFragment.CallbackForBackdropImageClick {
-    @SuppressWarnings("GroovyConstantNamingConvention")
     private static final String LOG_TAG = DetailMovieActivity.class.getSimpleName()
 
     @Override

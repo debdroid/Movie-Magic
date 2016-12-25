@@ -14,7 +14,6 @@ import groovy.transform.CompileStatic
 
 @CompileStatic
 class TmdbServerAuthenticate implements TmdbAuthenticateInterface {
-    @SuppressWarnings("GroovyConstantNamingConvention")
     private static final String LOG_TAG = TmdbServerAuthenticate.class.getSimpleName()
 
     @Override

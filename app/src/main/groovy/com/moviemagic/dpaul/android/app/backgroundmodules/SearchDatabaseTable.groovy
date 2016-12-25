@@ -10,31 +10,19 @@ import groovy.transform.CompileStatic
 
 @CompileStatic
 class SearchDatabaseTable {
-    @SuppressWarnings("GroovyConstantNamingConvention")
     private static final String LOG_TAG = SearchDatabaseTable.class.getSimpleName()
 
-    @SuppressWarnings("GroovyConstantNamingConvention")
     public static final String SEARCH_FTS_VIRTUAL_TABLE_NAME = "search_movie_basic_info_table"
 
-    @SuppressWarnings("GroovyConstantNamingConvention")
     public static final String SEARCH_FTS_COLUMN_MOVIE_ID = 'search_fts_movie_id'
-    @SuppressWarnings("GroovyConstantNamingConvention")
     public static final String SEARCH_FTS_COLUMN_ADULT_FLAG = 'search_fts_adult_flag'
-    @SuppressWarnings("GroovyConstantNamingConvention")
     public static final String SEARCH_FTS_COLUMN_BACKDROP_PATH = 'search_fts_backdrop_path'
-    @SuppressWarnings("GroovyConstantNamingConvention")
     public static final String SEARCH_FTS_COLUMN_ORIGINAL_TITLE = 'search_fts_original_title'
-    @SuppressWarnings("GroovyConstantNamingConvention")
     public static final String SEARCH_FTS_COLUMN_RELEASE_DATE = 'search_fts_release_date'
-    @SuppressWarnings("GroovyConstantNamingConvention")
     public static final String SEARCH_FTS_COLUMN_POSTER_PATH = 'search_fts_poster_path'
-    @SuppressWarnings("GroovyConstantNamingConvention")
     public static final String SEARCH_FTS_COLUMN_TITLE = 'search_fts_title'
-    @SuppressWarnings("GroovyConstantNamingConvention")
     public static final String SEARCH_FTS_COLUMN_PAGE_NUMBER = 'search_fts_page_number'
-    @SuppressWarnings("GroovyConstantNamingConvention")
     public static final String SEARCH_FTS_COLUMN_MOVIE_CATEGORY = 'search_fts_movie_category'
-    @SuppressWarnings("GroovyConstantNamingConvention")
     public static final String SEARCH_FTS_COLUMN_QUERY_STRING = 'search_fts_query_string'
 
     private final SearchDatabaseOpenHelper mSearchDatabaseOpenHelper
@@ -45,9 +33,7 @@ class SearchDatabaseTable {
 
     public static class SearchDatabaseOpenHelper extends SQLiteOpenHelper {
         private final Context mHelperContext
-        @SuppressWarnings("GroovyConstantNamingConvention")
         private static final String SEARCH_DATABASE_NAME = "search_database.db"
-        @SuppressWarnings("GroovyConstantNamingConvention")
         private static final int SEARCH_DATABASE_VERSION = 1
 
         //Create the SQL to create search_movie_basic_info table

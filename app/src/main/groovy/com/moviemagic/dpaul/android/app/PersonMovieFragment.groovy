@@ -35,7 +35,6 @@ import groovy.transform.CompileStatic
 
 @CompileStatic
 class PersonMovieFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
-    @SuppressWarnings("GroovyConstantNamingConvention")
     private static final String LOG_TAG = PersonMovieFragment.class.getSimpleName()
 
     private Uri mPersonInfoUri
@@ -70,18 +69,13 @@ class PersonMovieFragment extends Fragment implements LoaderManager.LoaderCallba
     private CallbackForImageClick mCallbackForImageClick
     private String mPersonName
 
-    @SuppressWarnings("GroovyConstantNamingConvention")
     private static final int PERSON_MOVIE_FRAGMENT_PERSON_INFO_LOADER_ID = 0
-    @SuppressWarnings("GroovyConstantNamingConvention")
     private static final int PERSON_MOVIE_FRAGMENT_PERSON_CAST_LOADER_ID = 1
-    @SuppressWarnings("GroovyConstantNamingConvention")
     private static final int PERSON_MOVIE_FRAGMENT_PERSON_CREW_LOADER_ID = 2
-    @SuppressWarnings("GroovyConstantNamingConvention")
     private static final int PERSON_MOVIE_FRAGMENT_PERSON_IMAGE_LOADER_ID = 3
 
 
     //Columns to fetch from movie_person_info table for similar movies
-    @SuppressWarnings("GroovyConstantNamingConvention")
     private static final String[] PERSON_INFO_COLUMNS = [MovieMagicContract.MoviePersonInfo._ID,
                                                          MovieMagicContract.MoviePersonInfo.COLUMN_PERSON_ID,
                                                          MovieMagicContract.MoviePersonInfo.COLUMN_PERSON_PROFILE_PATH,
@@ -96,35 +90,21 @@ class PersonMovieFragment extends Fragment implements LoaderManager.LoaderCallba
                                                          MovieMagicContract.MoviePersonInfo.COLUMN_PERSON_POPULARITY,
                                                          MovieMagicContract.MoviePersonInfo.COLUMN_PERSON_ADULT_FLAG]
     //These are indices of the above columns, if projection array changes then this needs to be changed
-    @SuppressWarnings("GroovyConstantNamingConvention")
     final static int COL_PERSON_INFO_ID = 0
-    @SuppressWarnings("GroovyConstantNamingConvention")
     final static int COL_PERSON_INFO_PERSON_ID = 1
-    @SuppressWarnings("GroovyConstantNamingConvention")
     final static int COL_PERSON_INFO_PROFILE_PATH = 2
-    @SuppressWarnings("GroovyConstantNamingConvention")
     final static int COL_PERSON_INFO_PERSON_NAME = 3
-    @SuppressWarnings("GroovyConstantNamingConvention")
     final static int COL_PERSON_INFO_PERSON_BIRTHDAY = 4
-    @SuppressWarnings("GroovyConstantNamingConvention")
     final static int COL_PERSON_INFO_PERSON_PLACE_OF_BIRTH = 5
-    @SuppressWarnings("GroovyConstantNamingConvention")
     final static int COL_PERSON_INFO_PERSON_ALSO_KNOWN_AS = 6
-    @SuppressWarnings("GroovyConstantNamingConvention")
     final static int COL_PERSON_INFO_PERSON_DEATH_DAY = 7
-    @SuppressWarnings("GroovyConstantNamingConvention")
     final static int COL_PERSON_INFO_PERSON_BIOGRAPHY = 8
-    @SuppressWarnings("GroovyConstantNamingConvention")
     final static int COL_PERSON_INFO_PERSON_HOMEPAGE = 9
-    @SuppressWarnings("GroovyConstantNamingConvention")
     final static int COL_PERSON_INFO_PERSON_IMDB_ID = 10
-    @SuppressWarnings("GroovyConstantNamingConvention")
     final static int COL_PERSON_INFO_PERSON_POPULARITY = 11
-    @SuppressWarnings("GroovyConstantNamingConvention")
     final static int COL_PERSON_INFO_PERSON_ADULT_FLAG = 12
 
     //Columns to fetch from movie_person_cast table for similar movies
-    @SuppressWarnings("GroovyConstantNamingConvention")
     private static final String[] PERSON_CAST_COLUMNS = [MovieMagicContract.MoviePersonCast._ID,
                                                          MovieMagicContract.MoviePersonCast.COLUMN_PERSON_CAST_ORIG_PERSON_ID,
                                                          MovieMagicContract.MoviePersonCast.COLUMN_PERSON_CAST_POSTER_PATH,
@@ -134,25 +114,16 @@ class PersonMovieFragment extends Fragment implements LoaderManager.LoaderCallba
                                                          MovieMagicContract.MoviePersonCast.COLUMN_PERSON_CAST_RELEASE_DATE,
                                                          MovieMagicContract.MoviePersonCast.COLUMN_PERSON_CAST_ADULT_FLAG]
     //These are indices of the above columns, if projection array changes then this needs to be changed
-    @SuppressWarnings("GroovyConstantNamingConvention")
     final static int COL_PERSON_CAST_ID = 0
-    @SuppressWarnings("GroovyConstantNamingConvention")
     final static int COL_PERSON_CAST_ORIG_PERSON_ID = 1
-    @SuppressWarnings("GroovyConstantNamingConvention")
     final static int COL_PERSON_CAST_MOVIE_POSTER_PATH = 2
-    @SuppressWarnings("GroovyConstantNamingConvention")
     final static int COL_PERSON_CAST_MOVIE_ID = 3
-    @SuppressWarnings("GroovyConstantNamingConvention")
     final static int COL_PERSON_CAST_MOVIE_TITLE = 4
-    @SuppressWarnings("GroovyConstantNamingConvention")
     final static int COL_PERSON_CAST_CHARACTER_NAME = 5
-    @SuppressWarnings("GroovyConstantNamingConvention")
     final static int COL_PERSON_CAST_MOVIE_RELEASE_DATE = 6
-    @SuppressWarnings("GroovyConstantNamingConvention")
     final static int COL_PERSON_CAST_AUDULT_FLAG = 7
 
     //Columns to fetch from movie_person_crew table for similar movies
-    @SuppressWarnings("GroovyConstantNamingConvention")
     private static final String[] PERSON_CREW_COLUMNS = [MovieMagicContract.MoviePersonCrew._ID,
                                                          MovieMagicContract.MoviePersonCrew.COLUMN_PERSON_CREW_ORIG_PERSON_ID,
                                                          MovieMagicContract.MoviePersonCrew.COLUMN_PERSON_CREW_POSTER_PATH,
@@ -162,25 +133,16 @@ class PersonMovieFragment extends Fragment implements LoaderManager.LoaderCallba
                                                          MovieMagicContract.MoviePersonCrew.COLUMN_PERSON_CREW_RELEASE_DATE,
                                                          MovieMagicContract.MoviePersonCrew.COLUMN_PERSON_CREW_ADULT_FLAG]
     //These are indices of the above columns, if projection array changes then this needs to be changed
-    @SuppressWarnings("GroovyConstantNamingConvention")
     final static int COL_PERSON_CREW_ID = 0
-    @SuppressWarnings("GroovyConstantNamingConvention")
     final static int COL_PERSON_CREW_ORIG_PERSON_ID = 1
-    @SuppressWarnings("GroovyConstantNamingConvention")
     final static int COL_PERSON_CREW_MOVIE_POSTER_PATH = 2
-    @SuppressWarnings("GroovyConstantNamingConvention")
     final static int COL_PERSON_CREW_MOVIE_ID = 3
-    @SuppressWarnings("GroovyConstantNamingConvention")
     final static int COL_PERSON_CREW_MOVIE_TITLE = 4
-    @SuppressWarnings("GroovyConstantNamingConvention")
     final static int COL_PERSON_CREW_JOB_NAME = 5
-    @SuppressWarnings("GroovyConstantNamingConvention")
     final static int COL_PERSON_CREW_MOVIE_RELEASE_DATE = 6
-    @SuppressWarnings("GroovyConstantNamingConvention")
     final static int COL_PERSON_CREW_AUDULT_FLAG = 7
 
     //Columns to fetch from movie_person_image table for similar movies
-    @SuppressWarnings("GroovyConstantNamingConvention")
     private static final String[] PERSON_IMAGE_COLUMNS = [MovieMagicContract.MoviePersonImage._ID,
                                                          MovieMagicContract.MoviePersonImage.COLUMN_PERSON_IMAGE_ORIG_PERSON_ID,
                                                          MovieMagicContract.MoviePersonImage.COLUMN_PERSON_IMAGE_FILE_PATH,
@@ -188,17 +150,11 @@ class PersonMovieFragment extends Fragment implements LoaderManager.LoaderCallba
                                                          MovieMagicContract.MoviePersonImage.COLUMN_PERSON_IMAGE_VOTE_COUNT,
                                                          MovieMagicContract.MoviePersonImage.COLUMN_PERSON_IMAGE_ISO_639_1]
     //These are indices of the above columns, if projection array changes then this needs to be changed
-    @SuppressWarnings("GroovyConstantNamingConvention")
     final static int COL_PERSON_IMAGE_ID = 0
-    @SuppressWarnings("GroovyConstantNamingConvention")
     final static int COL_PERSON_IMAGE_ORIG_PERSON_ID = 1
-    @SuppressWarnings("GroovyConstantNamingConvention")
     final static int COL_PERSON_IMAGE_FILE_PATH = 2
-    @SuppressWarnings("GroovyConstantNamingConvention")
     final static int COL_PERSON_IMAGE_VOTE_AVG = 3
-    @SuppressWarnings("GroovyConstantNamingConvention")
     final static int COL_PERSON_IMAGE_VOTE_COUNT = 4
-    @SuppressWarnings("GroovyConstantNamingConvention")
     final static int COL_PERSON_IMAGE_VOTE_ISO = 5
 
     //An empty constructor is needed so that lifecycle is properly handled

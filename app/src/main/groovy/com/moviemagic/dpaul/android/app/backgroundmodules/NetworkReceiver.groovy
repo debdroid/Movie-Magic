@@ -16,7 +16,6 @@ import groovy.transform.CompileStatic
  */
 @CompileStatic
 class NetworkReceiver extends BroadcastReceiver {
-    @SuppressWarnings("GroovyConstantNamingConvention")
     private static final String LOG_TAG = NetworkReceiver.class.getSimpleName()
 
     @Override

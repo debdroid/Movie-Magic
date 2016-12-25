@@ -16,7 +16,6 @@ import groovy.transform.CompileStatic
 
 @CompileStatic
 class LoadPersonData extends AsyncTask<Integer, Void, Void> {
-    @SuppressWarnings("GroovyConstantNamingConvention")
     private static final String LOG_TAG = LoadPersonData.class.getSimpleName()
     private final ContentResolver mContentResolver
     private final Context mContext

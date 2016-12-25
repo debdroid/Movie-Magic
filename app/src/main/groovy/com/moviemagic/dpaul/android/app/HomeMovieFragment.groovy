@@ -29,7 +29,6 @@ import groovy.transform.CompileStatic
 
 @CompileStatic
 class HomeMovieFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
-    @SuppressWarnings("GroovyConstantNamingConvention")
     private static final String LOG_TAG = HomeMovieFragment.class.getSimpleName()
 
     private RecyclerView mInCinemaRecyclerView
@@ -54,19 +53,13 @@ class HomeMovieFragment extends Fragment implements LoaderManager.LoaderCallback
     private View mRecommendationDivider
     private FrameLayout mYouTubeFragmentContainer
 
-    @SuppressWarnings("GroovyConstantNamingConvention")
     private static final int HOME_MOVIE_FRAGMENT_VIEW_PAGER_LOADER_ID = 0
-    @SuppressWarnings("GroovyConstantNamingConvention")
     private static final int HOME_MOVIE_FRAGMENT_IN_CINEMA_LOADER_ID = 1
-    @SuppressWarnings("GroovyConstantNamingConvention")
     private static final int HOME_MOVIE_FRAGMENT_COMING_SOON_LOADER_ID = 2
-    @SuppressWarnings("GroovyConstantNamingConvention")
     private static final int HOME_MOVIE_FRAGMENT_RECENTLY_ADDED_USER_LIST_LOADER_ID = 3
-    @SuppressWarnings("GroovyConstantNamingConvention")
     private static final int HOME_MOVIE_FRAGMENT_RECOMMENDATION_LOADER_ID = 4
 
     //Columns to fetch from movie_video table
-    @SuppressWarnings("GroovyConstantNamingConvention")
     private static final String[] MOVIE_VIDEO_COLUMNS = [MovieMagicContract.MovieVideo._ID,
                                                          MovieMagicContract.MovieVideo.COLUMN_VIDEO_ORIG_MOVIE_ID,
                                                          MovieMagicContract.MovieVideo.COLUMN_VIDEO_KEY,
@@ -74,21 +67,14 @@ class HomeMovieFragment extends Fragment implements LoaderManager.LoaderCallback
                                                          MovieMagicContract.MovieVideo.COLUMN_VIDEO_SITE,
                                                          MovieMagicContract.MovieVideo.COLUMN_VIDEO_TYPE]
     //These are indices of the above columns, if projection array changes then this needs to be changed
-    @SuppressWarnings("GroovyConstantNamingConvention")
     final static int COL_MOVIE_VIDEO_ID = 0
-    @SuppressWarnings("GroovyConstantNamingConvention")
     final static int COL_MOVIE_VIDEO_ORIG_MOVIE_ID = 1
-    @SuppressWarnings("GroovyConstantNamingConvention")
     final static int COL_MOVIE_VIDEO_KEY = 2
-    @SuppressWarnings("GroovyConstantNamingConvention")
     final static int COL_MOVIE_VIDEO_NAME = 3
-    @SuppressWarnings("GroovyConstantNamingConvention")
     final static int COL_MOVIE_VIDEO_SITE = 4
-    @SuppressWarnings("GroovyConstantNamingConvention")
     final static int COL_MOVIE_VIDEO_TYPE = 5
 
     //Columns to fetch from movie_basic_info table
-    @SuppressWarnings("GroovyConstantNamingConvention")
     private static final String[] MOVIE_BASIC_INFO_COLUMNS = [MovieMagicContract.MovieBasicInfo._ID,
                                                               MovieMagicContract.MovieBasicInfo.COLUMN_MOVIE_ID,
                                                               MovieMagicContract.MovieBasicInfo.COLUMN_BACKDROP_PATH,
@@ -103,29 +89,17 @@ class HomeMovieFragment extends Fragment implements LoaderManager.LoaderCallback
                                                               MovieMagicContract.MovieBasicInfo.COLUMN_DETAIL_DATA_PRESENT_FLAG]
 
     //These are indices of the above columns, if projection array changes then this needs to be changed
-    @SuppressWarnings("GroovyConstantNamingConvention")
     final static int COL_MOVIE_BASIC_ID = 0
-    @SuppressWarnings("GroovyConstantNamingConvention")
     final static int COL_MOVIE_BASIC_MOVIE_ID = 1
-    @SuppressWarnings("GroovyConstantNamingConvention")
     final static int COL_MOVIE_BASIC_BACKDROP_PATH = 2
-    @SuppressWarnings("GroovyConstantNamingConvention")
     final static int COL_MOVIE_BASIC_TITLE = 3
-    @SuppressWarnings("GroovyConstantNamingConvention")
     final static int COL_MOVIE_BASIC_RELEASE_DATE = 4
-    @SuppressWarnings("GroovyConstantNamingConvention")
     final static int COL_MOVIE_BASIC_POSTER_PATH = 5
-    @SuppressWarnings("GroovyConstantNamingConvention")
     final static int COL_MOVIE_BASIC_MOVIE_CATEGORY = 6
-    @SuppressWarnings("GroovyConstantNamingConvention")
     final static int COL_MOVIE_BASIC_MOVIE_LIST_TYPE = 7
-    @SuppressWarnings("GroovyConstantNamingConvention")
     final static int COL_MOVIE_BASIC_GENRE = 8
-    @SuppressWarnings("GroovyConstantNamingConvention")
     final static int COL_MOVIE_BASIC_RUN_TIME = 9
-    @SuppressWarnings("GroovyConstantNamingConvention")
     final static int COL_MOVIE_BASIC_RELEASE_STATUS = 10
-    @SuppressWarnings("GroovyConstantNamingConvention")
     final static int COL_MOVIE_BASIC_DETAIL_DATA_PRESENT_FLAG = 11
 
     //An empty constructor is needed so that lifecycle is properly handled
@@ -356,7 +330,6 @@ class HomeMovieFragment extends Fragment implements LoaderManager.LoaderCallback
                 LogDisplay.callLog(LOG_TAG, "Unknown loader id->$id", LogDisplay.HOME_MOVIE_FRAGMENT_LOG_FLAG)
                 return null
         }
-        return null
     }
 
     @Override

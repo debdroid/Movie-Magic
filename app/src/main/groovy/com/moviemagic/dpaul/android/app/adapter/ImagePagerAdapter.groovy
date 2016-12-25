@@ -20,7 +20,6 @@ import groovy.transform.CompileStatic
 
 @CompileStatic
 class ImagePagerAdapter extends PagerAdapter {
-    @SuppressWarnings("GroovyConstantNamingConvention")
     private static final String LOG_TAG = ImagePagerAdapter.class.getSimpleName()
     private final Context mContext = null
     private final String mTitle = null
@@ -30,7 +29,6 @@ class ImagePagerAdapter extends PagerAdapter {
     private LayoutInflater mLayoutInflater
     private final boolean mBackdropImageFlag = false
     private int mPosition
-    @SuppressWarnings("GroovyConstantNamingConvention")
     public static final String PAGER_CURRENT_IMAGE_TAG = 'pager_current_image_tag'
 
     public ImagePagerAdapter() {

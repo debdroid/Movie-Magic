@@ -20,7 +20,6 @@ import groovy.transform.CompileStatic
 
 @CompileStatic
 class HomeMovieAdapter extends RecyclerView.Adapter<HomeMovieAdapter.HomeMovieAdapterViewHolder> {
-    @SuppressWarnings("GroovyConstantNamingConvention")
     private static final String LOG_TAG = HomeMovieAdapter.class.getSimpleName()
 
     private Cursor mCursor

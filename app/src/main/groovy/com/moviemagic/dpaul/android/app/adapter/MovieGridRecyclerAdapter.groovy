@@ -17,7 +17,6 @@ import groovy.transform.CompileStatic
 
 @CompileStatic
 class MovieGridRecyclerAdapter extends RecyclerView.Adapter<MovieGridRecyclerAdapter.MovieGridRecyclerAdapterViewHolder>{
-    @SuppressWarnings("GroovyConstantNamingConvention")
     private static final String LOG_TAG = MovieGridRecyclerAdapter.class.getSimpleName()
     private final Context mContext = null
     private Cursor mCursor

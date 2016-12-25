@@ -12,13 +12,10 @@ import groovy.transform.CompileStatic
 
 @CompileStatic
 class MovieMagicYoutubeFragment extends YouTubePlayerSupportFragment implements YouTubePlayer.OnInitializedListener {
-    @SuppressWarnings("GroovyConstantNamingConvention")
     private static final String LOG_TAG = MovieMagicYoutubeFragment.class.getSimpleName()
 
     //Error dialog id
-    @SuppressWarnings("GroovyConstantNamingConvention")
     private static final int RECOVERY_ERROR_DIALOG_ID = 1
-    @SuppressWarnings("GroovyConstantNamingConvention")
     public static final String YOUTUBE_VIDEO_ID_KEY = 'youtube_video_id_key'
     private List<String> mVideoIds
 

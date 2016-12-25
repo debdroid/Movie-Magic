@@ -17,7 +17,6 @@ import groovy.transform.CompileStatic
 
 @CompileStatic
 class PersonCastAdapter extends RecyclerView.Adapter<PersonCastAdapter.PersonCastAdapterViewHolder> {
-    @SuppressWarnings("GroovyConstantNamingConvention")
     private static final String LOG_TAG = PersonCastAdapter.class.getSimpleName()
 
     private Cursor mCursor

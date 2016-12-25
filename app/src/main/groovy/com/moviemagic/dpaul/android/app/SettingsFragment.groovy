@@ -11,7 +11,6 @@ import groovy.transform.CompileStatic
 
 @CompileStatic
 class SettingsFragment extends PreferenceFragmentCompat implements SharedPreferences.OnSharedPreferenceChangeListener {
-    @SuppressWarnings("GroovyConstantNamingConvention")
     private static final String LOG_TAG = SettingsFragment.class.getSimpleName()
 
     @Override

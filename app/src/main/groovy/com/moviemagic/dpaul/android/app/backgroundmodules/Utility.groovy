@@ -13,7 +13,6 @@ import groovy.transform.CompileStatic
 
 @CompileStatic
 class Utility {
-    @SuppressWarnings("GroovyConstantNamingConvention")
     private static final String LOG_TAG = JsonParse.class.getSimpleName()
 
     /**

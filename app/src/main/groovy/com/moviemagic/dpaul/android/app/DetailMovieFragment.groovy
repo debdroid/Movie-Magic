@@ -63,10 +63,8 @@ import com.squareup.picasso.Callback
 import com.squareup.picasso.Picasso
 import groovy.transform.CompileStatic
 
-@SuppressWarnings("GroovyAssignabilityCheck")
 @CompileStatic
 class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
-    @SuppressWarnings("GroovyConstantNamingConvention")
     private static final String LOG_TAG = DetailMovieFragment.class.getSimpleName()
 
     private TextView mMovieTitleTextView, mGenreTextView, mRunTimeTextView, mReleaseDateTextView, mBudgetTextView,
@@ -129,29 +127,18 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
     private ShareActionProvider mShareActionProvider
     private boolean mMoviDataLoaded = false
 
-    @SuppressWarnings("GroovyConstantNamingConvention")
     private static final int MOVIE_DETAIL_FRAGMENT_BASIC_DATA_LOADER_ID = 0
-    @SuppressWarnings("GroovyConstantNamingConvention")
     private static final int MOVIE_DETAIL_FRAGMENT_SIMILAR_MOVIE_LOADER_ID = 1
-    @SuppressWarnings("GroovyConstantNamingConvention")
     private static final int MOVIE_DETAIL_FRAGMENT_MOVIE_VIDEO_LOADER_ID = 2
-    @SuppressWarnings("GroovyConstantNamingConvention")
     private static final int MOVIE_DETAIL_FRAGMENT_MOVIE_CAST_LOADER_ID = 3
-    @SuppressWarnings("GroovyConstantNamingConvention")
     private static final int MOVIE_DETAIL_FRAGMENT_MOVIE_CREW_LOADER_ID = 4
-    @SuppressWarnings("GroovyConstantNamingConvention")
     private static final int MOVIE_DETAIL_FRAGMENT_MOVIE_RELEASE_INFO_LOADER_ID = 5
-    @SuppressWarnings("GroovyConstantNamingConvention")
     private static final int MOVIE_DETAIL_FRAGMENT_MOVIE_IMAGE_LOADER_ID = 6
-    @SuppressWarnings("GroovyConstantNamingConvention")
     private static final int MOVIE_DETAIL_FRAGMENT_MOVIE_REVIEW_LOADER_ID = 7
-    @SuppressWarnings("GroovyConstantNamingConvention")
     private static final int MOVIE_DETAIL_FRAGMENT_MOVIE_USER_LIST_FLAG_LOADER_ID = 8
-    @SuppressWarnings("GroovyConstantNamingConvention")
     private static final int MOVIE_DETAIL_FRAGMENT_BASIC_TMDB_DATA_LOADER_ID = 9
 
     //Columns to fetch from movie_basic_info table
-    @SuppressWarnings("GroovyConstantNamingConvention")
     private static final String[] MOVIE_BASIC_INFO_COLUMNS = [MovieMagicContract.MovieBasicInfo._ID,
                                                               MovieMagicContract.MovieBasicInfo.COLUMN_MOVIE_ID,
                                                               MovieMagicContract.MovieBasicInfo.COLUMN_ADULT_FLAG,
@@ -187,77 +174,42 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
                                                               MovieMagicContract.MovieBasicInfo.COLUMN_CREATE_TIMESTAMP,
                                                               MovieMagicContract.MovieBasicInfo.COLUMN_UPDATE_TIMESTAMP]
     //These are indices of the above columns, if projection array changes then this needs to be changed
-    @SuppressWarnings("GroovyConstantNamingConvention")
     final static int COL_MOVIE_BASIC_ID = 0
-    @SuppressWarnings("GroovyConstantNamingConvention")
     final static int COL_MOVIE_BASIC_MOVIE_ID = 1
-    @SuppressWarnings("GroovyConstantNamingConvention")
     final static int COL_MOVIE_BASIC_ADULT_FLAG = 2
-    @SuppressWarnings("GroovyConstantNamingConvention")
     final static int COL_MOVIE_BASIC_BACKDROP_PATH = 3
-    @SuppressWarnings("GroovyConstantNamingConvention")
     final static int COL_MOVIE_BASIC_ORIG_TITLE = 4
-    @SuppressWarnings("GroovyConstantNamingConvention")
     final static int COL_MOVIE_BASIC_OVERVIEW = 5
-    @SuppressWarnings("GroovyConstantNamingConvention")
     final static int COL_MOVIE_BASIC_RELEASE_DATE = 6
-    @SuppressWarnings("GroovyConstantNamingConvention")
     final static int COL_MOVIE_BASIC_POSTER_PATH = 7
-    @SuppressWarnings("GroovyConstantNamingConvention")
     final static int COL_MOVIE_BASIC_POPULARITY = 8
-    @SuppressWarnings("GroovyConstantNamingConvention")
     final static int COL_MOVIE_BASIC_TITLE = 9
-    @SuppressWarnings("GroovyConstantNamingConvention")
     final static int COL_MOVIE_BASIC_VIDEO_FLAG = 10
-    @SuppressWarnings("GroovyConstantNamingConvention")
     final static int COL_MOVIE_BASIC_VOTE_AVG = 11
-    @SuppressWarnings("GroovyConstantNamingConvention")
     final static int COL_MOVIE_BASIC_VOTE_COUNT = 12
-    @SuppressWarnings("GroovyConstantNamingConvention")
     final static int COL_MOVIE_BASIC_PAGE_NUM = 13
-    @SuppressWarnings("GroovyConstantNamingConvention")
     final static int COL_MOVIE_BASIC_MOVIE_CATEGORY = 14
-    @SuppressWarnings("GroovyConstantNamingConvention")
     final static int COL_MOVIE_BASIC_MOVIE_LIST_TYPE = 15
-    @SuppressWarnings("GroovyConstantNamingConvention")
     final static int COL_MOVIE_BASIC_DETAIL_DATA_PRESENT_FLAG = 16
-    @SuppressWarnings("GroovyConstantNamingConvention")
     final static int COL_MOVIE_BASIC_SIMILAR_MOVIE_LINK_ID = 17
-    @SuppressWarnings("GroovyConstantNamingConvention")
     final static int COL_MOVIE_BASIC_COLLECTION_ID = 18
-    @SuppressWarnings("GroovyConstantNamingConvention")
     final static int COL_MOVIE_BASIC_COLLECTION_NAME = 19
-    @SuppressWarnings("GroovyConstantNamingConvention")
     final static int COL_MOVIE_BASIC_COLLECTION_POSTER_PATH = 20
-    @SuppressWarnings("GroovyConstantNamingConvention")
     final static int COL_MOVIE_BASIC_COLLECTION_BACKDROP_PATH = 21
-    @SuppressWarnings("GroovyConstantNamingConvention")
     final static int COL_MOVIE_BASIC_BUDGET = 22
-    @SuppressWarnings("GroovyConstantNamingConvention")
     final static int COL_MOVIE_BASIC_GENRE = 23
-    @SuppressWarnings("GroovyConstantNamingConvention")
     final static int COL_MOVIE_BASIC_HOME_PAGE = 24
-    @SuppressWarnings("GroovyConstantNamingConvention")
     final static int COL_MOVIE_BASIC_IMDB_ID = 25
-    @SuppressWarnings("GroovyConstantNamingConvention")
     final static int COL_MOVIE_BASIC_PRODUCTION_COMPANIES = 26
-    @SuppressWarnings("GroovyConstantNamingConvention")
     final static int COL_MOVIE_BASIC_PRODUCTION_COUNTRIES = 27
-    @SuppressWarnings("GroovyConstantNamingConvention")
     final static int COL_MOVIE_BASIC_REVENUE = 28
-    @SuppressWarnings("GroovyConstantNamingConvention")
     final static int COL_MOVIE_BASIC_RUNTIME = 29
-    @SuppressWarnings("GroovyConstantNamingConvention")
     final static int COL_MOVIE_BASIC_RELEASE_STATUS = 30
-    @SuppressWarnings("GroovyConstantNamingConvention")
     final static int COL_MOVIE_BASIC_TAGLINE = 31
-    @SuppressWarnings("GroovyConstantNamingConvention")
     final static int COL_MOVIE_BASIC_CREATE_TIMESTAMP = 32
-    @SuppressWarnings("GroovyConstantNamingConvention")
     final static int COL_MOVIE_BASIC_UPDATE_TIMESTAMP = 33
 
     //Columns to fetch from movie_basic_info table for similar movies
-    @SuppressWarnings("GroovyConstantNamingConvention")
     private static final String[] SIMILAR_MOVIE_COLUMNS = [MovieMagicContract.MovieBasicInfo._ID,
                                                            MovieMagicContract.MovieBasicInfo.COLUMN_MOVIE_ID,
                                                            MovieMagicContract.MovieBasicInfo.COLUMN_POSTER_PATH,
@@ -265,21 +217,14 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
                                                            MovieMagicContract.MovieBasicInfo.COLUMN_MOVIE_CATEGORY,
                                                            MovieMagicContract.MovieBasicInfo.COLUMN_SIMILAR_MOVIE_LINK_ID]
     //These are indices of the above columns, if projection array changes then this needs to be changed
-    @SuppressWarnings("GroovyConstantNamingConvention")
     final static int COL_SIMILAR_MOVIE_ID = 0
-    @SuppressWarnings("GroovyConstantNamingConvention")
     final static int COL_SIMILAR_MOVIE_MOVIE_ID = 1
-    @SuppressWarnings("GroovyConstantNamingConvention")
     final static int COL_SIMILAR_MOVIE_POSTER_PATH = 2
-    @SuppressWarnings("GroovyConstantNamingConvention")
     final static int COL_SIMILAR_MOVIE_TITLE = 3
-    @SuppressWarnings("GroovyConstantNamingConvention")
     final static int COL_SIMILAR_MOVIE_CATEGORY = 4
-    @SuppressWarnings("GroovyConstantNamingConvention")
     final static int COL_SIMILAR_MOVIE_LINK_ID = 5
 
     //Columns to fetch from movie_video table
-    @SuppressWarnings("GroovyConstantNamingConvention")
     private static final String[] MOVIE_VIDEO_COLUMNS = [MovieMagicContract.MovieVideo._ID,
                                                          MovieMagicContract.MovieVideo.COLUMN_VIDEO_ORIG_MOVIE_ID,
                                                          MovieMagicContract.MovieVideo.COLUMN_VIDEO_KEY,
@@ -287,21 +232,14 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
                                                          MovieMagicContract.MovieVideo.COLUMN_VIDEO_SITE,
                                                          MovieMagicContract.MovieVideo.COLUMN_VIDEO_TYPE]
     //These are indices of the above columns, if projection array changes then this needs to be changed
-    @SuppressWarnings("GroovyConstantNamingConvention")
     final static int COL_MOVIE_VIDEO_ID = 0
-    @SuppressWarnings("GroovyConstantNamingConvention")
     final static int COL_MOVIE_VIDEO_ORIG_MOVIE_ID = 1
-    @SuppressWarnings("GroovyConstantNamingConvention")
     final static int COL_MOVIE_VIDEO_KEY = 2
-    @SuppressWarnings("GroovyConstantNamingConvention")
     final static int COL_MOVIE_VIDEO_NAME = 3
-    @SuppressWarnings("GroovyConstantNamingConvention")
     final static int COL_MOVIE_VIDEO_SITE = 4
-    @SuppressWarnings("GroovyConstantNamingConvention")
     final static int COL_MOVIE_VIDEO_TYPE = 5
 
     //Columns to fetch from movie_cast table
-    @SuppressWarnings("GroovyConstantNamingConvention")
     private static final String[] MOVIE_CAST_COLUMNS = [MovieMagicContract.MovieCast._ID,
                                                         MovieMagicContract.MovieCast.COLUMN_CAST_ORIG_MOVIE_ID,
                                                         MovieMagicContract.MovieCast.COLUMN_CAST_CHARACTER,
@@ -309,21 +247,14 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
                                                         MovieMagicContract.MovieCast.COLUMN_CAST_PERSON_NAME,
                                                         MovieMagicContract.MovieCast.COLUMN_CAST_PROFILE_PATH]
     //These are indices of the above columns, if projection array changes then this needs to be changed
-    @SuppressWarnings("GroovyConstantNamingConvention")
     final static int COL_MOVIE_CAST_ID = 0
-    @SuppressWarnings("GroovyConstantNamingConvention")
     final static int COL_MOVIE_CAST_ORIG_MOVIE_ID = 1
-    @SuppressWarnings("GroovyConstantNamingConvention")
     final static int COL_MOVIE_CAST_CHARACTER = 2
-    @SuppressWarnings("GroovyConstantNamingConvention")
     final static int COL_MOVIE_CAST_PERSON_ID = 3
-    @SuppressWarnings("GroovyConstantNamingConvention")
     final static int COL_MOVIE_CAST_PERSON_NAME = 4
-    @SuppressWarnings("GroovyConstantNamingConvention")
     final static int COL_MOVIE_CAST_PROFILE_PATH = 5
 
     //Columns to fetch from movie_crew table
-    @SuppressWarnings("GroovyConstantNamingConvention")
     private static final String[] MOVIE_CREW_COLUMNS = [MovieMagicContract.MovieCrew._ID,
                                                         MovieMagicContract.MovieCrew.COLUMN_CREW_ORIG_MOVIE_ID,
                                                         MovieMagicContract.MovieCrew.COLUMN_CREW_PERSON_ID,
@@ -331,70 +262,48 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
                                                         MovieMagicContract.MovieCrew.COLUMN_CREW_JOB,
                                                         MovieMagicContract.MovieCrew.COLUMN_CREW_PROFILE_PATH]
     //These are indices of the above columns, if projection array changes then this needs to be changed
-    @SuppressWarnings("GroovyConstantNamingConvention")
     final static int COL_MOVIE_CREW_ID = 0
-    @SuppressWarnings("GroovyConstantNamingConvention")
     final static int COL_MOVIE_CREW_ORIG_MOVIE_ID = 1
-    @SuppressWarnings("GroovyConstantNamingConvention")
     final static int COL_MOVIE_CREW_PERSON_ID = 2
-    @SuppressWarnings("GroovyConstantNamingConvention")
     final static int COL_MOVIE_CREW_PERSON_NAME = 3
-    @SuppressWarnings("GroovyConstantNamingConvention")
     final static int COL_MOVIE_CREW_CREW_JOB = 4
-    @SuppressWarnings("GroovyConstantNamingConvention")
     final static int COL_MOVIE_CREW_PROFILE_PATH = 5
 
     //Columns to fetch from movie_release_date_info table
-    @SuppressWarnings("GroovyConstantNamingConvention")
     private static
     final String[] MOVIE_RELEASE_INFO_COLUMNS = [MovieMagicContract.MovieReleaseDate._ID,
                                                  MovieMagicContract.MovieReleaseDate.COLUMN_RELEASE_ORIG_MOVIE_ID,
                                                  MovieMagicContract.MovieReleaseDate.COLUMN_RELEASE_ISO_COUNTRY,
                                                  MovieMagicContract.MovieReleaseDate.COLUMN_RELEASE_CERTIFICATION]
     //These are indices of the above columns, if projection array changes then this needs to be changed
-    @SuppressWarnings("GroovyConstantNamingConvention")
     final static int COL_MOVIE_RELEASE_INFO_ID = 0
-    @SuppressWarnings("GroovyConstantNamingConvention")
     final static int COL_MOVIE_RELEASE_INFO_ORIG_MOVIE_ID = 1
-    @SuppressWarnings("GroovyConstantNamingConvention")
     final static int COL_MOVIE_RELEASE_INFO_ISO_COUNTRY = 2
-    @SuppressWarnings("GroovyConstantNamingConvention")
     final static int COL_MOVIE_RELEASE_INFO_CERTIFICATION = 3
 
     //Columns to fetch from movie_image table
-    @SuppressWarnings("GroovyConstantNamingConvention")
     private static final String[] MOVIE_IMAGE_COLUMNS = [MovieMagicContract.MovieImage._ID,
                                                          MovieMagicContract.MovieImage.COLUMN_IMAGE_ORIG_MOVIE_ID,
                                                          MovieMagicContract.MovieImage.COLUMN_IMAGE_TYPE,
                                                          MovieMagicContract.MovieImage.COLUMN_IMAGE_FILE_PATH]
     //These are indices of the above columns, if projection array changes then this needs to be changed
-    @SuppressWarnings("GroovyConstantNamingConvention")
     final static int COL_MOVIE_IMAGE_ID = 0
-    @SuppressWarnings("GroovyConstantNamingConvention")
     final static int COL_MOVIE_IMAGE_ORIG_MOVIE_ID = 1
-    @SuppressWarnings("GroovyConstantNamingConvention")
     final static int COL_MOVIE_IMAGE_TYPE = 2
-    @SuppressWarnings("GroovyConstantNamingConvention")
     final static int COL_MOVIE_IMAGE_FILE_PATH = 3
 
     //Columns to fetch from movie_review table
-    @SuppressWarnings("GroovyConstantNamingConvention")
     private static final String[] MOVIE_REVIEW_COLUMNS = [MovieMagicContract.MovieReview._ID,
                                                           MovieMagicContract.MovieReview.COLUMN_REVIEW_ORIG_MOVIE_ID,
                                                           MovieMagicContract.MovieReview.COLUMN_REVIEW_AUTHOR,
                                                           MovieMagicContract.MovieReview.COLUMN_REVIEW_CONTENT]
     //These are indices of the above columns, if projection array changes then this needs to be changed
-    @SuppressWarnings("GroovyConstantNamingConvention")
     final static int COL_MOVIE_REVIEW_ID = 0
-    @SuppressWarnings("GroovyConstantNamingConvention")
     final static int COL_MOVIE_REVIEW_ORIG_MOVIE_ID = 1
-    @SuppressWarnings("GroovyConstantNamingConvention")
     final static int COL_MOVIE_REVIEW_AUTHOR = 2
-    @SuppressWarnings("GroovyConstantNamingConvention")
     final static int COL_MOVIE_REVIEW_CONTENT = 3
 
     //Columns to fetch from movie_user_list_flag table
-    @SuppressWarnings("GroovyConstantNamingConvention")
     private static
     final String[] MOVIE_USER_LIST_FLAG_COLUMNS = [MovieMagicContract.MovieUserListFlag._ID,
                                                    MovieMagicContract.MovieUserListFlag.COLUMN_USER_LIST_FLAG_ORIG_MOVIE_ID,
@@ -404,23 +313,15 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
                                                    MovieMagicContract.MovieUserListFlag.COLUMN_USER_LIST_FLAG_COLLECTION,
                                                    MovieMagicContract.MovieUserListFlag.COLUMN_USER_LIST_USER_RATING]
     //These are indices of the above columns, if projection array changes then this needs to be changed
-    @SuppressWarnings("GroovyConstantNamingConvention")
     final static int COL_MOVIE_USER_LIST_FLAG_ID = 0
-    @SuppressWarnings("GroovyConstantNamingConvention")
     final static int COL_MOVIE_USER_LIST_FLAG_ORIG_MOVIE_ID = 1
-    @SuppressWarnings("GroovyConstantNamingConvention")
     final static int COL_MOVIE_USER_LIST_FLAG_WATCHED_FLAG = 2
-    @SuppressWarnings("GroovyConstantNamingConvention")
     final static int COL_MOVIE_USER_LIST_FLAG_WISH_LIST_FLAG = 3
-    @SuppressWarnings("GroovyConstantNamingConvention")
     final static int COL_MOVIE_USER_LIST_FLAG_FAVOURITE_FLAG = 4
-    @SuppressWarnings("GroovyConstantNamingConvention")
     final static int COL_MOVIE_USER_LIST_FLAG_COLLECTION_FLAG = 5
-    @SuppressWarnings("GroovyConstantNamingConvention")
     final static int COL_MOVIE_USER_LIST_FLAG_USER_RATING = 6
 
     //Columns to fetch from movie_basic_info for user's Tmdb list table
-    @SuppressWarnings("GroovyConstantNamingConvention")
     private static
     final String[] MOVIE_BASIC_INFO_TMDB_COLUMNS = [MovieMagicContract.MovieBasicInfo._ID,
                                                    MovieMagicContract.MovieBasicInfo.COLUMN_MOVIE_ID,
@@ -428,15 +329,10 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
                                                    MovieMagicContract.MovieBasicInfo.COLUMN_TMDB_USER_RATED_RATING,
                                                    MovieMagicContract.MovieBasicInfo.COLUMN_MOVIE_LIST_TYPE]
     //These are indices of the above columns, if projection array changes then this needs to be changed
-    @SuppressWarnings("GroovyConstantNamingConvention")
     final static int COL_MOVIE_BASIC_TMDB_ID = 0
-    @SuppressWarnings("GroovyConstantNamingConvention")
     final static int COL_MOVIE_BASIC_TMDB_MOVIE_ID = 1
-    @SuppressWarnings("GroovyConstantNamingConvention")
     final static int COL_MOVIE_BASIC_TMDB_MOVIE_CATEGORY = 2
-    @SuppressWarnings("GroovyConstantNamingConvention")
     final static int COL_MOVIE_BASIC_TMDB_MOVIE_RATING = 3
-    @SuppressWarnings("GroovyConstantNamingConvention")
     final static int COL_MOVIE_BASIC_TMDB_MOVIE_LIST_TYPE = 4
 
     //An empty constructor is needed so that lifecycle is properly handled

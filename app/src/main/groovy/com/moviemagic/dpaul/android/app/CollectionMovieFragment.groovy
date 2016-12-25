@@ -48,7 +48,6 @@ import groovy.transform.CompileStatic
 
 @CompileStatic
 class CollectionMovieFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
-    @SuppressWarnings("GroovyConstantNamingConvention")
     private static final String LOG_TAG = CollectionMovieFragment.class.getSimpleName()
 
     private Uri mCollectionMovieIdUri
@@ -60,7 +59,6 @@ class CollectionMovieFragment extends Fragment implements LoaderManager.LoaderCa
     private TextView mCollectionTitleTextView
     private TextView mCollectionOverviewTextViewHeader
     private TextView mCollectionOverviewTextView
-    @SuppressWarnings("GroovyConstantNamingConvention")
     private static final int COLLECTION_MOVIE_FRAGMENT_LOADER_ID = 0
     private int mPalletePrimaryColor
     private int mPalletePrimaryDarkColor
@@ -77,7 +75,6 @@ class CollectionMovieFragment extends Fragment implements LoaderManager.LoaderCa
     private String mCollectionName
 
     //Columns to fetch from movie_collection table for similar movies
-    @SuppressWarnings("GroovyConstantNamingConvention")
     private static final String[] COLLECTION_MOVIE_COLUMNS = [MovieMagicContract.MovieCollection._ID,
                                                            MovieMagicContract.MovieCollection.COLUMN_COLLECTION_ID,
                                                            MovieMagicContract.MovieCollection.COLUMN_COLLECTION_NAME,
@@ -86,19 +83,12 @@ class CollectionMovieFragment extends Fragment implements LoaderManager.LoaderCa
                                                            MovieMagicContract.MovieCollection.COLUMN_COLLECTION_BACKDROP_PATH,
                                                            MovieMagicContract.MovieCollection.COLUMN_COLLECTION_MOVIE_PRESENT_FLAG]
     //These are indices of the above columns, if projection array changes then this needs to be changed
-    @SuppressWarnings("GroovyConstantNamingConvention")
     final static int COL_COLLECTION_MOVIE_ID = 0
-    @SuppressWarnings("GroovyConstantNamingConvention")
     final static int COL_COLLECTION_MOVIE_COLLECTION_ID = 1
-    @SuppressWarnings("GroovyConstantNamingConvention")
     final static int COL_COLLECTION_MOVIE_COLLECTION_NAME = 2
-    @SuppressWarnings("GroovyConstantNamingConvention")
     final static int COL_COLLECTION_MOVIE_COLLECTION_OVERVIEW = 3
-    @SuppressWarnings("GroovyConstantNamingConvention")
     final static int COL_COLLECTION_MOVIE_COLLECTION_POSTER_PATH = 4
-    @SuppressWarnings("GroovyConstantNamingConvention")
     final static int COL_COLLECTION_MOVIE_COLLECTION_BACKDROP_PATH = 5
-    @SuppressWarnings("GroovyConstantNamingConvention")
     final static int COL_COLLECTION_MOVIE_PRESENT_FLAG = 6
 
     //An empty constructor is needed so that lifecycle is properly handled

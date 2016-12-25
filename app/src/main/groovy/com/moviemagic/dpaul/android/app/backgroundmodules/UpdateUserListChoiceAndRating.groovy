@@ -17,7 +17,6 @@ import groovy.transform.CompileStatic
 
 @CompileStatic
 class UpdateUserListChoiceAndRating extends AsyncTask<String, Void, Integer> {
-    @SuppressWarnings("GroovyConstantNamingConvention")
     private static final String LOG_TAG = UpdateUserListChoiceAndRating.class.getSimpleName()
     private final ContentResolver mContentResolver
     private final Context mContext
@@ -31,7 +30,6 @@ class UpdateUserListChoiceAndRating extends AsyncTask<String, Void, Integer> {
     private final boolean mShowNotification = false
 
     //Columns to fetch from movie_user_list_flag table
-    @SuppressWarnings("GroovyConstantNamingConvention")
     private static final String[] MOVIE_USER_LIST_FLAG_COLUMNS = [MovieMagicContract.MovieUserListFlag._ID,
                                                                   MovieMagicContract.MovieUserListFlag.COLUMN_USER_LIST_FLAG_ORIG_MOVIE_ID,
                                                                   MovieMagicContract.MovieUserListFlag.COLUMN_USER_LIST_FLAG_WATCHED,
@@ -40,19 +38,12 @@ class UpdateUserListChoiceAndRating extends AsyncTask<String, Void, Integer> {
                                                                   MovieMagicContract.MovieUserListFlag.COLUMN_USER_LIST_FLAG_COLLECTION,
                                                                   MovieMagicContract.MovieUserListFlag.COLUMN_USER_LIST_USER_RATING]
     //These are indices of the above columns, if projection array changes then this needs to be changed
-    @SuppressWarnings("GroovyConstantNamingConvention")
     private final static int COL_MOVIE_USER_LIST_FLAG_ID = 0
-    @SuppressWarnings("GroovyConstantNamingConvention")
     private final static int COL_MOVIE_USER_LIST_FLAG_ORIG_MOVIE_ID = 1
-    @SuppressWarnings("GroovyConstantNamingConvention")
     private final static int COL_MOVIE_USER_LIST_FLAG_WATCHED_FLAG = 2
-    @SuppressWarnings("GroovyConstantNamingConvention")
     private final static int COL_MOVIE_USER_LIST_FLAG_WISH_LIST_FLAG = 3
-    @SuppressWarnings("GroovyConstantNamingConvention")
     private final static int COL_MOVIE_USER_LIST_FLAG_FAVOURITE_FLAG = 4
-    @SuppressWarnings("GroovyConstantNamingConvention")
     private final static int COL_MOVIE_USER_LIST_FLAG_COLLECTION_FLAG = 5
-    @SuppressWarnings("GroovyConstantNamingConvention")
     private final static int COL_MOVIE_USER_LIST_FLAG_USER_RATING = 6
 
     public UpdateUserListChoiceAndRating(

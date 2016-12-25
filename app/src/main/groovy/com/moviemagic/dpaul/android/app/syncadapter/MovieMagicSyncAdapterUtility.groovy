@@ -13,18 +13,13 @@ import groovy.transform.CompileStatic
 
 @CompileStatic
 class MovieMagicSyncAdapterUtility {
-    @SuppressWarnings("GroovyConstantNamingConvention")
     private static final String LOG_TAG = MovieMagicSyncAdapterUtility.class.getSimpleName()
 
     // Interval at which to sync with the movie data, in milliseconds.
     // 60 seconds (1 minute) * 360 = 6 hours
-    @SuppressWarnings("GroovyConstantNamingConvention")
     private static final int SECONDS_PER_MINUTE = 60
-    @SuppressWarnings("GroovyConstantNamingConvention")
     private static final int SYNC_INTERVAL_IN_MINUTES = 360
-    @SuppressWarnings("GroovyConstantNamingConvention")
     private static final int SYNC_INTERVAL = SECONDS_PER_MINUTE * SYNC_INTERVAL_IN_MINUTES
-    @SuppressWarnings("GroovyConstantNamingConvention")
     private static final int SYNC_FLEXTIME = SECONDS_PER_MINUTE * 120
 
     /**

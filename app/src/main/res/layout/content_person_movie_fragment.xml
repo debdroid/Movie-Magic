@@ -51,7 +51,8 @@
                 android:paddingEnd="@dimen/m_design_screen_edge_left_right_margin"
                 android:fontFamily="sans-serif-condensed"
                 android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-                android:textColor="@color/grey_color" />
+                android:textColor="@color/grey_color"
+                android:textIsSelectable="true" />
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
@@ -75,7 +76,8 @@
                 android:paddingEnd="@dimen/m_design_screen_edge_left_right_margin"
                 android:fontFamily="sans-serif-condensed"
                 android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-                android:textColor="@color/grey_color" />
+                android:textColor="@color/grey_color"
+                android:textIsSelectable="true" />
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
@@ -99,7 +101,8 @@
                 android:paddingEnd="@dimen/m_design_screen_edge_left_right_margin"
                 android:fontFamily="sans-serif-condensed"
                 android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-                android:textColor="@color/grey_color" />
+                android:textColor="@color/grey_color"
+                android:textIsSelectable="true" />
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
@@ -123,7 +126,8 @@
                 android:paddingEnd="@dimen/m_design_screen_edge_left_right_margin"
                 android:fontFamily="sans-serif-condensed"
                 android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-                android:textColor="@color/grey_color" />
+                android:textColor="@color/grey_color"
+                android:textIsSelectable="true" />
             <View
                 android:id="@+id/person_also_known_as_devider"
                 android:layout_width="match_parent"
@@ -148,7 +152,8 @@
                 android:paddingEnd="@dimen/m_design_screen_edge_left_right_margin"
                 android:fontFamily="sans-serif-condensed"
                 android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-                android:textColor="@color/grey_color" />
+                android:textColor="@color/grey_color"
+                android:textIsSelectable="true" />
             <View
                 android:id="@+id/person_death_day_devider"
                 android:layout_width="match_parent"
@@ -173,7 +178,8 @@
                 android:paddingEnd="@dimen/m_design_screen_edge_left_right_margin"
                 android:fontFamily="sans-serif-condensed"
                 android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-                android:textColor="@color/grey_color" />
+                android:textColor="@color/grey_color"
+                android:textIsSelectable="true" />
         </LinearLayout>
     </RelativeLayout>
 
@@ -213,7 +219,8 @@
             android:ellipsize="end"
             android:maxLines="@string/person_biography_collapse_line_item_count"
             android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-            android:textColor="@color/grey_color" />
+            android:textColor="@color/grey_color"
+            android:textIsSelectable="true" />
         <ImageButton
             android:id="@+id/person_biography_show_button"
             android:layout_width="@dimen/person_biography_collapse_icon_size"

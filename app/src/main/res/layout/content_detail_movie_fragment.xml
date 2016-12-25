@@ -25,7 +25,8 @@
             android:fontFamily="sans-serif"
             android:gravity="start"
             android:textAppearance="@style/TextAppearance.AppCompat.Headline"
-            android:textColor="@color/white_color" />
+            android:textColor="@color/white_color"
+            android:textIsSelectable="true" />
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -46,13 +47,15 @@
                 android:paddingStart="@dimen/m_design_screen_edge_left_right_margin"
                 android:textAppearance="@style/TextAppearance.AppCompat.Small"
                 android:textColor="@color/grey_color"
-                tools:ignore="RtlSymmetry" />
+                tools:ignore="RtlSymmetry"
+                android:textIsSelectable="true" />
             <TextView
                 android:id="@+id/movie_detail_title_runtime"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textAppearance="@style/TextAppearance.AppCompat.Small"
-                android:textColor="@color/grey_color" />
+                android:textColor="@color/grey_color"
+                android:textIsSelectable="true" />
         </LinearLayout>
     </LinearLayout>
     <!-- line divider -->
@@ -104,7 +107,8 @@
                 android:paddingEnd="@dimen/m_design_screen_edge_left_right_margin"
                 android:fontFamily="sans-serif-condensed"
                 android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-                android:textColor="@color/grey_color" />
+                android:textColor="@color/grey_color"
+                android:textIsSelectable="true" />
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
@@ -128,7 +132,8 @@
                 android:paddingEnd="@dimen/m_design_screen_edge_left_right_margin"
                 android:fontFamily="sans-serif-condensed"
                 android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-                android:textColor="@color/grey_color" />
+                android:textColor="@color/grey_color"
+                android:textIsSelectable="true" />
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
@@ -152,7 +157,8 @@
                 android:paddingEnd="@dimen/m_design_screen_edge_left_right_margin"
                 android:fontFamily="sans-serif-condensed"
                 android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-                android:textColor="@color/grey_color" />
+                android:textColor="@color/grey_color"
+                android:textIsSelectable="true" />
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
@@ -176,7 +182,8 @@
                 android:paddingEnd="@dimen/m_design_screen_edge_left_right_margin"
                 android:fontFamily="sans-serif-condensed"
                 android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-                android:textColor="@color/grey_color" />
+                android:textColor="@color/grey_color"
+                android:textIsSelectable="true" />
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
@@ -227,7 +234,8 @@
                 android:paddingStart="@dimen/m_design_space_between_content_area"
                 android:textAppearance="@style/TextAppearance.AppCompat.Title"
                 android:textColor="@color/white_color"
-                tools:ignore="RtlSymmetry" />
+                tools:ignore="RtlSymmetry"
+                android:textIsSelectable="true" />
             <TextView
                 android:id="@+id/movie_detail_tmdb_rating_vote_count_trailer"
                 android:layout_width="wrap_content"
@@ -467,7 +475,8 @@
             android:layout_height="wrap_content"
             android:paddingBottom="@dimen/m_design_space_between_content_area"
             android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-            android:textColor="@color/grey_color" />
+            android:textColor="@color/grey_color"
+            android:textIsSelectable="true" />
         <TextView
             android:id="@+id/movie_detail_synopsis_header"
             android:layout_width="match_parent"
@@ -483,7 +492,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-            android:textColor="@color/grey_color" />
+            android:textColor="@color/grey_color"
+            android:textIsSelectable="true" />
     </LinearLayout>
     <!-- line divider -->
     <View
@@ -563,7 +573,8 @@
             android:fontFamily="sans-serif-condensed"
             android:paddingBottom="@dimen/m_design_space_between_content_area"
             android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-            android:textColor="@color/grey_color" />
+            android:textColor="@color/grey_color"
+            android:textIsSelectable="true" />
         <TextView
             android:id="@+id/movie_detail_production_info_country_header"
             android:layout_width="match_parent"
@@ -580,7 +591,8 @@
             android:layout_height="wrap_content"
             android:fontFamily="sans-serif-condensed"
             android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-            android:textColor="@color/grey_color" />
+            android:textColor="@color/grey_color"
+            android:textIsSelectable="true" />
     </LinearLayout>
     <!-- line divider -->
     <View
@@ -761,7 +773,8 @@
             android:fontFamily="sans-serif-condensed"
             android:paddingBottom="@dimen/m_design_space_between_content_area"
             android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-            android:textColor="@color/grey_color" />
+            android:textColor="@color/grey_color"
+            android:textIsSelectable="true" />
         <ImageView
             android:id="@+id/movie_detail_collection_image"
             android:layout_width="match_parent"

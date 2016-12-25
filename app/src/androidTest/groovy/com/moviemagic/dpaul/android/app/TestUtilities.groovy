@@ -11,14 +11,11 @@ import groovy.transform.CompileStatic
 @CompileStatic
 class TestUtilities extends AndroidTestCase {
 
-    @SuppressWarnings("GroovyConstantNamingConvention")
     static final long TEST_DATE = 1471042800385 //2016-08-13
     public static int TEST_MOVIE_ID = 101
     public static int TEST_COLL_ID = 202
     public static int TEST_PERSON_ID = 303
-    @SuppressWarnings("GroovyConstantNamingConvention")
     public static final String TEST_MOVIE_CATEGORY = 'popular'
-    @SuppressWarnings("GroovyConstantNamingConvention")
     public static final String TEST_COUNTRY_ISO = 'US'
 
     static void validateCursor(final String error, final Cursor valueCursor, final ContentValues expectedValues) {

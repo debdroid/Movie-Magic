@@ -26,10 +26,8 @@ import groovy.json.JsonParserType
 import groovy.json.JsonSlurper;
 import groovy.transform.CompileStatic
 
-@SuppressWarnings("GroovyAssignabilityCheck")
 @CompileStatic
 class SearchActivity extends AppCompatActivity {
-    @SuppressWarnings("GroovyConstantNamingConvention")
     private static final String LOG_TAG = SearchActivity.class.getSimpleName()
 
     private SearchDatabaseTable mSearchDatabaseTable = new SearchDatabaseTable(this)
@@ -39,7 +37,6 @@ class SearchActivity extends AppCompatActivity {
     //Projection for search_movie_basic_info table (items are same as GridFragment except COLUMN_MOVIE_LIST_TYPE)
     //This is important as MovieGridRecyclerAdapter is driven by GridFragment projection column and the same
     //adapter is used for search activity result
-    @SuppressWarnings("GroovyConstantNamingConvention")
     private static final String[] SEARCH_MOVIE_COLUMNS = ["docid",
                                                    SearchDatabaseTable.SEARCH_FTS_COLUMN_TITLE,
                                                    SearchDatabaseTable.SEARCH_FTS_COLUMN_POSTER_PATH,

@@ -21,7 +21,6 @@ import groovy.transform.CompileStatic
 
 @CompileStatic
 class MovieCrewAdapter extends RecyclerView.Adapter<MovieCrewAdapter.MovieCrewAdapterViewHolder> {
-    @SuppressWarnings("GroovyConstantNamingConvention")
     private static final String LOG_TAG = MovieCrewAdapter.class.getSimpleName()
 
     private Cursor mCursor

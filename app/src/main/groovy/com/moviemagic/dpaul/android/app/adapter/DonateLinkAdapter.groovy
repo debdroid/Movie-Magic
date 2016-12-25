@@ -13,7 +13,6 @@ import groovy.transform.CompileStatic
 
 @CompileStatic
 class DonateLinkAdapter extends RecyclerView.Adapter<DonateLinkAdapter.DonateLinkAdapterViewHolder> {
-    @SuppressWarnings("GroovyConstantNamingConvention")
     private static final String LOG_TAG = DonateLinkAdapter.class.getSimpleName()
 
     final Context mContext = null

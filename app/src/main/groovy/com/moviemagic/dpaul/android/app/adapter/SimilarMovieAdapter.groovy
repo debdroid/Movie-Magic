@@ -19,7 +19,6 @@ import groovy.transform.CompileStatic
 
 @CompileStatic
 class SimilarMovieAdapter extends RecyclerView.Adapter<SimilarMovieAdapter.SimilarMovieAdapterViewHolder> {
-    @SuppressWarnings("GroovyConstantNamingConvention")
     private static final String LOG_TAG = SimilarMovieAdapter.class.getSimpleName()
 
     private Cursor mCursor

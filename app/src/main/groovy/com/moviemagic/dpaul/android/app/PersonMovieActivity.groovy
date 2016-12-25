@@ -14,7 +14,6 @@ import groovy.transform.CompileStatic
 @CompileStatic
 class PersonMovieActivity extends AppCompatActivity implements PersonMovieFragment.CallbackForCastClick,
                 PersonMovieFragment.CallbackForCrewClick, PersonMovieFragment.CallbackForImageClick {
-    @SuppressWarnings("GroovyConstantNamingConvention")
     private static final String LOG_TAG = PersonMovieActivity.class.getSimpleName()
 
     @Override

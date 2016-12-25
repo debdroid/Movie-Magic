@@ -13,75 +13,43 @@ import org.codehaus.groovy.runtime.ArrayUtil
 
 @CompileStatic
 class MovieMagicProvider extends ContentProvider {
-    @SuppressWarnings("GroovyConstantNamingConvention")
     private static final String LOG_TAG = MovieMagicProvider.class.getSimpleName()
 
     // The URI Matcher used by this content provider.
-    @SuppressWarnings("GroovyConstantNamingConvention")
     private static final UriMatcher sUriMatcher = buildUriMatcher()
     private MovieMagicDbHelper mOpenHelper
 
-    @SuppressWarnings("GroovyConstantNamingConvention")
     static final int MOVIE_BASIC_INFO = 101
     //To access a single item we shall use the primary key (_ID) of movie_basic_info
-    @SuppressWarnings("GroovyConstantNamingConvention")
     static final int MOVIE_BASIC_INFO_WITH_MOVIE_ID = 102
-    @SuppressWarnings("GroovyConstantNamingConvention")
     static final int MOVIE_BASIC_INFO_WITH_CATEGORY = 103
-    @SuppressWarnings("GroovyConstantNamingConvention")
     static final int MOVIE_BASIC_INFO_WITH_CATEGORY_AND_COLLECTION_ID = 104
-    @SuppressWarnings("GroovyConstantNamingConvention")
     static final int MOVIE_CAST = 105
-    @SuppressWarnings("GroovyConstantNamingConvention")
     static final int MOVIE_CAST_WITH_MOVIE_ID = 106
-    @SuppressWarnings("GroovyConstantNamingConvention")
     static final int MOVIE_CREW = 107
-    @SuppressWarnings("GroovyConstantNamingConvention")
     static final int MOVIE_CREW_WITH_MOVIE_ID = 108
-    @SuppressWarnings("GroovyConstantNamingConvention")
     static final int MOVIE_IMAGE = 109
-    @SuppressWarnings("GroovyConstantNamingConvention")
     static final int MOVIE_IMAGE_WITH_MOVIE_ID = 110
-    @SuppressWarnings("GroovyConstantNamingConvention")
     static final int MOVIE_VIDEO = 111
-    @SuppressWarnings("GroovyConstantNamingConvention")
     static final int MOVIE_VIDEO_WITH_MOVIE_ID = 112
-    @SuppressWarnings("GroovyConstantNamingConvention")
     static final int MOVIE_REVIEW = 113
-    @SuppressWarnings("GroovyConstantNamingConvention")
     static final int MOVIE_REVIEW_WITH_MOVIE_ID = 114
-    @SuppressWarnings("GroovyConstantNamingConvention")
     static final int MOVIE_RELEASE_DATE = 115
-    @SuppressWarnings("GroovyConstantNamingConvention")
     static final int MOVIE_RELEASE_DATE_WITH_MOVIE_ID = 116
-    @SuppressWarnings("GroovyConstantNamingConvention")
     static final int MOVIE_RELEASE_DATE_WITH_MOVIE_ID_AND_COUNTRY_ISO = 117
-    @SuppressWarnings("GroovyConstantNamingConvention")
     static final int MOVIE_USER_LIST_FLAG = 118
-    @SuppressWarnings("GroovyConstantNamingConvention")
     static final int MOVIE_USER_LIST_FLAG_WITH_MOVIE_ID = 119
-    @SuppressWarnings("GroovyConstantNamingConvention")
     static final int MOVIE_PERSON_INFO = 120
-    @SuppressWarnings("GroovyConstantNamingConvention")
     static final int MOVIE_PERSON_INFO_WITH_PERSON_ID = 121
-    @SuppressWarnings("GroovyConstantNamingConvention")
     static final int MOVIE_PERSON_CAST = 122
-    @SuppressWarnings("GroovyConstantNamingConvention")
     static final int MOVIE_PERSON_CAST_WITH_PERSON_ID = 123
-    @SuppressWarnings("GroovyConstantNamingConvention")
     static final int MOVIE_PERSON_CREW = 124
-    @SuppressWarnings("GroovyConstantNamingConvention")
     static final int MOVIE_PERSON_CREW_WITH_PERSON_ID = 125
-    @SuppressWarnings("GroovyConstantNamingConvention")
     static final int MOVIE_PERSON_IMAGE = 126
-    @SuppressWarnings("GroovyConstantNamingConvention")
     static final int MOVIE_PERSON_IMAGE_WITH_PERSON_ID = 127
-    @SuppressWarnings("GroovyConstantNamingConvention")
     static final int MOVIE_COLLECTION = 128
-    @SuppressWarnings("GroovyConstantNamingConvention")
     static final int MOVIE_COLLECTION_WITH_COLECTION_ID = 129
 
-    @SuppressWarnings("GroovyConstantNamingConvention")
     private static final SQLiteQueryBuilder sMovieMagicQueryBuilder
 
     static {
@@ -89,84 +57,68 @@ class MovieMagicProvider extends ContentProvider {
     }
 
     //movie_basic_info.movie_id = ?
-    @SuppressWarnings("GroovyConstantNamingConvention")
     private static final String sMovieBasicInfoWithMovieIdSelection =
             "$MovieMagicContract.MovieBasicInfo.TABLE_NAME.$MovieMagicContract.MovieBasicInfo.COLUMN_MOVIE_ID = ? "
 
     //movie_basic_info.movie_category = ?
-    @SuppressWarnings("GroovyConstantNamingConvention")
     private static final String sMovieBasicInfoWithCategorySelection =
             "$MovieMagicContract.MovieBasicInfo.TABLE_NAME.$MovieMagicContract.MovieBasicInfo.COLUMN_MOVIE_CATEGORY = ? "
 
     //movie_basic_info.movie_category = ?
-    @SuppressWarnings("GroovyConstantNamingConvention")
     private static final String sMovieBasicInfoWithCategoryAndCollectionIdSelection =
             "$MovieMagicContract.MovieBasicInfo.TABLE_NAME.$MovieMagicContract.MovieBasicInfo.COLUMN_MOVIE_CATEGORY = ? " +
             " and $MovieMagicContract.MovieBasicInfo.COLUMN_COLLECTION_ID = ?"
 
     //movie_cast.cast_orig_movie_id = ?
-    @SuppressWarnings("GroovyConstantNamingConvention")
     private static final String sMovieCastWithMovieIdSelection =
             "$MovieMagicContract.MovieCast.TABLE_NAME.$MovieMagicContract.MovieCast.COLUMN_CAST_ORIG_MOVIE_ID = ? "
 
     //movie_crew.crew_orig_movie_id = ?
-    @SuppressWarnings("GroovyConstantNamingConvention")
     private static final String sMovieCrewWithMovieIdSelection =
             "$MovieMagicContract.MovieCrew.TABLE_NAME.$MovieMagicContract.MovieCrew.COLUMN_CREW_ORIG_MOVIE_ID = ? "
 
     //movie_image.image_orig_movie_id = ?
-    @SuppressWarnings("GroovyConstantNamingConvention")
     private static final String sMovieImageWithMovieIdSelection =
             "$MovieMagicContract.MovieImage.TABLE_NAME.$MovieMagicContract.MovieImage.COLUMN_IMAGE_ORIG_MOVIE_ID = ? "
 
     //movie_video.video_orig_movie_id = ?
-    @SuppressWarnings("GroovyConstantNamingConvention")
     private static final String sMovieVideoWithMovieIdSelection =
             "$MovieMagicContract.MovieVideo.TABLE_NAME.$MovieMagicContract.MovieVideo.COLUMN_VIDEO_ORIG_MOVIE_ID = ? "
 
     //movie_review.review_orig_movie_id = ?
-    @SuppressWarnings("GroovyConstantNamingConvention")
     private static final String sMovieReviewWithMovieIdSelection =
             "$MovieMagicContract.MovieReview.TABLE_NAME.$MovieMagicContract.MovieReview.COLUMN_REVIEW_ORIG_MOVIE_ID = ? "
 
     //movie_release_date.release_orig_movie_id = ?
-    @SuppressWarnings("GroovyConstantNamingConvention")
     private static final String sMovieReleaseWithMovieIdSelection =
             "$MovieMagicContract.MovieReleaseDate.TABLE_NAME.$MovieMagicContract.MovieReleaseDate.COLUMN_RELEASE_ORIG_MOVIE_ID = ? "
 
     //movie_release_date.release_orig_movie_id = ? and release_iso_country = ?
-    @SuppressWarnings("GroovyConstantNamingConvention")
     private static final String sMovieReleaseWithMovieIdAndCountryISOSelection =
             "$MovieMagicContract.MovieReleaseDate.TABLE_NAME.$MovieMagicContract.MovieReleaseDate.COLUMN_RELEASE_ORIG_MOVIE_ID = ? " +
                     " and $MovieMagicContract.MovieReleaseDate.COLUMN_RELEASE_ISO_COUNTRY = ?"
 
     //movie_user_list_flag.user_list_flag_orig_movie_id = ?
-    @SuppressWarnings("GroovyConstantNamingConvention")
     private static final String sMovieUserListFlagWithMovieIdSelection =
             "$MovieMagicContract.MovieUserListFlag.TABLE_NAME.$MovieMagicContract.MovieUserListFlag.COLUMN_USER_LIST_FLAG_ORIG_MOVIE_ID = ? "
 
     //movie_person_info.person_id = ?
-    @SuppressWarnings("GroovyConstantNamingConvention")
     private static final String sMoviePersonInfoWithPersonIdSelection =
             "$MovieMagicContract.MoviePersonInfo.TABLE_NAME.$MovieMagicContract.MoviePersonInfo.COLUMN_PERSON_ID = ? "
 
     //movie_person_cast.person_cast_orig_person_id = ?
-    @SuppressWarnings("GroovyConstantNamingConvention")
     private static final String sMoviePersonCastWithPersonIdSelection =
             "$MovieMagicContract.MoviePersonCast.TABLE_NAME.$MovieMagicContract.MoviePersonCast.COLUMN_PERSON_CAST_ORIG_PERSON_ID = ? "
 
     //movie_person_crew.person_crew_orig_person_id = ?
-    @SuppressWarnings("GroovyConstantNamingConvention")
     private static final String sMoviePersonCrewWithPersonIdSelection =
             "$MovieMagicContract.MoviePersonCrew.TABLE_NAME.$MovieMagicContract.MoviePersonCrew.COLUMN_PERSON_CREW_ORIG_PERSON_ID = ? "
 
     //movie_person_image.person_crew_orig_person_id = ?
-    @SuppressWarnings("GroovyConstantNamingConvention")
     private static final String sMoviePersonImageWithPersonIdSelection =
             "$MovieMagicContract.MoviePersonImage.TABLE_NAME.$MovieMagicContract.MoviePersonImage.COLUMN_PERSON_IMAGE_ORIG_PERSON_ID = ? "
 
     //movie_collection.collection_id = ?
-    @SuppressWarnings("GroovyConstantNamingConvention")
     private static final String sMovieCollectionWithCollectionIdSelection =
             "$MovieMagicContract.MovieCollection.TABLE_NAME.$MovieMagicContract.MovieCollection.COLUMN_COLLECTION_ID = ? "
 

@@ -34,10 +34,8 @@ import com.moviemagic.dpaul.android.app.backgroundmodules.LogDisplay
 import com.squareup.picasso.Picasso
 import groovy.transform.CompileStatic
 
-@SuppressWarnings(["GroovyAssignabilityCheck", "GroovyAssignabilityCheck"])
 @CompileStatic
 class GridMovieFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
-    @SuppressWarnings("GroovyConstantNamingConvention")
     private static final String LOG_TAG = GridMovieFragment.class.getSimpleName()
     private int mCurrentPage = 0
     //To hold the previous count of the total records
@@ -65,21 +63,14 @@ class GridMovieFragment extends Fragment implements LoaderManager.LoaderCallback
     private Uri mMovieCategoryAndCollectionIdUri
     private String mMovieListType
     private boolean mShowSubTitleForUserLocalAndTmdbList = false
-    @SuppressWarnings("GroovyConstantNamingConvention")
     private static final int MOVIE_GRID_FRAGMENT_LOADER_ID = 0
-    @SuppressWarnings("GroovyConstantNamingConvention")
     private static final String SORT_MENU_FLAG = 'sort_menu_flag'
-    @SuppressWarnings("GroovyConstantNamingConvention")
     private static final String FILTER_MENU_FLAG = 'filter_menu_flag'
-    @SuppressWarnings("GroovyConstantNamingConvention")
     private static final String CURSOR_SELECTION_CLAUSE = 'selection_clause'
-    @SuppressWarnings("GroovyConstantNamingConvention")
     private static final String CURSOR_SELECTION_ARGUMENTS = 'selection_arguments'
-    @SuppressWarnings("GroovyConstantNamingConvention")
     private static final String CURSOR_SORT_CRITERIA = 'sort_Criteria'
 
     //Projection for movie_basic_info table
-    @SuppressWarnings("GroovyConstantNamingConvention")
     private static final String[] MOVIE_COLUMNS = [MovieMagicContract.MovieBasicInfo._ID,
                                                    MovieMagicContract.MovieBasicInfo.COLUMN_TITLE,
                                                    MovieMagicContract.MovieBasicInfo.COLUMN_POSTER_PATH,
@@ -87,17 +78,11 @@ class GridMovieFragment extends Fragment implements LoaderManager.LoaderCallback
                                                    MovieMagicContract.MovieBasicInfo.COLUMN_MOVIE_ID,
                                                    MovieMagicContract.MovieBasicInfo.COLUMN_MOVIE_LIST_TYPE]
     //These are indices of the above columns, if projection array changes then this needs to be changed
-    @SuppressWarnings("GroovyConstantNamingConvention")
     final static int COL_MOVIE_ROW_ID = 0
-    @SuppressWarnings("GroovyConstantNamingConvention")
     final static int COL_MOVIE_TITLE = 1
-    @SuppressWarnings("GroovyConstantNamingConvention")
     final static int COL_MOVIE_POSTER = 2
-    @SuppressWarnings("GroovyConstantNamingConvention")
     final static int COL_MOVIE_PAGE_NUM = 3
-    @SuppressWarnings("GroovyConstantNamingConvention")
     final static int COL_MOVIE_ID = 4
-    @SuppressWarnings("GroovyConstantNamingConvention")
     final static int COL_MOVIE_LIST_TYPE = 5
 
     //An empty constructor is needed so that lifecycle is properly handled

@@ -8,7 +8,6 @@ import groovy.transform.CompileStatic
 
 @CompileStatic
 class SettingsActivity extends AppCompatActivity {
-    @SuppressWarnings("GroovyConstantNamingConvention")
     private static final String LOG_TAG = SettingsActivity.class.getSimpleName()
 
     @Override

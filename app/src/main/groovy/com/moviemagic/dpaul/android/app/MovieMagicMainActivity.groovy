@@ -52,9 +52,7 @@ import groovy.transform.CompileStatic
 public class MovieMagicMainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener,
         GridMovieFragment.CallbackForGridItemClick, GridMovieFragment.CollectionColorChangeCallback,
         HomeMovieFragment.CallbackForHomeMovieClick, HomeMovieFragment.CallbackForShowAllButtonClick {
-    @SuppressWarnings("GroovyConstantNamingConvention")
     private static final String LOG_TAG = MovieMagicMainActivity.class.getSimpleName()
-    @SuppressWarnings("GroovyConstantNamingConvention")
     private static final String STATE_APP_TITLE = 'app_title'
     private NavigationView mNavigationView
     private TextView mNavPanelUserNameTextView, mNavPanelUserIdTextView
@@ -258,7 +256,6 @@ public class MovieMagicMainActivity extends AppCompatActivity implements Navigat
         return super.onOptionsItemSelected(item)
     }
 
-    @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(final MenuItem item) {
         LogDisplay.callLog(LOG_TAG, 'onNavigationItemSelected is called.', LogDisplay.MOVIE_MAGIC_MAIN_LOG_FLAG)

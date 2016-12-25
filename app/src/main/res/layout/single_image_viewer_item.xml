@@ -27,5 +27,6 @@
         android:fontFamily="sans-serif"
         android:gravity="center"
         android:textAppearance="@style/TextAppearance.AppCompat.Headline"
-        android:textColor="@color/white_color" />
+        android:textColor="@color/white_color"
+        android:textIsSelectable="true" />
 </FrameLayout>

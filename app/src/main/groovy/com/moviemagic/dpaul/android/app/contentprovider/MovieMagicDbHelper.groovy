@@ -12,17 +12,14 @@ import groovy.transform.CompileStatic
 
 @CompileStatic
 class MovieMagicDbHelper extends SQLiteOpenHelper {
-    @SuppressWarnings("GroovyConstantNamingConvention")
     private static final String LOG_TAG = MovieMagicDbHelper.class.getSimpleName()
     // Increment the database version if the schema gets changed
     //TODO:In my nexus4, somehow the database does not get deleted while uninstalling, so every change in db
     //TODO: is forcing me to upgrade the database.
     //TODO:Need to change before release
-    @SuppressWarnings("GroovyConstantNamingConvention")
     private static final int DATABASE_VERSION = 2
 
     //Define as public as used by TestMovieMagicDatabase.groovy
-    @SuppressWarnings("GroovyConstantNamingConvention")
     public static final String DATABASE_NAME = 'movie_magic.db'
 
     public MovieMagicDbHelper(final Context context) {

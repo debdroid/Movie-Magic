@@ -22,7 +22,6 @@ import groovy.transform.CompileStatic
 
 @CompileStatic
 class MovieMagicAuthenticator extends AbstractAccountAuthenticator {
-    @SuppressWarnings("GroovyConstantNamingConvention")
     private static final String LOG_TAG = MovieMagicAuthenticator.class.getSimpleName()
 
     private final Context mContext

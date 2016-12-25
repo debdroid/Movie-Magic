@@ -32,7 +32,6 @@ import groovy.transform.CompileStatic
 
 @CompileStatic
 class ImageViewerActivity extends AppCompatActivity {
-    @SuppressWarnings("GroovyConstantNamingConvention")
     private static final String LOG_TAG = ImageViewerActivity.class.getSimpleName()
     private ArrayList<String> mImageFilePath
     private String mTitle
@@ -41,7 +40,6 @@ class ImageViewerActivity extends AppCompatActivity {
     private RelativeLayout mImageViewerMainLayout
     protected ViewPager mViewPager
     private ImagePagerAdapter mAdapter
-    @SuppressWarnings("GroovyConstantNamingConvention")
     private static final int REQUEST_EXTERNAL_STORAGE = 1
 
     @Override

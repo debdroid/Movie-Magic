@@ -39,14 +39,11 @@ import groovy.json.JsonParserType
 import groovy.json.JsonSlurper
 import groovy.transform.CompileStatic
 
-@SuppressWarnings(["GroovyAssignabilityCheck", "GroovyAssignabilityCheck", "GroovyAssignabilityCheck", "GroovyAssignabilityCheck"])
 @CompileStatic
 class MovieMagicSyncAdapter extends AbstractThreadedSyncAdapter {
-    @SuppressWarnings("GroovyConstantNamingConvention")
     private static final String LOG_TAG = MovieMagicSyncAdapter.class.getSimpleName()
 
     //This variable indicates the number of pages for initial load.
-    @SuppressWarnings("GroovyConstantNamingConvention")
     private final static int MAX_PAGE_DOWNLOAD = 3
     //Define a variable for api page count
     private static int mTotalPage = 0
@@ -63,7 +60,6 @@ class MovieMagicSyncAdapter extends AbstractThreadedSyncAdapter {
 
 
     //Columns to fetch from movie_basic_info table
-    @SuppressWarnings("GroovyConstantNamingConvention")
     private static final String[] MOVIE_BASIC_INFO_COLUMNS = [MovieMagicContract.MovieBasicInfo._ID,
                                                               MovieMagicContract.MovieBasicInfo.COLUMN_MOVIE_ID,
                                                               MovieMagicContract.MovieBasicInfo.COLUMN_RELEASE_DATE,
@@ -72,19 +68,12 @@ class MovieMagicSyncAdapter extends AbstractThreadedSyncAdapter {
                                                               MovieMagicContract.MovieBasicInfo.COLUMN_BACKDROP_PATH,
                                                               MovieMagicContract.MovieBasicInfo.COLUMN_MOVIE_CATEGORY]
     //These are indices of the above columns, if projection array changes then this needs to be changed
-    @SuppressWarnings("GroovyConstantNamingConvention")
     final static int COL_MOVIE_BASIC_ID = 0
-    @SuppressWarnings("GroovyConstantNamingConvention")
     final static int COL_MOVIE_BASIC_MOVIE_ID = 1
-    @SuppressWarnings("GroovyConstantNamingConvention")
     final static int COL_MOVIE_BASIC_RELEASE_DATE = 2
-    @SuppressWarnings("GroovyConstantNamingConvention")
     final static int COL_MOVIE_BASIC_TITLE = 3
-    @SuppressWarnings("GroovyConstantNamingConvention")
     final static int COL_MOVIE_BASIC_POSTER_PATH = 4
-    @SuppressWarnings("GroovyConstantNamingConvention")
     final static int COL_MOVIE_BASIC_BACKDROP_PATH = 5
-    @SuppressWarnings("GroovyConstantNamingConvention")
     final static int COL_MOVIE_BASIC_MOVIE_CATEGORY = 6
 
     MovieMagicSyncAdapter(final Context context, final boolean autoInitialize) {
@@ -106,7 +95,6 @@ class MovieMagicSyncAdapter extends AbstractThreadedSyncAdapter {
 //        mContentResolver = context.getContentResolver()
 //    }
 
-    @SuppressWarnings("GroovyAssignabilityCheck")
     @Override
     void onPerformSync(
             final Account account, final Bundle extras, final String authority, final ContentProviderClient provider, final SyncResult syncResult) {
