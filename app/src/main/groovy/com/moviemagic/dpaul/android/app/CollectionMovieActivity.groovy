@@ -11,8 +11,6 @@ import groovy.transform.CompileStatic
 
 @CompileStatic
 class CollectionMovieActivity extends AppCompatActivity implements GridMovieFragment.CallbackForGridItemClick, GridMovieFragment.CollectionColorChangeCallback {
-
-    
     private static final String LOG_TAG = CollectionMovieActivity.class.getSimpleName()
 
     @Override
