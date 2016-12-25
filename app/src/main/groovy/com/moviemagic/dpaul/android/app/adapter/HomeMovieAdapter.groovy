@@ -20,12 +20,13 @@ import groovy.transform.CompileStatic
 
 @CompileStatic
 class HomeMovieAdapter extends RecyclerView.Adapter<HomeMovieAdapter.HomeMovieAdapterViewHolder> {
+    @SuppressWarnings("GroovyConstantNamingConvention")
     private static final String LOG_TAG = HomeMovieAdapter.class.getSimpleName()
 
     private Cursor mCursor
-    private final Context mContext
-    private final TextView mRecyclerviewEmptyTextView
-    private final HomeMovieAdapterOnClickHandler mHomeMovieAdapterOnClickHandler
+    private final Context mContext = null
+    private final TextView mRecyclerviewEmptyTextView = null
+    private final HomeMovieAdapterOnClickHandler mHomeMovieAdapterOnClickHandler= null
 
 
     //Empty constructor
@@ -33,7 +34,7 @@ class HomeMovieAdapter extends RecyclerView.Adapter<HomeMovieAdapter.HomeMovieAd
         LogDisplay.callLog(LOG_TAG, 'HomeMovieAdapter empty constructor is called', LogDisplay.HOME_MOVIE_ADAPTER_LOG_FLAG)
     }
 
-    public HomeMovieAdapter(Context ctx, TextView recyclerviewEmptyTextView, HomeMovieAdapterOnClickHandler clickHandler) {
+    public HomeMovieAdapter(final Context ctx, final TextView recyclerviewEmptyTextView, final HomeMovieAdapterOnClickHandler clickHandler) {
         LogDisplay.callLog(LOG_TAG, 'HomeMovieAdapter non-empty constructor is called', LogDisplay.HOME_MOVIE_ADAPTER_LOG_FLAG)
         mContext = ctx
         mRecyclerviewEmptyTextView = recyclerviewEmptyTextView
@@ -50,7 +51,7 @@ class HomeMovieAdapter extends RecyclerView.Adapter<HomeMovieAdapter.HomeMovieAd
         private final TextView movieUserListTextView
 
 
-        public HomeMovieAdapterViewHolder(View view) {
+        public HomeMovieAdapterViewHolder(final View view) {
             super(view)
             movieBackdropImageView = view.findViewById(R.id.home_movie_backdrop_image) as ImageView
             movieTitleTextView = view.findViewById(R.id.home_movie_title) as TextView
@@ -61,7 +62,7 @@ class HomeMovieAdapter extends RecyclerView.Adapter<HomeMovieAdapter.HomeMovieAd
             movieUserListTextView = view.findViewById(R.id.home_movie_list_text_container) as TextView
             view.setOnClickListener(this)
         }
-        public void onClick(View v) {
+        public void onClick(final View v) {
             LogDisplay.callLog(LOG_TAG,"onClick is called.LayoutPos=${getLayoutPosition()}.AdapterPos=${getAdapterPosition()}",LogDisplay.HOME_MOVIE_ADAPTER_LOG_FLAG)
             mCursor.moveToPosition(getAdapterPosition())
             final int movieId = mCursor.getInt(HomeMovieFragment.COL_MOVIE_BASIC_MOVIE_ID)
@@ -71,15 +72,16 @@ class HomeMovieAdapter extends RecyclerView.Adapter<HomeMovieAdapter.HomeMovieAd
     }
 
     @Override
-    HomeMovieAdapterViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    HomeMovieAdapterViewHolder onCreateViewHolder(final ViewGroup parent, final int viewType) {
         LogDisplay.callLog(LOG_TAG, 'onCreateViewHolder is called', LogDisplay.HOME_MOVIE_ADAPTER_LOG_FLAG)
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.single_home_movie_grid, parent, false)
+        //noinspection GroovyVariableCanBeFinal
+        final View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.single_home_movie_grid, parent, false)
         view.setFocusable(true)
         return new HomeMovieAdapterViewHolder(view)
     }
 
     @Override
-    void onBindViewHolder(HomeMovieAdapterViewHolder holder, int position) {
+    void onBindViewHolder(final HomeMovieAdapterViewHolder holder, final int position) {
         // move the cursor to correct position
         mCursor.moveToPosition(position)
         LogDisplay.callLog(LOG_TAG,'onBindViewHolder is called',LogDisplay.HOME_MOVIE_ADAPTER_LOG_FLAG)
@@ -122,7 +124,8 @@ class HomeMovieAdapter extends RecyclerView.Adapter<HomeMovieAdapter.HomeMovieAd
         } else {
             holder.movieReleaseDateTextView.setText("${mContext.getResources().getString(R.string.home_movie_release_date_text)}: ${mContext.getResources().getString(R.string.movie_data_not_available)}")
         }
-        String listType
+        //noinspection GroovyVariableCanBeFinal
+        String listType = null
         switch (mCursor.getString(HomeMovieFragment.COL_MOVIE_BASIC_MOVIE_CATEGORY)) {
             case GlobalStaticVariables.MOVIE_CATEGORY_NOW_PLAYING:
                 listType = mContext.getResources().getString(R.string.home_movie_in_cinema_text)
@@ -166,7 +169,7 @@ class HomeMovieAdapter extends RecyclerView.Adapter<HomeMovieAdapter.HomeMovieAd
         return mCursor.getCount()
     }
 
-    public void swapCursor(Cursor newCursor) {
+    public void swapCursor(final Cursor newCursor) {
         LogDisplay.callLog(LOG_TAG,'swapCursor is called',LogDisplay.HOME_MOVIE_ADAPTER_LOG_FLAG)
         mCursor = newCursor
         if (getItemCount() == 0) {

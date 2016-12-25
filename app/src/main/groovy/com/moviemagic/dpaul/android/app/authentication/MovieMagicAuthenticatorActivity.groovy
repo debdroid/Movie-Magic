@@ -36,10 +36,13 @@ import groovy.transform.CompileStatic
  * The Authenticator activity.
  * A login screen that offers TMDb login to user via user id/password.
  */
+@SuppressWarnings(["GroovyAssignabilityCheck", "GroovyAssignabilityCheck", "GroovyAssignabilityCheck", "GroovyAssignabilityCheck", "GroovyAssignabilityCheck", "GroovyAssignabilityCheck"])
 @CompileStatic
 class MovieMagicAuthenticatorActivity extends AccountAuthenticatorActivity {
+    @SuppressWarnings("GroovyConstantNamingConvention")
     private static final String LOG_TAG = MovieMagicAuthenticatorActivity.class.getSimpleName()
 
+    @SuppressWarnings("GroovyConstantNamingConvention")
     public static final String IS_NEW_ACCOUNT = 'is_new_account'
     private AccountManager mAccountManager
     private EditText mUserNameEditTextView,mPasswordEditTextView
@@ -54,7 +57,7 @@ class MovieMagicAuthenticatorActivity extends AccountAuthenticatorActivity {
     private UserLoginTask mUserLoginTask = null
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState)
         LogDisplay.callLog(LOG_TAG,'onCreate is called',LogDisplay.MOVIE_MAGIC_AUTHENTICATOR_ACTIVITY_LOG_FLAG)
         setContentView(R.layout.activity_movie_magic_authenticator)
@@ -62,23 +65,26 @@ class MovieMagicAuthenticatorActivity extends AccountAuthenticatorActivity {
         mUserNameEditTextView = findViewById(R.id.username) as EditText
         mPasswordEditTextView = findViewById(R.id.password) as EditText
         mSignInButton = findViewById(R.id.sign_in_button) as Button
+        //noinspection GroovyVariableCanBeFinal
         mSignInButton.setOnClickListener(new OnClickListener() {
             @Override
-            public void onClick(View view) {
+            public void onClick(final View view) {
                 attemptLogin()
             }
         })
         mSignUpButton = findViewById(R.id.sign_up_button) as Button
+        //noinspection GroovyVariableCanBeFinal
         mSignUpButton.setOnClickListener(new OnClickListener() {
             @Override
-            void onClick(View v) {
+            void onClick(final View v) {
                 launchSignUpPage()
             }
         })
         mCancelButton = findViewById(R.id.cancel_button) as Button
+        //noinspection GroovyVariableCanBeFinal
         mCancelButton.setOnClickListener(new OnClickListener() {
             @Override
-            void onClick(View v) {
+            void onClick(final View v) {
                 cancelLogin()
             }
         })
@@ -175,12 +181,12 @@ class MovieMagicAuthenticatorActivity extends AccountAuthenticatorActivity {
         }
     }
 
-    private boolean isUserIdValid(String username) {
+    private static boolean isUserIdValid(final String username) {
         //TMDb's user name is not necessary to be an email id, so just checking for any length greater than one
         return username.length() > 1
     }
 
-    private boolean isPasswordValid(String password) {
+    private static boolean isPasswordValid(final String password) {
         //TMDb's minimum password length is 4
         return password.length() >= 4
     }
@@ -195,21 +201,24 @@ class MovieMagicAuthenticatorActivity extends AccountAuthenticatorActivity {
         // the progress spinner.
         // Check if the build version is greater than equal Build.VERSION_CODES.HONEYCOMB_MR2 (i.e. version 13)
         if (Build.VERSION.SDK_INT >= 13) {
-            int shortAnimTime = getResources().getInteger(android.R.integer.config_shortAnimTime)
+            //noinspection GroovyVariableCanBeFinal
+            final int shortAnimTime = getResources().getInteger(android.R.integer.config_shortAnimTime)
             mLoginFormView.setVisibility(show ? LinearLayout.INVISIBLE : LinearLayout.VISIBLE)
+            //noinspection GroovyVariableCanBeFinal
             mLoginFormView.animate().setDuration(shortAnimTime).alpha(
                     show ? 0 : 1).setListener(new AnimatorListenerAdapter() {
                 @Override
-                public void onAnimationEnd(Animator animation) {
+                public void onAnimationEnd(final Animator animation) {
                     mLoginFormView.setVisibility(show ? LinearLayout.INVISIBLE : LinearLayout.VISIBLE)
                 }
             })
 
             mProgressView.setVisibility(show ? ProgressBar.VISIBLE : ProgressBar.INVISIBLE)
+            //noinspection GroovyVariableCanBeFinal
             mProgressView.animate().setDuration(shortAnimTime).alpha(
                     show ? 1 : 0).setListener(new AnimatorListenerAdapter() {
                 @Override
-                public void onAnimationEnd(Animator animation) {
+                public void onAnimationEnd(final Animator animation) {
                     mProgressView.setVisibility(show ? ProgressBar.VISIBLE : ProgressBar.INVISIBLE)
                 }
             })
@@ -232,11 +241,12 @@ class MovieMagicAuthenticatorActivity extends AccountAuthenticatorActivity {
         }
 
         @Override
-        protected Intent doInBackground(String... params) {
+        protected Intent doInBackground(final String... params) {
             LogDisplay.callLog(LOG_TAG,'Started the authentication..',LogDisplay.MOVIE_MAGIC_AUTHENTICATOR_ACTIVITY_LOG_FLAG)
             final String username = params[0]
             final String password = params[1]
             final Bundle data = new Bundle()
+            //noinspection GroovyVariableCanBeFinal
             try {
                 final Bundle bundle = GlobalStaticVariables.sTmdbAuthenticateInterface
                         .tmdbUserSignIn(username, password, mAuthTokenType)
@@ -262,7 +272,7 @@ class MovieMagicAuthenticatorActivity extends AccountAuthenticatorActivity {
                     data.putString(AccountManager.KEY_ERROR_MESSAGE, getString(R.string.authenticator_jellybean_error_message))
                 }
 
-            } catch (Exception e) {
+            } catch (final Exception e) {
                 data.putString(AccountManager.KEY_ERROR_MESSAGE, e.getMessage())
                 LogDisplay.callLog(LOG_TAG,'Exception thrown while authenticating the user',LogDisplay.MOVIE_MAGIC_AUTHENTICATOR_ACTIVITY_LOG_FLAG)
                 Log.e(LOG_TAG, "Error: ${e.message}", e)
@@ -273,7 +283,7 @@ class MovieMagicAuthenticatorActivity extends AccountAuthenticatorActivity {
         }
 
         @Override
-        protected void onPostExecute(Intent intent) {
+        protected void onPostExecute(final Intent intent) {
             mUserLoginTask = null
             showProgress(false)
             if (intent.hasExtra(AccountManager.KEY_ERROR_MESSAGE)) {
@@ -295,7 +305,7 @@ class MovieMagicAuthenticatorActivity extends AccountAuthenticatorActivity {
      * This method is called if the login is successful and an authToken is received
      * @param intent Intent containing the required details of the account
      */
-    private void finishLogin(Intent intent) {
+    private void finishLogin(final Intent intent) {
         LogDisplay.callLog(LOG_TAG,'finishLogin is called',LogDisplay.MOVIE_MAGIC_AUTHENTICATOR_ACTIVITY_LOG_FLAG)
 
         final String accountName = intent.getStringExtra(AccountManager.KEY_ACCOUNT_NAME)
@@ -312,13 +322,16 @@ class MovieMagicAuthenticatorActivity extends AccountAuthenticatorActivity {
             final Context context = getApplicationContext()
             // Application supports only a single account, so first remove existing ones
             final Account[] accounts = mAccountManager.getAccountsByType(accountType)
-            for(i in 0..(accounts.size() -1)) {
+            //noinspection GroovyVariableCanBeFinal
+            for(final i in 0..(accounts.size() -1)) {
                 LogDisplay.callLog(LOG_TAG,"Removing account -> ${accounts[i].name}",LogDisplay.MOVIE_MAGIC_AUTHENTICATOR_ACTIVITY_LOG_FLAG)
                 // Remove the account
                 if (Build.VERSION.SDK_INT >= 21) {
+                    //noinspection GroovyVariableCanBeFinal
                     mAccountManager.removeAccount(accounts[i], this, new AccountManagerCallback<Bundle>() {
                         @Override
-                        void run(AccountManagerFuture<Bundle> future) {
+                        void run(final AccountManagerFuture<Bundle> future) {
+                            //noinspection GroovyVariableCanBeFinal
                             try { //getResult will throw exception if login is not successful
                                 final Bundle bundle = future.getResult()
                                 LogDisplay.callLog(LOG_TAG,"Remove account successful, accout bundle: $bundle",LogDisplay.MOVIE_MAGIC_AUTHENTICATOR_ACTIVITY_LOG_FLAG)
@@ -326,7 +339,7 @@ class MovieMagicAuthenticatorActivity extends AccountAuthenticatorActivity {
                                 MovieMagicSyncAdapterUtility.removePeriodicSync(accounts[i], context)
                                 // Add the account and authToken
                                 addAcountAndAuthToken(intent, account, authtoken, tmdbUSerName, tmdbAccountId, accountPassword)
-                            } catch (Exception e) {
+                            } catch (final Exception e) {
                                 LogDisplay.callLog(LOG_TAG,"Remove account failed, error message: ${e.getMessage()}",LogDisplay.MOVIE_MAGIC_AUTHENTICATOR_ACTIVITY_LOG_FLAG)
                                 Toast.makeText(getBaseContext(), getString(R.string.cannot_perform_operation_message), Toast.LENGTH_SHORT).show()
                                 Log.e(LOG_TAG, "Error: ${e.message}", e)
@@ -334,9 +347,10 @@ class MovieMagicAuthenticatorActivity extends AccountAuthenticatorActivity {
                         }
                     }, null)
                 } else {
+                    //noinspection GroovyVariableCanBeFinal
                     mAccountManager.removeAccount(accounts[i], new AccountManagerCallback<Boolean>() {
                         @Override
-                        void run(AccountManagerFuture<Boolean> future) {
+                        void run(final AccountManagerFuture<Boolean> future) {
                             final boolean returnStatus = future.getResult()
                             if(returnStatus) {
                                 LogDisplay.callLog(LOG_TAG,'Remove account successful',LogDisplay.MOVIE_MAGIC_AUTHENTICATOR_ACTIVITY_LOG_FLAG)
@@ -370,7 +384,8 @@ class MovieMagicAuthenticatorActivity extends AccountAuthenticatorActivity {
      * @param tmdbAccountId Account id of Tmdb account which is stored as user data
      * @param accountPassword Password of the account
      */
-    private addAcountAndAuthToken(Intent intent, Account account, String authtoken, String tmdbUSerName, String tmdbAccountId, String accountPassword) {
+    private addAcountAndAuthToken(
+            final Intent intent, final Account account, final String authtoken, final String tmdbUSerName, final String tmdbAccountId, final String accountPassword) {
         // Since it's a new account so create the account and set the authToken
         // (Not setting the auth token will cause another call to the server to authenticate the user)
         final Bundle userDataBundle = new Bundle()

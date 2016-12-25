@@ -52,7 +52,9 @@ import groovy.transform.CompileStatic
 public class MovieMagicMainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener,
         GridMovieFragment.CallbackForGridItemClick, GridMovieFragment.CollectionColorChangeCallback,
         HomeMovieFragment.CallbackForHomeMovieClick, HomeMovieFragment.CallbackForShowAllButtonClick {
+    @SuppressWarnings("GroovyConstantNamingConvention")
     private static final String LOG_TAG = MovieMagicMainActivity.class.getSimpleName()
+    @SuppressWarnings("GroovyConstantNamingConvention")
     private static final String STATE_APP_TITLE = 'app_title'
     private NavigationView mNavigationView
     private TextView mNavPanelUserNameTextView, mNavPanelUserIdTextView
@@ -62,7 +64,7 @@ public class MovieMagicMainActivity extends AppCompatActivity implements Navigat
     private NetworkReceiver networkReceiver
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState)
         LogDisplay.callLog(LOG_TAG,'onCreate is called',LogDisplay.MOVIE_MAGIC_MAIN_LOG_FLAG)
         setContentView(R.layout.activity_movie_magic_main)
@@ -81,9 +83,10 @@ public class MovieMagicMainActivity extends AppCompatActivity implements Navigat
         mNavPanelUserNameTextView = navigationHeader.findViewById(R.id.nav_drawer_user_name) as TextView
         mNavPanelUserIdTextView = navigationHeader.findViewById(R.id.nav_drawer_user_id) as TextView
         mNavPanelLoginButton = navigationHeader.findViewById(R.id.nav_drawer_log_in) as Button
+        //noinspection GroovyVariableCanBeFinal
         mNavPanelLoginButton.setOnClickListener(new View.OnClickListener() {
             @Override
-            void onClick(View v) {
+            void onClick(final View v) {
                 LogDisplay.callLog(LOG_TAG,'Login button is clicked',LogDisplay.MOVIE_MAGIC_MAIN_LOG_FLAG)
                 loginToTmdbAccount()
             }
@@ -162,7 +165,7 @@ public class MovieMagicMainActivity extends AppCompatActivity implements Navigat
     }
 
     @Override
-    protected void onSaveInstanceState(Bundle outState) {
+    protected void onSaveInstanceState(final Bundle outState) {
         LogDisplay.callLog(LOG_TAG,'onSaveInstanceState is called',LogDisplay.MOVIE_MAGIC_MAIN_LOG_FLAG)
         outState.putString(STATE_APP_TITLE,getSupportActionBar().getTitle().toString())
         // Now call the superclass so it can save the view hierarchy state
@@ -170,7 +173,7 @@ public class MovieMagicMainActivity extends AppCompatActivity implements Navigat
     }
 
     @Override
-    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+    protected void onRestoreInstanceState(final Bundle savedInstanceState) {
         LogDisplay.callLog(LOG_TAG,'onRestoreInstanceState is called',LogDisplay.MOVIE_MAGIC_MAIN_LOG_FLAG)
         // Always call the superclass first, so that Bundle is retrieved properly
         super.onRestoreInstanceState(savedInstanceState)
@@ -226,7 +229,7 @@ public class MovieMagicMainActivity extends AppCompatActivity implements Navigat
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
+    public boolean onCreateOptionsMenu(final Menu menu) {
         // Inflate the menu, this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.main_activity_menu, menu)
 
@@ -241,7 +244,7 @@ public class MovieMagicMainActivity extends AppCompatActivity implements Navigat
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
+    public boolean onOptionsItemSelected(final MenuItem item) {
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
@@ -257,7 +260,7 @@ public class MovieMagicMainActivity extends AppCompatActivity implements Navigat
 
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
-    public boolean onNavigationItemSelected(MenuItem item) {
+    public boolean onNavigationItemSelected(final MenuItem item) {
         LogDisplay.callLog(LOG_TAG, 'onNavigationItemSelected is called.', LogDisplay.MOVIE_MAGIC_MAIN_LOG_FLAG)
         // Handle navigation view item clicks here.
         final int id = item.getItemId()
@@ -320,10 +323,12 @@ public class MovieMagicMainActivity extends AppCompatActivity implements Navigat
      */
     private void loginToTmdbAccount() {
         LogDisplay.callLog(LOG_TAG,'loginToTmdbAccount is called',LogDisplay.MOVIE_MAGIC_MAIN_LOG_FLAG)
+        //noinspection GroovyVariableCanBeFinal
         final AccountManagerFuture<Bundle> amFuture= mAccountManager.addAccount(getString(R.string.authenticator_account_type),
                 GlobalStaticVariables.AUTHTOKEN_TYPE_FULL_ACCESS,null,null,this,new AccountManagerCallback<Bundle>() {
             @Override
-            void run(AccountManagerFuture<Bundle> future) {
+            void run(final AccountManagerFuture<Bundle> future) {
+                //noinspection GroovyVariableCanBeFinal
                 try { //getResult will throw exception if login is not successful
                     final Bundle bundle = future.getResult()
                     // Set the name to the TMDb user name, if it's not present then set the app name
@@ -346,7 +351,7 @@ public class MovieMagicMainActivity extends AppCompatActivity implements Navigat
                     } else {
                         mNavPanelUserNameTextView.setText(getString(R.string.app_name))
                     }
-                } catch (Exception e) {
+                } catch (final Exception e) {
                     LogDisplay.callLog(LOG_TAG,"Login failed, error message: ${e.getMessage()}",LogDisplay.MOVIE_MAGIC_MAIN_LOG_FLAG)
                     Log.e(LOG_TAG, "Error: ${e.message}", e)
                 }
@@ -367,16 +372,18 @@ public class MovieMagicMainActivity extends AppCompatActivity implements Navigat
             LogDisplay.callLog(LOG_TAG,"Removing account -> ${accounts[0].name}",LogDisplay.MOVIE_MAGIC_MAIN_LOG_FLAG)
             // Remove the account
             if (Build.VERSION.SDK_INT >= 21) {
+                //noinspection GroovyVariableCanBeFinal
                 mAccountManager.removeAccount(accounts[0], this, new AccountManagerCallback<Bundle>() {
                     @Override
-                    void run(AccountManagerFuture<Bundle> future) {
+                    void run(final AccountManagerFuture<Bundle> future) {
+                        //noinspection GroovyVariableCanBeFinal
                         try { //getResult will throw exception if logout is not successful
                             // Remove the Periodic Sync for the account
                             MovieMagicSyncAdapterUtility.removePeriodicSync(accounts[0], context)
                             final Bundle bundle = future.getResult()
                             finishLogout()
                             LogDisplay.callLog(LOG_TAG,"Remove account successful, accout bundle: $bundle",LogDisplay.MOVIE_MAGIC_MAIN_LOG_FLAG)
-                        } catch (Exception e) {
+                        } catch (final Exception e) {
                             LogDisplay.callLog(LOG_TAG,"Remove account failed, error message: ${e.getMessage()}",LogDisplay.MOVIE_MAGIC_MAIN_LOG_FLAG)
                             Toast.makeText(getBaseContext(), getString(R.string.cannot_perform_operation_message), Toast.LENGTH_SHORT).show()
                             Log.e(LOG_TAG, "Error: ${e.message}", e)
@@ -384,9 +391,10 @@ public class MovieMagicMainActivity extends AppCompatActivity implements Navigat
                     }
                 }, null)
             } else {
+                //noinspection GroovyVariableCanBeFinal
                 mAccountManager.removeAccount(accounts[0], new AccountManagerCallback<Boolean>() {
                     @Override
-                    void run(AccountManagerFuture<Boolean> future) {
+                    void run(final AccountManagerFuture<Boolean> future) {
                         final boolean returnStatus = future.getResult()
                         if(returnStatus) {
                             // Remove the Periodic Sync for the account
@@ -481,16 +489,18 @@ public class MovieMagicMainActivity extends AppCompatActivity implements Navigat
         final AlertDialog.Builder builder = new AlertDialog.Builder(this)
         builder.setTitle(getString(R.string.not_connected_dialog_title))
                 .setMessage(getString(R.string.not_connected_dialog_message))
+        //noinspection GroovyVariableCanBeFinal,GroovyVariableCanBeFinal
         builder.setPositiveButton(getString(R.string.not_connected_open_settings_button), new DialogInterface.OnClickListener() {
             @Override
-            void onClick(DialogInterface dialog, int which) {
+            void onClick(final DialogInterface dialog, final int which) {
                 LogDisplay.callLog(LOG_TAG, 'Dialog open network settings is clicked, go and open it', LogDisplay.MOVIE_MAGIC_MAIN_LOG_FLAG)
                 openSystemSettings()
             }
         })
+        //noinspection GroovyVariableCanBeFinal,GroovyVariableCanBeFinal
         builder.setNegativeButton(getString(R.string.action_cancel), new DialogInterface.OnClickListener(){
             @Override
-            void onClick(DialogInterface dialog, int which) {
+            void onClick(final DialogInterface dialog, final int which) {
                 LogDisplay.callLog(LOG_TAG, 'Dialog cancel is clicked. No action needed.', LogDisplay.MOVIE_MAGIC_MAIN_LOG_FLAG)
                 dialog.dismiss()
             }
@@ -507,16 +517,18 @@ public class MovieMagicMainActivity extends AppCompatActivity implements Navigat
         final AlertDialog.Builder builder = new AlertDialog.Builder(this)
         builder.setTitle(getString(R.string.not_wifi_connected_dialog_title))
                 .setMessage(getString(R.string.not_wifi_connected_dialog_message))
+        //noinspection GroovyVariableCanBeFinal,GroovyVariableCanBeFinal
         builder.setPositiveButton(getString(R.string.not_wifi_connected_open_settings_button), new DialogInterface.OnClickListener() {
             @Override
-            void onClick(DialogInterface dialog, int which) {
+            void onClick(final DialogInterface dialog, final int which) {
                 LogDisplay.callLog(LOG_TAG, 'Dialog change settings is clicked, go and open settings activity', LogDisplay.MOVIE_MAGIC_MAIN_LOG_FLAG)
                 openSettingsActivity()
             }
         })
+        //noinspection GroovyVariableCanBeFinal,GroovyVariableCanBeFinal
         builder.setNegativeButton(getString(R.string.action_cancel), new DialogInterface.OnClickListener(){
             @Override
-            void onClick(DialogInterface dialog, int which) {
+            void onClick(final DialogInterface dialog, final int which) {
                 LogDisplay.callLog(LOG_TAG, 'Dialog cancel is clicked. No action needed.', LogDisplay.MOVIE_MAGIC_MAIN_LOG_FLAG)
             }
         })
@@ -559,7 +571,7 @@ public class MovieMagicMainActivity extends AppCompatActivity implements Navigat
      * Load the Grid Fragment of the movie selected movie category
      * @param category Movie category
      */
-    private void loadGridFragment(String category) {
+    private void loadGridFragment(final String category) {
         //Set this flag as false so that theme primaryDark color is used in the grid
         MovieGridRecyclerAdapter.collectionGridFlag = false
         final Bundle bundle = new Bundle()
@@ -579,7 +591,7 @@ public class MovieMagicMainActivity extends AppCompatActivity implements Navigat
      * This method sets the Title of the Activity
      * @param title Title to be set for the activity
      */
-    private void setItemTitleAndSubTitle(CharSequence title){
+    private void setItemTitleAndSubTitle(final CharSequence title){
         LogDisplay.callLog(LOG_TAG,"The drawer menu $title is called",LogDisplay.MOVIE_MAGIC_MAIN_LOG_FLAG)
         getSupportActionBar().setTitle(title)
         // Filter menu of GridFragment can set the subtitle, so reset it
@@ -594,7 +606,7 @@ public class MovieMagicMainActivity extends AppCompatActivity implements Navigat
      * @param viewHolder HomeMovieApterViewHolder
      */
     @Override
-    void onHomeMovieItemSelected(int movieId, String movieCategory, HomeMovieAdapter.HomeMovieAdapterViewHolder viewHolder) {
+    void onHomeMovieItemSelected(final int movieId, final String movieCategory, final HomeMovieAdapter.HomeMovieAdapterViewHolder viewHolder) {
         final Bundle bundle = new Bundle()
         bundle.putInt(GlobalStaticVariables.MOVIE_BASIC_INFO_MOVIE_ID,movieId)
         bundle.putString(GlobalStaticVariables.MOVIE_BASIC_INFO_CATEGORY,movieCategory)
@@ -610,7 +622,7 @@ public class MovieMagicMainActivity extends AppCompatActivity implements Navigat
      * @param movieCategory The movie category (now_playing or upcoming) of the corresponding button click
      */
     @Override
-    void onShowAllButtonClicked(String movieCategory) {
+    void onShowAllButtonClicked(final String movieCategory) {
         if(movieCategory == GlobalStaticVariables.MOVIE_CATEGORY_NOW_PLAYING) {
             setItemTitleAndSubTitle(getString(R.string.drawer_menu_tmdb_nowplaying))
             // Set the corresponding item in nav drawer
@@ -694,13 +706,14 @@ public class MovieMagicMainActivity extends AppCompatActivity implements Navigat
     protected class UpdateMenuCounter extends AsyncTask<String, Void, Integer[]> {
         private final Context mContext
 
-        public UpdateMenuCounter(Context ctx) {
+        public UpdateMenuCounter(final Context ctx) {
             LogDisplay.callLog(LOG_TAG,'UpdateMenuCounter constructor is called',LogDisplay.MOVIE_MAGIC_MAIN_LOG_FLAG)
             mContext = ctx
         }
         @Override
-        protected Integer[] doInBackground(String... params) {
-            Integer[] result = new Integer[7]
+        protected Integer[] doInBackground(final String... params) {
+            //noinspection GroovyVariableCanBeFinal
+            final Integer[] result = new Integer[7]
             Cursor cursor
             //Get the count for watched
             cursor = mContext.getContentResolver().query(
@@ -780,7 +793,7 @@ public class MovieMagicMainActivity extends AppCompatActivity implements Navigat
         }
 
         @Override
-        protected void onPostExecute(Integer[] result) {
+        protected void onPostExecute(final Integer[] result) {
             //Set the Watched counter
             final TextView watchedView = (TextView) mNavigationView.getMenu().findItem(R.id.nav_user_watched).getActionView()
             watchedView.setText(result[0] > 0 ? String.valueOf(result[0]) : null)
@@ -812,7 +825,7 @@ public class MovieMagicMainActivity extends AppCompatActivity implements Navigat
     // Override the callback method of GridMovieFragment
     // Once an item is clicked then it will be called and it will launch the DetailMovie activity
     @Override
-    public void onMovieGridItemSelected(int movieId, String movieCategory, MovieGridRecyclerAdapter.MovieGridRecyclerAdapterViewHolder viewHolder) {
+    public void onMovieGridItemSelected(final int movieId, final String movieCategory, final MovieGridRecyclerAdapter.MovieGridRecyclerAdapterViewHolder viewHolder) {
         final Intent intent = new Intent(this, DetailMovieActivity.class)
         final Bundle bundle = new Bundle()
         bundle.putInt(GlobalStaticVariables.MOVIE_BASIC_INFO_MOVIE_ID,movieId)

@@ -21,11 +21,12 @@ import groovy.transform.CompileStatic
 
 @CompileStatic
 class MovieCrewAdapter extends RecyclerView.Adapter<MovieCrewAdapter.MovieCrewAdapterViewHolder> {
+    @SuppressWarnings("GroovyConstantNamingConvention")
     private static final String LOG_TAG = MovieCrewAdapter.class.getSimpleName()
 
     private Cursor mCursor
-    private final Context mContext
-    private final TextView mCrewGridEmptyTextView
+    private final Context mContext = null
+    private final TextView mCrewGridEmptyTextView = null
     private int mPrimaryDarkColor, mBodyTextColor
 
 
@@ -34,7 +35,7 @@ class MovieCrewAdapter extends RecyclerView.Adapter<MovieCrewAdapter.MovieCrewAd
         LogDisplay.callLog(LOG_TAG,'MovieCrewAdapter empty constructor is called',LogDisplay.MOVIE_CREW_ADAPTER_LOG_FLAG)
     }
 
-    public MovieCrewAdapter(Context ctx, TextView emptyView){
+    public MovieCrewAdapter(final Context ctx, final TextView emptyView){
         LogDisplay.callLog(LOG_TAG,'MovieCrewAdapter non-empty constructor is called',LogDisplay.MOVIE_CREW_ADAPTER_LOG_FLAG)
         mContext = ctx
         mCrewGridEmptyTextView = emptyView
@@ -45,7 +46,7 @@ class MovieCrewAdapter extends RecyclerView.Adapter<MovieCrewAdapter.MovieCrewAd
         public final TextView movieCrewJobName
         public final TextView movieCrewName
 
-        public MovieCrewAdapterViewHolder(View view) {
+        public MovieCrewAdapterViewHolder(final View view) {
             super(view)
             movieCrewImageView = view.findViewById(R.id.single_movie_crew_grid_image) as ImageView
             movieCrewJobName = view.findViewById(R.id.single_movie_crew_grid_job_name) as TextView
@@ -54,7 +55,7 @@ class MovieCrewAdapter extends RecyclerView.Adapter<MovieCrewAdapter.MovieCrewAd
         }
 
         @Override
-        public void onClick(View v) {
+        public void onClick(final View v) {
             LogDisplay.callLog(LOG_TAG,"onClick is called.LayoutPos=${getLayoutPosition()}.AdapterPos=${getAdapterPosition()}",LogDisplay.MOVIE_CREW_ADAPTER_LOG_FLAG)
             mCursor.moveToPosition(getAdapterPosition())
             final int personId = mCursor.getInt(DetailMovieFragment.COL_MOVIE_CREW_PERSON_ID)
@@ -65,15 +66,16 @@ class MovieCrewAdapter extends RecyclerView.Adapter<MovieCrewAdapter.MovieCrewAd
         }
     }
     @Override
-    MovieCrewAdapterViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    MovieCrewAdapterViewHolder onCreateViewHolder(final ViewGroup parent, final int viewType) {
         LogDisplay.callLog(LOG_TAG,'onCreateViewHolder is called',LogDisplay.MOVIE_CREW_ADAPTER_LOG_FLAG)
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.single_movie_crew_grid,parent,false)
+        //noinspection GroovyVariableCanBeFinal
+        final View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.single_movie_crew_grid,parent,false)
         view.setFocusable(true)
         return new MovieCrewAdapterViewHolder(view)
     }
 
     @Override
-    void onBindViewHolder(MovieCrewAdapterViewHolder holder, int position) {
+    void onBindViewHolder(final MovieCrewAdapterViewHolder holder, final int position) {
         //Move the cursor to correct position
         mCursor.moveToPosition(position)
         LogDisplay.callLog(LOG_TAG,'onBindViewHolder is called',LogDisplay.MOVIE_CREW_ADAPTER_LOG_FLAG)
@@ -97,7 +99,7 @@ class MovieCrewAdapter extends RecyclerView.Adapter<MovieCrewAdapter.MovieCrewAd
         return mCursor.getCount()
     }
 
-    public void swapCursor(Cursor newCursor) {
+    public void swapCursor(final Cursor newCursor) {
         mCursor = newCursor
         if (getItemCount() == 0) {
             mCrewGridEmptyTextView.setVisibility(TextView.VISIBLE)
@@ -110,7 +112,7 @@ class MovieCrewAdapter extends RecyclerView.Adapter<MovieCrewAdapter.MovieCrewAd
     //Since the color is decided once the poster is downloaded by Picasso
     //but by then adapter might got loaded with data. Hence call notifyDataSetChanged
     //so that it get's recreated with correct color
-    public void changeColor(int primaryDarkColor, int bodyTextColor) {
+    public void changeColor(final int primaryDarkColor, final int bodyTextColor) {
         mPrimaryDarkColor = primaryDarkColor
         mBodyTextColor = bodyTextColor
         if (getItemCount() == 0) {

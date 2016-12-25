@@ -17,25 +17,27 @@ class AutoGridRecyclerView extends RecyclerView {
     private GridLayoutManager gridLayoutManager
     private int columnWidth = -1
 
-    public AutoGridRecyclerView(Context context) {
+    public AutoGridRecyclerView(final Context context) {
         super(context)
         init(context, null)
     }
 
-    public AutoGridRecyclerView(Context context, AttributeSet attrs) {
+    public AutoGridRecyclerView(final Context context, final AttributeSet attrs) {
         super(context, attrs)
         init(context, attrs)
     }
 
-    public AutoGridRecyclerView(Context context, AttributeSet attrs, int defStyle) {
+    public AutoGridRecyclerView(final Context context, final AttributeSet attrs, final int defStyle) {
         super(context, attrs, defStyle)
         init(context, attrs)
     }
 
-    private void init(Context context, AttributeSet attrs) {
+    private void init(final Context context, final AttributeSet attrs) {
         if (attrs != null) {
-            int[] attrsArray = [android.R.attr.columnWidth] as int[]
-            TypedArray array = context.obtainStyledAttributes(attrs, attrsArray)
+            //noinspection GroovyVariableCanBeFinal
+            final int[] attrsArray = [android.R.attr.columnWidth] as int[]
+            //noinspection GroovyVariableCanBeFinal
+            final TypedArray array = context.obtainStyledAttributes(attrs, attrsArray)
             columnWidth = array.getDimensionPixelSize(0, -1)
             array.recycle()
         }
@@ -46,12 +48,13 @@ class AutoGridRecyclerView extends RecyclerView {
     }
 
     @Override
-    protected void onMeasure(int widthSpec, int heightSpec) {
+    protected void onMeasure(final int widthSpec, final int heightSpec) {
         super.onMeasure(widthSpec, heightSpec)
         if (columnWidth > 0) {
             //This makes sure that it will return a span count of 1,
             //even if the column width is defined to be larger than the width of the RecyclerView
-            int spanCount = Math.max(1, getMeasuredWidth() / columnWidth)
+            //noinspection GroovyVariableCanBeFinal
+            final int spanCount = Math.max(1, getMeasuredWidth() / columnWidth)
             gridLayoutManager.setSpanCount(spanCount)
         }
     }

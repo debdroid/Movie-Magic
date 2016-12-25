@@ -15,25 +15,29 @@ import groovy.transform.CompileStatic
 
 @CompileStatic
 class LoadMoreMovies extends AsyncTask<String, Void, Void>{
+    @SuppressWarnings("GroovyConstantNamingConvention")
     private static final String LOG_TAG = LoadMoreMovies.class.getSimpleName()
     private final ContentResolver mContentResolver
     private final Context mContext
     private final int mCurrentPage
 
-    public LoadMoreMovies(Context ctx, int currPage) {
+    public LoadMoreMovies(final Context ctx, final int currPage) {
         mContext = ctx
         mCurrentPage = currPage
         mContentResolver = mContext.getContentResolver()
     }
 
     @Override
-    protected Void doInBackground(String... params) {
+    protected Void doInBackground(final String... params) {
         final String movieCategory = params[0]
-        int totalPage
-        List<ContentValues> movieList
+        //noinspection GroovyVariableCanBeFinal
+        final int totalPage
+        //noinspection GroovyVariableCanBeFinal
+        final List<ContentValues> movieList
         //TMDB api example
         //https://api.themoviedb.org/3/movie/popular?api_key=key&page=<page_number>
 
+        //noinspection GroovyVariableCanBeFinal,GroovyVariableCanBeFinal,GroovyVariableCanBeFinal
         try {
             final Uri.Builder uriBuilder = Uri.parse(GlobalStaticVariables.TMDB_MOVIE_BASE_URL).buildUpon()
 
@@ -46,7 +50,8 @@ class LoadMoreMovies extends AsyncTask<String, Void, Void>{
             final URL url = new URL(uri.toString())
             LogDisplay.callLog(LOG_TAG,"Movie url-> ${uri.toString()}",LogDisplay.LOAD_MORE_MOVIES_LOG_FLAG)
 
-            def jsonData = new JsonSlurper(type: JsonParserType.INDEX_OVERLAY).parse(url)
+            //noinspection GroovyVariableCanBeFinal
+            final def jsonData = new JsonSlurper(type: JsonParserType.INDEX_OVERLAY).parse(url)
             totalPage = JsonParse.getTotalPages(jsonData)
             //This is to ensure we have valid data page
             if (mCurrentPage <= totalPage) {
@@ -63,12 +68,12 @@ class LoadMoreMovies extends AsyncTask<String, Void, Void>{
                     }
                 }
             }
-        } catch (URISyntaxException e) {
+        } catch (final URISyntaxException e) {
             Log.e(LOG_TAG, "URISyntaxException: ${e.message}", e)
-        } catch (JsonException e) {
+        } catch (final JsonException e) {
             Log.e(LOG_TAG, "JsonException: ${e.message}", e)
-        } catch (JsonException e) {
-            Log.e(LOG_TAG, "JsonException: ${e.message}", e)
+        } catch (final IOException e) {
+            Log.e(LOG_TAG, "IOException: ${e.message}", e)
         }
         return null
     }

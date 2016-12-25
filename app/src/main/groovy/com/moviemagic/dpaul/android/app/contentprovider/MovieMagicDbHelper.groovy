@@ -12,22 +12,25 @@ import groovy.transform.CompileStatic
 
 @CompileStatic
 class MovieMagicDbHelper extends SQLiteOpenHelper {
+    @SuppressWarnings("GroovyConstantNamingConvention")
     private static final String LOG_TAG = MovieMagicDbHelper.class.getSimpleName()
     // Increment the database version if the schema gets changed
     //TODO:In my nexus4, somehow the database does not get deleted while uninstalling, so every change in db
     //TODO: is forcing me to upgrade the database.
     //TODO:Need to change before release
+    @SuppressWarnings("GroovyConstantNamingConvention")
     private static final int DATABASE_VERSION = 2
 
     //Define as public as used by TestMovieMagicDatabase.groovy
+    @SuppressWarnings("GroovyConstantNamingConvention")
     public static final String DATABASE_NAME = 'movie_magic.db'
 
-    public MovieMagicDbHelper(Context context) {
+    public MovieMagicDbHelper(final Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION)
     }
 
     @Override
-    public void onCreate(SQLiteDatabase sqLiteDatabase) {
+    public void onCreate(final SQLiteDatabase sqLiteDatabase) {
 
         //Create the SQL to create movie_basic_info table
         final  String SQL_CREATE_MOVIE_BASIC_INFO_TABLE = """
@@ -335,7 +338,7 @@ class MovieMagicDbHelper extends SQLiteOpenHelper {
     }
 
     @Override
-    public void onUpgrade(SQLiteDatabase sqLiteDatabase, int oldVersion, int newVersion) {
+    public void onUpgrade(final SQLiteDatabase sqLiteDatabase, final int oldVersion, final int newVersion) {
         // This database is cache for online data and also stores user data, so its upgrade policy is
         // not straight forward. So  simple drop and create won't work. Need to take care before upgrade.
         // As of now, upgrade strategy is not yet thought of!
@@ -368,7 +371,7 @@ class MovieMagicDbHelper extends SQLiteOpenHelper {
     }
 
     @Override
-    void onOpen(SQLiteDatabase db) {
+    void onOpen(final SQLiteDatabase db) {
         super.onOpen(db)
         //Sqlite disables foreign key constrain by default, so need to enable it
         db.execSQL("PRAGMA foreign_keys=ON")

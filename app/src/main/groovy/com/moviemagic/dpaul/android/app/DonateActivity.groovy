@@ -11,8 +11,10 @@ import com.moviemagic.dpaul.android.app.adapter.DonateLinkAdapter
 import com.moviemagic.dpaul.android.app.backgroundmodules.LogDisplay;
 import groovy.transform.CompileStatic
 
+@SuppressWarnings(["GroovyAssignabilityCheck", "GroovyAssignabilityCheck"])
 @CompileStatic
 class DonateActivity extends AppCompatActivity {
+    @SuppressWarnings("GroovyConstantNamingConvention")
     private static final String LOG_TAG = DonateActivity.class.getSimpleName()
 
     private RecyclerView mRecyclerView
@@ -20,7 +22,7 @@ class DonateActivity extends AppCompatActivity {
     private DonateLinkAdapter mDonateLinkAdapter
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
+    public void onCreate(final Bundle savedInstanceState) {
         LogDisplay.callLog(LOG_TAG, 'onCreate is called', LogDisplay.DONATE_ACTIVITY_LOG_FLAG)
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_donate)
@@ -43,10 +45,11 @@ class DonateActivity extends AppCompatActivity {
         final String[] donateHeader = getResources().getStringArray(R.array.donate_header)
         final String[] donateLinkAddress = getResources().getStringArray(R.array.donate_link_address)
         // specify an adapter (see also next example)
+        //noinspection GroovyVariableCanBeFinal
         mDonateLinkAdapter = new DonateLinkAdapter(this, donateHeader, donateLinkAddress,
                 new DonateLinkAdapter.DonateLinkAdapterOnClickHandler(){
                     @Override
-                    void onClick(int position) {
+                    void onClick(final int position) {
                         openWebPage(position, donateLinkAddress)
                     }
                 })
@@ -58,7 +61,7 @@ class DonateActivity extends AppCompatActivity {
      * @param position Position of the clicked item
      * @param linkAddress Arraylist of web addresses
      */
-    protected void openWebPage(int position, String[] linkAddress) {
+    protected void openWebPage(final int position, final String[] linkAddress) {
         final String url = linkAddress[position]
         final Intent intent = new Intent(Intent.ACTION_VIEW)
         intent.setData(Uri.parse(url))

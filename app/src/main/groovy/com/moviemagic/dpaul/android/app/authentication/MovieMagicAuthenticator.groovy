@@ -22,11 +22,12 @@ import groovy.transform.CompileStatic
 
 @CompileStatic
 class MovieMagicAuthenticator extends AbstractAccountAuthenticator {
+    @SuppressWarnings("GroovyConstantNamingConvention")
     private static final String LOG_TAG = MovieMagicAuthenticator.class.getSimpleName()
 
     private final Context mContext
 
-    public MovieMagicAuthenticator(Context context) {
+    public MovieMagicAuthenticator(final Context context) {
         super(context)
         LogDisplay.callLog(LOG_TAG,'MovieMagicAuthenticator constructor is called',LogDisplay.MOVIE_MAGIC_AUTHENTICATOR_LOG_FLAG)
         mContext = context
@@ -37,8 +38,9 @@ class MovieMagicAuthenticator extends AbstractAccountAuthenticator {
     // This method can be called by the app itself by calling AccountManager#addAccount()
     // (requires a special permission for that) or from the phone’s settings screen
     @Override
-    public Bundle addAccount(AccountAuthenticatorResponse response, String accountType, String authTokenType,
-                             String[] requiredFeatures, Bundle options) throws NetworkErrorException {
+    public Bundle addAccount(
+            final AccountAuthenticatorResponse response, final String accountType, final String authTokenType,
+            final String[] requiredFeatures, final Bundle options) throws NetworkErrorException {
         LogDisplay.callLog(LOG_TAG,'addAccount is called',LogDisplay.MOVIE_MAGIC_AUTHENTICATOR_LOG_FLAG)
         // Create the AuthenticatorActivity intent
         final Intent intent = new Intent(mContext, MovieMagicAuthenticatorActivity.class)
@@ -56,8 +58,9 @@ class MovieMagicAuthenticator extends AbstractAccountAuthenticator {
     // Gets a stored auth-token for the account type from a previous successful log-in on the device.
     // If the auth-token is not found then the user will be prompted for log-in
     @Override
-    public Bundle getAuthToken(AccountAuthenticatorResponse response, Account account, String authTokenType,
-                               Bundle options) throws NetworkErrorException {
+    public Bundle getAuthToken(
+            final AccountAuthenticatorResponse response, final Account account, final String authTokenType,
+            final Bundle options) throws NetworkErrorException {
         LogDisplay.callLog(LOG_TAG,'getAuthToken is called',LogDisplay.MOVIE_MAGIC_AUTHENTICATOR_LOG_FLAG)
         // If the caller requested an authToken type which  is not supported, then return error
         if (!authTokenType.equals(GlobalStaticVariables.AUTHTOKEN_TYPE_READ_ONLY) &&
@@ -71,7 +74,7 @@ class MovieMagicAuthenticator extends AbstractAccountAuthenticator {
         // Gets an auth token from the AccountManager's cache. If no auth token is cached for this account,
         // null will be returned. A new auth token will not be generated, and the server will not be contacted.
         // Intended for use by the authenticator, not directly by applications.
-        final String authToken = accountManager.peekAuthToken(account, authTokenType)
+        String authToken = accountManager.peekAuthToken(account, authTokenType)
         LogDisplay.callLog(LOG_TAG,"Returned authToken -> $authToken",LogDisplay.MOVIE_MAGIC_AUTHENTICATOR_LOG_FLAG)
 
         // Lets give another try to authenticate the user
@@ -79,11 +82,12 @@ class MovieMagicAuthenticator extends AbstractAccountAuthenticator {
             final String password = accountManager.getPassword(account)
             // If password is available then give it another try
             if (password != null) {
+                //noinspection GroovyVariableCanBeFinal
                 try {
                     LogDisplay.callLog(LOG_TAG,'Re-attempt to authenticate user',LogDisplay.MOVIE_MAGIC_AUTHENTICATOR_LOG_FLAG)
                     final Bundle bundle = GlobalStaticVariables.sTmdbAuthenticateInterface.tmdbUserSignIn(account.name, password, authTokenType)
                     authToken = bundle.getString(GlobalStaticVariables.TMDB_AUTH_TOKEN)
-                } catch (Exception e) {
+                } catch (final Exception e) {
                     LogDisplay.callLog(LOG_TAG,'Re-attempt to authenticate user failed',LogDisplay.MOVIE_MAGIC_AUTHENTICATOR_LOG_FLAG)
                     Log.e(LOG_TAG, "Error: ${e.message}", e)
                 }
@@ -109,7 +113,7 @@ class MovieMagicAuthenticator extends AbstractAccountAuthenticator {
         intent.putExtra(AccountManager.KEY_ACCOUNT_NAME, account.name)
         intent.putExtra(MovieMagicAuthenticatorActivity.IS_NEW_ACCOUNT, false)
 
-        final Bundle bundle = new Bundle()
+        Bundle bundle = new Bundle()
         // Send the intent with key 'KEY_INTENT' so that AuthenticatorActivity is launched
         bundle.putParcelable(AccountManager.KEY_INTENT, intent)
         return bundle
@@ -117,7 +121,7 @@ class MovieMagicAuthenticator extends AbstractAccountAuthenticator {
 
     // Ask the authenticator for a localized label for the given authTokenType.
     @Override
-    public String getAuthTokenLabel(String authTokenType) {
+    public String getAuthTokenLabel(final String authTokenType) {
         LogDisplay.callLog(LOG_TAG,'getAuthTokenLabel is called',LogDisplay.MOVIE_MAGIC_AUTHENTICATOR_LOG_FLAG)
         if (GlobalStaticVariables.AUTHTOKEN_TYPE_FULL_ACCESS.equals(authTokenType))
             return GlobalStaticVariables.AUTHTOKEN_TYPE_FULL_ACCESS_LABEL
@@ -128,8 +132,8 @@ class MovieMagicAuthenticator extends AbstractAccountAuthenticator {
     }
 
     @Override
-    public Bundle hasFeatures(AccountAuthenticatorResponse response, Account account,
-                              String[] features) throws NetworkErrorException {
+    public Bundle hasFeatures(final AccountAuthenticatorResponse response, final Account account,
+                              final String[] features) throws NetworkErrorException {
         LogDisplay.callLog(LOG_TAG,'hasFeatures is called',LogDisplay.MOVIE_MAGIC_AUTHENTICATOR_LOG_FLAG)
         final Bundle result = new Bundle()
         result.putBoolean(AccountManager.KEY_BOOLEAN_RESULT, false)
@@ -140,23 +144,24 @@ class MovieMagicAuthenticator extends AbstractAccountAuthenticator {
     // In order to indicate success the activity should call response.setResult() with a non-null Bundle.
     // - Not implemented
     @Override
-    public Bundle editProperties(AccountAuthenticatorResponse response, String accountType) {
+    public Bundle editProperties(final AccountAuthenticatorResponse response, final String accountType) {
         LogDisplay.callLog(LOG_TAG,'editProperties is called',LogDisplay.MOVIE_MAGIC_AUTHENTICATOR_LOG_FLAG)
         return null
     }
 
     // Checks that the user knows the credentials of an account. - Not implemented
     @Override
-    public Bundle confirmCredentials(AccountAuthenticatorResponse response, Account account,
-                                     Bundle options) throws NetworkErrorException {
+    public Bundle confirmCredentials(final AccountAuthenticatorResponse response, final Account account,
+                                     final Bundle options) throws NetworkErrorException {
         LogDisplay.callLog(LOG_TAG,'confirmCredentials is called',LogDisplay.MOVIE_MAGIC_AUTHENTICATOR_LOG_FLAG)
         return null
     }
 
     //Update the locally stored credentials for an account. - Not implemented
     @Override
-    public Bundle updateCredentials(AccountAuthenticatorResponse response, Account account, String authTokenType,
-                                    Bundle options) throws NetworkErrorException {
+    public Bundle updateCredentials(
+            final AccountAuthenticatorResponse response, final Account account, final String authTokenType,
+            final Bundle options) throws NetworkErrorException {
         LogDisplay.callLog(LOG_TAG,'updateCredentials is called',LogDisplay.MOVIE_MAGIC_AUTHENTICATOR_LOG_FLAG)
         return null
     }

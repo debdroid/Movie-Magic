@@ -13,6 +13,7 @@ import groovy.transform.CompileStatic
 
 @CompileStatic
 class Utility {
+    @SuppressWarnings("GroovyConstantNamingConvention")
     private static final String LOG_TAG = JsonParse.class.getSimpleName()
 
     /**
@@ -72,7 +73,7 @@ class Utility {
      * @param timeInMillis Date represented in milliseconds
      * @return Formatted date value
      */
-    static String convertMilliSecsToOrigReleaseDate(long timeInMillis) {
+    static String convertMilliSecsToOrigReleaseDate(final long timeInMillis) {
         final SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd")
         final String dateString = simpleDateFormat.format(new Date(timeInMillis))
         return dateString
@@ -83,11 +84,12 @@ class Utility {
      * @param date Date to be formatted
      * @return Formatted date value
      */
-    static String formatFriendlyDate(String date) {
+    static String formatFriendlyDate(final String date) {
         final SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd MMM yyyy")
         if(date.size() == 10) {
             if (date.getAt(4) == '-' && date.getAt(7) == '-') {
-                String dateString = simpleDateFormat.format(new SimpleDateFormat("yyyy-MM-dd").parse(date))
+                //noinspection GroovyVariableCanBeFinal
+                final String dateString = simpleDateFormat.format(new SimpleDateFormat("yyyy-MM-dd").parse(date))
                 return dateString
             } else
                 return date
@@ -101,7 +103,7 @@ class Utility {
      * @param date Release date of the movie
      * @return Formatted day name
      */
-    static String getDayNameForNotification(Context ctx, String date) {
+    static String getDayNameForNotification(final Context ctx, final String date) {
         final String[] dayOfWeek = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday']
         final GregorianCalendar currCalendar = new GregorianCalendar()
         currCalendar.setTime(new SimpleDateFormat("yyyy-MM-dd").parse('2015-12-31'))
@@ -109,7 +111,8 @@ class Utility {
         final GregorianCalendar releaseCalendar = new GregorianCalendar()
         releaseCalendar.setTime(new SimpleDateFormat("yyyy-MM-dd").parse(date))
         final int releaseDayOfYear = releaseCalendar.get(Calendar.DAY_OF_YEAR)
-        String dayName
+        //noinspection GroovyVariableCanBeFinal
+        final String dayName = null
         if(currentDayOfYear == releaseDayOfYear) {
             dayName = ctx.getString(R.string.notification_day_name_today)
         } else if (currentDayOfYear < 365) {
@@ -140,9 +143,11 @@ class Utility {
      * @param runTime Minute value
      * @return Converted hour and minute value
      */
-    public static String formatRunTime(Context ctx, int runTime) {
-        int hourVal
-        def minVal
+    public static String formatRunTime(final Context ctx, final int runTime) {
+        //noinspection GroovyVariableCanBeFinal
+        final int hourVal
+        //noinspection GroovyVariableCanBeFinal
+        final def minVal
         hourVal = runTime / 60 as Integer
         minVal = runTime % 60
         return String.format(ctx.getString(R.string.movie_run_time),hourVal,minVal)
@@ -153,9 +158,11 @@ class Utility {
      * @param val Dollar value to be formatted
      * @return Formattd dollar value in us currency
      */
-    public static String formatCurrencyInDollar(int val) {
-        NumberFormat formatter = NumberFormat.getCurrencyInstance(Locale.US)
-        def formattedValue = formatter.format(val)
+    public static String formatCurrencyInDollar(final int val) {
+        //noinspection GroovyVariableCanBeFinal
+        final NumberFormat formatter = NumberFormat.getCurrencyInstance(Locale.US)
+        //noinspection GroovyVariableCanBeFinal
+        final def formattedValue = formatter.format(val)
         return formattedValue
     }
 
@@ -164,9 +171,11 @@ class Utility {
      * @param timeInMilliSeconds Date represented in milliseconds
      * @return Formatted friendly display date
      */
-    public static String formatMilliSecondsToDate(long timeInMilliSeconds) {
-        SimpleDateFormat formatter = new SimpleDateFormat("dd MMM yyyy")
-        String dateString = formatter.format(new Date(timeInMilliSeconds))
+    public static String formatMilliSecondsToDate(final long timeInMilliSeconds) {
+        //noinspection GroovyVariableCanBeFinal
+        final SimpleDateFormat formatter = new SimpleDateFormat("dd MMM yyyy")
+        //noinspection GroovyVariableCanBeFinal
+        final String dateString = formatter.format(new Date(timeInMilliSeconds))
         return dateString
     }
 
@@ -175,7 +184,7 @@ class Utility {
      * @param context The application Context
      * @return True if the theme is set as 'Dynamic Theme' otherwise False
      */
-    public static boolean isDynamicTheme(Context context) {
+    public static boolean isDynamicTheme(final Context context) {
         final SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context)
         final String themeType = sharedPreferences.getString(context.getString(R.string.pref_theme_key),
                                     context.getString(R.string.pref_theme_default_value))
@@ -194,7 +203,7 @@ class Utility {
      * @param context The application Context
      * @return Returns true if all set to download data otherwise returns False
      */
-    public static boolean isReadyToDownload(Context context) {
+    public static boolean isReadyToDownload(final Context context) {
         final boolean isUserOnline = isOnline(context)
         final boolean isUserSelectedOnlyOnWifi = isOnlyWifi(context)
 
@@ -214,7 +223,7 @@ class Utility {
      * @param context The application Context
      * @return Returns the Reduce Data flag
      */
-    public static boolean isReducedDataOn(Context context) {
+    public static boolean isReducedDataOn(final Context context) {
         final SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context)
         final boolean reduceDataFlag = sharedPreferences.getBoolean(context.getString(R.string.pref_reduce_data_use_key),false)
         return reduceDataFlag
@@ -225,7 +234,7 @@ class Utility {
      * @param context The application Context
      * @return Returns the WiFiFlag
      */
-    public static boolean isOnlyWifi(Context context) {
+    public static boolean isOnlyWifi(final Context context) {
         final SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context)
         final boolean wifiFlag = sharedPreferences.getBoolean(context.getString(R.string.pref_wifi_download_key),false)
         return wifiFlag
@@ -237,7 +246,7 @@ class Utility {
      * @param ctx Application Context
      * @return True if WiFi or Mobile network is available otherwise returns False
      */
-    public static boolean isOnline(Context ctx) {
+    public static boolean isOnline(final Context ctx) {
         final ConnectivityManager connMgr = ctx.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
         final NetworkInfo activeInfo = connMgr.getActiveNetworkInfo()
         if (activeInfo != null && activeInfo.isConnected()) {
@@ -278,7 +287,7 @@ class Utility {
      * @param locale Country
      * @return Logo to be displayed as determined by mpaa indicator and locale
      */
-    public static int getIconResourceForMpaaRating(String mpaa, String locale) {
+    public static int getIconResourceForMpaaRating(final String mpaa, final String locale) {
         //Remove any white spaces from mpaa and locale string
         if(mpaa) {
             mpaa.replaceAll("\\s", "")

@@ -9,10 +9,11 @@ import groovy.transform.CompileStatic
 
 @CompileStatic
 class DetailMovieActivity extends AppCompatActivity implements DetailMovieFragment.CallbackForBackdropImageClick {
+    @SuppressWarnings("GroovyConstantNamingConvention")
     private static final String LOG_TAG = DetailMovieActivity.class.getSimpleName()
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_detail_movie)
 
@@ -47,7 +48,7 @@ class DetailMovieActivity extends AppCompatActivity implements DetailMovieFragme
     }
 
     @Override
-    void onBackdropImageClicked(String title, int position, ArrayList<String> backdropImageFilePath) {
+    void onBackdropImageClicked(final String title, final int position, final ArrayList<String> backdropImageFilePath) {
         final Bundle bundle = new Bundle()
         bundle.putString(GlobalStaticVariables.IMAGE_VIEWER_TITLE,title)
         bundle.putInt(GlobalStaticVariables.IMAGE_VIEWER_ADAPTER_POSITION, position)

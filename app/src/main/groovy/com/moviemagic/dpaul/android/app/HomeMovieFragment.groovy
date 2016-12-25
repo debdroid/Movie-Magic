@@ -29,6 +29,7 @@ import groovy.transform.CompileStatic
 
 @CompileStatic
 class HomeMovieFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
+    @SuppressWarnings("GroovyConstantNamingConvention")
     private static final String LOG_TAG = HomeMovieFragment.class.getSimpleName()
 
     private RecyclerView mInCinemaRecyclerView
@@ -53,13 +54,19 @@ class HomeMovieFragment extends Fragment implements LoaderManager.LoaderCallback
     private View mRecommendationDivider
     private FrameLayout mYouTubeFragmentContainer
 
+    @SuppressWarnings("GroovyConstantNamingConvention")
     private static final int HOME_MOVIE_FRAGMENT_VIEW_PAGER_LOADER_ID = 0
+    @SuppressWarnings("GroovyConstantNamingConvention")
     private static final int HOME_MOVIE_FRAGMENT_IN_CINEMA_LOADER_ID = 1
+    @SuppressWarnings("GroovyConstantNamingConvention")
     private static final int HOME_MOVIE_FRAGMENT_COMING_SOON_LOADER_ID = 2
+    @SuppressWarnings("GroovyConstantNamingConvention")
     private static final int HOME_MOVIE_FRAGMENT_RECENTLY_ADDED_USER_LIST_LOADER_ID = 3
+    @SuppressWarnings("GroovyConstantNamingConvention")
     private static final int HOME_MOVIE_FRAGMENT_RECOMMENDATION_LOADER_ID = 4
 
     //Columns to fetch from movie_video table
+    @SuppressWarnings("GroovyConstantNamingConvention")
     private static final String[] MOVIE_VIDEO_COLUMNS = [MovieMagicContract.MovieVideo._ID,
                                                          MovieMagicContract.MovieVideo.COLUMN_VIDEO_ORIG_MOVIE_ID,
                                                          MovieMagicContract.MovieVideo.COLUMN_VIDEO_KEY,
@@ -67,14 +74,21 @@ class HomeMovieFragment extends Fragment implements LoaderManager.LoaderCallback
                                                          MovieMagicContract.MovieVideo.COLUMN_VIDEO_SITE,
                                                          MovieMagicContract.MovieVideo.COLUMN_VIDEO_TYPE]
     //These are indices of the above columns, if projection array changes then this needs to be changed
+    @SuppressWarnings("GroovyConstantNamingConvention")
     final static int COL_MOVIE_VIDEO_ID = 0
+    @SuppressWarnings("GroovyConstantNamingConvention")
     final static int COL_MOVIE_VIDEO_ORIG_MOVIE_ID = 1
+    @SuppressWarnings("GroovyConstantNamingConvention")
     final static int COL_MOVIE_VIDEO_KEY = 2
+    @SuppressWarnings("GroovyConstantNamingConvention")
     final static int COL_MOVIE_VIDEO_NAME = 3
+    @SuppressWarnings("GroovyConstantNamingConvention")
     final static int COL_MOVIE_VIDEO_SITE = 4
+    @SuppressWarnings("GroovyConstantNamingConvention")
     final static int COL_MOVIE_VIDEO_TYPE = 5
 
     //Columns to fetch from movie_basic_info table
+    @SuppressWarnings("GroovyConstantNamingConvention")
     private static final String[] MOVIE_BASIC_INFO_COLUMNS = [MovieMagicContract.MovieBasicInfo._ID,
                                                               MovieMagicContract.MovieBasicInfo.COLUMN_MOVIE_ID,
                                                               MovieMagicContract.MovieBasicInfo.COLUMN_BACKDROP_PATH,
@@ -89,17 +103,29 @@ class HomeMovieFragment extends Fragment implements LoaderManager.LoaderCallback
                                                               MovieMagicContract.MovieBasicInfo.COLUMN_DETAIL_DATA_PRESENT_FLAG]
 
     //These are indices of the above columns, if projection array changes then this needs to be changed
+    @SuppressWarnings("GroovyConstantNamingConvention")
     final static int COL_MOVIE_BASIC_ID = 0
+    @SuppressWarnings("GroovyConstantNamingConvention")
     final static int COL_MOVIE_BASIC_MOVIE_ID = 1
+    @SuppressWarnings("GroovyConstantNamingConvention")
     final static int COL_MOVIE_BASIC_BACKDROP_PATH = 2
+    @SuppressWarnings("GroovyConstantNamingConvention")
     final static int COL_MOVIE_BASIC_TITLE = 3
+    @SuppressWarnings("GroovyConstantNamingConvention")
     final static int COL_MOVIE_BASIC_RELEASE_DATE = 4
+    @SuppressWarnings("GroovyConstantNamingConvention")
     final static int COL_MOVIE_BASIC_POSTER_PATH = 5
+    @SuppressWarnings("GroovyConstantNamingConvention")
     final static int COL_MOVIE_BASIC_MOVIE_CATEGORY = 6
+    @SuppressWarnings("GroovyConstantNamingConvention")
     final static int COL_MOVIE_BASIC_MOVIE_LIST_TYPE = 7
+    @SuppressWarnings("GroovyConstantNamingConvention")
     final static int COL_MOVIE_BASIC_GENRE = 8
+    @SuppressWarnings("GroovyConstantNamingConvention")
     final static int COL_MOVIE_BASIC_RUN_TIME = 9
+    @SuppressWarnings("GroovyConstantNamingConvention")
     final static int COL_MOVIE_BASIC_RELEASE_STATUS = 10
+    @SuppressWarnings("GroovyConstantNamingConvention")
     final static int COL_MOVIE_BASIC_DETAIL_DATA_PRESENT_FLAG = 11
 
     //An empty constructor is needed so that lifecycle is properly handled
@@ -108,7 +134,7 @@ class HomeMovieFragment extends Fragment implements LoaderManager.LoaderCallback
     }
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
+    public void onCreate(final Bundle savedInstanceState) {
         LogDisplay.callLog(LOG_TAG, 'onCreate is called', LogDisplay.HOME_MOVIE_FRAGMENT_LOG_FLAG)
         super.onCreate(savedInstanceState)
         //Following line needed to let android know that Fragment has options menu
@@ -118,9 +144,10 @@ class HomeMovieFragment extends Fragment implements LoaderManager.LoaderCallback
     }
 
     @Override
-    View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    View onCreateView(final LayoutInflater inflater, final ViewGroup container, final Bundle savedInstanceState) {
         LogDisplay.callLog(LOG_TAG,'onCreateView is called',LogDisplay.HOME_MOVIE_FRAGMENT_LOG_FLAG)
-        View mRootView = inflater.inflate(R.layout.fragment_home_movie,container,false)
+        //noinspection GroovyVariableCanBeFinal
+        final View mRootView = inflater.inflate(R.layout.fragment_home_movie,container,false)
         mYouTubeFragmentEmptyTextView = mRootView.findViewById(R.id.home_youtube_fragment_empty_msg) as TextView
         mInCinemaRecyclerView = mRootView.findViewById(R.id.home_movie_in_cinema_recycler_view) as RecyclerView
         mInCinemaRecyclerViewEmptyTextView = mRootView.findViewById(R.id.home_movie_in_cinema_recycler_view_empty_msg_text_view) as TextView
@@ -143,10 +170,11 @@ class HomeMovieFragment extends Fragment implements LoaderManager.LoaderCallback
         //Set this to false for smooth scrolling of recyclerview
         mInCinemaRecyclerView.setNestedScrollingEnabled(false)
         mInCinemaRecyclerView.setFocusable(false)
+        //noinspection GroovyVariableCanBeFinal,GroovyVariableCanBeFinal,GroovyVariableCanBeFinal
         mInCinemaAdapter = new HomeMovieAdapter(getActivity(), mInCinemaRecyclerViewEmptyTextView,
                 new HomeMovieAdapter.HomeMovieAdapterOnClickHandler(){
                     @Override
-                    void onClick(int movieId, String movieCategory, HomeMovieAdapter.HomeMovieAdapterViewHolder viewHolder) {
+                    void onClick(final int movieId, final String movieCategory, final HomeMovieAdapter.HomeMovieAdapterViewHolder viewHolder) {
                         mCallbackForHomeMovieClick.onHomeMovieItemSelected(movieId,movieCategory,viewHolder)
                     }
                 })
@@ -161,10 +189,11 @@ class HomeMovieFragment extends Fragment implements LoaderManager.LoaderCallback
         mComingSoonRecyclerView.setNestedScrollingEnabled(false)
         //Set this to false so that activity starts the page from the beginning
         mComingSoonRecyclerView.setFocusable(false)
+        //noinspection GroovyVariableCanBeFinal,GroovyVariableCanBeFinal,GroovyVariableCanBeFinal
         mComingSoonAdapter = new HomeMovieAdapter(getActivity(), mComingSoonRecyclerViewEmptyTextView,
                 new HomeMovieAdapter.HomeMovieAdapterOnClickHandler(){
                     @Override
-                    void onClick(int movieId, String movieCategory, HomeMovieAdapter.HomeMovieAdapterViewHolder viewHolder) {
+                    void onClick(final int movieId, final String movieCategory, final HomeMovieAdapter.HomeMovieAdapterViewHolder viewHolder) {
                         mCallbackForHomeMovieClick.onHomeMovieItemSelected(movieId,movieCategory,viewHolder)
                     }
                 })
@@ -179,10 +208,11 @@ class HomeMovieFragment extends Fragment implements LoaderManager.LoaderCallback
         mRecentlyAddedUserListRecyclerView.setNestedScrollingEnabled(false)
         //Set this to false so that activity starts the page from the beginning
         mRecentlyAddedUserListRecyclerView.setFocusable(false)
+        //noinspection GroovyVariableCanBeFinal,GroovyVariableCanBeFinal,GroovyVariableCanBeFinal
         mRecentlyAddedUserListAdapter = new HomeMovieAdapter(getActivity(), mRecentlyAddedUserListRecyclerViewEmptyTextView,
                 new HomeMovieAdapter.HomeMovieAdapterOnClickHandler(){
                     @Override
-                    void onClick(int movieId, String movieCategory, HomeMovieAdapter.HomeMovieAdapterViewHolder viewHolder) {
+                    void onClick(final int movieId, final String movieCategory, final HomeMovieAdapter.HomeMovieAdapterViewHolder viewHolder) {
                         mCallbackForHomeMovieClick.onHomeMovieItemSelected(movieId,movieCategory,viewHolder)
                     }
                 })
@@ -199,10 +229,11 @@ class HomeMovieFragment extends Fragment implements LoaderManager.LoaderCallback
         mRecommendationRecyclerView.setNestedScrollingEnabled(false)
         //Set this to false so that activity starts the page from the beginning
         mRecommendationRecyclerView.setFocusable(false)
+        //noinspection GroovyVariableCanBeFinal,GroovyVariableCanBeFinal,GroovyVariableCanBeFinal
         mRecommendationAdapter = new HomeMovieAdapter(getActivity(), mRecommendationRecyclerViewEmptyTextView,
                 new HomeMovieAdapter.HomeMovieAdapterOnClickHandler(){
                     @Override
-                    void onClick(int movieId, String movieCategory, HomeMovieAdapter.HomeMovieAdapterViewHolder viewHolder) {
+                    void onClick(final int movieId, final String movieCategory, final HomeMovieAdapter.HomeMovieAdapterViewHolder viewHolder) {
                         mCallbackForHomeMovieClick.onHomeMovieItemSelected(movieId,movieCategory,viewHolder)
                     }
                 })
@@ -212,9 +243,10 @@ class HomeMovieFragment extends Fragment implements LoaderManager.LoaderCallback
         /**
          * Show all In Cinemas Button click handling
          */
+        //noinspection GroovyVariableCanBeFinal
         mShowAllInCinemaButton.setOnClickListener(new View.OnClickListener() {
             @Override
-            void onClick(View v) {
+            void onClick(final View v) {
                 mCallbackForShowAllButtonClick.onShowAllButtonClicked(GlobalStaticVariables.MOVIE_CATEGORY_NOW_PLAYING)
             }
         })
@@ -223,9 +255,10 @@ class HomeMovieFragment extends Fragment implements LoaderManager.LoaderCallback
         /**
          * Show all Coming Soon Button click handling
          */
+        //noinspection GroovyVariableCanBeFinal
         mShowAllComingSoonButton.setOnClickListener(new View.OnClickListener() {
             @Override
-            void onClick(View v) {
+            void onClick(final View v) {
                 mCallbackForShowAllButtonClick.onShowAllButtonClicked(GlobalStaticVariables.MOVIE_CATEGORY_UPCOMING)
             }
         })
@@ -234,7 +267,7 @@ class HomeMovieFragment extends Fragment implements LoaderManager.LoaderCallback
     }
 
     @Override
-    void onActivityCreated(Bundle savedInstanceState) {
+    void onActivityCreated(final Bundle savedInstanceState) {
         LogDisplay.callLog(LOG_TAG, 'onActivityCreated is called', LogDisplay.HOME_MOVIE_FRAGMENT_LOG_FLAG)
         super.onActivityCreated(savedInstanceState)
         mMovieVideoArg = [GlobalStaticVariables.MOVIE_MAGIC_FLAG_TRUE, GlobalStaticVariables.MOVIE_VIDEO_SITE_YOUTUBE, GlobalStaticVariables.MOVIE_VIDEO_SITE_TYPE] as String[]
@@ -257,7 +290,7 @@ class HomeMovieFragment extends Fragment implements LoaderManager.LoaderCallback
     }
 
     @Override
-    Loader<Cursor> onCreateLoader(int id, Bundle args) {
+    Loader<Cursor> onCreateLoader(final int id, final Bundle args) {
         LogDisplay.callLog(LOG_TAG, "onCreateLoader.loader id->$id", LogDisplay.HOME_MOVIE_FRAGMENT_LOG_FLAG)
         switch (id) {
             case HOME_MOVIE_FRAGMENT_VIEW_PAGER_LOADER_ID:
@@ -319,12 +352,17 @@ class HomeMovieFragment extends Fragment implements LoaderManager.LoaderCallback
                         [GlobalStaticVariables.MOVIE_LIST_TYPE_TMDB_RECOMMENDATIONS, '', '', ''] as String[],                    //Selection Arg
                         /** Recommendations has no grid page, so showing 10 instead of standard 6 **/
                         "$MovieMagicContract.MovieBasicInfo.COLUMN_CREATE_TIMESTAMP desc limit 10") //Sorted on release date
+            default:
+                LogDisplay.callLog(LOG_TAG, "Unknown loader id->$id", LogDisplay.HOME_MOVIE_FRAGMENT_LOG_FLAG)
+                return null
         }
+        return null
     }
 
     @Override
-    void onLoadFinished(Loader<Cursor> loader, Cursor data) {
-        int loaderId = loader.getId()
+    void onLoadFinished(final Loader<Cursor> loader, final Cursor data) {
+        //noinspection GroovyVariableCanBeFinal
+        final int loaderId = loader.getId()
         LogDisplay.callLog(LOG_TAG, "onLoadFinished.loader id->$loaderId", LogDisplay.HOME_MOVIE_FRAGMENT_LOG_FLAG)
         switch (loaderId) {
             case HOME_MOVIE_FRAGMENT_VIEW_PAGER_LOADER_ID:
@@ -348,7 +386,7 @@ class HomeMovieFragment extends Fragment implements LoaderManager.LoaderCallback
     }
 
     @Override
-    void onLoaderReset(Loader<Cursor> loader) {
+    void onLoaderReset(final Loader<Cursor> loader) {
         LogDisplay.callLog(LOG_TAG, 'onLoaderReset is called', LogDisplay.HOME_MOVIE_FRAGMENT_LOG_FLAG)
         //Reset the adapters
         mInCinemaAdapter.swapCursor(null)
@@ -361,11 +399,13 @@ class HomeMovieFragment extends Fragment implements LoaderManager.LoaderCallback
      * This method handles the video (movie trailer) cursor
      * @param data Cursor
      */
-    void handleTrailerOnLoadFinished(Cursor data) {
+    void handleTrailerOnLoadFinished(final Cursor data) {
         LogDisplay.callLog(LOG_TAG, "handleTrailerOnLoadFinished.Cursor rec count -> ${data.getCount()}", LogDisplay.HOME_MOVIE_FRAGMENT_LOG_FLAG)
-        List<String> youtubeVideoKey = new ArrayList<>()
+        //noinspection GroovyVariableCanBeFinal
+        final List<String> youtubeVideoKey = new ArrayList<>()
         if (data.moveToFirst()) {
-            for (i in 0..(data.count - 1)) {
+            //noinspection GroovyVariableCanBeFinal
+            for (final i in 0..(data.count - 1)) {
                 youtubeVideoKey.add(data.getString(COL_MOVIE_VIDEO_KEY))
                 data.moveToNext()
             }
@@ -395,7 +435,7 @@ class HomeMovieFragment extends Fragment implements LoaderManager.LoaderCallback
      * This method handles the in cinema (i.e. Now Playing) movie cursor
      * @param data Cursor
      */
-    void handleInCinemaOnLoadFinished(Cursor data) {
+    void handleInCinemaOnLoadFinished(final Cursor data) {
         LogDisplay.callLog(LOG_TAG, "handleInCinemaOnLoadFinished.Cursor rec count -> ${data.getCount()}", LogDisplay.HOME_MOVIE_FRAGMENT_LOG_FLAG)
         mInCinemaAdapter.swapCursor(data)
     }
@@ -404,7 +444,7 @@ class HomeMovieFragment extends Fragment implements LoaderManager.LoaderCallback
      * This method handles the coming soon (i.e. Upcoming) movie cursor
      * @param data Cursor
      */
-    void handleComingSoonOnLoadFinished(Cursor data) {
+    void handleComingSoonOnLoadFinished(final Cursor data) {
         LogDisplay.callLog(LOG_TAG, "handleComingSoonOnLoadFinished.Cursor rec count -> ${data.getCount()}", LogDisplay.HOME_MOVIE_FRAGMENT_LOG_FLAG)
         mComingSoonAdapter.swapCursor(data)
     }
@@ -413,7 +453,7 @@ class HomeMovieFragment extends Fragment implements LoaderManager.LoaderCallback
      * This method handles the recently added user list (i.e. Watched or Wishlist or Favourite or Collection) movie cursor
      * @param data Cursor
      */
-    void recentlyAddedUserListOnLoadFinished(Cursor data) {
+    void recentlyAddedUserListOnLoadFinished(final Cursor data) {
         LogDisplay.callLog(LOG_TAG, "recentlyAddedUserListOnLoadFinished.Cursor rec count -> ${data.getCount()}", LogDisplay.HOME_MOVIE_FRAGMENT_LOG_FLAG)
         mRecentlyAddedUserListAdapter.swapCursor(data)
     }
@@ -422,7 +462,7 @@ class HomeMovieFragment extends Fragment implements LoaderManager.LoaderCallback
      * This method handles the recommendation (i.e. recommended movies loaded when user views movie detail) movie cursor
      * @param data Cursor
      */
-    void recommendationOnLoadFinished(Cursor data) {
+    void recommendationOnLoadFinished(final Cursor data) {
         LogDisplay.callLog(LOG_TAG, "recommendationOnLoadFinished.Cursor rec count -> ${data.getCount()}", LogDisplay.HOME_MOVIE_FRAGMENT_LOG_FLAG)
         // Read the user's preference and show / hide recommended movies accordingly
         final SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getActivity())
@@ -439,31 +479,33 @@ class HomeMovieFragment extends Fragment implements LoaderManager.LoaderCallback
     }
 
     @Override
-    void onSaveInstanceState(Bundle outState) {
+    void onSaveInstanceState(final Bundle outState) {
         LogDisplay.callLog(LOG_TAG,'onSaveInstanceState is called',LogDisplay.HOME_MOVIE_FRAGMENT_LOG_FLAG)
         super.onSaveInstanceState(outState)
     }
 
 
     @Override
-    public void onAttach(Context context) {
+    public void onAttach(final Context context) {
         LogDisplay.callLog(LOG_TAG,'onAttach is called',LogDisplay.HOME_MOVIE_FRAGMENT_LOG_FLAG)
         super.onAttach(context)
         // This makes sure that the container activity has implemented
         // the callback interface. If not, it throws an exception
+        //noinspection GroovyVariableCanBeFinal
         try {
             if(context instanceof Activity) {
                 mCallbackForHomeMovieClick = (CallbackForHomeMovieClick) context
             }
-        } catch (ClassCastException e) {
+        } catch (final ClassCastException e) {
             throw new ClassCastException(getActivity().toString()
                     + " must implement CallbackForHomeMovieClick interface")
         }
+        //noinspection GroovyVariableCanBeFinal
         try {
             if(context instanceof Activity) {
                 mCallbackForShowAllButtonClick = (CallbackForShowAllButtonClick) context
             }
-        } catch (ClassCastException e) {
+        } catch (final ClassCastException e) {
             throw new ClassCastException(getActivity().toString()
                     + " must implement CallbackForShowAllButtonClick interface")
         }

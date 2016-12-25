@@ -16,9 +16,10 @@ import groovy.transform.CompileStatic
 
 @CompileStatic
 class DetailFragmentPagerAdapter extends PagerAdapter {
+    @SuppressWarnings("GroovyConstantNamingConvention")
     private static final String LOG_TAG = DetailFragmentPagerAdapter.class.getSimpleName()
-    private final Context mContext
-    private final String[] mBackdropimageFilePaths
+    private final Context mContext = null
+    private final String[] mBackdropimageFilePaths = null
     private DetailFragmentPagerAdapterOnClickHandler mDetailFragmentPagerAdapterOnClickHandler
     private LayoutInflater mLayoutInflater
 
@@ -26,8 +27,8 @@ class DetailFragmentPagerAdapter extends PagerAdapter {
         LogDisplay.callLog(LOG_TAG,'DetailFragmentPagerAdapter empty constructor is called',LogDisplay.DETAIL_FRAGMENT_PAGER_ADAPTER_LOG_FLAG)
     }
 
-    public DetailFragmentPagerAdapter(Context context, String[] filePaths,
-                                      DetailFragmentPagerAdapterOnClickHandler clickHandler) {
+    public DetailFragmentPagerAdapter(final Context context, final String[] filePaths,
+                                      final DetailFragmentPagerAdapterOnClickHandler clickHandler) {
         LogDisplay.callLog(LOG_TAG,'DetailFragmentPagerAdapter non-empty constructor is called',LogDisplay.DETAIL_FRAGMENT_PAGER_ADAPTER_LOG_FLAG)
         mContext = context
         mBackdropimageFilePaths = filePaths
@@ -40,12 +41,12 @@ class DetailFragmentPagerAdapter extends PagerAdapter {
     }
 
     @Override
-    boolean isViewFromObject(View view, Object object) {
+    boolean isViewFromObject(final View view, final Object object) {
         return view == ((RelativeLayout) object)
     }
 
     @Override
-    Object instantiateItem(ViewGroup container, int position) {
+    Object instantiateItem(final ViewGroup container, final int position) {
         LogDisplay.callLog(LOG_TAG,"instantiateItem is called:$position",LogDisplay.DETAIL_FRAGMENT_PAGER_ADAPTER_LOG_FLAG)
         mLayoutInflater = LayoutInflater.from(mContext)
         final View view = mLayoutInflater.inflate(R.layout.single_backdrop_viewpager_item, container, false)
@@ -55,9 +56,10 @@ class DetailFragmentPagerAdapter extends PagerAdapter {
         LogDisplay.callLog(LOG_TAG,"instantiateItem:imagePath-> $imagePath",LogDisplay.DETAIL_FRAGMENT_PAGER_ADAPTER_LOG_FLAG)
         PicassoLoadImage.loadDetailFragmentPagerAdapterImage(mContext,imagePath,imageView)
 
+        //noinspection GroovyVariableCanBeFinal
         view.setOnClickListener(new View.OnClickListener() {
             @Override
-            void onClick(View v) {
+            void onClick(final View v) {
                 LogDisplay.callLog(LOG_TAG,"view pager adapter item is clicked:$position",LogDisplay.DETAIL_FRAGMENT_PAGER_ADAPTER_LOG_FLAG)
                 mDetailFragmentPagerAdapterOnClickHandler.onClick(position)
             }
@@ -68,7 +70,7 @@ class DetailFragmentPagerAdapter extends PagerAdapter {
     }
 
     @Override
-    void destroyItem(ViewGroup container, int position, Object object) {
+    void destroyItem(final ViewGroup container, final int position, final Object object) {
         LogDisplay.callLog(LOG_TAG,'destroyItem is called',LogDisplay.DETAIL_FRAGMENT_PAGER_ADAPTER_LOG_FLAG)
         ((ViewPager) container).removeView((RelativeLayout) object)
     }

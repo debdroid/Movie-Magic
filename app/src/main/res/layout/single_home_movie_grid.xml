@@ -49,7 +49,7 @@
             tools:ignore="UnusedAttribute" />
         <LinearLayout
             android:id="@+id/home_movie_genre_runtime_layout"
-            android:layout_toRightOf="@+id/home_movie_poster_image"
+            android:layout_toEndOf="@+id/home_movie_poster_image"
             android:layout_alignBottom="@id/home_movie_backdrop_image"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

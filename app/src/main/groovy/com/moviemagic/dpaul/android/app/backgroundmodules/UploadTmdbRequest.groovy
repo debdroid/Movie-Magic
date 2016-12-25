@@ -26,6 +26,7 @@ import groovy.transform.CompileStatic
 
 @CompileStatic
 class UploadTmdbRequest extends AsyncTask<Integer, Void, String> {
+    @SuppressWarnings("GroovyConstantNamingConvention")
     private static final String LOG_TAG = UploadTmdbRequest.class.getSimpleName()
     private final ContentResolver mContentResolver
     private final Context mContext
@@ -39,8 +40,9 @@ class UploadTmdbRequest extends AsyncTask<Integer, Void, String> {
     private final int mAccentColor
     private boolean mSuccessPostFlag = false
 
-    public UploadTmdbRequest(Context ctx, String movieType, float ratingVal, boolean addOrDelete,
-                             String movieCategory, LinearLayout tmdbUserDrawableLayout, int accentColor) {
+    public UploadTmdbRequest(
+            final Context ctx, final String movieType, final float ratingVal, final boolean addOrDelete,
+            final String movieCategory, final LinearLayout tmdbUserDrawableLayout, final int accentColor) {
         mContext = ctx
         mContentResolver = mContext.getContentResolver()
         mTmdbMovieType = movieType
@@ -60,12 +62,16 @@ class UploadTmdbRequest extends AsyncTask<Integer, Void, String> {
     }
 
     @Override
-    protected String doInBackground(Integer... params) {
+    protected String doInBackground(final Integer... params) {
         mTmdbMovieId = params[0]
-        String movieTypePath
-        String bodyJsonData
-        String authToken
-        String accountId
+        //noinspection GroovyVariableCanBeFinal
+        final String movieTypePath = null
+        //noinspection GroovyVariableCanBeFinal
+        final String bodyJsonData = null
+        //noinspection GroovyVariableCanBeFinal
+        final String authToken= null
+        //noinspection GroovyVariableCanBeFinal
+        final String accountId = null
 
         // Get the account information - if not found then return null
         final AccountManager accountManager = AccountManager.get(mContext)
@@ -104,17 +110,22 @@ class UploadTmdbRequest extends AsyncTask<Integer, Void, String> {
 
         LogDisplay.callLog(LOG_TAG, "bodyJsonData-> $bodyJsonData", LogDisplay.UPLOAD_TMDB_REQUEST_LOG_FLAG)
 
-        HttpURLConnection conn
-        InputStream inputStream
-        OutputStream outputStream
+        //noinspection GroovyVariableCanBeFinal
+        final HttpURLConnection conn = null
+        //noinspection GroovyVariableCanBeFinal
+        final InputStream inputStream = null
+        //noinspection GroovyVariableCanBeFinal
+        final OutputStream outputStream = null
 
         //TMDB api example for watchlist & favourite
         //https://api.themoviedb.org/3/account/{account_id}/watchlist?api_key=key
         //TMDB api example for rated
         //https://api.themoviedb.org/3/movie/{movie_id}/rating?api_key=key
+        //noinspection GroovyVariableCanBeFinal,GroovyVariableCanBeFinal,GroovyVariableCanBeFinal
         try {
             final Uri.Builder uriBuilder = Uri.parse(GlobalStaticVariables.TMDB_MOVIE_BASE_URL).buildUpon()
-            Uri tmdbUri
+            //noinspection GroovyVariableCanBeFinal
+            final Uri tmdbUri
             if(mTmdbMovieType == GlobalStaticVariables.MOVIE_CATEGORY_TMDB_USER_RATED) {
                 tmdbUri = uriBuilder.appendPath(GlobalStaticVariables.TMDB_MOVIE_PATH)
                         .appendPath(Integer.toString(mTmdbMovieId))
@@ -177,11 +188,11 @@ class UploadTmdbRequest extends AsyncTask<Integer, Void, String> {
 
             // Return the TMDb message
             return  statusMessage
-        } catch (URISyntaxException e) {
+        } catch (final URISyntaxException e) {
             Log.e(LOG_TAG, "URISyntaxException: ${e.message}", e)
-        } catch (JsonException e) {
+        } catch (final JsonException e) {
             Log.e(LOG_TAG, "JsonException: ${e.message}", e)
-        } catch (IOException e) {
+        } catch (final IOException e) {
             Log.e(LOG_TAG, "IOException: ${e.message}", e)
         } finally {
             // Close the connection and input stream
@@ -193,7 +204,7 @@ class UploadTmdbRequest extends AsyncTask<Integer, Void, String> {
     }
 
     @Override
-    protected void onPostExecute(String msg) {
+    protected void onPostExecute(final String msg) {
         if(mProgressDialog.isShowing()) {
             mProgressDialog.dismiss()
         }
@@ -337,7 +348,7 @@ class UploadTmdbRequest extends AsyncTask<Integer, Void, String> {
      * This method creates a new record in database for User TMDb movie
      * @param movieBasicInfoContentValues The Contentvalues of the record to be created
      */
-    protected void addTmdbUserRecord(ContentValues movieBasicInfoContentValues) {
+    protected void addTmdbUserRecord(final ContentValues movieBasicInfoContentValues) {
         movieBasicInfoContentValues.put(MovieMagicContract.MovieBasicInfo.COLUMN_MOVIE_CATEGORY,mTmdbMovieType)
         movieBasicInfoContentValues.put(MovieMagicContract.MovieBasicInfo.COLUMN_MOVIE_LIST_TYPE,
                 GlobalStaticVariables.MOVIE_LIST_TYPE_TMDB_USER)
@@ -366,7 +377,7 @@ class UploadTmdbRequest extends AsyncTask<Integer, Void, String> {
      * This method updates an existing user TMDb rated movie record in database
      * @param rowId The row id of the movie to be updated
      */
-    protected void updateTmdbUserRecord(long rowId) {
+    protected void updateTmdbUserRecord(final long rowId) {
         final ContentValues movieBasicInfoContentValues = new ContentValues()
         movieBasicInfoContentValues.put(MovieMagicContract.MovieBasicInfo.COLUMN_TMDB_USER_RATED_RATING, mTmdbRatingValue)
         final int updateCount = mContentResolver.update(
@@ -414,7 +425,7 @@ class UploadTmdbRequest extends AsyncTask<Integer, Void, String> {
      * This method enables / disables user's TMDb list button for Watchlist & Favourite
      * @param button The button to be enabled or disabled
      */
-    protected void toggleImageButton(ImageButton button) {
+    protected void toggleImageButton(final ImageButton button) {
         if(mOperationFlag) {
             button.setAlpha(GlobalStaticVariables.MOVIE_MAGIC_ALPHA_FULL_OPAQUE)
             button.setColorFilter(mAccentColor)
@@ -428,7 +439,7 @@ class UploadTmdbRequest extends AsyncTask<Integer, Void, String> {
      * This method enables / disables user's TMDb list Rated
      * @param button The rated button to be enabled or disabled
      */
-    protected toggleRatedImageButton(ImageButton button) {
+    protected toggleRatedImageButton(final ImageButton button) {
         if(mTmdbRatingValue > 0) {
             button.setAlpha(GlobalStaticVariables.MOVIE_MAGIC_ALPHA_FULL_OPAQUE)
             button.setColorFilter(mAccentColor)

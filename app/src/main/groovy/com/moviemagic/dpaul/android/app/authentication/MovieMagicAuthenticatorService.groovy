@@ -12,6 +12,7 @@ import groovy.transform.CompileStatic
 
 @CompileStatic
 class MovieMagicAuthenticatorService extends Service {
+    @SuppressWarnings("GroovyConstantNamingConvention")
     private static final String LOG_TAG = MovieMagicAuthenticatorService.class.getSimpleName()
 
     // Instance field that stores the authenticator object
@@ -29,7 +30,7 @@ class MovieMagicAuthenticatorService extends Service {
      * return the authenticator's IBinder.
      */
     @Override
-    IBinder onBind(Intent intent) {
+    IBinder onBind(final Intent intent) {
         LogDisplay.callLog(LOG_TAG,'onBind is called',LogDisplay.MOVIE_MAGIC_AUTHENTICATOR_SERVICE_LOG_FLAG)
         return mAuthenticator.getIBinder()
     }

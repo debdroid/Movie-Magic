@@ -16,11 +16,12 @@ import groovy.transform.CompileStatic
 
 @CompileStatic
 class LoadMovieDetails extends AsyncTask<ArrayList<Integer>, Void, Void> {
+    @SuppressWarnings("GroovyConstantNamingConvention")
     private static final String LOG_TAG = LoadMovieDetails.class.getSimpleName()
     private final ContentResolver mContentResolver
     private final Context mContext
 
-    public LoadMovieDetails(Context ctx) {
+    public LoadMovieDetails(final Context ctx) {
         mContext = ctx
         mContentResolver = mContext.getContentResolver()
     }
@@ -282,11 +283,12 @@ class LoadMovieDetails extends AsyncTask<ArrayList<Integer>, Void, Void> {
      * so the details needs to be updated while loading the movies to the table
      * @param contentValues
      */
-    private void loadRecommendationMovieDetails(ContentValues[] contentValues) {
+    private void loadRecommendationMovieDetails(final ContentValues[] contentValues) {
         LogDisplay.callLog(LOG_TAG, 'loadRecommendationMovieDetails is called', LogDisplay.LOAD_MOVIE_DETAILS_LOG_FLAG)
         // TMDb api example
         // https://api.themoviedb.org/3/movie/240?api_key=key
-        for(i in 0..(contentValues.length - 1)) {
+        //noinspection GroovyVariableCanBeFinal
+        for(final i in 0..(contentValues.length - 1)) {
             final int recommMovieId = contentValues[i].getAsInteger(MovieMagicContract.MovieBasicInfo.COLUMN_MOVIE_ID)
             try {
                 final Uri.Builder recommUriBuilder = Uri.parse(GlobalStaticVariables.TMDB_MOVIE_BASE_URL).buildUpon()
@@ -330,7 +332,7 @@ class LoadMovieDetails extends AsyncTask<ArrayList<Integer>, Void, Void> {
     }
 
     @Override
-    protected void onPostExecute(Void aVoid) {
+    protected void onPostExecute(final Void aVoid) {
         super.onPostExecute(aVoid)
         LogDisplay.callLog(LOG_TAG, 'Additional movie data load finished', LogDisplay.LOAD_MOVIE_DETAILS_LOG_FLAG)
     }

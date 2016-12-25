@@ -35,6 +35,7 @@ import groovy.transform.CompileStatic
 
 @CompileStatic
 class PersonMovieFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
+    @SuppressWarnings("GroovyConstantNamingConvention")
     private static final String LOG_TAG = PersonMovieFragment.class.getSimpleName()
 
     private Uri mPersonInfoUri
@@ -69,13 +70,18 @@ class PersonMovieFragment extends Fragment implements LoaderManager.LoaderCallba
     private CallbackForImageClick mCallbackForImageClick
     private String mPersonName
 
+    @SuppressWarnings("GroovyConstantNamingConvention")
     private static final int PERSON_MOVIE_FRAGMENT_PERSON_INFO_LOADER_ID = 0
+    @SuppressWarnings("GroovyConstantNamingConvention")
     private static final int PERSON_MOVIE_FRAGMENT_PERSON_CAST_LOADER_ID = 1
+    @SuppressWarnings("GroovyConstantNamingConvention")
     private static final int PERSON_MOVIE_FRAGMENT_PERSON_CREW_LOADER_ID = 2
+    @SuppressWarnings("GroovyConstantNamingConvention")
     private static final int PERSON_MOVIE_FRAGMENT_PERSON_IMAGE_LOADER_ID = 3
 
 
     //Columns to fetch from movie_person_info table for similar movies
+    @SuppressWarnings("GroovyConstantNamingConvention")
     private static final String[] PERSON_INFO_COLUMNS = [MovieMagicContract.MoviePersonInfo._ID,
                                                          MovieMagicContract.MoviePersonInfo.COLUMN_PERSON_ID,
                                                          MovieMagicContract.MoviePersonInfo.COLUMN_PERSON_PROFILE_PATH,
@@ -90,21 +96,35 @@ class PersonMovieFragment extends Fragment implements LoaderManager.LoaderCallba
                                                          MovieMagicContract.MoviePersonInfo.COLUMN_PERSON_POPULARITY,
                                                          MovieMagicContract.MoviePersonInfo.COLUMN_PERSON_ADULT_FLAG]
     //These are indices of the above columns, if projection array changes then this needs to be changed
+    @SuppressWarnings("GroovyConstantNamingConvention")
     final static int COL_PERSON_INFO_ID = 0
+    @SuppressWarnings("GroovyConstantNamingConvention")
     final static int COL_PERSON_INFO_PERSON_ID = 1
+    @SuppressWarnings("GroovyConstantNamingConvention")
     final static int COL_PERSON_INFO_PROFILE_PATH = 2
+    @SuppressWarnings("GroovyConstantNamingConvention")
     final static int COL_PERSON_INFO_PERSON_NAME = 3
+    @SuppressWarnings("GroovyConstantNamingConvention")
     final static int COL_PERSON_INFO_PERSON_BIRTHDAY = 4
+    @SuppressWarnings("GroovyConstantNamingConvention")
     final static int COL_PERSON_INFO_PERSON_PLACE_OF_BIRTH = 5
+    @SuppressWarnings("GroovyConstantNamingConvention")
     final static int COL_PERSON_INFO_PERSON_ALSO_KNOWN_AS = 6
+    @SuppressWarnings("GroovyConstantNamingConvention")
     final static int COL_PERSON_INFO_PERSON_DEATH_DAY = 7
+    @SuppressWarnings("GroovyConstantNamingConvention")
     final static int COL_PERSON_INFO_PERSON_BIOGRAPHY = 8
+    @SuppressWarnings("GroovyConstantNamingConvention")
     final static int COL_PERSON_INFO_PERSON_HOMEPAGE = 9
+    @SuppressWarnings("GroovyConstantNamingConvention")
     final static int COL_PERSON_INFO_PERSON_IMDB_ID = 10
+    @SuppressWarnings("GroovyConstantNamingConvention")
     final static int COL_PERSON_INFO_PERSON_POPULARITY = 11
+    @SuppressWarnings("GroovyConstantNamingConvention")
     final static int COL_PERSON_INFO_PERSON_ADULT_FLAG = 12
 
     //Columns to fetch from movie_person_cast table for similar movies
+    @SuppressWarnings("GroovyConstantNamingConvention")
     private static final String[] PERSON_CAST_COLUMNS = [MovieMagicContract.MoviePersonCast._ID,
                                                          MovieMagicContract.MoviePersonCast.COLUMN_PERSON_CAST_ORIG_PERSON_ID,
                                                          MovieMagicContract.MoviePersonCast.COLUMN_PERSON_CAST_POSTER_PATH,
@@ -114,16 +134,25 @@ class PersonMovieFragment extends Fragment implements LoaderManager.LoaderCallba
                                                          MovieMagicContract.MoviePersonCast.COLUMN_PERSON_CAST_RELEASE_DATE,
                                                          MovieMagicContract.MoviePersonCast.COLUMN_PERSON_CAST_ADULT_FLAG]
     //These are indices of the above columns, if projection array changes then this needs to be changed
+    @SuppressWarnings("GroovyConstantNamingConvention")
     final static int COL_PERSON_CAST_ID = 0
+    @SuppressWarnings("GroovyConstantNamingConvention")
     final static int COL_PERSON_CAST_ORIG_PERSON_ID = 1
+    @SuppressWarnings("GroovyConstantNamingConvention")
     final static int COL_PERSON_CAST_MOVIE_POSTER_PATH = 2
+    @SuppressWarnings("GroovyConstantNamingConvention")
     final static int COL_PERSON_CAST_MOVIE_ID = 3
+    @SuppressWarnings("GroovyConstantNamingConvention")
     final static int COL_PERSON_CAST_MOVIE_TITLE = 4
+    @SuppressWarnings("GroovyConstantNamingConvention")
     final static int COL_PERSON_CAST_CHARACTER_NAME = 5
+    @SuppressWarnings("GroovyConstantNamingConvention")
     final static int COL_PERSON_CAST_MOVIE_RELEASE_DATE = 6
+    @SuppressWarnings("GroovyConstantNamingConvention")
     final static int COL_PERSON_CAST_AUDULT_FLAG = 7
 
     //Columns to fetch from movie_person_crew table for similar movies
+    @SuppressWarnings("GroovyConstantNamingConvention")
     private static final String[] PERSON_CREW_COLUMNS = [MovieMagicContract.MoviePersonCrew._ID,
                                                          MovieMagicContract.MoviePersonCrew.COLUMN_PERSON_CREW_ORIG_PERSON_ID,
                                                          MovieMagicContract.MoviePersonCrew.COLUMN_PERSON_CREW_POSTER_PATH,
@@ -133,16 +162,25 @@ class PersonMovieFragment extends Fragment implements LoaderManager.LoaderCallba
                                                          MovieMagicContract.MoviePersonCrew.COLUMN_PERSON_CREW_RELEASE_DATE,
                                                          MovieMagicContract.MoviePersonCrew.COLUMN_PERSON_CREW_ADULT_FLAG]
     //These are indices of the above columns, if projection array changes then this needs to be changed
+    @SuppressWarnings("GroovyConstantNamingConvention")
     final static int COL_PERSON_CREW_ID = 0
+    @SuppressWarnings("GroovyConstantNamingConvention")
     final static int COL_PERSON_CREW_ORIG_PERSON_ID = 1
+    @SuppressWarnings("GroovyConstantNamingConvention")
     final static int COL_PERSON_CREW_MOVIE_POSTER_PATH = 2
+    @SuppressWarnings("GroovyConstantNamingConvention")
     final static int COL_PERSON_CREW_MOVIE_ID = 3
+    @SuppressWarnings("GroovyConstantNamingConvention")
     final static int COL_PERSON_CREW_MOVIE_TITLE = 4
+    @SuppressWarnings("GroovyConstantNamingConvention")
     final static int COL_PERSON_CREW_JOB_NAME = 5
+    @SuppressWarnings("GroovyConstantNamingConvention")
     final static int COL_PERSON_CREW_MOVIE_RELEASE_DATE = 6
+    @SuppressWarnings("GroovyConstantNamingConvention")
     final static int COL_PERSON_CREW_AUDULT_FLAG = 7
 
     //Columns to fetch from movie_person_image table for similar movies
+    @SuppressWarnings("GroovyConstantNamingConvention")
     private static final String[] PERSON_IMAGE_COLUMNS = [MovieMagicContract.MoviePersonImage._ID,
                                                          MovieMagicContract.MoviePersonImage.COLUMN_PERSON_IMAGE_ORIG_PERSON_ID,
                                                          MovieMagicContract.MoviePersonImage.COLUMN_PERSON_IMAGE_FILE_PATH,
@@ -150,11 +188,17 @@ class PersonMovieFragment extends Fragment implements LoaderManager.LoaderCallba
                                                          MovieMagicContract.MoviePersonImage.COLUMN_PERSON_IMAGE_VOTE_COUNT,
                                                          MovieMagicContract.MoviePersonImage.COLUMN_PERSON_IMAGE_ISO_639_1]
     //These are indices of the above columns, if projection array changes then this needs to be changed
+    @SuppressWarnings("GroovyConstantNamingConvention")
     final static int COL_PERSON_IMAGE_ID = 0
+    @SuppressWarnings("GroovyConstantNamingConvention")
     final static int COL_PERSON_IMAGE_ORIG_PERSON_ID = 1
+    @SuppressWarnings("GroovyConstantNamingConvention")
     final static int COL_PERSON_IMAGE_FILE_PATH = 2
+    @SuppressWarnings("GroovyConstantNamingConvention")
     final static int COL_PERSON_IMAGE_VOTE_AVG = 3
+    @SuppressWarnings("GroovyConstantNamingConvention")
     final static int COL_PERSON_IMAGE_VOTE_COUNT = 4
+    @SuppressWarnings("GroovyConstantNamingConvention")
     final static int COL_PERSON_IMAGE_VOTE_ISO = 5
 
     //An empty constructor is needed so that lifecycle is properly handled
@@ -163,7 +207,7 @@ class PersonMovieFragment extends Fragment implements LoaderManager.LoaderCallba
     }
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
+    public void onCreate(final Bundle savedInstanceState) {
         LogDisplay.callLog(LOG_TAG, 'onCreate is called', LogDisplay.PERSON_MOVIE_FRAGMENT_LOG_FLAG)
         super.onCreate(savedInstanceState)
         //Following line needed to let android know that Fragment has options menu
@@ -173,7 +217,7 @@ class PersonMovieFragment extends Fragment implements LoaderManager.LoaderCallba
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
+    public boolean onOptionsItemSelected(final MenuItem item) {
         if (item.getItemId() == android.R.id.home) { // Press appbar back button to go to previous activity
             getActivity().finish()
             return true
@@ -182,17 +226,19 @@ class PersonMovieFragment extends Fragment implements LoaderManager.LoaderCallba
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(final LayoutInflater inflater, final ViewGroup container, final Bundle savedInstanceState) {
         LogDisplay.callLog(LOG_TAG, 'onCreateView is called', LogDisplay.PERSON_MOVIE_FRAGMENT_LOG_FLAG)
         // Get the bundle from the Fragment
-        Bundle args = getArguments()
+        //noinspection GroovyVariableCanBeFinal
+        final Bundle args = getArguments()
         if (args) {
             mPersonInfoUri = args.getParcelable(GlobalStaticVariables.MOVIE_PERSON_URI) as Uri
             LogDisplay.callLog(LOG_TAG, "Person Fragment arguments.Uri -> $mPersonInfoUri", LogDisplay.PERSON_MOVIE_FRAGMENT_LOG_FLAG)
             mPersonId = MovieMagicContract.MoviePersonInfo.getPersonIdFromMoviePersonInfoUri(mPersonInfoUri)
         }
         // Inflate the view before referring any view using id
-        View mRootView = inflater.inflate(R.layout.fragment_person_movie, container, false)
+        //noinspection GroovyVariableCanBeFinal
+        final View mRootView = inflater.inflate(R.layout.fragment_person_movie, container, false)
         mAppBarLayout = mRootView.findViewById(R.id.person_app_bar_layout) as AppBarLayout
         mPersonLinLayout = mRootView.findViewById(R.id.person_info_layout) as LinearLayout
         mPosterImageView = mRootView.findViewById(R.id.person_poster_image) as ImageView
@@ -216,9 +262,10 @@ class PersonMovieFragment extends Fragment implements LoaderManager.LoaderCallba
          * Biography show button handling
          */
         mShowBiographyImageButton = mRootView.findViewById(R.id.person_biography_show_button) as ImageButton
+        //noinspection GroovyVariableCanBeFinal
         mShowBiographyImageButton.setOnClickListener( new View.OnClickListener() {
             @Override
-            void onClick(View v) {
+            void onClick(final View v) {
                 mShowBiographyImageButton.setVisibility(Button.INVISIBLE)
                 mHideBiographyImageButton.setVisibility(Button.VISIBLE)
                 mBiographyTextView.setMaxLines(Integer.MAX_VALUE)
@@ -228,9 +275,10 @@ class PersonMovieFragment extends Fragment implements LoaderManager.LoaderCallba
          * Biography hide button handling
          */
         mHideBiographyImageButton = mRootView.findViewById(R.id.person_biography_hide_button) as ImageButton
+        //noinspection GroovyVariableCanBeFinal
         mHideBiographyImageButton.setOnClickListener(new View.OnClickListener() {
             @Override
-            void onClick(View v) {
+            void onClick(final View v) {
                 mShowBiographyImageButton.setVisibility(Button.VISIBLE)
                 mHideBiographyImageButton.setVisibility(Button.INVISIBLE)
                 mBiographyTextView.setMaxLines(getActivity().getResources().getString(R.string.person_biography_collapse_line_item_count) as Integer)
@@ -246,10 +294,11 @@ class PersonMovieFragment extends Fragment implements LoaderManager.LoaderCallba
         mCastGridView.setLayoutManager(mCastGridLayoutManager)
         //Create a new interface member variable for PersonCastAdapterOnClickHandler and the same is passed as
         //parameter to Adapter, this onClick method is called whenever onClick is called from PersonCastAdapter
+        //noinspection GroovyVariableCanBeFinal,GroovyVariableCanBeFinal
         mPersonCastAdapter = new PersonCastAdapter(getActivity(),mCastGridEmptyMsgTextView,
             new PersonCastAdapter.PersonCastAdapterOnClickHandler(){
                 @Override
-                void onClick(int movieId, PersonCastAdapter.PersonCastAdapterViewHolder viewHolder) {
+                void onClick(final int movieId, final PersonCastAdapter.PersonCastAdapterViewHolder viewHolder) {
                     mCallbackForCastClick.onCastMovieItemSelected(movieId,viewHolder)
                 }
             })
@@ -262,10 +311,11 @@ class PersonMovieFragment extends Fragment implements LoaderManager.LoaderCallba
         mCrewGridEmptyMsgTextView = mRootView.findViewById(R.id.person_crew_grid_empty_msg_text_view) as TextView
         mCrewGridLayoutManager = new GridLayoutManager(getActivity(), 1, GridLayoutManager.HORIZONTAL, false)
         mCrewGridView.setLayoutManager(mCrewGridLayoutManager)
+        //noinspection GroovyVariableCanBeFinal,GroovyVariableCanBeFinal
         mPersonCrewAdapter = new PersonCrewAdapter(getActivity(), mCrewGridEmptyMsgTextView,
             new PersonCrewAdapter.PersonCrewAdapterOnClickHandler(){
                 @Override
-                void onClick(int movieId, PersonCrewAdapter.PersonCrewAdapterViewHolder viewHolder) {
+                void onClick(final int movieId, final PersonCrewAdapter.PersonCrewAdapterViewHolder viewHolder) {
                     mCallbackForCrewClick.onCrewMovieItemSelected(movieId,viewHolder)
                 }
             })
@@ -278,10 +328,12 @@ class PersonMovieFragment extends Fragment implements LoaderManager.LoaderCallba
         mImageGridEmptyMsgTextView = mRootView.findViewById(R.id.person_image_grid_empty_msg_text_view) as TextView
         mImageGridLayoutManager = new GridLayoutManager(getActivity(), 1, GridLayoutManager.HORIZONTAL, false)
         mImageGridView.setLayoutManager(mImageGridLayoutManager)
+        //noinspection GroovyVariableCanBeFinal,GroovyVariableCanBeFinal,GroovyVariableCanBeFinal
         mPersonImageAdapter = new PersonImageAdapter(getActivity(), mImageGridEmptyMsgTextView,
                 new PersonImageAdapter.PersonImageAdapterOnClickHandler(){
                     @Override
-                    void onClick(int adapterPosition, String[] imageFilePath, PersonImageAdapter.PersonImageAdapterViewHolder viewHolder) {
+                    void onClick(
+                            final int adapterPosition, final String[] imageFilePath, final PersonImageAdapter.PersonImageAdapterViewHolder viewHolder) {
                         mCallbackForImageClick.onImageMovieItemSelected(mPersonName, adapterPosition, imageFilePath, viewHolder)
                     }
                 })
@@ -291,17 +343,19 @@ class PersonMovieFragment extends Fragment implements LoaderManager.LoaderCallba
          * External web link button handling
          */
         mHomePageButton = mRootView.findViewById(R.id.person_web_links_home_page_button) as Button
+        //noinspection GroovyVariableCanBeFinal
         mHomePageButton.setOnClickListener(new View.OnClickListener() {
             @Override
-            void onClick(View v) {
+            void onClick(final View v) {
                 LogDisplay.callLog(LOG_TAG, 'Home Page Button is clicked', LogDisplay.PERSON_MOVIE_FRAGMENT_LOG_FLAG)
                 startHomePageIntent()
             }
         })
         mImdbLinkButton = mRootView.findViewById(R.id.person_web_links_imdb_link_button) as Button
+        //noinspection GroovyVariableCanBeFinal
         mImdbLinkButton.setOnClickListener(new View.OnClickListener() {
             @Override
-            void onClick(View v) {
+            void onClick(final View v) {
                 LogDisplay.callLog(LOG_TAG, 'IMDb Button is clicked', LogDisplay.PERSON_MOVIE_FRAGMENT_LOG_FLAG)
                 startImdbIntent()
             }
@@ -311,9 +365,10 @@ class PersonMovieFragment extends Fragment implements LoaderManager.LoaderCallba
     }
 
     @Override
-    void onActivityCreated(Bundle savedInstanceState) {
+    void onActivityCreated(final Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState)
-        AppCompatActivity appCompatActivity = getActivity() as AppCompatActivity
+        //noinspection GroovyVariableCanBeFinal
+        final AppCompatActivity appCompatActivity = getActivity() as AppCompatActivity
         mToolbar = getView().findViewById(R.id.person_toolbar) as Toolbar
         if (mToolbar) {
             appCompatActivity.setSupportActionBar(mToolbar)
@@ -361,7 +416,7 @@ class PersonMovieFragment extends Fragment implements LoaderManager.LoaderCallba
     }
 
     @Override
-    Loader<Cursor> onCreateLoader(int id, Bundle args) {
+    Loader<Cursor> onCreateLoader(final int id, final Bundle args) {
         LogDisplay.callLog(LOG_TAG, "onCreateLoader.loader id->$id", LogDisplay.PERSON_MOVIE_FRAGMENT_LOG_FLAG)
         switch (id) {
             case PERSON_MOVIE_FRAGMENT_PERSON_INFO_LOADER_ID:
@@ -402,8 +457,9 @@ class PersonMovieFragment extends Fragment implements LoaderManager.LoaderCallba
     }
 
     @Override
-    void onLoadFinished(Loader<Cursor> loader, Cursor data) {
-        int loaderId = loader.getId()
+    void onLoadFinished(final Loader<Cursor> loader, final Cursor data) {
+        //noinspection GroovyVariableCanBeFinal
+        final int loaderId = loader.getId()
         LogDisplay.callLog(LOG_TAG, "onLoadFinished.loader id->$loaderId", LogDisplay.PERSON_MOVIE_FRAGMENT_LOG_FLAG)
         switch (loaderId) {
             case PERSON_MOVIE_FRAGMENT_PERSON_INFO_LOADER_ID:
@@ -424,7 +480,7 @@ class PersonMovieFragment extends Fragment implements LoaderManager.LoaderCallba
     }
 
     @Override
-    void onLoaderReset(Loader<Cursor> loader) {
+    void onLoaderReset(final Loader<Cursor> loader) {
         //Reset the adapter
         LogDisplay.callLog(LOG_TAG, 'onLoaderReset is called', LogDisplay.PERSON_MOVIE_FRAGMENT_LOG_FLAG)
         mPersonCastAdapter.swapCursor(null)
@@ -436,7 +492,7 @@ class PersonMovieFragment extends Fragment implements LoaderManager.LoaderCallba
      * This method is called loader is finished for movie person info table
      * @param data Cursor
      */
-    void handlePersonInfoOnLoadFinished(Cursor data) {
+    void handlePersonInfoOnLoadFinished(final Cursor data) {
         LogDisplay.callLog(LOG_TAG, "handlePersonInfoOnLoadFinished.Cursor rec count -> ${data.getCount()}", LogDisplay.PERSON_MOVIE_FRAGMENT_LOG_FLAG)
         if(data.moveToFirst()) {
             LogDisplay.callLog(LOG_TAG, "handlePersonInfoOnLoadFinished.Data present for person id $mPersonId", LogDisplay.PERSON_MOVIE_FRAGMENT_LOG_FLAG)
@@ -449,16 +505,23 @@ class PersonMovieFragment extends Fragment implements LoaderManager.LoaderCallba
                     // If user does not select dynamic theme (default value) then do not change the color
                     if (Utility.isDynamicTheme(getActivity())) {
                         final Bitmap bitmapPoster = ((BitmapDrawable) mPosterImageView.getDrawable()).getBitmap()
+                        //noinspection GroovyVariableCanBeFinal
                         Palette.from(bitmapPoster).generate(new Palette.PaletteAsyncListener() {
                             @Override
-                            public void onGenerated(Palette p) {
+                            public void onGenerated(final Palette p) {
                                 LogDisplay.callLog(LOG_TAG, 'onGenerated is called', LogDisplay.PERSON_MOVIE_FRAGMENT_LOG_FLAG)
-                                Palette.Swatch vibrantSwatch = p.getVibrantSwatch()
-                                Palette.Swatch lightVibrantSwatch = p.getLightVibrantSwatch()
-                                Palette.Swatch darkVibrantSwatch = p.getDarkVibrantSwatch()
-                                Palette.Swatch mutedSwatch = p.getMutedSwatch()
-                                Palette.Swatch mutedLightSwatch = p.getLightMutedSwatch()
-                                Palette.Swatch mutedDarkSwatch = p.getDarkMutedSwatch()
+                                //noinspection GroovyVariableCanBeFinal
+                                final Palette.Swatch vibrantSwatch = p.getVibrantSwatch()
+                                //noinspection GroovyVariableCanBeFinal
+                                final Palette.Swatch lightVibrantSwatch = p.getLightVibrantSwatch()
+                                //noinspection GroovyVariableCanBeFinal
+                                final Palette.Swatch darkVibrantSwatch = p.getDarkVibrantSwatch()
+                                //noinspection GroovyVariableCanBeFinal
+                                final Palette.Swatch mutedSwatch = p.getMutedSwatch()
+                                //noinspection GroovyVariableCanBeFinal
+                                final Palette.Swatch mutedLightSwatch = p.getLightMutedSwatch()
+                                //noinspection GroovyVariableCanBeFinal
+                                final Palette.Swatch mutedDarkSwatch = p.getDarkMutedSwatch()
                                 boolean pickSwatchColorFlag = false
                                 //Pick primary, primaryDark, title and body text color
                                 if (vibrantSwatch) {
@@ -466,8 +529,9 @@ class PersonMovieFragment extends Fragment implements LoaderManager.LoaderCallba
                                     mPaletteTitleColor = vibrantSwatch.getTitleTextColor()
                                     mPaletteBodyTextColor = vibrantSwatch.getBodyTextColor()
                                     //Produce Dark color by changing the value (3rd parameter) of HSL value
-                                    float[] primaryHsl = vibrantSwatch.getHsl()
-                                    primaryHsl[2] = primaryHsl[2] * 0.9f
+                                    //noinspection GroovyVariableCanBeFinal
+                                    final float[] primaryHsl = vibrantSwatch.getHsl()
+                                    primaryHsl[2] *= 0.9f
                                     mPalettePrimaryDarkColor = Color.HSVToColor(primaryHsl)
                                     pickSwatchColorFlag = true
                                 } else if (lightVibrantSwatch) { //Try another swatch
@@ -475,8 +539,9 @@ class PersonMovieFragment extends Fragment implements LoaderManager.LoaderCallba
                                     mPaletteTitleColor = lightVibrantSwatch.getTitleTextColor()
                                     mPaletteBodyTextColor = lightVibrantSwatch.getBodyTextColor()
                                     //Produce Dark color by changing the value (3rd parameter) of HSL value
-                                    float[] primaryHsl = lightVibrantSwatch.getHsl()
-                                    primaryHsl[2] = primaryHsl[2] * 0.9f
+                                    //noinspection GroovyVariableCanBeFinal
+                                    final float[] primaryHsl = lightVibrantSwatch.getHsl()
+                                    primaryHsl[2] *= 0.9f
                                     mPalettePrimaryDarkColor = Color.HSVToColor(primaryHsl)
                                     pickSwatchColorFlag = true
                                 } else if (darkVibrantSwatch) { //Try last swatch
@@ -484,8 +549,9 @@ class PersonMovieFragment extends Fragment implements LoaderManager.LoaderCallba
                                     mPaletteTitleColor = darkVibrantSwatch.getTitleTextColor()
                                     mPaletteBodyTextColor = darkVibrantSwatch.getBodyTextColor()
                                     //Produce Dark color by changing the value (3rd parameter) of HSL value
-                                    float[] primaryHsl = darkVibrantSwatch.getHsl()
-                                    primaryHsl[2] = primaryHsl[2] * 0.9f
+                                    //noinspection GroovyVariableCanBeFinal
+                                    final float[] primaryHsl = darkVibrantSwatch.getHsl()
+                                    primaryHsl[2] *= 0.9f
                                     mPalettePrimaryDarkColor = Color.HSVToColor(primaryHsl)
                                     pickSwatchColorFlag = true
                                 } else { //Fallback to default
@@ -533,7 +599,8 @@ class PersonMovieFragment extends Fragment implements LoaderManager.LoaderCallba
                                 mToolbar.setBackgroundColor(mPalettePrimaryColor)
                                 mToolbar.setTitleTextColor(mPaletteTitleColor)
                                 if (Build.VERSION.SDK_INT >= 21) {
-                                    Window window = getActivity().getWindow()
+                                    //noinspection GroovyVariableCanBeFinal
+                                    final Window window = getActivity().getWindow()
                                     window.setStatusBarColor(mPalettePrimaryDarkColor)
                                 }
 
@@ -651,7 +718,7 @@ class PersonMovieFragment extends Fragment implements LoaderManager.LoaderCallba
      * This method is called loader is finished for movie person cast table
      * @param data Cursor
      */
-    void handlePersonCastOnLoadFinished(Cursor data) {
+    void handlePersonCastOnLoadFinished(final Cursor data) {
         LogDisplay.callLog(LOG_TAG, "handlePersonCastOnLoadFinished.Cursor rec count -> ${data.getCount()}", LogDisplay.PERSON_MOVIE_FRAGMENT_LOG_FLAG)
         //Show two rows if the count is greater than 6 otherwise show single row
         if(data.count >= 10) {
@@ -664,7 +731,7 @@ class PersonMovieFragment extends Fragment implements LoaderManager.LoaderCallba
      * This method is called loader is finished for movie person crew table
      * @param data Cursor
      */
-    void handlePersonCrewOnLoadFinished(Cursor data) {
+    void handlePersonCrewOnLoadFinished(final Cursor data) {
         LogDisplay.callLog(LOG_TAG, "handlePersonCrewOnLoadFinished.Cursor rec count -> ${data.getCount()}", LogDisplay.PERSON_MOVIE_FRAGMENT_LOG_FLAG)
         //Show two rows if the count is greater than 6 otherwise show single row
         if(data.count >= 10) {
@@ -677,7 +744,7 @@ class PersonMovieFragment extends Fragment implements LoaderManager.LoaderCallba
      * This method is called loader is finished for movie person image table
      * @param data Cursor
      */
-    void handlePersonImageOnLoadFinished(Cursor data) {
+    void handlePersonImageOnLoadFinished(final Cursor data) {
         LogDisplay.callLog(LOG_TAG, "handlePersonImageOnLoadFinished.Cursor rec count -> ${data.getCount()}", LogDisplay.PERSON_MOVIE_FRAGMENT_LOG_FLAG)
         //Show two rows if the count is greater than 6 otherwise show single row
         if(data.count >= 10) {
@@ -712,33 +779,36 @@ class PersonMovieFragment extends Fragment implements LoaderManager.LoaderCallba
     }
 
     @Override
-    public void onAttach(Context context) {
+    public void onAttach(final Context context) {
         LogDisplay.callLog(LOG_TAG,'onAttach is called',LogDisplay.PERSON_MOVIE_FRAGMENT_LOG_FLAG)
         super.onAttach(context)
         // This makes sure that the container activity has implemented
         // the callback interface. If not, it throws an exception
+        //noinspection GroovyVariableCanBeFinal
         try {
             if(context instanceof Activity) {
                 mCallbackForCastClick = (CallbackForCastClick) context
             }
-        } catch (ClassCastException e) {
+        } catch (final ClassCastException e) {
             throw new ClassCastException(getActivity().toString()
                     + " must implement CallbackForCastClick interface")
         }
+        //noinspection GroovyVariableCanBeFinal
         try {
             if(context instanceof Activity) {
                 mCallbackForCrewClick = (CallbackForCrewClick) context
             }
-        } catch (ClassCastException e) {
+        } catch (final ClassCastException e) {
             throw new ClassCastException(getActivity().toString()
                     + " must implement CallbackForCrewClick interface")
         }
 
+        //noinspection GroovyVariableCanBeFinal
         try {
             if(context instanceof Activity) {
                 mCallbackForImageClick = (CallbackForImageClick) context
             }
-        } catch (ClassCastException e) {
+        } catch (final ClassCastException e) {
             throw new ClassCastException(getActivity().toString()
                     + " must implement CallbackForImageClick interface")
         }

@@ -13,12 +13,13 @@ import groovy.transform.CompileStatic
 
 @CompileStatic
 class DonateLinkAdapter extends RecyclerView.Adapter<DonateLinkAdapter.DonateLinkAdapterViewHolder> {
+    @SuppressWarnings("GroovyConstantNamingConvention")
     private static final String LOG_TAG = DonateLinkAdapter.class.getSimpleName()
 
-    final Context mContext
-    final String[] mLinkHeader
-    final String[] mLinkAddress
-    final DonateLinkAdapterOnClickHandler mDonateLinkAdapterOnClickHandler
+    final Context mContext = null
+    final String[] mLinkHeader = null
+    final String[] mLinkAddress = null
+    final DonateLinkAdapterOnClickHandler mDonateLinkAdapterOnClickHandler = null
 
     //Empty constructor
     public DonateLinkAdapter() {
@@ -26,7 +27,8 @@ class DonateLinkAdapter extends RecyclerView.Adapter<DonateLinkAdapter.DonateLin
     }
 
     // Provide a suitable constructor (depends on the kind of dataset)
-    public DonateLinkAdapter(Context ctx, String[] linkHeader, String[] linkAddress, DonateLinkAdapterOnClickHandler clickHandler) {
+    public DonateLinkAdapter(
+            final Context ctx, final String[] linkHeader, final String[] linkAddress, final DonateLinkAdapterOnClickHandler clickHandler) {
         LogDisplay.callLog(LOG_TAG, 'DonateLinkAdapter non-empty constructor is called', LogDisplay.DONATE_ADAPTER_LOG_FLAG)
         mContext = ctx
         mLinkHeader = linkHeader
@@ -39,7 +41,7 @@ class DonateLinkAdapter extends RecyclerView.Adapter<DonateLinkAdapter.DonateLin
         private final TextView donateLink
         private final Button donateGoButton
 
-        public DonateLinkAdapterViewHolder(View view) {
+        public DonateLinkAdapterViewHolder(final View view) {
             super(view)
             donateHeader = view.findViewById(R.id.single_donate_item_header) as TextView
             donateLink = view.findViewById(R.id.single_donate_item_link_address) as TextView
@@ -48,22 +50,23 @@ class DonateLinkAdapter extends RecyclerView.Adapter<DonateLinkAdapter.DonateLin
         }
 
         @Override
-        void onClick(View view) {
+        void onClick(final View view) {
             LogDisplay.callLog(LOG_TAG, 'Donate Go button is clicked', LogDisplay.DONATE_ADAPTER_LOG_FLAG)
             mDonateLinkAdapterOnClickHandler.onClick(getAdapterPosition())
         }
     }
 
     @Override
-    DonateLinkAdapter.DonateLinkAdapterViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    DonateLinkAdapter.DonateLinkAdapterViewHolder onCreateViewHolder(final ViewGroup parent, final int viewType) {
         LogDisplay.callLog(LOG_TAG, 'onCreateViewHolder is called', LogDisplay.DONATE_ADAPTER_LOG_FLAG)
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.single_donate_item, parent, false)
+        //noinspection GroovyVariableCanBeFinal
+        final View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.single_donate_item, parent, false)
         view.setFocusable(true)
         return new DonateLinkAdapterViewHolder(view)
     }
 
     @Override
-    void onBindViewHolder(DonateLinkAdapter.DonateLinkAdapterViewHolder holder, int position) {
+    void onBindViewHolder(final DonateLinkAdapter.DonateLinkAdapterViewHolder holder, final int position) {
         holder.donateHeader.setText(mLinkHeader[position])
         holder.donateLink.setText(mLinkAddress[position])
     }

@@ -14,12 +14,14 @@ import groovy.transform.CompileStatic
 
 @CompileStatic
 class TmdbServerAuthenticate implements TmdbAuthenticateInterface {
+    @SuppressWarnings("GroovyConstantNamingConvention")
     private static final String LOG_TAG = TmdbServerAuthenticate.class.getSimpleName()
 
     @Override
-    public Bundle tmdbUserSignIn(String userName, String password, String authTokenType) throws Exception {
+    public Bundle tmdbUserSignIn(final String userName, final String password, final String authTokenType) throws Exception {
         LogDisplay.callLog(LOG_TAG,'tmdbUserSignIn is called',LogDisplay.TMDB_SERVER_AUTHENTICATE_LOG_FLAG)
-        final Bundle bundle = new Bundle()
+        Bundle bundle = new Bundle()
+        //noinspection GroovyVariableCanBeFinal
         try {
             // Request a token first
             // TMDB api example for requesting a token
@@ -110,7 +112,7 @@ class TmdbServerAuthenticate implements TmdbAuthenticateInterface {
                 LogDisplay.callLog(LOG_TAG,'New TMDb request token failed',LogDisplay.TMDB_SERVER_AUTHENTICATE_LOG_FLAG)
                 bundle = tokenBundle
             }
-        } catch (URISyntaxException e) {
+        } catch (final URISyntaxException e) {
             Log.e(LOG_TAG, "URISyntaxException: ${e.message}", e)
         }
         return bundle
@@ -121,10 +123,13 @@ class TmdbServerAuthenticate implements TmdbAuthenticateInterface {
  * @param url The TMDb URL
  * @return Bundle with formatted JSON data or status message based on response code & error flag
  */
-    private Bundle getNewRequestToken(URL url) {
-        InputStream inputStream
+    private static Bundle getNewRequestToken(final URL url) {
+        //noinspection GroovyVariableCanBeFinal
+        InputStream inputStream = null
         final HttpURLConnection conn = (HttpURLConnection) url.openConnection()
-        Bundle tokenBundle
+        //noinspection GroovyVariableCanBeFinal
+        Bundle tokenBundle = null
+        //noinspection GroovyVariableCanBeFinal,GroovyVariableCanBeFinal
         try {
             conn.setReadTimeout(10000) /* milliseconds */
             conn.setConnectTimeout(15000) /* milliseconds */
@@ -142,9 +147,9 @@ class TmdbServerAuthenticate implements TmdbAuthenticateInterface {
             }
             final def tokenJsonData = new JsonSlurper(type: JsonParserType.INDEX_OVERLAY).parse(inputStream)
             tokenBundle = JsonParse.parseTmdbToken(tokenJsonData, respCode)
-        } catch (JsonException e) {
+        } catch (final JsonException e) {
             Log.e(LOG_TAG, "JsonException: ${e.message}", e)
-        } catch (IOException e) {
+        } catch (final IOException e) {
             Log.e(LOG_TAG, "IOException: ${e.message}", e)
         } finally {
             // Close the connection and input stream
@@ -160,10 +165,13 @@ class TmdbServerAuthenticate implements TmdbAuthenticateInterface {
      * @param url The TMDb URL
      * @return Bundle with formatted JSON data or status message based on response code & error flag
      */
-    private Bundle validateRequestToken(URL url) {
-        InputStream inputStream
+    private static Bundle validateRequestToken(final URL url) {
+        //noinspection GroovyVariableCanBeFinal
+        InputStream inputStream = null
         final HttpURLConnection conn = (HttpURLConnection) url.openConnection()
-        Bundle authenticatedTokenBundle
+        //noinspection GroovyVariableCanBeFinal
+        Bundle authenticatedTokenBundle = null
+        //noinspection GroovyVariableCanBeFinal,GroovyVariableCanBeFinal
         try {
             conn.setReadTimeout(10000) /* milliseconds */
             conn.setConnectTimeout(15000) /* milliseconds */
@@ -181,9 +189,9 @@ class TmdbServerAuthenticate implements TmdbAuthenticateInterface {
             }
             final def validateTokenJsonData = new JsonSlurper(type: JsonParserType.INDEX_OVERLAY).parse(inputStream)
             authenticatedTokenBundle = JsonParse.parseTmdbAuthenticatedToken(validateTokenJsonData, respCode)
-        } catch (JsonException e) {
+        } catch (final JsonException e) {
             Log.e(LOG_TAG, "JsonException: ${e.message}", e)
-        } catch (IOException e) {
+        } catch (final IOException e) {
             Log.e(LOG_TAG, "IOException: ${e.message}", e)
         } finally {
             // Close the connection and input stream
@@ -199,10 +207,13 @@ class TmdbServerAuthenticate implements TmdbAuthenticateInterface {
      * @param url The TMDb URL
      * @return Bundle with formatted JSON data or status message based on response code & error flag
      */
-    private Bundle getSessionId(URL url) {
-        InputStream inputStream
+    private static Bundle getSessionId(final URL url) {
+        //noinspection GroovyVariableCanBeFinal
+        InputStream inputStream = null
         final HttpURLConnection conn = (HttpURLConnection) url.openConnection()
-        Bundle SessionIdBundle
+        //noinspection GroovyVariableCanBeFinal
+        Bundle SessionIdBundle = null
+        //noinspection GroovyVariableCanBeFinal,GroovyVariableCanBeFinal
         try {
             conn.setReadTimeout(10000) /* milliseconds */
             conn.setConnectTimeout(15000) /* milliseconds */
@@ -220,9 +231,9 @@ class TmdbServerAuthenticate implements TmdbAuthenticateInterface {
             }
             final def tokenJsonData = new JsonSlurper(type: JsonParserType.INDEX_OVERLAY).parse(inputStream)
             SessionIdBundle = JsonParse.parseTmdbSessionId(tokenJsonData, respCode)
-        } catch (JsonException e) {
+        } catch (final JsonException e) {
             Log.e(LOG_TAG, "JsonException: ${e.message}", e)
-        } catch (IOException e) {
+        } catch (final IOException e) {
             Log.e(LOG_TAG, "IOException: ${e.message}", e)
         } finally {
             // Close the connection and input stream
@@ -238,10 +249,13 @@ class TmdbServerAuthenticate implements TmdbAuthenticateInterface {
      * @param url The TMDb URL
      * @return Bundle with Name of the user of the TMDb account & error flag
      */
-    private Bundle getAccountDetails(URL url) {
-        InputStream inputStream
+    private static Bundle getAccountDetails(final URL url) {
+        //noinspection GroovyVariableCanBeFinal
+        InputStream inputStream =null
         final HttpURLConnection conn = (HttpURLConnection) url.openConnection()
-        Bundle nameOfUser
+        //noinspection GroovyVariableCanBeFinal
+        Bundle nameOfUser = null
+        //noinspection GroovyVariableCanBeFinal,GroovyVariableCanBeFinal
         try {
             conn.setReadTimeout(10000) /* milliseconds */
             conn.setConnectTimeout(15000) /* milliseconds */
@@ -259,9 +273,9 @@ class TmdbServerAuthenticate implements TmdbAuthenticateInterface {
             }
             final def tokenJsonData = new JsonSlurper(type: JsonParserType.INDEX_OVERLAY).parse(inputStream)
             nameOfUser = JsonParse.parseTmdbAccountInfo(tokenJsonData, respCode)
-        } catch (IOException e) {
-            Log.e(LOG_TAG, "IOException: ${e.message}", e)
-        } catch (IOException e) {
+        } catch (final JsonException e) {
+            Log.e(LOG_TAG, "JsonException: ${e.message}", e)
+        } catch (final IOException e) {
             Log.e(LOG_TAG, "IOException: ${e.message}", e)
         } finally {
             // Close the connection and input stream

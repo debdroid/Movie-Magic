@@ -10,30 +10,44 @@ import groovy.transform.CompileStatic
 
 @CompileStatic
 class SearchDatabaseTable {
+    @SuppressWarnings("GroovyConstantNamingConvention")
     private static final String LOG_TAG = SearchDatabaseTable.class.getSimpleName()
 
+    @SuppressWarnings("GroovyConstantNamingConvention")
     public static final String SEARCH_FTS_VIRTUAL_TABLE_NAME = "search_movie_basic_info_table"
 
+    @SuppressWarnings("GroovyConstantNamingConvention")
     public static final String SEARCH_FTS_COLUMN_MOVIE_ID = 'search_fts_movie_id'
+    @SuppressWarnings("GroovyConstantNamingConvention")
     public static final String SEARCH_FTS_COLUMN_ADULT_FLAG = 'search_fts_adult_flag'
+    @SuppressWarnings("GroovyConstantNamingConvention")
     public static final String SEARCH_FTS_COLUMN_BACKDROP_PATH = 'search_fts_backdrop_path'
+    @SuppressWarnings("GroovyConstantNamingConvention")
     public static final String SEARCH_FTS_COLUMN_ORIGINAL_TITLE = 'search_fts_original_title'
+    @SuppressWarnings("GroovyConstantNamingConvention")
     public static final String SEARCH_FTS_COLUMN_RELEASE_DATE = 'search_fts_release_date'
+    @SuppressWarnings("GroovyConstantNamingConvention")
     public static final String SEARCH_FTS_COLUMN_POSTER_PATH = 'search_fts_poster_path'
+    @SuppressWarnings("GroovyConstantNamingConvention")
     public static final String SEARCH_FTS_COLUMN_TITLE = 'search_fts_title'
+    @SuppressWarnings("GroovyConstantNamingConvention")
     public static final String SEARCH_FTS_COLUMN_PAGE_NUMBER = 'search_fts_page_number'
+    @SuppressWarnings("GroovyConstantNamingConvention")
     public static final String SEARCH_FTS_COLUMN_MOVIE_CATEGORY = 'search_fts_movie_category'
+    @SuppressWarnings("GroovyConstantNamingConvention")
     public static final String SEARCH_FTS_COLUMN_QUERY_STRING = 'search_fts_query_string'
 
     private final SearchDatabaseOpenHelper mSearchDatabaseOpenHelper
 
-    public SearchDatabaseTable (Context context) {
+    public SearchDatabaseTable (final Context context) {
         mSearchDatabaseOpenHelper = new SearchDatabaseOpenHelper(context)
     }
 
     public static class SearchDatabaseOpenHelper extends SQLiteOpenHelper {
         private final Context mHelperContext
+        @SuppressWarnings("GroovyConstantNamingConvention")
         private static final String SEARCH_DATABASE_NAME = "search_database.db"
+        @SuppressWarnings("GroovyConstantNamingConvention")
         private static final int SEARCH_DATABASE_VERSION = 1
 
         //Create the SQL to create search_movie_basic_info table
@@ -52,18 +66,18 @@ class SearchDatabaseTable {
                 $SEARCH_FTS_COLUMN_MOVIE_CATEGORY TEXT,
                 $SEARCH_FTS_COLUMN_QUERY_STRING TEXT)"""
 
-        SearchDatabaseOpenHelper(Context context) {
+        SearchDatabaseOpenHelper(final Context context) {
             super(context, SEARCH_DATABASE_NAME, null, SEARCH_DATABASE_VERSION)
             mHelperContext = context
         }
 
         @Override
-        void onCreate(SQLiteDatabase sqLiteDatabase) {
+        void onCreate(final SQLiteDatabase sqLiteDatabase) {
             sqLiteDatabase.execSQL(SQL_CREATE_SEARCH_FTS_VIRTUAL_TABLE)
         }
 
         @Override
-        void onUpgrade(SQLiteDatabase sqLiteDatabase, int oldVersion, int newVersion) {
+        void onUpgrade(final SQLiteDatabase sqLiteDatabase, final int oldVersion, final int newVersion) {
             LogDisplay.callLog(LOG_TAG,"Upgrading database from version $oldVersion to $newVersion," +
                     " which will destroy all old data",LogDisplay.SEARCH_DATABASE_TABLE_LOG_FLAG)
             sqLiteDatabase.execSQL("DROP TABLE IF EXISTS $SearchDatabaseTable.SEARCH_FTS_VIRTUAL_TABLE_NAME")
@@ -73,12 +87,13 @@ class SearchDatabaseTable {
         }
     }
 
-    public int bulkInsert(ContentValues[] values) {
+    public int bulkInsert(final ContentValues[] values) {
         final SQLiteDatabase db = mSearchDatabaseOpenHelper.getWritableDatabase()
         db.beginTransaction()
         int returnCount = 0
         try {
-            for (ContentValues value : values) {
+            //noinspection GroovyVariableCanBeFinal
+            for (final ContentValues value : values) {
                 convertReleaseDate(value)
                 long _id = db.insert(SEARCH_FTS_VIRTUAL_TABLE_NAME, null, value)
                 if (_id != -1) {
@@ -92,10 +107,11 @@ class SearchDatabaseTable {
         return returnCount
     }
 
-    public Cursor getSearchResult(String query, String[] columns) {
+    public Cursor getSearchResult(final String query, final String[] columns) {
         final int wordCount = query.isEmpty() ? 0 : query.split("\\s+").length
         LogDisplay.callLog(LOG_TAG,"Query string -> $query & word count -> $wordCount",LogDisplay.SEARCH_DATABASE_TABLE_LOG_FLAG)
-        String[] selectionArgs
+        //noinspection GroovyVariableCanBeFinal
+        final String[] selectionArgs
         if(wordCount > 1) {
             final String quotedStringWithLastStar = "\"$query*\""
             LogDisplay.callLog(LOG_TAG,"Quoted string after adding \" and last star-> $quotedStringWithLastStar",LogDisplay.SEARCH_DATABASE_TABLE_LOG_FLAG)
@@ -111,7 +127,7 @@ class SearchDatabaseTable {
         return queryResult(selection, selectionArgs, columns)
     }
 
-    private Cursor queryResult(String selection, String[] selectionArgs, String[] columns) {
+    private Cursor queryResult(final String selection, final String[] selectionArgs, final String[] columns) {
         final SQLiteDatabase sqLiteDatabase = mSearchDatabaseOpenHelper.getReadableDatabase()
         final Cursor resultSet = sqLiteDatabase.query (true,                            // Indicate distinct records
                                                       SEARCH_FTS_VIRTUAL_TABLE_NAME,    // Table name
@@ -139,7 +155,7 @@ class SearchDatabaseTable {
      * @param values The date value to be converted to
      */
 
-    private void convertReleaseDate(ContentValues values) {
+    private static void convertReleaseDate(final ContentValues values) {
         // Covert the movie release date
         if (values.containsKey(SEARCH_FTS_COLUMN_RELEASE_DATE)) {
             final String movieReleaseDate = values.getAsString(SEARCH_FTS_COLUMN_RELEASE_DATE)

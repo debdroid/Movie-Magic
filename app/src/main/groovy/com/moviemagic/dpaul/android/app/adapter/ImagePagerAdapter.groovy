@@ -20,23 +20,25 @@ import groovy.transform.CompileStatic
 
 @CompileStatic
 class ImagePagerAdapter extends PagerAdapter {
+    @SuppressWarnings("GroovyConstantNamingConvention")
     private static final String LOG_TAG = ImagePagerAdapter.class.getSimpleName()
-    private final Context mContext
-    private final String mTitle
-    private final String[] mImageFilePaths
+    private final Context mContext = null
+    private final String mTitle = null
+    private final String[] mImageFilePaths = null
     private boolean visibilityFlag = true
-    private final ImagePagerAdapterOnClickHandler mImagePagerAdapterOnClickHandler
+    private final ImagePagerAdapterOnClickHandler mImagePagerAdapterOnClickHandler = null
     private LayoutInflater mLayoutInflater
-    private final boolean mBackdropImageFlag
+    private final boolean mBackdropImageFlag = false
     private int mPosition
+    @SuppressWarnings("GroovyConstantNamingConvention")
     public static final String PAGER_CURRENT_IMAGE_TAG = 'pager_current_image_tag'
 
     public ImagePagerAdapter() {
         LogDisplay.callLog(LOG_TAG,'ImagePagerAdapter empty constructor is called',LogDisplay.IMAGE_PAGER_ADAPTER_LOG_FLAG)
     }
 
-    public ImagePagerAdapter(Context context, String title, String[] imageFilePaths,
-                             ImagePagerAdapterOnClickHandler clickHandler, boolean backdropImageFlag) {
+    public ImagePagerAdapter(final Context context, final String title, final String[] imageFilePaths,
+                             final ImagePagerAdapterOnClickHandler clickHandler, final boolean backdropImageFlag) {
         LogDisplay.callLog(LOG_TAG,'ImagePagerAdapter non-empty constructor is called',LogDisplay.IMAGE_PAGER_ADAPTER_LOG_FLAG)
         mContext = context
         mTitle = title
@@ -51,12 +53,12 @@ class ImagePagerAdapter extends PagerAdapter {
     }
 
     @Override
-    boolean isViewFromObject(View view, Object object) {
+    boolean isViewFromObject(final View view, final Object object) {
         return view == ((FrameLayout) object)
     }
 
     @Override
-    Object instantiateItem(ViewGroup container, int position) {
+    Object instantiateItem(final ViewGroup container, final int position) {
         LogDisplay.callLog(LOG_TAG,"instantiateItem is called:$position",LogDisplay.IMAGE_VIEWER_ACTIVITY_LOG_FLAG)
         mPosition = position
         mLayoutInflater = LayoutInflater.from(mContext)
@@ -78,9 +80,10 @@ class ImagePagerAdapter extends PagerAdapter {
         final int totCount = mImageFilePaths.size()
         footerTextView.setText(String.format(mContext.getString(R.string.image_view_footer_value),(position + 1),totCount))
 
+        //noinspection GroovyVariableCanBeFinal
         view.setOnClickListener(new View.OnClickListener() {
             @Override
-            void onClick(View v) {
+            void onClick(final View v) {
                 LogDisplay.callLog(LOG_TAG,"view pager adapter item is clicked:$position",LogDisplay.IMAGE_VIEWER_ACTIVITY_LOG_FLAG)
                 if(visibilityFlag) {
                     visibilityFlag = false
@@ -101,15 +104,16 @@ class ImagePagerAdapter extends PagerAdapter {
         } else {
             final Animation animOut = AnimationUtils.loadAnimation(mContext,R.anim.abc_slide_out_bottom)
             animOut.setDuration(100)
+            //noinspection GroovyVariableCanBeFinal,GroovyVariableCanBeFinal,GroovyVariableCanBeFinal
             animOut.setAnimationListener(new Animation.AnimationListener() {
                 @Override
-                void onAnimationStart(Animation animation) {}
+                void onAnimationStart(final Animation animation) {}
                 @Override
-                void onAnimationEnd(Animation animation) {
+                void onAnimationEnd(final Animation animation) {
                     footerTextView.setVisibility(TextView.GONE)
                 }
                 @Override
-                void onAnimationRepeat(Animation animation) {}
+                void onAnimationRepeat(final Animation animation) {}
             })
             footerTextView.startAnimation(animOut)
         }
@@ -119,13 +123,13 @@ class ImagePagerAdapter extends PagerAdapter {
     }
 
     @Override
-    void destroyItem(ViewGroup container, int position, Object object) {
+    void destroyItem(final ViewGroup container, final int position, final Object object) {
         LogDisplay.callLog(LOG_TAG,'destroyItem is called',LogDisplay.IMAGE_PAGER_ADAPTER_LOG_FLAG)
         ((ViewPager) container).removeView((FrameLayout) object)
     }
 
     @Override
-    int getItemPosition(Object object) {
+    int getItemPosition(final Object object) {
         LogDisplay.callLog(LOG_TAG,'getItemPosition is called',LogDisplay.IMAGE_PAGER_ADAPTER_LOG_FLAG)
         return POSITION_NONE
     }

@@ -13,7 +13,7 @@
         android:id="@+id/nav_drawer_imageView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
         android:paddingTop="@dimen/nav_header_vertical_spacing"
         android:contentDescription="@string/nav_drawer_imageView_content_description"
@@ -34,7 +34,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/nav_drawer_user_name"
-        android:text="android.studio@android.com"
         android:visibility="gone"/>
 
 
@@ -43,8 +42,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/nav_drawer_user_name"
-        android:layout_toRightOf="@id/nav_drawer_user_id"
-        android:layout_alignParentRight="true"
+        android:layout_toEndOf="@id/nav_drawer_user_id"
+        android:layout_alignParentEnd="true"
         android:layout_alignParentBottom="true"
         style="?android:attr/borderlessButtonStyle"
         android:textColor="@color/white_color"

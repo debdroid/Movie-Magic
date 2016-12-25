@@ -11,10 +11,11 @@ import groovy.transform.CompileStatic
 
 @CompileStatic
 class SettingsFragment extends PreferenceFragmentCompat implements SharedPreferences.OnSharedPreferenceChangeListener {
+    @SuppressWarnings("GroovyConstantNamingConvention")
     private static final String LOG_TAG = SettingsFragment.class.getSimpleName()
 
     @Override
-    void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
+    void onCreatePreferences(final Bundle savedInstanceState, final String rootKey) {
         LogDisplay.callLog(LOG_TAG,'onCreate is called',LogDisplay.SETTINGS_FRAGMENT_LOG_FLAG)
 
         //Add the preference (i.e. Settings) xml
@@ -45,7 +46,7 @@ class SettingsFragment extends PreferenceFragmentCompat implements SharedPrefere
     }
 
     @Override
-    void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
+    void onSharedPreferenceChanged(final SharedPreferences sharedPreferences, final String key) {
         LogDisplay.callLog(LOG_TAG,'onSharedPreferenceChanged is called',LogDisplay.SETTINGS_FRAGMENT_LOG_FLAG)
         final Preference preference = findPreference(key) as Preference
         // For list preferences, look up the correct display value in

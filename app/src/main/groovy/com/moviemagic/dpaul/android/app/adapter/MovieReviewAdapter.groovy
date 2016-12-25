@@ -16,11 +16,12 @@ import groovy.transform.CompileStatic
 
 @CompileStatic
 class MovieReviewAdapter extends RecyclerView.Adapter<MovieReviewAdapter.MovieReviewAdapterViewHolder> {
+    @SuppressWarnings("GroovyConstantNamingConvention")
     private static final String LOG_TAG = MovieReviewAdapter.class.getSimpleName()
 
     private Cursor mCursor
-    private final Context mContext
-    private final TextView mRecyclerviewEmptyTextView
+    private final Context mContext = null
+    private final TextView mRecyclerviewEmptyTextView = null
     private int mPrimaryColor, mTitleTextColor, mBodyTextColor
 
     //Empty constructor
@@ -28,7 +29,7 @@ class MovieReviewAdapter extends RecyclerView.Adapter<MovieReviewAdapter.MovieRe
         LogDisplay.callLog(LOG_TAG, 'MovieReviewAdapter empty constructor is called', LogDisplay.MOVIE_REVIEW_ADAPTER_LOG_FLAG)
     }
 
-    public MovieReviewAdapter(Context ctx, TextView recyclerviewEmptyTextView) {
+    public MovieReviewAdapter(final Context ctx, final TextView recyclerviewEmptyTextView) {
         LogDisplay.callLog(LOG_TAG, 'MovieReviewAdapter non-empty constructor is called', LogDisplay.MOVIE_REVIEW_ADAPTER_LOG_FLAG)
         mContext = ctx
         mRecyclerviewEmptyTextView = recyclerviewEmptyTextView
@@ -41,23 +42,25 @@ class MovieReviewAdapter extends RecyclerView.Adapter<MovieReviewAdapter.MovieRe
         private final ImageButton mHideImageButton
 
 
-        public MovieReviewAdapterViewHolder(View view) {
+        public MovieReviewAdapterViewHolder(final View view) {
             super(view)
             movieReviewAuthor = view.findViewById(R.id.single_review_item_author) as TextView
             movieReviewContent = view.findViewById(R.id.single_review_item_review_content) as TextView
             mShowImageButton = view.findViewById(R.id.single_review_item_show_button) as ImageButton
             mHideImageButton = view.findViewById(R.id.single_review_item_hide_button) as ImageButton
+            //noinspection GroovyVariableCanBeFinal
             mShowImageButton.setOnClickListener( new View.OnClickListener() {
                 @Override
-                void onClick(View v) {
+                void onClick(final View v) {
                     mShowImageButton.setVisibility(Button.INVISIBLE)
                     mHideImageButton.setVisibility(Button.VISIBLE)
                     movieReviewContent.setMaxLines(Integer.MAX_VALUE)
                 }
             })
+            //noinspection GroovyVariableCanBeFinal
             mHideImageButton.setOnClickListener(new View.OnClickListener() {
                 @Override
-                void onClick(View v) {
+                void onClick(final View v) {
                     mShowImageButton.setVisibility(Button.VISIBLE)
                     mHideImageButton.setVisibility(Button.INVISIBLE)
                     movieReviewContent.setMaxLines(mContext.getResources().getString(R.string.single_review_item_collapse_line_item_count) as Integer)
@@ -67,15 +70,16 @@ class MovieReviewAdapter extends RecyclerView.Adapter<MovieReviewAdapter.MovieRe
     }
 
     @Override
-    MovieReviewAdapterViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    MovieReviewAdapterViewHolder onCreateViewHolder(final ViewGroup parent, final int viewType) {
         LogDisplay.callLog(LOG_TAG, 'onCreateViewHolder is called', LogDisplay.MOVIE_REVIEW_ADAPTER_LOG_FLAG)
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.single_movie_review_item, parent, false)
+        //noinspection GroovyVariableCanBeFinal
+        final View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.single_movie_review_item, parent, false)
         view.setFocusable(true)
         return new MovieReviewAdapterViewHolder(view)
     }
 
     @Override
-    void onBindViewHolder(MovieReviewAdapterViewHolder holder, int position) {
+    void onBindViewHolder(final MovieReviewAdapterViewHolder holder, final int position) {
         LogDisplay.callLog(LOG_TAG,'onBindViewHolder is called',LogDisplay.MOVIE_REVIEW_ADAPTER_LOG_FLAG)
         //Move the cursor to correct position
         mCursor.moveToPosition(position)
@@ -102,7 +106,7 @@ class MovieReviewAdapter extends RecyclerView.Adapter<MovieReviewAdapter.MovieRe
         return mCursor.getCount()
     }
 
-    public void swapCursor(Cursor newCursor) {
+    public void swapCursor(final Cursor newCursor) {
         LogDisplay.callLog(LOG_TAG, 'swapCursor is called', LogDisplay.MOVIE_REVIEW_ADAPTER_LOG_FLAG)
         mCursor = newCursor
         if (getItemCount() == 0) {
@@ -116,7 +120,7 @@ class MovieReviewAdapter extends RecyclerView.Adapter<MovieReviewAdapter.MovieRe
     //Since the color is decided once the poster is downloaded by Picasso
     //but by then adapter might got loaded with data. Hence call notifyDataSetChanged
     //so that it get's recreated with correct color
-    public void changeColor(int primaryColor, int titleTextColor, int bodyTextColor) {
+    public void changeColor(final int primaryColor, final int titleTextColor, final int bodyTextColor) {
         mPrimaryColor = primaryColor
         mTitleTextColor = titleTextColor
         mBodyTextColor = bodyTextColor

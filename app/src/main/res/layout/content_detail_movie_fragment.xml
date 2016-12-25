@@ -4,7 +4,8 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    android:background="@color/primary">
+    android:background="@color/primary"
+    tools:ignore="Overdraw">
     <!-- Layout for title, genre & run time -->
     <LinearLayout
         android:id="@+id/movie_detail_title_layout"
@@ -22,7 +23,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:fontFamily="sans-serif"
-            android:gravity="left"
+            android:gravity="start"
             android:textAppearance="@style/TextAppearance.AppCompat.Headline"
             android:textColor="@color/white_color" />
         <LinearLayout
@@ -32,8 +33,8 @@
             android:orientation="horizontal">
             <ImageView
                 android:id="@+id/movie_detail_mpaa_image"
-                android:layout_width="@dimen/detail_today_layout_mpga_image_size"
-                android:layout_height="@dimen/detail_today_layout_mpga_image_size"
+                android:layout_width="@dimen/detail_today_layout_mppa_image_size"
+                android:layout_height="@dimen/detail_today_layout_mppa_image_size"
                 android:scaleType="centerInside"
                 android:contentDescription="@string/movie_detail_mpaa_image_content_description"
                 android:src="@mipmap/ic_launcher" />
@@ -42,9 +43,10 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:paddingLeft="@dimen/m_design_screen_edge_left_right_margin"
+                android:paddingStart="@dimen/m_design_screen_edge_left_right_margin"
                 android:textAppearance="@style/TextAppearance.AppCompat.Small"
-                android:textColor="@color/grey_color" />
+                android:textColor="@color/grey_color"
+                tools:ignore="RtlSymmetry" />
             <TextView
                 android:id="@+id/movie_detail_title_runtime"
                 android:layout_width="wrap_content"
@@ -65,9 +67,9 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:paddingBottom="@dimen/m_design_space_between_content_area"
-        android:paddingLeft="@dimen/m_design_screen_edge_left_right_margin"
         android:paddingStart="@dimen/m_design_screen_edge_left_right_margin"
-        android:paddingTop="@dimen/m_design_space_between_content_area">
+        android:paddingTop="@dimen/m_design_space_between_content_area"
+        tools:ignore="RtlSymmetry">
         <ImageView
             android:id="@+id/movie_detail_poster_image"
             android:layout_width="@dimen/movie_detail_poster_width"
@@ -81,16 +83,14 @@
         <LinearLayout
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:gravity="left"
+            android:gravity="start"
             android:layout_weight="1"
             android:orientation="vertical">
             <TextView
                 android:id="@+id/movie_detail_poster_release_date_header"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:paddingLeft="@dimen/poster_image_data_fields_margin"
                 android:paddingStart="@dimen/poster_image_data_fields_margin"
-                android:paddingRight="@dimen/m_design_screen_edge_left_right_margin"
                 android:paddingEnd="@dimen/m_design_screen_edge_left_right_margin"
                 android:fontFamily="sans-serif-condensed"
                 android:text="@string/movie_detail_release_date"
@@ -100,9 +100,7 @@
                 android:id="@+id/movie_detail_poster_release_date"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:paddingLeft="@dimen/poster_image_data_fields_margin"
                 android:paddingStart="@dimen/poster_image_data_fields_margin"
-                android:paddingRight="@dimen/m_design_screen_edge_left_right_margin"
                 android:paddingEnd="@dimen/m_design_screen_edge_left_right_margin"
                 android:fontFamily="sans-serif-condensed"
                 android:textAppearance="@style/TextAppearance.AppCompat.Medium"
@@ -110,15 +108,13 @@
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
-                android:layout_marginLeft="@dimen/poster_image_data_fields_margin"
+                android:layout_marginStart="@dimen/poster_image_data_fields_margin"
                 android:background="@color/divider_color" />
             <TextView
                 android:id="@+id/movie_detail_poster_budget_header"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:paddingLeft="@dimen/poster_image_data_fields_margin"
                 android:paddingStart="@dimen/poster_image_data_fields_margin"
-                android:paddingRight="@dimen/m_design_screen_edge_left_right_margin"
                 android:paddingEnd="@dimen/m_design_screen_edge_left_right_margin"
                 android:fontFamily="sans-serif-condensed"
                 android:text="@string/movie_detail_budget"
@@ -128,9 +124,7 @@
                 android:id="@+id/movie_detail_poster_budget"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:paddingLeft="@dimen/poster_image_data_fields_margin"
                 android:paddingStart="@dimen/poster_image_data_fields_margin"
-                android:paddingRight="@dimen/m_design_screen_edge_left_right_margin"
                 android:paddingEnd="@dimen/m_design_screen_edge_left_right_margin"
                 android:fontFamily="sans-serif-condensed"
                 android:textAppearance="@style/TextAppearance.AppCompat.Medium"
@@ -138,15 +132,13 @@
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
-                android:layout_marginLeft="@dimen/poster_image_data_fields_margin"
+                android:layout_marginStart="@dimen/poster_image_data_fields_margin"
                 android:background="@color/divider_color" />
             <TextView
                 android:id="@+id/movie_detail_poster_revenue_header"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:paddingLeft="@dimen/poster_image_data_fields_margin"
                 android:paddingStart="@dimen/poster_image_data_fields_margin"
-                android:paddingRight="@dimen/m_design_screen_edge_left_right_margin"
                 android:paddingEnd="@dimen/m_design_screen_edge_left_right_margin"
                 android:fontFamily="sans-serif-condensed"
                 android:text="@string/movie_detail_revenue"
@@ -156,9 +148,7 @@
                 android:id="@+id/movie_detail_poster_revenue"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:paddingLeft="@dimen/poster_image_data_fields_margin"
                 android:paddingStart="@dimen/poster_image_data_fields_margin"
-                android:paddingRight="@dimen/m_design_screen_edge_left_right_margin"
                 android:paddingEnd="@dimen/m_design_screen_edge_left_right_margin"
                 android:fontFamily="sans-serif-condensed"
                 android:textAppearance="@style/TextAppearance.AppCompat.Medium"
@@ -166,15 +156,13 @@
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
-                android:layout_marginLeft="@dimen/poster_image_data_fields_margin"
+                android:layout_marginStart="@dimen/poster_image_data_fields_margin"
                 android:background="@color/divider_color" />
             <TextView
                 android:id="@+id/movie_detail_poster_popularity_header"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:paddingLeft="@dimen/poster_image_data_fields_margin"
                 android:paddingStart="@dimen/poster_image_data_fields_margin"
-                android:paddingRight="@dimen/m_design_screen_edge_left_right_margin"
                 android:paddingEnd="@dimen/m_design_screen_edge_left_right_margin"
                 android:fontFamily="sans-serif-condensed"
                 android:text="@string/person_popularity"
@@ -184,9 +172,7 @@
                 android:id="@+id/movie_detail_poster_popularity"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:paddingLeft="@dimen/poster_image_data_fields_margin"
                 android:paddingStart="@dimen/poster_image_data_fields_margin"
-                android:paddingRight="@dimen/m_design_screen_edge_left_right_margin"
                 android:paddingEnd="@dimen/m_design_screen_edge_left_right_margin"
                 android:fontFamily="sans-serif-condensed"
                 android:textAppearance="@style/TextAppearance.AppCompat.Medium"
@@ -194,7 +180,7 @@
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
-                android:layout_marginLeft="@dimen/poster_image_data_fields_margin"
+                android:layout_marginStart="@dimen/poster_image_data_fields_margin"
                 android:background="@color/divider_color" />
         </LinearLayout>
     </LinearLayout>
@@ -216,7 +202,7 @@
                 android:id="@+id/movie_detail_tmdb_rating_header"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="left"
+                android:layout_gravity="start"
                 android:fontFamily="sans-serif-condensed"
                 android:text="@string/tmdb_rating_text"
                 android:textAppearance="@style/TextAppearance.AppCompat.Title"
@@ -225,38 +211,41 @@
                 android:id="@+id/movie_detail_tmdb_rating_vote_count_header"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="left"
+                android:layout_gravity="start"
                 android:fontFamily="sans-serif-condensed"
-                android:paddingLeft="@dimen/m_design_space_between_content_area"
+                android:paddingStart="@dimen/m_design_space_between_content_area"
                 android:text="@string/tmdb_rating_vote_count_text"
                 android:textAppearance="@style/TextAppearance.AppCompat.Title"
-                android:textColor="@color/white_color" />
+                android:textColor="@color/white_color"
+                tools:ignore="RtlSymmetry" />
             <TextView
                 android:id="@+id/movie_detail_tmdb_rating_vote_count_val"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="left"
+                android:layout_gravity="start"
                 android:fontFamily="sans-serif-condensed"
-                android:paddingLeft="@dimen/m_design_space_between_content_area"
+                android:paddingStart="@dimen/m_design_space_between_content_area"
                 android:textAppearance="@style/TextAppearance.AppCompat.Title"
-                android:textColor="@color/white_color" />
+                android:textColor="@color/white_color"
+                tools:ignore="RtlSymmetry" />
             <TextView
                 android:id="@+id/movie_detail_tmdb_rating_vote_count_trailer"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="left"
+                android:layout_gravity="start"
                 android:fontFamily="sans-serif-condensed"
-                android:paddingLeft="@dimen/m_design_space_between_content_area"
+                android:paddingStart="@dimen/m_design_space_between_content_area"
                 android:text="@string/tmdb_rating_vote_count_closing_brace"
                 android:textAppearance="@style/TextAppearance.AppCompat.Title"
-                android:textColor="@color/white_color" />
+                android:textColor="@color/white_color"
+                tools:ignore="RtlSymmetry" />
         </LinearLayout>
         <RatingBar
             android:id="@+id/movie_detail_tmdb_rating_bar"
             style="?android:attr/ratingBarStyleIndicator"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="left"
+            android:layout_gravity="start"
             android:isIndicator="true"
             android:max="10"
             android:numStars="10"
@@ -280,7 +269,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:fontFamily="sans-serif-condensed"
-            android:gravity="left"
+            android:gravity="start"
             android:text="@string/user_rating_text"
             android:textAppearance="@style/TextAppearance.AppCompat.Title"
             android:textColor="@color/white_color" />
@@ -289,7 +278,7 @@
             style="?android:attr/ratingBarStyleIndicator"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="left"
+            android:layout_gravity="start"
             android:isIndicator="false"
             android:max="10"
             android:numStars="10"
@@ -468,7 +457,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:fontFamily="sans-serif-condensed"
-            android:gravity="left"
+            android:gravity="start"
             android:text="@string/movie_detail_synopsis_tagline"
             android:textAppearance="@style/TextAppearance.AppCompat.Title"
             android:textColor="@color/white_color" />
@@ -485,7 +474,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:fontFamily="sans-serif-condensed"
-            android:gravity="left"
+            android:gravity="start"
             android:text="@string/movie_detail_synopsis"
             android:textAppearance="@style/TextAppearance.AppCompat.Title"
             android:textColor="@color/white_color" />
@@ -519,7 +508,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:fontFamily="sans-serif-condensed"
-            android:gravity="left"
+            android:gravity="start"
             android:paddingBottom="@dimen/m_design_space_between_content_area"
             android:text="@string/movie_detail_trailer_text"
             android:textAppearance="@style/TextAppearance.AppCompat.Title"
@@ -535,7 +524,7 @@
             android:id="@+id/movie_detail_trailer_empty_msg_text_view"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:gravity="left"
+            android:gravity="start"
             android:textAppearance="@style/TextAppearance.AppCompat.Medium"
             android:textColor="@color/grey_color"
             android:text="@string/movie_data_not_available"/>
@@ -563,7 +552,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:fontFamily="sans-serif-condensed"
-            android:gravity="left"
+            android:gravity="start"
             android:text="@string/movie_detail_prod_cmpy_text"
             android:textAppearance="@style/TextAppearance.AppCompat.Title"
             android:textColor="@color/white_color" />
@@ -581,7 +570,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:fontFamily="sans-serif-condensed"
-            android:gravity="left"
+            android:gravity="start"
             android:text="@string/movie_detail_production_country_text"
             android:textAppearance="@style/TextAppearance.AppCompat.Title"
             android:textColor="@color/white_color" />
@@ -615,7 +604,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:fontFamily="sans-serif-condensed"
-            android:gravity="left"
+            android:gravity="start"
             android:paddingBottom="@dimen/m_design_space_between_content_area"
             android:text="@string/movie_detail_cast_header_text"
             android:textAppearance="@style/TextAppearance.AppCompat.Title"
@@ -635,7 +624,7 @@
                 android:id="@+id/movie_detail_cast_grid_empty_msg_text_view"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:gravity="left"
+                android:gravity="start"
                 android:textAppearance="@style/TextAppearance.AppCompat.Medium"
                 android:textColor="@color/grey_color"
                 android:text="@string/movie_data_not_available"/>
@@ -663,7 +652,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:fontFamily="sans-serif-condensed"
-            android:gravity="left"
+            android:gravity="start"
             android:paddingBottom="@dimen/m_design_space_between_content_area"
             android:text="@string/movie_detail_crew_header_text"
             android:textAppearance="@style/TextAppearance.AppCompat.Title"
@@ -683,7 +672,7 @@
                 android:id="@+id/movie_detail_crew_grid_empty_msg_text_view"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:gravity="left"
+                android:gravity="start"
                 android:textAppearance="@style/TextAppearance.AppCompat.Medium"
                 android:textColor="@color/grey_color"
                 android:text="@string/movie_data_not_available"/>
@@ -693,7 +682,8 @@
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:background="@color/divider_color"/>
+        android:background="@color/divider_color"
+        tools:ignore="TooManyViews" />
     <!-- Layout for similar movie grid -->
     <LinearLayout
         android:id="@+id/movie_detail_similar_movie_header_layout"
@@ -711,7 +701,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:fontFamily="sans-serif-condensed"
-            android:gravity="left"
+            android:gravity="start"
             android:paddingBottom="@dimen/m_design_space_between_content_area"
             android:text="@string/movie_detail_similar_movie_header_text"
             android:textAppearance="@style/TextAppearance.AppCompat.Title"
@@ -731,7 +721,7 @@
                 android:id="@+id/movie_detail_similar_movie_grid_empty_msg_text_view"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:gravity="left"
+                android:gravity="start"
                 android:textAppearance="@style/TextAppearance.AppCompat.Medium"
                 android:textColor="@color/grey_color"
                 android:text="@string/movie_data_not_available"/>
@@ -760,7 +750,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:fontFamily="sans-serif-condensed"
-            android:gravity="left"
+            android:gravity="start"
             android:text="@string/movie_detail_collection_header_text"
             android:textAppearance="@style/TextAppearance.AppCompat.Title"
             android:textColor="@color/white_color" />
@@ -780,6 +770,7 @@
             android:elevation="@dimen/m_design_toolbar_elevation"
             android:scaleType="centerCrop"
             android:src="@drawable/grid_image_placeholder"
+            android:contentDescription="@string/movie_detail_collection_image_content_description"
             tools:ignore="UnusedAttribute" />
     </LinearLayout>
     <!-- line divider -->
@@ -805,7 +796,7 @@
             android:layout_height="wrap_content"
             android:paddingBottom="@dimen/m_design_space_between_content_area"
             android:fontFamily="sans-serif-condensed"
-            android:gravity="left"
+            android:gravity="start"
             android:text="@string/movie_detail_web_links_header"
             android:textAppearance="@style/TextAppearance.AppCompat.Title"
             android:textColor="@color/white_color" />
@@ -817,7 +808,6 @@
                 android:id="@+id/movie_detail_web_links_home_page_button"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginRight="@dimen/m_design_space_between_content_area"
                 android:layout_marginEnd="@dimen/m_design_space_between_content_area"
                 android:layout_weight="1"
                 android:fontFamily="sans-serif-condensed"
@@ -825,12 +815,12 @@
                 android:gravity="center"
                 android:background="@color/primary_dark"
                 android:textAppearance="@style/TextAppearance.AppCompat.Title"
-                android:textColor="@color/grey_color" />
+                android:textColor="@color/grey_color"
+                tools:ignore="ButtonStyle" />
             <Button
                 android:id="@+id/movie_detail_web_links_imdb_link_button"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/m_design_space_between_content_area"
                 android:layout_marginStart="@dimen/m_design_space_between_content_area"
                 android:layout_weight="1"
                 android:fontFamily="sans-serif-condensed"
@@ -838,7 +828,8 @@
                 android:gravity="center"
                 android:background="@color/primary_dark"
                 android:textAppearance="@style/TextAppearance.AppCompat.Title"
-                android:textColor="@color/grey_color" />
+                android:textColor="@color/grey_color"
+                tools:ignore="ButtonStyle" />
         </LinearLayout>
     </LinearLayout>
     <!-- line divider -->
@@ -864,7 +855,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:fontFamily="sans-serif-condensed"
-            android:gravity="left"
+            android:gravity="start"
             android:paddingBottom="@dimen/m_design_space_between_content_area"
             android:text="@string/movie_detail_review_header_text"
             android:textAppearance="@style/TextAppearance.AppCompat.Title"
@@ -884,7 +875,7 @@
                 android:id="@+id/movie_detail_review_recycler_view_empty_msg_text_view"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:gravity="left"
+                android:gravity="start"
                 android:textAppearance="@style/TextAppearance.AppCompat.Medium"
                 android:textColor="@color/grey_color"
                 android:text="@string/movie_data_not_available"/>

@@ -32,6 +32,7 @@ import groovy.transform.CompileStatic
 
 @CompileStatic
 class ImageViewerActivity extends AppCompatActivity {
+    @SuppressWarnings("GroovyConstantNamingConvention")
     private static final String LOG_TAG = ImageViewerActivity.class.getSimpleName()
     private ArrayList<String> mImageFilePath
     private String mTitle
@@ -40,10 +41,11 @@ class ImageViewerActivity extends AppCompatActivity {
     private RelativeLayout mImageViewerMainLayout
     protected ViewPager mViewPager
     private ImagePagerAdapter mAdapter
+    @SuppressWarnings("GroovyConstantNamingConvention")
     private static final int REQUEST_EXTERNAL_STORAGE = 1
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
+    public void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_image_viewer)
         mViewPager = findViewById(R.id.image_viewer_pager) as ViewPager
@@ -69,23 +71,25 @@ class ImageViewerActivity extends AppCompatActivity {
         getSupportActionBar().setTitle(mTitle)
 
         //Create and set PagerAdapter
+        //noinspection GroovyVariableCanBeFinal
         mAdapter = new ImagePagerAdapter(this, mTitle, mImageFilePath as String[],
                 new ImagePagerAdapter.ImagePagerAdapterOnClickHandler(){
                     @Override
-                    void onClick(int position) {
+                    void onClick(final int position) {
                         LogDisplay.callLog(LOG_TAG, "ImagePagerAdapter clicked.Position->$position", LogDisplay.IMAGE_VIEWER_ACTIVITY_LOG_FLAG)
                         if(getSupportActionBar() && getSupportActionBar().isShowing()) {
                             final Animation animOut = new TranslateAnimation(0,0,0,-100)
                             animOut.setDuration(100)
+                            //noinspection GroovyVariableCanBeFinal,GroovyVariableCanBeFinal,GroovyVariableCanBeFinal
                             animOut.setAnimationListener(new Animation.AnimationListener() {
                                 @Override
-                                void onAnimationStart(Animation animation) {}
+                                void onAnimationStart(final Animation animation) {}
                                 @Override
-                                void onAnimationEnd(Animation animation) {
+                                void onAnimationEnd(final Animation animation) {
                                     getSupportActionBar().hide()
                                 }
                                 @Override
-                                void onAnimationRepeat(Animation animation) {}
+                                void onAnimationRepeat(final Animation animation) {}
                             })
                             myToolbar.startAnimation(animOut)
 
@@ -104,14 +108,14 @@ class ImageViewerActivity extends AppCompatActivity {
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
+    public boolean onCreateOptionsMenu(final Menu menu) {
         // Inflate the menu, this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.image_viewer_activity_menu, menu)
         return true
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
+    public boolean onOptionsItemSelected(final MenuItem item) {
         final int itemId = item.getItemId()
         switch (itemId) {
             case android.R.id.home:
@@ -137,7 +141,8 @@ class ImageViewerActivity extends AppCompatActivity {
         // Get the ImageView which is currently hosting the image
         final ImageView imageView = mViewPager.findViewWithTag(ImagePagerAdapter.PAGER_CURRENT_IMAGE_TAG+imagePosition) as ImageView
         // Get the Bitmap from the ImageView
-        Bitmap bitmapImage
+        //noinspection GroovyVariableCanBeFinal
+        final Bitmap bitmapImage
         if(imageView && imageView.getDrawable()) {
             bitmapImage  = ((BitmapDrawable) imageView.getDrawable()).getBitmap()
         } else {
@@ -156,6 +161,7 @@ class ImageViewerActivity extends AppCompatActivity {
             LogDisplay.callLog(LOG_TAG,"mImagePath -> ${mImagePath.toString()}",LogDisplay.IMAGE_VIEWER_ACTIVITY_LOG_FLAG)
             LogDisplay.callLog(LOG_TAG,"imageFile -> ${imageFile.toString()}",LogDisplay.IMAGE_VIEWER_ACTIVITY_LOG_FLAG)
 
+            //noinspection GroovyVariableCanBeFinal
             try {
                 // Make sure the Pictures directory exists.
                 if(!mImagePath.mkdirs()) {
@@ -183,7 +189,8 @@ class ImageViewerActivity extends AppCompatActivity {
                     final InputStream is = new ByteArrayInputStream(stream.toByteArray())
 
                     final OutputStream os = new FileOutputStream(imageFile)
-                    byte[] data = new byte[is.available()]
+                    //noinspection GroovyVariableCanBeFinal
+                    final byte[] data = new byte[is.available()]
                     is.read(data)
                     os.write(data)
                     is.close()
@@ -201,7 +208,7 @@ class ImageViewerActivity extends AppCompatActivity {
                     LogDisplay.callLog(LOG_TAG,"Insufficient space. Space needed -> $bitmapSize & space available - > $freeSpace",LogDisplay.IMAGE_VIEWER_ACTIVITY_LOG_FLAG)
                     Snackbar.make(mImageViewerMainLayout, getString(R.string.insufficient_space_msg), Snackbar.LENGTH_LONG).show()
                 }
-            } catch (IOException e) {
+            } catch (final IOException e) {
                 // Unable to create file, likely because external storage is
                 // not currently mounted.
                 Snackbar.make(mImageViewerMainLayout, getString(R.string.cannot_perform_operation_message), Snackbar.LENGTH_LONG).show()
@@ -229,10 +236,11 @@ class ImageViewerActivity extends AppCompatActivity {
                 // This method returns true if the app has requested this permission previously and the user denied the request but
                 // if the user turned down the permission request in the past and chose the Don't ask again option in the permission request system dialog,
                 // this method returns false
+                //noinspection GroovyVariableCanBeFinal
                 Snackbar.make(mImageViewerMainLayout, getString(R.string.write_permission_missing_msg), Snackbar.LENGTH_INDEFINITE)
                         .setAction(android.R.string.ok, new View.OnClickListener() {
                     @Override
-                    void onClick(View v) {
+                    void onClick(final View v) {
                         // Request the permission again
                         requestPermissionAgain()
                     }
@@ -260,7 +268,7 @@ class ImageViewerActivity extends AppCompatActivity {
     }
 
     @Override
-    void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+    void onRequestPermissionsResult(final int requestCode, @NonNull final String[] permissions, @NonNull final int[] grantResults) {
         LogDisplay.callLog(LOG_TAG,'onRequestPermissionsResult is called',LogDisplay.IMAGE_VIEWER_ACTIVITY_LOG_FLAG)
         switch (requestCode) {
             case REQUEST_EXTERNAL_STORAGE:
@@ -275,6 +283,8 @@ class ImageViewerActivity extends AppCompatActivity {
                     Snackbar.make(mImageViewerMainLayout, getString(R.string.write_permission_not_given_msg), Snackbar.LENGTH_LONG).show()
                 }
                 break
+            default:
+                LogDisplay.callLog(LOG_TAG,"Unknown request code. Request code -> $requestCode",LogDisplay.IMAGE_VIEWER_ACTIVITY_LOG_FLAG)
         }
     }
 
@@ -295,7 +305,7 @@ class ImageViewerActivity extends AppCompatActivity {
     }
 
     @Override
-    protected void onSaveInstanceState(Bundle outState) {
+    protected void onSaveInstanceState(final Bundle outState) {
         outState.putStringArrayList(GlobalStaticVariables.IMAGE_VIEWER_IMAGE_PATH_ARRAY,mImageFilePath)
         outState.putString(GlobalStaticVariables.IMAGE_VIEWER_TITLE,mTitle)
         outState.putBoolean(GlobalStaticVariables.IMAGE_VIEWER_BACKDROP_IMAGE_FLAG,mBackdropImageFlag)

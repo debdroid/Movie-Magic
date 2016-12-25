@@ -34,8 +34,10 @@ import com.moviemagic.dpaul.android.app.backgroundmodules.LogDisplay
 import com.squareup.picasso.Picasso
 import groovy.transform.CompileStatic
 
+@SuppressWarnings(["GroovyAssignabilityCheck", "GroovyAssignabilityCheck"])
 @CompileStatic
 class GridMovieFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
+    @SuppressWarnings("GroovyConstantNamingConvention")
     private static final String LOG_TAG = GridMovieFragment.class.getSimpleName()
     private int mCurrentPage = 0
     //To hold the previous count of the total records
@@ -63,14 +65,21 @@ class GridMovieFragment extends Fragment implements LoaderManager.LoaderCallback
     private Uri mMovieCategoryAndCollectionIdUri
     private String mMovieListType
     private boolean mShowSubTitleForUserLocalAndTmdbList = false
+    @SuppressWarnings("GroovyConstantNamingConvention")
     private static final int MOVIE_GRID_FRAGMENT_LOADER_ID = 0
+    @SuppressWarnings("GroovyConstantNamingConvention")
     private static final String SORT_MENU_FLAG = 'sort_menu_flag'
+    @SuppressWarnings("GroovyConstantNamingConvention")
     private static final String FILTER_MENU_FLAG = 'filter_menu_flag'
+    @SuppressWarnings("GroovyConstantNamingConvention")
     private static final String CURSOR_SELECTION_CLAUSE = 'selection_clause'
+    @SuppressWarnings("GroovyConstantNamingConvention")
     private static final String CURSOR_SELECTION_ARGUMENTS = 'selection_arguments'
+    @SuppressWarnings("GroovyConstantNamingConvention")
     private static final String CURSOR_SORT_CRITERIA = 'sort_Criteria'
 
     //Projection for movie_basic_info table
+    @SuppressWarnings("GroovyConstantNamingConvention")
     private static final String[] MOVIE_COLUMNS = [MovieMagicContract.MovieBasicInfo._ID,
                                                    MovieMagicContract.MovieBasicInfo.COLUMN_TITLE,
                                                    MovieMagicContract.MovieBasicInfo.COLUMN_POSTER_PATH,
@@ -78,11 +87,17 @@ class GridMovieFragment extends Fragment implements LoaderManager.LoaderCallback
                                                    MovieMagicContract.MovieBasicInfo.COLUMN_MOVIE_ID,
                                                    MovieMagicContract.MovieBasicInfo.COLUMN_MOVIE_LIST_TYPE]
     //These are indices of the above columns, if projection array changes then this needs to be changed
+    @SuppressWarnings("GroovyConstantNamingConvention")
     final static int COL_MOVIE_ROW_ID = 0
+    @SuppressWarnings("GroovyConstantNamingConvention")
     final static int COL_MOVIE_TITLE = 1
+    @SuppressWarnings("GroovyConstantNamingConvention")
     final static int COL_MOVIE_POSTER = 2
+    @SuppressWarnings("GroovyConstantNamingConvention")
     final static int COL_MOVIE_PAGE_NUM = 3
+    @SuppressWarnings("GroovyConstantNamingConvention")
     final static int COL_MOVIE_ID = 4
+    @SuppressWarnings("GroovyConstantNamingConvention")
     final static int COL_MOVIE_LIST_TYPE = 5
 
     //An empty constructor is needed so that lifecycle is properly handled
@@ -111,7 +126,7 @@ class GridMovieFragment extends Fragment implements LoaderManager.LoaderCallback
     }
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
+    public void onCreate(final Bundle savedInstanceState) {
         LogDisplay.callLog(LOG_TAG, 'onCreate is called', LogDisplay.GRID_MOVIE_FRAGMENT_LOG_FLAG)
         super.onCreate(savedInstanceState)
         //Following line needed to let android know that Fragment has options menu
@@ -121,10 +136,11 @@ class GridMovieFragment extends Fragment implements LoaderManager.LoaderCallback
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(final LayoutInflater inflater, final ViewGroup container, final Bundle savedInstanceState) {
         LogDisplay.callLog(LOG_TAG,'onCreateView is called',LogDisplay.GRID_MOVIE_FRAGMENT_LOG_FLAG)
         //Get the bundle from the Fragment
-        Bundle args = getArguments()
+        //noinspection GroovyVariableCanBeFinal
+        final Bundle args = getArguments()
         if (args) {
             mMovieCategoryAndCollectionIdUri = args.getParcelable(GlobalStaticVariables.MOVIE_CATEGORY_AND_COLL_ID_URI) as Uri
             mMovieCategory = MovieMagicContract.MovieBasicInfo.getMovieCategoryFromMovieAndCollectionIdUri(mMovieCategoryAndCollectionIdUri)
@@ -136,14 +152,16 @@ class GridMovieFragment extends Fragment implements LoaderManager.LoaderCallback
         }
 
         //Inflate the view before referring any view using id
-        View mRootView = inflater.inflate(R.layout.fragment_grid_movie,container,false)
+        //noinspection GroovyVariableCanBeFinal
+        final View mRootView = inflater.inflate(R.layout.fragment_grid_movie,container,false)
         mRecyclerView = mRootView.findViewById(R.id.auto_grid_recycler_view) as RecyclerView
         //Create a new interface member variable for MovieGridRecyclerAdapterOnClickHandler and the same is passed as
         //parameter to Adapter, this onClick method is called whenever onClick is called from MovieGridRecyclerAdapter
+        //noinspection GroovyVariableCanBeFinal,GroovyVariableCanBeFinal
         mGridRecyclerAdapter = new MovieGridRecyclerAdapter(getActivity(),
                 new MovieGridRecyclerAdapter.MovieGridRecyclerAdapterOnClickHandler(){
                     @Override
-                    void onClick(int movieId, MovieGridRecyclerAdapter.MovieGridRecyclerAdapterViewHolder viewHolder) {
+                    void onClick(final int movieId, final MovieGridRecyclerAdapter.MovieGridRecyclerAdapterViewHolder viewHolder) {
                         mCallbackForGridItemClick.onMovieGridItemSelected(movieId, mMovieCategory, viewHolder)
                     }
                 })
@@ -154,9 +172,11 @@ class GridMovieFragment extends Fragment implements LoaderManager.LoaderCallback
            mMovieCategory == GlobalStaticVariables.MOVIE_CATEGORY_TOP_RATED ||
            mMovieCategory == GlobalStaticVariables.MOVIE_CATEGORY_UPCOMING ||
            mMovieCategory == GlobalStaticVariables.MOVIE_CATEGORY_NOW_PLAYING) {
+            //noinspection GroovyVariableCanBeFinal
+            //noinspection GroovyVariableCanBeFinal,GroovyVariableCanBeFinal,GroovyVariableCanBeFinal,GroovyVariableCanBeFinal
             mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
                 @Override
-                void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+                void onScrollStateChanged(final RecyclerView recyclerView, final int newState) {
                     LogDisplay.callLog(LOG_TAG, "state=$newState",LogDisplay.GRID_MOVIE_FRAGMENT_LOG_FLAG)
                     //Pause / resume Picasso based on scroll state
                     if(newState == RecyclerView.SCROLL_STATE_IDLE || newState == RecyclerView.SCROLL_STATE_DRAGGING) {
@@ -167,7 +187,7 @@ class GridMovieFragment extends Fragment implements LoaderManager.LoaderCallback
                 }
 
                 @Override
-                void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                void onScrolled(final RecyclerView recyclerView, final int dx, final int dy) {
                     final GridLayoutManager gridLayoutManager = recyclerView.getLayoutManager() as GridLayoutManager
                     final int totalItemCount = gridLayoutManager.getItemCount()
                     final int lastVisibleItemPosition = gridLayoutManager.findLastVisibleItemPosition()
@@ -199,7 +219,8 @@ class GridMovieFragment extends Fragment implements LoaderManager.LoaderCallback
                     if (!isMoreDataToLoad && (lastVisibleItemPosition + mThreasholdCount) >= totalItemCount) {
                         isMoreDataToLoad = true
                         if (mMovieCategory != 'error') {
-                            String[] movieCategory = [mMovieCategory] as String[]
+                            //noinspection GroovyVariableCanBeFinal
+                            final String[] movieCategory = [mMovieCategory] as String[]
                             LogDisplay.callLog(LOG_TAG, 'Going to load more data...', LogDisplay.GRID_MOVIE_FRAGMENT_LOG_FLAG)
                             if(Utility.isReadyToDownload(getActivity())) {
                                 new LoadMoreMovies(getActivity(), mCurrentPage).execute(movieCategory)
@@ -216,7 +237,7 @@ class GridMovieFragment extends Fragment implements LoaderManager.LoaderCallback
 
 
     @Override
-    void onActivityCreated(Bundle savedInstanceState) {
+    void onActivityCreated(final Bundle savedInstanceState) {
         LogDisplay.callLog(LOG_TAG, 'onActivityCreated is called', LogDisplay.GRID_MOVIE_FRAGMENT_LOG_FLAG)
         super.onActivityCreated(savedInstanceState)
         //If savedInstanceState (i.e. in case of restore), restore the value of mMovieCategory
@@ -264,7 +285,7 @@ class GridMovieFragment extends Fragment implements LoaderManager.LoaderCallback
     }
 
     @Override
-    public void onCreateOptionsMenu (Menu menu, MenuInflater inflater) {
+    public void onCreateOptionsMenu (final Menu menu, final MenuInflater inflater) {
         LogDisplay.callLog(LOG_TAG, 'onCreateOptionsMenu is called', LogDisplay.GRID_MOVIE_FRAGMENT_LOG_FLAG)
         // Inflate the menu, this adds items to the action bar if it is present.
         inflater.inflate(R.menu.grid_fragment_menu, menu)
@@ -285,7 +306,7 @@ class GridMovieFragment extends Fragment implements LoaderManager.LoaderCallback
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
+    public boolean onOptionsItemSelected(final MenuItem item) {
         LogDisplay.callLog(LOG_TAG, 'onOptionsItemSelected is called', LogDisplay.GRID_MOVIE_FRAGMENT_LOG_FLAG)
         mValidMenuSelection = true
         switch (item.getItemId()) {
@@ -485,7 +506,7 @@ class GridMovieFragment extends Fragment implements LoaderManager.LoaderCallback
     }
 
     @Override
-    void onSaveInstanceState(Bundle outState) {
+    void onSaveInstanceState(final Bundle outState) {
         LogDisplay.callLog(LOG_TAG, 'onSaveInstanceState is called', LogDisplay.GRID_MOVIE_FRAGMENT_LOG_FLAG)
         LogDisplay.callLog(LOG_TAG, "mSortIsOn -> $mSortIsOn", LogDisplay.GRID_MOVIE_FRAGMENT_LOG_FLAG)
         LogDisplay.callLog(LOG_TAG, "mFilterIsOn -> $mFilterIsOn", LogDisplay.GRID_MOVIE_FRAGMENT_LOG_FLAG)
@@ -502,12 +523,13 @@ class GridMovieFragment extends Fragment implements LoaderManager.LoaderCallback
     }
 
     @Override
-    Loader<Cursor> onCreateLoader(int id, Bundle args) {
+    Loader<Cursor> onCreateLoader(final int id, final Bundle args) {
         LogDisplay.callLog(LOG_TAG, "onCreateLoader is called.loader id->$id", LogDisplay.GRID_MOVIE_FRAGMENT_LOG_FLAG)
         //Build the URI with movie category
         final Uri movieCategoryUri = MovieMagicContract.MovieBasicInfo.buildMovieUriWithMovieCategory(mMovieCategory)
         //Decide the uri based on request type (i.e. collection movies or rest)
-        Uri uri
+        //noinspection GroovyVariableCanBeFinal
+        final Uri uri
         if(mMovieCollectionId == 0) {
             uri = movieCategoryUri
         } else {
@@ -530,7 +552,7 @@ class GridMovieFragment extends Fragment implements LoaderManager.LoaderCallback
     }
 
     @Override
-    void onLoadFinished(Loader<Cursor> loader, Cursor data) {
+    void onLoadFinished(final Loader<Cursor> loader, final Cursor data) {
         LogDisplay.callLog(LOG_TAG,"onLoadFinished is called. Total record count -> ${data.getCount()}",LogDisplay.GRID_MOVIE_FRAGMENT_LOG_FLAG)
         data.moveToLast()
         if(data.moveToFirst()) {
@@ -580,7 +602,7 @@ class GridMovieFragment extends Fragment implements LoaderManager.LoaderCallback
     }
 
     @Override
-    void onLoaderReset(Loader<Cursor> loader) {
+    void onLoaderReset(final Loader<Cursor> loader) {
         LogDisplay.callLog(LOG_TAG,'onLoaderReset is called',LogDisplay.GRID_MOVIE_FRAGMENT_LOG_FLAG)
         mGridRecyclerAdapter.swapCursor(null)
     }
@@ -589,7 +611,7 @@ class GridMovieFragment extends Fragment implements LoaderManager.LoaderCallback
      * Determines if a subtitle will be shown or not
      * @param category Movie Category used to determine if subtitle to be shown
      */
-    protected void determineSubTitleShow(String category) {
+    protected void determineSubTitleShow(final String category) {
         switch (category) {
             case GlobalStaticVariables.MOVIE_CATEGORY_LOCAL_USER_WATCHED:
             case GlobalStaticVariables.MOVIE_CATEGORY_LOCAL_USER_FAVOURITE:
@@ -643,25 +665,30 @@ class GridMovieFragment extends Fragment implements LoaderManager.LoaderCallback
         // Build the dialog items based on list type (for user list a new menu item is shown)
         if(mMovieListType == GlobalStaticVariables.MOVIE_LIST_TYPE_TMDB_PUBLIC ||
             mMovieListType == GlobalStaticVariables.MOVIE_LIST_TYPE_TMDB_USER) {
+            //noinspection GroovyVariableCanBeFinal
+            //noinspection GroovyVariableCanBeFinal
             builder.setSingleChoiceItems(getResources().getStringArray(R.array.sort_elements_public_or_tmdb_user), -1, new DialogInterface.OnClickListener() {
                 @Override
-                void onClick(DialogInterface dialog, int which) {
+                void onClick(final DialogInterface dialog, final int which) {
                     LogDisplay.callLog(LOG_TAG, "iten selected is -> $which", LogDisplay.MOVIE_MAGIC_MAIN_LOG_FLAG)
                     mSortItemNumber = which
                 }
             })
         } else if (mMovieListType == GlobalStaticVariables.MOVIE_LIST_TYPE_USER_LOCAL_LIST) {
+            //noinspection GroovyVariableCanBeFinal
+            //noinspection GroovyVariableCanBeFinal
             builder.setSingleChoiceItems(getResources().getStringArray(R.array.sort_elements_user_local), -1, new DialogInterface.OnClickListener() {
                 @Override
-                void onClick(DialogInterface dialog, int which) {
+                void onClick(final DialogInterface dialog, final int which) {
                     LogDisplay.callLog(LOG_TAG, "iten selected is -> $which", LogDisplay.MOVIE_MAGIC_MAIN_LOG_FLAG)
                     mSortItemNumber = which
                 }
             })
         }
+        //noinspection GroovyVariableCanBeFinal,GroovyVariableCanBeFinal
         builder.setPositiveButton(getString(R.string.sort_dialog_ascending_button), new DialogInterface.OnClickListener() {
             @Override
-            void onClick(DialogInterface dialog, int which) {
+            void onClick(final DialogInterface dialog, final int which) {
                 LogDisplay.callLog(LOG_TAG, 'Dialog ascending is clicked.', LogDisplay.MOVIE_MAGIC_MAIN_LOG_FLAG)
                 mSortIsOn = true
                 mSortParam = "${determineSortType()} ASC"
@@ -669,9 +696,10 @@ class GridMovieFragment extends Fragment implements LoaderManager.LoaderCallback
             }
         })
         // Doing a bit of hacking to use alert dialog's cancel button as an action button
+        //noinspection GroovyVariableCanBeFinal,GroovyVariableCanBeFinal
         builder.setNegativeButton(getString(R.string.sort_dialog_descending_button), new DialogInterface.OnClickListener(){
             @Override
-            void onClick(DialogInterface dialog, int which) {
+            void onClick(final DialogInterface dialog, final int which) {
                 LogDisplay.callLog(LOG_TAG, 'Dialog descending is clicked.', LogDisplay.MOVIE_MAGIC_MAIN_LOG_FLAG)
                 mSortIsOn = true
                 mSortParam = "${determineSortType()} DESC"
@@ -679,9 +707,10 @@ class GridMovieFragment extends Fragment implements LoaderManager.LoaderCallback
             }
         })
         // Since the alert dialog's cancel button is used as an action button, using neutral button as cancel
+        //noinspection GroovyVariableCanBeFinal,GroovyVariableCanBeFinal
         builder.setNeutralButton(getString(R.string.sort_dialog_cancel_button), new DialogInterface.OnClickListener() {
             @Override
-            void onClick(DialogInterface dialog, int which) {
+            void onClick(final DialogInterface dialog, final int which) {
                 LogDisplay.callLog(LOG_TAG, 'Dialog cancel is clicked. No action needed.', LogDisplay.MOVIE_MAGIC_MAIN_LOG_FLAG)
                 dialog.dismiss()
             }
@@ -734,15 +763,18 @@ class GridMovieFragment extends Fragment implements LoaderManager.LoaderCallback
         builder.setTitle(getString(R.string.filter_release_year_dialog_title))
         // Get the current year
         final Calendar calendar = Calendar.getInstance()
-        int year = calendar.get(Calendar.YEAR)
+        //noinspection GroovyVariableCanBeFinal
+        final int year = calendar.get(Calendar.YEAR)
         // Create an array with current and last 99 years
         final String[] items = new String[100]
-        for(i in 0..99) {
+        //noinspection GroovyVariableCanBeFinal
+        for(final i in 0..99) {
             items[i] = year - i
         }
+        //noinspection GroovyVariableCanBeFinal,GroovyVariableCanBeFinal
         builder.setItems(items, new DialogInterface.OnClickListener() {
             @Override
-            void onClick(DialogInterface dialog, int which) {
+            void onClick(final DialogInterface dialog, final int which) {
                 LogDisplay.callLog(LOG_TAG, "Item ${items[which]} is clicked", LogDisplay.MOVIE_MAGIC_MAIN_LOG_FLAG)
                 final String selectedYearStartBound = "${items[which]}-01-01"
                 final String selectedYearEndBound = "${items[which]}-12-31"
@@ -757,9 +789,10 @@ class GridMovieFragment extends Fragment implements LoaderManager.LoaderCallback
                 restartCursorLoader()
             }
         })
+        //noinspection GroovyVariableCanBeFinal,GroovyVariableCanBeFinal
         builder.setNegativeButton(getString(R.string.action_cancel), new DialogInterface.OnClickListener(){
             @Override
-            void onClick(DialogInterface dialog, int which) {
+            void onClick(final DialogInterface dialog, final int which) {
                 LogDisplay.callLog(LOG_TAG, 'Dialog filter cancel is clicked. No action needed.', LogDisplay.MOVIE_MAGIC_MAIN_LOG_FLAG)
                 dialog.dismiss()
             }
@@ -792,7 +825,7 @@ class GridMovieFragment extends Fragment implements LoaderManager.LoaderCallback
      * @param drawable Drawable of either Sort or Filter icon
      * @param setColor Boolean falg (True to set color or False to reset color)
      */
-    protected void setIconColor(Drawable drawable, boolean setColor) {
+    protected void setIconColor(final Drawable drawable, final boolean setColor) {
         LogDisplay.callLog(LOG_TAG, 'setIconColor is called', LogDisplay.MOVIE_MAGIC_MAIN_LOG_FLAG)
         if(drawable) {
             if(setColor) {
@@ -806,24 +839,26 @@ class GridMovieFragment extends Fragment implements LoaderManager.LoaderCallback
     }
 
     @Override
-    public void onAttach(Context context) {
+    public void onAttach(final Context context) {
         LogDisplay.callLog(LOG_TAG,'onAttach is called',LogDisplay.GRID_MOVIE_FRAGMENT_LOG_FLAG)
         super.onAttach(context)
         // This makes sure that the container activity has implemented
         // the callback interface. If not, it throws an exception
+        //noinspection GroovyVariableCanBeFinal
         try {
             if(context instanceof Activity) {
                 mCallbackForGridItemClick = (CallbackForGridItemClick) context
             }
-        } catch (ClassCastException e) {
+        } catch (final ClassCastException e) {
             throw new ClassCastException(getActivity().toString()
                     + " must implement CallbackForGridItemClick interface")
         }
+        //noinspection GroovyVariableCanBeFinal
         try {
             if(context instanceof Activity) {
                 mCollectionColorChangeCallback = (CollectionColorChangeCallback) context
             }
-        } catch (ClassCastException e) {
+        } catch (final ClassCastException e) {
             throw new ClassCastException(getActivity().toString()
                     + " must implement CollectionColorChangeCallback interface")
         }

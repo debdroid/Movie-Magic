@@ -26,8 +26,10 @@ import groovy.json.JsonParserType
 import groovy.json.JsonSlurper;
 import groovy.transform.CompileStatic
 
+@SuppressWarnings("GroovyAssignabilityCheck")
 @CompileStatic
 class SearchActivity extends AppCompatActivity {
+    @SuppressWarnings("GroovyConstantNamingConvention")
     private static final String LOG_TAG = SearchActivity.class.getSimpleName()
 
     private SearchDatabaseTable mSearchDatabaseTable = new SearchDatabaseTable(this)
@@ -37,6 +39,7 @@ class SearchActivity extends AppCompatActivity {
     //Projection for search_movie_basic_info table (items are same as GridFragment except COLUMN_MOVIE_LIST_TYPE)
     //This is important as MovieGridRecyclerAdapter is driven by GridFragment projection column and the same
     //adapter is used for search activity result
+    @SuppressWarnings("GroovyConstantNamingConvention")
     private static final String[] SEARCH_MOVIE_COLUMNS = ["docid",
                                                    SearchDatabaseTable.SEARCH_FTS_COLUMN_TITLE,
                                                    SearchDatabaseTable.SEARCH_FTS_COLUMN_POSTER_PATH,
@@ -44,7 +47,7 @@ class SearchActivity extends AppCompatActivity {
                                                    SearchDatabaseTable.SEARCH_FTS_COLUMN_MOVIE_ID]
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
+    public void onCreate(final Bundle savedInstanceState) {
         LogDisplay.callLog(LOG_TAG,'onCreate is called',LogDisplay.SEARCH_ACTIVITY_LOG_FLAG)
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_search)
@@ -59,10 +62,11 @@ class SearchActivity extends AppCompatActivity {
         mRecyclerView.setNestedScrollingEnabled(false)
         //Create a new interface member variable for MovieGridRecyclerAdapterOnClickHandler and the same is passed as
         //parameter to Adapter, this onClick method is called whenever onClick is called from MovieGridRecyclerAdapter
+        //noinspection GroovyVariableCanBeFinal,GroovyVariableCanBeFinal
         mGridRecyclerAdapter = new MovieGridRecyclerAdapter(this,
                 new MovieGridRecyclerAdapter.MovieGridRecyclerAdapterOnClickHandler(){
                     @Override
-                    void onClick(int movieId, MovieGridRecyclerAdapter.MovieGridRecyclerAdapterViewHolder viewHolder) {
+                    void onClick(final int movieId, final MovieGridRecyclerAdapter.MovieGridRecyclerAdapterViewHolder viewHolder) {
                         handleMovieClick(movieId, viewHolder)
                     }
                 })
@@ -85,7 +89,7 @@ class SearchActivity extends AppCompatActivity {
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
+    public boolean onOptionsItemSelected(final MenuItem item) {
         if (item.getItemId() == android.R.id.home) { // Press appbar back button to go to previous activity
             finish()
             return true
@@ -128,7 +132,7 @@ class SearchActivity extends AppCompatActivity {
         private final ProgressDialog mProgressDialog
         private String queryString
 
-        public SearchMoviesOnline(Context ctx) {
+        public SearchMoviesOnline(final Context ctx) {
             LogDisplay.callLog(LOG_TAG, 'SearchMoviesOnline constructor is called', LogDisplay.SEARCH_ACTIVITY_LOG_FLAG)
             mContext = ctx
             mProgressDialog = new ProgressDialog(mContext, ProgressDialog.STYLE_SPINNER)
@@ -142,11 +146,12 @@ class SearchActivity extends AppCompatActivity {
         }
 
         @Override
-        protected String doInBackground(String... params) {
+        protected String doInBackground(final String... params) {
             queryString = params[0]
             List<ContentValues> contentValues = []
 
-            for (i in 1..MAX_PAGE_DOWNLOAD) {
+            //noinspection GroovyVariableCanBeFinal
+            for (final i in 1..MAX_PAGE_DOWNLOAD) {
                 if(i <= mTotalPage) {
                     contentValues = downloadSearchMovies(queryString, i)
                     if (contentValues && contentValues.size() > 0) {
@@ -168,7 +173,7 @@ class SearchActivity extends AppCompatActivity {
         }
 
         @Override
-        protected void onPostExecute(String result) {
+        protected void onPostExecute(final String result) {
             LogDisplay.callLog(LOG_TAG, 'onPostExecute is called', LogDisplay.SEARCH_ACTIVITY_LOG_FLAG)
             if(mProgressDialog) {
                 mProgressDialog.dismiss()
@@ -199,12 +204,14 @@ class SearchActivity extends AppCompatActivity {
             }
         }
 
-        protected List<ContentValues> downloadSearchMovies(String queryString, int page) {
+        protected List<ContentValues> downloadSearchMovies(final String queryString, final int page) {
             //TMDB api example
             https://api.themoviedb.org/3/search/movie?api_key=key&query=<query_string>
 
-            List<ContentValues> movieList
+            //noinspection GroovyVariableCanBeFinal
+            final List<ContentValues> movieList
 
+            //noinspection GroovyVariableCanBeFinal,GroovyVariableCanBeFinal,GroovyVariableCanBeFinal
             try {
                 if (page <= mTotalPage) {
                     final Uri.Builder uriBuilder = Uri.parse(GlobalStaticVariables.TMDB_MOVIE_BASE_URL).buildUpon()
@@ -217,7 +224,8 @@ class SearchActivity extends AppCompatActivity {
 
                     final URL url = new URL(uri.toString())
                     LogDisplay.callLog(LOG_TAG,"Movie url for search string $queryString -> ${uri.toString()}",LogDisplay.SEARCH_ACTIVITY_LOG_FLAG)
-                    def jsonData = new JsonSlurper(type: JsonParserType.INDEX_OVERLAY).parse(url)
+                    //noinspection GroovyVariableCanBeFinal
+                    final def jsonData = new JsonSlurper(type: JsonParserType.INDEX_OVERLAY).parse(url)
                     LogDisplay.callLog(LOG_TAG, "JSON DATA for $queryString -> $jsonData", LogDisplay.SEARCH_ACTIVITY_LOG_FLAG)
                     movieList = JsonParse.parseSearchMovieListJson(jsonData, queryString)
                     if(firstTotalPageRead) {
@@ -226,11 +234,11 @@ class SearchActivity extends AppCompatActivity {
                     }
                     return movieList
                 }
-            } catch (URISyntaxException e) {
+            } catch (final URISyntaxException e) {
                 Log.e(LOG_TAG, "URISyntaxException Error: ${e.message}", e)
-            } catch (JsonException e) {
+            } catch (final JsonException e) {
                 Log.e(LOG_TAG, " JsonException Error: ${e.message}", e)
-            } catch (IOException e) {
+            } catch (final IOException e) {
                 Log.e(LOG_TAG, "IOException Error: ${e.message}", e)
             }
             return null

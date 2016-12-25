@@ -23,11 +23,12 @@ import groovy.transform.CompileStatic
 
 @CompileStatic
 class MovieCastAdapter extends RecyclerView.Adapter<MovieCastAdapter.MovieCastAdapterViewHolder> {
+    @SuppressWarnings("GroovyConstantNamingConvention")
     private static final String LOG_TAG = MovieCastAdapter.class.getSimpleName()
 
     private Cursor mCursor
-    private final Context mContext
-    private final TextView mCastGridEmptyTextView
+    private final Context mContext = null
+    private final TextView mCastGridEmptyTextView = null
     private int mPrimaryDarkColor, mBodyTextColor
 
     //Empty constructor
@@ -35,7 +36,7 @@ class MovieCastAdapter extends RecyclerView.Adapter<MovieCastAdapter.MovieCastAd
         LogDisplay.callLog(LOG_TAG, 'MovieCastAdapter empty constructor is called', LogDisplay.MOVIE_CAST_ADAPTER_LOG_FLAG)
     }
 
-    public MovieCastAdapter(Context ctx, TextView emptyView) {
+    public MovieCastAdapter(final Context ctx, final TextView emptyView) {
         LogDisplay.callLog(LOG_TAG, 'MovieCastAdapter non-empty constructor is called', LogDisplay.MOVIE_CAST_ADAPTER_LOG_FLAG)
         mContext = ctx
         mCastGridEmptyTextView = emptyView
@@ -47,7 +48,7 @@ class MovieCastAdapter extends RecyclerView.Adapter<MovieCastAdapter.MovieCastAd
         public final TextView movieCastAsText
         public final TextView movieCastName
 
-        public MovieCastAdapterViewHolder(View view) {
+        public MovieCastAdapterViewHolder(final View view) {
             super(view)
             movieCastImageView = view.findViewById(R.id.single_movie_cast_grid_image) as ImageView
             movieCastCharacterName = view.findViewById(R.id.single_movie_cast_grid_char_name) as TextView
@@ -57,7 +58,7 @@ class MovieCastAdapter extends RecyclerView.Adapter<MovieCastAdapter.MovieCastAd
         }
 
         @Override
-        public void onClick(View v) {
+        public void onClick(final View v) {
             LogDisplay.callLog(LOG_TAG, "onClick is called.LayoutPos=${getLayoutPosition()}.AdapterPos=${getAdapterPosition()}", LogDisplay.MOVIE_CAST_ADAPTER_LOG_FLAG)
             mCursor.moveToPosition(getAdapterPosition())
             final int personId = mCursor.getInt(DetailMovieFragment.COL_MOVIE_CAST_PERSON_ID)
@@ -71,15 +72,16 @@ class MovieCastAdapter extends RecyclerView.Adapter<MovieCastAdapter.MovieCastAd
     }
 
     @Override
-    MovieCastAdapterViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    MovieCastAdapterViewHolder onCreateViewHolder(final ViewGroup parent, final int viewType) {
         LogDisplay.callLog(LOG_TAG, 'onCreateViewHolder is called', LogDisplay.MOVIE_CAST_ADAPTER_LOG_FLAG)
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.single_movie_cast_grid, parent, false)
+        //noinspection GroovyVariableCanBeFinal
+        final View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.single_movie_cast_grid, parent, false)
         view.setFocusable(true)
         return new MovieCastAdapterViewHolder(view)
     }
 
     @Override
-    void onBindViewHolder(MovieCastAdapterViewHolder holder, int position) {
+    void onBindViewHolder(final MovieCastAdapterViewHolder holder, final int position) {
         //Move the cursor to correct position
         mCursor.moveToPosition(position)
         LogDisplay.callLog(LOG_TAG, 'onBindViewHolder is called', LogDisplay.MOVIE_CAST_ADAPTER_LOG_FLAG)
@@ -105,7 +107,7 @@ class MovieCastAdapter extends RecyclerView.Adapter<MovieCastAdapter.MovieCastAd
         return mCursor.getCount()
     }
 
-    public void swapCursor(Cursor newCursor) {
+    public void swapCursor(final Cursor newCursor) {
         LogDisplay.callLog(LOG_TAG, 'swapCursor is called', LogDisplay.MOVIE_CAST_ADAPTER_LOG_FLAG)
         mCursor = newCursor
         if (getItemCount() == 0) {
@@ -119,7 +121,7 @@ class MovieCastAdapter extends RecyclerView.Adapter<MovieCastAdapter.MovieCastAd
     //Since the color is decided once the poster is downloaded by Picasso
     //but by then adapter might got loaded with data. Hence call notifyDataSetChanged
     //so that it get's recreated with correct color
-    public void changeColor(int primaryDarkColor, int bodyTextColor) {
+    public void changeColor(final int primaryDarkColor, final int bodyTextColor) {
         LogDisplay.callLog(LOG_TAG, 'changeColor is called', LogDisplay.MOVIE_CAST_ADAPTER_LOG_FLAG)
         mPrimaryDarkColor = primaryDarkColor
         mBodyTextColor = bodyTextColor

@@ -16,10 +16,11 @@ import groovy.transform.CompileStatic
  */
 @CompileStatic
 class NetworkReceiver extends BroadcastReceiver {
+    @SuppressWarnings("GroovyConstantNamingConvention")
     private static final String LOG_TAG = NetworkReceiver.class.getSimpleName()
 
     @Override
-    void onReceive(Context context, Intent intent) {
+    void onReceive(final Context context, final Intent intent) {
         LogDisplay.callLog(LOG_TAG,'onReceive is called',LogDisplay.NETWORK_RECEIVER_LOG_FLAG)
         final ConnectivityManager connMgr = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
         final NetworkInfo activeInfo = connMgr.getActiveNetworkInfo()

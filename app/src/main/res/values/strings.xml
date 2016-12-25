@@ -87,12 +87,12 @@
     <string name="format_release_date_notification">Releasing <xliff:g id="release_day_name">%1$s</xliff:g> (<xliff:g id="release_date">%2$s</xliff:g>)</string>
     <string name="image_view_footer_value"><xliff:g id="current">%d</xliff:g> of <xliff:g id="total">%d</xliff:g></string>
     <string name="search_no_movie_found_message">No movie found for search query <xliff:g id="no_movie">%1$s</xliff:g></string>
-    <string name="user_local_and_tmdb_list_subtitle_record_count"><xliff:g id="search_movie_count">%d</xliff:g> movies</string>
-    <string name="user_local_and_tmdb_list_subtitle_record_count_single"><xliff:g id="search_movie_count">%d</xliff:g> movie</string>
-    <string name="search_activity_subtitle_record_count">Found <xliff:g id="search_movie_count">%d</xliff:g> movies</string>
-    <string name="search_activity_subtitle_record_count_single_or_zero">Found <xliff:g id="search_movie_count">%d</xliff:g> movie</string>
-    <string name="grid_fragment_subtitle_record_count">Filtered <xliff:g id="filter_movie_count">%d</xliff:g> movies</string>
-    <string name="grid_fragment_subtitle_record_count_single">Filtered <xliff:g id="filter_movie_count">%d</xliff:g> movie</string>
+    <string name="user_local_and_tmdb_list_subtitle_record_count" xliff:ignore="PluralsCandidate"><xliff:g id="search_movie_count">%d</xliff:g> movies</string>
+    <string name="user_local_and_tmdb_list_subtitle_record_count_single" xliff:ignore="PluralsCandidate"><xliff:g id="search_movie_count">%d</xliff:g> movie</string>
+    <string name="search_activity_subtitle_record_count" xliff:ignore="PluralsCandidate">Found <xliff:g id="search_movie_count">%d</xliff:g> movies</string>
+    <string name="search_activity_subtitle_record_count_single_or_zero" xliff:ignore="PluralsCandidate">Found <xliff:g id="search_movie_count">%d</xliff:g> movie</string>
+    <string name="grid_fragment_subtitle_record_count" xliff:ignore="PluralsCandidate">Filtered <xliff:g id="filter_movie_count">%d</xliff:g> movies</string>
+    <string name="grid_fragment_subtitle_record_count_single" xliff:ignore="PluralsCandidate">Filtered <xliff:g id="filter_movie_count">%d</xliff:g> movie</string>
     <string name="saved_image_folder_name"><xliff:g id="parent_folder">%1$s</xliff:g>/Media/<xliff:g id="image_path">%2$s</xliff:g> Images</string>
 
 
@@ -191,7 +191,7 @@
     <!-- String for Tmdb rating update dialog -->
     <string name="tmdb_rating_dialog_title">Do you want to update the rating value to TMDb?</string>
     <string name="tmdb_rating_dialog_message">This movie is present in your TMDb Rated movie list. To update the TMDb rating value click OK (recommended). Otherwise this rating will be overwritten by your TMDb rating when you will browse this movie next time.</string>
-    <string name="tmdb_rating_dialog_ok_button">Ok</string>
+    <string name="tmdb_rating_dialog_ok_button">OK</string>
     <string name="tmdb_rating_dialog_cancel_button">Cancel</string>
 
     <string name="tmdb_rating_user_prompt_empty_msg">Please set your rating first then try to add the movie to your TMDb Rated list.</string>
@@ -282,7 +282,7 @@
     <string name="menu_action_filter_rating_greater_than_equal_5"><![CDATA[Rating >= 5]]></string>
     <string name="menu_action_filter_rating_less_than_5"><![CDATA[Rating < 5]]></string>
     <string name="filter_release_year_dialog_title">Enter Release Year</string>
-    <string name="filter_release_year_ok_button">Ok</string>
+    <string name="filter_release_year_ok_button">OK</string>
     <string name="filter_release_year_cancel_button">Cancel</string>
     <string name="filter_no_movie_msg">No movie met filter criteria</string>
     <string name="user_local_and_tmdb_list_subtitle_no_movie_msg">List is empty</string>
@@ -329,6 +329,8 @@
     <string name="movie_detail_user_tmdb_list_drawable_watchlist_content_description">User Tmdb watch list image button</string>
     <string name="movie_detail_user_tmdb_list_drawable_favourite_content_description">User Tmdb favourite image button</string>
     <string name="movie_detail_user_tmdb_list_drawable_rated_content_description">User Tmdb rated image button</string>
+    <string name="movie_detail_collection_image_content_description">Collection backdrop image</string>
+    <string name="menu_counter_zero_value">0</string>
 
 
 </resources>

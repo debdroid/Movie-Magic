@@ -14,7 +14,7 @@
             android:id="@+id/single_donate_item_header"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="left"
+            android:layout_gravity="start"
             android:fontFamily="sans-serif-condensed"
             android:textAppearance="@style/TextAppearance.AppCompat.Title"
             android:textColor="@color/primary_dark"/>
@@ -22,7 +22,7 @@
             android:id="@+id/single_donate_item_link_address"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="left"
+            android:layout_gravity="start"
             android:fontFamily="sans-serif-condensed"
             android:textAppearance="@style/TextAppearance.AppCompat.Medium"
             android:textColor="@color/primary"/>
@@ -31,7 +31,6 @@
         android:id="@+id/single_donate_item_donate_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
         android:layout_gravity="center"
         android:clickable="true"
         app:backgroundTint="@color/accent"

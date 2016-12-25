@@ -16,21 +16,23 @@ import groovy.transform.CompileStatic
 
 @CompileStatic
 class LoadCollectionData extends AsyncTask<Integer, Void, Void> {
+    @SuppressWarnings("GroovyConstantNamingConvention")
     private static final String LOG_TAG = LoadCollectionData.class.getSimpleName()
     private final ContentResolver mContentResolver
     private final Context mContext
 
-    public LoadCollectionData(Context ctx) {
+    public LoadCollectionData(final Context ctx) {
         mContext = ctx
         mContentResolver = mContext.getContentResolver()
     }
     @Override
-    protected Void doInBackground(Integer... params) {
+    protected Void doInBackground(final Integer... params) {
         final int collectionId = params[0]
         final int cleanupFlag = params[1]
         LogDisplay.callLog(LOG_TAG,"Parms-> collectionId: $collectionId & cleanupFlag: $cleanupFlag",LogDisplay.LOAD_COLLECTION_DATA_LOG_FLAG)
         //TMDB api example
         //https://api.themoviedb.org/3/collection/10?api_key=key
+        //noinspection GroovyVariableCanBeFinal,GroovyVariableCanBeFinal,GroovyVariableCanBeFinal
         try {
             final Uri.Builder uriBuilder = Uri.parse(GlobalStaticVariables.TMDB_MOVIE_BASE_URL).buildUpon()
 
@@ -42,7 +44,8 @@ class LoadCollectionData extends AsyncTask<Integer, Void, Void> {
             final URL url = new URL(uri.toString())
             LogDisplay.callLog(LOG_TAG,"Collection url-> ${uri.toString()}",LogDisplay.LOAD_COLLECTION_DATA_LOG_FLAG)
 
-            def jsonData = new JsonSlurper(type: JsonParserType.INDEX_OVERLAY).parse(url)
+            //noinspection GroovyVariableCanBeFinal
+            final def jsonData = new JsonSlurper(type: JsonParserType.INDEX_OVERLAY).parse(url)
 
             /**
              * There could be cases where the collection record exists but the flag is not updated due to some error
@@ -79,7 +82,8 @@ class LoadCollectionData extends AsyncTask<Integer, Void, Void> {
                  * Process and load (insert) the collection data
                  * **/
                 final ContentValues collectionDataContentValue = JsonParse.parseCollectionDataJson(jsonData) as ContentValues
-                Uri collectionDataUri
+                //noinspection GroovyVariableCanBeFinal
+                final Uri collectionDataUri
                 if(collectionDataContentValue) {
                     collectionDataUri = mContentResolver.insert(MovieMagicContract.MovieCollection.CONTENT_URI, collectionDataContentValue)
                     LogDisplay.callLog(LOG_TAG, "Collection data inserted.Uri->$collectionDataUri", LogDisplay.LOAD_COLLECTION_DATA_LOG_FLAG)
@@ -96,7 +100,8 @@ class LoadCollectionData extends AsyncTask<Integer, Void, Void> {
                  * Process and load (insert) the collection movies
                  * **/
                 final ContentValues[] collectionMoviesContentValues = JsonParse.parseCollectionMovieJson(jsonData) as ContentValues[]
-                int collectionMovieCount
+                //noinspection GroovyVariableCanBeFinal
+                int collectionMovieCount = 0
                 if(collectionMoviesContentValues) {
                     collectionMovieCount = mContentResolver.bulkInsert(MovieMagicContract.MovieBasicInfo.CONTENT_URI, collectionMoviesContentValues)
                     LogDisplay.callLog(LOG_TAG, "Total collection movie inserted.->$collectionMovieCount", LogDisplay.LOAD_COLLECTION_DATA_LOG_FLAG)
@@ -130,11 +135,11 @@ class LoadCollectionData extends AsyncTask<Integer, Void, Void> {
                     }
                 }
             }
-        } catch (URISyntaxException e) {
+        } catch (final URISyntaxException e) {
             Log.e(LOG_TAG, "URISyntaxException: ${e.message}", e)
-        } catch (JsonException e) {
+        } catch (final JsonException e) {
             Log.e(LOG_TAG, "JsonException: ${e.message}", e)
-        } catch (IOException e) {
+        } catch (final IOException e) {
             Log.e(LOG_TAG, "IOException: ${e.message}", e)
         }
         return null

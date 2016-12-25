@@ -19,11 +19,12 @@ import groovy.transform.CompileStatic
 
 @CompileStatic
 class SimilarMovieAdapter extends RecyclerView.Adapter<SimilarMovieAdapter.SimilarMovieAdapterViewHolder> {
+    @SuppressWarnings("GroovyConstantNamingConvention")
     private static final String LOG_TAG = SimilarMovieAdapter.class.getSimpleName()
 
     private Cursor mCursor
-    private final Context mContext
-    private final TextView mSimilarMovieGridEmptyTextView
+    private final Context mContext = null
+    private final TextView mSimilarMovieGridEmptyTextView = null
     private int mPrimaryDarkColor, mBodyTextColor
 
     //Empty constructor
@@ -31,7 +32,7 @@ class SimilarMovieAdapter extends RecyclerView.Adapter<SimilarMovieAdapter.Simil
         LogDisplay.callLog(LOG_TAG,'SimilarMovieAdapter empty constructor is called',LogDisplay.SIMILAR_MOVIE_ADAPTER_LOG_FLAG)
     }
 
-    public SimilarMovieAdapter(Context ctx, TextView emptyView){
+    public SimilarMovieAdapter(final Context ctx, final TextView emptyView){
         LogDisplay.callLog(LOG_TAG,'SimilarMovieAdapter non-empty constructor is called',LogDisplay.SIMILAR_MOVIE_ADAPTER_LOG_FLAG)
         mContext = ctx
         mSimilarMovieGridEmptyTextView = emptyView
@@ -41,7 +42,7 @@ class SimilarMovieAdapter extends RecyclerView.Adapter<SimilarMovieAdapter.Simil
         public final ImageView similarMovieImageView
         public final TextView similarMovieTextView
 
-        public SimilarMovieAdapterViewHolder(View view) {
+        public SimilarMovieAdapterViewHolder(final View view) {
             super(view)
             similarMovieImageView = view.findViewById(R.id.single_similar_movie_grid_image) as ImageView
             similarMovieTextView = view.findViewById(R.id.single_similar_movie_movie_name) as TextView
@@ -49,7 +50,7 @@ class SimilarMovieAdapter extends RecyclerView.Adapter<SimilarMovieAdapter.Simil
         }
 
         @Override
-        public void onClick(View v) {
+        public void onClick(final View v) {
             LogDisplay.callLog(LOG_TAG,"onClick is called.LayoutPos=${getLayoutPosition()}.AdapterPos=${getAdapterPosition()}",LogDisplay.SIMILAR_MOVIE_ADAPTER_LOG_FLAG)
             mCursor.moveToPosition(getAdapterPosition())
             final int movieId = mCursor.getInt(DetailMovieFragment.COL_SIMILAR_MOVIE_MOVIE_ID)
@@ -71,15 +72,16 @@ class SimilarMovieAdapter extends RecyclerView.Adapter<SimilarMovieAdapter.Simil
     }
 
     @Override
-    SimilarMovieAdapterViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    SimilarMovieAdapterViewHolder onCreateViewHolder(final ViewGroup parent, final int viewType) {
         LogDisplay.callLog(LOG_TAG,'onCreateViewHolder is called',LogDisplay.SIMILAR_MOVIE_ADAPTER_LOG_FLAG)
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.single_similar_movie_grid,parent,false)
+        //noinspection GroovyVariableCanBeFinal
+        final View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.single_similar_movie_grid,parent,false)
         view.setFocusable(true)
         return new SimilarMovieAdapterViewHolder(view)
     }
 
     @Override
-    void onBindViewHolder(SimilarMovieAdapterViewHolder holder, int position) {
+    void onBindViewHolder(final SimilarMovieAdapterViewHolder holder, final int position) {
         // move the cursor to correct position
         mCursor.moveToPosition(position)
         LogDisplay.callLog(LOG_TAG,'onBindViewHolder is called',LogDisplay.SIMILAR_MOVIE_ADAPTER_LOG_FLAG)
@@ -102,7 +104,7 @@ class SimilarMovieAdapter extends RecyclerView.Adapter<SimilarMovieAdapter.Simil
         return mCursor.getCount()
     }
 
-    public void swapCursor(Cursor newCursor) {
+    public void swapCursor(final Cursor newCursor) {
         mCursor = newCursor
         if (getItemCount() == 0) {
             mSimilarMovieGridEmptyTextView.setVisibility(TextView.VISIBLE)
@@ -115,7 +117,7 @@ class SimilarMovieAdapter extends RecyclerView.Adapter<SimilarMovieAdapter.Simil
     //Since the color is decided once the poster is downloaded by Picasso
     //but by then adapter might got loaded with data. Hence call notifyDataSetChanged
     //so that it get's recreated with correct color
-    public void changeColor(int primaryDarkColor, int bodyTextColor) {
+    public void changeColor(final int primaryDarkColor, final int bodyTextColor) {
         mPrimaryDarkColor = primaryDarkColor
         mBodyTextColor = bodyTextColor
         if (getItemCount() == 0) {

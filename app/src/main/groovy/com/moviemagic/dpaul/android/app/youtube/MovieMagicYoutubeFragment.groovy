@@ -12,10 +12,13 @@ import groovy.transform.CompileStatic
 
 @CompileStatic
 class MovieMagicYoutubeFragment extends YouTubePlayerSupportFragment implements YouTubePlayer.OnInitializedListener {
+    @SuppressWarnings("GroovyConstantNamingConvention")
     private static final String LOG_TAG = MovieMagicYoutubeFragment.class.getSimpleName()
 
     //Error dialog id
+    @SuppressWarnings("GroovyConstantNamingConvention")
     private static final int RECOVERY_ERROR_DIALOG_ID = 1
+    @SuppressWarnings("GroovyConstantNamingConvention")
     public static final String YOUTUBE_VIDEO_ID_KEY = 'youtube_video_id_key'
     private List<String> mVideoIds
 
@@ -39,7 +42,7 @@ class MovieMagicYoutubeFragment extends YouTubePlayerSupportFragment implements 
     }
 
     @Override
-    public void onCreate(Bundle bundle) {
+    public void onCreate(final Bundle bundle) {
         LogDisplay.callLog(LOG_TAG,'onCreate is called',LogDisplay.MOVIE_MAGIC_YOUTUBE_FRAGMENT_LOG_FLAG)
         super.onCreate(bundle)
 
@@ -68,7 +71,8 @@ class MovieMagicYoutubeFragment extends YouTubePlayerSupportFragment implements 
     }
 
     @Override
-    void onInitializationSuccess(YouTubePlayer.Provider provider, YouTubePlayer youTubePlayer, boolean restored) {
+    void onInitializationSuccess(
+            final YouTubePlayer.Provider provider, final YouTubePlayer youTubePlayer, final boolean restored) {
         LogDisplay.callLog(LOG_TAG,'onInitializationSuccess is called',LogDisplay.MOVIE_MAGIC_YOUTUBE_FRAGMENT_LOG_FLAG)
         //This flag tells the player to switch to landscape when in fullscreen, it will also return to portrait
         //when leaving fullscreen
@@ -88,7 +92,7 @@ class MovieMagicYoutubeFragment extends YouTubePlayerSupportFragment implements 
     }
 
     @Override
-    void onInitializationFailure(YouTubePlayer.Provider provider, YouTubeInitializationResult youTubeInitializationResult) {
+    void onInitializationFailure(final YouTubePlayer.Provider provider, final YouTubeInitializationResult youTubeInitializationResult) {
         LogDisplay.callLog(LOG_TAG,'onInitializationFailure is called',LogDisplay.MOVIE_MAGIC_YOUTUBE_FRAGMENT_LOG_FLAG)
         if (youTubeInitializationResult.isUserRecoverableError()) {
             LogDisplay.callLog(LOG_TAG,'onInitializationFailure:user recoverable',LogDisplay.MOVIE_MAGIC_YOUTUBE_FRAGMENT_LOG_FLAG)
@@ -101,13 +105,13 @@ class MovieMagicYoutubeFragment extends YouTubePlayerSupportFragment implements 
     }
 
     @Override
-    void setUserVisibleHint(boolean isVisibleToUser) {
+    void setUserVisibleHint(final boolean isVisibleToUser) {
         super.setUserVisibleHint(isVisibleToUser)
         LogDisplay.callLog(LOG_TAG,'setUserVisibleHint is called',LogDisplay.MOVIE_MAGIC_YOUTUBE_FRAGMENT_LOG_FLAG)
     }
 
     @Override
-    public void onSaveInstanceState(Bundle bundle) {
+    public void onSaveInstanceState(final Bundle bundle) {
         LogDisplay.callLog(LOG_TAG,'onSaveInstanceState is called',LogDisplay.MOVIE_MAGIC_YOUTUBE_FRAGMENT_LOG_FLAG)
         if(mVideoIds) {
             bundle.putStringArrayList(YOUTUBE_VIDEO_ID_KEY, new ArrayList<String>(mVideoIds))

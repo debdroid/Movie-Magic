@@ -17,10 +17,11 @@ import groovy.transform.CompileStatic
 
 @CompileStatic
 class MovieGridRecyclerAdapter extends RecyclerView.Adapter<MovieGridRecyclerAdapter.MovieGridRecyclerAdapterViewHolder>{
+    @SuppressWarnings("GroovyConstantNamingConvention")
     private static final String LOG_TAG = MovieGridRecyclerAdapter.class.getSimpleName()
-    private final Context mContext
+    private final Context mContext = null
     private Cursor mCursor
-    private final MovieGridRecyclerAdapterOnClickHandler mMovieGridRecyclerAdapterOnClickHandler
+    private final MovieGridRecyclerAdapterOnClickHandler mMovieGridRecyclerAdapterOnClickHandler = null
     private int mPrimaryDarkColor, mBodyTextColor
     //This flag is set as true by CollectionMovieFragment in order to apply color
     //And the same is set as false by MovieMagicMainActivity in order to use defualt color
@@ -31,7 +32,7 @@ class MovieGridRecyclerAdapter extends RecyclerView.Adapter<MovieGridRecyclerAda
         LogDisplay.callLog(LOG_TAG, 'MovieGridRecyclerAdapter empty constructor is called', LogDisplay.GRID_RECYCLER_ADAPTER_LOG_FLAG)
     }
 
-    public MovieGridRecyclerAdapter(Context ctx, MovieGridRecyclerAdapterOnClickHandler clickHandler) {
+    public MovieGridRecyclerAdapter(final Context ctx, final MovieGridRecyclerAdapterOnClickHandler clickHandler) {
         LogDisplay.callLog(LOG_TAG, 'MovieGridRecyclerAdapter non-empty constructor is called', LogDisplay.GRID_RECYCLER_ADAPTER_LOG_FLAG)
         mContext = ctx
         mMovieGridRecyclerAdapterOnClickHandler = clickHandler
@@ -41,14 +42,14 @@ class MovieGridRecyclerAdapter extends RecyclerView.Adapter<MovieGridRecyclerAda
         private final ImageView movieImageView
         private final TextView movieNameView
 
-        public MovieGridRecyclerAdapterViewHolder(View view) {
+        public MovieGridRecyclerAdapterViewHolder(final View view) {
             super(view)
             movieImageView = view.findViewById(R.id.grid_image_view) as ImageView
             movieNameView = view.findViewById(R.id.grid_text_view) as TextView
             view.setOnClickListener(this)
         }
         @Override
-        void onClick(View v) {
+        void onClick(final View v) {
             final int adapterPosition = getAdapterPosition()
             mCursor.moveToPosition(adapterPosition)
             final int movieId = mCursor.getInt(GridMovieFragment.COL_MOVIE_ID)
@@ -57,15 +58,16 @@ class MovieGridRecyclerAdapter extends RecyclerView.Adapter<MovieGridRecyclerAda
     }
 
     @Override
-    MovieGridRecyclerAdapterViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    MovieGridRecyclerAdapterViewHolder onCreateViewHolder(final ViewGroup parent, final int viewType) {
         LogDisplay.callLog(LOG_TAG, 'onCreateViewHolder is called', LogDisplay.GRID_RECYCLER_ADAPTER_LOG_FLAG)
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.single_grid_movie_item, parent, false)
+        //noinspection GroovyVariableCanBeFinal
+        final View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.single_grid_movie_item, parent, false)
         view.setFocusable(true)
         return new MovieGridRecyclerAdapterViewHolder(view)
     }
 
     @Override
-    void onBindViewHolder(MovieGridRecyclerAdapterViewHolder holder, int position) {
+    void onBindViewHolder(final MovieGridRecyclerAdapterViewHolder holder, final int position) {
         LogDisplay.callLog(LOG_TAG,'onBindViewHolder is called',LogDisplay.GRID_RECYCLER_ADAPTER_LOG_FLAG)
         // move the cursor to correct position
         mCursor.moveToPosition(position)
@@ -89,7 +91,7 @@ class MovieGridRecyclerAdapter extends RecyclerView.Adapter<MovieGridRecyclerAda
         return mCursor.getCount()
     }
 
-    public void swapCursor(Cursor newCursor) {
+    public void swapCursor(final Cursor newCursor) {
         LogDisplay.callLog(LOG_TAG, 'swapCursor is called', LogDisplay.GRID_RECYCLER_ADAPTER_LOG_FLAG)
         mCursor = newCursor
         notifyDataSetChanged()
@@ -98,7 +100,7 @@ class MovieGridRecyclerAdapter extends RecyclerView.Adapter<MovieGridRecyclerAda
     //Since the color is decided once the poster is downloaded by Picasso
     //but by then adapter might got loaded with data. Hence call notifyDataSetChanged
     //so that it get's recreated with correct color
-    public void changeColor(int primaryDarkColor, int bodyTextColor) {
+    public void changeColor(final int primaryDarkColor, final int bodyTextColor) {
         LogDisplay.callLog(LOG_TAG, 'changeColor is called', LogDisplay.GRID_RECYCLER_ADAPTER_LOG_FLAG)
         mPrimaryDarkColor = primaryDarkColor
         mBodyTextColor = bodyTextColor

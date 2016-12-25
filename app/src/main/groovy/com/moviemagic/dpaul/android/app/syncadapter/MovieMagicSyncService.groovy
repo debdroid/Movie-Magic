@@ -13,9 +13,11 @@ import groovy.transform.CompileStatic
  */
 @CompileStatic
 class MovieMagicSyncService extends Service {
+    @SuppressWarnings("GroovyConstantNamingConvention")
     private static final String LOG_TAG = MovieMagicSyncService.class.getSimpleName()
 
     // Object to use as a thread-safe lock
+    @SuppressWarnings("GroovyConstantNamingConvention")
     private static final Object sSyncAdapterLock = new Object()
     // Storage for an instance of the sync adapter
     private static MovieMagicSyncAdapter sMovieMagicSyncAdapter = null
@@ -44,7 +46,7 @@ class MovieMagicSyncService extends Service {
      *
      */
     @Override
-    public IBinder onBind(Intent intent) {
+    public IBinder onBind(final Intent intent) {
         /*
          * Get the object that allows external processes
          * to call onPerformSync(). The object is created

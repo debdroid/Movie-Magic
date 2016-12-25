@@ -21,7 +21,9 @@ import com.moviemagic.dpaul.android.app.contentprovider.MovieMagicContract.Movie
 
 //Since the json field is used dynamically, so this class is not compiled as CompileStatic
 //@CompileStatic
+@SuppressWarnings(["GroovyAssignabilityCheck", "GroovyAssignabilityCheck", "GroovyAssignabilityCheck", "GroovyAssignabilityCheck", "GroovyAssignabilityCheck", "GroovyAssignabilityCheck", "GroovyAssignabilityCheck", "GroovyAssignabilityCheck", "GroovyAssignabilityCheck", "GroovyAssignabilityCheck", "GroovyAssignabilityCheck", "GroovyAssignabilityCheck", "GroovyAssignabilityCheck", "GroovyAssignabilityCheck", "GroovyAssignabilityCheck", "GroovyAssignabilityCheck", "GroovyAssignabilityCheck", "GroovyAssignabilityCheck", "GroovyAssignabilityCheck", "GroovyAssignabilityCheck", "GroovyAssignabilityCheck", "GroovyAssignabilityCheck", "GroovyAssignabilityCheck", "GroovyAssignabilityCheck", "GroovyAssignabilityCheck", "GroovyAssignabilityCheck", "GroovyAssignabilityCheck", "GroovyAssignabilityCheck", "GroovyAssignabilityCheck", "GroovyAssignabilityCheck", "GroovyAssignabilityCheck", "GroovyAssignabilityCheck", "GroovyAssignabilityCheck", "GroovyAssignabilityCheck", "GroovyAssignabilityCheck", "GroovyAssignabilityCheck", "GroovyAssignabilityCheck", "GroovyAssignabilityCheck", "GroovyAssignabilityCheck", "GroovyAssignabilityCheck", "GroovyAssignabilityCheck", "GroovyAssignabilityCheck", "GroovyAssignabilityCheck", "GroovyAssignabilityCheck", "GroovyAssignabilityCheck", "GroovyAssignabilityCheck", "GroovyAssignabilityCheck", "GroovyAssignabilityCheck", "GroovyAssignabilityCheck", "GroovyAssignabilityCheck", "GroovyAssignabilityCheck", "GroovyAssignabilityCheck", "GroovyAssignabilityCheck", "GroovyAssignabilityCheck", "GroovyAssignabilityCheck", "GroovyAssignabilityCheck", "GroovyAssignabilityCheck", "GroovyAssignabilityCheck", "GroovyAssignabilityCheck", "GroovyAssignabilityCheck", "GroovyAssignabilityCheck", "GroovyAssignabilityCheck", "GroovyAssignabilityCheck", "GroovyAssignabilityCheck", "GroovyAssignabilityCheck", "GroovyAssignabilityCheck", "GroovyAssignabilityCheck", "GroovyAssignabilityCheck", "GroovyAssignabilityCheck", "GroovyAssignabilityCheck", "GroovyAssignabilityCheck", "GroovyAssignabilityCheck", "GroovyAssignabilityCheck", "GroovyAssignabilityCheck", "GroovyAssignabilityCheck", "GroovyAssignabilityCheck", "GroovyAssignabilityCheck", "GroovyAssignabilityCheck", "GroovyAssignabilityCheck", "GroovyAssignabilityCheck", "GroovyAssignabilityCheck", "GroovyAssignabilityCheck", "GroovyAssignabilityCheck", "GroovyAssignabilityCheck", "GroovyAssignabilityCheck", "GroovyAssignabilityCheck", "GroovyAssignabilityCheck", "GroovyAssignabilityCheck", "GroovyAssignabilityCheck", "GroovyAssignabilityCheck", "GroovyAssignabilityCheck", "GroovyAssignabilityCheck", "GroovyAssignabilityCheck", "GroovyAssignabilityCheck", "GroovyAssignabilityCheck", "GroovyAssignabilityCheck", "GroovyAssignabilityCheck", "GroovyAssignabilityCheck", "GroovyAssignabilityCheck", "GroovyAssignabilityCheck", "GroovyAssignabilityCheck", "GroovyAssignabilityCheck", "GroovyAssignabilityCheck", "GroovyAssignabilityCheck", "GroovyAssignabilityCheck", "GroovyAssignabilityCheck", "GroovyAssignabilityCheck", "GroovyAssignabilityCheck", "GroovyAssignabilityCheck", "GroovyAssignabilityCheck", "GroovyAssignabilityCheck", "GroovyAssignabilityCheck", "GroovyAssignabilityCheck", "GroovyAssignabilityCheck", "GroovyAssignabilityCheck", "GroovyAssignabilityCheck", "GroovyAssignabilityCheck", "GroovyAssignabilityCheck", "GroovyAssignabilityCheck", "GroovyAssignabilityCheck", "GroovyAssignabilityCheck", "GroovyAssignabilityCheck", "GroovyAssignabilityCheck", "GroovyAssignabilityCheck", "GroovyAssignabilityCheck", "GroovyAssignabilityCheck", "GroovyAssignabilityCheck", "GroovyAssignabilityCheck", "GroovyAssignabilityCheck", "GroovyAssignabilityCheck", "GroovyAssignabilityCheck", "GroovyAssignabilityCheck", "GroovyAssignabilityCheck", "GroovyAssignabilityCheck", "GroovyAssignabilityCheck", "GroovyAssignabilityCheck", "GroovyAssignabilityCheck", "GroovyAssignabilityCheck", "GroovyAssignabilityCheck", "GroovyAssignabilityCheck", "GroovyAssignabilityCheck", "GroovyAssignabilityCheck", "GroovyAssignabilityCheck", "GroovyAssignabilityCheck", "GroovyAssignabilityCheck", "GroovyAssignabilityCheck", "GroovyAssignabilityCheck", "GroovyAssignabilityCheck", "GroovyAssignabilityCheck", "GroovyAssignabilityCheck", "GroovyAssignabilityCheck", "GroovyAssignabilityCheck", "GroovyAssignabilityCheck", "GroovyAssignabilityCheck", "GroovyAssignabilityCheck", "GroovyAssignabilityCheck", "GroovyAssignabilityCheck", "GroovyAssignabilityCheck", "GroovyAssignabilityCheck", "GroovyAssignabilityCheck", "GroovyAssignabilityCheck", "GroovyAssignabilityCheck", "GroovyAssignabilityCheck", "GroovyAssignabilityCheck", "GroovyAssignabilityCheck", "GroovyAssignabilityCheck", "GroovyAssignabilityCheck", "GroovyAssignabilityCheck", "GroovyAssignabilityCheck", "GroovyAssignabilityCheck", "GroovyAssignabilityCheck", "GroovyAssignabilityCheck", "GroovyAssignabilityCheck", "GroovyAssignabilityCheck", "GroovyAssignabilityCheck", "GroovyAssignabilityCheck", "GroovyAssignabilityCheck", "GroovyAssignabilityCheck", "GroovyAssignabilityCheck", "GroovyAssignabilityCheck", "GroovyAssignabilityCheck", "GroovyAssignabilityCheck", "GroovyAssignabilityCheck", "GroovyAssignabilityCheck", "GroovyAssignabilityCheck", "GroovyAssignabilityCheck", "GroovyAssignabilityCheck", "GroovyAssignabilityCheck"])
 class JsonParse {
+    @SuppressWarnings("GroovyConstantNamingConvention")
     private static final String LOG_TAG = JsonParse.class.getSimpleName()
 
     /**
@@ -29,9 +31,11 @@ class JsonParse {
      * @param jsonData JSON data to be parsed
      * @return total page count
      */
-    static int getTotalPages(def jsonData) {
-        int currentPage = jsonData.page
-        int totalPage = jsonData.total_pages
+    static int getTotalPages(final def jsonData) {
+        //noinspection GroovyVariableCanBeFinal
+        final int currentPage = jsonData.page
+        //noinspection GroovyVariableCanBeFinal
+        final int totalPage = jsonData.total_pages
         LogDisplay.callLog(LOG_TAG, "CurrentPage -> $currentPage", LogDisplay.JSON_PARSE_LOG_FLAG)
         LogDisplay.callLog(LOG_TAG, "TotalPage -> $totalPage", LogDisplay.JSON_PARSE_LOG_FLAG)
         return totalPage
@@ -45,12 +49,17 @@ class JsonParse {
      * @param dateTimeStamp The Date & Time stamp to use while inserting the records
      * @return formatted list of movies as content values
      */
-    static List<ContentValues> parseMovieListJson(Context ctx, def jsonData, String category, String movieListType, String dateTimeStamp) {
-        List<ContentValues> movieList = []
-        def cnt = jsonData.results.size() - 1
+    @SuppressWarnings("GroovyAssignabilityCheck")
+    static List<ContentValues> parseMovieListJson(
+            final Context ctx, final def jsonData, final String category, final String movieListType, final String dateTimeStamp) {
+        //noinspection GroovyVariableCanBeFinal
+        final List<ContentValues> movieList = []
+        //noinspection GroovyVariableCanBeFinal
+        final def cnt = jsonData.results.size() - 1
         //Ensure that the results is not Null
         if (jsonData.results) {
-            for (i in 0..cnt) {
+            //noinspection GroovyVariableCanBeFinal
+            for (final i in 0..cnt) {
                 LogDisplay.callLog(LOG_TAG, "$i -> ${jsonData.results[i].title}", LogDisplay.JSON_PARSE_LOG_FLAG)
                 ContentValues movieValue = new ContentValues()
                 //if-else is used for all json fields for null safe
@@ -160,8 +169,9 @@ class JsonParse {
      * @param jsonData JSON data to be parsed
      * @return formatted updated movie details as content value
      */
-    static ContentValues parseAdditionalBasicMovieData(def jsonData) {
-        def genreCount = jsonData.genres.size()
+    static ContentValues parseAdditionalBasicMovieData(final def jsonData) {
+        //noinspection GroovyVariableCanBeFinal
+        final def genreCount = jsonData.genres.size()
         def genreVal = null
         if (genreCount == 1) {
             genreVal = jsonData.genres[0].name
@@ -169,14 +179,16 @@ class JsonParse {
             genreVal = jsonData.genres[0].name + " | " + jsonData.genres[1].name
         } else if (genreCount > 2) {
             genreVal = jsonData.genres[0].name + " | "
-            for (i in 1..(genreCount - 2)) {
+            //noinspection GroovyVariableCanBeFinal
+            for (final i in 1..(genreCount - 2)) {
                 genreVal = genreVal + jsonData.genres[i].name + " | "
             }
-            genreVal = genreVal + jsonData.genres[genreCount - 1].name
+            genreVal += jsonData.genres[genreCount - 1].name
         }
         LogDisplay.callLog(LOG_TAG, "Genre -> $genreVal", LogDisplay.JSON_PARSE_LOG_FLAG)
 
-        def prodCompanyCount = jsonData.production_companies.size()
+        //noinspection GroovyVariableCanBeFinal
+        final def prodCompanyCount = jsonData.production_companies.size()
         LogDisplay.callLog(LOG_TAG, "Production company Count -> $prodCompanyCount", LogDisplay.JSON_PARSE_LOG_FLAG)
 
         def prodCompanyVal = null
@@ -189,16 +201,17 @@ class JsonParse {
         } else if (prodCompanyCount > 2) {
             prodCompanyVal = jsonData.production_companies[0].name + " | "
             LogDisplay.callLog(LOG_TAG, "Production Companies 2-> $prodCompanyVal", LogDisplay.JSON_PARSE_LOG_FLAG)
-            for (i in 1..(prodCompanyCount - 2)) {
+            //noinspection GroovyVariableCanBeFinal
+            for (final i in 1..(prodCompanyCount - 2)) {
                 prodCompanyVal = prodCompanyVal + jsonData.production_companies[i].name + " | "
                 LogDisplay.callLog(LOG_TAG, "Production Companies 3-> $prodCompanyVal", LogDisplay.JSON_PARSE_LOG_FLAG)
             }
-            prodCompanyVal = prodCompanyVal + jsonData.production_companies[prodCompanyCount - 1].name
+            prodCompanyVal += jsonData.production_companies[prodCompanyCount - 1].name
         }
         LogDisplay.callLog(LOG_TAG, "Production Companies 4-> $prodCompanyVal", LogDisplay.JSON_PARSE_LOG_FLAG)
 
-
-        def prodCountryCount = jsonData.production_countries.size()
+        //noinspection GroovyVariableCanBeFinal
+        final def prodCountryCount = jsonData.production_countries.size()
         def prodCountryVal = null
         if (prodCountryCount == 1) {
             prodCountryVal = jsonData.production_countries[0].name
@@ -206,15 +219,16 @@ class JsonParse {
             prodCountryVal = jsonData.production_countries[0].name + " | " + jsonData.production_countries[1].name
         } else if (prodCountryCount > 2) {
             prodCountryVal = jsonData.production_countries[0].name + " | "
-            for (i in 1..(prodCountryCount - 2)) {
+            //noinspection GroovyVariableCanBeFinal
+            for (final i in 1..(prodCountryCount - 2)) {
                 prodCountryVal = prodCountryVal + jsonData.production_countries[i].name + " | "
             }
-            prodCountryVal = prodCountryVal + jsonData.production_countries[prodCountryCount - 1].name
+            prodCountryVal += jsonData.production_countries[prodCountryCount - 1].name
         }
         LogDisplay.callLog(LOG_TAG, "Production Countries -> $prodCountryVal", LogDisplay.JSON_PARSE_LOG_FLAG)
 
-
-        ContentValues movieAllValues = new ContentValues()
+        //noinspection GroovyVariableCanBeFinal
+        final ContentValues movieAllValues = new ContentValues()
         //if check is used for all json fields for null safe
         if (jsonData.belongs_to_collection) {
             if (jsonData.belongs_to_collection.id)
@@ -318,8 +332,9 @@ class JsonParse {
      * @param movieId Original movie id for which similar movies are fetched
      * @return formatted list of similar movies as content values
      */
-    static List<ContentValues> parseSimilarMovieListJson(Context ctx, def jsonData, int movieId) {
-        List<ContentValues> similarMovies
+    static List<ContentValues> parseSimilarMovieListJson(final Context ctx, final def jsonData, final int movieId) {
+        //noinspection GroovyVariableCanBeFinal
+        final List<ContentValues> similarMovies
         LogDisplay.callLog(LOG_TAG, "Similar -> $jsonData.similar", LogDisplay.JSON_PARSE_LOG_FLAG)
         similarMovies = parseMovieListJson(ctx, jsonData.similar,GlobalStaticVariables.MOVIE_CATEGORY_SIMILAR,
                 GlobalStaticVariables.MOVIE_LIST_TYPE_TMDB_SIMILAR, Utility.getTodayDate())
@@ -339,11 +354,14 @@ class JsonParse {
      * @param foreignKey Row id of primary movie table (movie_basic_info)
      * @return formatted list of movie cast as content values
      */
-    static List<ContentValues> parseMovieCastJson(def jsonData, int movieId, int foreignKey) {
-        List<ContentValues> movieCastList = []
-        def castCounter = jsonData.credits.cast.size() - 1
+    static List<ContentValues> parseMovieCastJson(final def jsonData, final int movieId, final int foreignKey) {
+        //noinspection GroovyVariableCanBeFinal
+        final List<ContentValues> movieCastList = []
+        //noinspection GroovyVariableCanBeFinal
+        final def castCounter = jsonData.credits.cast.size() - 1
         if (jsonData.credits.cast) {
-            for (i in 0..castCounter) {
+            //noinspection GroovyVariableCanBeFinal
+            for (final i in 0..castCounter) {
                 LogDisplay.callLog(LOG_TAG, "$i -> ${jsonData.credits.cast[i].name}", LogDisplay.JSON_PARSE_LOG_FLAG)
                 ContentValues movieCast = new ContentValues()
                 //if is used for all non-mandatory json fields for null safe
@@ -386,11 +404,14 @@ class JsonParse {
      * @param foreignKey Row id of primary movie table (movie_basic_info)
      * @return formatted list of movie crew as content values
      */
-    static List<ContentValues> parseMovieCrewJson(def jsonData, int movieId, int foreignKey) {
-        List<ContentValues> movieCrewList = []
-        def crewCounter = jsonData.credits.crew.size() - 1
+    static List<ContentValues> parseMovieCrewJson(final def jsonData, final int movieId, final int foreignKey) {
+        //noinspection GroovyVariableCanBeFinal
+        final List<ContentValues> movieCrewList = []
+        //noinspection GroovyVariableCanBeFinal
+        final def crewCounter = jsonData.credits.crew.size() - 1
         if (jsonData.credits.crew) {
-            for (i in 0..crewCounter) {
+            //noinspection GroovyVariableCanBeFinal
+            for (final i in 0..crewCounter) {
                 LogDisplay.callLog(LOG_TAG, "$i -> ${jsonData.credits.crew[i].name}", LogDisplay.JSON_PARSE_LOG_FLAG)
                 ContentValues movieCrew = new ContentValues()
                 //if is used for all non-mandatory json fields for null safe
@@ -431,11 +452,13 @@ class JsonParse {
      * @param foreignKey Row id of primary movie table (movie_basic_info)
      * @return formatted list of movie image as content values
      */
-    static List<ContentValues> parseMovieImageJson(def jsonData, int movieId, int foreignKey) {
-        List<ContentValues> movieImageList = []
+    static List<ContentValues> parseMovieImageJson(final def jsonData, final int movieId, final int foreignKey) {
+        //noinspection GroovyVariableCanBeFinal
+        final List<ContentValues> movieImageList = []
         def imageCounter = jsonData.images.backdrops.size() - 1
         if (jsonData.images.backdrops) {
-            for (i in 0..imageCounter) {
+            //noinspection GroovyVariableCanBeFinal
+            for (final i in 0..imageCounter) {
                 LogDisplay.callLog(LOG_TAG, "$i -> ${jsonData.images.backdrops[i].file_path}", LogDisplay.JSON_PARSE_LOG_FLAG)
                 ContentValues movieImage = new ContentValues()
                 //if is used for all non-mandatory json fields for null safe
@@ -459,7 +482,8 @@ class JsonParse {
 
         imageCounter = jsonData.images.posters.size() - 1
         if (jsonData.images.posters) {
-            for (i in 0..imageCounter) {
+            //noinspection GroovyVariableCanBeFinal
+            for (final i in 0..imageCounter) {
                 LogDisplay.callLog(LOG_TAG, "$i -> ${jsonData.images.posters[i].file_path}", LogDisplay.JSON_PARSE_LOG_FLAG)
                 ContentValues movieImage = new ContentValues()
                 //if is used for all non-mandatory json fields for null safe
@@ -493,11 +517,15 @@ class JsonParse {
      * @param foreignKey Row id of primary movie table (movie_basic_info)
      * @return formatted list of movie now_playing as content values
      */
-    static List<ContentValues> parseMovieVideoJson(def jsonData, int movieId, int foreignKey, int isForHomePage) {
-        List<ContentValues> movieVideoList = []
-        def videoCounter = jsonData.videos.results.size() - 1
+    static List<ContentValues> parseMovieVideoJson(
+            final def jsonData, final int movieId, final int foreignKey, final int isForHomePage) {
+        //noinspection GroovyVariableCanBeFinal
+        final List<ContentValues> movieVideoList = []
+        //noinspection GroovyVariableCanBeFinal
+        final def videoCounter = jsonData.videos.results.size() - 1
         if (jsonData.videos.results) {
-            for (i in 0..videoCounter) {
+            //noinspection GroovyVariableCanBeFinal
+            for (final i in 0..videoCounter) {
                 LogDisplay.callLog(LOG_TAG, "$i -> ${jsonData.videos.results[i].name}", LogDisplay.JSON_PARSE_LOG_FLAG)
                 ContentValues movieVideo = new ContentValues()
                 //if is used for all non-mandatory json fields for null safe
@@ -539,18 +567,22 @@ class JsonParse {
      * @param foreignKey Row id of primary movie table (movie_basic_info)
      * @return formatted list of movie release date as content values
      */
-    static List<ContentValues> parseMovieReleaseDateJson(def jsonData, int movieId, int foreignKey) {
-        List<ContentValues> movieReleaseDateList = []
-        def releaseDateCounter = jsonData.release_dates.results.size() - 1
+    static List<ContentValues> parseMovieReleaseDateJson(final def jsonData, final int movieId, final int foreignKey) {
+        //noinspection GroovyVariableCanBeFinal
+        final List<ContentValues> movieReleaseDateList = []
+        //noinspection GroovyVariableCanBeFinal
+        final def releaseDateCounter = jsonData.release_dates.results.size() - 1
         if (jsonData.release_dates.results) {
-            for (i in 0..releaseDateCounter) {
+            //noinspection GroovyVariableCanBeFinal
+            for (final i in 0..releaseDateCounter) {
                 LogDisplay.callLog(LOG_TAG, "$i -> ${jsonData.release_dates.results[i].iso_3166_1}", LogDisplay.JSON_PARSE_LOG_FLAG)
                 //if is used for all non-mandatory json fields for null safe
                 //if-else is used for all mandatory json fields for null safe
                 if (jsonData.release_dates.results[i].iso_3166_1) {
                     def isoCountry = jsonData.release_dates.results[i].iso_3166_1
                     def releaseDateInnerCounter = jsonData.release_dates.results[i].release_dates.size() - 1
-                    for(j in 0..releaseDateInnerCounter) {
+                    //noinspection GroovyVariableCanBeFinal
+                    for(final j in 0..releaseDateInnerCounter) {
                         ContentValues movieReleaseDate = new ContentValues()
                         if(isoCountry)
                             movieReleaseDate.put(MovieReleaseDate.COLUMN_RELEASE_ISO_COUNTRY,isoCountry)
@@ -591,11 +623,14 @@ class JsonParse {
      * @param foreignKey Row id of primary movie table (movie_basic_info)
      * @return formatted list of movie review as content values
      */
-    static List<ContentValues> parseMovieReviewJson(def jsonData, int movieId, int foreignKey) {
-        List<ContentValues> movieReviewList = []
-        def reviewCounter = jsonData.reviews.results.size() - 1
+    static List<ContentValues> parseMovieReviewJson(final def jsonData, final int movieId, final int foreignKey) {
+        //noinspection GroovyVariableCanBeFinal
+        final List<ContentValues> movieReviewList = []
+        //noinspection GroovyVariableCanBeFinal
+        final def reviewCounter = jsonData.reviews.results.size() - 1
         if (jsonData.reviews.results) {
-            for (i in 0..reviewCounter) {
+            //noinspection GroovyVariableCanBeFinal
+            for (final i in 0..reviewCounter) {
                 LogDisplay.callLog(LOG_TAG, "$i -> ${jsonData.reviews.results[i].author}", LogDisplay.JSON_PARSE_LOG_FLAG)
                 ContentValues movieReview = new ContentValues()
                 //if is used for all non-mandatory json fields for null safe
@@ -633,17 +668,20 @@ class JsonParse {
      * @param movieId Original movie id for which recommendations movies are fetched
      * @return formatted list of recommendations movies as content values
      */
-    static List<ContentValues> parseRecommendationsMovieListJson(Context ctx, def jsonData, int movieId) {
+    static List<ContentValues> parseRecommendationsMovieListJson(
+            final Context ctx, final def jsonData, final int movieId) {
         LogDisplay.callLog(LOG_TAG, "Recommendations -> $jsonData.recommendations", LogDisplay.JSON_PARSE_LOG_FLAG)
         final List<ContentValues> recommendationsMovies = parseMovieListJson(ctx, jsonData.recommendations,
                 GlobalStaticVariables.MOVIE_CATEGORY_RECOMMENDATIONS, GlobalStaticVariables.MOVIE_LIST_TYPE_TMDB_RECOMMENDATIONS,
                 Utility.getTodayDate())
         // We just need 2 items of the recommended movies, so remove rest of the items
         // We could have just parsed two records, but better to reuse the code which is already tested and proven
-        List<ContentValues> returnValue = []
+        //noinspection GroovyVariableCanBeFinal
+        final List<ContentValues> returnValue = []
         if (recommendationsMovies) {
             if(recommendationsMovies.size() > 1) {
-                for (i in 0..1) {
+                //noinspection GroovyVariableCanBeFinal
+                for (final i in 0..1) {
                     LogDisplay.callLog(LOG_TAG, "Index $i and value ${recommendationsMovies[i]}", LogDisplay.JSON_PARSE_LOG_FLAG)
                     returnValue << recommendationsMovies.get(i)
                 }
@@ -664,8 +702,9 @@ class JsonParse {
      * @param jsonData JSON data to be parsed
      * @return formatted collection data as content values
      */
-    static ContentValues parseCollectionDataJson(def jsonData) {
-        ContentValues collectionData = new ContentValues()
+    static ContentValues parseCollectionDataJson(final def jsonData) {
+        //noinspection GroovyVariableCanBeFinal
+        final ContentValues collectionData = new ContentValues()
         if(jsonData) {
             if (jsonData.id)
                 collectionData.put(MovieCollection.COLUMN_COLLECTION_ID, jsonData.id)
@@ -693,12 +732,15 @@ class JsonParse {
      * @param jsonData JSON data to be parsed
      * @return formatted list of collection movies as content values
      */
-    static List<ContentValues> parseCollectionMovieJson(def jsonData) {
-        List<ContentValues> collectionMovieList = []
-        def cnt = jsonData.parts.size() - 1
+    static List<ContentValues> parseCollectionMovieJson(final def jsonData) {
+        //noinspection GroovyVariableCanBeFinal
+        final List<ContentValues> collectionMovieList = []
+        //noinspection GroovyVariableCanBeFinal
+        final def cnt = jsonData.parts.size() - 1
         //Ensure that the parts is not Null
         if (jsonData.parts) {
-            for (i in 0..cnt) {
+            //noinspection GroovyVariableCanBeFinal
+            for (final i in 0..cnt) {
                 LogDisplay.callLog(LOG_TAG, "$i -> ${jsonData.parts[i].title}", LogDisplay.JSON_PARSE_LOG_FLAG)
                 ContentValues collectionMovieValue = new ContentValues()
                 //if-else is used for all json fields for null safe
@@ -778,13 +820,15 @@ class JsonParse {
      * @param personId Person id
      * @return formatted person info data as content values
      */
-    static ContentValues parsePersonInfoDataJson(def jsonData, int personId) {
-        ContentValues personInfoData = new ContentValues()
+    static ContentValues parsePersonInfoDataJson(final def jsonData, final int personId) {
+        //noinspection GroovyVariableCanBeFinal
+        final ContentValues personInfoData = new ContentValues()
         if(jsonData) {
             if(jsonData.adult)
                 personInfoData.put(MoviePersonInfo.COLUMN_PERSON_ADULT_FLAG,jsonData.adult)
 
-            def alsoKnownAsCount = jsonData.also_known_as.size()
+            //noinspection GroovyVariableCanBeFinal
+            final def alsoKnownAsCount = jsonData.also_known_as.size()
             def alsoKnownAsVal = null
             if (alsoKnownAsCount == 1) {
                 alsoKnownAsVal = jsonData.also_known_as[0]
@@ -792,10 +836,11 @@ class JsonParse {
                 alsoKnownAsVal = jsonData.also_known_as[0] + " | " + jsonData.also_known_as[1]
             } else if (alsoKnownAsCount > 2) {
                 alsoKnownAsVal = jsonData.also_known_as[0] + " | "
-                for (i in 1..(alsoKnownAsCount - 2)) {
+                //noinspection GroovyVariableCanBeFinal
+                for (final i in 1..(alsoKnownAsCount - 2)) {
                     alsoKnownAsVal = alsoKnownAsVal + jsonData.also_known_as[i] + " | "
                 }
-                alsoKnownAsVal = alsoKnownAsVal + jsonData.also_known_as[alsoKnownAsCount - 1]
+                alsoKnownAsVal += jsonData.also_known_as[alsoKnownAsCount - 1]
             }
             LogDisplay.callLog(LOG_TAG, "Also known as -> $alsoKnownAsVal", LogDisplay.JSON_PARSE_LOG_FLAG)
 
@@ -845,11 +890,14 @@ class JsonParse {
      * @param foreignKey Row id of person info table
      * @return formatted list of person cast data as content values
      */
-    static List<ContentValues> parsePersonCastDataJson(def jsonData, int personId, long foreignKey) {
-        List<ContentValues> personCastList = []
-        def castCounter = jsonData.movie_credits.cast.size() - 1
+    static List<ContentValues> parsePersonCastDataJson(final def jsonData, final int personId, final long foreignKey) {
+        //noinspection GroovyVariableCanBeFinal
+        final List<ContentValues> personCastList = []
+        //noinspection GroovyVariableCanBeFinal
+        final def castCounter = jsonData.movie_credits.cast.size() - 1
         if (jsonData.movie_credits.cast) {
-            for (i in 0..castCounter) {
+            //noinspection GroovyVariableCanBeFinal
+            for (final i in 0..castCounter) {
                 LogDisplay.callLog(LOG_TAG, "$i -> ${jsonData.movie_credits.cast[i].character} -> " +
                         "${jsonData.movie_credits.cast[i].original_title}", LogDisplay.JSON_PARSE_LOG_FLAG)
 
@@ -905,11 +953,14 @@ class JsonParse {
      * @param foreignKey Row id of person info table
      * @return formatted list of person crew data as content values
      */
-    static List<ContentValues> parsePersonCrewDataJson(def jsonData, int personId, long foreignKey) {
-        List<ContentValues> personCrewList = []
-        def crewCounter = jsonData.movie_credits.crew.size() - 1
+    static List<ContentValues> parsePersonCrewDataJson(final def jsonData, final int personId, final long foreignKey) {
+        //noinspection GroovyVariableCanBeFinal
+        final List<ContentValues> personCrewList = []
+        //noinspection GroovyVariableCanBeFinal
+        final def crewCounter = jsonData.movie_credits.crew.size() - 1
         if (jsonData.movie_credits.crew) {
-            for (i in 0..crewCounter) {
+            //noinspection GroovyVariableCanBeFinal
+            for (final i in 0..crewCounter) {
                 LogDisplay.callLog(LOG_TAG, "$i -> ${jsonData.movie_credits.crew[i].job} -> " +
                         "${jsonData.movie_credits.crew[i].original_title}", LogDisplay.JSON_PARSE_LOG_FLAG)
 
@@ -967,11 +1018,14 @@ class JsonParse {
      * @param foreignKey Row id of person info table
      * @return formatted list of person image data as content values
      */
-    static List<ContentValues> parsePersonImageDataJson(def jsonData, int personId, long foreignKey) {
-        List<ContentValues> personImageList = []
-        def imageCounter = jsonData.profiles.size() - 1
+    static List<ContentValues> parsePersonImageDataJson(final def jsonData, final int personId, final long foreignKey) {
+        //noinspection GroovyVariableCanBeFinal
+        final List<ContentValues> personImageList = []
+        //noinspection GroovyVariableCanBeFinal
+        final def imageCounter = jsonData.profiles.size() - 1
         if (jsonData.profiles) {
-            for (i in 0..imageCounter) {
+            //noinspection GroovyVariableCanBeFinal
+            for (final i in 0..imageCounter) {
                 LogDisplay.callLog(LOG_TAG, "$i -> ${jsonData.profiles[i].file_path}", LogDisplay.JSON_PARSE_LOG_FLAG)
 
                 ContentValues personImageData = new ContentValues()
@@ -1019,7 +1073,7 @@ class JsonParse {
      * @param respCode The response code of Http call
      * @return The Bundle with parsed data or error message & error flag
      */
-    static Bundle parseTmdbToken(def jsonData, int respCode) {
+    static Bundle parseTmdbToken(final def jsonData, final int respCode) {
         LogDisplay.callLog(LOG_TAG, 'parseTmdbToken is called', LogDisplay.JSON_PARSE_LOG_FLAG)
         LogDisplay.callLog(LOG_TAG, "respCode -> $respCode", LogDisplay.JSON_PARSE_LOG_FLAG)
         LogDisplay.callLog(LOG_TAG, "jsonData -> $jsonData", LogDisplay.JSON_PARSE_LOG_FLAG)
@@ -1041,7 +1095,7 @@ class JsonParse {
      * @param respCode The response code of Http call
      * @return The Bundle with parsed data or error message & error flag
      */
-    static Bundle parseTmdbAuthenticatedToken(def jsonData, int respCode) {
+    static Bundle parseTmdbAuthenticatedToken(final def jsonData, final int respCode) {
         LogDisplay.callLog(LOG_TAG, 'parseTmdbAuthenticatedToken is called', LogDisplay.JSON_PARSE_LOG_FLAG)
         LogDisplay.callLog(LOG_TAG, "respCode -> $respCode", LogDisplay.JSON_PARSE_LOG_FLAG)
         LogDisplay.callLog(LOG_TAG, "jsonData -> $jsonData", LogDisplay.JSON_PARSE_LOG_FLAG)
@@ -1063,7 +1117,7 @@ class JsonParse {
      * @param respCode The response code of Http call
      * @return The Bundle with parsed data or error message & error flag
      */
-    static Bundle parseTmdbSessionId(def jsonData, int respCode) {
+    static Bundle parseTmdbSessionId(final def jsonData, final int respCode) {
         LogDisplay.callLog(LOG_TAG, 'parseTmdbSessionId is called', LogDisplay.JSON_PARSE_LOG_FLAG)
         LogDisplay.callLog(LOG_TAG, "respCode -> $respCode", LogDisplay.JSON_PARSE_LOG_FLAG)
         LogDisplay.callLog(LOG_TAG, "jsonData -> $jsonData", LogDisplay.JSON_PARSE_LOG_FLAG)
@@ -1085,7 +1139,7 @@ class JsonParse {
      * @param respCode The response code of Http call
      * @return The Bundle with parsed data or error message & error flag
      */
-    static Bundle parseTmdbAccountInfo(def jsonData, int respCode) {
+    static Bundle parseTmdbAccountInfo(final def jsonData, final int respCode) {
         LogDisplay.callLog(LOG_TAG, 'parseTmdbAccountInfo is called', LogDisplay.JSON_PARSE_LOG_FLAG)
         LogDisplay.callLog(LOG_TAG, "respCode -> $respCode", LogDisplay.JSON_PARSE_LOG_FLAG)
         LogDisplay.callLog(LOG_TAG, "jsonData -> $jsonData", LogDisplay.JSON_PARSE_LOG_FLAG)
@@ -1111,7 +1165,7 @@ class JsonParse {
      * @param respCode The response code of Http call
      * @return The Status meesage of the request
      */
-    static String parseTmdbUserListPostResponse(def jsonData, int respCode) {
+    static String parseTmdbUserListPostResponse(final def jsonData, final int respCode) {
         LogDisplay.callLog(LOG_TAG, 'parseTmdbUserListPostResponse is called', LogDisplay.JSON_PARSE_LOG_FLAG)
         LogDisplay.callLog(LOG_TAG, "respCode -> $respCode", LogDisplay.JSON_PARSE_LOG_FLAG)
         LogDisplay.callLog(LOG_TAG, "jsonData -> $jsonData", LogDisplay.JSON_PARSE_LOG_FLAG)
@@ -1123,12 +1177,15 @@ class JsonParse {
      * @param jsonData JSON data to be parsed
      * @return formatted list of movies as content values
      */
-    static List<ContentValues> parseSearchMovieListJson(def jsonData, String queryString) {
-        List<ContentValues> movieList = []
-        def cnt = jsonData.results.size() - 1
+    static List<ContentValues> parseSearchMovieListJson(final def jsonData, final String queryString) {
+        //noinspection GroovyVariableCanBeFinal
+        final List<ContentValues> movieList = []
+        //noinspection GroovyVariableCanBeFinal
+        final def cnt = jsonData.results.size() - 1
         //Ensure that the results is not Null
         if (jsonData.results) {
-            for (i in 0..cnt) {
+            //noinspection GroovyVariableCanBeFinal
+            for (final i in 0..cnt) {
                 LogDisplay.callLog(LOG_TAG, "$i -> ${jsonData.results[i].title}", LogDisplay.JSON_PARSE_LOG_FLAG)
                 ContentValues movieValue = new ContentValues()
                 //if-else is used for all json fields for null safe

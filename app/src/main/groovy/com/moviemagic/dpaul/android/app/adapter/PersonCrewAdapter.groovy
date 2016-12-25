@@ -17,20 +17,21 @@ import groovy.transform.CompileStatic
 
 @CompileStatic
 class PersonCrewAdapter extends RecyclerView.Adapter<PersonCrewAdapter.PersonCrewAdapterViewHolder> {
+    @SuppressWarnings("GroovyConstantNamingConvention")
     private static final String LOG_TAG = PersonCrewAdapter.class.getSimpleName()
 
     private Cursor mCursor
-    private final Context mContext
-    private final TextView mPersonCrewGridEmptyTextView
+    private final Context mContext = null
+    private final TextView mPersonCrewGridEmptyTextView = null
     private int mPrimaryDarkColor, mBodyTextColor
-    private final PersonCrewAdapterOnClickHandler mMoviePersonCrewAdapterOnClickHandler
+    private final PersonCrewAdapterOnClickHandler mMoviePersonCrewAdapterOnClickHandler = null
 
     //Empty constructor
     public PersonCrewAdapter(){
         LogDisplay.callLog(LOG_TAG,'PersonCrewAdapter empty constructor is called',LogDisplay.PERSON_CREW_ADAPTER_LOG_FLAG)
     }
 
-    public PersonCrewAdapter(Context ctx, TextView emptyView, PersonCrewAdapterOnClickHandler clickHandler){
+    public PersonCrewAdapter(final Context ctx, final TextView emptyView, final PersonCrewAdapterOnClickHandler clickHandler){
         LogDisplay.callLog(LOG_TAG,'PersonCrewAdapter non-empty constructor is called',LogDisplay.PERSON_CREW_ADAPTER_LOG_FLAG)
         mContext = ctx
         mPersonCrewGridEmptyTextView = emptyView
@@ -41,7 +42,7 @@ class PersonCrewAdapter extends RecyclerView.Adapter<PersonCrewAdapter.PersonCre
         public final ImageView movieImageView
         public final TextView movieTextView, jobTextView
 
-        public PersonCrewAdapterViewHolder(View view) {
+        public PersonCrewAdapterViewHolder(final View view) {
             super(view)
             movieImageView = view.findViewById(R.id.person_crew_grid_movie_image) as ImageView
             movieTextView = view.findViewById(R.id.person_crew_grid_movie_name) as TextView
@@ -50,7 +51,7 @@ class PersonCrewAdapter extends RecyclerView.Adapter<PersonCrewAdapter.PersonCre
         }
 
         @Override
-        public void onClick(View v) {
+        public void onClick(final View v) {
             LogDisplay.callLog(LOG_TAG,"onClick is called.LayoutPos=${getLayoutPosition()}.AdapterPos=${getAdapterPosition()}",LogDisplay.PERSON_CREW_ADAPTER_LOG_FLAG)
             final int adapterPosition = getAdapterPosition()
             mCursor.moveToPosition(adapterPosition)
@@ -60,15 +61,16 @@ class PersonCrewAdapter extends RecyclerView.Adapter<PersonCrewAdapter.PersonCre
     }
 
     @Override
-    PersonCrewAdapterViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    PersonCrewAdapterViewHolder onCreateViewHolder(final ViewGroup parent, final int viewType) {
         LogDisplay.callLog(LOG_TAG,'onCreateViewHolder is called',LogDisplay.PERSON_CREW_ADAPTER_LOG_FLAG)
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.single_person_crew_grid,parent,false)
+        //noinspection GroovyVariableCanBeFinal
+        final View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.single_person_crew_grid,parent,false)
         view.setFocusable(true)
         return new PersonCrewAdapterViewHolder(view)
     }
 
     @Override
-    void onBindViewHolder(PersonCrewAdapterViewHolder holder, int position) {
+    void onBindViewHolder(final PersonCrewAdapterViewHolder holder, final int position) {
         //Move the cursor to correct position
         mCursor.moveToPosition(position)
         LogDisplay.callLog(LOG_TAG,'onBindViewHolder is called',LogDisplay.PERSON_CREW_ADAPTER_LOG_FLAG)
@@ -94,7 +96,7 @@ class PersonCrewAdapter extends RecyclerView.Adapter<PersonCrewAdapter.PersonCre
         return mCursor.getCount()
     }
 
-    public void swapCursor(Cursor newCursor) {
+    public void swapCursor(final Cursor newCursor) {
         mCursor = newCursor
         if (getItemCount() == 0) {
             mPersonCrewGridEmptyTextView.setVisibility(TextView.VISIBLE)
@@ -107,7 +109,7 @@ class PersonCrewAdapter extends RecyclerView.Adapter<PersonCrewAdapter.PersonCre
     //Since the color is decided once the poster is downloaded by Picasso
     //but by then adapter might got loaded with data. Hence call notifyDataSetChanged
     //so that it get's recreated with correct color
-    public void changeColor(int primaryDarkColor, int bodyTextColor) {
+    public void changeColor(final int primaryDarkColor, final int bodyTextColor) {
         LogDisplay.callLog(LOG_TAG,'changeColor is called',LogDisplay.PERSON_CREW_ADAPTER_LOG_FLAG)
         mPrimaryDarkColor = primaryDarkColor
         mBodyTextColor = bodyTextColor

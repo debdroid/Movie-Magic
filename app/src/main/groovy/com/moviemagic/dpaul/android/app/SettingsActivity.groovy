@@ -8,10 +8,11 @@ import groovy.transform.CompileStatic
 
 @CompileStatic
 class SettingsActivity extends AppCompatActivity {
+    @SuppressWarnings("GroovyConstantNamingConvention")
     private static final String LOG_TAG = SettingsActivity.class.getSimpleName()
 
     @Override
-    void onCreate(Bundle savedInstanceState) {
+    void onCreate(final Bundle savedInstanceState) {
         LogDisplay.callLog(LOG_TAG,'onCreate is called',LogDisplay.SETTINGS_ACTIVITY_LOG_FLAG)
         super.onCreate(savedInstanceState)
         getSupportActionBar().setDisplayHomeAsUpEnabled(true)
@@ -23,7 +24,7 @@ class SettingsActivity extends AppCompatActivity {
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
+    public boolean onOptionsItemSelected(final MenuItem item) {
         if (item.getItemId() == android.R.id.home) { // Press appbar back button to go to previous activity
             LogDisplay.callLog(LOG_TAG,'App bar back button is called',LogDisplay.SETTINGS_ACTIVITY_LOG_FLAG)
             finish()

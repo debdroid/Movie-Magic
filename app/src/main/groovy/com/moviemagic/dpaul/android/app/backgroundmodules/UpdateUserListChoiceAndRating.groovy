@@ -17,6 +17,7 @@ import groovy.transform.CompileStatic
 
 @CompileStatic
 class UpdateUserListChoiceAndRating extends AsyncTask<String, Void, Integer> {
+    @SuppressWarnings("GroovyConstantNamingConvention")
     private static final String LOG_TAG = UpdateUserListChoiceAndRating.class.getSimpleName()
     private final ContentResolver mContentResolver
     private final Context mContext
@@ -30,6 +31,7 @@ class UpdateUserListChoiceAndRating extends AsyncTask<String, Void, Integer> {
     private final boolean mShowNotification = false
 
     //Columns to fetch from movie_user_list_flag table
+    @SuppressWarnings("GroovyConstantNamingConvention")
     private static final String[] MOVIE_USER_LIST_FLAG_COLUMNS = [MovieMagicContract.MovieUserListFlag._ID,
                                                                   MovieMagicContract.MovieUserListFlag.COLUMN_USER_LIST_FLAG_ORIG_MOVIE_ID,
                                                                   MovieMagicContract.MovieUserListFlag.COLUMN_USER_LIST_FLAG_WATCHED,
@@ -38,16 +40,24 @@ class UpdateUserListChoiceAndRating extends AsyncTask<String, Void, Integer> {
                                                                   MovieMagicContract.MovieUserListFlag.COLUMN_USER_LIST_FLAG_COLLECTION,
                                                                   MovieMagicContract.MovieUserListFlag.COLUMN_USER_LIST_USER_RATING]
     //These are indices of the above columns, if projection array changes then this needs to be changed
+    @SuppressWarnings("GroovyConstantNamingConvention")
     private final static int COL_MOVIE_USER_LIST_FLAG_ID = 0
+    @SuppressWarnings("GroovyConstantNamingConvention")
     private final static int COL_MOVIE_USER_LIST_FLAG_ORIG_MOVIE_ID = 1
+    @SuppressWarnings("GroovyConstantNamingConvention")
     private final static int COL_MOVIE_USER_LIST_FLAG_WATCHED_FLAG = 2
+    @SuppressWarnings("GroovyConstantNamingConvention")
     private final static int COL_MOVIE_USER_LIST_FLAG_WISH_LIST_FLAG = 3
+    @SuppressWarnings("GroovyConstantNamingConvention")
     private final static int COL_MOVIE_USER_LIST_FLAG_FAVOURITE_FLAG = 4
+    @SuppressWarnings("GroovyConstantNamingConvention")
     private final static int COL_MOVIE_USER_LIST_FLAG_COLLECTION_FLAG = 5
+    @SuppressWarnings("GroovyConstantNamingConvention")
     private final static int COL_MOVIE_USER_LIST_FLAG_USER_RATING = 6
 
-    public UpdateUserListChoiceAndRating(Context ctx, LinearLayout userDrawableLayout, int movieId, String movieTitle,
-                                         boolean showNotification) {
+    public UpdateUserListChoiceAndRating(
+            final Context ctx, final LinearLayout userDrawableLayout, final int movieId, final String movieTitle,
+            final boolean showNotification) {
         mContext = ctx
         mContentResolver = mContext.getContentResolver()
         mUserDrawableLayout = userDrawableLayout
@@ -65,15 +75,18 @@ class UpdateUserListChoiceAndRating extends AsyncTask<String, Void, Integer> {
     }
 
     @Override
-    protected Integer doInBackground(String... params) {
+    protected Integer doInBackground(final String... params) {
         final String listType = params[0]
         final String operationType = params[1]
         final float ratingValue = params[2] as Float
-        int retValue
-        String userListCategory
+        //noinspection GroovyVariableCanBeFinal
+        final int retValue = 0
+        //noinspection GroovyVariableCanBeFinal
+        final String userListCategory = null
         final ContentValues movieBasicInfoContentValues = new ContentValues()
         final ContentValues movieUserListFlagContentValues = new ContentValues()
-        Cursor movieBasicInfoCursor
+        //noinspection GroovyVariableCanBeFinal
+        final Cursor movieBasicInfoCursor = null
         //Build the URIs
         final Uri movieUserListFlagUri = MovieMagicContract.MovieUserListFlag.buildMovieUserListFlagUriWithMovieId(mMovieId)
         //Get the record from movie_user_list_flag
@@ -301,11 +314,12 @@ class UpdateUserListChoiceAndRating extends AsyncTask<String, Void, Integer> {
     }
 
     @Override
-    protected void onPostExecute(Integer result) {
+    protected void onPostExecute(final Integer result) {
         if(mProgressDialog) {
             mProgressDialog.dismiss()
         }
-        String snackBarMsg
+        //noinspection GroovyVariableCanBeFinal
+        final String snackBarMsg = null
         if(mUserFlag == GlobalStaticVariables.MOVIE_MAGIC_FLAG_TRUE) {
             snackBarMsg = String.format(mContext.getString(R.string.user_list_add_message),mMovieTitle,mUserListMsg)
         } else if(mUserFlag == GlobalStaticVariables.MOVIE_MAGIC_FLAG_FALSE) {

@@ -118,7 +118,8 @@
             android:syncable="true" />
 
         <!-- SyncAdapter's dummy authentication service -->
-        <service android:name=".authentication.MovieMagicAuthenticatorService">
+        <service android:name=".authentication.MovieMagicAuthenticatorService"
+            tools:ignore="ExportedService">
             <intent-filter>
                 <action android:name="android.accounts.AccountAuthenticator" />
             </intent-filter>
@@ -131,7 +132,8 @@
         <!-- The SyncAdapter service -->
         <service
             android:name=".syncadapter.MovieMagicSyncService"
-            android:exported="true">
+            android:exported="true"
+            tools:ignore="ExportedService">
             <intent-filter>
                 <action android:name="android.content.SyncAdapter" />
             </intent-filter>

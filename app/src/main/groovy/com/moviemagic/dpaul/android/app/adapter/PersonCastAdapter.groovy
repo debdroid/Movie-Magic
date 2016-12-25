@@ -17,20 +17,21 @@ import groovy.transform.CompileStatic
 
 @CompileStatic
 class PersonCastAdapter extends RecyclerView.Adapter<PersonCastAdapter.PersonCastAdapterViewHolder> {
+    @SuppressWarnings("GroovyConstantNamingConvention")
     private static final String LOG_TAG = PersonCastAdapter.class.getSimpleName()
 
     private Cursor mCursor
-    private final Context mContext
-    private final TextView mPersonCastGridEmptyTextView
+    private final Context mContext = null
+    private final TextView mPersonCastGridEmptyTextView = null
     private int mPrimaryDarkColor, mBodyTextColor
-    private final PersonCastAdapterOnClickHandler mMoviePersonCastAdapterOnClickHandler
+    private final PersonCastAdapterOnClickHandler mMoviePersonCastAdapterOnClickHandler = null
 
     //Empty constructor
     public PersonCastAdapter(){
         LogDisplay.callLog(LOG_TAG,'PersonCastAdapter empty constructor is called',LogDisplay.PERSON_CAST_ADAPTER_LOG_FLAG)
     }
 
-    public PersonCastAdapter(Context ctx, TextView emptyView, PersonCastAdapterOnClickHandler clickHandler){
+    public PersonCastAdapter(final Context ctx, final TextView emptyView, final PersonCastAdapterOnClickHandler clickHandler){
         LogDisplay.callLog(LOG_TAG,'PersonCastAdapter non-empty constructor is called',LogDisplay.PERSON_CAST_ADAPTER_LOG_FLAG)
         mContext = ctx
         mPersonCastGridEmptyTextView = emptyView
@@ -41,7 +42,7 @@ class PersonCastAdapter extends RecyclerView.Adapter<PersonCastAdapter.PersonCas
         public final ImageView movieImageView
         public final TextView movieTextView, charTextView
 
-        public PersonCastAdapterViewHolder(View view) {
+        public PersonCastAdapterViewHolder(final View view) {
             super(view)
             movieImageView = view.findViewById(R.id.person_cast_grid_movie_image) as ImageView
             movieTextView = view.findViewById(R.id.person_cast_grid_movie_name) as TextView
@@ -50,7 +51,7 @@ class PersonCastAdapter extends RecyclerView.Adapter<PersonCastAdapter.PersonCas
         }
 
         @Override
-        public void onClick(View v) {
+        public void onClick(final View v) {
             LogDisplay.callLog(LOG_TAG,"onClick is called.LayoutPos=${getLayoutPosition()}.AdapterPos=${getAdapterPosition()}",LogDisplay.PERSON_CAST_ADAPTER_LOG_FLAG)
             final int adapterPosition = getAdapterPosition()
             mCursor.moveToPosition(adapterPosition)
@@ -60,15 +61,16 @@ class PersonCastAdapter extends RecyclerView.Adapter<PersonCastAdapter.PersonCas
     }
 
     @Override
-    PersonCastAdapterViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    PersonCastAdapterViewHolder onCreateViewHolder(final ViewGroup parent, final int viewType) {
         LogDisplay.callLog(LOG_TAG,'onCreateViewHolder is called',LogDisplay.PERSON_CAST_ADAPTER_LOG_FLAG)
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.single_person_cast_grid,parent,false)
+        //noinspection GroovyVariableCanBeFinal
+        final View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.single_person_cast_grid,parent,false)
         view.setFocusable(true)
         return new PersonCastAdapterViewHolder(view)
     }
 
     @Override
-    void onBindViewHolder(PersonCastAdapterViewHolder holder, int position) {
+    void onBindViewHolder(final PersonCastAdapterViewHolder holder, final int position) {
         //Move the cursor to correct position
         mCursor.moveToPosition(position)
         LogDisplay.callLog(LOG_TAG,'onBindViewHolder is called',LogDisplay.PERSON_CAST_ADAPTER_LOG_FLAG)
@@ -96,7 +98,7 @@ class PersonCastAdapter extends RecyclerView.Adapter<PersonCastAdapter.PersonCas
         return mCursor.getCount()
     }
 
-    public void swapCursor(Cursor newCursor) {
+    public void swapCursor(final Cursor newCursor) {
         mCursor = newCursor
         if (getItemCount() == 0) {
             mPersonCastGridEmptyTextView.setVisibility(TextView.VISIBLE)
@@ -109,7 +111,7 @@ class PersonCastAdapter extends RecyclerView.Adapter<PersonCastAdapter.PersonCas
     //Since the color is decided once the poster is downloaded by Picasso
     //but by then adapter might got loaded with data. Hence call notifyDataSetChanged
     //so that it get's recreated with correct color
-    public void changeColor(int primaryDarkColor, int bodyTextColor) {
+    public void changeColor(final int primaryDarkColor, final int bodyTextColor) {
         mPrimaryDarkColor = primaryDarkColor
         mBodyTextColor = bodyTextColor
         if (getItemCount() == 0) {

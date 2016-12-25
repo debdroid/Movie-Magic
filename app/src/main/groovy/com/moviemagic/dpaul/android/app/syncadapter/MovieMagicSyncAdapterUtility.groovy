@@ -13,13 +13,18 @@ import groovy.transform.CompileStatic
 
 @CompileStatic
 class MovieMagicSyncAdapterUtility {
+    @SuppressWarnings("GroovyConstantNamingConvention")
     private static final String LOG_TAG = MovieMagicSyncAdapterUtility.class.getSimpleName()
 
     // Interval at which to sync with the movie data, in milliseconds.
     // 60 seconds (1 minute) * 360 = 6 hours
+    @SuppressWarnings("GroovyConstantNamingConvention")
     private static final int SECONDS_PER_MINUTE = 60
+    @SuppressWarnings("GroovyConstantNamingConvention")
     private static final int SYNC_INTERVAL_IN_MINUTES = 360
+    @SuppressWarnings("GroovyConstantNamingConvention")
     private static final int SYNC_INTERVAL = SECONDS_PER_MINUTE * SYNC_INTERVAL_IN_MINUTES
+    @SuppressWarnings("GroovyConstantNamingConvention")
     private static final int SYNC_FLEXTIME = SECONDS_PER_MINUTE * 120
 
     /**
@@ -27,7 +32,7 @@ class MovieMagicSyncAdapterUtility {
      *
      * @param context The context used to initialise the SyncAdapter
      */
-    public static void initializeSyncAdapter(Context context) {
+    public static void initializeSyncAdapter(final Context context) {
         LogDisplay.callLog(LOG_TAG,'initializeSyncAdapter is called',LogDisplay.MOVIE_MAGIC_SYNC_ADAPTER_UTILITY_LOG_FLAG)
         getSyncAccount(context)
     }
@@ -40,7 +45,7 @@ class MovieMagicSyncAdapterUtility {
      * @param context The context used to access the account service
      * @return a fake account.
      */
-    private static Account getSyncAccount(Context context) {
+    private static Account getSyncAccount(final Context context) {
         LogDisplay.callLog(LOG_TAG,'getSyncAccount is called',LogDisplay.MOVIE_MAGIC_SYNC_ADAPTER_UTILITY_LOG_FLAG)
         // Get an instance of the Android account manager
         final AccountManager accountManager =
@@ -48,7 +53,8 @@ class MovieMagicSyncAdapterUtility {
 
         //Check if any account exists
         final Account[] accounts = accountManager.getAccountsByType(context.getString(R.string.authenticator_account_type))
-        Account newAccount
+        //noinspection GroovyVariableCanBeFinal
+        final Account newAccount
         if(accounts.size() == 1) {
             LogDisplay.callLog(LOG_TAG,"Existing account. Account name->${accounts[0].name}",LogDisplay.MOVIE_MAGIC_SYNC_ADAPTER_UTILITY_LOG_FLAG)
             //Application can have only one account, so safe to use the following line
@@ -85,7 +91,7 @@ class MovieMagicSyncAdapterUtility {
      * @param newAccount The account used for SyncAdapter
      * @param context The context used to setup the execution frequency
      */
-    public static void onAccountCreated(Account newAccount, Context context) {
+    public static void onAccountCreated(final Account newAccount, final Context context) {
         LogDisplay.callLog(LOG_TAG,'onAccountCreated is called',LogDisplay.MOVIE_MAGIC_SYNC_ADAPTER_UTILITY_LOG_FLAG)
         /*
          * Account is set, so now configure periodic sync
@@ -111,7 +117,7 @@ class MovieMagicSyncAdapterUtility {
      * @param context The context used to setup the execution frequency
      * @param account The account for which the Periodic Sync is to be set
      */
-    public static void configurePeriodicSync(Context context, Account account) {
+    public static void configurePeriodicSync(final Context context, final Account account) {
         LogDisplay.callLog(LOG_TAG,'configurePeriodicSync is called',LogDisplay.MOVIE_MAGIC_SYNC_ADAPTER_UTILITY_LOG_FLAG)
         final String authority = context.getString(R.string.content_authority)
         if (Build.VERSION.SDK_INT >= 19) { //API number 19 - KITKAT
@@ -132,7 +138,7 @@ class MovieMagicSyncAdapterUtility {
      *
      * @param context The context used to access the account service
      */
-    public static void syncImmediately(Context context) {
+    public static void syncImmediately(final Context context) {
         LogDisplay.callLog(LOG_TAG,'syncImmediately is called',LogDisplay.MOVIE_MAGIC_SYNC_ADAPTER_UTILITY_LOG_FLAG)
         final Bundle bundle = new Bundle()
         bundle.putBoolean(ContentResolver.SYNC_EXTRAS_EXPEDITED, true)
@@ -147,7 +153,7 @@ class MovieMagicSyncAdapterUtility {
      * @param account The account for which the Periodic sync needs to be removed
      * @param context The context used to retrieve string value (authority)
      */
-    public static void removePeriodicSync(Account account, Context context) {
+    public static void removePeriodicSync(final Account account, final Context context) {
         LogDisplay.callLog(LOG_TAG,'removePeriodicSync is called',LogDisplay.MOVIE_MAGIC_SYNC_ADAPTER_UTILITY_LOG_FLAG)
         final String authority = context.getString(R.string.content_authority)
         if (Build.VERSION.SDK_INT >= 21) {

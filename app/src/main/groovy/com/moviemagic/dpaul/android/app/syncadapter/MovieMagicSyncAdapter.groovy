@@ -39,11 +39,14 @@ import groovy.json.JsonParserType
 import groovy.json.JsonSlurper
 import groovy.transform.CompileStatic
 
+@SuppressWarnings(["GroovyAssignabilityCheck", "GroovyAssignabilityCheck", "GroovyAssignabilityCheck", "GroovyAssignabilityCheck"])
 @CompileStatic
 class MovieMagicSyncAdapter extends AbstractThreadedSyncAdapter {
+    @SuppressWarnings("GroovyConstantNamingConvention")
     private static final String LOG_TAG = MovieMagicSyncAdapter.class.getSimpleName()
 
     //This variable indicates the number of pages for initial load.
+    @SuppressWarnings("GroovyConstantNamingConvention")
     private final static int MAX_PAGE_DOWNLOAD = 3
     //Define a variable for api page count
     private static int mTotalPage = 0
@@ -60,6 +63,7 @@ class MovieMagicSyncAdapter extends AbstractThreadedSyncAdapter {
 
 
     //Columns to fetch from movie_basic_info table
+    @SuppressWarnings("GroovyConstantNamingConvention")
     private static final String[] MOVIE_BASIC_INFO_COLUMNS = [MovieMagicContract.MovieBasicInfo._ID,
                                                               MovieMagicContract.MovieBasicInfo.COLUMN_MOVIE_ID,
                                                               MovieMagicContract.MovieBasicInfo.COLUMN_RELEASE_DATE,
@@ -68,15 +72,22 @@ class MovieMagicSyncAdapter extends AbstractThreadedSyncAdapter {
                                                               MovieMagicContract.MovieBasicInfo.COLUMN_BACKDROP_PATH,
                                                               MovieMagicContract.MovieBasicInfo.COLUMN_MOVIE_CATEGORY]
     //These are indices of the above columns, if projection array changes then this needs to be changed
+    @SuppressWarnings("GroovyConstantNamingConvention")
     final static int COL_MOVIE_BASIC_ID = 0
+    @SuppressWarnings("GroovyConstantNamingConvention")
     final static int COL_MOVIE_BASIC_MOVIE_ID = 1
+    @SuppressWarnings("GroovyConstantNamingConvention")
     final static int COL_MOVIE_BASIC_RELEASE_DATE = 2
+    @SuppressWarnings("GroovyConstantNamingConvention")
     final static int COL_MOVIE_BASIC_TITLE = 3
+    @SuppressWarnings("GroovyConstantNamingConvention")
     final static int COL_MOVIE_BASIC_POSTER_PATH = 4
+    @SuppressWarnings("GroovyConstantNamingConvention")
     final static int COL_MOVIE_BASIC_BACKDROP_PATH = 5
+    @SuppressWarnings("GroovyConstantNamingConvention")
     final static int COL_MOVIE_BASIC_MOVIE_CATEGORY = 6
 
-    MovieMagicSyncAdapter(Context context, boolean autoInitialize) {
+    MovieMagicSyncAdapter(final Context context, final boolean autoInitialize) {
         super(context, autoInitialize)
         mContentResolver = context.getContentResolver()
         mContext = context
@@ -95,8 +106,10 @@ class MovieMagicSyncAdapter extends AbstractThreadedSyncAdapter {
 //        mContentResolver = context.getContentResolver()
 //    }
 
+    @SuppressWarnings("GroovyAssignabilityCheck")
     @Override
-    void onPerformSync(Account account, Bundle extras, String authority, ContentProviderClient provider, SyncResult syncResult) {
+    void onPerformSync(
+            final Account account, final Bundle extras, final String authority, final ContentProviderClient provider, final SyncResult syncResult) {
         LogDisplay.callLog(LOG_TAG,'onPerformSync is called',LogDisplay.MOVIE_MAGIC_SYNC_ADAPTER_LOG_FLAG)
 
         if(Utility.isReadyToDownload(mContext)) {
@@ -105,7 +118,8 @@ class MovieMagicSyncAdapter extends AbstractThreadedSyncAdapter {
             //mTotalPage is set to 1 so that at least first page is downloaded in downloadMovieList
             // later this variable is overridden by the total page value retrieved from the api
             mTotalPage = 1
-            for (i in 1..MAX_PAGE_DOWNLOAD) {
+            //noinspection GroovyVariableCanBeFinal
+            for (final i in 1..MAX_PAGE_DOWNLOAD) {
                 contentValues = downloadMovieList(GlobalStaticVariables.MOVIE_CATEGORY_POPULAR, i)
                 if (contentValues) {
                     insertBulkRecords(contentValues, GlobalStaticVariables.MOVIE_CATEGORY_POPULAR)
@@ -116,7 +130,8 @@ class MovieMagicSyncAdapter extends AbstractThreadedSyncAdapter {
             }
             mTotalPage = 1
             mFirstTotalPageRead = true
-            for (i in 1..MAX_PAGE_DOWNLOAD) {
+            //noinspection GroovyVariableCanBeFinal
+            for (final i in 1..MAX_PAGE_DOWNLOAD) {
                 contentValues = downloadMovieList(GlobalStaticVariables.MOVIE_CATEGORY_TOP_RATED, i)
                 if (contentValues) {
                     insertBulkRecords(contentValues, GlobalStaticVariables.MOVIE_CATEGORY_TOP_RATED)
@@ -127,7 +142,8 @@ class MovieMagicSyncAdapter extends AbstractThreadedSyncAdapter {
             }
             mTotalPage = 1
             mFirstTotalPageRead = true
-            for (i in 1..MAX_PAGE_DOWNLOAD) {
+            //noinspection GroovyVariableCanBeFinal
+            for (final i in 1..MAX_PAGE_DOWNLOAD) {
                 contentValues = downloadMovieList(GlobalStaticVariables.MOVIE_CATEGORY_UPCOMING, i)
                 if (contentValues) {
                     insertBulkRecords(contentValues, GlobalStaticVariables.MOVIE_CATEGORY_UPCOMING)
@@ -138,7 +154,8 @@ class MovieMagicSyncAdapter extends AbstractThreadedSyncAdapter {
             }
             mTotalPage = 1
             mFirstTotalPageRead = true
-            for (i in 1..MAX_PAGE_DOWNLOAD) {
+            //noinspection GroovyVariableCanBeFinal
+            for (final i in 1..MAX_PAGE_DOWNLOAD) {
                 contentValues = downloadMovieList(GlobalStaticVariables.MOVIE_CATEGORY_NOW_PLAYING, i)
                 if (contentValues) {
                     insertBulkRecords(contentValues, GlobalStaticVariables.MOVIE_CATEGORY_NOW_PLAYING)
@@ -189,12 +206,14 @@ class MovieMagicSyncAdapter extends AbstractThreadedSyncAdapter {
      * @param page Page number of the list
      * @return Formatted movie data as content values
      */
-    private List<ContentValues> downloadMovieList (String category, int page) {
+    private List<ContentValues> downloadMovieList (final String category, final int page) {
         //TMDB api example
         //https://api.themoviedb.org/3/movie/popular?api_key=key&page=1
 
-        List<ContentValues> movieList
+        //noinspection GroovyVariableCanBeFinal
+        List<ContentValues> movieList = null
 
+        //noinspection GroovyVariableCanBeFinal,GroovyVariableCanBeFinal,GroovyVariableCanBeFinal
         try {
             final Uri.Builder uriBuilder = Uri.parse(GlobalStaticVariables.TMDB_MOVIE_BASE_URL).buildUpon()
 
@@ -210,7 +229,8 @@ class MovieMagicSyncAdapter extends AbstractThreadedSyncAdapter {
             //This is intentional so that at lest one page is not loaded in order to make sure
             //at least one (i.e. first) LoadMoreMovies call is always successful (?? Think it's not true!! need to check later)
             if (page <= mTotalPage) {
-                def jsonData = new JsonSlurper(type: JsonParserType.INDEX_OVERLAY).parse(url)
+                //noinspection GroovyVariableCanBeFinal
+                final def jsonData = new JsonSlurper(type: JsonParserType.INDEX_OVERLAY).parse(url)
                 LogDisplay.callLog(LOG_TAG, "JSON DATA for $category -> $jsonData",LogDisplay.MOVIE_MAGIC_SYNC_ADAPTER_LOG_FLAG)
                 movieList = JsonParse.parseMovieListJson(mContext,jsonData, category, GlobalStaticVariables.MOVIE_LIST_TYPE_TMDB_PUBLIC, mDateTimeStamp)
                 if(mFirstTotalPageRead) {
@@ -218,13 +238,13 @@ class MovieMagicSyncAdapter extends AbstractThreadedSyncAdapter {
                     mFirstTotalPageRead = false
                 }
             }
-        } catch (URISyntaxException e) {
+        } catch (final URISyntaxException e) {
             mPublicTmdbProcessingException = true
             Log.e(LOG_TAG, "URISyntaxException Error: ${e.message}", e)
-        } catch (JsonException e) {
+        } catch (final JsonException e) {
             mPublicTmdbProcessingException = true
             Log.e(LOG_TAG, " JsonException Error: ${e.message}", e)
-        } catch (IOException e) {
+        } catch (final IOException e) {
             mPublicTmdbProcessingException = true
             Log.e(LOG_TAG, "IOException Error: ${e.message}", e)
         }
@@ -236,7 +256,7 @@ class MovieMagicSyncAdapter extends AbstractThreadedSyncAdapter {
      * @param account The account for which the type needs to be determined
      * @return True if it's a user's Tmdb account
      */
-    private boolean checkAccountType(Account account) {
+    private boolean checkAccountType(final Account account) {
         LogDisplay.callLog(LOG_TAG,'checkAccountType is called',LogDisplay.MOVIE_MAGIC_SYNC_ADAPTER_LOG_FLAG)
         LogDisplay.callLog(LOG_TAG,"Account name -> ${account.name}",LogDisplay.MOVIE_MAGIC_SYNC_ADAPTER_LOG_FLAG)
         // Application can have only one account, so if it's SyncAdapter's dummy account then return false otherwise true
@@ -252,7 +272,7 @@ class MovieMagicSyncAdapter extends AbstractThreadedSyncAdapter {
      * @param sessionId The session if which is required to get the data from Tmdb server
      * @param accountId The account id of the user's account, needed to get data from Tmdb server
      */
-    private void processTmdbLists(String sessionId, String accountId) {
+    private void processTmdbLists(final String sessionId, final String accountId) {
         LogDisplay.callLog(LOG_TAG,"processTmdbLists:Session id found -> $sessionId",LogDisplay.MOVIE_MAGIC_SYNC_ADAPTER_LOG_FLAG)
         List<ContentValues> contentValues = []
         // Download user's Tmdb Watchlist movies
@@ -288,11 +308,14 @@ class MovieMagicSyncAdapter extends AbstractThreadedSyncAdapter {
      * @param sessionId The session if which is required to get the data from Tmdb server
      * @return Formatted movie data as content values
      */
-    private List<ContentValues> downloadTmdbUserList (String category, String accountId, String sessionId) {
+    private List<ContentValues> downloadTmdbUserList (
+            final String category, final String accountId, final String sessionId) {
         //TMDB api example
         // https://api.themoviedb.org/3/account/<accountId>/watchlist/movies?api_key=apiKey&session_id=sessionId
-        List<ContentValues> tmdbUserMovieList
+        //noinspection GroovyVariableCanBeFinal
+        List<ContentValues> tmdbUserMovieList = null
 
+        //noinspection GroovyVariableCanBeFinal,GroovyVariableCanBeFinal,GroovyVariableCanBeFinal
         try {
             final Uri.Builder tmdbUserUriBuilder = Uri.parse(GlobalStaticVariables.TMDB_MOVIE_BASE_URL).buildUpon()
 
@@ -307,15 +330,19 @@ class MovieMagicSyncAdapter extends AbstractThreadedSyncAdapter {
             final URL tmdbUserUrl = new URL(tmdbUserUri.toString())
             LogDisplay.callLog(LOG_TAG,"Tmdb user movie url for $category -> ${tmdbUserUri.toString()}",LogDisplay.MOVIE_MAGIC_SYNC_ADAPTER_LOG_FLAG)
 
-            def jsonData = new JsonSlurper(type: JsonParserType.INDEX_OVERLAY).parse(tmdbUserUrl)
+            //noinspection GroovyVariableCanBeFinal
+            final def jsonData = new JsonSlurper(type: JsonParserType.INDEX_OVERLAY).parse(tmdbUserUrl)
             LogDisplay.callLog(LOG_TAG, "Tmdb user movie JSON data for $category -> $jsonData",LogDisplay.MOVIE_MAGIC_SYNC_ADAPTER_LOG_FLAG)
             tmdbUserMovieList = JsonParse.parseMovieListJson(mContext, jsonData, category, GlobalStaticVariables.MOVIE_LIST_TYPE_TMDB_USER, mDateTimeStamp)
-        } catch (URISyntaxException e) {
-            Log.e(LOG_TAG, " URISyntaxException Error: ${e.message}", e)
-        } catch (URISyntaxException e) {
+        } catch (final URISyntaxException e) {
+            mPublicTmdbProcessingException = true
             Log.e(LOG_TAG, "URISyntaxException Error: ${e.message}", e)
-        } catch (URISyntaxException e) {
-            Log.e(LOG_TAG, "URISyntaxException Error: ${e.message}", e)
+        } catch (final JsonException e) {
+            mPublicTmdbProcessingException = true
+            Log.e(LOG_TAG, " JsonException Error: ${e.message}", e)
+        } catch (final IOException e) {
+            mPublicTmdbProcessingException = true
+            Log.e(LOG_TAG, "IOException Error: ${e.message}", e)
         }
         return tmdbUserMovieList
     }
@@ -325,10 +352,12 @@ class MovieMagicSyncAdapter extends AbstractThreadedSyncAdapter {
      * @param cvList The content values to ve inserted
      * @param category The category of the data (movie list) is to be inserted (used for display purpose only)
      */
-    private void insertBulkRecords(List<ContentValues> cvList, String category) {
-        ContentValues[] cv = cvList as ContentValues []
+    private void insertBulkRecords(final List<ContentValues> cvList, final String category) {
+        //noinspection GroovyVariableCanBeFinal
+        final ContentValues[] cv = cvList as ContentValues []
         if(cv) {
-            int insertCount = mContentResolver.bulkInsert(MovieMagicContract.MovieBasicInfo.CONTENT_URI, cv)
+            //noinspection GroovyVariableCanBeFinal
+            final int insertCount = mContentResolver.bulkInsert(MovieMagicContract.MovieBasicInfo.CONTENT_URI, cv)
             LogDisplay.callLog(LOG_TAG, "Total insert for $category->$insertCount", LogDisplay.MOVIE_MAGIC_SYNC_ADAPTER_LOG_FLAG)
             if (insertCount > 0) {
                 LogDisplay.callLog(LOG_TAG, "Insert in movie_basic_info successful. Total insert for $category->$insertCount", LogDisplay.MOVIE_MAGIC_SYNC_ADAPTER_LOG_FLAG)
@@ -346,8 +375,10 @@ class MovieMagicSyncAdapter extends AbstractThreadedSyncAdapter {
     private void loadMovieDetailsForHomePageItems() {
         LogDisplay.callLog(LOG_TAG,'loadMovieDetailsForHomePageItems is called',LogDisplay.MOVIE_MAGIC_SYNC_ADAPTER_LOG_FLAG)
         Cursor movieDataCursor
-        ArrayList<Integer> mMovieIdList = new ArrayList<>()
-        ArrayList<Integer> mMovieRowIdList = new ArrayList<>()
+        //noinspection GroovyVariableCanBeFinal
+        final ArrayList<Integer> mMovieIdList = new ArrayList<>()
+        //noinspection GroovyVariableCanBeFinal
+        final ArrayList<Integer> mMovieRowIdList = new ArrayList<>()
         //First finalise the data to be loaded for now playing
         movieDataCursor = mContentResolver.query(
                 MovieMagicContract.MovieBasicInfo.CONTENT_URI,
@@ -362,7 +393,8 @@ class MovieMagicSyncAdapter extends AbstractThreadedSyncAdapter {
                 "$MovieMagicContract.MovieBasicInfo.COLUMN_RELEASE_DATE desc limit $GlobalStaticVariables.HOME_PAGE_MAX_MOVIE_SHOW_COUNTER")
 
         if(movieDataCursor.moveToFirst()) {
-            for (i in 0..(movieDataCursor.getCount() - 1)) {
+            //noinspection GroovyVariableCanBeFinal
+            for (final i in 0..(movieDataCursor.getCount() - 1)) {
                 mMovieIdList.add(i, movieDataCursor.getInt(COL_MOVIE_BASIC_MOVIE_ID))
                 mMovieRowIdList.add(i, movieDataCursor.getInt(COL_MOVIE_BASIC_ID))
                 movieDataCursor.moveToNext()
@@ -389,7 +421,8 @@ class MovieMagicSyncAdapter extends AbstractThreadedSyncAdapter {
                   "$MovieMagicContract.MovieBasicInfo.COLUMN_RELEASE_DATE desc limit $GlobalStaticVariables.HOME_PAGE_MAX_MOVIE_SHOW_COUNTER")
 
         if(movieDataCursor.moveToFirst()) {
-            for (i in 0..(movieDataCursor.getCount() - 1)) {
+            //noinspection GroovyVariableCanBeFinal
+            for (final i in 0..(movieDataCursor.getCount() - 1)) {
                 mMovieIdList.add(i, movieDataCursor.getInt(COL_MOVIE_BASIC_MOVIE_ID))
                 mMovieRowIdList.add(i, movieDataCursor.getInt(COL_MOVIE_BASIC_ID))
                 movieDataCursor.moveToNext()
@@ -406,8 +439,10 @@ class MovieMagicSyncAdapter extends AbstractThreadedSyncAdapter {
         //Now go and load the detail data for the home screen movies
         if(mMovieIdList.size() > 0 && mMovieRowIdList.size() > 0) {
             LogDisplay.callLog(LOG_TAG, 'Now go and load the details of the movies for home page..', LogDisplay.MOVIE_MAGIC_SYNC_ADAPTER_LOG_FLAG)
-            ArrayList<Integer> isForHomeList = new ArrayList<>(1)
-            ArrayList<Integer> categoryFlag = new ArrayList<>(1)
+            //noinspection GroovyVariableCanBeFinal
+            final ArrayList<Integer> isForHomeList = new ArrayList<>(1)
+            //noinspection GroovyVariableCanBeFinal
+            final ArrayList<Integer> categoryFlag = new ArrayList<>(1)
             //Set this flag to true as the Home page videos are retrieved based on this indicator
             isForHomeList.add(0,GlobalStaticVariables.MOVIE_MAGIC_FLAG_TRUE)
             categoryFlag.add(0,GlobalStaticVariables.NULL_CATEGORY_FLAG)
@@ -435,7 +470,8 @@ class MovieMagicSyncAdapter extends AbstractThreadedSyncAdapter {
         }
 
         /** Delete recommendation records which are more than 10 days old **/
-        String tenDayPriorTimestamp = Utility.getTenDayPriorDate()
+        //noinspection GroovyVariableCanBeFinal
+        final String tenDayPriorTimestamp = Utility.getTenDayPriorDate()
         LogDisplay.callLog(LOG_TAG,"performHouseKeeping: Ten day's prior DateTimeStamp->$tenDayPriorTimestamp",LogDisplay.MOVIE_MAGIC_SYNC_ADAPTER_LOG_FLAG)
         final int movieBasicInfoRecommendDeleteCount = mContentResolver.delete(MovieMagicContract.MovieBasicInfo.CONTENT_URI,
                 """$MovieMagicContract.MovieBasicInfo.COLUMN_MOVIE_CATEGORY = ? and
@@ -446,7 +482,8 @@ class MovieMagicSyncAdapter extends AbstractThreadedSyncAdapter {
         /** Reset the data already present flags for user local lists movies, so that it's get updated next time it accessed by user  **/
         final ContentValues userListContentValues = new ContentValues()
         userListContentValues.put(MovieMagicContract.MovieBasicInfo.COLUMN_DETAIL_DATA_PRESENT_FLAG,0)
-        int userListMovieBasicInfoUpdateCount = mContentResolver.update(MovieMagicContract.MovieBasicInfo.CONTENT_URI,
+        //noinspection GroovyVariableCanBeFinal
+        final int userListMovieBasicInfoUpdateCount = mContentResolver.update(MovieMagicContract.MovieBasicInfo.CONTENT_URI,
                 userListContentValues,
                 """$MovieMagicContract.MovieBasicInfo.COLUMN_DETAIL_DATA_PRESENT_FLAG = ? and
                    $MovieMagicContract.MovieBasicInfo.COLUMN_MOVIE_LIST_TYPE = ?""",
@@ -454,20 +491,23 @@ class MovieMagicSyncAdapter extends AbstractThreadedSyncAdapter {
         LogDisplay.callLog(LOG_TAG,"Total records updated for user list in movie_basic_info-> $userListMovieBasicInfoUpdateCount",LogDisplay.MOVIE_MAGIC_SYNC_ADAPTER_LOG_FLAG)
 
         /** Delete old data from movie_person_info  **/
-        int personInfoDeleteCount = mContentResolver.delete(MovieMagicContract.MoviePersonInfo.CONTENT_URI,
+        //noinspection GroovyVariableCanBeFinal
+        final int personInfoDeleteCount = mContentResolver.delete(MovieMagicContract.MoviePersonInfo.CONTENT_URI,
                 "$MovieMagicContract.MoviePersonInfo.COLUMN_PERSON_CREATE_TIMESTAMP < ? ",
                 [mDateTimeStamp] as String [] )
         LogDisplay.callLog(LOG_TAG,"Total records deleted from movie_person_info -> $personInfoDeleteCount",LogDisplay.MOVIE_MAGIC_SYNC_ADAPTER_LOG_FLAG)
 
         /** Delete old data from movie_collection  **/
-        int collectionDeleteCount = mContentResolver.delete(MovieMagicContract.MovieCollection.CONTENT_URI,
+        //noinspection GroovyVariableCanBeFinal
+        final int collectionDeleteCount = mContentResolver.delete(MovieMagicContract.MovieCollection.CONTENT_URI,
                 "$MovieMagicContract.MovieCollection.COLUMN_COLLECTION_CREATE_TIMESTAMP < ? ",
                 [mDateTimeStamp] as String [] )
         LogDisplay.callLog(LOG_TAG,"Total records deleted from movie_collection -> $collectionDeleteCount",LogDisplay.MOVIE_MAGIC_SYNC_ADAPTER_LOG_FLAG)
 
         /** Delete old data from search_movie_basic_info_table virtual (temporary) table  **/
         final SQLiteDatabase sqLiteDatabase = new SearchDatabaseTable.SearchDatabaseOpenHelper(mContext).getWritableDatabase()
-        int searchMovieDeleteCount = sqLiteDatabase.delete(SearchDatabaseTable.SEARCH_FTS_VIRTUAL_TABLE_NAME, null, null)
+        //noinspection GroovyVariableCanBeFinal
+        final int searchMovieDeleteCount = sqLiteDatabase.delete(SearchDatabaseTable.SEARCH_FTS_VIRTUAL_TABLE_NAME, null, null)
         // Close the database
         sqLiteDatabase.close()
         LogDisplay.callLog(LOG_TAG,"Total records deleted from virtual search_movie_basic_info_table -> $searchMovieDeleteCount",LogDisplay.MOVIE_MAGIC_SYNC_ADAPTER_LOG_FLAG)
@@ -503,7 +543,8 @@ class MovieMagicSyncAdapter extends AbstractThreadedSyncAdapter {
                     "$GlobalStaticVariables.MAX_NOTIFICATION_COUNTER")
 
             if(notificationDataCursor.moveToFirst()) {
-                for (i in 0..(notificationDataCursor.getCount() - 1)) {
+                //noinspection GroovyVariableCanBeFinal
+                for (final i in 0..(notificationDataCursor.getCount() - 1)) {
                     // Prepare data for notification
                     final String releaseDayName = Utility.getDayNameForNotification(mContext, Utility.convertMilliSecsToOrigReleaseDate(notificationDataCursor.getLong(COL_MOVIE_BASIC_RELEASE_DATE)))
                     final String releaseDate = Utility.formatFriendlyDate(Utility.convertMilliSecsToOrigReleaseDate(notificationDataCursor.getLong(COL_MOVIE_BASIC_RELEASE_DATE)))
