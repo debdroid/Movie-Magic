@@ -3,5 +3,22 @@
     <issue id="Overdraw">
         <ignore path="src/main/res/layout/activity_search.xml"/>
     </issue>
+    <!-- It seems lint is not showing unused ids correctly, it could be becuase of using Groovy, so ignore -->
     <issue id="UnusedIds" severity="ignore" />
+    <!-- It seems lint is not showing unused resources correctly, it could be becuase of using Groovy, so ignore -->
+    <issue id="UnusedResources" severity="ignore" />
+
+    <issue id="GroovyListGetCanBeKeyedAccess" severity="ignore" />
+    <issue id="GroovyConstantNamingConvention" severity="ignore" />
+    <issue id="GroovyInstanceMethodNamingConvention" severity="ignore" />
+    <issue id="GroovyInstanceVariableNamingConvention" severity="ignore" />
+    <issue id="GroovyLocalVariableNamingConvention" severity="ignore" />
+    <issue id="GroovyParameterNamingConvention" severity="ignore" />
+    <issue id="GroovyStaticMethodNamingConvention" severity="ignore" />
+    <issue id="GroovyStaticVariableNamingConvention" severity="ignore" />
+    <issue id="GroovyUntypedAccess" severity="ignore" />
+    <issue id="JavaStylePropertiesInvocation" severity="ignore" />
+
+    <issue id="UnnecessaryQualifiedReference" severity="ignore" />
+
 </lint>

@@ -27,7 +27,7 @@ class UpdateUserListChoiceAndRating extends AsyncTask<String, Void, Integer> {
     private int mUserFlag = 0
     private float mUserRating = 0.0
     private final ProgressDialog mProgressDialog
-    private final boolean mShowNotification = false
+    private final boolean mShowNotification
 
     //Columns to fetch from movie_user_list_flag table
     private static final String[] MOVIE_USER_LIST_FLAG_COLUMNS = [MovieMagicContract.MovieUserListFlag._ID,
@@ -70,14 +70,11 @@ class UpdateUserListChoiceAndRating extends AsyncTask<String, Void, Integer> {
         final String listType = params[0]
         final String operationType = params[1]
         final float ratingValue = params[2] as Float
-        //noinspection GroovyVariableCanBeFinal
-        final int retValue = 0
-        //noinspection GroovyVariableCanBeFinal
-        final String userListCategory = null
+        int retValue = 0
+        String userListCategory = null
         final ContentValues movieBasicInfoContentValues = new ContentValues()
         final ContentValues movieUserListFlagContentValues = new ContentValues()
-        //noinspection GroovyVariableCanBeFinal
-        final Cursor movieBasicInfoCursor = null
+        Cursor movieBasicInfoCursor = null
         //Build the URIs
         final Uri movieUserListFlagUri = MovieMagicContract.MovieUserListFlag.buildMovieUserListFlagUriWithMovieId(mMovieId)
         //Get the record from movie_user_list_flag
@@ -309,8 +306,7 @@ class UpdateUserListChoiceAndRating extends AsyncTask<String, Void, Integer> {
         if(mProgressDialog) {
             mProgressDialog.dismiss()
         }
-        //noinspection GroovyVariableCanBeFinal
-        final String snackBarMsg = null
+        String snackBarMsg = null
         if(mUserFlag == GlobalStaticVariables.MOVIE_MAGIC_FLAG_TRUE) {
             snackBarMsg = String.format(mContext.getString(R.string.user_list_add_message),mMovieTitle,mUserListMsg)
         } else if(mUserFlag == GlobalStaticVariables.MOVIE_MAGIC_FLAG_FALSE) {

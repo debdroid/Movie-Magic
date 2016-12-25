@@ -20,10 +20,10 @@ class PersonCastAdapter extends RecyclerView.Adapter<PersonCastAdapter.PersonCas
     private static final String LOG_TAG = PersonCastAdapter.class.getSimpleName()
 
     private Cursor mCursor
-    private final Context mContext = null
-    private final TextView mPersonCastGridEmptyTextView = null
+    private final Context mContext
+    private final TextView mPersonCastGridEmptyTextView
     private int mPrimaryDarkColor, mBodyTextColor
-    private final PersonCastAdapterOnClickHandler mMoviePersonCastAdapterOnClickHandler = null
+    private final PersonCastAdapterOnClickHandler mMoviePersonCastAdapterOnClickHandler
 
     //Empty constructor
     public PersonCastAdapter(){
@@ -62,7 +62,6 @@ class PersonCastAdapter extends RecyclerView.Adapter<PersonCastAdapter.PersonCas
     @Override
     PersonCastAdapterViewHolder onCreateViewHolder(final ViewGroup parent, final int viewType) {
         LogDisplay.callLog(LOG_TAG,'onCreateViewHolder is called',LogDisplay.PERSON_CAST_ADAPTER_LOG_FLAG)
-        //noinspection GroovyVariableCanBeFinal
         final View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.single_person_cast_grid,parent,false)
         view.setFocusable(true)
         return new PersonCastAdapterViewHolder(view)

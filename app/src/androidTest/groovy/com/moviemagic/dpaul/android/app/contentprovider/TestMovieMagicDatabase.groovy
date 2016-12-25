@@ -29,7 +29,6 @@ class TestMovieMagicDatabase extends AndroidTestCase {
 
     void testCreateDb() throws Throwable {
         mContext.deleteDatabase(MovieMagicDbHelper.DATABASE_NAME)
-        //noinspection GroovyVariableCanBeFinal
         final SQLiteDatabase db = new MovieMagicDbHelper(this.mContext).getWritableDatabase()
         assertEquals(true, db.isOpen())
 
@@ -40,7 +39,6 @@ class TestMovieMagicDatabase extends AndroidTestCase {
 
         // verify that all the tables have been created.
         //Create a list with all the table names
-        //noinspection GroovyVariableCanBeFinal
         final def tables = []
         tables << MovieMagicContract.MovieBasicInfo.TABLE_NAME
         tables << MovieMagicContract.MovieCast.TABLE_NAME
@@ -58,7 +56,6 @@ class TestMovieMagicDatabase extends AndroidTestCase {
         // System creates another metadata table "android_metadata" which stores db version info
         // So at the end of the following loop, the tables list should be empty
         // verify that the tables have been created
-        //noinspection GroovyVariableCanBeFinal
         for(final i in 1..c.getCount()) {
             tables.remove(c.getString(0))
             c.moveToNext()
@@ -118,7 +115,6 @@ class TestMovieMagicDatabase extends AndroidTestCase {
         columeList << MovieMagicContract.MovieBasicInfo.COLUMN_FUTURE_USE_5
 
         int columnNameIndex = c.getColumnIndex('name')
-        //noinspection GroovyVariableCanBeFinal
         for(final i in 1..c.getCount()) {
             columeList.remove(c.getString(columnNameIndex))
             c.moveToNext()
@@ -144,7 +140,6 @@ class TestMovieMagicDatabase extends AndroidTestCase {
         columeList << MovieMagicContract.MovieCast.COLUMN_CAST_PROFILE_PATH
 
         columnNameIndex = c.getColumnIndex('name')
-        //noinspection GroovyVariableCanBeFinal
         for(final i in 1..c.getCount()) {
             columeList.remove(c.getString(columnNameIndex))
             c.moveToNext()
@@ -169,7 +164,6 @@ class TestMovieMagicDatabase extends AndroidTestCase {
         columeList << MovieMagicContract.MovieCrew.COLUMN_CREW_PROFILE_PATH
 
         columnNameIndex = c.getColumnIndex('name')
-        //noinspection GroovyVariableCanBeFinal
         for(final i in 1..c.getCount()) {
             columeList.remove(c.getString(columnNameIndex))
             c.moveToNext()
@@ -192,7 +186,6 @@ class TestMovieMagicDatabase extends AndroidTestCase {
         columeList << MovieMagicContract.MovieImage.COLUMN_IMAGE_FILE_PATH
 
         columnNameIndex = c.getColumnIndex('name')
-        //noinspection GroovyVariableCanBeFinal
         for(final i in 1..c.getCount()) {
             columeList.remove(c.getString(columnNameIndex))
             c.moveToNext()
@@ -218,7 +211,6 @@ class TestMovieMagicDatabase extends AndroidTestCase {
         columeList << MovieMagicContract.MovieVideo.COLUMN_VIDEO_FOR_HOME_PAGE_USE_FLAG
 
         columnNameIndex = c.getColumnIndex('name')
-        //noinspection GroovyVariableCanBeFinal
         for(final i in 1..c.getCount()) {
             columeList.remove(c.getString(columnNameIndex))
             c.moveToNext()
@@ -241,7 +233,6 @@ class TestMovieMagicDatabase extends AndroidTestCase {
         columeList << MovieMagicContract.MovieReview.COLUMN_REVIEW_URL
 
         columnNameIndex = c.getColumnIndex('name')
-        //noinspection GroovyVariableCanBeFinal
         for(final i in 1..c.getCount()) {
             columeList.remove(c.getString(columnNameIndex))
             c.moveToNext()
@@ -266,7 +257,6 @@ class TestMovieMagicDatabase extends AndroidTestCase {
         columeList << MovieMagicContract.MovieReleaseDate.COLUMN_RELEASE_TYPE
 
         columnNameIndex = c.getColumnIndex('name')
-        //noinspection GroovyVariableCanBeFinal
         for(final i in 1..c.getCount()) {
             columeList.remove(c.getString(columnNameIndex))
             c.moveToNext()
@@ -294,7 +284,6 @@ class TestMovieMagicDatabase extends AndroidTestCase {
         columeList << MovieMagicContract.MovieUserListFlag.COLUMN_FUTURE_USE_4
 
         columnNameIndex = c.getColumnIndex('name')
-        //noinspection GroovyVariableCanBeFinal
         for(final i in 1..c.getCount()) {
             columeList.remove(c.getString(columnNameIndex))
             c.moveToNext()
@@ -326,7 +315,6 @@ class TestMovieMagicDatabase extends AndroidTestCase {
         columeList << MovieMagicContract.MoviePersonInfo.COLUMN_PERSON_UPDATE_TIMESTAMP
 
         columnNameIndex = c.getColumnIndex('name')
-        //noinspection GroovyVariableCanBeFinal
         for(final i in 1..c.getCount()) {
             columeList.remove(c.getString(columnNameIndex))
             c.moveToNext()
@@ -353,7 +341,6 @@ class TestMovieMagicDatabase extends AndroidTestCase {
         columeList << MovieMagicContract.MoviePersonCast.COLUMN_PERSON_CAST_TITLE
 
         columnNameIndex = c.getColumnIndex('name')
-        //noinspection GroovyVariableCanBeFinal
         for(final i in 1..c.getCount()) {
             columeList.remove(c.getString(columnNameIndex))
             c.moveToNext()
@@ -381,7 +368,6 @@ class TestMovieMagicDatabase extends AndroidTestCase {
         columeList << MovieMagicContract.MoviePersonCrew.COLUMN_PERSON_CREW_TITLE
 
         columnNameIndex = c.getColumnIndex('name')
-        //noinspection GroovyVariableCanBeFinal
         for(final i in 1..c.getCount()) {
             columeList.remove(c.getString(columnNameIndex))
             c.moveToNext()
@@ -407,7 +393,6 @@ class TestMovieMagicDatabase extends AndroidTestCase {
         columeList << MovieMagicContract.MoviePersonImage.COLUMN_PERSON_IMAGE_WIDTH
 
         columnNameIndex = c.getColumnIndex('name')
-        //noinspection GroovyVariableCanBeFinal
         for(final i in 1..c.getCount()) {
             columeList.remove(c.getString(columnNameIndex))
             c.moveToNext()
@@ -432,7 +417,6 @@ class TestMovieMagicDatabase extends AndroidTestCase {
         columeList << MovieMagicContract.MovieCollection.COLUMN_COLLECTION_UPDATE_TIMESTAMP
 
         columnNameIndex = c.getColumnIndex('name')
-        //noinspection GroovyVariableCanBeFinal
         for(final i in 1..c.getCount()) {
             columeList.remove(c.getString(columnNameIndex))
             c.moveToNext()
@@ -447,7 +431,6 @@ class TestMovieMagicDatabase extends AndroidTestCase {
 
     void testMovieBasicInfoAndRelatedTables() {
         // First step: Get reference to writable database
-        //noinspection GroovyVariableCanBeFinal
         final SQLiteDatabase sqLiteDatabase = new MovieMagicDbHelper(mContext).getWritableDatabase()
         // Create ContentValues of what we want to insert
         ContentValues contentValues = TestUtilities.createMovieValues()
@@ -601,7 +584,6 @@ class TestMovieMagicDatabase extends AndroidTestCase {
 
     void testMoviePersonInfoAndRelatedTables() {
         // First step: Get reference to writable database
-        //noinspection GroovyVariableCanBeFinal
         final SQLiteDatabase sqLiteDatabase = new MovieMagicDbHelper(mContext).getWritableDatabase()
         // Create ContentValues of what we want to insert
         ContentValues contentValues = TestUtilities.createMoviePersonInfoValues()
@@ -684,18 +666,14 @@ class TestMovieMagicDatabase extends AndroidTestCase {
 
     void testMovieCollectionTable() {
         // First step: Get reference to writable database
-        //noinspection GroovyVariableCanBeFinal
         final SQLiteDatabase sqLiteDatabase = new MovieMagicDbHelper(mContext).getWritableDatabase()
         // Create ContentValues of what we want to insert
-        //noinspection GroovyVariableCanBeFinal
         final ContentValues contentValues = TestUtilities.createMovieCollectionValues()
         // Insert ContentValues into database table and get a row ID back
-        //noinspection GroovyVariableCanBeFinal
         final long rowId = sqLiteDatabase.insert(MovieMagicContract.MovieCollection.TABLE_NAME,null,contentValues)
         //Verify record inserted and record received
         assertTrue('Error: Unable to Insert movie_collection data into the Database', rowId != -1)
         // Query the database and receive a Cursor back
-        //noinspection GroovyVariableCanBeFinal
         final Cursor cursor = sqLiteDatabase.query(MovieMagicContract.MovieCollection.TABLE_NAME,null,null,null,null,null,null)
         // Move the cursor to a valid database row
         assertTrue("Error: No record returned from the $MovieMagicContract.MovieCollection.TABLE_NAME table",cursor.moveToFirst())
@@ -718,7 +696,6 @@ class TestMovieMagicDatabase extends AndroidTestCase {
         testMoviePersonInfoAndRelatedTables()
 
         // Now Get reference to writable database
-        //noinspection GroovyVariableCanBeFinal
         final SQLiteDatabase sqLiteDatabase = new MovieMagicDbHelper(mContext).getWritableDatabase()
         //Now delete the records from movie_basic_info which in turn should delete records from other
         //child tables

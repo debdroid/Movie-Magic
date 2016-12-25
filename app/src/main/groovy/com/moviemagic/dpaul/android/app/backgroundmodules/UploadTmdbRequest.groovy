@@ -63,14 +63,10 @@ class UploadTmdbRequest extends AsyncTask<Integer, Void, String> {
     @Override
     protected String doInBackground(final Integer... params) {
         mTmdbMovieId = params[0]
-        //noinspection GroovyVariableCanBeFinal
-        final String movieTypePath = null
-        //noinspection GroovyVariableCanBeFinal
-        final String bodyJsonData = null
-        //noinspection GroovyVariableCanBeFinal
-        final String authToken= null
-        //noinspection GroovyVariableCanBeFinal
-        final String accountId = null
+        String movieTypePath = null
+        String bodyJsonData = null
+        String authToken= null
+        String accountId = null
 
         // Get the account information - if not found then return null
         final AccountManager accountManager = AccountManager.get(mContext)
@@ -109,21 +105,16 @@ class UploadTmdbRequest extends AsyncTask<Integer, Void, String> {
 
         LogDisplay.callLog(LOG_TAG, "bodyJsonData-> $bodyJsonData", LogDisplay.UPLOAD_TMDB_REQUEST_LOG_FLAG)
 
-        //noinspection GroovyVariableCanBeFinal
-        final HttpURLConnection conn = null
-        //noinspection GroovyVariableCanBeFinal
-        final InputStream inputStream = null
-        //noinspection GroovyVariableCanBeFinal
-        final OutputStream outputStream = null
+        HttpURLConnection conn = null
+        InputStream inputStream = null
+        OutputStream outputStream = null
 
         //TMDB api example for watchlist & favourite
         //https://api.themoviedb.org/3/account/{account_id}/watchlist?api_key=key
         //TMDB api example for rated
         //https://api.themoviedb.org/3/movie/{movie_id}/rating?api_key=key
-        //noinspection GroovyVariableCanBeFinal,GroovyVariableCanBeFinal,GroovyVariableCanBeFinal
         try {
             final Uri.Builder uriBuilder = Uri.parse(GlobalStaticVariables.TMDB_MOVIE_BASE_URL).buildUpon()
-            //noinspection GroovyVariableCanBeFinal
             final Uri tmdbUri
             if(mTmdbMovieType == GlobalStaticVariables.MOVIE_CATEGORY_TMDB_USER_RATED) {
                 tmdbUri = uriBuilder.appendPath(GlobalStaticVariables.TMDB_MOVIE_PATH)

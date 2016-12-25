@@ -20,10 +20,10 @@ class PersonCrewAdapter extends RecyclerView.Adapter<PersonCrewAdapter.PersonCre
     private static final String LOG_TAG = PersonCrewAdapter.class.getSimpleName()
 
     private Cursor mCursor
-    private final Context mContext = null
-    private final TextView mPersonCrewGridEmptyTextView = null
+    private final Context mContext
+    private final TextView mPersonCrewGridEmptyTextView
     private int mPrimaryDarkColor, mBodyTextColor
-    private final PersonCrewAdapterOnClickHandler mMoviePersonCrewAdapterOnClickHandler = null
+    private final PersonCrewAdapterOnClickHandler mMoviePersonCrewAdapterOnClickHandler
 
     //Empty constructor
     public PersonCrewAdapter(){
@@ -62,7 +62,6 @@ class PersonCrewAdapter extends RecyclerView.Adapter<PersonCrewAdapter.PersonCre
     @Override
     PersonCrewAdapterViewHolder onCreateViewHolder(final ViewGroup parent, final int viewType) {
         LogDisplay.callLog(LOG_TAG,'onCreateViewHolder is called',LogDisplay.PERSON_CREW_ADAPTER_LOG_FLAG)
-        //noinspection GroovyVariableCanBeFinal
         final View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.single_person_crew_grid,parent,false)
         view.setFocusable(true)
         return new PersonCrewAdapterViewHolder(view)

@@ -407,7 +407,6 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
 
         mAppBarLayout = mRootView.findViewById(R.id.movie_detail_app_bar_layout) as AppBarLayout
         //Show the title only when image is collapsed
-        //noinspection GroovyVariableCanBeFinal,GroovyVariableCanBeFinal
         mAppBarLayout.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
             boolean isShow = false
             int scrollRange = -1
@@ -464,7 +463,6 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
          * User list button handling
          */
         mImageButtonWatched = mRootView.findViewById(R.id.movie_detail_user_list_drawable_watched) as ImageButton
-        //noinspection GroovyVariableCanBeFinal
         mImageButtonWatched.setOnClickListener(new View.OnClickListener() {
             @Override
             void onClick(final View v) {
@@ -472,7 +470,6 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
                 if (mMovieTitle && mMovieId) {
                     final UpdateUserListChoiceAndRating updateUserList = new UpdateUserListChoiceAndRating(getActivity(), mUserListDrawableLayout,
                             mMovieId, mMovieTitle, true)
-                    //noinspection GroovyVariableCanBeFinal
                     final String[] updateUserListArgs
                     //If full opaque then already selected, so remove it
                     if (mImageButtonWatched.getAlpha() == GlobalStaticVariables.MOVIE_MAGIC_ALPHA_FULL_OPAQUE) {
@@ -495,7 +492,6 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
             }
         })
         mImageButtonWishList = mRootView.findViewById(R.id.movie_detail_user_list_drawable_wish_list) as ImageButton
-        //noinspection GroovyVariableCanBeFinal
         mImageButtonWishList.setOnClickListener(new View.OnClickListener() {
             @Override
             void onClick(final View v) {
@@ -503,7 +499,6 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
                 if (mMovieTitle && mMovieId) {
                     final UpdateUserListChoiceAndRating updateUserList = new UpdateUserListChoiceAndRating(getActivity(), mUserListDrawableLayout,
                             mMovieId, mMovieTitle, true)
-                    //noinspection GroovyVariableCanBeFinal
                     final String[] updateUserListArgs
                     //If full opaque then already selected, so remove it
                     if (mImageButtonWishList.getAlpha() == GlobalStaticVariables.MOVIE_MAGIC_ALPHA_FULL_OPAQUE) {
@@ -526,7 +521,6 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
             }
         } as View.OnClickListener)
         mImageButtonFavourite = mRootView.findViewById(R.id.movie_detail_user_list_drawable_favourite) as ImageButton
-        //noinspection GroovyVariableCanBeFinal
         mImageButtonFavourite.setOnClickListener(new View.OnClickListener() {
             @Override
             void onClick(final View v) {
@@ -534,7 +528,6 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
                 if (mMovieTitle && mMovieId) {
                     final UpdateUserListChoiceAndRating updateUserList = new UpdateUserListChoiceAndRating(getActivity(), mUserListDrawableLayout,
                             mMovieId, mMovieTitle, true)
-                    //noinspection GroovyVariableCanBeFinal
                     final String[] updateUserListArgs
                     //If full opaque then already selected, so remove it
                     if (mImageButtonFavourite.getAlpha() == GlobalStaticVariables.MOVIE_MAGIC_ALPHA_FULL_OPAQUE) {
@@ -557,7 +550,6 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
             }
         } as View.OnClickListener)
         mImageButtonCollection = mRootView.findViewById(R.id.movie_detail_user_list_drawable_collection) as ImageButton
-        //noinspection GroovyVariableCanBeFinal
         mImageButtonCollection.setOnClickListener(new View.OnClickListener() {
             @Override
             void onClick(final View v) {
@@ -565,7 +557,6 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
                 if (mMovieTitle && mMovieId) {
                     final UpdateUserListChoiceAndRating updateUserList = new UpdateUserListChoiceAndRating(getActivity(), mUserListDrawableLayout,
                             mMovieId, mMovieTitle, true)
-                    //noinspection GroovyVariableCanBeFinal
                     final String[] updateUserListArgs
                     //If full opaque then already selected, so remove it
                     if (mImageButtonCollection.getAlpha() == GlobalStaticVariables.MOVIE_MAGIC_ALPHA_FULL_OPAQUE) {
@@ -591,7 +582,6 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
          * User's TMDb list button handling
          */
         mTmdbImageButtonWatchlist = mRootView.findViewById(R.id.movie_detail_user_tmdb_list_drawable_watchlist) as ImageButton
-        //noinspection GroovyVariableCanBeFinal
         mTmdbImageButtonWatchlist.setOnClickListener(new View.OnClickListener() {
             @Override
             void onClick(final View v) {
@@ -612,7 +602,6 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
             }
         } as View.OnClickListener)
         mTmdbImageButtonFavourite = mRootView.findViewById(R.id.movie_detail_user_tmdb_list_drawable_favourite) as ImageButton
-        //noinspection GroovyVariableCanBeFinal
         mTmdbImageButtonFavourite.setOnClickListener(new View.OnClickListener() {
             @Override
             void onClick(final View v) {
@@ -634,7 +623,6 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
             }
         } as View.OnClickListener)
         mTmdbImageButtonRated = mRootView.findViewById(R.id.movie_detail_user_tmdb_list_drawable_rated) as ImageButton
-        //noinspection GroovyVariableCanBeFinal
         mTmdbImageButtonRated.setOnClickListener(new View.OnClickListener() {
             @Override
             void onClick(final View v) {
@@ -676,7 +664,6 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
          * User rating bar handling
          */
         mUserRatingBar = mRootView.findViewById(R.id.movie_detail_user_rating_bar) as RatingBar
-        //noinspection GroovyVariableCanBeFinal,GroovyVariableCanBeFinal,GroovyVariableCanBeFinal
         mUserRatingBar.setOnRatingBarChangeListener(new RatingBar.OnRatingBarChangeListener() {
             @Override
             void onRatingChanged(final RatingBar ratingBar, final float rating, final boolean fromUser) {
@@ -684,7 +671,6 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
                 if (mMovieTitle && mMovieId) {
                     final UpdateUserListChoiceAndRating updateUserList = new UpdateUserListChoiceAndRating(getActivity(), mUserListDrawableLayout,
                             mMovieId, mMovieTitle, true)
-                    //noinspection GroovyVariableCanBeFinal
                     final String[] updateUserListArgs
                     //If the rating value is zero then remove it
                     if (rating == 0.0) {
@@ -715,7 +701,6 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
          * Collection backdrop image handling
          */
         mCollectionBackdropImageView = mRootView.findViewById(R.id.movie_detail_collection_image) as ImageView
-        //noinspection GroovyVariableCanBeFinal
         mCollectionBackdropImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             void onClick(final View v) {
@@ -767,7 +752,6 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
          * External web link button handling
          */
         mHomePageButton = mRootView.findViewById(R.id.movie_detail_web_links_home_page_button) as Button
-        //noinspection GroovyVariableCanBeFinal
         mHomePageButton.setOnClickListener(new View.OnClickListener() {
             @Override
             void onClick(final View v) {
@@ -776,7 +760,6 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
             }
         } as View.OnClickListener)
         mImdbLinkButton = mRootView.findViewById(R.id.movie_detail_web_links_imdb_link_button) as Button
-        //noinspection GroovyVariableCanBeFinal
         mImdbLinkButton.setOnClickListener(new View.OnClickListener() {
             @Override
             void onClick(final View v) {
@@ -810,7 +793,6 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
         LogDisplay.callLog(LOG_TAG, 'onActivityCreated is called', LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
         super.onActivityCreated(savedInstanceState)
 
-        //noinspection GroovyVariableCanBeFinal
         final AppCompatActivity appCompatActivity = getActivity() as AppCompatActivity
         mToolbar = getView().findViewById(R.id.movie_detail_toolbar) as Toolbar
         if (mToolbar) {
@@ -1010,7 +992,6 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
 
     @Override
     void onLoadFinished(final Loader<Cursor> loader, final Cursor data) {
-        //noinspection GroovyVariableCanBeFinal
         final int loaderId = loader.getId()
         LogDisplay.callLog(LOG_TAG, "onLoadFinished.loader id->$loaderId", LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
         switch (loaderId) {
@@ -1098,21 +1079,14 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
                     // If user does not select dynamic theme (default value) then do not change the color
                     if (Utility.isDynamicTheme(getActivity())) {
                         final Bitmap bitmapPoster = ((BitmapDrawable) mPosterImageView.getDrawable()).getBitmap()
-                        //noinspection GroovyVariableCanBeFinal
                         Palette.from(bitmapPoster).generate(new Palette.PaletteAsyncListener() {
                             @Override
                             public void onGenerated(final Palette p) {
-                                //noinspection GroovyVariableCanBeFinal
                                 final Palette.Swatch vibrantSwatch = p.getVibrantSwatch()
-                                //noinspection GroovyVariableCanBeFinal
                                 final Palette.Swatch lightVibrantSwatch = p.getLightVibrantSwatch()
-                                //noinspection GroovyVariableCanBeFinal
                                 final Palette.Swatch darkVibrantSwatch = p.getDarkVibrantSwatch()
-                                //noinspection GroovyVariableCanBeFinal
                                 final Palette.Swatch mutedSwatch = p.getMutedSwatch()
-                                //noinspection GroovyVariableCanBeFinal
                                 final Palette.Swatch mutedLightSwatch = p.getLightMutedSwatch()
-                                //noinspection GroovyVariableCanBeFinal
                                 final Palette.Swatch mutedDarkSwatch = p.getDarkMutedSwatch()
                                 boolean pickSwatchColorFlag = false
                                 //Pick primary, primaryDark, title and body text color
@@ -1121,7 +1095,6 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
                                     mPalleteTitleColor = vibrantSwatch.getTitleTextColor()
                                     mPalleteBodyTextColor = vibrantSwatch.getBodyTextColor()
                                     //Produce Dark color by changing the value (3rd parameter) of HSL value
-                                    //noinspection GroovyVariableCanBeFinal
                                     final float[] primaryHsl = vibrantSwatch.getHsl()
                                     primaryHsl[2] *= 0.9f
                                     mPalletePrimaryDarkColor = Color.HSVToColor(primaryHsl)
@@ -1131,7 +1104,6 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
                                     mPalleteTitleColor = lightVibrantSwatch.getTitleTextColor()
                                     mPalleteBodyTextColor = lightVibrantSwatch.getBodyTextColor()
                                     //Produce Dark color by changing the value (3rd parameter) of HSL value
-                                    //noinspection GroovyVariableCanBeFinal
                                     final float[] primaryHsl = lightVibrantSwatch.getHsl()
                                     primaryHsl[2] *= 0.9f
                                     mPalletePrimaryDarkColor = Color.HSVToColor(primaryHsl)
@@ -1141,7 +1113,6 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
                                     mPalleteTitleColor = darkVibrantSwatch.getTitleTextColor()
                                     mPalleteBodyTextColor = darkVibrantSwatch.getBodyTextColor()
                                     //Produce Dark color by changing the value (3rd parameter) of HSL value
-                                    //noinspection GroovyVariableCanBeFinal
                                     final float[] primaryHsl = darkVibrantSwatch.getHsl()
                                     primaryHsl[2] *= 0.9f
                                     mPalletePrimaryDarkColor = Color.HSVToColor(primaryHsl)
@@ -1297,18 +1268,13 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
                     mImdbLinkButton.setElevation(GlobalStaticVariables.MOVIE_MAGIC_ELEVATION_RESET)
                 }
             }
-            //noinspection GroovyVariableCanBeFinal
             final int detailDataPresentFlag = data.getInt(COL_MOVIE_BASIC_DETAIL_DATA_PRESENT_FLAG)
             //If the flag is zero then all the movie data are not present, so go and fetch it
             if (detailDataPresentFlag == GlobalStaticVariables.MOVIE_MAGIC_FLAG_FALSE) {
                 LogDisplay.callLog(LOG_TAG, 'handleMovieBasicOnLoadFinished.Additional movie data not present, go and fetch it', LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
-                //noinspection GroovyVariableCanBeFinal
                 final ArrayList<Integer> movieIdList = new ArrayList<>(1)
-                //noinspection GroovyVariableCanBeFinal
                 final ArrayList<Integer> movieRowIdList = new ArrayList<>(1)
-                //noinspection GroovyVariableCanBeFinal
                 final ArrayList<Integer> isForHomeList = new ArrayList<>(1)
-                //noinspection GroovyVariableCanBeFinal
                 final ArrayList<Integer> categoryFlag = new ArrayList<>(1)
                 movieIdList.add(0,mMovieId)
                 movieRowIdList.add(0,_ID_movie_basic_info)
@@ -1337,13 +1303,9 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
             if(mMovieCategory == GlobalStaticVariables.MOVIE_CATEGORY_PERSON || GlobalStaticVariables.MOVIE_CATEGORY_SEARCH) {
                 //Movie does not exists, go and fetch then insert into movie basic info table
                 LogDisplay.callLog(LOG_TAG, 'handleMovieBasicOnLoadFinished.Movie for person or search does not exists, go and fetch then insert into movie basic info table', LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
-                //noinspection GroovyVariableCanBeFinal
                 final ArrayList<Integer> movieIdList = new ArrayList<>(1)
-                //noinspection GroovyVariableCanBeFinal
                 final ArrayList<Integer> movieRowIdList = new ArrayList<>(1)
-                //noinspection GroovyVariableCanBeFinal
                 final ArrayList<Integer> isForHomeList = new ArrayList<>(1)
-                //noinspection GroovyVariableCanBeFinal
                 final ArrayList<Integer> categoryFlag = new ArrayList<>(1)
                 movieIdList.add(0,mMovieId)
                 movieRowIdList.add(0,0)
@@ -1406,9 +1368,7 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
     void initiateYouTubeVideo(final Cursor data) {
         LogDisplay.callLog(LOG_TAG, "initiateYouTubeVideo.Cursor rec count -> ${data.getCount()}", LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
         if (data.moveToFirst()) {
-            //noinspection GroovyVariableCanBeFinal
             final List<String> youtubeVideoKey = new ArrayList<>()
-            //noinspection GroovyVariableCanBeFinal
             for (final i in 0..(data.count - 1)) {
                 youtubeVideoKey.add(data.getString(COL_MOVIE_VIDEO_KEY))
                 LogDisplay.callLog(LOG_TAG, "YouTube now_playing key= $youtubeVideoKey", LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
@@ -1462,14 +1422,12 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
             if (mOriginalBackdropPath) {
                 mBackdropList.add(mOriginalBackdropPath)
             }
-            //noinspection GroovyVariableCanBeFinal
             for (final i in 0..(data.count - 1)) {
                 mBackdropList.add(data.getString(COL_MOVIE_IMAGE_FILE_PATH))
                 data.moveToNext()
             }
             LogDisplay.callLog(LOG_TAG, "backdropImageArray-> $mBackdropList", LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
             //This initialize ensures the pager is at position zero if the loader is executed due to change in data
-            //noinspection GroovyVariableCanBeFinal
             final DetailFragmentPagerAdapter adapter = new DetailFragmentPagerAdapter(getActivity(), mBackdropList as String[],
                     new DetailFragmentPagerAdapter.DetailFragmentPagerAdapterOnClickHandler() {
                         @Override
@@ -1484,7 +1442,6 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
             final AppCompatImageButton[] dotsImage = new AppCompatImageButton[dotsCount]
             mBackdropDotHolderLayout.removeAllViews()
             setBackDropViewPagerDots(dotsCount, dotsImage)
-            //noinspection GroovyVariableCanBeFinal,GroovyVariableCanBeFinal,GroovyVariableCanBeFinal,GroovyVariableCanBeFinal,GroovyVariableCanBeFinal
             final OnPageChangeListener onPageChangeListener = new OnPageChangeListener() {
                 @Override
                 void onPageScrolled(final int position, final float positionOffset, final int positionOffsetPixels) {
@@ -1494,7 +1451,6 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
                 void onPageSelected(final int position) {
                     final LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(18,18)
                     final ColorStateList whiteColorStateList = ColorStateList.valueOf(ContextCompat.getColor(getActivity(), R.color.white_color))
-                    //noinspection GroovyVariableCanBeFinal
                     for (final i in 0..(dotsCount - 1)) {
                         if (i != position) {
                             dotsImage[i].setLayoutParams(layoutParams)
@@ -1572,9 +1528,7 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
         if (data.moveToFirst() && MovieMagicMainActivity.isUserLoggedIn) {
             boolean isTmdbMovie = false
             float tmdbUserRating = 0.0
-            //noinspection GroovyVariableCanBeFinal
             final ArrayList<String> categories = new ArrayList<>()
-            //noinspection GroovyVariableCanBeFinal
             for (final i in 0..(data.getCount() - 1)) {
                 if(mMovieId == data.getInt(COL_MOVIE_BASIC_TMDB_MOVIE_ID)) {
                     categories.add(data.getString(COL_MOVIE_BASIC_TMDB_MOVIE_CATEGORY))
@@ -1590,7 +1544,6 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
             // If it's a Tmdb movie then see what we got and set the flags accordingly
             if (isTmdbMovie) {
                 LogDisplay.callLog(LOG_TAG, "Movie is in Tmdb list. Categories -> $categories", LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
-                //noinspection GroovyVariableCanBeFinal
                 for (final i in 0..(categories.size() -1)) {
                     switch (categories.get(i)) {
                         case GlobalStaticVariables.MOVIE_CATEGORY_TMDB_USER_WATCHLIST:
@@ -1770,7 +1723,6 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
         final LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(18,18)
         final ColorStateList whiteColorStateList = ColorStateList.valueOf(ContextCompat.getColor(getActivity(), R.color.white_color))
         layoutParams.setMargins(1,0,1,0)
-        //noinspection GroovyVariableCanBeFinal
         for(final i in 0..(dotsCount - 1)) {
             dotsImage[i] = new AppCompatImageButton(getActivity())
             dotsImage[i].setBackgroundResource(R.drawable.view_pager_dot)
@@ -1826,7 +1778,6 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
         builder.setTitle(R.string.tmdb_rating_dialog_title)
                 .setMessage(R.string.tmdb_rating_dialog_message)
 
-        //noinspection GroovyVariableCanBeFinal,GroovyVariableCanBeFinal
         builder.setPositiveButton(R.string.tmdb_rating_dialog_ok_button, new DialogInterface.OnClickListener() {
             @Override
             void onClick(final DialogInterface dialog, final int which) {
@@ -1840,7 +1791,6 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
             }
         })
 
-        //noinspection GroovyVariableCanBeFinal,GroovyVariableCanBeFinal
         builder.setNegativeButton(R.string.tmdb_rating_dialog_cancel_button, new DialogInterface.OnClickListener(){
             @Override
             void onClick(final DialogInterface dialog, final int which) {
@@ -1890,7 +1840,6 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
             }
             if (animation != null) {
                 getView().setLayerType(View.LAYER_TYPE_HARDWARE, null)
-                //noinspection GroovyVariableCanBeFinal,GroovyVariableCanBeFinal,GroovyVariableCanBeFinal
                 animation.setAnimationListener(new Animation.AnimationListener() {
                     @Override
                     void onAnimationStart(final Animation anim) {
@@ -1914,7 +1863,6 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
         super.onAttach(context)
         // This makes sure that the container activity has implemented
         // the callback interface. If not, it throws an exception
-        //noinspection GroovyVariableCanBeFinal
         try {
             if(context instanceof Activity) {
                 mCallbackForBackdropImageClick = (CallbackForBackdropImageClick) context

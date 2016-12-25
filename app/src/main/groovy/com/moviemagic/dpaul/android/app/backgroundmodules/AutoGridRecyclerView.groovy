@@ -34,9 +34,7 @@ class AutoGridRecyclerView extends RecyclerView {
 
     private void init(final Context context, final AttributeSet attrs) {
         if (attrs != null) {
-            //noinspection GroovyVariableCanBeFinal
             final int[] attrsArray = [android.R.attr.columnWidth] as int[]
-            //noinspection GroovyVariableCanBeFinal
             final TypedArray array = context.obtainStyledAttributes(attrs, attrsArray)
             columnWidth = array.getDimensionPixelSize(0, -1)
             array.recycle()
@@ -53,7 +51,6 @@ class AutoGridRecyclerView extends RecyclerView {
         if (columnWidth > 0) {
             //This makes sure that it will return a span count of 1,
             //even if the column width is defined to be larger than the width of the RecyclerView
-            //noinspection GroovyVariableCanBeFinal
             final int spanCount = Math.max(1, getMeasuredWidth() / columnWidth)
             gridLayoutManager.setSpanCount(spanCount)
         }

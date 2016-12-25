@@ -17,8 +17,8 @@ import groovy.transform.CompileStatic
 @CompileStatic
 class DetailFragmentPagerAdapter extends PagerAdapter {
     private static final String LOG_TAG = DetailFragmentPagerAdapter.class.getSimpleName()
-    private final Context mContext = null
-    private final String[] mBackdropimageFilePaths = null
+    private final Context mContext
+    private final String[] mBackdropimageFilePaths
     private DetailFragmentPagerAdapterOnClickHandler mDetailFragmentPagerAdapterOnClickHandler
     private LayoutInflater mLayoutInflater
 
@@ -55,7 +55,6 @@ class DetailFragmentPagerAdapter extends PagerAdapter {
         LogDisplay.callLog(LOG_TAG,"instantiateItem:imagePath-> $imagePath",LogDisplay.DETAIL_FRAGMENT_PAGER_ADAPTER_LOG_FLAG)
         PicassoLoadImage.loadDetailFragmentPagerAdapterImage(mContext,imagePath,imageView)
 
-        //noinspection GroovyVariableCanBeFinal
         view.setOnClickListener(new View.OnClickListener() {
             @Override
             void onClick(final View v) {

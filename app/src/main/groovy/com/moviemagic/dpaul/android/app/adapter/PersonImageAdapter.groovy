@@ -20,10 +20,10 @@ class PersonImageAdapter extends RecyclerView.Adapter<PersonImageAdapter.PersonI
     private static final String LOG_TAG = PersonImageAdapter.class.getSimpleName()
 
     private Cursor mCursor
-    private final Context mContext = null
-    private final TextView mPersonImageGridEmptyTextView = null
+    private final Context mContext
+    private final TextView mPersonImageGridEmptyTextView
     private int mPrimaryDarkColor, mBodyTextColor
-    private final PersonImageAdapterOnClickHandler mMoviePersonImageAdapterOnClickHandler = null
+    private final PersonImageAdapterOnClickHandler mMoviePersonImageAdapterOnClickHandler
 
     //Empty constructor
     public PersonImageAdapter(){
@@ -52,7 +52,6 @@ class PersonImageAdapter extends RecyclerView.Adapter<PersonImageAdapter.PersonI
             final String[] imagePath = new String[mCursor.getCount()]
             LogDisplay.callLog(LOG_TAG,"onClick:Cursor count ${mCursor.getCount()}",LogDisplay.PERSON_IMAGE_ADAPTER_LOG_FLAG)
             mCursor.moveToFirst()
-            //noinspection GroovyVariableCanBeFinal
             for(final i in 0..mCursor.getCount()-1) {
                 imagePath[i] = mCursor.getString(PersonMovieFragment.COL_PERSON_IMAGE_FILE_PATH)
                 mCursor.moveToNext()
@@ -66,7 +65,6 @@ class PersonImageAdapter extends RecyclerView.Adapter<PersonImageAdapter.PersonI
     @Override
     PersonImageAdapterViewHolder onCreateViewHolder(final ViewGroup parent, final int viewType) {
         LogDisplay.callLog(LOG_TAG,'onCreateViewHolder is called',LogDisplay.PERSON_IMAGE_ADAPTER_LOG_FLAG)
-        //noinspection GroovyVariableCanBeFinal
         final View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.single_person_image_grid,parent,false)
         view.setFocusable(true)
         return new PersonImageAdapterViewHolder(view)

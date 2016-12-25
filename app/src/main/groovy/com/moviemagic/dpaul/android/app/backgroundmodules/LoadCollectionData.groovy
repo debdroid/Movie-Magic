@@ -31,7 +31,6 @@ class LoadCollectionData extends AsyncTask<Integer, Void, Void> {
         LogDisplay.callLog(LOG_TAG,"Parms-> collectionId: $collectionId & cleanupFlag: $cleanupFlag",LogDisplay.LOAD_COLLECTION_DATA_LOG_FLAG)
         //TMDB api example
         //https://api.themoviedb.org/3/collection/10?api_key=key
-        //noinspection GroovyVariableCanBeFinal,GroovyVariableCanBeFinal,GroovyVariableCanBeFinal
         try {
             final Uri.Builder uriBuilder = Uri.parse(GlobalStaticVariables.TMDB_MOVIE_BASE_URL).buildUpon()
 
@@ -43,7 +42,6 @@ class LoadCollectionData extends AsyncTask<Integer, Void, Void> {
             final URL url = new URL(uri.toString())
             LogDisplay.callLog(LOG_TAG,"Collection url-> ${uri.toString()}",LogDisplay.LOAD_COLLECTION_DATA_LOG_FLAG)
 
-            //noinspection GroovyVariableCanBeFinal
             final def jsonData = new JsonSlurper(type: JsonParserType.INDEX_OVERLAY).parse(url)
 
             /**
@@ -81,7 +79,6 @@ class LoadCollectionData extends AsyncTask<Integer, Void, Void> {
                  * Process and load (insert) the collection data
                  * **/
                 final ContentValues collectionDataContentValue = JsonParse.parseCollectionDataJson(jsonData) as ContentValues
-                //noinspection GroovyVariableCanBeFinal
                 final Uri collectionDataUri
                 if(collectionDataContentValue) {
                     collectionDataUri = mContentResolver.insert(MovieMagicContract.MovieCollection.CONTENT_URI, collectionDataContentValue)
@@ -99,7 +96,6 @@ class LoadCollectionData extends AsyncTask<Integer, Void, Void> {
                  * Process and load (insert) the collection movies
                  * **/
                 final ContentValues[] collectionMoviesContentValues = JsonParse.parseCollectionMovieJson(jsonData) as ContentValues[]
-                //noinspection GroovyVariableCanBeFinal
                 int collectionMovieCount = 0
                 if(collectionMoviesContentValues) {
                     collectionMovieCount = mContentResolver.bulkInsert(MovieMagicContract.MovieBasicInfo.CONTENT_URI, collectionMoviesContentValues)

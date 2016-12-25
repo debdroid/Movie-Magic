@@ -20,7 +20,6 @@ class TmdbServerAuthenticate implements TmdbAuthenticateInterface {
     public Bundle tmdbUserSignIn(final String userName, final String password, final String authTokenType) throws Exception {
         LogDisplay.callLog(LOG_TAG,'tmdbUserSignIn is called',LogDisplay.TMDB_SERVER_AUTHENTICATE_LOG_FLAG)
         Bundle bundle = new Bundle()
-        //noinspection GroovyVariableCanBeFinal
         try {
             // Request a token first
             // TMDB api example for requesting a token
@@ -123,12 +122,9 @@ class TmdbServerAuthenticate implements TmdbAuthenticateInterface {
  * @return Bundle with formatted JSON data or status message based on response code & error flag
  */
     private static Bundle getNewRequestToken(final URL url) {
-        //noinspection GroovyVariableCanBeFinal
         InputStream inputStream = null
         final HttpURLConnection conn = (HttpURLConnection) url.openConnection()
-        //noinspection GroovyVariableCanBeFinal
         Bundle tokenBundle = null
-        //noinspection GroovyVariableCanBeFinal,GroovyVariableCanBeFinal
         try {
             conn.setReadTimeout(10000) /* milliseconds */
             conn.setConnectTimeout(15000) /* milliseconds */
@@ -165,12 +161,9 @@ class TmdbServerAuthenticate implements TmdbAuthenticateInterface {
      * @return Bundle with formatted JSON data or status message based on response code & error flag
      */
     private static Bundle validateRequestToken(final URL url) {
-        //noinspection GroovyVariableCanBeFinal
         InputStream inputStream = null
         final HttpURLConnection conn = (HttpURLConnection) url.openConnection()
-        //noinspection GroovyVariableCanBeFinal
         Bundle authenticatedTokenBundle = null
-        //noinspection GroovyVariableCanBeFinal,GroovyVariableCanBeFinal
         try {
             conn.setReadTimeout(10000) /* milliseconds */
             conn.setConnectTimeout(15000) /* milliseconds */
@@ -207,12 +200,9 @@ class TmdbServerAuthenticate implements TmdbAuthenticateInterface {
      * @return Bundle with formatted JSON data or status message based on response code & error flag
      */
     private static Bundle getSessionId(final URL url) {
-        //noinspection GroovyVariableCanBeFinal
         InputStream inputStream = null
         final HttpURLConnection conn = (HttpURLConnection) url.openConnection()
-        //noinspection GroovyVariableCanBeFinal
         Bundle SessionIdBundle = null
-        //noinspection GroovyVariableCanBeFinal,GroovyVariableCanBeFinal
         try {
             conn.setReadTimeout(10000) /* milliseconds */
             conn.setConnectTimeout(15000) /* milliseconds */
@@ -249,12 +239,9 @@ class TmdbServerAuthenticate implements TmdbAuthenticateInterface {
      * @return Bundle with Name of the user of the TMDb account & error flag
      */
     private static Bundle getAccountDetails(final URL url) {
-        //noinspection GroovyVariableCanBeFinal
         InputStream inputStream =null
         final HttpURLConnection conn = (HttpURLConnection) url.openConnection()
-        //noinspection GroovyVariableCanBeFinal
         Bundle nameOfUser = null
-        //noinspection GroovyVariableCanBeFinal,GroovyVariableCanBeFinal
         try {
             conn.setReadTimeout(10000) /* milliseconds */
             conn.setConnectTimeout(15000) /* milliseconds */

@@ -53,7 +53,7 @@ dependencies {
     }
     compile 'com.squareup.picasso:picasso:2.5.2'
     // the following dependency is necessary if you want JSON support
-    //Getting compile erroer :(. So commented out
+    //Getting compile error :(. So commented out
     //compile ('org.codehaus.groovy:groovy-json:2.4.6') {
     //    transitive = false
     //}

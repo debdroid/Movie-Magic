@@ -29,7 +29,6 @@ class LoadPersonData extends AsyncTask<Integer, Void, Void> {
         final int personId = params[0]
         //TMDB api example (person with appended response)
         //http://api.themoviedb.org/3/person/1158?api_key=key5&append_to_response=movie_credits
-        //noinspection GroovyVariableCanBeFinal,GroovyVariableCanBeFinal,GroovyVariableCanBeFinal
         try {
             final Uri.Builder uriBuilder = Uri.parse(GlobalStaticVariables.TMDB_MOVIE_BASE_URL).buildUpon()
 
@@ -42,14 +41,12 @@ class LoadPersonData extends AsyncTask<Integer, Void, Void> {
             final URL url = new URL(uri.toString())
             LogDisplay.callLog(LOG_TAG,"Person url-> ${uri.toString()}",LogDisplay.LOAD_PERSON_DATA_LOG_FLAG)
 
-            //noinspection GroovyVariableCanBeFinal
             final def jsonData = new JsonSlurper(type: JsonParserType.INDEX_OVERLAY).parse(url)
 
             /**
              * Process and load (insert) the person info data
              * **/
             final ContentValues personInfoDataContentValue = JsonParse.parsePersonInfoDataJson(jsonData, personId) as ContentValues
-            //noinspection GroovyVariableCanBeFinal
             long personInfoRowId = 0
             if(personInfoDataContentValue) {
                 final Uri personDataUri = mContentResolver.insert(MovieMagicContract.MoviePersonInfo.CONTENT_URI, personInfoDataContentValue)
@@ -108,7 +105,6 @@ class LoadPersonData extends AsyncTask<Integer, Void, Void> {
             final URL personImageUrl = new URL(personImageUri.toString())
             LogDisplay.callLog(LOG_TAG,"Person images url-> ${personImageUri.toString()}",LogDisplay.LOAD_PERSON_DATA_LOG_FLAG)
 
-            //noinspection GroovyVariableCanBeFinal
             final def personImagesJsonData = new JsonSlurper(type: JsonParserType.INDEX_OVERLAY).parse(personImageUrl)
             /**
              * Process and load (insert) the person images data

@@ -43,7 +43,6 @@ class DonateActivity extends AppCompatActivity {
         final String[] donateHeader = getResources().getStringArray(R.array.donate_header)
         final String[] donateLinkAddress = getResources().getStringArray(R.array.donate_link_address)
         // specify an adapter (see also next example)
-        //noinspection GroovyVariableCanBeFinal
         mDonateLinkAdapter = new DonateLinkAdapter(this, donateHeader, donateLinkAddress,
                 new DonateLinkAdapter.DonateLinkAdapterOnClickHandler(){
                     @Override

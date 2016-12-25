@@ -50,7 +50,6 @@ class TestMovieMagicUriMatcher extends AndroidTestCase {
         for each of the Uri types that the ContentProvider can handle.
      */
     public void testUriMatcher() {
-        //noinspection GroovyVariableCanBeFinal
         final UriMatcher testMatcher = MovieMagicProvider.buildUriMatcher()
 
         assertEquals('Error: movie_basic_info matched incorrectly.',testMatcher.match(TEST_MOVIE_BASIC_INFO_DIR), MovieMagicProvider.MOVIE_BASIC_INFO)

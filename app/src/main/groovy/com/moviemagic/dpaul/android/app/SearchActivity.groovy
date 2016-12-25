@@ -59,7 +59,6 @@ class SearchActivity extends AppCompatActivity {
         mRecyclerView.setNestedScrollingEnabled(false)
         //Create a new interface member variable for MovieGridRecyclerAdapterOnClickHandler and the same is passed as
         //parameter to Adapter, this onClick method is called whenever onClick is called from MovieGridRecyclerAdapter
-        //noinspection GroovyVariableCanBeFinal,GroovyVariableCanBeFinal
         mGridRecyclerAdapter = new MovieGridRecyclerAdapter(this,
                 new MovieGridRecyclerAdapter.MovieGridRecyclerAdapterOnClickHandler(){
                     @Override
@@ -147,7 +146,6 @@ class SearchActivity extends AppCompatActivity {
             queryString = params[0]
             List<ContentValues> contentValues = []
 
-            //noinspection GroovyVariableCanBeFinal
             for (final i in 1..MAX_PAGE_DOWNLOAD) {
                 if(i <= mTotalPage) {
                     contentValues = downloadSearchMovies(queryString, i)
@@ -205,10 +203,8 @@ class SearchActivity extends AppCompatActivity {
             //TMDB api example
             https://api.themoviedb.org/3/search/movie?api_key=key&query=<query_string>
 
-            //noinspection GroovyVariableCanBeFinal
             final List<ContentValues> movieList
 
-            //noinspection GroovyVariableCanBeFinal,GroovyVariableCanBeFinal,GroovyVariableCanBeFinal
             try {
                 if (page <= mTotalPage) {
                     final Uri.Builder uriBuilder = Uri.parse(GlobalStaticVariables.TMDB_MOVIE_BASE_URL).buildUpon()
@@ -221,7 +217,6 @@ class SearchActivity extends AppCompatActivity {
 
                     final URL url = new URL(uri.toString())
                     LogDisplay.callLog(LOG_TAG,"Movie url for search string $queryString -> ${uri.toString()}",LogDisplay.SEARCH_ACTIVITY_LOG_FLAG)
-                    //noinspection GroovyVariableCanBeFinal
                     final def jsonData = new JsonSlurper(type: JsonParserType.INDEX_OVERLAY).parse(url)
                     LogDisplay.callLog(LOG_TAG, "JSON DATA for $queryString -> $jsonData", LogDisplay.SEARCH_ACTIVITY_LOG_FLAG)
                     movieList = JsonParse.parseSearchMovieListJson(jsonData, queryString)

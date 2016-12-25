@@ -26,8 +26,8 @@ class MovieCastAdapter extends RecyclerView.Adapter<MovieCastAdapter.MovieCastAd
     private static final String LOG_TAG = MovieCastAdapter.class.getSimpleName()
 
     private Cursor mCursor
-    private final Context mContext = null
-    private final TextView mCastGridEmptyTextView = null
+    private final Context mContext
+    private final TextView mCastGridEmptyTextView
     private int mPrimaryDarkColor, mBodyTextColor
 
     //Empty constructor
@@ -73,7 +73,6 @@ class MovieCastAdapter extends RecyclerView.Adapter<MovieCastAdapter.MovieCastAd
     @Override
     MovieCastAdapterViewHolder onCreateViewHolder(final ViewGroup parent, final int viewType) {
         LogDisplay.callLog(LOG_TAG, 'onCreateViewHolder is called', LogDisplay.MOVIE_CAST_ADAPTER_LOG_FLAG)
-        //noinspection GroovyVariableCanBeFinal
         final View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.single_movie_cast_grid, parent, false)
         view.setFocusable(true)
         return new MovieCastAdapterViewHolder(view)

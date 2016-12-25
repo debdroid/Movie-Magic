@@ -78,7 +78,6 @@ class SearchDatabaseTable {
         db.beginTransaction()
         int returnCount = 0
         try {
-            //noinspection GroovyVariableCanBeFinal
             for (final ContentValues value : values) {
                 convertReleaseDate(value)
                 long _id = db.insert(SEARCH_FTS_VIRTUAL_TABLE_NAME, null, value)
@@ -96,7 +95,6 @@ class SearchDatabaseTable {
     public Cursor getSearchResult(final String query, final String[] columns) {
         final int wordCount = query.isEmpty() ? 0 : query.split("\\s+").length
         LogDisplay.callLog(LOG_TAG,"Query string -> $query & word count -> $wordCount",LogDisplay.SEARCH_DATABASE_TABLE_LOG_FLAG)
-        //noinspection GroovyVariableCanBeFinal
         final String[] selectionArgs
         if(wordCount > 1) {
             final String quotedStringWithLastStar = "\"$query*\""

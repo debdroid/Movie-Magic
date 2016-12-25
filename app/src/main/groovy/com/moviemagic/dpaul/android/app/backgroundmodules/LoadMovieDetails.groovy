@@ -286,7 +286,6 @@ class LoadMovieDetails extends AsyncTask<ArrayList<Integer>, Void, Void> {
         LogDisplay.callLog(LOG_TAG, 'loadRecommendationMovieDetails is called', LogDisplay.LOAD_MOVIE_DETAILS_LOG_FLAG)
         // TMDb api example
         // https://api.themoviedb.org/3/movie/240?api_key=key
-        //noinspection GroovyVariableCanBeFinal
         for(final i in 0..(contentValues.length - 1)) {
             final int recommMovieId = contentValues[i].getAsInteger(MovieMagicContract.MovieBasicInfo.COLUMN_MOVIE_ID)
             try {

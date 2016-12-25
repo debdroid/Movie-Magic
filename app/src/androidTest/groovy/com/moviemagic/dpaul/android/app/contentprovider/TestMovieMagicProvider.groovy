@@ -122,9 +122,7 @@ class TestMovieMagicProvider extends AndroidTestCase {
     void deleteAllRecordsFromDB() {
         //Since the CASCADE delete is in effect, so only delete the main primary tables
         //Commented out the rest, however PLEASE DO NOT DELETE THE LINES as those may be needed later
-        //noinspection GroovyVariableCanBeFinal
         final MovieMagicDbHelper dbHelper = new MovieMagicDbHelper(mContext)
-        //noinspection GroovyVariableCanBeFinal
         final SQLiteDatabase db = dbHelper.getWritableDatabase()
         db.delete(MovieMagicContract.MovieBasicInfo.TABLE_NAME, null, null)
 //        db.delete(MovieMagicContract.MovieCast.TABLE_NAME, null, null)
@@ -158,18 +156,14 @@ class TestMovieMagicProvider extends AndroidTestCase {
         This test checks to make sure that the content provider is registered correctly.
      */
     void testProviderRegistry() {
-        //noinspection GroovyVariableCanBeFinal
         final PackageManager pm = mContext.getPackageManager()
 
         // We define the component name based on the package name from the context and the
         // MovieMagicProvider class.
-        //noinspection GroovyVariableCanBeFinal
         final ComponentName componentName = new ComponentName(mContext.getPackageName(),MovieMagicProvider.class.getName())
-        //noinspection GroovyVariableCanBeFinal
         try {
             // Fetch the provider info using the component name from the PackageManager
             // This throws an exception if the provider isn't registered.
-            //noinspection GroovyVariableCanBeFinal
             final ProviderInfo providerInfo = pm.getProviderInfo(componentName, 0)
 
             // Make sure that the registered authority matches the authority from the Contract.
@@ -186,15 +180,10 @@ class TestMovieMagicProvider extends AndroidTestCase {
        the correct type for each type of URI that it can handle.
     */
     void testGetType() {
-        //noinspection GroovyVariableCanBeFinal
         final int testMovieId = 43546
-        //noinspection GroovyVariableCanBeFinal
         final int testCollectionId = 7890
-        //noinspection GroovyVariableCanBeFinal
         final int testPersonId = 2468
-        //noinspection GroovyVariableCanBeFinal
         final String testMovieCategory = 'popular'
-        //noinspection GroovyVariableCanBeFinal
         final String testCntryISO = 'US'
 
         //Test the type for movie_basic_info
@@ -347,26 +336,17 @@ class TestMovieMagicProvider extends AndroidTestCase {
         read out the data using query method.
     */
     void testBasicMovieMagicQuery() {
-        //noinspection GroovyVariableCanBeFinal
         final MovieMagicDbHelper dbHelper = new MovieMagicDbHelper(mContext)
-        //noinspection GroovyVariableCanBeFinal
         final SQLiteDatabase db = dbHelper.getWritableDatabase()
         ContentValues testValues
         Cursor testCursor
-        //noinspection GroovyVariableCanBeFinal
         final int testMovieId = TestUtilities.TEST_MOVIE_ID
-        //noinspection GroovyVariableCanBeFinal
         final String testMovieCategory = TestUtilities.TEST_MOVIE_CATEGORY
-        //noinspection GroovyVariableCanBeFinal
         final int testCollId = TestUtilities.TEST_COLL_ID
-        //noinspection GroovyVariableCanBeFinal
         final int testPersonID = TestUtilities.TEST_PERSON_ID
-        //noinspection GroovyVariableCanBeFinal
         final String testCntryISO = TestUtilities.TEST_COUNTRY_ISO
         long rowId
-        //noinspection GroovyVariableCanBeFinal
         final long movieBasicInfoForeignKey
-        //noinspection GroovyVariableCanBeFinal
         final long personInfoForeignKey
         //Insert test records to movie_basic_info
         testValues = TestUtilities.createMovieValues()
@@ -563,17 +543,13 @@ class TestMovieMagicProvider extends AndroidTestCase {
         ContentValues testValues
         ContentValues updatedValues
         Uri testUri
-        //noinspection GroovyVariableCanBeFinal
         final long movieMagicRowId
-        //noinspection GroovyVariableCanBeFinal
         final long movieMagicCollRowId
-        //noinspection GroovyVariableCanBeFinal
         final long movieMagicPersonRowId
         int rowCount
         Cursor queryCursor
         Cursor updateCursor
         TestContentObserverUtilities.TestContentObserver tco
-        //noinspection GroovyVariableCanBeFinal
         final String[] testMovieId
         String[] testId
 
@@ -908,7 +884,6 @@ class TestMovieMagicProvider extends AndroidTestCase {
         ContentValues testValues
         Uri testUri
         Cursor testCursor
-        //noinspection GroovyVariableCanBeFinal
         final TestContentObserverUtilities.TestContentObserver tco = TestContentObserverUtilities.getTestContentObserver()
 
         testValues = TestUtilities.createMovieValues()
@@ -927,7 +902,6 @@ class TestMovieMagicProvider extends AndroidTestCase {
         tco.waitForNotificationOrFail()
         mContext.getContentResolver().unregisterContentObserver(tco)
 
-        //noinspection GroovyVariableCanBeFinal
         final long movieMagicRowId = ContentUris.parseId(testUri)
 
         // Verify a valid insertion
@@ -1055,7 +1029,6 @@ class TestMovieMagicProvider extends AndroidTestCase {
         //Unregister the observer
         mContext.getContentResolver().unregisterContentObserver(tco)
         //Get the _id of the inserted record
-        //noinspection GroovyVariableCanBeFinal
         final long moviePersonRowId = ContentUris.parseId(testUri)
 
         // Verify a valid insertion
@@ -1153,13 +1126,11 @@ class TestMovieMagicProvider extends AndroidTestCase {
         final int BULK_INSERT_COUNT = 10
         int bulkCount
         Cursor bulkCursor
-        //noinspection GroovyVariableCanBeFinal
         final ContentValues[] testValues = new ContentValues[BULK_INSERT_COUNT]
         TestContentObserverUtilities.TestContentObserver tco
 
         //Bulk insert for movie_basic_info
         //Create some bulk data
-        //noinspection GroovyVariableCanBeFinal
         for (final i in 0..(BULK_INSERT_COUNT - 1)) {
             testValues[i] = TestUtilities.createBulkMovieValues(i)
             //TestUtilities uses the date in long format which is used to test raw database and table
@@ -1185,7 +1156,6 @@ class TestMovieMagicProvider extends AndroidTestCase {
         assertEquals('Error:bulk inserted query rec count not matched for movie_basic_info',bulkCursor.getCount(), BULK_INSERT_COUNT)
         // and let's make sure they match the ones we created
         bulkCursor.moveToFirst()
-        //noinspection GroovyVariableCanBeFinal
         for (final int i in 0..(BULK_INSERT_COUNT - 1)) {
             TestUtilities.validateCurrentRecord("testBulkInsert: movie_basic_info - #$i", bulkCursor, testValues[i])
             bulkCursor.moveToNext()
@@ -1193,7 +1163,6 @@ class TestMovieMagicProvider extends AndroidTestCase {
 
         //Bulk insert for movie_cast
         //Create some bulk data
-        //noinspection GroovyVariableCanBeFinal
         for (final i in 0..(BULK_INSERT_COUNT - 1)) {
             //Since there is UNIQUE REPLACE is in effect in the child table, so in order to ensure the primary
             //and foreign key match, instead of sending 'i' as is '1' is added so that foreign key starts from 1
@@ -1219,7 +1188,6 @@ class TestMovieMagicProvider extends AndroidTestCase {
         assertEquals('Error:bulk inserted query rec count not matched for movie_cast',bulkCursor.getCount(), BULK_INSERT_COUNT)
         // and let's make sure they match the ones we created
         bulkCursor.moveToFirst()
-        //noinspection GroovyVariableCanBeFinal
         for (final int i in 0..(BULK_INSERT_COUNT - 1)) {
             TestUtilities.validateCurrentRecord("testBulkInsert: movie_cast - #$i", bulkCursor, testValues[i])
             bulkCursor.moveToNext()
@@ -1227,7 +1195,6 @@ class TestMovieMagicProvider extends AndroidTestCase {
 
         //Bulk insert for movie_crew
         //Create some bulk data
-        //noinspection GroovyVariableCanBeFinal
         for (final i in 0..(BULK_INSERT_COUNT - 1)) {
             testValues[i] = TestUtilities.createBulkMovieCrewValues(i+1)
         }
@@ -1249,7 +1216,6 @@ class TestMovieMagicProvider extends AndroidTestCase {
         assertEquals('Error:bulk inserted query rec count not matched for movie_crew',bulkCursor.getCount(), BULK_INSERT_COUNT)
         // and let's make sure they match the ones we created
         bulkCursor.moveToFirst()
-        //noinspection GroovyVariableCanBeFinal
         for (final int i in 0..(BULK_INSERT_COUNT - 1)) {
             TestUtilities.validateCurrentRecord("testBulkInsert: movie_crew - #$i", bulkCursor, testValues[i])
             bulkCursor.moveToNext()
@@ -1257,7 +1223,6 @@ class TestMovieMagicProvider extends AndroidTestCase {
 
         //Bulk insert for movie_image
         //Create some bulk data
-        //noinspection GroovyVariableCanBeFinal
         for (final i in 0..(BULK_INSERT_COUNT - 1)) {
             testValues[i] = TestUtilities.createBulkMovieImageValues(i+1)
         }
@@ -1279,7 +1244,6 @@ class TestMovieMagicProvider extends AndroidTestCase {
         assertEquals('Error:bulk inserted query rec count not matched for movie_image',bulkCursor.getCount(), BULK_INSERT_COUNT)
         // and let's make sure they match the ones we created
         bulkCursor.moveToFirst()
-        //noinspection GroovyVariableCanBeFinal
         for (final int i in 0..(BULK_INSERT_COUNT - 1)) {
             TestUtilities.validateCurrentRecord("testBulkInsert: movie_image - #$i", bulkCursor, testValues[i])
             bulkCursor.moveToNext()
@@ -1287,7 +1251,6 @@ class TestMovieMagicProvider extends AndroidTestCase {
 
         //Bulk insert for movie_video
         //Create some bulk data
-        //noinspection GroovyVariableCanBeFinal
         for (final i in 0..(BULK_INSERT_COUNT - 1)) {
             testValues[i] = TestUtilities.createBulkMovieVideoValues(i+1)
         }
@@ -1309,7 +1272,6 @@ class TestMovieMagicProvider extends AndroidTestCase {
         assertEquals('Error:bulk inserted query rec count not matched for movie_video',bulkCursor.getCount(), BULK_INSERT_COUNT)
         // and let's make sure they match the ones we created
         bulkCursor.moveToFirst()
-        //noinspection GroovyVariableCanBeFinal
         for (final int i in 0..(BULK_INSERT_COUNT - 1)) {
             TestUtilities.validateCurrentRecord("testBulkInsert: movie_video - #$i", bulkCursor, testValues[i])
             bulkCursor.moveToNext()
@@ -1317,7 +1279,6 @@ class TestMovieMagicProvider extends AndroidTestCase {
 
         //Bulk insert for movie_review
         //Create some bulk data
-        //noinspection GroovyVariableCanBeFinal
         for (final i in 0..(BULK_INSERT_COUNT - 1)) {
             testValues[i] = TestUtilities.createBulkMovieReviewValues(i+1)
         }
@@ -1339,7 +1300,6 @@ class TestMovieMagicProvider extends AndroidTestCase {
         assertEquals('Error:bulk inserted query rec count not matched for movie_review',bulkCursor.getCount(), BULK_INSERT_COUNT)
         // and let's make sure they match the ones we created
         bulkCursor.moveToFirst()
-        //noinspection GroovyVariableCanBeFinal
         for (final int i in 0..(BULK_INSERT_COUNT - 1)) {
             TestUtilities.validateCurrentRecord("testBulkInsert: movie_review - #$i", bulkCursor, testValues[i])
             bulkCursor.moveToNext()
@@ -1347,7 +1307,6 @@ class TestMovieMagicProvider extends AndroidTestCase {
 
         //Bulk insert for movie_release_date
         //Create some bulk data
-        //noinspection GroovyVariableCanBeFinal
         for (final i in 0..(BULK_INSERT_COUNT - 1)) {
             testValues[i] = TestUtilities.createBulkMovieReleaseDateValues(i+1)
         }
@@ -1369,7 +1328,6 @@ class TestMovieMagicProvider extends AndroidTestCase {
         assertEquals('Error:bulk inserted query rec count not matched for movie_release_date',bulkCursor.getCount(), BULK_INSERT_COUNT)
         // and let's make sure they match the ones we created
         bulkCursor.moveToFirst()
-        //noinspection GroovyVariableCanBeFinal
         for (final int i in 0..(BULK_INSERT_COUNT - 1)) {
             TestUtilities.validateCurrentRecord("testBulkInsert: movie_release_date - #$i", bulkCursor, testValues[i])
             bulkCursor.moveToNext()
@@ -1379,7 +1337,6 @@ class TestMovieMagicProvider extends AndroidTestCase {
 
         //Bulk insert for movie_person_info
         //Create some bulk data
-        //noinspection GroovyVariableCanBeFinal
         for (final i in 0..(BULK_INSERT_COUNT - 1)) {
             testValues[i] = TestUtilities.createBulkMoviePersonInfoValues(i)
         }
@@ -1401,7 +1358,6 @@ class TestMovieMagicProvider extends AndroidTestCase {
         assertEquals('Error:bulk inserted query rec count not matched for movie_person_info',bulkCursor.getCount(), BULK_INSERT_COUNT)
         // and let's make sure they match the ones we created
         bulkCursor.moveToFirst()
-        //noinspection GroovyVariableCanBeFinal
         for (final int i in 0..(BULK_INSERT_COUNT - 1)) {
             TestUtilities.validateCurrentRecord("testBulkInsert: movie_person_info - #$i", bulkCursor, testValues[i])
             bulkCursor.moveToNext()
@@ -1409,7 +1365,6 @@ class TestMovieMagicProvider extends AndroidTestCase {
 
         //Bulk insert for movie_person_cast
         //Create some bulk data
-        //noinspection GroovyVariableCanBeFinal
         for (final i in 0..(BULK_INSERT_COUNT - 1)) {
             testValues[i] = TestUtilities.createBulkMoviePersonCastValues(i+1)
         }
@@ -1431,7 +1386,6 @@ class TestMovieMagicProvider extends AndroidTestCase {
         assertEquals('Error:bulk inserted query rec count not matched for movie_person_cast',bulkCursor.getCount(), BULK_INSERT_COUNT)
         // and let's make sure they match the ones we created
         bulkCursor.moveToFirst()
-        //noinspection GroovyVariableCanBeFinal
         for (final int i in 0..(BULK_INSERT_COUNT - 1)) {
             TestUtilities.validateCurrentRecord("testBulkInsert: movie_person_cast - #$i", bulkCursor, testValues[i])
             bulkCursor.moveToNext()
@@ -1439,7 +1393,6 @@ class TestMovieMagicProvider extends AndroidTestCase {
 
         //Bulk insert for movie_person_crew
         //Create some bulk data
-        //noinspection GroovyVariableCanBeFinal
         for (final i in 0..(BULK_INSERT_COUNT - 1)) {
             testValues[i] = TestUtilities.createBulkMoviePersonCrewValues(i+1)
         }
@@ -1461,7 +1414,6 @@ class TestMovieMagicProvider extends AndroidTestCase {
         assertEquals('Error:bulk inserted query rec count not matched for movie_person_crew',bulkCursor.getCount(), BULK_INSERT_COUNT)
         // and let's make sure they match the ones we created
         bulkCursor.moveToFirst()
-        //noinspection GroovyVariableCanBeFinal
         for (final int i in 0..(BULK_INSERT_COUNT - 1)) {
             TestUtilities.validateCurrentRecord("testBulkInsert: movie_person_crew - #$i", bulkCursor, testValues[i])
             bulkCursor.moveToNext()
@@ -1470,7 +1422,6 @@ class TestMovieMagicProvider extends AndroidTestCase {
 
         //Bulk insert for movie_person_image
         //Create some bulk data
-        //noinspection GroovyVariableCanBeFinal
         for (final i in 0..(BULK_INSERT_COUNT - 1)) {
             testValues[i] = TestUtilities.createBulkMoviePersonImageValues(i+1)
         }
@@ -1492,7 +1443,6 @@ class TestMovieMagicProvider extends AndroidTestCase {
         assertEquals('Error:bulk inserted query rec count not matched for movie_person_image',bulkCursor.getCount(), BULK_INSERT_COUNT)
         // and let's make sure they match the ones we created
         bulkCursor.moveToFirst()
-        //noinspection GroovyVariableCanBeFinal
         for (final int i in 0..(BULK_INSERT_COUNT - 1)) {
             TestUtilities.validateCurrentRecord("testBulkInsert: movie_person_image - #$i", bulkCursor, testValues[i])
             bulkCursor.moveToNext()
@@ -1500,7 +1450,6 @@ class TestMovieMagicProvider extends AndroidTestCase {
 
         //Bulk insert for movie_collection
         //Create some bulk data
-        //noinspection GroovyVariableCanBeFinal
         for (final i in 0..(BULK_INSERT_COUNT - 1)) {
             testValues[i] = TestUtilities.createBulkMovieCollectionValues(i)
         }
@@ -1522,7 +1471,6 @@ class TestMovieMagicProvider extends AndroidTestCase {
         assertEquals('Error:bulk inserted query rec count not matched for movie_collection',bulkCursor.getCount(), BULK_INSERT_COUNT)
         // and let's make sure they match the ones we created
         bulkCursor.moveToFirst()
-        //noinspection GroovyVariableCanBeFinal
         for (final int i in 0..(BULK_INSERT_COUNT - 1)) {
             TestUtilities.validateCurrentRecord("testBulkInsert: movie_collection - #$i", bulkCursor, testValues[i])
             bulkCursor.moveToNext()

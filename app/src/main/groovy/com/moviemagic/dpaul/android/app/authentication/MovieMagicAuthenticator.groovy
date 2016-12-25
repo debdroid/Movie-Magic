@@ -81,7 +81,6 @@ class MovieMagicAuthenticator extends AbstractAccountAuthenticator {
             final String password = accountManager.getPassword(account)
             // If password is available then give it another try
             if (password != null) {
-                //noinspection GroovyVariableCanBeFinal
                 try {
                     LogDisplay.callLog(LOG_TAG,'Re-attempt to authenticate user',LogDisplay.MOVIE_MAGIC_AUTHENTICATOR_LOG_FLAG)
                     final Bundle bundle = GlobalStaticVariables.sTmdbAuthenticateInterface.tmdbUserSignIn(account.name, password, authTokenType)
@@ -112,7 +111,7 @@ class MovieMagicAuthenticator extends AbstractAccountAuthenticator {
         intent.putExtra(AccountManager.KEY_ACCOUNT_NAME, account.name)
         intent.putExtra(MovieMagicAuthenticatorActivity.IS_NEW_ACCOUNT, false)
 
-        Bundle bundle = new Bundle()
+        final Bundle bundle = new Bundle()
         // Send the intent with key 'KEY_INTENT' so that AuthenticatorActivity is launched
         bundle.putParcelable(AccountManager.KEY_INTENT, intent)
         return bundle

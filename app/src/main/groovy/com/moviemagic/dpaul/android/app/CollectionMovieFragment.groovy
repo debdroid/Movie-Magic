@@ -138,7 +138,6 @@ class CollectionMovieFragment extends Fragment implements LoaderManager.LoaderCa
     public View onCreateView(final LayoutInflater inflater, final ViewGroup container, final Bundle savedInstanceState) {
         LogDisplay.callLog(LOG_TAG, 'onCreateView is called', LogDisplay.COLLECTION_MOVIE_FRAGMENT_LOG_FLAG)
         //Get the bundle from the Fragment
-        //noinspection GroovyVariableCanBeFinal
         final Bundle args = getArguments()
         if (args) {
             mCollectionMovieIdUri = args.getParcelable(GlobalStaticVariables.MOVIE_COLLECTION_URI) as Uri
@@ -146,7 +145,6 @@ class CollectionMovieFragment extends Fragment implements LoaderManager.LoaderCa
             mCollectionId = MovieMagicContract.MovieCollection.getCollectionIdFromMovieCollectionUri(mCollectionMovieIdUri)
         }
         //Inflate the view before referring any view using id
-        //noinspection GroovyVariableCanBeFinal
         final View mRootView = inflater.inflate(R.layout.fragment_collection_movie, container, false)
         mBackdropImageView = mRootView.findViewById(R.id.collection_backdrop_image) as ImageView
         mCollectionTitleTextView = mRootView.findViewById(R.id.movie_collection_title) as TextView
@@ -163,7 +161,6 @@ class CollectionMovieFragment extends Fragment implements LoaderManager.LoaderCa
     @Override
     void onActivityCreated(final Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState)
-        //noinspection GroovyVariableCanBeFinal
         final AppCompatActivity appCompatActivity = getActivity() as AppCompatActivity
         mToolbar = getView().findViewById(R.id.collection_toolbar) as Toolbar
         if (mToolbar) {
@@ -236,7 +233,6 @@ class CollectionMovieFragment extends Fragment implements LoaderManager.LoaderCa
                 //Fragment transaction cannot be done inside onnLoadFinished, so work around is to use a handler as per
                 //stackoverflow http://stackoverflow.com/questions/22788684/can-not-perform-this-action-inside-of-onloadfinished
                 final int WHAT = 1
-                //noinspection GroovyVariableCanBeFinal,GroovyVariableCanBeFinal
                 final Handler handler = new Handler(){
                     @Override
                     public void handleMessage(final Message msg) {
@@ -245,7 +241,6 @@ class CollectionMovieFragment extends Fragment implements LoaderManager.LoaderCa
                 }
                 handler.sendEmptyMessage(WHAT)
                 //Show the title only when image is collapsed
-                //noinspection GroovyVariableCanBeFinal,GroovyVariableCanBeFinal
                 mAppBarLayout.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
                     boolean isShow = false
                     int scrollRange = -1
@@ -325,7 +320,6 @@ class CollectionMovieFragment extends Fragment implements LoaderManager.LoaderCa
                     // If user does not select dynamic theme (default value) then do not change the color
                     if (Utility.isDynamicTheme(getActivity())) {
                         final Bitmap bitmapPoster = ((BitmapDrawable) mBackdropImageView.getDrawable()).getBitmap()
-                        //noinspection GroovyVariableCanBeFinal
                         Palette.from(bitmapPoster).generate(new Palette.PaletteAsyncListener() {
                             @Override
                             public void onGenerated(final Palette p) {
@@ -339,17 +333,11 @@ class CollectionMovieFragment extends Fragment implements LoaderManager.LoaderCa
                                     LogDisplay.callLog(LOG_TAG,'loadCollBackdropAndchangeCollectionMovieGridColor: collection data not yet loaded!',LogDisplay.COLLECTION_MOVIE_FRAGMENT_LOG_FLAG)
                                 }
                                 LogDisplay.callLog(LOG_TAG, 'onGenerated is called', LogDisplay.COLLECTION_MOVIE_FRAGMENT_LOG_FLAG)
-                                //noinspection GroovyVariableCanBeFinal
                                 final Palette.Swatch vibrantSwatch = p.getVibrantSwatch()
-                                //noinspection GroovyVariableCanBeFinal
                                 final Palette.Swatch lightVibrantSwatch = p.getLightVibrantSwatch()
-                                //noinspection GroovyVariableCanBeFinal
                                 final Palette.Swatch darkVibrantSwatch = p.getDarkVibrantSwatch()
-                                //noinspection GroovyVariableCanBeFinal
                                 final Palette.Swatch mutedSwatch = p.getMutedSwatch()
-                                //noinspection GroovyVariableCanBeFinal
                                 final Palette.Swatch mutedLightSwatch = p.getLightMutedSwatch()
-                                //noinspection GroovyVariableCanBeFinal
                                 final Palette.Swatch mutedDarkSwatch = p.getDarkMutedSwatch()
                                 boolean pickSwatchColorFlag = false
                                 //Pick primary, primaryDark, title and body text color
@@ -358,7 +346,6 @@ class CollectionMovieFragment extends Fragment implements LoaderManager.LoaderCa
                                     mPalleteTitleColor = vibrantSwatch.getTitleTextColor()
                                     mPalleteBodyTextColor = vibrantSwatch.getBodyTextColor()
                                     //Produce Dark color by changing the value (3rd parameter) of HSL value
-                                    //noinspection GroovyVariableCanBeFinal
                                     final float[] primaryHsl = vibrantSwatch.getHsl()
                                     primaryHsl[2] *= 0.9f
                                     mPalletePrimaryDarkColor = Color.HSVToColor(primaryHsl)
@@ -368,7 +355,6 @@ class CollectionMovieFragment extends Fragment implements LoaderManager.LoaderCa
                                     mPalleteTitleColor = lightVibrantSwatch.getTitleTextColor()
                                     mPalleteBodyTextColor = lightVibrantSwatch.getBodyTextColor()
                                     //Produce Dark color by changing the value (3rd parameter) of HSL value
-                                    //noinspection GroovyVariableCanBeFinal
                                     final float[] primaryHsl = lightVibrantSwatch.getHsl()
                                     primaryHsl[2] *= 0.9f
                                     mPalletePrimaryDarkColor = Color.HSVToColor(primaryHsl)
@@ -378,7 +364,6 @@ class CollectionMovieFragment extends Fragment implements LoaderManager.LoaderCa
                                     mPalleteTitleColor = darkVibrantSwatch.getTitleTextColor()
                                     mPalleteBodyTextColor = darkVibrantSwatch.getBodyTextColor()
                                     //Produce Dark color by changing the value (3rd parameter) of HSL value
-                                    //noinspection GroovyVariableCanBeFinal
                                     final float[] primaryHsl = darkVibrantSwatch.getHsl()
                                     primaryHsl[2] *= 0.9f
                                     mPalletePrimaryDarkColor = Color.HSVToColor(primaryHsl)

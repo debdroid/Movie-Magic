@@ -69,7 +69,6 @@ class ImageViewerActivity extends AppCompatActivity {
         getSupportActionBar().setTitle(mTitle)
 
         //Create and set PagerAdapter
-        //noinspection GroovyVariableCanBeFinal
         mAdapter = new ImagePagerAdapter(this, mTitle, mImageFilePath as String[],
                 new ImagePagerAdapter.ImagePagerAdapterOnClickHandler(){
                     @Override
@@ -78,7 +77,6 @@ class ImageViewerActivity extends AppCompatActivity {
                         if(getSupportActionBar() && getSupportActionBar().isShowing()) {
                             final Animation animOut = new TranslateAnimation(0,0,0,-100)
                             animOut.setDuration(100)
-                            //noinspection GroovyVariableCanBeFinal,GroovyVariableCanBeFinal,GroovyVariableCanBeFinal
                             animOut.setAnimationListener(new Animation.AnimationListener() {
                                 @Override
                                 void onAnimationStart(final Animation animation) {}
@@ -139,7 +137,6 @@ class ImageViewerActivity extends AppCompatActivity {
         // Get the ImageView which is currently hosting the image
         final ImageView imageView = mViewPager.findViewWithTag(ImagePagerAdapter.PAGER_CURRENT_IMAGE_TAG+imagePosition) as ImageView
         // Get the Bitmap from the ImageView
-        //noinspection GroovyVariableCanBeFinal
         final Bitmap bitmapImage
         if(imageView && imageView.getDrawable()) {
             bitmapImage  = ((BitmapDrawable) imageView.getDrawable()).getBitmap()
@@ -159,7 +156,6 @@ class ImageViewerActivity extends AppCompatActivity {
             LogDisplay.callLog(LOG_TAG,"mImagePath -> ${mImagePath.toString()}",LogDisplay.IMAGE_VIEWER_ACTIVITY_LOG_FLAG)
             LogDisplay.callLog(LOG_TAG,"imageFile -> ${imageFile.toString()}",LogDisplay.IMAGE_VIEWER_ACTIVITY_LOG_FLAG)
 
-            //noinspection GroovyVariableCanBeFinal
             try {
                 // Make sure the Pictures directory exists.
                 if(!mImagePath.mkdirs()) {
@@ -187,7 +183,6 @@ class ImageViewerActivity extends AppCompatActivity {
                     final InputStream is = new ByteArrayInputStream(stream.toByteArray())
 
                     final OutputStream os = new FileOutputStream(imageFile)
-                    //noinspection GroovyVariableCanBeFinal
                     final byte[] data = new byte[is.available()]
                     is.read(data)
                     os.write(data)
@@ -234,7 +229,6 @@ class ImageViewerActivity extends AppCompatActivity {
                 // This method returns true if the app has requested this permission previously and the user denied the request but
                 // if the user turned down the permission request in the past and chose the Don't ask again option in the permission request system dialog,
                 // this method returns false
-                //noinspection GroovyVariableCanBeFinal
                 Snackbar.make(mImageViewerMainLayout, getString(R.string.write_permission_missing_msg), Snackbar.LENGTH_INDEFINITE)
                         .setAction(android.R.string.ok, new View.OnClickListener() {
                     @Override

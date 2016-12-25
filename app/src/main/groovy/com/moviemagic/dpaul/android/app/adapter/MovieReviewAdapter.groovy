@@ -19,8 +19,8 @@ class MovieReviewAdapter extends RecyclerView.Adapter<MovieReviewAdapter.MovieRe
     private static final String LOG_TAG = MovieReviewAdapter.class.getSimpleName()
 
     private Cursor mCursor
-    private final Context mContext = null
-    private final TextView mRecyclerviewEmptyTextView = null
+    private final Context mContext
+    private final TextView mRecyclerviewEmptyTextView
     private int mPrimaryColor, mTitleTextColor, mBodyTextColor
 
     //Empty constructor
@@ -47,7 +47,6 @@ class MovieReviewAdapter extends RecyclerView.Adapter<MovieReviewAdapter.MovieRe
             movieReviewContent = view.findViewById(R.id.single_review_item_review_content) as TextView
             mShowImageButton = view.findViewById(R.id.single_review_item_show_button) as ImageButton
             mHideImageButton = view.findViewById(R.id.single_review_item_hide_button) as ImageButton
-            //noinspection GroovyVariableCanBeFinal
             mShowImageButton.setOnClickListener( new View.OnClickListener() {
                 @Override
                 void onClick(final View v) {
@@ -56,7 +55,6 @@ class MovieReviewAdapter extends RecyclerView.Adapter<MovieReviewAdapter.MovieRe
                     movieReviewContent.setMaxLines(Integer.MAX_VALUE)
                 }
             })
-            //noinspection GroovyVariableCanBeFinal
             mHideImageButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 void onClick(final View v) {
@@ -71,7 +69,6 @@ class MovieReviewAdapter extends RecyclerView.Adapter<MovieReviewAdapter.MovieRe
     @Override
     MovieReviewAdapterViewHolder onCreateViewHolder(final ViewGroup parent, final int viewType) {
         LogDisplay.callLog(LOG_TAG, 'onCreateViewHolder is called', LogDisplay.MOVIE_REVIEW_ADAPTER_LOG_FLAG)
-        //noinspection GroovyVariableCanBeFinal
         final View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.single_movie_review_item, parent, false)
         view.setFocusable(true)
         return new MovieReviewAdapterViewHolder(view)

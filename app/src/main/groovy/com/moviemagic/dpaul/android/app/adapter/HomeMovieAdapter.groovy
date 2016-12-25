@@ -23,9 +23,9 @@ class HomeMovieAdapter extends RecyclerView.Adapter<HomeMovieAdapter.HomeMovieAd
     private static final String LOG_TAG = HomeMovieAdapter.class.getSimpleName()
 
     private Cursor mCursor
-    private final Context mContext = null
-    private final TextView mRecyclerviewEmptyTextView = null
-    private final HomeMovieAdapterOnClickHandler mHomeMovieAdapterOnClickHandler= null
+    private final Context mContext
+    private final TextView mRecyclerviewEmptyTextView
+    private final HomeMovieAdapterOnClickHandler mHomeMovieAdapterOnClickHandler
 
 
     //Empty constructor
@@ -73,7 +73,6 @@ class HomeMovieAdapter extends RecyclerView.Adapter<HomeMovieAdapter.HomeMovieAd
     @Override
     HomeMovieAdapterViewHolder onCreateViewHolder(final ViewGroup parent, final int viewType) {
         LogDisplay.callLog(LOG_TAG, 'onCreateViewHolder is called', LogDisplay.HOME_MOVIE_ADAPTER_LOG_FLAG)
-        //noinspection GroovyVariableCanBeFinal
         final View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.single_home_movie_grid, parent, false)
         view.setFocusable(true)
         return new HomeMovieAdapterViewHolder(view)
@@ -123,7 +122,6 @@ class HomeMovieAdapter extends RecyclerView.Adapter<HomeMovieAdapter.HomeMovieAd
         } else {
             holder.movieReleaseDateTextView.setText("${mContext.getResources().getString(R.string.home_movie_release_date_text)}: ${mContext.getResources().getString(R.string.movie_data_not_available)}")
         }
-        //noinspection GroovyVariableCanBeFinal
         String listType = null
         switch (mCursor.getString(HomeMovieFragment.COL_MOVIE_BASIC_MOVIE_CATEGORY)) {
             case GlobalStaticVariables.MOVIE_CATEGORY_NOW_PLAYING:

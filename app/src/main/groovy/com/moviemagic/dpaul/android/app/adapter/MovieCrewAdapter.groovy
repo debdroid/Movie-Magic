@@ -24,8 +24,8 @@ class MovieCrewAdapter extends RecyclerView.Adapter<MovieCrewAdapter.MovieCrewAd
     private static final String LOG_TAG = MovieCrewAdapter.class.getSimpleName()
 
     private Cursor mCursor
-    private final Context mContext = null
-    private final TextView mCrewGridEmptyTextView = null
+    private final Context mContext
+    private final TextView mCrewGridEmptyTextView
     private int mPrimaryDarkColor, mBodyTextColor
 
 
@@ -67,7 +67,6 @@ class MovieCrewAdapter extends RecyclerView.Adapter<MovieCrewAdapter.MovieCrewAd
     @Override
     MovieCrewAdapterViewHolder onCreateViewHolder(final ViewGroup parent, final int viewType) {
         LogDisplay.callLog(LOG_TAG,'onCreateViewHolder is called',LogDisplay.MOVIE_CREW_ADAPTER_LOG_FLAG)
-        //noinspection GroovyVariableCanBeFinal
         final View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.single_movie_crew_grid,parent,false)
         view.setFocusable(true)
         return new MovieCrewAdapterViewHolder(view)

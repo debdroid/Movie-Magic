@@ -18,12 +18,12 @@ import groovy.transform.CompileStatic
 @CompileStatic
 class MovieGridRecyclerAdapter extends RecyclerView.Adapter<MovieGridRecyclerAdapter.MovieGridRecyclerAdapterViewHolder>{
     private static final String LOG_TAG = MovieGridRecyclerAdapter.class.getSimpleName()
-    private final Context mContext = null
+    private final Context mContext
     private Cursor mCursor
-    private final MovieGridRecyclerAdapterOnClickHandler mMovieGridRecyclerAdapterOnClickHandler = null
+    private final MovieGridRecyclerAdapterOnClickHandler mMovieGridRecyclerAdapterOnClickHandler
     private int mPrimaryDarkColor, mBodyTextColor
     //This flag is set as true by CollectionMovieFragment in order to apply color
-    //And the same is set as false by MovieMagicMainActivity in order to use defualt color
+    //And the same is set as false by MovieMagicMainActivity in order to use default color
     public static boolean collectionGridFlag = false
 
     //Empty constructor
@@ -59,7 +59,6 @@ class MovieGridRecyclerAdapter extends RecyclerView.Adapter<MovieGridRecyclerAda
     @Override
     MovieGridRecyclerAdapterViewHolder onCreateViewHolder(final ViewGroup parent, final int viewType) {
         LogDisplay.callLog(LOG_TAG, 'onCreateViewHolder is called', LogDisplay.GRID_RECYCLER_ADAPTER_LOG_FLAG)
-        //noinspection GroovyVariableCanBeFinal
         final View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.single_grid_movie_item, parent, false)
         view.setFocusable(true)
         return new MovieGridRecyclerAdapterViewHolder(view)

@@ -120,7 +120,6 @@ class HomeMovieFragment extends Fragment implements LoaderManager.LoaderCallback
     @Override
     View onCreateView(final LayoutInflater inflater, final ViewGroup container, final Bundle savedInstanceState) {
         LogDisplay.callLog(LOG_TAG,'onCreateView is called',LogDisplay.HOME_MOVIE_FRAGMENT_LOG_FLAG)
-        //noinspection GroovyVariableCanBeFinal
         final View mRootView = inflater.inflate(R.layout.fragment_home_movie,container,false)
         mYouTubeFragmentEmptyTextView = mRootView.findViewById(R.id.home_youtube_fragment_empty_msg) as TextView
         mInCinemaRecyclerView = mRootView.findViewById(R.id.home_movie_in_cinema_recycler_view) as RecyclerView
@@ -144,7 +143,6 @@ class HomeMovieFragment extends Fragment implements LoaderManager.LoaderCallback
         //Set this to false for smooth scrolling of recyclerview
         mInCinemaRecyclerView.setNestedScrollingEnabled(false)
         mInCinemaRecyclerView.setFocusable(false)
-        //noinspection GroovyVariableCanBeFinal,GroovyVariableCanBeFinal,GroovyVariableCanBeFinal
         mInCinemaAdapter = new HomeMovieAdapter(getActivity(), mInCinemaRecyclerViewEmptyTextView,
                 new HomeMovieAdapter.HomeMovieAdapterOnClickHandler(){
                     @Override
@@ -163,7 +161,6 @@ class HomeMovieFragment extends Fragment implements LoaderManager.LoaderCallback
         mComingSoonRecyclerView.setNestedScrollingEnabled(false)
         //Set this to false so that activity starts the page from the beginning
         mComingSoonRecyclerView.setFocusable(false)
-        //noinspection GroovyVariableCanBeFinal,GroovyVariableCanBeFinal,GroovyVariableCanBeFinal
         mComingSoonAdapter = new HomeMovieAdapter(getActivity(), mComingSoonRecyclerViewEmptyTextView,
                 new HomeMovieAdapter.HomeMovieAdapterOnClickHandler(){
                     @Override
@@ -182,7 +179,6 @@ class HomeMovieFragment extends Fragment implements LoaderManager.LoaderCallback
         mRecentlyAddedUserListRecyclerView.setNestedScrollingEnabled(false)
         //Set this to false so that activity starts the page from the beginning
         mRecentlyAddedUserListRecyclerView.setFocusable(false)
-        //noinspection GroovyVariableCanBeFinal,GroovyVariableCanBeFinal,GroovyVariableCanBeFinal
         mRecentlyAddedUserListAdapter = new HomeMovieAdapter(getActivity(), mRecentlyAddedUserListRecyclerViewEmptyTextView,
                 new HomeMovieAdapter.HomeMovieAdapterOnClickHandler(){
                     @Override
@@ -203,7 +199,6 @@ class HomeMovieFragment extends Fragment implements LoaderManager.LoaderCallback
         mRecommendationRecyclerView.setNestedScrollingEnabled(false)
         //Set this to false so that activity starts the page from the beginning
         mRecommendationRecyclerView.setFocusable(false)
-        //noinspection GroovyVariableCanBeFinal,GroovyVariableCanBeFinal,GroovyVariableCanBeFinal
         mRecommendationAdapter = new HomeMovieAdapter(getActivity(), mRecommendationRecyclerViewEmptyTextView,
                 new HomeMovieAdapter.HomeMovieAdapterOnClickHandler(){
                     @Override
@@ -217,7 +212,6 @@ class HomeMovieFragment extends Fragment implements LoaderManager.LoaderCallback
         /**
          * Show all In Cinemas Button click handling
          */
-        //noinspection GroovyVariableCanBeFinal
         mShowAllInCinemaButton.setOnClickListener(new View.OnClickListener() {
             @Override
             void onClick(final View v) {
@@ -229,7 +223,6 @@ class HomeMovieFragment extends Fragment implements LoaderManager.LoaderCallback
         /**
          * Show all Coming Soon Button click handling
          */
-        //noinspection GroovyVariableCanBeFinal
         mShowAllComingSoonButton.setOnClickListener(new View.OnClickListener() {
             @Override
             void onClick(final View v) {
@@ -334,7 +327,6 @@ class HomeMovieFragment extends Fragment implements LoaderManager.LoaderCallback
 
     @Override
     void onLoadFinished(final Loader<Cursor> loader, final Cursor data) {
-        //noinspection GroovyVariableCanBeFinal
         final int loaderId = loader.getId()
         LogDisplay.callLog(LOG_TAG, "onLoadFinished.loader id->$loaderId", LogDisplay.HOME_MOVIE_FRAGMENT_LOG_FLAG)
         switch (loaderId) {
@@ -374,10 +366,8 @@ class HomeMovieFragment extends Fragment implements LoaderManager.LoaderCallback
      */
     void handleTrailerOnLoadFinished(final Cursor data) {
         LogDisplay.callLog(LOG_TAG, "handleTrailerOnLoadFinished.Cursor rec count -> ${data.getCount()}", LogDisplay.HOME_MOVIE_FRAGMENT_LOG_FLAG)
-        //noinspection GroovyVariableCanBeFinal
         final List<String> youtubeVideoKey = new ArrayList<>()
         if (data.moveToFirst()) {
-            //noinspection GroovyVariableCanBeFinal
             for (final i in 0..(data.count - 1)) {
                 youtubeVideoKey.add(data.getString(COL_MOVIE_VIDEO_KEY))
                 data.moveToNext()
@@ -464,7 +454,6 @@ class HomeMovieFragment extends Fragment implements LoaderManager.LoaderCallback
         super.onAttach(context)
         // This makes sure that the container activity has implemented
         // the callback interface. If not, it throws an exception
-        //noinspection GroovyVariableCanBeFinal
         try {
             if(context instanceof Activity) {
                 mCallbackForHomeMovieClick = (CallbackForHomeMovieClick) context
@@ -473,7 +462,6 @@ class HomeMovieFragment extends Fragment implements LoaderManager.LoaderCallback
             throw new ClassCastException(getActivity().toString()
                     + " must implement CallbackForHomeMovieClick interface")
         }
-        //noinspection GroovyVariableCanBeFinal
         try {
             if(context instanceof Activity) {
                 mCallbackForShowAllButtonClick = (CallbackForShowAllButtonClick) context

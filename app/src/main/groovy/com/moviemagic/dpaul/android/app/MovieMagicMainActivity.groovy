@@ -81,7 +81,6 @@ public class MovieMagicMainActivity extends AppCompatActivity implements Navigat
         mNavPanelUserNameTextView = navigationHeader.findViewById(R.id.nav_drawer_user_name) as TextView
         mNavPanelUserIdTextView = navigationHeader.findViewById(R.id.nav_drawer_user_id) as TextView
         mNavPanelLoginButton = navigationHeader.findViewById(R.id.nav_drawer_log_in) as Button
-        //noinspection GroovyVariableCanBeFinal
         mNavPanelLoginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             void onClick(final View v) {
@@ -320,12 +319,10 @@ public class MovieMagicMainActivity extends AppCompatActivity implements Navigat
      */
     private void loginToTmdbAccount() {
         LogDisplay.callLog(LOG_TAG,'loginToTmdbAccount is called',LogDisplay.MOVIE_MAGIC_MAIN_LOG_FLAG)
-        //noinspection GroovyVariableCanBeFinal
         final AccountManagerFuture<Bundle> amFuture= mAccountManager.addAccount(getString(R.string.authenticator_account_type),
                 GlobalStaticVariables.AUTHTOKEN_TYPE_FULL_ACCESS,null,null,this,new AccountManagerCallback<Bundle>() {
             @Override
             void run(final AccountManagerFuture<Bundle> future) {
-                //noinspection GroovyVariableCanBeFinal
                 try { //getResult will throw exception if login is not successful
                     final Bundle bundle = future.getResult()
                     // Set the name to the TMDb user name, if it's not present then set the app name
@@ -369,11 +366,9 @@ public class MovieMagicMainActivity extends AppCompatActivity implements Navigat
             LogDisplay.callLog(LOG_TAG,"Removing account -> ${accounts[0].name}",LogDisplay.MOVIE_MAGIC_MAIN_LOG_FLAG)
             // Remove the account
             if (Build.VERSION.SDK_INT >= 21) {
-                //noinspection GroovyVariableCanBeFinal
                 mAccountManager.removeAccount(accounts[0], this, new AccountManagerCallback<Bundle>() {
                     @Override
                     void run(final AccountManagerFuture<Bundle> future) {
-                        //noinspection GroovyVariableCanBeFinal
                         try { //getResult will throw exception if logout is not successful
                             // Remove the Periodic Sync for the account
                             MovieMagicSyncAdapterUtility.removePeriodicSync(accounts[0], context)
@@ -388,7 +383,6 @@ public class MovieMagicMainActivity extends AppCompatActivity implements Navigat
                     }
                 }, null)
             } else {
-                //noinspection GroovyVariableCanBeFinal
                 mAccountManager.removeAccount(accounts[0], new AccountManagerCallback<Boolean>() {
                     @Override
                     void run(final AccountManagerFuture<Boolean> future) {
@@ -486,7 +480,6 @@ public class MovieMagicMainActivity extends AppCompatActivity implements Navigat
         final AlertDialog.Builder builder = new AlertDialog.Builder(this)
         builder.setTitle(getString(R.string.not_connected_dialog_title))
                 .setMessage(getString(R.string.not_connected_dialog_message))
-        //noinspection GroovyVariableCanBeFinal,GroovyVariableCanBeFinal
         builder.setPositiveButton(getString(R.string.not_connected_open_settings_button), new DialogInterface.OnClickListener() {
             @Override
             void onClick(final DialogInterface dialog, final int which) {
@@ -494,7 +487,6 @@ public class MovieMagicMainActivity extends AppCompatActivity implements Navigat
                 openSystemSettings()
             }
         })
-        //noinspection GroovyVariableCanBeFinal,GroovyVariableCanBeFinal
         builder.setNegativeButton(getString(R.string.action_cancel), new DialogInterface.OnClickListener(){
             @Override
             void onClick(final DialogInterface dialog, final int which) {
@@ -514,7 +506,6 @@ public class MovieMagicMainActivity extends AppCompatActivity implements Navigat
         final AlertDialog.Builder builder = new AlertDialog.Builder(this)
         builder.setTitle(getString(R.string.not_wifi_connected_dialog_title))
                 .setMessage(getString(R.string.not_wifi_connected_dialog_message))
-        //noinspection GroovyVariableCanBeFinal,GroovyVariableCanBeFinal
         builder.setPositiveButton(getString(R.string.not_wifi_connected_open_settings_button), new DialogInterface.OnClickListener() {
             @Override
             void onClick(final DialogInterface dialog, final int which) {
@@ -522,7 +513,6 @@ public class MovieMagicMainActivity extends AppCompatActivity implements Navigat
                 openSettingsActivity()
             }
         })
-        //noinspection GroovyVariableCanBeFinal,GroovyVariableCanBeFinal
         builder.setNegativeButton(getString(R.string.action_cancel), new DialogInterface.OnClickListener(){
             @Override
             void onClick(final DialogInterface dialog, final int which) {
@@ -709,7 +699,6 @@ public class MovieMagicMainActivity extends AppCompatActivity implements Navigat
         }
         @Override
         protected Integer[] doInBackground(final String... params) {
-            //noinspection GroovyVariableCanBeFinal
             final Integer[] result = new Integer[7]
             Cursor cursor
             //Get the count for watched

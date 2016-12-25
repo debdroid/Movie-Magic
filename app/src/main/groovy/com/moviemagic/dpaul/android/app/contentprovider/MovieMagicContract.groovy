@@ -18,7 +18,6 @@ final class MovieMagicContract {
     // The value is the number of milliseconds since Jan. 1, 1970, midnight GMT.
     static long convertMovieReleaseDate(final String releaseDate) {
         //Split the date string which is of format yyyy-mm-dd
-        //noinspection GroovyVariableCanBeFinal
         try {
             final Date simpleReleaseDate = new SimpleDateFormat("yyyy-MM-dd").parse(releaseDate)
             final long timeInMilliSeconds = simpleReleaseDate.getTime()

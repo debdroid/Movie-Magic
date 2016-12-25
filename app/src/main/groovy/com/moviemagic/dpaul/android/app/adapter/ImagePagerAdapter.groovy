@@ -21,13 +21,13 @@ import groovy.transform.CompileStatic
 @CompileStatic
 class ImagePagerAdapter extends PagerAdapter {
     private static final String LOG_TAG = ImagePagerAdapter.class.getSimpleName()
-    private final Context mContext = null
-    private final String mTitle = null
-    private final String[] mImageFilePaths = null
+    private final Context mContext
+    private final String mTitle
+    private final String[] mImageFilePaths
     private boolean visibilityFlag = true
-    private final ImagePagerAdapterOnClickHandler mImagePagerAdapterOnClickHandler = null
+    private final ImagePagerAdapterOnClickHandler mImagePagerAdapterOnClickHandler
     private LayoutInflater mLayoutInflater
-    private final boolean mBackdropImageFlag = false
+    private final boolean mBackdropImageFlag
     private int mPosition
     public static final String PAGER_CURRENT_IMAGE_TAG = 'pager_current_image_tag'
 
@@ -78,7 +78,6 @@ class ImagePagerAdapter extends PagerAdapter {
         final int totCount = mImageFilePaths.size()
         footerTextView.setText(String.format(mContext.getString(R.string.image_view_footer_value),(position + 1),totCount))
 
-        //noinspection GroovyVariableCanBeFinal
         view.setOnClickListener(new View.OnClickListener() {
             @Override
             void onClick(final View v) {
@@ -102,7 +101,6 @@ class ImagePagerAdapter extends PagerAdapter {
         } else {
             final Animation animOut = AnimationUtils.loadAnimation(mContext,R.anim.abc_slide_out_bottom)
             animOut.setDuration(100)
-            //noinspection GroovyVariableCanBeFinal,GroovyVariableCanBeFinal,GroovyVariableCanBeFinal
             animOut.setAnimationListener(new Animation.AnimationListener() {
                 @Override
                 void onAnimationStart(final Animation animation) {}

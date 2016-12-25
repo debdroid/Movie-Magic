@@ -15,10 +15,10 @@ import groovy.transform.CompileStatic
 class DonateLinkAdapter extends RecyclerView.Adapter<DonateLinkAdapter.DonateLinkAdapterViewHolder> {
     private static final String LOG_TAG = DonateLinkAdapter.class.getSimpleName()
 
-    final Context mContext = null
-    final String[] mLinkHeader = null
-    final String[] mLinkAddress = null
-    final DonateLinkAdapterOnClickHandler mDonateLinkAdapterOnClickHandler = null
+    final Context mContext
+    final String[] mLinkHeader
+    final String[] mLinkAddress
+    final DonateLinkAdapterOnClickHandler mDonateLinkAdapterOnClickHandler
 
     //Empty constructor
     public DonateLinkAdapter() {
@@ -58,7 +58,6 @@ class DonateLinkAdapter extends RecyclerView.Adapter<DonateLinkAdapter.DonateLin
     @Override
     DonateLinkAdapter.DonateLinkAdapterViewHolder onCreateViewHolder(final ViewGroup parent, final int viewType) {
         LogDisplay.callLog(LOG_TAG, 'onCreateViewHolder is called', LogDisplay.DONATE_ADAPTER_LOG_FLAG)
-        //noinspection GroovyVariableCanBeFinal
         final View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.single_donate_item, parent, false)
         view.setFocusable(true)
         return new DonateLinkAdapterViewHolder(view)

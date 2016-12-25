@@ -22,8 +22,8 @@ class SimilarMovieAdapter extends RecyclerView.Adapter<SimilarMovieAdapter.Simil
     private static final String LOG_TAG = SimilarMovieAdapter.class.getSimpleName()
 
     private Cursor mCursor
-    private final Context mContext = null
-    private final TextView mSimilarMovieGridEmptyTextView = null
+    private final Context mContext
+    private final TextView mSimilarMovieGridEmptyTextView
     private int mPrimaryDarkColor, mBodyTextColor
 
     //Empty constructor
@@ -73,7 +73,6 @@ class SimilarMovieAdapter extends RecyclerView.Adapter<SimilarMovieAdapter.Simil
     @Override
     SimilarMovieAdapterViewHolder onCreateViewHolder(final ViewGroup parent, final int viewType) {
         LogDisplay.callLog(LOG_TAG,'onCreateViewHolder is called',LogDisplay.SIMILAR_MOVIE_ADAPTER_LOG_FLAG)
-        //noinspection GroovyVariableCanBeFinal
         final View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.single_similar_movie_grid,parent,false)
         view.setFocusable(true)
         return new SimilarMovieAdapterViewHolder(view)

@@ -87,7 +87,6 @@ class Utility {
         final SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd MMM yyyy")
         if(date.size() == 10) {
             if (date.getAt(4) == '-' && date.getAt(7) == '-') {
-                //noinspection GroovyVariableCanBeFinal
                 final String dateString = simpleDateFormat.format(new SimpleDateFormat("yyyy-MM-dd").parse(date))
                 return dateString
             } else
@@ -110,8 +109,7 @@ class Utility {
         final GregorianCalendar releaseCalendar = new GregorianCalendar()
         releaseCalendar.setTime(new SimpleDateFormat("yyyy-MM-dd").parse(date))
         final int releaseDayOfYear = releaseCalendar.get(Calendar.DAY_OF_YEAR)
-        //noinspection GroovyVariableCanBeFinal
-        final String dayName = null
+        String dayName = null
         if(currentDayOfYear == releaseDayOfYear) {
             dayName = ctx.getString(R.string.notification_day_name_today)
         } else if (currentDayOfYear < 365) {
@@ -143,9 +141,7 @@ class Utility {
      * @return Converted hour and minute value
      */
     public static String formatRunTime(final Context ctx, final int runTime) {
-        //noinspection GroovyVariableCanBeFinal
         final int hourVal
-        //noinspection GroovyVariableCanBeFinal
         final def minVal
         hourVal = runTime / 60 as Integer
         minVal = runTime % 60
@@ -158,9 +154,7 @@ class Utility {
      * @return Formattd dollar value in us currency
      */
     public static String formatCurrencyInDollar(final int val) {
-        //noinspection GroovyVariableCanBeFinal
         final NumberFormat formatter = NumberFormat.getCurrencyInstance(Locale.US)
-        //noinspection GroovyVariableCanBeFinal
         final def formattedValue = formatter.format(val)
         return formattedValue
     }
@@ -171,9 +165,7 @@ class Utility {
      * @return Formatted friendly display date
      */
     public static String formatMilliSecondsToDate(final long timeInMilliSeconds) {
-        //noinspection GroovyVariableCanBeFinal
         final SimpleDateFormat formatter = new SimpleDateFormat("dd MMM yyyy")
-        //noinspection GroovyVariableCanBeFinal
         final String dateString = formatter.format(new Date(timeInMilliSeconds))
         return dateString
     }

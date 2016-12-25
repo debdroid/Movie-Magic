@@ -29,14 +29,11 @@ class LoadMoreMovies extends AsyncTask<String, Void, Void>{
     @Override
     protected Void doInBackground(final String... params) {
         final String movieCategory = params[0]
-        //noinspection GroovyVariableCanBeFinal
         final int totalPage
-        //noinspection GroovyVariableCanBeFinal
         final List<ContentValues> movieList
         //TMDB api example
         //https://api.themoviedb.org/3/movie/popular?api_key=key&page=<page_number>
 
-        //noinspection GroovyVariableCanBeFinal,GroovyVariableCanBeFinal,GroovyVariableCanBeFinal
         try {
             final Uri.Builder uriBuilder = Uri.parse(GlobalStaticVariables.TMDB_MOVIE_BASE_URL).buildUpon()
 
@@ -49,7 +46,6 @@ class LoadMoreMovies extends AsyncTask<String, Void, Void>{
             final URL url = new URL(uri.toString())
             LogDisplay.callLog(LOG_TAG,"Movie url-> ${uri.toString()}",LogDisplay.LOAD_MORE_MOVIES_LOG_FLAG)
 
-            //noinspection GroovyVariableCanBeFinal
             final def jsonData = new JsonSlurper(type: JsonParserType.INDEX_OVERLAY).parse(url)
             totalPage = JsonParse.getTotalPages(jsonData)
             //This is to ensure we have valid data page

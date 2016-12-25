@@ -142,9 +142,7 @@ class MovieMagicProvider extends ContentProvider {
             final Uri uri, final String[] projection, final String selection, final String[] selectionArgs, final String sortOrder) {
         sMovieMagicQueryBuilder.setTables("$MovieMagicContract.MovieBasicInfo.TABLE_NAME")
         final String[] movieCategory = [MovieMagicContract.MovieBasicInfo.getMovieCategoryFromMovieUri(uri)]
-        //noinspection GroovyVariableCanBeFinal
         final String querySelection
-        //noinspection GroovyVariableCanBeFinal
         final String[] queryArguments
         if(selection) {
             querySelection = "$sMovieBasicInfoWithCategorySelection and $selection"
@@ -169,7 +167,6 @@ class MovieMagicProvider extends ContentProvider {
         sMovieMagicQueryBuilder.setTables("$MovieMagicContract.MovieBasicInfo.TABLE_NAME")
         final String category = MovieMagicContract.MovieBasicInfo.getMovieCategoryFromMovieAndCollectionIdUri(uri)
         final String collectionID = Integer.toString(MovieMagicContract.MovieBasicInfo.getCollectionIdFromMovieAndCollectionIdUri(uri))
-        //noinspection GroovyVariableCanBeFinal
         final String[] selArgs = [category, collectionID]
 
         return sMovieMagicQueryBuilder.query(mOpenHelper.getReadableDatabase(),
@@ -497,7 +494,6 @@ class MovieMagicProvider extends ContentProvider {
             final Uri uri, final String[] projection, final String selection, final String[] selectionArgs, final String sortOrder) {
         // Here's the switch statement that, given a URI, will determine what kind of request it is,
         // and query the database accordingly.
-        //noinspection GroovyVariableCanBeFinal
         final Cursor retCursor
         switch(sUriMatcher.match(uri)) {
         // "/movie_basic_info/#"
@@ -514,7 +510,6 @@ class MovieMagicProvider extends ContentProvider {
                 break
         // "/movie_basic_info"
             case MOVIE_BASIC_INFO:
-                //noinspection GroovyVariableCanBeFinal
                 final String table = MovieMagicContract.MovieBasicInfo.TABLE_NAME
                 retCursor = queryHelperMethod(table, projection, selection, selectionArgs, sortOrder)
                 break
@@ -524,7 +519,6 @@ class MovieMagicProvider extends ContentProvider {
                 break
         // "/movie_cast"
             case MOVIE_CAST:
-                //noinspection GroovyVariableCanBeFinal
                 final String table = MovieMagicContract.MovieCast.TABLE_NAME
                 retCursor = queryHelperMethod(table, projection, selection, selectionArgs, sortOrder)
                 break
@@ -534,7 +528,6 @@ class MovieMagicProvider extends ContentProvider {
                 break
         // "/movie_crew"
             case MOVIE_CREW:
-                //noinspection GroovyVariableCanBeFinal
                 final String table = MovieMagicContract.MovieCrew.TABLE_NAME
                 retCursor = queryHelperMethod(table, projection, selection, selectionArgs, sortOrder)
                 break
@@ -544,7 +537,6 @@ class MovieMagicProvider extends ContentProvider {
                 break
         // "/movie_image"
             case MOVIE_IMAGE:
-                //noinspection GroovyVariableCanBeFinal
                 final String table = MovieMagicContract.MovieImage.TABLE_NAME
                 retCursor = queryHelperMethod(table, projection, selection, selectionArgs, sortOrder)
                 break
@@ -554,7 +546,6 @@ class MovieMagicProvider extends ContentProvider {
                 break
         // "/movie_video"
             case MOVIE_VIDEO:
-                //noinspection GroovyVariableCanBeFinal
                 final String table = MovieMagicContract.MovieVideo.TABLE_NAME
                 retCursor = queryHelperMethod(table, projection, selection, selectionArgs, sortOrder)
                 break
@@ -564,7 +555,6 @@ class MovieMagicProvider extends ContentProvider {
                 break
         // "/movie_review"
             case MOVIE_REVIEW:
-                //noinspection GroovyVariableCanBeFinal
                 final String table = MovieMagicContract.MovieReview.TABLE_NAME
                 retCursor = queryHelperMethod(table, projection, selection, selectionArgs, sortOrder)
                 break
@@ -578,7 +568,6 @@ class MovieMagicProvider extends ContentProvider {
                 break
         // "/movie_release_date"
             case MOVIE_RELEASE_DATE:
-                //noinspection GroovyVariableCanBeFinal
                 final String table = MovieMagicContract.MovieReleaseDate.TABLE_NAME
                 retCursor = queryHelperMethod(table, projection, selection, selectionArgs, sortOrder)
                 break
@@ -588,7 +577,6 @@ class MovieMagicProvider extends ContentProvider {
                 break
         // "/movie_user_list_flag"
             case MOVIE_USER_LIST_FLAG:
-                //noinspection GroovyVariableCanBeFinal
                 final String table = MovieMagicContract.MovieUserListFlag.TABLE_NAME
                 retCursor = queryHelperMethod(table, projection, selection, selectionArgs, sortOrder)
                 break
@@ -598,7 +586,6 @@ class MovieMagicProvider extends ContentProvider {
                 break
         // "/movie_person_info"
             case MOVIE_PERSON_INFO:
-                //noinspection GroovyVariableCanBeFinal
                 final String table = MovieMagicContract.MoviePersonInfo.TABLE_NAME
                 retCursor = queryHelperMethod(table, projection, selection, selectionArgs, sortOrder)
                 break
@@ -608,7 +595,6 @@ class MovieMagicProvider extends ContentProvider {
                 break
         // "/movie_person_cast"
             case MOVIE_PERSON_CAST:
-                //noinspection GroovyVariableCanBeFinal
                 final String table = MovieMagicContract.MoviePersonCast.TABLE_NAME
                 retCursor = queryHelperMethod(table, projection, selection, selectionArgs, sortOrder)
                 break
@@ -618,7 +604,6 @@ class MovieMagicProvider extends ContentProvider {
                 break
         // "/movie_person_crew"
             case MOVIE_PERSON_CREW:
-                //noinspection GroovyVariableCanBeFinal
                 final String table = MovieMagicContract.MoviePersonCrew.TABLE_NAME
                 retCursor = queryHelperMethod(table, projection, selection, selectionArgs, sortOrder)
                 break
@@ -628,7 +613,6 @@ class MovieMagicProvider extends ContentProvider {
                 break
         // "/movie_person_image"
             case MOVIE_PERSON_IMAGE:
-                //noinspection GroovyVariableCanBeFinal
                 final String table = MovieMagicContract.MoviePersonImage.TABLE_NAME
                 retCursor = queryHelperMethod(table, projection, selection, selectionArgs, sortOrder)
                 break
@@ -638,7 +622,6 @@ class MovieMagicProvider extends ContentProvider {
                 break
         // "/movie_collection"
             case MOVIE_COLLECTION:
-                //noinspection GroovyVariableCanBeFinal
                 final String table = MovieMagicContract.MovieCollection.TABLE_NAME
                 retCursor = queryHelperMethod(table, projection, selection, selectionArgs, sortOrder)
                 break
@@ -671,13 +654,11 @@ class MovieMagicProvider extends ContentProvider {
     Uri insert(final Uri uri, final ContentValues values) {
         final SQLiteDatabase db = mOpenHelper.getWritableDatabase()
         final int match = sUriMatcher.match(uri)
-        //noinspection GroovyVariableCanBeFinal
         final Uri returnUri
 
         switch (match) {
             case MOVIE_BASIC_INFO:
                 convertDate(values)
-                //noinspection GroovyVariableCanBeFinal
                 final long _id = db.insert(MovieMagicContract.MovieBasicInfo.TABLE_NAME, null, values)
                 if ( _id > 0 )
                     returnUri = MovieMagicContract.MovieBasicInfo.buildMovieUri(_id)
@@ -685,7 +666,6 @@ class MovieMagicProvider extends ContentProvider {
                     throw new android.database.SQLException("Failed to insert row into $uri")
                 break
             case MOVIE_CAST:
-                //noinspection GroovyVariableCanBeFinal
                 final long _id = db.insert(MovieMagicContract.MovieCast.TABLE_NAME, null, values)
                 if ( _id > 0 )
                     returnUri = MovieMagicContract.MovieCast.buildMovieCastUri(_id)
@@ -693,7 +673,6 @@ class MovieMagicProvider extends ContentProvider {
                     throw new android.database.SQLException("Failed to insert row into $uri")
                 break
             case MOVIE_CREW:
-                //noinspection GroovyVariableCanBeFinal
                 final long _id = db.insert(MovieMagicContract.MovieCrew.TABLE_NAME, null, values)
                 if ( _id > 0 )
                     returnUri = MovieMagicContract.MovieCrew.buildMovieCrewUri(_id)
@@ -701,7 +680,6 @@ class MovieMagicProvider extends ContentProvider {
                     throw new android.database.SQLException("Failed to insert row into $uri")
                 break
             case MOVIE_IMAGE:
-                //noinspection GroovyVariableCanBeFinal
                 final long _id = db.insert(MovieMagicContract.MovieImage.TABLE_NAME, null, values)
                 if ( _id > 0 )
                     returnUri = MovieMagicContract.MovieImage.buildMovieImageUri(_id)
@@ -709,7 +687,6 @@ class MovieMagicProvider extends ContentProvider {
                     throw new android.database.SQLException("Failed to insert row into $uri")
                 break
             case MOVIE_VIDEO:
-                //noinspection GroovyVariableCanBeFinal
                 final long _id = db.insert(MovieMagicContract.MovieVideo.TABLE_NAME, null, values)
                 if ( _id > 0 )
                     returnUri = MovieMagicContract.MovieVideo.buildMovieVideoUri(_id)
@@ -717,7 +694,6 @@ class MovieMagicProvider extends ContentProvider {
                     throw new android.database.SQLException("Failed to insert row into $uri")
                 break
             case MOVIE_REVIEW:
-                //noinspection GroovyVariableCanBeFinal
                 final long _id = db.insert(MovieMagicContract.MovieReview.TABLE_NAME, null, values)
                 if ( _id > 0 )
                     returnUri = MovieMagicContract.MovieReview.buildMovieReviewUri(_id)
@@ -725,7 +701,6 @@ class MovieMagicProvider extends ContentProvider {
                     throw new android.database.SQLException("Failed to insert row into $uri")
                 break
             case MOVIE_RELEASE_DATE:
-                //noinspection GroovyVariableCanBeFinal
                 final long _id = db.insert(MovieMagicContract.MovieReleaseDate.TABLE_NAME, null, values)
                 if ( _id > 0 )
                     returnUri = MovieMagicContract.MovieReleaseDate.buildMovieReleasewUri(_id)
@@ -733,7 +708,6 @@ class MovieMagicProvider extends ContentProvider {
                     throw new android.database.SQLException("Failed to insert row into $uri")
                 break
             case MOVIE_USER_LIST_FLAG:
-                //noinspection GroovyVariableCanBeFinal
                 final long _id = db.insert(MovieMagicContract.MovieUserListFlag.TABLE_NAME, null, values)
                 if ( _id > 0 )
                     returnUri = MovieMagicContract.MovieUserListFlag.buildMovieUserListFlagUri(_id)
@@ -741,7 +715,6 @@ class MovieMagicProvider extends ContentProvider {
                     throw new android.database.SQLException("Failed to insert row into $uri")
                 break
             case MOVIE_PERSON_INFO:
-                //noinspection GroovyVariableCanBeFinal
                 final long _id = db.insert(MovieMagicContract.MoviePersonInfo.TABLE_NAME, null, values)
                 if ( _id > 0 )
                     returnUri = MovieMagicContract.MoviePersonInfo.buildMoviePersonInfoUri(_id)
@@ -749,7 +722,6 @@ class MovieMagicProvider extends ContentProvider {
                     throw new android.database.SQLException("Failed to insert row into $uri")
                 break
             case MOVIE_PERSON_CAST:
-                //noinspection GroovyVariableCanBeFinal
                 final long _id = db.insert(MovieMagicContract.MoviePersonCast.TABLE_NAME, null, values)
                 if ( _id > 0 )
                     returnUri = MovieMagicContract.MoviePersonCast.buildMoviePersonCastUri(_id)
@@ -757,7 +729,6 @@ class MovieMagicProvider extends ContentProvider {
                     throw new android.database.SQLException("Failed to insert row into $uri")
                 break
             case MOVIE_PERSON_CREW:
-                //noinspection GroovyVariableCanBeFinal
                 final long _id = db.insert(MovieMagicContract.MoviePersonCrew.TABLE_NAME, null, values)
                 if ( _id > 0 )
                     returnUri = MovieMagicContract.MoviePersonCrew.buildMoviePersonCrewUri(_id)
@@ -765,7 +736,6 @@ class MovieMagicProvider extends ContentProvider {
                     throw new android.database.SQLException("Failed to insert row into $uri")
                 break
             case MOVIE_PERSON_IMAGE:
-                //noinspection GroovyVariableCanBeFinal
                 final long _id = db.insert(MovieMagicContract.MoviePersonImage.TABLE_NAME, null, values)
                 if ( _id > 0 )
                     returnUri = MovieMagicContract.MoviePersonImage.buildMoviePersonImageUri(_id)
@@ -773,7 +743,6 @@ class MovieMagicProvider extends ContentProvider {
                     throw new android.database.SQLException("Failed to insert row into $uri")
                 break
             case MOVIE_COLLECTION:
-                //noinspection GroovyVariableCanBeFinal
                 final long _id = db.insert(MovieMagicContract.MovieCollection.TABLE_NAME, null, values)
                 if ( _id > 0 )
                     returnUri = MovieMagicContract.MovieCollection.buildMovieCollectionUri(_id)
@@ -799,7 +768,6 @@ class MovieMagicProvider extends ContentProvider {
     int delete(final Uri uri, String selection, final String[] selectionArgs) {
         final SQLiteDatabase db = mOpenHelper.getWritableDatabase()
         final int match = sUriMatcher.match(uri)
-        //noinspection GroovyVariableCanBeFinal
         final int count
         //This makes delete all rows return the number of rows deleted
         if(selection == null) //noinspection GroovyAssignmentToMethodParameter
@@ -862,7 +830,6 @@ class MovieMagicProvider extends ContentProvider {
     int update(final Uri uri, final ContentValues values, final String selection, final String[] selectionArgs) {
         final SQLiteDatabase db = mOpenHelper.getWritableDatabase()
         final int match = sUriMatcher.match(uri)
-        //noinspection GroovyVariableCanBeFinal
         final int count
         switch (match) {
             case MOVIE_BASIC_INFO:
@@ -927,7 +894,6 @@ class MovieMagicProvider extends ContentProvider {
                 db.beginTransaction()
                 int returnCount = 0
                 try {
-                    //noinspection GroovyVariableCanBeFinal
                     for (final ContentValues value : values) {
                         convertDate(value)
                         long _id = db.insert(MovieMagicContract.MovieBasicInfo.TABLE_NAME, null, value)
@@ -945,7 +911,6 @@ class MovieMagicProvider extends ContentProvider {
                 db.beginTransaction()
                 int returnCount = 0
                 try {
-                    //noinspection GroovyVariableCanBeFinal
                     for (final ContentValues value : values) {
                         long _id = db.insert(MovieMagicContract.MovieCast.TABLE_NAME, null, value)
                         if (_id != -1) {
@@ -962,7 +927,6 @@ class MovieMagicProvider extends ContentProvider {
                 db.beginTransaction()
                 int returnCount = 0
                 try {
-                    //noinspection GroovyVariableCanBeFinal
                     for (final ContentValues value : values) {
                         long _id = db.insert(MovieMagicContract.MovieCrew.TABLE_NAME, null, value)
                         if (_id != -1) {
@@ -979,7 +943,6 @@ class MovieMagicProvider extends ContentProvider {
                 db.beginTransaction()
                 int returnCount = 0
                 try {
-                    //noinspection GroovyVariableCanBeFinal
                     for (final ContentValues value : values) {
                         long _id = db.insert(MovieMagicContract.MovieImage.TABLE_NAME, null, value)
                         if (_id != -1) {
@@ -996,7 +959,6 @@ class MovieMagicProvider extends ContentProvider {
                 db.beginTransaction()
                 int returnCount = 0
                 try {
-                    //noinspection GroovyVariableCanBeFinal
                     for (final ContentValues value : values) {
                         long _id = db.insert(MovieMagicContract.MovieVideo.TABLE_NAME, null, value)
                         if (_id != -1) {
@@ -1013,7 +975,6 @@ class MovieMagicProvider extends ContentProvider {
                 db.beginTransaction()
                 int returnCount = 0
                 try {
-                    //noinspection GroovyVariableCanBeFinal
                     for (final ContentValues value : values) {
                         long _id = db.insert(MovieMagicContract.MovieReview.TABLE_NAME, null, value)
                         if (_id != -1) {
@@ -1030,7 +991,6 @@ class MovieMagicProvider extends ContentProvider {
                 db.beginTransaction()
                 int returnCount = 0
                 try {
-                    //noinspection GroovyVariableCanBeFinal
                     for (final ContentValues value : values) {
                         long _id = db.insert(MovieMagicContract.MovieReleaseDate.TABLE_NAME, null, value)
                         if (_id != -1) {
@@ -1049,7 +1009,6 @@ class MovieMagicProvider extends ContentProvider {
                 db.beginTransaction()
                 int returnCount = 0
                 try {
-                    //noinspection GroovyVariableCanBeFinal
                     for (final ContentValues value : values) {
                         long _id = db.insert(MovieMagicContract.MoviePersonInfo.TABLE_NAME, null, value)
                         if (_id != -1) {
@@ -1066,7 +1025,6 @@ class MovieMagicProvider extends ContentProvider {
                 db.beginTransaction()
                 int returnCount = 0
                 try {
-                    //noinspection GroovyVariableCanBeFinal
                     for (final ContentValues value : values) {
                         long _id = db.insert(MovieMagicContract.MoviePersonCast.TABLE_NAME, null, value)
                         if (_id != -1) {
@@ -1083,7 +1041,6 @@ class MovieMagicProvider extends ContentProvider {
                 db.beginTransaction()
                 int returnCount = 0
                 try {
-                    //noinspection GroovyVariableCanBeFinal
                     for (final ContentValues value : values) {
                         long _id = db.insert(MovieMagicContract.MoviePersonCrew.TABLE_NAME, null, value)
                         if (_id != -1) {
@@ -1100,7 +1057,6 @@ class MovieMagicProvider extends ContentProvider {
                 db.beginTransaction()
                 int returnCount = 0
                 try {
-                    //noinspection GroovyVariableCanBeFinal
                     for (final ContentValues value : values) {
                         long _id = db.insert(MovieMagicContract.MoviePersonImage.TABLE_NAME, null, value)
                         if (_id != -1) {
@@ -1117,7 +1073,6 @@ class MovieMagicProvider extends ContentProvider {
                 db.beginTransaction()
                 int returnCount = 0
                 try {
-                    //noinspection GroovyVariableCanBeFinal
                     for (final ContentValues value : values) {
                         long _id = db.insert(MovieMagicContract.MovieCollection.TABLE_NAME, null, value)
                         if (_id != -1) {

@@ -185,7 +185,6 @@ class PersonMovieFragment extends Fragment implements LoaderManager.LoaderCallba
     public View onCreateView(final LayoutInflater inflater, final ViewGroup container, final Bundle savedInstanceState) {
         LogDisplay.callLog(LOG_TAG, 'onCreateView is called', LogDisplay.PERSON_MOVIE_FRAGMENT_LOG_FLAG)
         // Get the bundle from the Fragment
-        //noinspection GroovyVariableCanBeFinal
         final Bundle args = getArguments()
         if (args) {
             mPersonInfoUri = args.getParcelable(GlobalStaticVariables.MOVIE_PERSON_URI) as Uri
@@ -193,7 +192,6 @@ class PersonMovieFragment extends Fragment implements LoaderManager.LoaderCallba
             mPersonId = MovieMagicContract.MoviePersonInfo.getPersonIdFromMoviePersonInfoUri(mPersonInfoUri)
         }
         // Inflate the view before referring any view using id
-        //noinspection GroovyVariableCanBeFinal
         final View mRootView = inflater.inflate(R.layout.fragment_person_movie, container, false)
         mAppBarLayout = mRootView.findViewById(R.id.person_app_bar_layout) as AppBarLayout
         mPersonLinLayout = mRootView.findViewById(R.id.person_info_layout) as LinearLayout
@@ -218,7 +216,6 @@ class PersonMovieFragment extends Fragment implements LoaderManager.LoaderCallba
          * Biography show button handling
          */
         mShowBiographyImageButton = mRootView.findViewById(R.id.person_biography_show_button) as ImageButton
-        //noinspection GroovyVariableCanBeFinal
         mShowBiographyImageButton.setOnClickListener( new View.OnClickListener() {
             @Override
             void onClick(final View v) {
@@ -231,7 +228,6 @@ class PersonMovieFragment extends Fragment implements LoaderManager.LoaderCallba
          * Biography hide button handling
          */
         mHideBiographyImageButton = mRootView.findViewById(R.id.person_biography_hide_button) as ImageButton
-        //noinspection GroovyVariableCanBeFinal
         mHideBiographyImageButton.setOnClickListener(new View.OnClickListener() {
             @Override
             void onClick(final View v) {
@@ -250,7 +246,6 @@ class PersonMovieFragment extends Fragment implements LoaderManager.LoaderCallba
         mCastGridView.setLayoutManager(mCastGridLayoutManager)
         //Create a new interface member variable for PersonCastAdapterOnClickHandler and the same is passed as
         //parameter to Adapter, this onClick method is called whenever onClick is called from PersonCastAdapter
-        //noinspection GroovyVariableCanBeFinal,GroovyVariableCanBeFinal
         mPersonCastAdapter = new PersonCastAdapter(getActivity(),mCastGridEmptyMsgTextView,
             new PersonCastAdapter.PersonCastAdapterOnClickHandler(){
                 @Override
@@ -267,7 +262,6 @@ class PersonMovieFragment extends Fragment implements LoaderManager.LoaderCallba
         mCrewGridEmptyMsgTextView = mRootView.findViewById(R.id.person_crew_grid_empty_msg_text_view) as TextView
         mCrewGridLayoutManager = new GridLayoutManager(getActivity(), 1, GridLayoutManager.HORIZONTAL, false)
         mCrewGridView.setLayoutManager(mCrewGridLayoutManager)
-        //noinspection GroovyVariableCanBeFinal,GroovyVariableCanBeFinal
         mPersonCrewAdapter = new PersonCrewAdapter(getActivity(), mCrewGridEmptyMsgTextView,
             new PersonCrewAdapter.PersonCrewAdapterOnClickHandler(){
                 @Override
@@ -284,7 +278,6 @@ class PersonMovieFragment extends Fragment implements LoaderManager.LoaderCallba
         mImageGridEmptyMsgTextView = mRootView.findViewById(R.id.person_image_grid_empty_msg_text_view) as TextView
         mImageGridLayoutManager = new GridLayoutManager(getActivity(), 1, GridLayoutManager.HORIZONTAL, false)
         mImageGridView.setLayoutManager(mImageGridLayoutManager)
-        //noinspection GroovyVariableCanBeFinal,GroovyVariableCanBeFinal,GroovyVariableCanBeFinal
         mPersonImageAdapter = new PersonImageAdapter(getActivity(), mImageGridEmptyMsgTextView,
                 new PersonImageAdapter.PersonImageAdapterOnClickHandler(){
                     @Override
@@ -299,7 +292,6 @@ class PersonMovieFragment extends Fragment implements LoaderManager.LoaderCallba
          * External web link button handling
          */
         mHomePageButton = mRootView.findViewById(R.id.person_web_links_home_page_button) as Button
-        //noinspection GroovyVariableCanBeFinal
         mHomePageButton.setOnClickListener(new View.OnClickListener() {
             @Override
             void onClick(final View v) {
@@ -308,7 +300,6 @@ class PersonMovieFragment extends Fragment implements LoaderManager.LoaderCallba
             }
         })
         mImdbLinkButton = mRootView.findViewById(R.id.person_web_links_imdb_link_button) as Button
-        //noinspection GroovyVariableCanBeFinal
         mImdbLinkButton.setOnClickListener(new View.OnClickListener() {
             @Override
             void onClick(final View v) {
@@ -323,7 +314,6 @@ class PersonMovieFragment extends Fragment implements LoaderManager.LoaderCallba
     @Override
     void onActivityCreated(final Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState)
-        //noinspection GroovyVariableCanBeFinal
         final AppCompatActivity appCompatActivity = getActivity() as AppCompatActivity
         mToolbar = getView().findViewById(R.id.person_toolbar) as Toolbar
         if (mToolbar) {
@@ -414,7 +404,6 @@ class PersonMovieFragment extends Fragment implements LoaderManager.LoaderCallba
 
     @Override
     void onLoadFinished(final Loader<Cursor> loader, final Cursor data) {
-        //noinspection GroovyVariableCanBeFinal
         final int loaderId = loader.getId()
         LogDisplay.callLog(LOG_TAG, "onLoadFinished.loader id->$loaderId", LogDisplay.PERSON_MOVIE_FRAGMENT_LOG_FLAG)
         switch (loaderId) {
@@ -461,22 +450,15 @@ class PersonMovieFragment extends Fragment implements LoaderManager.LoaderCallba
                     // If user does not select dynamic theme (default value) then do not change the color
                     if (Utility.isDynamicTheme(getActivity())) {
                         final Bitmap bitmapPoster = ((BitmapDrawable) mPosterImageView.getDrawable()).getBitmap()
-                        //noinspection GroovyVariableCanBeFinal
                         Palette.from(bitmapPoster).generate(new Palette.PaletteAsyncListener() {
                             @Override
                             public void onGenerated(final Palette p) {
                                 LogDisplay.callLog(LOG_TAG, 'onGenerated is called', LogDisplay.PERSON_MOVIE_FRAGMENT_LOG_FLAG)
-                                //noinspection GroovyVariableCanBeFinal
                                 final Palette.Swatch vibrantSwatch = p.getVibrantSwatch()
-                                //noinspection GroovyVariableCanBeFinal
                                 final Palette.Swatch lightVibrantSwatch = p.getLightVibrantSwatch()
-                                //noinspection GroovyVariableCanBeFinal
                                 final Palette.Swatch darkVibrantSwatch = p.getDarkVibrantSwatch()
-                                //noinspection GroovyVariableCanBeFinal
                                 final Palette.Swatch mutedSwatch = p.getMutedSwatch()
-                                //noinspection GroovyVariableCanBeFinal
                                 final Palette.Swatch mutedLightSwatch = p.getLightMutedSwatch()
-                                //noinspection GroovyVariableCanBeFinal
                                 final Palette.Swatch mutedDarkSwatch = p.getDarkMutedSwatch()
                                 boolean pickSwatchColorFlag = false
                                 //Pick primary, primaryDark, title and body text color
@@ -485,7 +467,6 @@ class PersonMovieFragment extends Fragment implements LoaderManager.LoaderCallba
                                     mPaletteTitleColor = vibrantSwatch.getTitleTextColor()
                                     mPaletteBodyTextColor = vibrantSwatch.getBodyTextColor()
                                     //Produce Dark color by changing the value (3rd parameter) of HSL value
-                                    //noinspection GroovyVariableCanBeFinal
                                     final float[] primaryHsl = vibrantSwatch.getHsl()
                                     primaryHsl[2] *= 0.9f
                                     mPalettePrimaryDarkColor = Color.HSVToColor(primaryHsl)
@@ -495,7 +476,6 @@ class PersonMovieFragment extends Fragment implements LoaderManager.LoaderCallba
                                     mPaletteTitleColor = lightVibrantSwatch.getTitleTextColor()
                                     mPaletteBodyTextColor = lightVibrantSwatch.getBodyTextColor()
                                     //Produce Dark color by changing the value (3rd parameter) of HSL value
-                                    //noinspection GroovyVariableCanBeFinal
                                     final float[] primaryHsl = lightVibrantSwatch.getHsl()
                                     primaryHsl[2] *= 0.9f
                                     mPalettePrimaryDarkColor = Color.HSVToColor(primaryHsl)
@@ -505,7 +485,6 @@ class PersonMovieFragment extends Fragment implements LoaderManager.LoaderCallba
                                     mPaletteTitleColor = darkVibrantSwatch.getTitleTextColor()
                                     mPaletteBodyTextColor = darkVibrantSwatch.getBodyTextColor()
                                     //Produce Dark color by changing the value (3rd parameter) of HSL value
-                                    //noinspection GroovyVariableCanBeFinal
                                     final float[] primaryHsl = darkVibrantSwatch.getHsl()
                                     primaryHsl[2] *= 0.9f
                                     mPalettePrimaryDarkColor = Color.HSVToColor(primaryHsl)
@@ -555,7 +534,6 @@ class PersonMovieFragment extends Fragment implements LoaderManager.LoaderCallba
                                 mToolbar.setBackgroundColor(mPalettePrimaryColor)
                                 mToolbar.setTitleTextColor(mPaletteTitleColor)
                                 if (Build.VERSION.SDK_INT >= 21) {
-                                    //noinspection GroovyVariableCanBeFinal
                                     final Window window = getActivity().getWindow()
                                     window.setStatusBarColor(mPalettePrimaryDarkColor)
                                 }
@@ -740,7 +718,6 @@ class PersonMovieFragment extends Fragment implements LoaderManager.LoaderCallba
         super.onAttach(context)
         // This makes sure that the container activity has implemented
         // the callback interface. If not, it throws an exception
-        //noinspection GroovyVariableCanBeFinal
         try {
             if(context instanceof Activity) {
                 mCallbackForCastClick = (CallbackForCastClick) context
@@ -749,7 +726,6 @@ class PersonMovieFragment extends Fragment implements LoaderManager.LoaderCallba
             throw new ClassCastException(getActivity().toString()
                     + " must implement CallbackForCastClick interface")
         }
-        //noinspection GroovyVariableCanBeFinal
         try {
             if(context instanceof Activity) {
                 mCallbackForCrewClick = (CallbackForCrewClick) context
@@ -758,8 +734,6 @@ class PersonMovieFragment extends Fragment implements LoaderManager.LoaderCallba
             throw new ClassCastException(getActivity().toString()
                     + " must implement CallbackForCrewClick interface")
         }
-
-        //noinspection GroovyVariableCanBeFinal
         try {
             if(context instanceof Activity) {
                 mCallbackForImageClick = (CallbackForImageClick) context
