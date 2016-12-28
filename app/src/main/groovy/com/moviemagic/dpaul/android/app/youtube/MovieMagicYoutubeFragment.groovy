@@ -27,7 +27,7 @@ class MovieMagicYoutubeFragment extends YouTubePlayerSupportFragment implements 
     /**
      * Returns a new instance of MovieMagicYoutubeFragment Fragment
      *
-     * @param videoIds The IDs of the YouTube now_playing to play
+     * @param videoIds The IDs of the YouTube ic_drawer_now_playing to play
      */
     public static MovieMagicYoutubeFragment createMovieMagicYouTubeFragment(final List<String> videoIds) {
         LogDisplay.callLog(LOG_TAG,'createMovieMagicYouTubeFragment is called',LogDisplay.MOVIE_MAGIC_YOUTUBE_FRAGMENT_LOG_FLAG)
@@ -57,9 +57,9 @@ class MovieMagicYoutubeFragment extends YouTubePlayerSupportFragment implements 
 
 
     /**
-     * Set the now_playing id and initialize the player
+     * Set the ic_drawer_now_playing id and initialize the player
      * This can be used when including the Fragment in an XML layout
-     * @param videoIds The IDs of the YouTube now_playing to play
+     * @param videoIds The IDs of the YouTube ic_drawer_now_playing to play
      */
     public void setVideoId(final List<String> videoIds) {
         LogDisplay.callLog(LOG_TAG,'setVideoId is called',LogDisplay.MOVIE_MAGIC_YOUTUBE_FRAGMENT_LOG_FLAG)

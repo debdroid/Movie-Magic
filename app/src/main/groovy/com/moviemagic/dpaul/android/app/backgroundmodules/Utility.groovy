@@ -287,38 +287,40 @@ class Utility {
             locale.replaceAll("\\s", "")
         }
 
-        if(locale == 'US') {
-            if (mpaa == 'G') {
-                return R.drawable.mpaa_us_g
-            } else if (mpaa == 'PG') {
-                return R.drawable.mpaa_us_pg
-            } else if (mpaa == 'PG-13') {
-                return R.drawable.mpaa_us_pg13
-            } else if (mpaa == 'R') {
-                return R.drawable.mpaa_us_r
-            } else if (mpaa == 'NC-17') {
-                return R.drawable.mpaa_us_nc17
-            }
+        switch (locale) {
+            case 'GB':
+                if (mpaa == 'U') {
+                    return R.drawable.mpaa_uk_u
+                } else if (mpaa == 'PG') {
+                    return R.drawable.mpaa_uk_pg
+                } else if (mpaa == '12A') {
+                    return R.drawable.mpaa_uk_12a
+                } else if (mpaa == '12') {
+                    return R.drawable.mpaa_uk_12
+                } else if (mpaa == '15') {
+                    return R.drawable.mpaa_uk_15
+                } else if (mpaa == '18') {
+                    return R.drawable.mpaa_uk_18
+                } else if (mpaa == 'R18') {
+                    return R.drawable.mpaa_uk_r18
+                }
+                break
+            case 'US':
+                if (mpaa == 'G') {
+                    return R.drawable.mpaa_us_g
+                } else if (mpaa == 'PG') {
+                    return R.drawable.mpaa_us_pg
+                } else if (mpaa == 'PG-13') {
+                    return R.drawable.mpaa_us_pg13
+                } else if (mpaa == 'R') {
+                    return R.drawable.mpaa_us_r
+                } else if (mpaa == 'NC-17') {
+                    return R.drawable.mpaa_us_nc17
+                }
+                break
+            default:
+                LogDisplay.callLog(LOG_TAG, "Unknown locale-> $locale", LogDisplay.UTILITY_LIST_LOG_FLAG)
         }
-
-        if(locale == 'GB') {
-            if (mpaa == 'U') {
-                return R.drawable.mpaa_uk_u
-            } else if (mpaa == 'PG') {
-                return R.drawable.mpaa_uk_pg
-            } else if (mpaa == '12A') {
-                return R.drawable.mpaa_uk_12a
-            } else if (mpaa == '12') {
-                return R.drawable.mpaa_uk_12
-            } else if (mpaa == '15') {
-                return R.drawable.mpaa_uk_15
-            } else if (mpaa == '18') {
-                return R.drawable.mpaa_uk_18
-            } else if (mpaa == 'R18') {
-                return R.drawable.mpaa_uk_r18
-            }
-        }
-
         return -1
     }
 }

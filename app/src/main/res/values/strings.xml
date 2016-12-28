@@ -1,5 +1,5 @@
 <resources xmlns:xliff="http://schemas.android.com/tools">
-    <string name="app_name">Movie Magic</string>
+    <string name="app_name">My Movies</string>
     <string name="movie_name">Movie Name</string>
     <string name="content_authority">com.moviemagic.dpaul.android.app</string>
     <string name="search_hint">Search for online movies..</string>
@@ -173,7 +173,7 @@
     <string name="drawer_menu_logout">Logout</string>
     <string name="show_all_button_text">Show All</string>
     <string name="home_movie_recommendation_title">Recommend For You</string>
-    <string name="progress_dialog_wait_title">Please wait...</string>
+    <string name="progress_dialog_wait_title">Please wait…</string>
 
     <!-- String for not connected error dialog -->
     <string name="not_connected_dialog_title">No internet connection</string>

@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    android:background="@color/primary"
+    android:background="@color/primary_background"
     tools:ignore="Overdraw">
     <!-- Layout for title, genre & run time -->
     <LinearLayout
@@ -25,7 +25,7 @@
             android:fontFamily="sans-serif"
             android:gravity="start"
             android:textAppearance="@style/TextAppearance.AppCompat.Headline"
-            android:textColor="@color/white_color"
+            android:textColor="@color/primary_text"
             android:textIsSelectable="true" />
         <LinearLayout
             android:layout_width="match_parent"
@@ -36,9 +36,8 @@
                 android:id="@+id/movie_detail_mpaa_image"
                 android:layout_width="@dimen/detail_today_layout_mppa_image_size"
                 android:layout_height="@dimen/detail_today_layout_mppa_image_size"
-                android:scaleType="centerInside"
-                android:contentDescription="@string/movie_detail_mpaa_image_content_description"
-                android:src="@mipmap/ic_launcher" />
+                android:scaleType="fitXY"
+                android:contentDescription="@string/movie_detail_mpaa_image_content_description"/>
             <TextView
                 android:id="@+id/movie_detail_title_genre"
                 android:layout_width="0dp"
@@ -46,7 +45,7 @@
                 android:layout_weight="1"
                 android:paddingStart="@dimen/m_design_screen_edge_left_right_margin"
                 android:textAppearance="@style/TextAppearance.AppCompat.Small"
-                android:textColor="@color/grey_color"
+                android:textColor="@color/secondary_text"
                 tools:ignore="RtlSymmetry"
                 android:textIsSelectable="true" />
             <TextView
@@ -54,7 +53,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textAppearance="@style/TextAppearance.AppCompat.Small"
-                android:textColor="@color/grey_color"
+                android:textColor="@color/secondary_text"
                 android:textIsSelectable="true" />
         </LinearLayout>
     </LinearLayout>
@@ -81,7 +80,7 @@
             android:elevation="@dimen/m_design_toolbar_elevation"
             android:scaleType="centerCrop"
             android:contentDescription="@string/movie_detail_poster_image_content_description"
-            android:src="@drawable/grid_image_placeholder"
+            android:src="@drawable/image_place_holder"
             tools:ignore="UnusedAttribute" />
         <LinearLayout
             android:layout_width="0dp"
@@ -98,7 +97,7 @@
                 android:fontFamily="sans-serif-condensed"
                 android:text="@string/movie_detail_release_date"
                 android:textAppearance="@style/TextAppearance.AppCompat.Title"
-                android:textColor="@color/white_color" />
+                android:textColor="@color/primary_text" />
             <TextView
                 android:id="@+id/movie_detail_poster_release_date"
                 android:layout_width="wrap_content"
@@ -107,7 +106,7 @@
                 android:paddingEnd="@dimen/m_design_screen_edge_left_right_margin"
                 android:fontFamily="sans-serif-condensed"
                 android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-                android:textColor="@color/grey_color"
+                android:textColor="@color/secondary_text"
                 android:textIsSelectable="true" />
             <View
                 android:layout_width="match_parent"
@@ -123,7 +122,7 @@
                 android:fontFamily="sans-serif-condensed"
                 android:text="@string/movie_detail_budget"
                 android:textAppearance="@style/TextAppearance.AppCompat.Title"
-                android:textColor="@color/white_color" />
+                android:textColor="@color/primary_text" />
             <TextView
                 android:id="@+id/movie_detail_poster_budget"
                 android:layout_width="wrap_content"
@@ -132,7 +131,7 @@
                 android:paddingEnd="@dimen/m_design_screen_edge_left_right_margin"
                 android:fontFamily="sans-serif-condensed"
                 android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-                android:textColor="@color/grey_color"
+                android:textColor="@color/secondary_text"
                 android:textIsSelectable="true" />
             <View
                 android:layout_width="match_parent"
@@ -148,7 +147,7 @@
                 android:fontFamily="sans-serif-condensed"
                 android:text="@string/movie_detail_revenue"
                 android:textAppearance="@style/TextAppearance.AppCompat.Title"
-                android:textColor="@color/white_color" />
+                android:textColor="@color/primary_text" />
             <TextView
                 android:id="@+id/movie_detail_poster_revenue"
                 android:layout_width="wrap_content"
@@ -157,7 +156,7 @@
                 android:paddingEnd="@dimen/m_design_screen_edge_left_right_margin"
                 android:fontFamily="sans-serif-condensed"
                 android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-                android:textColor="@color/grey_color"
+                android:textColor="@color/secondary_text"
                 android:textIsSelectable="true" />
             <View
                 android:layout_width="match_parent"
@@ -173,7 +172,7 @@
                 android:fontFamily="sans-serif-condensed"
                 android:text="@string/person_popularity"
                 android:textAppearance="@style/TextAppearance.AppCompat.Title"
-                android:textColor="@color/white_color" />
+                android:textColor="@color/primary_text" />
             <TextView
                 android:id="@+id/movie_detail_poster_popularity"
                 android:layout_width="wrap_content"
@@ -182,7 +181,7 @@
                 android:paddingEnd="@dimen/m_design_screen_edge_left_right_margin"
                 android:fontFamily="sans-serif-condensed"
                 android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-                android:textColor="@color/grey_color"
+                android:textColor="@color/secondary_text"
                 android:textIsSelectable="true" />
             <View
                 android:layout_width="match_parent"
@@ -213,7 +212,7 @@
                 android:fontFamily="sans-serif-condensed"
                 android:text="@string/tmdb_rating_text"
                 android:textAppearance="@style/TextAppearance.AppCompat.Title"
-                android:textColor="@color/white_color" />
+                android:textColor="@color/primary_text" />
             <TextView
                 android:id="@+id/movie_detail_tmdb_rating_vote_count_header"
                 android:layout_width="wrap_content"
@@ -223,7 +222,7 @@
                 android:paddingStart="@dimen/m_design_space_between_content_area"
                 android:text="@string/tmdb_rating_vote_count_text"
                 android:textAppearance="@style/TextAppearance.AppCompat.Title"
-                android:textColor="@color/white_color"
+                android:textColor="@color/primary_text"
                 tools:ignore="RtlSymmetry" />
             <TextView
                 android:id="@+id/movie_detail_tmdb_rating_vote_count_val"
@@ -233,7 +232,7 @@
                 android:fontFamily="sans-serif-condensed"
                 android:paddingStart="@dimen/m_design_space_between_content_area"
                 android:textAppearance="@style/TextAppearance.AppCompat.Title"
-                android:textColor="@color/white_color"
+                android:textColor="@color/primary_text"
                 tools:ignore="RtlSymmetry"
                 android:textIsSelectable="true" />
             <TextView
@@ -245,7 +244,7 @@
                 android:paddingStart="@dimen/m_design_space_between_content_area"
                 android:text="@string/tmdb_rating_vote_count_closing_brace"
                 android:textAppearance="@style/TextAppearance.AppCompat.Title"
-                android:textColor="@color/white_color"
+                android:textColor="@color/primary_text"
                 tools:ignore="RtlSymmetry" />
         </LinearLayout>
         <RatingBar
@@ -280,7 +279,7 @@
             android:gravity="start"
             android:text="@string/user_rating_text"
             android:textAppearance="@style/TextAppearance.AppCompat.Title"
-            android:textColor="@color/white_color" />
+            android:textColor="@color/primary_text" />
         <RatingBar
             android:id="@+id/movie_detail_user_rating_bar"
             style="?android:attr/ratingBarStyleIndicator"
@@ -293,7 +292,7 @@
             android:rating="0"
             android:stepSize="0.5" />
     </LinearLayout>
-    <!-- Layout for user list icons (i.e. watched, wishlist, favourite & collection) -->
+    <!-- Layout for user list icons (i.e. ic_drawer_watched, wishlist, ic_drawer_favourite & ic_drawer_user_collection) -->
     <LinearLayout
         android:id="@+id/movie_detail_user_list_drawable_layout"
         android:orientation="vertical"
@@ -311,7 +310,7 @@
             android:layout_height="wrap_content"
             android:textAppearance="@style/TextAppearance.AppCompat.Title"
             android:fontFamily="sans-serif-condensed"
-            android:textColor="@color/white_color"
+            android:textColor="@color/primary_text"
             android:paddingBottom="@dimen/m_design_space_between_content_area"
             android:text="@string/movie_detail_user_list_drawable_title_value"/>
         <LinearLayout
@@ -325,10 +324,10 @@
                 android:layout_weight="1"
                 android:alpha="@dimen/movie_detail_user_list_drawable_alpha_value_40_percent"
                 android:elevation="@dimen/card_view_elevation"
-                android:background="@color/primary_dark"
-                android:tint="@color/white_color"
+                android:background="@color/primary"
+                android:tint="@color/primary_text"
                 android:contentDescription="@string/movie_detail_user_list_drawable_watched_content_description"
-                android:src="@drawable/watched"
+                android:src="@drawable/ic_drawer_watched"
                 tools:ignore="UnusedAttribute" />
             <View
                 android:layout_width="2dp"
@@ -340,10 +339,10 @@
                 android:layout_weight="1"
                 android:alpha="@dimen/movie_detail_user_list_drawable_alpha_value_40_percent"
                 android:elevation="@dimen/card_view_elevation"
-                android:background="@color/primary_dark"
-                android:tint="@color/white_color"
+                android:background="@color/primary"
+                android:tint="@color/primary_text"
                 android:contentDescription="@string/movie_detail_user_list_drawable_wish_list_content_description"
-                android:src="@drawable/wish_list"
+                android:src="@drawable/ic_drawer_wish_list"
                 tools:ignore="UnusedAttribute" />
             <View
                 android:layout_width="2dp"
@@ -355,10 +354,10 @@
                 android:layout_weight="1"
                 android:alpha="@dimen/movie_detail_user_list_drawable_alpha_value_40_percent"
                 android:elevation="@dimen/card_view_elevation"
-                android:background="@color/primary_dark"
-                android:tint="@color/white_color"
+                android:background="@color/primary"
+                android:tint="@color/primary_text"
                 android:contentDescription="@string/movie_detail_user_list_drawable_favourite_content_description"
-                android:src="@drawable/favourite"
+                android:src="@drawable/ic_drawer_favourite"
                 tools:ignore="UnusedAttribute" />
             <View
                 android:layout_width="2dp"
@@ -370,14 +369,14 @@
                 android:layout_weight="1"
                 android:alpha="@dimen/movie_detail_user_list_drawable_alpha_value_40_percent"
                 android:elevation="@dimen/card_view_elevation"
-                android:background="@color/primary_dark"
-                android:tint="@color/white_color"
+                android:background="@color/primary"
+                android:tint="@color/primary_text"
                 android:contentDescription="@string/movie_detail_user_list_drawable_collection_content_description"
-                android:src="@drawable/collection"
+                android:src="@drawable/ic_drawer_user_collection"
                 tools:ignore="UnusedAttribute" />
         </LinearLayout>
     </LinearLayout>
-    <!-- Layout for user's TMDb list icons (i.e. wishlists, favourite & rated) -->
+    <!-- Layout for user's TMDb list icons (i.e. wishlists, ic_drawer_favourite & rated) -->
     <LinearLayout
         android:id="@+id/movie_detail_user_tmdb_list_drawable_layout"
         android:orientation="vertical"
@@ -396,7 +395,7 @@
             android:layout_height="wrap_content"
             android:textAppearance="@style/TextAppearance.AppCompat.Title"
             android:fontFamily="sans-serif-condensed"
-            android:textColor="@color/white_color"
+            android:textColor="@color/primary_text"
             android:paddingBottom="@dimen/m_design_space_between_content_area"
             android:text="@string/movie_detail_user_tmdb_list_drawable_title_value"/>
         <LinearLayout
@@ -410,10 +409,10 @@
                 android:layout_weight="1"
                 android:elevation="@dimen/card_view_elevation"
                 android:alpha="@dimen/movie_detail_user_list_drawable_alpha_value_40_percent"
-                android:background="@color/primary_dark"
-                android:tint="@color/white_color"
+                android:background="@color/primary"
+                android:tint="@color/primary_text"
                 android:contentDescription="@string/movie_detail_user_tmdb_list_drawable_watchlist_content_description"
-                android:src="@drawable/bookmark"
+                android:src="@drawable/ic_drawer_tmdb_watch_list"
                 tools:ignore="UnusedAttribute" />
             <View
                 android:layout_width="2dp"
@@ -425,10 +424,10 @@
                 android:layout_weight="1"
                 android:elevation="@dimen/card_view_elevation"
                 android:alpha="@dimen/movie_detail_user_list_drawable_alpha_value_40_percent"
-                android:background="@color/primary_dark"
-                android:tint="@color/white_color"
+                android:background="@color/primary"
+                android:tint="@color/primary_text"
                 android:contentDescription="@string/movie_detail_user_tmdb_list_drawable_favourite_content_description"
-                android:src="@drawable/favourite"
+                android:src="@drawable/ic_drawer_favourite"
                 tools:ignore="UnusedAttribute" />
             <View
                 android:layout_width="2dp"
@@ -440,10 +439,10 @@
                 android:layout_weight="1"
                 android:elevation="@dimen/card_view_elevation"
                 android:alpha="@dimen/movie_detail_user_list_drawable_alpha_value_40_percent"
-                android:background="@color/primary_dark"
-                android:tint="@color/white_color"
+                android:background="@color/primary"
+                android:tint="@color/primary_text"
                 android:contentDescription="@string/movie_detail_user_tmdb_list_drawable_rated_content_description"
-                android:src="@drawable/top_rated"
+                android:src="@drawable/ic_drawer_star"
                 tools:ignore="UnusedAttribute" />
         </LinearLayout>
     </LinearLayout>
@@ -468,14 +467,14 @@
             android:gravity="start"
             android:text="@string/movie_detail_synopsis_tagline"
             android:textAppearance="@style/TextAppearance.AppCompat.Title"
-            android:textColor="@color/white_color" />
+            android:textColor="@color/primary_text" />
         <TextView
             android:id="@+id/movie_detail_synopsis_tagline"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:paddingBottom="@dimen/m_design_space_between_content_area"
             android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-            android:textColor="@color/grey_color"
+            android:textColor="@color/secondary_text"
             android:textIsSelectable="true" />
         <TextView
             android:id="@+id/movie_detail_synopsis_header"
@@ -486,13 +485,13 @@
             android:gravity="start"
             android:text="@string/movie_detail_synopsis"
             android:textAppearance="@style/TextAppearance.AppCompat.Title"
-            android:textColor="@color/white_color" />
+            android:textColor="@color/primary_text" />
         <TextView
             android:id="@+id/movie_detail_synopsis"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-            android:textColor="@color/grey_color"
+            android:textColor="@color/secondary_text"
             android:textIsSelectable="true" />
     </LinearLayout>
     <!-- line divider -->
@@ -522,7 +521,7 @@
             android:paddingBottom="@dimen/m_design_space_between_content_area"
             android:text="@string/movie_detail_trailer_text"
             android:textAppearance="@style/TextAppearance.AppCompat.Title"
-            android:textColor="@color/white_color" />
+            android:textColor="@color/primary_text" />
         <!-- YouTube Fragment Container -->
         <FrameLayout
             android:id="@+id/youtube_fragment_container"
@@ -536,7 +535,7 @@
             android:layout_height="match_parent"
             android:gravity="start"
             android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-            android:textColor="@color/grey_color"
+            android:textColor="@color/secondary_text"
             android:text="@string/movie_data_not_available"/>
     </LinearLayout>
     <!-- line divider -->
@@ -565,7 +564,7 @@
             android:gravity="start"
             android:text="@string/movie_detail_prod_cmpy_text"
             android:textAppearance="@style/TextAppearance.AppCompat.Title"
-            android:textColor="@color/white_color" />
+            android:textColor="@color/primary_text" />
         <TextView
             android:id="@+id/movie_detail_production_info_cmpy"
             android:layout_width="wrap_content"
@@ -573,7 +572,7 @@
             android:fontFamily="sans-serif-condensed"
             android:paddingBottom="@dimen/m_design_space_between_content_area"
             android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-            android:textColor="@color/grey_color"
+            android:textColor="@color/secondary_text"
             android:textIsSelectable="true" />
         <TextView
             android:id="@+id/movie_detail_production_info_country_header"
@@ -584,14 +583,14 @@
             android:gravity="start"
             android:text="@string/movie_detail_production_country_text"
             android:textAppearance="@style/TextAppearance.AppCompat.Title"
-            android:textColor="@color/white_color" />
+            android:textColor="@color/primary_text" />
         <TextView
             android:id="@+id/movie_detail_production_info_country"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:fontFamily="sans-serif-condensed"
             android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-            android:textColor="@color/grey_color"
+            android:textColor="@color/secondary_text"
             android:textIsSelectable="true" />
     </LinearLayout>
     <!-- line divider -->
@@ -620,7 +619,7 @@
             android:paddingBottom="@dimen/m_design_space_between_content_area"
             android:text="@string/movie_detail_cast_header_text"
             android:textAppearance="@style/TextAppearance.AppCompat.Title"
-            android:textColor="@color/white_color" />
+            android:textColor="@color/primary_text" />
         <FrameLayout
             android:id="@+id/movie_detail_cast_grid_layout"
             android:layout_width="match_parent"
@@ -638,7 +637,7 @@
                 android:layout_height="match_parent"
                 android:gravity="start"
                 android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-                android:textColor="@color/grey_color"
+                android:textColor="@color/secondary_text"
                 android:text="@string/movie_data_not_available"/>
         </FrameLayout>
     </LinearLayout>
@@ -668,7 +667,7 @@
             android:paddingBottom="@dimen/m_design_space_between_content_area"
             android:text="@string/movie_detail_crew_header_text"
             android:textAppearance="@style/TextAppearance.AppCompat.Title"
-            android:textColor="@color/white_color" />
+            android:textColor="@color/primary_text" />
         <FrameLayout
             android:id="@+id/movie_detail_crew_grid_layout"
             android:layout_width="match_parent"
@@ -686,7 +685,7 @@
                 android:layout_height="match_parent"
                 android:gravity="start"
                 android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-                android:textColor="@color/grey_color"
+                android:textColor="@color/secondary_text"
                 android:text="@string/movie_data_not_available"/>
         </FrameLayout>
     </LinearLayout>
@@ -717,7 +716,7 @@
             android:paddingBottom="@dimen/m_design_space_between_content_area"
             android:text="@string/movie_detail_similar_movie_header_text"
             android:textAppearance="@style/TextAppearance.AppCompat.Title"
-            android:textColor="@color/white_color" />
+            android:textColor="@color/primary_text" />
         <FrameLayout
             android:id="@+id/movie_detail_similar_movie_grid_layout"
             android:layout_width="match_parent"
@@ -735,7 +734,7 @@
                 android:layout_height="match_parent"
                 android:gravity="start"
                 android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-                android:textColor="@color/grey_color"
+                android:textColor="@color/secondary_text"
                 android:text="@string/movie_data_not_available"/>
         </FrameLayout>
     </LinearLayout>
@@ -744,7 +743,7 @@
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:background="@color/divider_color"/>
-    <!-- Layout for movie collection -->
+    <!-- Layout for movie ic_drawer_user_collection -->
     <LinearLayout
         android:id="@+id/movie_detail_collection_layout"
         android:layout_width="match_parent"
@@ -765,7 +764,7 @@
             android:gravity="start"
             android:text="@string/movie_detail_collection_header_text"
             android:textAppearance="@style/TextAppearance.AppCompat.Title"
-            android:textColor="@color/white_color" />
+            android:textColor="@color/primary_text" />
         <TextView
             android:id="@+id/movie_detail_collection_name"
             android:layout_width="wrap_content"
@@ -773,7 +772,7 @@
             android:fontFamily="sans-serif-condensed"
             android:paddingBottom="@dimen/m_design_space_between_content_area"
             android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-            android:textColor="@color/grey_color"
+            android:textColor="@color/secondary_text"
             android:textIsSelectable="true" />
         <ImageView
             android:id="@+id/movie_detail_collection_image"
@@ -782,7 +781,7 @@
             android:layout_gravity="center"
             android:elevation="@dimen/m_design_toolbar_elevation"
             android:scaleType="centerCrop"
-            android:src="@drawable/grid_image_placeholder"
+            android:src="@drawable/image_place_holder"
             android:contentDescription="@string/movie_detail_collection_image_content_description"
             tools:ignore="UnusedAttribute" />
     </LinearLayout>
@@ -791,7 +790,7 @@
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:background="@color/divider_color"/>
-    <!-- Layout for movie home page and IMDb links -->
+    <!-- Layout for movie ic_drawer_home page and IMDb links -->
     <LinearLayout
         android:id="@+id/movie_detail_web_links_layout"
         android:layout_width="match_parent"
@@ -812,7 +811,7 @@
             android:gravity="start"
             android:text="@string/movie_detail_web_links_header"
             android:textAppearance="@style/TextAppearance.AppCompat.Title"
-            android:textColor="@color/white_color" />
+            android:textColor="@color/primary_text" />
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -826,9 +825,9 @@
                 android:fontFamily="sans-serif-condensed"
                 android:text="@string/movie_detail_web_links_home_page"
                 android:gravity="center"
-                android:background="@color/primary_dark"
+                android:background="@color/accent"
                 android:textAppearance="@style/TextAppearance.AppCompat.Title"
-                android:textColor="@color/grey_color"
+                android:textColor="@color/secondary_text"
                 tools:ignore="ButtonStyle" />
             <Button
                 android:id="@+id/movie_detail_web_links_imdb_link_button"
@@ -839,9 +838,9 @@
                 android:fontFamily="sans-serif-condensed"
                 android:text="@string/detail_web_links_imdb_link"
                 android:gravity="center"
-                android:background="@color/primary_dark"
+                android:background="@color/accent"
                 android:textAppearance="@style/TextAppearance.AppCompat.Title"
-                android:textColor="@color/grey_color"
+                android:textColor="@color/secondary_text"
                 tools:ignore="ButtonStyle" />
         </LinearLayout>
     </LinearLayout>
@@ -872,7 +871,7 @@
             android:paddingBottom="@dimen/m_design_space_between_content_area"
             android:text="@string/movie_detail_review_header_text"
             android:textAppearance="@style/TextAppearance.AppCompat.Title"
-            android:textColor="@color/white_color" />
+            android:textColor="@color/primary_text" />
         <FrameLayout
             android:id="@+id/movie_detail_review_recycler_view_layout"
             android:layout_width="match_parent"
@@ -890,7 +889,7 @@
                 android:layout_height="match_parent"
                 android:gravity="start"
                 android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-                android:textColor="@color/grey_color"
+                android:textColor="@color/secondary_text"
                 android:text="@string/movie_data_not_available"/>
         </FrameLayout>
     </LinearLayout>

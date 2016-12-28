@@ -7,25 +7,25 @@
         android:checkableBehavior="single">
         <item
             android:id="@+id/nav_home"
-            android:icon="@drawable/home"
+            android:icon="@drawable/ic_drawer_home"
             android:title="@string/drawer_menu_home" />
         <item
             android:id="@+id/nav_tmdb_popular"
-            android:icon="@drawable/popular"
+            android:icon="@drawable/ic_drawer_now_popular"
             android:title="@string/drawer_menu_tmdb_popular" />
         <item
             android:id="@+id/nav_tmdb_toprated"
-            android:icon="@drawable/top_rated"
+            android:icon="@drawable/ic_drawer_star"
             android:title="@string/drawer_menu_tmdb_toprated" />
 
         <item
             android:id="@+id/nav_tmdb_nowplaying"
-            android:icon="@drawable/now_playing"
+            android:icon="@drawable/ic_drawer_now_playing"
             android:title="@string/drawer_menu_tmdb_nowplaying" />
 
         <item
             android:id="@+id/nav_tmdb_upcoming"
-            android:icon="@drawable/upcoming"
+            android:icon="@drawable/ic_drawer_upcoming"
             android:title="@string/drawer_menu_tmdb_upcoming" />
     </group>
 
@@ -36,24 +36,24 @@
                 android:checkableBehavior="single">
                 <item
                     android:id="@+id/nav_user_watched"
-                    android:icon="@drawable/watched"
+                    android:icon="@drawable/ic_drawer_watched"
                     android:title="@string/drawer_menu_user_watched"
                     app:actionLayout="@layout/menu_counter" /> <!-- Needed to populate counter -->
                 <item
                     android:id="@+id/nav_user_wishlist"
-                    android:icon="@drawable/wish_list"
+                    android:icon="@drawable/ic_drawer_wish_list"
                     android:title="@string/drawer_menu_user_wishlist"
                     app:actionLayout="@layout/menu_counter" /> <!-- Needed to populate counter -->
 
                 <item
                     android:id="@+id/nav_user_favourite"
-                    android:icon="@drawable/favourite"
+                    android:icon="@drawable/ic_drawer_favourite"
                     android:title="@string/drawer_menu_user_favourite"
                     app:actionLayout="@layout/menu_counter" /> <!-- Needed to populate counter -->
 
                 <item
                     android:id="@+id/nav_user_collection"
-                    android:icon="@drawable/collection"
+                    android:icon="@drawable/ic_drawer_user_collection"
                     android:title="@string/drawer_menu_user_collection"
                     app:actionLayout="@layout/menu_counter" /> <!-- Needed to populate counter -->
             </group>
@@ -70,18 +70,18 @@
                 android:checkableBehavior="single">
                 <item
                     android:id="@+id/nav_tmdb_user_watchlist"
-                    android:icon="@drawable/bookmark"
+                    android:icon="@drawable/ic_drawer_tmdb_watch_list"
                     android:title="@string/drawer_menu_tmdb_user_watchlist"
                     app:actionLayout="@layout/menu_counter" /> <!-- Needed to populate counter -->
                 <item
                     android:id="@+id/nav_tmdb_user_favourite"
-                    android:icon="@drawable/favourite"
+                    android:icon="@drawable/ic_drawer_favourite"
                     android:title="@string/drawer_menu_tmdb_user_favourite"
                     app:actionLayout="@layout/menu_counter" /> <!-- Needed to populate counter -->
 
                 <item
                     android:id="@+id/nav_tmdb_user_rated"
-                    android:icon="@drawable/top_rated"
+                    android:icon="@drawable/ic_drawer_star"
                     android:title="@string/drawer_menu_tmdb_user_rated"
                     app:actionLayout="@layout/menu_counter" /> <!-- Needed to populate counter -->
             </group>
@@ -91,24 +91,24 @@
         android:checkableBehavior="single">
             <item
                 android:id="@+id/nav_menu_logout"
-                android:icon="@drawable/logout"
+                android:icon="@drawable/ic_drawer_logout"
                 android:title="@string/drawer_menu_logout"
                 android:visible="false"/>
         <item
             android:id="@+id/nav_menu_settings"
-            android:icon="@drawable/ic_settings_black_48dp"
+            android:icon="@drawable/ic_drawer_settings"
             android:title="@string/drawer_menu_settings" />
         <item
             android:id="@+id/nav_menu_rate_the_app"
-            android:icon="@drawable/ic_thumbs_up_down_black_48dp"
+            android:icon="@drawable/ic_drawer_thumbs_up_down"
             android:title="@string/nav_menu_rate_the_app"/>
         <item
             android:id="@+id/nav_menu_contact_developer"
-            android:icon="@drawable/email"
+            android:icon="@drawable/ic_drawer_email"
             android:title="@string/drawer_menu_contact_developer"/>
         <item
             android:id="@+id/nav_menu_donate"
-            android:icon="@drawable/ic_mood_black_48dp"
+            android:icon="@drawable/ic_drawer_mood"
             android:title="@string/nav_menu_donate"/>
     </group>
 </menu>

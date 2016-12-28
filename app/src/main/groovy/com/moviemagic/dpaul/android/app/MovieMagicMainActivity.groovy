@@ -654,16 +654,9 @@ public class MovieMagicMainActivity extends AppCompatActivity implements Navigat
 
         final String[] emailAddress = ["${getString(R.string.developer_email_id)}"]
         final String emailSubject = "${getString(R.string.app_name)} (Version $versionName) - Feedback"
-        final String emailBody = """Android Code Name: $codeName
-                                    Android Release: $release
-                                    Brand: $brand
-                                    Device: $device
-                                    Manufacturer: $manufacturer
-                                    Model: $model
-                                    App Version Code: $versionCode
-                                    App Version Name: $versionName
-
-                                    Feedback / Comments - """
+        final String emailBody = "Android Code Name: $codeName\nAndroid Release: $release\nBrand: $brand\nDevice: $device" +
+                "\nManufacturer: $manufacturer\nModel: $model\nApp Version Code: $versionCode" +
+                "\nApp Version Name: $versionName\n\nFeedback / Comments - "
         final Intent intent = new Intent(Intent.ACTION_SENDTO)
         intent.setData(Uri.parse("mailto:")) // only email apps should handle this
         intent.putExtra(Intent.EXTRA_EMAIL, emailAddress)

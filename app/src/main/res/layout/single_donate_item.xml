@@ -17,7 +17,7 @@
             android:layout_gravity="start"
             android:fontFamily="sans-serif-condensed"
             android:textAppearance="@style/TextAppearance.AppCompat.Title"
-            android:textColor="@color/primary_dark"
+            android:textColor="@color/primary"
             android:textIsSelectable="true" />
         <TextView
             android:id="@+id/single_donate_item_link_address"
@@ -26,7 +26,7 @@
             android:layout_gravity="start"
             android:fontFamily="sans-serif-condensed"
             android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-            android:textColor="@color/primary"
+            android:textColor="@color/primary_background"
             android:textIsSelectable="true" />
     </LinearLayout>
     <android.support.v7.widget.AppCompatButton
@@ -36,7 +36,7 @@
         android:layout_gravity="center"
         android:clickable="true"
         app:backgroundTint="@color/accent"
-        android:textColor="@color/white_color"
+        android:textColor="@color/primary_text"
         style="?android:textAppearanceSmall"
         android:textStyle="bold"
         android:text="@string/single_donate_item_donate_button"/>

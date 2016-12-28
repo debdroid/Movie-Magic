@@ -493,8 +493,8 @@ class PersonMovieFragment extends Fragment implements LoaderManager.LoaderCallba
                                     LogDisplay.callLog(LOG_TAG, 'onGenerated:not able to pick color, so fallback', LogDisplay.COLLECTION_MOVIE_FRAGMENT_LOG_FLAG)
                                     mPalettePrimaryColor = ContextCompat.getColor(getActivity(), R.color.primary)
                                     mPalettePrimaryDarkColor = ContextCompat.getColor(getActivity(), R.color.primary_dark)
-                                    mPaletteTitleColor = ContextCompat.getColor(getActivity(), R.color.white_color)
-                                    mPaletteBodyTextColor = ContextCompat.getColor(getActivity(), R.color.grey_color)
+                                    mPaletteTitleColor = ContextCompat.getColor(getActivity(), R.color.primary_text)
+                                    mPaletteBodyTextColor = ContextCompat.getColor(getActivity(), R.color.secondary_text)
                                     //This is needed as we are not going pick accent colour if falling back
                                     mPaletteAccentColor = ContextCompat.getColor(getActivity(), R.color.accent)
                                 }
@@ -538,10 +538,10 @@ class PersonMovieFragment extends Fragment implements LoaderManager.LoaderCallba
                                     window.setStatusBarColor(mPalettePrimaryDarkColor)
                                 }
 
-                                mHomePageButton.setBackgroundColor(mPalettePrimaryDarkColor)
-                                mImdbLinkButton.setBackgroundColor(mPalettePrimaryDarkColor)
-                                mHomePageButton.setTextColor(mPaletteBodyTextColor)
-                                mImdbLinkButton.setTextColor(mPaletteBodyTextColor)
+//                                mHomePageButton.setBackgroundColor(mPalettePrimaryDarkColor)
+//                                mImdbLinkButton.setBackgroundColor(mPalettePrimaryDarkColor)
+//                                mHomePageButton.setTextColor(mPaletteBodyTextColor)
+//                                mImdbLinkButton.setTextColor(mPaletteBodyTextColor)
 
                                 //Apply color to adapter elements
                                 mPersonCastAdapter.changeColor(mPalettePrimaryDarkColor, mPaletteBodyTextColor)
@@ -591,8 +591,12 @@ class PersonMovieFragment extends Fragment implements LoaderManager.LoaderCallba
                 mDeathDayTextView.setVisibility(TextView.GONE)
                 mDeathDayDivider.setVisibility(View.GONE)
             }
+            LogDisplay.callLog(LOG_TAG, "popularity:${data.getFloat(COL_PERSON_INFO_PERSON_POPULARITY)}", LogDisplay.PERSON_MOVIE_FRAGMENT_LOG_FLAG)
+            final BigDecimal popularityBigDecimal = new BigDecimal(Float.toString(data.getFloat(COL_PERSON_INFO_PERSON_POPULARITY)))
+            popularityBigDecimal = popularityBigDecimal.setScale(2,BigDecimal.ROUND_HALF_UP)
+            LogDisplay.callLog(LOG_TAG, "popularityBigDecimal:$popularityBigDecimal", LogDisplay.PERSON_MOVIE_FRAGMENT_LOG_FLAG)
             if (data.getFloat(COL_PERSON_INFO_PERSON_POPULARITY) > 0) {
-                mPopularityTextView.setText(Float.toString(data.getFloat(COL_PERSON_INFO_PERSON_POPULARITY)))
+                mPopularityTextView.setText(Float.toString(popularityBigDecimal as Float))
             } else {
                 mPopularityTextView.setText(getActivity().getString(R.string.movie_data_not_available))
             }

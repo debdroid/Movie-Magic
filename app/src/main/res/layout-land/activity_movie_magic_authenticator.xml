@@ -26,7 +26,7 @@
                 android:paddingTop="@dimen/login_page_top_landscape_padding"
                 android:text="@string/tmdb_login_header"
                 android:textAppearance="@style/TextAppearance.AppCompat.Headline"
-                android:textColor="@color/white_color" />
+                android:textColor="@color/primary_text" />
 
             <TextView
                 android:layout_width="match_parent"
@@ -39,7 +39,7 @@
                 android:paddingStart="@dimen/activity_horizontal_margin"
                 android:text="@string/tmdb_login_body"
                 android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-                android:textColor="@color/grey_color" />
+                android:textColor="@color/secondary_text" />
         </LinearLayout>
 
         <android.support.v4.widget.NestedScrollView
@@ -109,7 +109,7 @@
                         android:layout_weight="1"
                         android:text="@string/action_sign_in"
                         app:backgroundTint="@color/accent"
-                        android:textColor="@color/white_color"
+                        android:textColor="@color/primary_text"
                         android:textStyle="bold" />
 
                     <LinearLayout
@@ -126,7 +126,7 @@
                             android:layout_weight="1"
                             android:text="@string/action_cancel"
                             app:backgroundTint="@color/accent"
-                            android:textColor="@color/white_color"
+                            android:textColor="@color/primary_text"
                             android:textStyle="bold" />
 
                         <android.support.v7.widget.AppCompatButton
@@ -138,7 +138,7 @@
                             android:layout_weight="1"
                             android:text="@string/action_sign_up"
                             app:backgroundTint="@color/accent"
-                            android:textColor="@color/white_color"
+                            android:textColor="@color/primary_text"
                             android:textStyle="bold" />
                     </LinearLayout>
                 </LinearLayout>

@@ -7,7 +7,7 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@color/primary">
+    android:background="@color/primary_background">
     <TextView
         android:id="@+id/single_review_item_author"
         android:layout_width="match_parent"
@@ -15,8 +15,7 @@
         android:layout_gravity="start"
         android:fontFamily="sans-serif-condensed"
         android:textAppearance="@style/TextAppearance.AppCompat.Title"
-        android:text="@string/review_author"
-        android:textColor="@color/white_color"/>
+        android:textColor="@color/primary_text"/>
     <TextView
         android:id="@+id/single_review_item_review_content"
         android:layout_width="match_parent"
@@ -24,22 +23,21 @@
         android:ellipsize="end"
         android:maxLines="@string/single_review_item_collapse_line_item_count"
         android:layout_gravity="start"
-        android:background="@color/primary"
+        android:background="@color/primary_background"
         android:fontFamily="sans-serif-condensed"
         android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-        android:text="@string/review_content"
-        android:textColor="@color/grey_color"/>
+        android:textColor="@color/secondary_text"/>
 </LinearLayout>
     <ImageButton
         android:id="@+id/single_review_item_show_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="@dimen/person_biography_collapse_icon_size"
+        android:layout_height="@dimen/person_biography_collapse_icon_size"
         android:layout_alignParentEnd="true"
         android:clickable="true"
         android:backgroundTint="@color/divider_color"
         android:layout_below="@+id/single_review_item_linear_layout"
         android:contentDescription="@string/review_item_show_button_content_description"
-        android:background="@drawable/ic_keyboard_arrow_down_white_24dp"
+        android:background="@drawable/ic_keyboard_arrow_down"
         tools:ignore="UnusedAttribute" />
     <View
         android:id="@+id/single_review_item_divider"
@@ -51,14 +49,14 @@
         android:background="@color/divider_color" />
     <ImageButton
         android:id="@+id/single_review_item_hide_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="@dimen/person_biography_collapse_icon_size"
+        android:layout_height="@dimen/person_biography_collapse_icon_size"
         android:layout_alignParentEnd="true"
         android:clickable="true"
         android:backgroundTint="@color/divider_color"
         android:contentDescription="@string/review_item_hide_button_content_description"
         android:visibility="invisible"
         android:layout_below="@+id/single_review_item_linear_layout"
-        android:background="@drawable/ic_keyboard_arrow_up_white_24dp"
+        android:background="@drawable/ic_keyboard_arrow_up"
         tools:ignore="UnusedAttribute" />
 </RelativeLayout>

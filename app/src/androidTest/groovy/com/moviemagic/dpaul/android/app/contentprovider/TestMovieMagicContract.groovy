@@ -49,7 +49,7 @@ class TestMovieMagicContract extends AndroidTestCase {
         final int TEST_MOVIE_USER_LIST_FLAG_ID = 1013
         final String TEST_COUNTRY_ISO = 'IN'
   // intentionally includes a slash to make sure Uri is getting quoted correctly (i.e. getting %2F or '/' & %20 for space)
-        final String TEST_MOVIE_CATEGORY = "/popular movie"
+        final String TEST_MOVIE_CATEGORY = "/ic_drawer_now_popular movie"
         final long TEST_DATE = 1471042800000L //2016-08-13
 
         //test movie_basic_info methods

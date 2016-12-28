@@ -5,7 +5,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/primary"
+        android:background="@color/primary_background"
         android:orientation="vertical">
 
         <FrameLayout
@@ -21,7 +21,7 @@
             android:layout_height="match_parent"
             android:gravity="start"
             android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-            android:textColor="@color/grey_color"
+            android:textColor="@color/secondary_text"
             android:paddingBottom="@dimen/m_design_space_between_content_area"
             android:visibility="gone"/>
         <!-- line divider -->
@@ -58,7 +58,7 @@
                     android:paddingStart="@dimen/m_design_screen_edge_left_right_margin"
                     android:text="@string/home_movie_in_cinema_title"
                     android:textAppearance="@style/TextAppearance.AppCompat.Headline"
-                    android:textColor="@color/white_color" />
+                    android:textColor="@color/primary_text" />
 
                 <Button
                     android:id="@+id/show_all_in_cinema_button"
@@ -67,7 +67,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:text="@string/show_all_button_text"
-                    android:textColor="@color/white_color"
+                    android:textColor="@color/primary_text"
                     android:textStyle="bold" />
             </LinearLayout>
 
@@ -94,7 +94,7 @@
                     android:paddingStart="@dimen/m_design_screen_edge_left_right_margin"
                     android:text="@string/movie_data_not_available"
                     android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-                    android:textColor="@color/grey_color" />
+                    android:textColor="@color/secondary_text" />
             </FrameLayout>
         </LinearLayout>
         <!-- line divider -->
@@ -130,7 +130,7 @@
                     android:paddingStart="@dimen/m_design_screen_edge_left_right_margin"
                     android:text="@string/home_movie_coming_soon_title"
                     android:textAppearance="@style/TextAppearance.AppCompat.Headline"
-                    android:textColor="@color/white_color" />
+                    android:textColor="@color/primary_text" />
 
                 <Button
                     android:id="@+id/show_all_coming_soon_button"
@@ -139,7 +139,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:text="@string/show_all_button_text"
-                    android:textColor="@color/white_color"
+                    android:textColor="@color/primary_text"
                     android:textStyle="bold" />
             </LinearLayout>
 
@@ -166,7 +166,7 @@
                     android:paddingStart="@dimen/m_design_screen_edge_left_right_margin"
                     android:text="@string/movie_data_not_available"
                     android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-                    android:textColor="@color/grey_color" />
+                    android:textColor="@color/secondary_text" />
             </FrameLayout>
         </LinearLayout>
         <!-- line divider -->
@@ -196,7 +196,7 @@
                 android:paddingStart="@dimen/m_design_screen_edge_left_right_margin"
                 android:text="@string/home_movie_recommendation_title"
                 android:textAppearance="@style/TextAppearance.AppCompat.Headline"
-                android:textColor="@color/white_color" />
+                android:textColor="@color/primary_text" />
 
             <FrameLayout
                 android:id="@+id/home_movie_recommendation_recycler_view_layout"
@@ -221,7 +221,7 @@
                     android:paddingStart="@dimen/m_design_screen_edge_left_right_margin"
                     android:text="@string/movie_data_not_available"
                     android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-                    android:textColor="@color/grey_color" />
+                    android:textColor="@color/secondary_text" />
             </FrameLayout>
         </LinearLayout>
         <!-- line divider -->
@@ -252,7 +252,7 @@
                 android:paddingStart="@dimen/m_design_screen_edge_left_right_margin"
                 android:text="@string/home_movie_recently_added_title"
                 android:textAppearance="@style/TextAppearance.AppCompat.Headline"
-                android:textColor="@color/white_color" />
+                android:textColor="@color/primary_text" />
 
             <FrameLayout
                 android:id="@+id/home_movie_recently_added_recycler_view_layout"
@@ -277,7 +277,7 @@
                     android:paddingStart="@dimen/m_design_screen_edge_left_right_margin"
                     android:text="@string/movie_data_not_available"
                     android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-                    android:textColor="@color/grey_color" />
+                    android:textColor="@color/secondary_text" />
             </FrameLayout>
         </LinearLayout>
     </LinearLayout>

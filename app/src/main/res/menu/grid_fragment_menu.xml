@@ -5,14 +5,14 @@
         android:id="@+id/menu_action_sort"
         android:orderInCategory="200"
         android:title="@string/menu_action_sort"
-        android:icon="@drawable/sort_variant"
+        android:icon="@drawable/ic_menu_sort_variant"
 
         app:showAsAction="collapseActionView|ifRoom"/>
     <item
         android:id="@+id/menu_action_filter"
         android:orderInCategory="300"
         android:title="@string/menu_action_filter"
-        android:icon="@drawable/filter_add"
+        android:icon="@drawable/ic_menu_filter_add"
         app:showAsAction="collapseActionView|ifRoom">
         <menu>
             <item

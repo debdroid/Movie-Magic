@@ -680,9 +680,19 @@ class JsonParse {
                 collectionData.put(MovieCollection.COLUMN_COLLECTION_NAME, jsonData.name)
             else
                 collectionData.put(MovieCollection.COLUMN_COLLECTION_NAME, '')
-            collectionData.put(MovieCollection.COLUMN_COLLECTION_OVERVIEW, jsonData.overview)
-            collectionData.put(MovieCollection.COLUMN_COLLECTION_POSTER_PATH, jsonData.poster_path)
-            collectionData.put(MovieCollection.COLUMN_COLLECTION_BACKDROP_PATH, jsonData.backdrop_path)
+            if(jsonData.overview)
+                collectionData.put(MovieCollection.COLUMN_COLLECTION_OVERVIEW, jsonData.overview)
+            else
+                collectionData.put(MovieCollection.COLUMN_COLLECTION_OVERVIEW, '')
+            if(jsonData.poster_path)
+                collectionData.put(MovieCollection.COLUMN_COLLECTION_POSTER_PATH, jsonData.poster_path)
+            else
+                collectionData.put(MovieCollection.COLUMN_COLLECTION_POSTER_PATH, '')
+            if(jsonData.backdrop_path)
+                collectionData.put(MovieCollection.COLUMN_COLLECTION_BACKDROP_PATH, jsonData.backdrop_path)
+            else
+                collectionData.put(MovieCollection.COLUMN_COLLECTION_BACKDROP_PATH, '')
+
             collectionData.put(MovieCollection.COLUMN_COLLECTION_MOVIE_PRESENT_FLAG, GlobalStaticVariables.MOVIE_MAGIC_FLAG_TRUE)
             collectionData.put(MovieCollection.COLUMN_COLLECTION_CREATE_TIMESTAMP, Utility.getTodayDate())
             collectionData.put(MovieCollection.COLUMN_COLLECTION_UPDATE_TIMESTAMP, Utility.getTodayDate())

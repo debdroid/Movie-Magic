@@ -1,4 +1,4 @@
-<!-- drawable/watched.xml -->
+<!-- drawable/ic_drawer_watched.xml -->
 <vector xmlns:android="http://schemas.android.com/apk/res/android"
     android:height="48dp"
     android:width="48dp"

@@ -4,7 +4,7 @@
     android:id="@+id/movie_detail_collection_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/primary"
+    android:background="@color/primary_background"
     android:orientation="vertical"
     tools:ignore="Overdraw">
 <LinearLayout
@@ -26,7 +26,7 @@
         android:paddingStart="@dimen/m_design_screen_edge_left_right_margin"
         android:paddingBottom="@dimen/m_design_space_between_content_area"
         android:textAppearance="@style/TextAppearance.AppCompat.Headline"
-        android:textColor="@color/white_color"
+        android:textColor="@color/primary_text"
         android:textIsSelectable="true" />
     <View
         android:layout_width="match_parent"
@@ -48,7 +48,7 @@
         android:paddingStart="@dimen/m_design_screen_edge_left_right_margin"
         android:paddingBottom="@dimen/m_design_space_between_content_area"
         android:textAppearance="@style/TextAppearance.AppCompat.Title"
-        android:textColor="@color/white_color" />
+        android:textColor="@color/primary_text" />
 
     <TextView
         android:id="@+id/collection_overview"
@@ -61,14 +61,14 @@
         android:paddingStart="@dimen/m_design_screen_edge_left_right_margin"
         android:paddingBottom="@dimen/m_design_space_between_content_area"
         android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-        android:textColor="@color/grey_color"
+        android:textColor="@color/secondary_text"
         android:textIsSelectable="true" />
 </LinearLayout>
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:background="@color/divider_color" />
-    <!-- Container for collection movies -->
+    <!-- Container for ic_drawer_user_collection movies -->
     <FrameLayout
         android:id="@+id/collection_movie_grid"
         android:layout_width="match_parent"

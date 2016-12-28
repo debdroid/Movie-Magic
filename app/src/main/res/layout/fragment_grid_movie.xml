@@ -6,6 +6,6 @@
     android:layout_height="match_parent"
     android:padding="@dimen/gridview_horizontal_vertical_spacing"
     android:columnWidth="@dimen/gridview_column_width"
-    android:background="@color/primary"
+    android:background="@color/primary_background"
     android:clipToPadding="false"
     tools:ignore="Overdraw" />

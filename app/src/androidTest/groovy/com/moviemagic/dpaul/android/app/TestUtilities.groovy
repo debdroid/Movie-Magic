@@ -15,7 +15,7 @@ class TestUtilities extends AndroidTestCase {
     public static int TEST_MOVIE_ID = 101
     public static int TEST_COLL_ID = 202
     public static int TEST_PERSON_ID = 303
-    public static final String TEST_MOVIE_CATEGORY = 'popular'
+    public static final String TEST_MOVIE_CATEGORY = 'ic_drawer_now_popular'
     public static final String TEST_COUNTRY_ISO = 'US'
 
     static void validateCursor(final String error, final Cursor valueCursor, final ContentValues expectedValues) {

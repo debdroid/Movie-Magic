@@ -80,7 +80,7 @@ final class MovieMagicContract {
         static final String COLUMN_POPULARITY = 'popularity'
         //Column to store movie title
         static final String COLUMN_TITLE = 'title'
-        //Column to store movie now_playing flag
+        //Column to store movie ic_drawer_now_playing flag
         static final String COLUMN_VIDEO_FLAG = 'video_flag'
         //Column to store movie voting average value
         static final String COLUMN_VOTE_AVG = 'vote_average'
@@ -101,11 +101,11 @@ final class MovieMagicContract {
         static final String COLUMN_RECOMMENDATION_MOVIE_LINK_ID = 'recommendation_movie_link_id'
 
         //Following fields are fetched for each movie (part of detail) and added later
-        //Column to store collection id
+        //Column to store ic_drawer_user_collection id
         static final String COLUMN_COLLECTION_ID = 'collection_id'
-        //Column to store collection name
+        //Column to store ic_drawer_user_collection name
         static final String COLUMN_COLLECTION_NAME = 'collection_name'
-        //Column to store collection poster path
+        //Column to store ic_drawer_user_collection poster path
         static final String COLUMN_COLLECTION_POSTER_PATH = 'collection_poster_path'
         //Column to store collection backdrop path
         static final String COLUMN_COLLECTION_BACKDROP_PATH = 'collection_backdrop_path'
@@ -113,7 +113,7 @@ final class MovieMagicContract {
         static final String COLUMN_BUDGET = 'budget'
         //Column to store movie genre
         static final String COLUMN_GENRE = 'genre'
-        //Column to store movie home page
+        //Column to store movie ic_drawer_home page
         static final String COLUMN_HOME_PAGE= 'home_page'
         //Column to store imdb movie id
         static final String COLUMN_IMDB_ID = 'imdb_id'

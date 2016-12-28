@@ -549,7 +549,7 @@ class MovieMagicSyncAdapter extends AbstractThreadedSyncAdapter {
 
                     // Build the Notification
                     final Notification notification = new NotificationCompat.Builder(mContext)
-                            .setSmallIcon(R.mipmap.ic_launcher)
+                            .setSmallIcon(R.drawable.ic_stat_notify_movie_magic)
                             .setAutoCancel(true)
                             .setLargeIcon(posterBitmap)
                             .setContentIntent(resultPendingIntent)

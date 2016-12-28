@@ -19,13 +19,12 @@ class PicassoLoadImage {
                     .load(imagePath)
                     .tag(GlobalStaticVariables.PICASSO_POSTER_IMAGE_TAG)
                     .fit()
-                    .placeholder(R.drawable.grid_image_placeholder)
-                    .error(R.drawable.grid_image_error)
+                    .placeholder(R.drawable.image_place_holder)
+                    .error(R.drawable.image_download_error)
                     .into(imageView)
         } else {
             Picasso.with(context)
-                    .load(R.drawable.grid_image_placeholder)
-                    .fit()
+                    .load(R.drawable.image_place_holder)
                     .into(imageView)
         }
     }
@@ -36,13 +35,12 @@ class PicassoLoadImage {
             Picasso.with(context)
                     .load(imagePath)
                     .fit()
-                    .placeholder(R.drawable.grid_image_placeholder)
-                    .error(R.drawable.na_person_icon)
+                    .placeholder(R.drawable.image_place_holder)
+                    .error(R.drawable.image_download_error)
                     .into(imageView)
         } else {
             Picasso.with(context)
-                    .load(R.drawable.grid_image_placeholder)
-                    .fit()
+                    .load(R.drawable.image_place_holder)
                     .into(imageView)
         }
     }
@@ -54,13 +52,12 @@ class PicassoLoadImage {
             Picasso.with(context)
                     .load(imagePath)
                     .fit()
-                    .placeholder(R.drawable.grid_image_placeholder)
-                    .error(R.drawable.grid_image_error)
+                    .placeholder(R.drawable.image_place_holder)
+                    .error(R.drawable.image_download_error)
                     .into(imageView, callback)
         } else {
             Picasso.with(context)
-                    .load(R.drawable.grid_image_placeholder)
-                    .fit()
+                    .load(R.drawable.image_place_holder)
                     .into(imageView)
         }
     }
@@ -73,15 +70,14 @@ class PicassoLoadImage {
                     .load(imagePath)
                     .priority(Picasso.Priority.HIGH) //Picasso will treat this as high priority
                     .fit()
-                    .placeholder(R.drawable.grid_image_placeholder)
-                    .error(R.drawable.grid_image_error)
+                    .placeholder(R.drawable.image_place_holder)
+                    .error(R.drawable.image_download_error)
                     .memoryPolicy(MemoryPolicy.NO_STORE, MemoryPolicy.NO_CACHE)
                     .networkPolicy(NetworkPolicy.NO_STORE, NetworkPolicy.NO_CACHE)
                     .into(imageView)
         } else {
             Picasso.with(context)
-                    .load(R.drawable.grid_image_placeholder)
-                    .fit()
+                    .load(R.drawable.image_place_holder)
                     .into(imageView)
         }
     }
@@ -92,13 +88,12 @@ class PicassoLoadImage {
             Picasso.with(context)
                     .load(imagePath)
                     .fit()
-                    .placeholder(R.drawable.grid_image_placeholder)
-                    .error(R.drawable.grid_image_error)
+                    .placeholder(R.drawable.image_place_holder)
+                    .error(R.drawable.image_download_error)
                     .into(imageView)
         } else {
             Picasso.with(context)
-                    .load(R.drawable.grid_image_placeholder)
-                    .fit()
+                    .load(R.drawable.image_place_holder)
                     .into(imageView)
         }
     }
@@ -110,13 +105,12 @@ class PicassoLoadImage {
             Picasso.with(context)
                     .load(imagePath)
                     .fit()
-                    .placeholder(R.drawable.grid_image_placeholder)
-                    .error(R.drawable.grid_image_error)
+                    .placeholder(R.drawable.image_place_holder)
+                    .error(R.drawable.image_download_error)
                     .into(imageView, callback)
         } else {
             Picasso.with(context)
-                    .load(R.drawable.grid_image_placeholder)
-                    .fit()
+                    .load(R.drawable.image_place_holder)
                     .into(imageView)
         }
     }
@@ -126,12 +120,12 @@ class PicassoLoadImage {
         if (Utility.isReadyToDownload(context) && !Utility.isReducedDataOn(context)) {
             Picasso.with(context)
                     .load(imagePath)
-                    .placeholder(R.drawable.grid_image_placeholder)
-                    .error(R.drawable.grid_image_error)
+                    .placeholder(R.drawable.image_place_holder)
+                    .error(R.drawable.image_download_error)
                     .into(imageView)
         } else {
             Picasso.with(context)
-                    .load(R.drawable.grid_image_placeholder)
+                    .load(R.drawable.image_place_holder)
                     .into(imageView)
         }
     }

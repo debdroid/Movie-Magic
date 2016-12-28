@@ -1,28 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- Material theme color - added for material design -->
-    <color name="primary_light">#CFD8DC</color> <!-- 100 -->
-    <color name="primary">#607D8B</color>       <!-- 500 -->
-    <color name="primary_dark">#455A64</color>  <!-- 700 -->
-    <color name="accent">#FF5252</color>        <!-- 200 -->
-    <color name="text_color">#FFFFFF</color>
-    <color name="primary_text">#212121</color>
-    <color name="secondary_text">#727272</color>
-    <color name="divider_color">#B6B6B6</color>
+    <color name="primary_light">#EEEEEE</color>            <!-- 200 -->
+    <color name="primary_dialog_n_card">#424242</color>    <!-- 800 (dialog & card)-->
+    <color name="primary_background">#303030</color>       <!-- ??? (background)-->
+    <color name="primary">#212121</color>                  <!-- 900 (app bar)-->
+    <color name="primary_dark">#000000</color>             <!-- ??? (status bar)-->
+    <color name="accent">#FF5252</color>                   <!-- 200 -->
+    <color name="primary_text">#FFFFFF</color>
+    <color name="secondary_text">#B3FFFFFF</color>
+    <color name="disable_hint_text">#80FFFFFF</color>
+    <color name="divider_color">#33FFFFFF</color>
 
     <color name="white_color">#FFFFFF</color>
-    <color name="grey_color">#cccccc</color>
     <color name="grey_600_color">#757575</color>
-    <color name="grey_700_color">#646464</color>
-    <color name="grey_800_color">#424242</color>
     <color name="black_color">#000000</color>
     <color name="black_color_opacity_30">#4D000000</color>
-    <color name="primary_opacity_50">#80607D8B</color>
+    <color name="primary_opacity_50">#80212121</color>
     <color name="accent_opacity_60">#99FF5252</color>
 
     <color name="nav_header_gradient_start">@color/primary_light</color>
-    <color name="nav_header_gradient_end">@color/primary_dark</color>
-    <color name="nav_header_gradient_center">@color/primary</color>
+    <color name="nav_header_gradient_end">@color/primary</color>
+    <color name="nav_header_gradient_center">@color/primary_background</color>
     <!--<color name="nav_header_gradient_start">#81C784</color>-->
     <!--<color name="nav_header_gradient_end">#2E7D32</color>-->
     <!--<color name="nav_header_gradient_center">#4CAF50</color>-->

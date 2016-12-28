@@ -16,7 +16,7 @@ import groovy.transform.CompileStatic
 @CompileStatic
 class TestMovieMagicProvider extends AndroidTestCase {
 
-    static final String TEST_UPDATED_MOVIE_CATEGORY = 'upcoming'
+    static final String TEST_UPDATED_MOVIE_CATEGORY = 'ic_drawer_upcoming'
     static final String TEST_UPDATED_MOVIE_ID = 90809
     static final String TEST_UPDATED_COLL_ID = 10987
     static final String TEST_UPDATED_PERSON_ID = 89704
@@ -183,7 +183,7 @@ class TestMovieMagicProvider extends AndroidTestCase {
         final int testMovieId = 43546
         final int testCollectionId = 7890
         final int testPersonId = 2468
-        final String testMovieCategory = 'popular'
+        final String testMovieCategory = 'ic_drawer_now_popular'
         final String testCntryISO = 'US'
 
         //Test the type for movie_basic_info
@@ -327,7 +327,7 @@ class TestMovieMagicProvider extends AndroidTestCase {
         // content://com.moviemagic.dpaul.android.app/movie_collection/7890
         type = mContext.getContentResolver().getType(MovieMagicContract.MovieCollection.buildMovieCollectionUriWithCollectionId(testCollectionId))
         // vnd.android.cursor.item/com.moviemagic.dpaul.android.app/movie_collection
-        assertEquals('Error: movie_collection with collection id should return MovieCollection.CONTENT_ITEM_TYPE',MovieMagicContract.MovieCollection.CONTENT_ITEM_TYPE, type)
+        assertEquals('Error: movie_collection with ic_drawer_user_collection id should return MovieCollection.CONTENT_ITEM_TYPE',MovieMagicContract.MovieCollection.CONTENT_ITEM_TYPE, type)
     }
 
     /*

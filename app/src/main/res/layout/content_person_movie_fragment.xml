@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="@color/primary"
+    android:background="@color/primary_background"
     tools:ignore="Overdraw">
 
     <!-- Person poster section -->
@@ -25,7 +25,7 @@
             android:layout_alignParentTop="true"
             android:elevation="@dimen/cardview_default_elevation"
             android:contentDescription="@string/person_poster_image_content_description"
-            android:src="@drawable/grid_image_placeholder"
+            android:src="@drawable/image_place_holder"
             tools:ignore="UnusedAttribute" />
         <LinearLayout
             android:layout_width="wrap_content"
@@ -42,7 +42,7 @@
                 android:fontFamily="sans-serif-condensed"
                 android:text="@string/person_name"
                 android:textAppearance="@style/TextAppearance.AppCompat.Title"
-                android:textColor="@color/white_color" />
+                android:textColor="@color/primary_text" />
             <TextView
                 android:id="@+id/person_name"
                 android:layout_width="match_parent"
@@ -51,7 +51,7 @@
                 android:paddingEnd="@dimen/m_design_screen_edge_left_right_margin"
                 android:fontFamily="sans-serif-condensed"
                 android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-                android:textColor="@color/grey_color"
+                android:textColor="@color/secondary_text"
                 android:textIsSelectable="true" />
             <View
                 android:layout_width="match_parent"
@@ -67,7 +67,7 @@
                 android:fontFamily="sans-serif-condensed"
                 android:text="@string/person_dob"
                 android:textAppearance="@style/TextAppearance.AppCompat.Title"
-                android:textColor="@color/white_color" />
+                android:textColor="@color/primary_text" />
             <TextView
                 android:id="@+id/person_dob"
                 android:layout_width="match_parent"
@@ -76,7 +76,7 @@
                 android:paddingEnd="@dimen/m_design_screen_edge_left_right_margin"
                 android:fontFamily="sans-serif-condensed"
                 android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-                android:textColor="@color/grey_color"
+                android:textColor="@color/secondary_text"
                 android:textIsSelectable="true" />
             <View
                 android:layout_width="match_parent"
@@ -92,7 +92,7 @@
                 android:fontFamily="sans-serif-condensed"
                 android:text="@string/person_place_of_birth"
                 android:textAppearance="@style/TextAppearance.AppCompat.Title"
-                android:textColor="@color/white_color" />
+                android:textColor="@color/primary_text" />
             <TextView
                 android:id="@+id/person_place_of_birth"
                 android:layout_width="match_parent"
@@ -101,7 +101,7 @@
                 android:paddingEnd="@dimen/m_design_screen_edge_left_right_margin"
                 android:fontFamily="sans-serif-condensed"
                 android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-                android:textColor="@color/grey_color"
+                android:textColor="@color/secondary_text"
                 android:textIsSelectable="true" />
             <View
                 android:layout_width="match_parent"
@@ -117,7 +117,7 @@
                 android:fontFamily="sans-serif-condensed"
                 android:text="@string/person_also_known_as"
                 android:textAppearance="@style/TextAppearance.AppCompat.Title"
-                android:textColor="@color/white_color" />
+                android:textColor="@color/primary_text" />
             <TextView
                 android:id="@+id/person_also_known_as"
                 android:layout_width="match_parent"
@@ -126,7 +126,7 @@
                 android:paddingEnd="@dimen/m_design_screen_edge_left_right_margin"
                 android:fontFamily="sans-serif-condensed"
                 android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-                android:textColor="@color/grey_color"
+                android:textColor="@color/secondary_text"
                 android:textIsSelectable="true" />
             <View
                 android:id="@+id/person_also_known_as_devider"
@@ -143,7 +143,7 @@
                 android:fontFamily="sans-serif-condensed"
                 android:text="@string/person_death_day"
                 android:textAppearance="@style/TextAppearance.AppCompat.Title"
-                android:textColor="@color/white_color" />
+                android:textColor="@color/primary_text" />
             <TextView
                 android:id="@+id/person_death_day"
                 android:layout_width="match_parent"
@@ -152,7 +152,7 @@
                 android:paddingEnd="@dimen/m_design_screen_edge_left_right_margin"
                 android:fontFamily="sans-serif-condensed"
                 android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-                android:textColor="@color/grey_color"
+                android:textColor="@color/secondary_text"
                 android:textIsSelectable="true" />
             <View
                 android:id="@+id/person_death_day_devider"
@@ -169,7 +169,7 @@
                 android:fontFamily="sans-serif-condensed"
                 android:text="@string/person_popularity"
                 android:textAppearance="@style/TextAppearance.AppCompat.Title"
-                android:textColor="@color/white_color" />
+                android:textColor="@color/primary_text" />
             <TextView
                 android:id="@+id/person_popularity"
                 android:layout_width="match_parent"
@@ -178,7 +178,7 @@
                 android:paddingEnd="@dimen/m_design_screen_edge_left_right_margin"
                 android:fontFamily="sans-serif-condensed"
                 android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-                android:textColor="@color/grey_color"
+                android:textColor="@color/secondary_text"
                 android:textIsSelectable="true" />
         </LinearLayout>
     </RelativeLayout>
@@ -209,7 +209,7 @@
             android:gravity="start"
             android:text="@string/person_biography"
             android:textAppearance="@style/TextAppearance.AppCompat.Title"
-            android:textColor="@color/white_color" />
+            android:textColor="@color/primary_text" />
 
         <TextView
             android:id="@+id/person_biography"
@@ -219,7 +219,7 @@
             android:ellipsize="end"
             android:maxLines="@string/person_biography_collapse_line_item_count"
             android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-            android:textColor="@color/grey_color"
+            android:textColor="@color/secondary_text"
             android:textIsSelectable="true" />
         <ImageButton
             android:id="@+id/person_biography_show_button"
@@ -230,7 +230,7 @@
             android:layout_alignParentEnd="true"
             android:backgroundTint="@color/divider_color"
             android:contentDescription="@string/person_biography_show_button_content_description"
-            android:background="@drawable/ic_keyboard_arrow_down_white_24dp"
+            android:background="@drawable/ic_keyboard_arrow_down"
             tools:ignore="UnusedAttribute" />
         <ImageButton
             android:id="@+id/person_biography_hide_button"
@@ -242,7 +242,7 @@
             android:layout_alignParentEnd="true"
             android:visibility="invisible"
             android:contentDescription="@string/person_biography_hide_button_content_description"
-            android:background="@drawable/ic_keyboard_arrow_up_white_24dp"
+            android:background="@drawable/ic_keyboard_arrow_up"
             tools:ignore="UnusedAttribute" />
     </RelativeLayout>
 
@@ -274,7 +274,7 @@
             android:paddingBottom="@dimen/m_design_space_between_content_area"
             android:text="@string/person_image_grid"
             android:textAppearance="@style/TextAppearance.AppCompat.Title"
-            android:textColor="@color/white_color" />
+            android:textColor="@color/primary_text" />
         <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
@@ -292,7 +292,7 @@
                 android:layout_height="match_parent"
                 android:gravity="start"
                 android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-                android:textColor="@color/grey_color"
+                android:textColor="@color/secondary_text"
                 android:text="@string/movie_data_not_available"/>
         </FrameLayout>
     </LinearLayout>
@@ -324,7 +324,7 @@
             android:paddingBottom="@dimen/m_design_space_between_content_area"
             android:text="@string/person_cast_grid"
             android:textAppearance="@style/TextAppearance.AppCompat.Title"
-            android:textColor="@color/white_color" />
+            android:textColor="@color/primary_text" />
         <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
@@ -342,7 +342,7 @@
                 android:layout_height="match_parent"
                 android:gravity="start"
                 android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-                android:textColor="@color/grey_color"
+                android:textColor="@color/secondary_text"
                 android:text="@string/movie_data_not_available"/>
         </FrameLayout>
     </LinearLayout>
@@ -373,7 +373,7 @@
             android:paddingBottom="@dimen/m_design_space_between_content_area"
             android:text="@string/person_crew_grid"
             android:textAppearance="@style/TextAppearance.AppCompat.Title"
-            android:textColor="@color/white_color" />
+            android:textColor="@color/primary_text" />
         <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
@@ -391,7 +391,7 @@
                 android:layout_height="match_parent"
                 android:gravity="start"
                 android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-                android:textColor="@color/grey_color"
+                android:textColor="@color/secondary_text"
                 android:text="@string/movie_data_not_available"/>
         </FrameLayout>
     </LinearLayout>
@@ -401,7 +401,7 @@
         android:layout_height="1dp"
         android:background="@color/divider_color" />
 
-    <!-- Person external web links (home page & imdb link) section -->
+    <!-- Person external web links (ic_drawer_home page & imdb link) section -->
     <LinearLayout
         android:id="@+id/person_web_links_layout"
         android:layout_width="match_parent"
@@ -422,7 +422,7 @@
             android:gravity="start"
             android:text="@string/person_web_links_header"
             android:textAppearance="@style/TextAppearance.AppCompat.Title"
-            android:textColor="@color/white_color" />
+            android:textColor="@color/primary_text" />
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -437,9 +437,9 @@
                 android:fontFamily="sans-serif-condensed"
                 android:text="@string/person_web_links_home_page"
                 android:gravity="center"
-                android:background="@color/primary_dark"
+                android:background="@color/accent"
                 android:textAppearance="@style/TextAppearance.AppCompat.Title"
-                android:textColor="@color/white_color"
+                android:textColor="@color/primary_text"
                 tools:ignore="ButtonStyle" />
 
             <Button
@@ -451,9 +451,9 @@
                 android:fontFamily="sans-serif-condensed"
                 android:text="@string/detail_web_links_imdb_link"
                 android:gravity="center"
-                android:background="@color/primary_dark"
+                android:background="@color/accent"
                 android:textAppearance="@style/TextAppearance.AppCompat.Title"
-                android:textColor="@color/white_color"
+                android:textColor="@color/primary_text"
                 tools:ignore="ButtonStyle" />
         </LinearLayout>
     </LinearLayout>

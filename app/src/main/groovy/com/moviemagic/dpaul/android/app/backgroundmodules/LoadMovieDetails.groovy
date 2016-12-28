@@ -25,6 +25,7 @@ class LoadMovieDetails extends AsyncTask<ArrayList<Integer>, Void, Void> {
         mContentResolver = mContext.getContentResolver()
     }
 
+    @SuppressWarnings("GroovyListGetCanBeKeyedAccess")
     @Override
     protected Void doInBackground(ArrayList<Integer>... params) {
         final ArrayList<Integer> movieIdList = new ArrayList<Integer>()

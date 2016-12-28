@@ -15,7 +15,7 @@
             android:adjustViewBounds="true"
             android:scaleType="centerCrop"
             android:contentDescription="@string/image_viewer_image_content_description"
-            android:src="@mipmap/ic_launcher" />
+            android:src="@drawable/image_place_holder" />
     </LinearLayout>
 
     <TextView
@@ -27,6 +27,6 @@
         android:fontFamily="sans-serif"
         android:gravity="center"
         android:textAppearance="@style/TextAppearance.AppCompat.Headline"
-        android:textColor="@color/white_color"
+        android:textColor="@color/primary_text"
         android:textIsSelectable="true" />
 </FrameLayout>

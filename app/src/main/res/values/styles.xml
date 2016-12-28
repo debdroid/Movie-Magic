@@ -1,12 +1,10 @@
 <resources>
-
     <!-- Base theme. -->
     <style name="BaseTheme" parent="Theme.AppCompat.DayNight.NoActionBar">
         <!-- Customize the theme here. -->
         <item name="colorPrimary">@color/primary</item>
         <item name="colorPrimaryDark">@color/primary_dark</item>
         <item name="colorAccent">@color/accent</item>
-        <!--<item name="toolbarStyle">@style/Toolbar</item>-->
     </style>
 
     <style name="AppTheme" parent="BaseTheme">
@@ -19,41 +17,9 @@
         <item name="preferenceTheme">@style/PreferenceThemeOverlay</item>
     </style>
 
-    <!-- Toolbar theme -->
-    <!--<style name="Toolbar" parent="Widget.AppCompat.Toolbar">-->
-        <!--<item name="popupTheme">@style/Theme.AppCompat.Light</item>-->
-    <!--</style>-->
-
-    <!--<style name="AppTheme.NoActionBar">-->
-        <!--<item name="windowActionBar">false</item>-->
-        <!--<item name="windowNoTitle">true</item>-->
-    <!--</style>-->
-
     <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
 
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
-
-    <!-- Ratingbar star color theme -->
-    <!--<style name="RatingBarTheme" parent="Theme.AppCompat">-->
-        <!--<item name="colorControlNormal">@color/grey_600_color</item>-->
-        <!--<item name="colorControlActivated">@color/accent</item>-->
-    <!--</style>-->
-
-    <!--&lt;!&ndash; Main activity toolbar theme &ndash;&gt;-->
-    <!--<style name="Toolbar" parent="Widget.AppCompat.Toolbar">-->
-        <!--<item name="android:background">?attr/colorPrimary</item>-->
-        <!--<item name="popupTheme">@style/Theme.AppCompat.Light</item>-->
-    <!--</style>-->
-
-    <!--<style name="FabStyle">-->
-        <!--<item name="android:layout_width">wrap_content</item>-->
-        <!--<item name="android:layout_height">wrap_content</item>-->
-        <!--<item name="android:layout_margin">@dimen/spacing_large</item>-->
-        <!--<item name="borderWidth">0dp</item>-->
-        <!--<item name="elevation">6dp</item>-->
-        <!--<item name="pressedTranslationZ">12dp</item>-->
-        <!--<item name="rippleColor">@android:color/white</item>-->
-    <!--</style>-->
 
     <!-- Styles for each activity -->
     <style name="AppTheme.MovieMain" parent="@style/AppTheme"/>
@@ -61,11 +27,8 @@
     <style name="AppTheme.MovieDetail" parent="@style/AppTheme"/>
     <style name="AppTheme.MovieCollection" parent="@style/AppTheme"/>
     <style name="AppTheme.MoviePerson" parent="@style/AppTheme"/>
-    <!--<style name="AppTheme.Login" parent="Theme.AppCompat.DayNight.NoActionBar"/>-->
     <style name="AppTheme.Login" parent="@style/AppTheme"/>
-    <!--<style name="AppTheme.ImageViewer" parent="Theme.AppCompat.DayNight.NoActionBar"/>-->
     <style name="AppTheme.ImageViewer" parent="@style/ImageViewerTheme"/>
-    <!--<style name="AppTheme.ImageViewer" parent="@style/AppTheme"/>-->
     <style name="AppTheme.Settings" parent="@style/SettingsTheme"/>
     <style name="AppTheme.Search" parent="@style/AppTheme"/>
     <style name="AppTheme.Donate" parent="@style/AppTheme"/>

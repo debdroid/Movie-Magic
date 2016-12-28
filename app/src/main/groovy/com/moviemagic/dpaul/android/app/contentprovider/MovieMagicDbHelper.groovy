@@ -80,7 +80,7 @@ class MovieMagicDbHelper extends SQLiteOpenHelper {
                 $MovieMagicContract.MovieBasicInfo.COLUMN_SIMILAR_MOVIE_LINK_ID) ON CONFLICT REPLACE)
                 """
                 /** Using COLUMN_RECOMMENDATION_MOVIE_LINK_ID caused duplicate entries for recommended movies
-                 * on the home page, so removed it from the UNIQUE replace logic. Since recommended movies
+                 * on the ic_drawer_home page, so removed it from the UNIQUE replace logic. Since recommended movies
                  * are not used in detail movie page, so there is no harm if one gets replaced by other**/
 
         //Create the SQL to create movie_cast table

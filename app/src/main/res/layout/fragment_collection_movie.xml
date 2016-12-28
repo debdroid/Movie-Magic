@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/collection_coordinator_layout"
-    android:background="@color/primary"
+    android:background="@color/primary_background"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
@@ -31,8 +31,8 @@
                     android:scaleType="centerCrop"
                     android:fitsSystemWindows="true"
                     android:contentDescription="@string/collection_backdrop_image_content_description"
-                    android:src="@drawable/grid_image_placeholder" />
-            <!-- setting itsSystemWindows="true" for toolbar moves home up and setting buttons to status bar -->
+                    android:src="@drawable/image_place_holder" />
+            <!-- setting itsSystemWindows="true" for toolbar moves ic_drawer_home up and setting buttons to status bar -->
             <android.support.v7.widget.Toolbar
                 android:id="@+id/collection_toolbar"
                 android:layout_width="match_parent"
@@ -48,7 +48,7 @@
         android:id="@+id/collection_nested_scroll"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/primary"
+        android:background="@color/primary_background"
         android:fitsSystemWindows="true"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
         <include layout="@layout/content_collection_movie_fragment" />

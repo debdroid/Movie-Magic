@@ -14,7 +14,7 @@
         android:elevation="0dp"
         app:theme="@style/AppTheme.AppBarOverlay"
         tools:ignore="UnusedAttribute">
-        <!-- setting itsSystemWindows="true" for toolbar moves home up and setting buttons to status bar -->
+        <!-- setting itsSystemWindows="true" for toolbar moves ic_drawer_home up and setting buttons to status bar -->
         <android.support.v7.widget.Toolbar
                 android:id="@+id/person_toolbar"
                 android:layout_width="match_parent"

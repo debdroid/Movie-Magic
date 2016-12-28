@@ -372,8 +372,8 @@ class CollectionMovieFragment extends Fragment implements LoaderManager.LoaderCa
                                     LogDisplay.callLog(LOG_TAG, 'onGenerated:not able to pick color, so fallback', LogDisplay.COLLECTION_MOVIE_FRAGMENT_LOG_FLAG)
                                     mPalletePrimaryColor = ContextCompat.getColor(getActivity(), R.color.primary)
                                     mPalletePrimaryDarkColor = ContextCompat.getColor(getActivity(), R.color.primary_dark)
-                                    mPalleteTitleColor = ContextCompat.getColor(getActivity(), R.color.white_color)
-                                    mPalleteBodyTextColor = ContextCompat.getColor(getActivity(), R.color.grey_color)
+                                    mPalleteTitleColor = ContextCompat.getColor(getActivity(), R.color.primary_text)
+                                    mPalleteBodyTextColor = ContextCompat.getColor(getActivity(), R.color.secondary_text)
                                     //This is needed as we are not going pick accent colour if falling back
                                     mPalleteAccentColor = ContextCompat.getColor(getActivity(), R.color.accent)
                                 }

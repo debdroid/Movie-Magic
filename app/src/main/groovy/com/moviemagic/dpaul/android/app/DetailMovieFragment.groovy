@@ -808,6 +808,18 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
         }
 
         mLocale = context.getResources().getConfiguration().locale.getCountry()
+//        mLocale = 'IN' // Testing line
+        // Currently program handles only 'GK' (i.e. UK and 'US' locales)
+        // If not any of the above then fall back to US locale
+        switch (mLocale) {
+            case 'GB':
+            case 'US':
+            // do nothing
+                break
+            default:
+                mLocale = 'US'
+        }
+
         LogDisplay.callLog(LOG_TAG, "Locale: $mLocale", LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
         if (mMovieId && mMovieCategory) {
             mMovieIdArg = [Integer.toString(mMovieId)] as String[]
@@ -1121,8 +1133,8 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
                                     LogDisplay.callLog(LOG_TAG, 'onGenerated:not able to pick color, so fallback', LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
                                     mPalletePrimaryColor = ContextCompat.getColor(getActivity(), R.color.primary)
                                     mPalletePrimaryDarkColor = ContextCompat.getColor(getActivity(), R.color.primary_dark)
-                                    mPalleteTitleColor = ContextCompat.getColor(getActivity(), R.color.white_color)
-                                    mPalleteBodyTextColor = ContextCompat.getColor(getActivity(), R.color.grey_color)
+                                    mPalleteTitleColor = ContextCompat.getColor(getActivity(), R.color.primary_text)
+                                    mPalleteBodyTextColor = ContextCompat.getColor(getActivity(), R.color.secondary_text)
                                     //This is needed as we are not going to pick up accent colour if falling back
                                     mPalleteAccentColor = ContextCompat.getColor(getActivity(), R.color.accent)
                                 }
@@ -1402,11 +1414,11 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
                 mMpaaRatingImageView.setImageResource(mpaaIconResId)
             } else {
                 LogDisplay.callLog(LOG_TAG, 'Utility.getIconResourceForMpaaRating returned -1', LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
-                mMpaaRatingImageView.setImageResource(R.drawable.not_available)
+                mMpaaRatingImageView.setImageResource(R.drawable.mpaa_na)
             }
         } else {
             LogDisplay.callLog(LOG_TAG, 'Not able to retrieve mpaa image, set default image', LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
-            mMpaaRatingImageView.setImageResource(R.drawable.not_available)
+            mMpaaRatingImageView.setImageResource(R.drawable.mpaa_na)
         }
     }
 
@@ -1644,10 +1656,10 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
         mTmdbImageButtonRated.setBackgroundColor(mPalletePrimaryDarkColor)
 
         //Set homepage & Imdb button color
-        mHomePageButton.setBackgroundColor(mPalletePrimaryDarkColor)
-        mImdbLinkButton.setBackgroundColor(mPalletePrimaryDarkColor)
-        mHomePageButton.setTextColor(mPalleteBodyTextColor)
-        mImdbLinkButton.setTextColor(mPalleteBodyTextColor)
+//        mHomePageButton.setBackgroundColor(mPalletePrimaryDarkColor)
+//        mImdbLinkButton.setBackgroundColor(mPalletePrimaryDarkColor)
+//        mHomePageButton.setTextColor(mPalleteBodyTextColor)
+//        mImdbLinkButton.setTextColor(mPalleteBodyTextColor)
 
         //Set Ratingbar color.
         final LayerDrawable tmdbRatingBarlayerDrawable = (LayerDrawable) mTmdbRatingBar.getProgressDrawable() as LayerDrawable

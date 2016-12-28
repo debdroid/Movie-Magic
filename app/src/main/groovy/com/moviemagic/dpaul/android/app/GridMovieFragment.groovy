@@ -138,6 +138,8 @@ class GridMovieFragment extends Fragment implements LoaderManager.LoaderCallback
         //Inflate the view before referring any view using id
         final View mRootView = inflater.inflate(R.layout.fragment_grid_movie,container,false)
         mRecyclerView = mRootView.findViewById(R.id.auto_grid_recycler_view) as RecyclerView
+        //Set this to false for smooth scrolling of recyclerview
+        mRecyclerView.setNestedScrollingEnabled(false)
         //Create a new interface member variable for MovieGridRecyclerAdapterOnClickHandler and the same is passed as
         //parameter to Adapter, this onClick method is called whenever onClick is called from MovieGridRecyclerAdapter
         mGridRecyclerAdapter = new MovieGridRecyclerAdapter(getActivity(),
@@ -790,7 +792,7 @@ class GridMovieFragment extends Fragment implements LoaderManager.LoaderCallback
     /**
      * This method changes the color of the Sort or Filter menu icon if it visible based on the boolean value (true -> set color or flase -> reset color)
      * @param drawable Drawable of either Sort or Filter icon
-     * @param setColor Boolean falg (True to set color or False to reset color)
+     * @param setColor Boolean flag (True to set color or False to reset color)
      */
     protected void setIconColor(final Drawable drawable, final boolean setColor) {
         LogDisplay.callLog(LOG_TAG, 'setIconColor is called', LogDisplay.MOVIE_MAGIC_MAIN_LOG_FLAG)
