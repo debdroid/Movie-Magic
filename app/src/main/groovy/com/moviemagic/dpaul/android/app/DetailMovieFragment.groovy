@@ -126,6 +126,7 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
     private boolean firstTimeLocalRatingUpdateWithTmdbRating = true
     private ShareActionProvider mShareActionProvider
     private boolean mMoviDataLoaded = false
+    private boolean mImageButtonClickForcedOnLoadFinished = false
 
     private static final int MOVIE_DETAIL_FRAGMENT_BASIC_DATA_LOADER_ID = 0
     private static final int MOVIE_DETAIL_FRAGMENT_SIMILAR_MOVIE_LOADER_ID = 1
@@ -467,6 +468,7 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
             @Override
             void onClick(final View v) {
                 LogDisplay.callLog(LOG_TAG, 'ImageButton Watched Button is clicked', LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
+                mImageButtonClickForcedOnLoadFinished = true
                 if (mMovieTitle && mMovieId) {
                     final UpdateUserListChoiceAndRating updateUserList = new UpdateUserListChoiceAndRating(getActivity(), mUserListDrawableLayout,
                             mMovieId, mMovieTitle, true)
@@ -478,12 +480,14 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
                         updateUserList.execute(updateUserListArgs)
                         mImageButtonWatched.setAlpha(GlobalStaticVariables.MOVIE_MAGIC_ALPHA_OPAQUE_40_PERCENT)
                         mImageButtonWatched.setColorFilter(null)
+                        mUserListWatchedFlag = false
                     } else { //If 40% opaque then not selected, so add it
                         //Pass the third parameter as "0.0" (i.e. user rating param)
                         updateUserListArgs = [GlobalStaticVariables.USER_LIST_WATCHED, GlobalStaticVariables.USER_LIST_ADD_FLAG, 0.0]
                         updateUserList.execute(updateUserListArgs)
                         mImageButtonWatched.setAlpha(GlobalStaticVariables.MOVIE_MAGIC_ALPHA_FULL_OPAQUE)
                         mImageButtonWatched.setColorFilter(mPalleteAccentColor)
+                        mUserListWatchedFlag = true
                     }
                 } else {
                     Snackbar.make(mRootView.findViewById(R.id.movie_detail_user_list_drawable_layout),
@@ -496,6 +500,7 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
             @Override
             void onClick(final View v) {
                 LogDisplay.callLog(LOG_TAG, 'ImageButton WishList Button is clicked', LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
+                mImageButtonClickForcedOnLoadFinished = true
                 if (mMovieTitle && mMovieId) {
                     final UpdateUserListChoiceAndRating updateUserList = new UpdateUserListChoiceAndRating(getActivity(), mUserListDrawableLayout,
                             mMovieId, mMovieTitle, true)
@@ -507,12 +512,14 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
                         updateUserList.execute(updateUserListArgs)
                         mImageButtonWishList.setAlpha(GlobalStaticVariables.MOVIE_MAGIC_ALPHA_OPAQUE_40_PERCENT)
                         mImageButtonWishList.setColorFilter(null)
+                        mUserListWishListdFlag = false
                     } else { //If 40% opaque then not selected, so add it
                         //Pass the third parameter as "0.0" (i.e. user rating param)
                         updateUserListArgs = [GlobalStaticVariables.USER_LIST_WISH_LIST, GlobalStaticVariables.USER_LIST_ADD_FLAG, 0.0]
                         updateUserList.execute(updateUserListArgs)
                         mImageButtonWishList.setAlpha(GlobalStaticVariables.MOVIE_MAGIC_ALPHA_FULL_OPAQUE)
                         mImageButtonWishList.setColorFilter(mPalleteAccentColor)
+                        mUserListWishListdFlag = true
                     }
                 } else {
                     Snackbar.make(mRootView.findViewById(R.id.movie_detail_user_list_drawable_layout),
@@ -525,6 +532,7 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
             @Override
             void onClick(final View v) {
                 LogDisplay.callLog(LOG_TAG, 'ImageButton Favourite Button is clicked', LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
+                mImageButtonClickForcedOnLoadFinished = true
                 if (mMovieTitle && mMovieId) {
                     final UpdateUserListChoiceAndRating updateUserList = new UpdateUserListChoiceAndRating(getActivity(), mUserListDrawableLayout,
                             mMovieId, mMovieTitle, true)
@@ -536,12 +544,14 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
                         updateUserList.execute(updateUserListArgs)
                         mImageButtonFavourite.setAlpha(GlobalStaticVariables.MOVIE_MAGIC_ALPHA_OPAQUE_40_PERCENT)
                         mImageButtonFavourite.setColorFilter(null)
+                        mUserListFavouriteFlag = false
                     } else { //If 40% opaque then not selected, so add it
                         //Pass the third parameter as "0.0" (i.e. user rating param)
                         updateUserListArgs = [GlobalStaticVariables.USER_LIST_FAVOURITE, GlobalStaticVariables.USER_LIST_ADD_FLAG, 0.0]
                         updateUserList.execute(updateUserListArgs)
                         mImageButtonFavourite.setAlpha(GlobalStaticVariables.MOVIE_MAGIC_ALPHA_FULL_OPAQUE)
                         mImageButtonFavourite.setColorFilter(mPalleteAccentColor)
+                        mUserListFavouriteFlag = true
                     }
                 } else {
                     Snackbar.make(mRootView.findViewById(R.id.movie_detail_user_list_drawable_layout),
@@ -553,7 +563,8 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
         mImageButtonCollection.setOnClickListener(new View.OnClickListener() {
             @Override
             void onClick(final View v) {
-                LogDisplay.callLog(LOG_TAG, 'ImageButton Favourite Button is clicked', LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
+                LogDisplay.callLog(LOG_TAG, 'ImageButton Collection Button is clicked', LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
+                mImageButtonClickForcedOnLoadFinished = true
                 if (mMovieTitle && mMovieId) {
                     final UpdateUserListChoiceAndRating updateUserList = new UpdateUserListChoiceAndRating(getActivity(), mUserListDrawableLayout,
                             mMovieId, mMovieTitle, true)
@@ -565,12 +576,14 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
                         updateUserList.execute(updateUserListArgs)
                         mImageButtonCollection.setAlpha(GlobalStaticVariables.MOVIE_MAGIC_ALPHA_OPAQUE_40_PERCENT)
                         mImageButtonCollection.setColorFilter(null)
+                        mUserListCollectionFlag = false
                     } else { //If 40% opaque then not selected, so add it
                         //Pass the third parameter as "0.0" (i.e. user rating param)
                         updateUserListArgs = [GlobalStaticVariables.USER_LIST_COLLECTION, GlobalStaticVariables.USER_LIST_ADD_FLAG, 0.0]
                         updateUserList.execute(updateUserListArgs)
                         mImageButtonCollection.setAlpha(GlobalStaticVariables.MOVIE_MAGIC_ALPHA_FULL_OPAQUE)
                         mImageButtonCollection.setColorFilter(mPalleteAccentColor)
+                        mUserListCollectionFlag = true
                     }
                 } else {
                     Snackbar.make(mRootView.findViewById(R.id.movie_detail_user_list_drawable_layout),
@@ -586,15 +599,18 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
             @Override
             void onClick(final View v) {
                 LogDisplay.callLog(LOG_TAG, 'Tmdb user watchlist button is clicked', LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
+                mImageButtonClickForcedOnLoadFinished = true
                 if(Utility.isReadyToDownload(getActivity())) {
-                    //If full opaque then already selected, so show user that they cannot remove it using the app
+                    //If full opaque then already selected, so remove it
                     if (mTmdbImageButtonWatchlist.getAlpha() == GlobalStaticVariables.MOVIE_MAGIC_ALPHA_FULL_OPAQUE) {
                         new UploadTmdbRequest(getActivity(), GlobalStaticVariables.MOVIE_CATEGORY_TMDB_USER_WATCHLIST, 0,
                                 false, mMovieCategory, mUserTmdbListDrawableLayout, mPalleteAccentColor).execute([mMovieId] as Integer[])
+                        mUserTmdbListWatchlistFlag = false
                     } else { //If 40% opaque then not selected, so add the movie to TMDb list
                         LogDisplay.callLog(LOG_TAG, 'User wants to add to TMDb Watchlist, go ahead and do that', LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
                         new UploadTmdbRequest(getActivity(), GlobalStaticVariables.MOVIE_CATEGORY_TMDB_USER_WATCHLIST, 0,
                                 true, mMovieCategory, mUserTmdbListDrawableLayout, mPalleteAccentColor).execute([mMovieId] as Integer[])
+                        mUserTmdbListWatchlistFlag = true
                     }
                 } else {
                     Snackbar.make(mUserTmdbListDrawableLayout, getString(R.string.no_internet_cannot_perform_operation_message), Snackbar.LENGTH_LONG).show()
@@ -606,15 +622,18 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
             @Override
             void onClick(final View v) {
                 LogDisplay.callLog(LOG_TAG, 'Tmdb user favourite button is clicked', LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
+                mImageButtonClickForcedOnLoadFinished = true
                 if(Utility.isReadyToDownload(getActivity())) {
-                    //If full opaque then already selected, so show user that they cannot remove it using the app
+                    //If full opaque then already selected, so remove it
                     if (mTmdbImageButtonFavourite.getAlpha() == GlobalStaticVariables.MOVIE_MAGIC_ALPHA_FULL_OPAQUE) {
                         new UploadTmdbRequest(getActivity(), GlobalStaticVariables.MOVIE_CATEGORY_TMDB_USER_FAVOURITE, 0,
                                 false, mMovieCategory, mUserTmdbListDrawableLayout, mPalleteAccentColor).execute([mMovieId] as Integer[])
+                        mUserTmdbListFavouriteFlag = false
                     } else { //If 40% opaque then not selected, so add the movie to TMDb list
                         LogDisplay.callLog(LOG_TAG, 'User wants to add to TMDb Favourite, go ahead and do that', LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
                         new UploadTmdbRequest(getActivity(), GlobalStaticVariables.MOVIE_CATEGORY_TMDB_USER_FAVOURITE, 0,
                                 true, mMovieCategory, mUserTmdbListDrawableLayout, mPalleteAccentColor).execute([mMovieId] as Integer[])
+                        mUserTmdbListFavouriteFlag = true
                     }
                 } else {
                     Snackbar.make(mUserTmdbListDrawableLayout, getString(R.string.no_internet_cannot_perform_operation_message), Snackbar.LENGTH_LONG).show()
@@ -627,6 +646,7 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
             @Override
             void onClick(final View v) {
                 LogDisplay.callLog(LOG_TAG, 'Tmdb user rated button is clicked', LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
+                mImageButtonClickForcedOnLoadFinished = true
                 if(Utility.isReadyToDownload(getActivity())) {
                     //If full opaque then already selected, so show user that they need to change the rating value
                     if (mTmdbImageButtonRated.getAlpha() == GlobalStaticVariables.MOVIE_MAGIC_ALPHA_FULL_OPAQUE) {
@@ -639,8 +659,10 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
                             // Rating is driven by value, so fourth parameter does not matter
                             new UploadTmdbRequest(getActivity(), GlobalStaticVariables.MOVIE_CATEGORY_TMDB_USER_RATED, userRatingVal,
                                     true, mMovieCategory, mUserTmdbListDrawableLayout, mPalleteAccentColor).execute([mMovieId] as Integer[])
+                            mUserTmdbListRatedFlag = true
                         } else {
                             Snackbar.make(mUserTmdbListDrawableLayout, getString(R.string.tmdb_rating_user_prompt_empty_msg), Snackbar.LENGTH_LONG).show()
+                            mUserTmdbListRatedFlag = false
                         }
                     }
                 } else {
@@ -1032,7 +1054,7 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
                 handleMovieReviewOnLoadFinished(data)
                 break
             case MOVIE_DETAIL_FRAGMENT_MOVIE_USER_LIST_FLAG_LOADER_ID:
-                handleMovieUSerListFlagOnLoadFinished(data)
+                handleMovieUserListFlagOnLoadFinished(data)
                 break
             case MOVIE_DETAIL_FRAGMENT_BASIC_TMDB_DATA_LOADER_ID:
                 handleTmdbMovieOnLoadFinished(data)
@@ -1058,92 +1080,96 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
      */
     void handleMovieBasicOnLoadFinished(final Cursor data) {
         LogDisplay.callLog(LOG_TAG, "handleMovieBasicOnLoadFinished.Cursor rec count -> ${data.getCount()}", LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
-        if (data.moveToFirst()) {
-            // If more than one record found then it's because of orphaned record (check loader section for details)
-            // So if the first record of the cursor is orphaned record then move to next and use that for displaying data
-            if(data.getCount() > 1 && data.getString(COL_MOVIE_BASIC_MOVIE_CATEGORY) != mMovieCategory) {
-                data.moveToNext()
-            }
-            _ID_movie_basic_info = data.getInt(COL_MOVIE_BASIC_ID)
-            LogDisplay.callLog(LOG_TAG, "handleMovieBasicOnLoadFinished.Movie row id -> $_ID_movie_basic_info", LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
-            LogDisplay.callLog(LOG_TAG, "handleMovieBasicOnLoadFinished.Movie Category -> ${data.getString(COL_MOVIE_BASIC_MOVIE_CATEGORY)}", LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
-            mOriginalBackdropPath = data.getString(COL_MOVIE_BASIC_BACKDROP_PATH)
-            mMovieTitle = data.getString(COL_MOVIE_BASIC_TITLE)
-            mMovieTitleTextView.setText(mMovieTitle)
-            if (data.getString(COL_MOVIE_BASIC_GENRE)) {
-                mGenreTextView.setText(data.getString(COL_MOVIE_BASIC_GENRE))
-            } else {
-                mGenreTextView.setText(getActivity().getString(R.string.movie_data_not_available))
-            }
-            if (data.getInt(COL_MOVIE_BASIC_RUNTIME) > 0) {
-                mRunTimeTextView.setText(Utility.formatRunTime(getActivity(), data.getInt(COL_MOVIE_BASIC_RUNTIME)))
-            } else {
-                mRunTimeTextView.setText(getActivity().getString(R.string.movie_data_not_available))
-            }
+        // The following IF condition is to ensure page's position does not change due to reloading data (causes by
+        // notifydataset change which gets triggered when user list movie or user tmdb list movie gets added/deleted in
+        // movie_basic_info table)
+        if(!mImageButtonClickForcedOnLoadFinished) {
+            if (data.moveToFirst()) {
+                // If more than one record found then it's because of orphaned record (check loader section for details)
+                // So if the first record of the cursor is orphaned record then move to next and use that for displaying data
+                if (data.getCount() > 1 && data.getString(COL_MOVIE_BASIC_MOVIE_CATEGORY) != mMovieCategory) {
+                    data.moveToNext()
+                }
+                _ID_movie_basic_info = data.getInt(COL_MOVIE_BASIC_ID)
+                LogDisplay.callLog(LOG_TAG, "handleMovieBasicOnLoadFinished.Movie row id -> $_ID_movie_basic_info", LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
+                LogDisplay.callLog(LOG_TAG, "handleMovieBasicOnLoadFinished.Movie Category -> ${data.getString(COL_MOVIE_BASIC_MOVIE_CATEGORY)}", LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
+                mOriginalBackdropPath = data.getString(COL_MOVIE_BASIC_BACKDROP_PATH)
+                mMovieTitle = data.getString(COL_MOVIE_BASIC_TITLE)
+                mMovieTitleTextView.setText(mMovieTitle)
+                if (data.getString(COL_MOVIE_BASIC_GENRE)) {
+                    mGenreTextView.setText(data.getString(COL_MOVIE_BASIC_GENRE))
+                } else {
+                    mGenreTextView.setText(getActivity().getString(R.string.movie_data_not_available))
+                }
+                if (data.getInt(COL_MOVIE_BASIC_RUNTIME) > 0) {
+                    mRunTimeTextView.setText(Utility.formatRunTime(getActivity(), data.getInt(COL_MOVIE_BASIC_RUNTIME)))
+                } else {
+                    mRunTimeTextView.setText(getActivity().getString(R.string.movie_data_not_available))
+                }
 
-            final String posterPath = "$GlobalStaticVariables.TMDB_IMAGE_BASE_URL/$GlobalStaticVariables.TMDB_IMAGE_SIZE_W185" +
-                    "${data.getString(COL_MOVIE_BASIC_POSTER_PATH)}"
-            //Create a picasso Callback
-            final Callback picassoPosterCallback = new Callback() {
-                @Override
-                void onSuccess() {
-                    LogDisplay.callLog(LOG_TAG, 'Picasso callback: onSuccess is called', LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
-                    // If user does not select dynamic theme (default value) then do not change the color
-                    if (Utility.isDynamicTheme(getActivity())) {
-                        final Bitmap bitmapPoster = ((BitmapDrawable) mPosterImageView.getDrawable()).getBitmap()
-                        Palette.from(bitmapPoster).generate(new Palette.PaletteAsyncListener() {
-                            @Override
-                            public void onGenerated(final Palette p) {
-                                final Palette.Swatch vibrantSwatch = p.getVibrantSwatch()
-                                final Palette.Swatch lightVibrantSwatch = p.getLightVibrantSwatch()
-                                final Palette.Swatch darkVibrantSwatch = p.getDarkVibrantSwatch()
-                                final Palette.Swatch mutedSwatch = p.getMutedSwatch()
-                                final Palette.Swatch mutedLightSwatch = p.getLightMutedSwatch()
-                                final Palette.Swatch mutedDarkSwatch = p.getDarkMutedSwatch()
-                                boolean pickSwatchColorFlag = false
-                                //Pick primary, primaryDark, title and body text color
-                                if (vibrantSwatch) {
-                                    mPalletePrimaryColor = vibrantSwatch.getRgb()
-                                    mPalleteTitleColor = vibrantSwatch.getTitleTextColor()
-                                    mPalleteBodyTextColor = vibrantSwatch.getBodyTextColor()
-                                    //Produce Dark color by changing the value (3rd parameter) of HSL value
-                                    final float[] primaryHsl = vibrantSwatch.getHsl()
-                                    primaryHsl[2] *= 0.9f
-                                    mPalletePrimaryDarkColor = Color.HSVToColor(primaryHsl)
-                                    pickSwatchColorFlag = true
-                                } else if (lightVibrantSwatch) { //Try another swatch
-                                    mPalletePrimaryColor = lightVibrantSwatch.getRgb()
-                                    mPalleteTitleColor = lightVibrantSwatch.getTitleTextColor()
-                                    mPalleteBodyTextColor = lightVibrantSwatch.getBodyTextColor()
-                                    //Produce Dark color by changing the value (3rd parameter) of HSL value
-                                    final float[] primaryHsl = lightVibrantSwatch.getHsl()
-                                    primaryHsl[2] *= 0.9f
-                                    mPalletePrimaryDarkColor = Color.HSVToColor(primaryHsl)
-                                    pickSwatchColorFlag = true
-                                } else if (darkVibrantSwatch) { //Try last swatch
-                                    mPalletePrimaryColor = darkVibrantSwatch.getRgb()
-                                    mPalleteTitleColor = darkVibrantSwatch.getTitleTextColor()
-                                    mPalleteBodyTextColor = darkVibrantSwatch.getBodyTextColor()
-                                    //Produce Dark color by changing the value (3rd parameter) of HSL value
-                                    final float[] primaryHsl = darkVibrantSwatch.getHsl()
-                                    primaryHsl[2] *= 0.9f
-                                    mPalletePrimaryDarkColor = Color.HSVToColor(primaryHsl)
-                                    pickSwatchColorFlag = true
-                                } else { //Fallback to default
-                                    LogDisplay.callLog(LOG_TAG, 'onGenerated:not able to pick color, so fallback', LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
-                                    mPalletePrimaryColor = ContextCompat.getColor(getActivity(), R.color.primary)
-                                    mPalletePrimaryDarkColor = ContextCompat.getColor(getActivity(), R.color.primary_dark)
-                                    mPalleteTitleColor = ContextCompat.getColor(getActivity(), R.color.primary_text)
-                                    mPalleteBodyTextColor = ContextCompat.getColor(getActivity(), R.color.secondary_text)
-                                    //This is needed as we are not going to pick up accent colour if falling back
+                final String posterPath = "$GlobalStaticVariables.TMDB_IMAGE_BASE_URL/$GlobalStaticVariables.TMDB_IMAGE_SIZE_W185" +
+                        "${data.getString(COL_MOVIE_BASIC_POSTER_PATH)}"
+                //Create a picasso Callback
+                final Callback picassoPosterCallback = new Callback() {
+                    @Override
+                    void onSuccess() {
+                        LogDisplay.callLog(LOG_TAG, 'Picasso callback: onSuccess is called', LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
+                        // If user does not select dynamic theme (default value) then do not change the color
+                        if (Utility.isDynamicTheme(getActivity())) {
+                            final Bitmap bitmapPoster = ((BitmapDrawable) mPosterImageView.getDrawable()).getBitmap()
+                            Palette.from(bitmapPoster).generate(new Palette.PaletteAsyncListener() {
+                                @Override
+                                public void onGenerated(final Palette p) {
+                                    final Palette.Swatch vibrantSwatch = p.getVibrantSwatch()
+                                    final Palette.Swatch lightVibrantSwatch = p.getLightVibrantSwatch()
+                                    final Palette.Swatch darkVibrantSwatch = p.getDarkVibrantSwatch()
+                                    final Palette.Swatch mutedSwatch = p.getMutedSwatch()
+                                    final Palette.Swatch mutedLightSwatch = p.getLightMutedSwatch()
+                                    final Palette.Swatch mutedDarkSwatch = p.getDarkMutedSwatch()
+                                    boolean pickSwatchColorFlag = false
+                                    //Pick primary, primaryDark, title and body text color
+                                    if (vibrantSwatch) {
+                                        mPalletePrimaryColor = vibrantSwatch.getRgb()
+                                        mPalleteTitleColor = vibrantSwatch.getTitleTextColor()
+                                        mPalleteBodyTextColor = vibrantSwatch.getBodyTextColor()
+                                        //Produce Dark color by changing the value (3rd parameter) of HSL value
+                                        final float[] primaryHsl = vibrantSwatch.getHsl()
+                                        primaryHsl[2] *= 0.9f
+                                        mPalletePrimaryDarkColor = Color.HSVToColor(primaryHsl)
+                                        pickSwatchColorFlag = true
+                                    } else if (lightVibrantSwatch) { //Try another swatch
+                                        mPalletePrimaryColor = lightVibrantSwatch.getRgb()
+                                        mPalleteTitleColor = lightVibrantSwatch.getTitleTextColor()
+                                        mPalleteBodyTextColor = lightVibrantSwatch.getBodyTextColor()
+                                        //Produce Dark color by changing the value (3rd parameter) of HSL value
+                                        final float[] primaryHsl = lightVibrantSwatch.getHsl()
+                                        primaryHsl[2] *= 0.9f
+                                        mPalletePrimaryDarkColor = Color.HSVToColor(primaryHsl)
+                                        pickSwatchColorFlag = true
+                                    } else if (darkVibrantSwatch) { //Try last swatch
+                                        mPalletePrimaryColor = darkVibrantSwatch.getRgb()
+                                        mPalleteTitleColor = darkVibrantSwatch.getTitleTextColor()
+                                        mPalleteBodyTextColor = darkVibrantSwatch.getBodyTextColor()
+                                        //Produce Dark color by changing the value (3rd parameter) of HSL value
+                                        final float[] primaryHsl = darkVibrantSwatch.getHsl()
+                                        primaryHsl[2] *= 0.9f
+                                        mPalletePrimaryDarkColor = Color.HSVToColor(primaryHsl)
+                                        pickSwatchColorFlag = true
+                                    } else { //Fallback to default
+                                        LogDisplay.callLog(LOG_TAG, 'onGenerated:not able to pick color, so fallback', LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
+                                        mPalletePrimaryColor = ContextCompat.getColor(getActivity(), R.color.primary)
+                                        mPalletePrimaryDarkColor = ContextCompat.getColor(getActivity(), R.color.primary_dark)
+                                        mPalleteTitleColor = ContextCompat.getColor(getActivity(), R.color.primary_text)
+                                        mPalleteBodyTextColor = ContextCompat.getColor(getActivity(), R.color.secondary_text)
+                                        //This is needed as we are not going to pick up accent colour if falling back
+                                        mPalleteAccentColor = ContextCompat.getColor(getActivity(), R.color.accent)
+                                    }
+                                    //Pick accent color only if Swatch color is picked, otherwise do not pick accent color
+                                    /** Commenting it out as some times the contrast is not good between accent and Primary Dark **/
+                                    /** Let's set the accent color to default values **/
+                                    /** Didn't cleanup the lines of code where accent color is applied, so there will be some
+                                     * redundant lines of code but kept it as is in case those are needed in future **/
                                     mPalleteAccentColor = ContextCompat.getColor(getActivity(), R.color.accent)
-                                }
-                                //Pick accent color only if Swatch color is picked, otherwise do not pick accent color
-                                /** Commenting it out as some times the contrast is not good between accent and Primary Dark **/
-                                /** Let's set the accent color to default values **/
-                                /** Didn't cleanup the lines of code where accent color is applied, so there will be some
-                                 * redundant lines of code but kept it as is in case those are needed in future **/
-                                mPalleteAccentColor = ContextCompat.getColor(getActivity(), R.color.accent)
 //                                if (pickSwatchColorFlag) {
 //                                    if (mutedSwatch) {
 //                                        mPalleteAccentColor = mutedSwatch.getRgb()
@@ -1155,190 +1181,197 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
 //                                        mPalleteAccentColor = ContextCompat.getColor(getActivity(), R.color.accent)
 //                                    }
 //                                }
-                                // Apply the color to the layouts & texts
-                                changeLayoutAndTextColor()
-                                initializeTitleAndColor()
-                                setImageButtonColor()
-                                // Apply the color for all attached adapters
-                                mMovieCastAdapter.changeColor(mPalletePrimaryDarkColor, mPalleteBodyTextColor)
-                                mMovieCrewAdapter.changeColor(mPalletePrimaryDarkColor, mPalleteBodyTextColor)
-                                mSimilarMovieAdapter.changeColor(mPalletePrimaryDarkColor, mPalleteBodyTextColor)
-                                mMovieReviewAdapter.changeColor(mPalletePrimaryColor, mPalleteTitleColor, mPalleteBodyTextColor)
-                            }
-                        })
-                    } else { // To ensure ImageButton color is set for static theme
-                        mPalleteAccentColor = ContextCompat.getColor(getActivity(), R.color.accent)
-                        setImageButtonColor()
+                                    // Apply the color to the layouts & texts
+                                    changeLayoutAndTextColor()
+                                    initializeTitleAndColor()
+                                    LogDisplay.callLog(LOG_TAG, 'calling setImageButtonColor position -> 1', LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
+                                    setImageButtonColor()
+                                    // Apply the color for all attached adapters
+                                    mMovieCastAdapter.changeColor(mPalletePrimaryDarkColor, mPalleteBodyTextColor)
+                                    mMovieCrewAdapter.changeColor(mPalletePrimaryDarkColor, mPalleteBodyTextColor)
+                                    mSimilarMovieAdapter.changeColor(mPalletePrimaryDarkColor, mPalleteBodyTextColor)
+                                    mMovieReviewAdapter.changeColor(mPalletePrimaryColor, mPalleteTitleColor, mPalleteBodyTextColor)
+                                }
+                            })
+                        } else { // To ensure ImageButton color is set for static theme
+                            mPalleteAccentColor = ContextCompat.getColor(getActivity(), R.color.accent)
+                            LogDisplay.callLog(LOG_TAG, 'calling setImageButtonColor position -> 2', LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
+                            setImageButtonColor()
+                        }
+                    }
+
+                    @Override
+                    void onError() {
+                        LogDisplay.callLog(LOG_TAG, 'Picasso callback: onError is called', LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
                     }
                 }
 
-                @Override
-                void onError() {
-                    LogDisplay.callLog(LOG_TAG, 'Picasso callback: onError is called', LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
+                // When user selects reduce data usage option the Picasso call does not get called as Picasso just add a placeholder
+                // So ensure that the ImageButton color and accent color are properly set
+                if (Utility.isReducedDataOn(getActivity())) {
+                    mPalleteAccentColor = ContextCompat.getColor(getActivity(), R.color.accent)
+                    LogDisplay.callLog(LOG_TAG, 'calling setImageButtonColor position -> 3', LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
+                    setImageButtonColor()
                 }
-            }
 
-            // When user selects reduce data usage option the Picasso call does not get called as Picasso just add a placeholder
-            // So ensure that the ImageButton color and accent color are properly set
-            if(Utility.isReducedDataOn(getActivity())) {
-                mPalleteAccentColor = ContextCompat.getColor(getActivity(), R.color.accent)
-                setImageButtonColor()
-            }
-
-            //Pass the Picasso Callback and load the image
-            PicassoLoadImage.loadDetailFragmentPosterImage(getActivity(),posterPath,mPosterImageView,picassoPosterCallback)
-            //Default date is 1900-01-01 which is less than Unix epoc 1st Jan 1970, so converted milliseconds is negative
-            if (data.getLong(COL_MOVIE_BASIC_RELEASE_DATE) > 0) {
-                mReleaseDateTextView.setText(Utility.formatMilliSecondsToDate(data.getLong(COL_MOVIE_BASIC_RELEASE_DATE)))
-            } else {
-                mReleaseDateTextView.setText(getActivity().getString(R.string.movie_data_not_available))
-            }
-            if (data.getInt(COL_MOVIE_BASIC_BUDGET) > 0) {
-                mBudgetTextView.setText(Utility.formatCurrencyInDollar(data.getInt(COL_MOVIE_BASIC_BUDGET)))
-            } else {
-                mBudgetTextView.setText(getActivity().getString(R.string.movie_data_not_available))
-            }
-            if (data.getInt(COL_MOVIE_BASIC_REVENUE)) {
-                mRevenueTextView.setText(Utility.formatCurrencyInDollar(data.getInt(COL_MOVIE_BASIC_REVENUE)))
-            } else {
-                mRevenueTextView.setText(getActivity().getString(R.string.movie_data_not_available))
-            }
-            if (data.getFloat(COL_MOVIE_BASIC_POPULARITY) > 0) {
-                mPopularityTextView.setText(Float.toString(data.getFloat(COL_MOVIE_BASIC_POPULARITY)))
-            } else {
-                mPopularityTextView.setText(getActivity().getString(R.string.movie_data_not_available))
-            }
-            if (data.getFloat(COL_MOVIE_BASIC_VOTE_AVG) > 0) {
-                mTmdbRatingBar.setRating(data.getFloat(COL_MOVIE_BASIC_VOTE_AVG))
-            } else {
-                mTmdbRatingBar.setRating(0)
-            }
-            mTotalVoteCountTextView.setText(data.getString(COL_MOVIE_BASIC_VOTE_COUNT))
-            if (data.getString(COL_MOVIE_BASIC_TAGLINE)) {
-                mTaglineTextView.setText(data.getString(COL_MOVIE_BASIC_TAGLINE))
-            } else {
-                mTaglineTextView.setText(getActivity().getString(R.string.movie_data_not_available))
-            }
-            if (data.getString(COL_MOVIE_BASIC_OVERVIEW) != '') {
-                mSynopsisTextView.setText(data.getString(COL_MOVIE_BASIC_OVERVIEW))
-            } else {
-                mSynopsisTextView.setText(getActivity().getString(R.string.movie_data_not_available))
-            }
-            if (data.getString(COL_MOVIE_BASIC_PRODUCTION_COMPANIES)) {
-                mProdCompanyTextView.setText(data.getString(COL_MOVIE_BASIC_PRODUCTION_COMPANIES))
-            } else {
-                mProdCompanyTextView.setText(getActivity().getString(R.string.movie_data_not_available))
-            }
-            if (data.getString(COL_MOVIE_BASIC_PRODUCTION_COUNTRIES)) {
-                mProdCountryTextView.setText(data.getString(COL_MOVIE_BASIC_PRODUCTION_COUNTRIES))
-            } else {
-                mProdCountryTextView.setText(getActivity().getString(R.string.movie_data_not_available))
-            }
-            mCollectionId = data.getInt(COL_MOVIE_BASIC_COLLECTION_ID)
-            if (mCollectionId > 0) {
-                mCollectionNameTextView.setText(data.getString(COL_MOVIE_BASIC_COLLECTION_NAME))
-                mCollectionBackdropImageView.setVisibility(LinearLayout.VISIBLE)
-                final String collectionBackdropPath = "$GlobalStaticVariables.TMDB_IMAGE_BASE_URL/$GlobalStaticVariables.TMDB_IMAGE_SIZE_W500" +
-                        "${data.getString(COL_MOVIE_BASIC_COLLECTION_BACKDROP_PATH)}"
-                PicassoLoadImage.loadDetailFragmentCollectionBackdropImage(getActivity(), collectionBackdropPath, mCollectionBackdropImageView)
-            } else {
-                mCollectionNameTextView.setText(getActivity().getString(R.string.movie_data_not_available))
-                mCollectionBackdropImageView.setVisibility(LinearLayout.GONE)
-            }
-
-            LogDisplay.callLog(LOG_TAG, "homePage:${data.getString(COL_MOVIE_BASIC_HOME_PAGE)}", LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
-            if (data.getString(COL_MOVIE_BASIC_HOME_PAGE)) {
-                mMovieHomePageUrl = data.getString(COL_MOVIE_BASIC_HOME_PAGE)
-                mHomePageButton.setText(getActivity().getString(R.string.movie_detail_web_links_home_page))
-                mHomePageButton.setClickable(true)
-                mHomePageButton.setAlpha(GlobalStaticVariables.MOVIE_MAGIC_ALPHA_FULL_OPAQUE)
-                if (Build.VERSION.SDK_INT >= 21) { // Version 21 -> Build.VERSION_CODES.LOLLIPOP
-                    mHomePageButton.setElevation(GlobalStaticVariables.MOVIE_MAGIC_ELEVATION)
-                }
-            } else {
-                mHomePageButton.setText(getActivity().getString(R.string.movie_detail_web_links_home_page_not_available))
-                mHomePageButton.setClickable(false)
-                mHomePageButton.setAlpha(GlobalStaticVariables.MOVIE_MAGIC_ALPHA_OPAQUE_40_PERCENT)
-                if (Build.VERSION.SDK_INT >= 21) { // Version 21 -> Build.VERSION_CODES.LOLLIPOP
-                    mHomePageButton.setElevation(GlobalStaticVariables.MOVIE_MAGIC_ELEVATION_RESET)
-                }
-            }
-            LogDisplay.callLog(LOG_TAG, "IMDb ID:${data.getString(COL_MOVIE_BASIC_IMDB_ID)}", LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
-            if (data.getString(COL_MOVIE_BASIC_IMDB_ID)) {
-                mMovieImdbId = data.getString(COL_MOVIE_BASIC_IMDB_ID)
-                mImdbLinkButton.setText(getActivity().getString(R.string.detail_web_links_imdb_link))
-                mImdbLinkButton.setClickable(true)
-                mImdbLinkButton.setAlpha(GlobalStaticVariables.MOVIE_MAGIC_ALPHA_FULL_OPAQUE)
-                if (Build.VERSION.SDK_INT >= 21) { // Version 21 -> Build.VERSION_CODES.LOLLIPOP
-                    mImdbLinkButton.setElevation(GlobalStaticVariables.MOVIE_MAGIC_ELEVATION)
-                }
-            } else {
-                mImdbLinkButton.setText(getActivity().getString(R.string.movie_detail_web_links_imdb_link_not_available))
-                mImdbLinkButton.setClickable(false)
-                mImdbLinkButton.setAlpha(GlobalStaticVariables.MOVIE_MAGIC_ALPHA_OPAQUE_40_PERCENT)
-                if (Build.VERSION.SDK_INT >= 21) { // Version 21 -> Build.VERSION_CODES.LOLLIPOP
-                    mImdbLinkButton.setElevation(GlobalStaticVariables.MOVIE_MAGIC_ELEVATION_RESET)
-                }
-            }
-            final int detailDataPresentFlag = data.getInt(COL_MOVIE_BASIC_DETAIL_DATA_PRESENT_FLAG)
-            //If the flag is zero then all the movie data are not present, so go and fetch it
-            if (detailDataPresentFlag == GlobalStaticVariables.MOVIE_MAGIC_FLAG_FALSE) {
-                LogDisplay.callLog(LOG_TAG, 'handleMovieBasicOnLoadFinished.Additional movie data not present, go and fetch it', LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
-                final ArrayList<Integer> movieIdList = new ArrayList<>(1)
-                final ArrayList<Integer> movieRowIdList = new ArrayList<>(1)
-                final ArrayList<Integer> isForHomeList = new ArrayList<>(1)
-                final ArrayList<Integer> categoryFlag = new ArrayList<>(1)
-                movieIdList.add(0,mMovieId)
-                movieRowIdList.add(0,_ID_movie_basic_info)
-                // Set the flag to false to indicate it's not for home page
-                isForHomeList.add(0,GlobalStaticVariables.MOVIE_MAGIC_FLAG_FALSE)
-                categoryFlag.add(0,GlobalStaticVariables.NULL_CATEGORY_FLAG)
-                final ArrayList<Integer>[] loadMovieDetailsArg = [movieIdList, movieRowIdList, isForHomeList, categoryFlag] as ArrayList<Integer>[]
-                if(Utility.isReadyToDownload(getActivity())) {
-                    new LoadMovieDetails(getActivity()).execute(loadMovieDetailsArg)
+                //Pass the Picasso Callback and load the image
+                PicassoLoadImage.loadDetailFragmentPosterImage(getActivity(), posterPath, mPosterImageView, picassoPosterCallback)
+                //Default date is 1900-01-01 which is less than Unix epoc 1st Jan 1970, so converted milliseconds is negative
+                if (data.getLong(COL_MOVIE_BASIC_RELEASE_DATE) > 0) {
+                    mReleaseDateTextView.setText(Utility.formatMilliSecondsToDate(data.getLong(COL_MOVIE_BASIC_RELEASE_DATE)))
                 } else {
-                    LogDisplay.callLog(LOG_TAG, '1-> Device is offline or connected to internet without WiFi and user selected download only on WiFi', LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
+                    mReleaseDateTextView.setText(getActivity().getString(R.string.movie_data_not_available))
+                }
+                if (data.getInt(COL_MOVIE_BASIC_BUDGET) > 0) {
+                    mBudgetTextView.setText(Utility.formatCurrencyInDollar(data.getInt(COL_MOVIE_BASIC_BUDGET)))
+                } else {
+                    mBudgetTextView.setText(getActivity().getString(R.string.movie_data_not_available))
+                }
+                if (data.getInt(COL_MOVIE_BASIC_REVENUE)) {
+                    mRevenueTextView.setText(Utility.formatCurrencyInDollar(data.getInt(COL_MOVIE_BASIC_REVENUE)))
+                } else {
+                    mRevenueTextView.setText(getActivity().getString(R.string.movie_data_not_available))
+                }
+                if (data.getFloat(COL_MOVIE_BASIC_POPULARITY) > 0) {
+                    mPopularityTextView.setText(Float.toString(data.getFloat(COL_MOVIE_BASIC_POPULARITY)))
+                } else {
+                    mPopularityTextView.setText(getActivity().getString(R.string.movie_data_not_available))
+                }
+                if (data.getFloat(COL_MOVIE_BASIC_VOTE_AVG) > 0) {
+                    mTmdbRatingBar.setRating(data.getFloat(COL_MOVIE_BASIC_VOTE_AVG))
+                } else {
+                    mTmdbRatingBar.setRating(0)
+                }
+                mTotalVoteCountTextView.setText(data.getString(COL_MOVIE_BASIC_VOTE_COUNT))
+                if (data.getString(COL_MOVIE_BASIC_TAGLINE)) {
+                    mTaglineTextView.setText(data.getString(COL_MOVIE_BASIC_TAGLINE))
+                } else {
+                    mTaglineTextView.setText(getActivity().getString(R.string.movie_data_not_available))
+                }
+                if (data.getString(COL_MOVIE_BASIC_OVERVIEW) != '') {
+                    mSynopsisTextView.setText(data.getString(COL_MOVIE_BASIC_OVERVIEW))
+                } else {
+                    mSynopsisTextView.setText(getActivity().getString(R.string.movie_data_not_available))
+                }
+                if (data.getString(COL_MOVIE_BASIC_PRODUCTION_COMPANIES)) {
+                    mProdCompanyTextView.setText(data.getString(COL_MOVIE_BASIC_PRODUCTION_COMPANIES))
+                } else {
+                    mProdCompanyTextView.setText(getActivity().getString(R.string.movie_data_not_available))
+                }
+                if (data.getString(COL_MOVIE_BASIC_PRODUCTION_COUNTRIES)) {
+                    mProdCountryTextView.setText(data.getString(COL_MOVIE_BASIC_PRODUCTION_COUNTRIES))
+                } else {
+                    mProdCountryTextView.setText(getActivity().getString(R.string.movie_data_not_available))
+                }
+                mCollectionId = data.getInt(COL_MOVIE_BASIC_COLLECTION_ID)
+                if (mCollectionId > 0) {
+                    mCollectionNameTextView.setText(data.getString(COL_MOVIE_BASIC_COLLECTION_NAME))
+                    mCollectionBackdropImageView.setVisibility(LinearLayout.VISIBLE)
+                    final String collectionBackdropPath = "$GlobalStaticVariables.TMDB_IMAGE_BASE_URL/$GlobalStaticVariables.TMDB_IMAGE_SIZE_W500" +
+                            "${data.getString(COL_MOVIE_BASIC_COLLECTION_BACKDROP_PATH)}"
+                    PicassoLoadImage.loadDetailFragmentCollectionBackdropImage(getActivity(), collectionBackdropPath, mCollectionBackdropImageView)
+                } else {
+                    mCollectionNameTextView.setText(getActivity().getString(R.string.movie_data_not_available))
+                    mCollectionBackdropImageView.setVisibility(LinearLayout.GONE)
+                }
+
+                LogDisplay.callLog(LOG_TAG, "homePage:${data.getString(COL_MOVIE_BASIC_HOME_PAGE)}", LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
+                if (data.getString(COL_MOVIE_BASIC_HOME_PAGE)) {
+                    mMovieHomePageUrl = data.getString(COL_MOVIE_BASIC_HOME_PAGE)
+                    mHomePageButton.setText(getActivity().getString(R.string.movie_detail_web_links_home_page))
+                    mHomePageButton.setClickable(true)
+                    mHomePageButton.setAlpha(GlobalStaticVariables.MOVIE_MAGIC_ALPHA_FULL_OPAQUE)
+                    if (Build.VERSION.SDK_INT >= 21) { // Version 21 -> Build.VERSION_CODES.LOLLIPOP
+                        mHomePageButton.setElevation(GlobalStaticVariables.MOVIE_MAGIC_ELEVATION)
+                    }
+                } else {
+                    mHomePageButton.setText(getActivity().getString(R.string.movie_detail_web_links_home_page_not_available))
+                    mHomePageButton.setClickable(false)
+                    mHomePageButton.setAlpha(GlobalStaticVariables.MOVIE_MAGIC_ALPHA_OPAQUE_40_PERCENT)
+                    if (Build.VERSION.SDK_INT >= 21) { // Version 21 -> Build.VERSION_CODES.LOLLIPOP
+                        mHomePageButton.setElevation(GlobalStaticVariables.MOVIE_MAGIC_ELEVATION_RESET)
+                    }
+                }
+                LogDisplay.callLog(LOG_TAG, "IMDb ID:${data.getString(COL_MOVIE_BASIC_IMDB_ID)}", LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
+                if (data.getString(COL_MOVIE_BASIC_IMDB_ID)) {
+                    mMovieImdbId = data.getString(COL_MOVIE_BASIC_IMDB_ID)
+                    mImdbLinkButton.setText(getActivity().getString(R.string.detail_web_links_imdb_link))
+                    mImdbLinkButton.setClickable(true)
+                    mImdbLinkButton.setAlpha(GlobalStaticVariables.MOVIE_MAGIC_ALPHA_FULL_OPAQUE)
+                    if (Build.VERSION.SDK_INT >= 21) { // Version 21 -> Build.VERSION_CODES.LOLLIPOP
+                        mImdbLinkButton.setElevation(GlobalStaticVariables.MOVIE_MAGIC_ELEVATION)
+                    }
+                } else {
+                    mImdbLinkButton.setText(getActivity().getString(R.string.movie_detail_web_links_imdb_link_not_available))
+                    mImdbLinkButton.setClickable(false)
+                    mImdbLinkButton.setAlpha(GlobalStaticVariables.MOVIE_MAGIC_ALPHA_OPAQUE_40_PERCENT)
+                    if (Build.VERSION.SDK_INT >= 21) { // Version 21 -> Build.VERSION_CODES.LOLLIPOP
+                        mImdbLinkButton.setElevation(GlobalStaticVariables.MOVIE_MAGIC_ELEVATION_RESET)
+                    }
+                }
+                final int detailDataPresentFlag = data.getInt(COL_MOVIE_BASIC_DETAIL_DATA_PRESENT_FLAG)
+                //If the flag is zero then all the movie data are not present, so go and fetch it
+                if (detailDataPresentFlag == GlobalStaticVariables.MOVIE_MAGIC_FLAG_FALSE) {
+                    LogDisplay.callLog(LOG_TAG, 'handleMovieBasicOnLoadFinished.Additional movie data not present, go and fetch it', LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
+                    final ArrayList<Integer> movieIdList = new ArrayList<>(1)
+                    final ArrayList<Integer> movieRowIdList = new ArrayList<>(1)
+                    final ArrayList<Integer> isForHomeList = new ArrayList<>(1)
+                    final ArrayList<Integer> categoryFlag = new ArrayList<>(1)
+                    movieIdList.add(0, mMovieId)
+                    movieRowIdList.add(0, _ID_movie_basic_info)
+                    // Set the flag to false to indicate it's not for home page
+                    isForHomeList.add(0, GlobalStaticVariables.MOVIE_MAGIC_FLAG_FALSE)
+                    categoryFlag.add(0, GlobalStaticVariables.NULL_CATEGORY_FLAG)
+                    final ArrayList<Integer>[] loadMovieDetailsArg = [movieIdList, movieRowIdList, isForHomeList, categoryFlag] as ArrayList<Integer>[]
+                    if (Utility.isReadyToDownload(getActivity())) {
+                        new LoadMovieDetails(getActivity()).execute(loadMovieDetailsArg)
+                    } else {
+                        LogDisplay.callLog(LOG_TAG, '1-> Device is offline or connected to internet without WiFi and user selected download only on WiFi', LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
+                    }
+                } else {
+                    LogDisplay.callLog(LOG_TAG, 'handleMovieBasicOnLoadFinished.Additional movie data already present', LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
+                }
+                mMoviDataLoaded = true
+                // If onCreateOptionsMenu already happened then do share this to share movie
+                if (mShareActionProvider) {
+                    shareMovie()
+                } else {
+                    LogDisplay.callLog(LOG_TAG, 'handleMovieBasicOnLoadFinished:mShareActionProvider is null because onCreateOptionsMenu is not' +
+                            ' yet called. shareMovie will be called from onCreateOptionsMenu.', LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
                 }
             } else {
-                LogDisplay.callLog(LOG_TAG, 'handleMovieBasicOnLoadFinished.Additional movie data already present', LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
-            }
-            mMoviDataLoaded = true
-            // If onCreateOptionsMenu already happened then do share this to share movie
-            if(mShareActionProvider) {
-                shareMovie()
-            } else {
-                LogDisplay.callLog(LOG_TAG, 'handleMovieBasicOnLoadFinished:mShareActionProvider is null because onCreateOptionsMenu is not' +
-                        ' yet called. shareMovie will be called from onCreateOptionsMenu.', LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
+                LogDisplay.callLog(LOG_TAG, "handleMovieBasicOnLoadFinished.Record not found, should reach here only when movie is clicked on person or search screen - Movie id:$mMovieId, Category:$mMovieCategory", LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
+                if (mMovieCategory == GlobalStaticVariables.MOVIE_CATEGORY_PERSON || GlobalStaticVariables.MOVIE_CATEGORY_SEARCH) {
+                    //Movie does not exists, go and fetch then insert into movie basic info table
+                    LogDisplay.callLog(LOG_TAG, 'handleMovieBasicOnLoadFinished.Movie for person or search does not exists, go and fetch then insert into movie basic info table', LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
+                    final ArrayList<Integer> movieIdList = new ArrayList<>(1)
+                    final ArrayList<Integer> movieRowIdList = new ArrayList<>(1)
+                    final ArrayList<Integer> isForHomeList = new ArrayList<>(1)
+                    final ArrayList<Integer> categoryFlag = new ArrayList<>(1)
+                    movieIdList.add(0, mMovieId)
+                    movieRowIdList.add(0, 0)
+                    isForHomeList.add(0, GlobalStaticVariables.MOVIE_MAGIC_FLAG_FALSE)
+                    if (mMovieCategory == GlobalStaticVariables.MOVIE_CATEGORY_PERSON) {
+                        categoryFlag.add(0, GlobalStaticVariables.PERSON_CATEGORY_FLAG)
+                    } else if (mMovieCategory == GlobalStaticVariables.MOVIE_CATEGORY_SEARCH) {
+                        categoryFlag.add(0, GlobalStaticVariables.SEARCH_CATEGORY_FLAG)
+                    } else {
+                        LogDisplay.callLog(LOG_TAG, "Shouldn't reach here. please investigate -> $mMovieCategory", LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
+                        categoryFlag.add(0, GlobalStaticVariables.NULL_CATEGORY_FLAG)
+                    }
+                    final ArrayList<Integer>[] loadMovieDetailsArg = [movieIdList, movieRowIdList, isForHomeList, categoryFlag] as ArrayList<Integer>[]
+                    if (Utility.isReadyToDownload(getActivity())) {
+                        new LoadMovieDetails(getActivity()).execute(loadMovieDetailsArg)
+                    } else {
+                        LogDisplay.callLog(LOG_TAG, '2-> Device is offline or connected to internet without WiFi and user selected download only on WiFi', LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
+                    }
+                } else {
+                    LogDisplay.callLog(LOG_TAG, "New scenario, investigate how it reached here - Movie id:$mMovieId, Category:$mMovieCategory", LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
+                }
             }
         } else {
-            LogDisplay.callLog(LOG_TAG, "handleMovieBasicOnLoadFinished.Record not found, should reach here only when movie is clicked on person or search screen - Movie id:$mMovieId, Category:$mMovieCategory", LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
-            if(mMovieCategory == GlobalStaticVariables.MOVIE_CATEGORY_PERSON || GlobalStaticVariables.MOVIE_CATEGORY_SEARCH) {
-                //Movie does not exists, go and fetch then insert into movie basic info table
-                LogDisplay.callLog(LOG_TAG, 'handleMovieBasicOnLoadFinished.Movie for person or search does not exists, go and fetch then insert into movie basic info table', LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
-                final ArrayList<Integer> movieIdList = new ArrayList<>(1)
-                final ArrayList<Integer> movieRowIdList = new ArrayList<>(1)
-                final ArrayList<Integer> isForHomeList = new ArrayList<>(1)
-                final ArrayList<Integer> categoryFlag = new ArrayList<>(1)
-                movieIdList.add(0,mMovieId)
-                movieRowIdList.add(0,0)
-                isForHomeList.add(0,GlobalStaticVariables.MOVIE_MAGIC_FLAG_FALSE)
-                if(mMovieCategory == GlobalStaticVariables.MOVIE_CATEGORY_PERSON) {
-                    categoryFlag.add(0,GlobalStaticVariables.PERSON_CATEGORY_FLAG)
-                } else if(mMovieCategory == GlobalStaticVariables.MOVIE_CATEGORY_SEARCH) {
-                    categoryFlag.add(0,GlobalStaticVariables.SEARCH_CATEGORY_FLAG)
-                } else {
-                    LogDisplay.callLog(LOG_TAG, "Shouldn't reach here. please investigate -> $mMovieCategory", LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
-                    categoryFlag.add(0,GlobalStaticVariables.NULL_CATEGORY_FLAG)
-                }
-                final ArrayList<Integer>[] loadMovieDetailsArg = [movieIdList, movieRowIdList, isForHomeList, categoryFlag] as ArrayList<Integer>[]
-                if(Utility.isReadyToDownload(getActivity())) {
-                    new LoadMovieDetails(getActivity()).execute(loadMovieDetailsArg)
-                } else {
-                    LogDisplay.callLog(LOG_TAG, '2-> Device is offline or connected to internet without WiFi and user selected download only on WiFi', LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
-                }
-            } else {
-                LogDisplay.callLog(LOG_TAG, "New scenario, investigate how it reached here - Movie id:$mMovieId, Category:$mMovieCategory", LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
-            }
+            LogDisplay.callLog(LOG_TAG, 'This is an ImageButton Click Forced OnLoadFinished', LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
+            mImageButtonClickForcedOnLoadFinished = false
         }
     }
 
@@ -1451,6 +1484,7 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
             mBackdropViewPager.setAdapter(adapter)
             mBackdropViewPager.clearOnPageChangeListeners()
             final int dotsCount = adapter.getCount()
+//            final ImageButton[] dotsImage = new ImageButton[dotsCount]
             final AppCompatImageButton[] dotsImage = new AppCompatImageButton[dotsCount]
             mBackdropDotHolderLayout.removeAllViews()
             setBackDropViewPagerDots(dotsCount, dotsImage)
@@ -1498,8 +1532,8 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
      * This method is called when the loader is finished for movie user list flag table
      * @param data Cursor The cursor returned by the loader
      */
-    void handleMovieUSerListFlagOnLoadFinished(final Cursor data) {
-        LogDisplay.callLog(LOG_TAG, "handleMovieUSerListFlagOnLoadFinished.Cursor rec count -> ${data.getCount()}", LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
+    void handleMovieUserListFlagOnLoadFinished(final Cursor data) {
+        LogDisplay.callLog(LOG_TAG, "handleMovieUserListFlagOnLoadFinished.Cursor rec count -> ${data.getCount()}", LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
         mUserListWatchedFlag = false
         mUserListWishListdFlag = false
         mUserListFavouriteFlag = false
@@ -1524,6 +1558,9 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
             if (data.getFloat(COL_MOVIE_USER_LIST_FLAG_USER_RATING) > 0) {
                 mUserRatingBar.setRating(data.getFloat(COL_MOVIE_USER_LIST_FLAG_USER_RATING))
             }
+            // Now set the color
+            LogDisplay.callLog(LOG_TAG, 'calling setImageButtonColor position -> 4', LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
+            setImageButtonColor()
         }
     }
 
@@ -1585,6 +1622,9 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
                             LogDisplay.callLog(LOG_TAG, "Unknown user Tmdb category -> ${categories.get(i)}", LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
                     }
                 }
+                // Now set the color
+                LogDisplay.callLog(LOG_TAG, 'calling setImageButtonColor position -> 5', LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
+                setImageButtonColor()
             } else {
                 LogDisplay.callLog(LOG_TAG, "This movie is not in any user Tmdb list", LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
             }
@@ -1702,27 +1742,49 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
      * This method is called to apply the color to image button (used for user list selection)
      */
     protected void setImageButtonColor() {
+        LogDisplay.callLog(LOG_TAG, 'setImageButtonColor is called', LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
+        LogDisplay.callLog(LOG_TAG, "mUserListWatchedFlag -> $mUserListWatchedFlag", LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
+        LogDisplay.callLog(LOG_TAG, "mUserListWishListdFlag -> $mUserListWishListdFlag", LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
+        LogDisplay.callLog(LOG_TAG, "mUserListFavouriteFlag -> $mUserListFavouriteFlag", LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
+        LogDisplay.callLog(LOG_TAG, "mUserListCollectionFlag -> $mUserListCollectionFlag", LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
+        LogDisplay.callLog(LOG_TAG, "mUserTmdbListWatchlistFlag -> $mUserTmdbListWatchlistFlag", LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
+        LogDisplay.callLog(LOG_TAG, "mUserTmdbListFavouriteFlag -> $mUserTmdbListFavouriteFlag", LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
+        LogDisplay.callLog(LOG_TAG, "mUserTmdbListRatedFlag -> $mUserTmdbListRatedFlag", LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
         if (mUserListWatchedFlag) {
             mImageButtonWatched.setColorFilter(mPalleteAccentColor)
         }
+
         if (mUserListWishListdFlag) {
             mImageButtonWishList.setColorFilter(mPalleteAccentColor)
         }
+
         if (mUserListFavouriteFlag) {
             mImageButtonFavourite.setColorFilter(mPalleteAccentColor)
         }
+
         if (mUserListCollectionFlag) {
             mImageButtonCollection.setColorFilter(mPalleteAccentColor)
         }
+
         if (mUserTmdbListWatchlistFlag) {
             mTmdbImageButtonWatchlist.setColorFilter(mPalleteAccentColor)
         }
+
         if (mUserTmdbListFavouriteFlag) {
             mTmdbImageButtonFavourite.setColorFilter(mPalleteAccentColor)
         }
+
         if (mUserTmdbListRatedFlag) {
             mTmdbImageButtonRated.setColorFilter(mPalleteAccentColor)
         }
+
+//        mUserListWatchedFlag = false
+//        mUserListWishListdFlag = false
+//        mUserListFavouriteFlag = false
+//        mUserListCollectionFlag = false
+//        mUserTmdbListWatchlistFlag = false
+//        mUserTmdbListFavouriteFlag = false
+//        mUserTmdbListRatedFlag = false
     }
 
     /**
@@ -1730,12 +1792,13 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
      * @param dotsCount Total number of dots to be created
      * @param dotsImage Array of Image Buttons
      */
-//    private void setBackDropViewPagerDots(int dotsCount, ImageButton[] dotsImage) {
+//    private void setBackDropViewPagerDots(final int dotsCount, final ImageButton[] dotsImage) {
     private void setBackDropViewPagerDots(final int dotsCount, final AppCompatImageButton[] dotsImage) {
         final LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(18,18)
         final ColorStateList whiteColorStateList = ColorStateList.valueOf(ContextCompat.getColor(getActivity(), R.color.white_color))
         layoutParams.setMargins(1,0,1,0)
         for(final i in 0..(dotsCount - 1)) {
+//            dotsImage[i] = new ImageButton(getActivity())
             dotsImage[i] = new AppCompatImageButton(getActivity())
             dotsImage[i].setBackgroundResource(R.drawable.view_pager_dot)
             dotsImage[i].setLayoutParams(layoutParams)
@@ -1795,8 +1858,12 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
             void onClick(final DialogInterface dialog, final int which) {
                 LogDisplay.callLog(LOG_TAG, 'Dialog Ok is clicked, go and update the TMDb rating', LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
                 if(Utility.isReadyToDownload(getActivity())) {
+                    mImageButtonClickForcedOnLoadFinished = true
                     new UploadTmdbRequest(getActivity(), GlobalStaticVariables.MOVIE_CATEGORY_TMDB_USER_RATED, userRatingVal,
                             false, mMovieCategory, mUserTmdbListDrawableLayout, mPalleteAccentColor).execute([mMovieId] as Integer[])
+                    if(userRatingVal == 0) { // Reset the flag if rating is zero
+                        mUserTmdbListRatedFlag = false
+                    }
                 } else {
                     Snackbar.make(mUserTmdbListDrawableLayout, getString(R.string.no_internet_cannot_perform_operation_message), Snackbar.LENGTH_LONG).show()
                 }
@@ -1839,7 +1906,13 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
         Picasso.with(getActivity()).cancelRequest(mPosterImageView)
     }
 
-    //Overriding the animation for better performance
+    @Override
+    void onDestroy() {
+        LogDisplay.callLog(LOG_TAG, 'onDestroy is called', LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
+        super.onDestroy()
+    }
+
+//Overriding the animation for better performance
     //Reference - http://daniel-codes.blogspot.co.uk/2013/09/smoothing-performance-on-fragment.html
     @Override
     Animation onCreateAnimation(final int transit, final boolean enter, final int nextAnim) {

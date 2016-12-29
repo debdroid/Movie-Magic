@@ -47,9 +47,9 @@ class Utility {
         calendar.add(Calendar.DAY_OF_YEAR, 5)
         final Date date = calendar.getTime()
         final SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd")
-        final String threeDayFutureDate = simpleDateFormat.format(date)
-        LogDisplay.callLog(LOG_TAG, "Three days future date stamp-> $threeDayFutureDate", LogDisplay.UTILITY_LIST_LOG_FLAG)
-        return threeDayFutureDate
+        final String fiveDayFutureDate = simpleDateFormat.format(date)
+        LogDisplay.callLog(LOG_TAG, "Three days future date stamp-> $fiveDayFutureDate", LogDisplay.UTILITY_LIST_LOG_FLAG)
+        return fiveDayFutureDate
     }
 
     /**
@@ -103,9 +103,9 @@ class Utility {
      */
     static String getDayNameForNotification(final Context ctx, final String date) {
         final String[] dayOfWeek = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday']
-        final GregorianCalendar currCalendar = new GregorianCalendar()
-        currCalendar.setTime(new SimpleDateFormat("yyyy-MM-dd").parse('2015-12-31'))
-        final int currentDayOfYear = currCalendar.get(Calendar.DAY_OF_YEAR)
+
+        final GregorianCalendar currDateCalendar = new GregorianCalendar()
+        final int currentDayOfYear = currDateCalendar.get(Calendar.DAY_OF_YEAR)
         final GregorianCalendar releaseCalendar = new GregorianCalendar()
         releaseCalendar.setTime(new SimpleDateFormat("yyyy-MM-dd").parse(date))
         final int releaseDayOfYear = releaseCalendar.get(Calendar.DAY_OF_YEAR)
@@ -118,13 +118,13 @@ class Utility {
             } else {
                 dayName = 'on ' + dayOfWeek[(releaseCalendar.get(Calendar.DAY_OF_WEEK)) - 1]
             }
-        } else if (!currCalendar.isLeapYear(currCalendar.get(Calendar.YEAR)) && currentDayOfYear == 365) {
+        } else if (!currDateCalendar.isLeapYear(currDateCalendar.get(Calendar.YEAR)) && currentDayOfYear == 365) {
             if (releaseDayOfYear == 1) {
                 dayName = ctx.getString(R.string.notification_day_name_tomorrow)
             } else {
                 dayName = 'on ' + dayOfWeek[(releaseCalendar.get(Calendar.DAY_OF_WEEK)) - 1]
             }
-        } else if (currCalendar.isLeapYear(currCalendar.get(Calendar.YEAR)) && currentDayOfYear == 366) {
+        } else if (currDateCalendar.isLeapYear(currDateCalendar.get(Calendar.YEAR)) && currentDayOfYear == 366) {
             if (releaseDayOfYear == 1) {
                 dayName = ctx.getString(R.string.notification_day_name_tomorrow)
             } else {
