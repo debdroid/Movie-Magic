@@ -129,7 +129,7 @@ class GridMovieFragment extends Fragment implements LoaderManager.LoaderCallback
             mMovieCategoryAndCollectionIdUri = args.getParcelable(GlobalStaticVariables.MOVIE_CATEGORY_AND_COLL_ID_URI) as Uri
             mMovieCategory = MovieMagicContract.MovieBasicInfo.getMovieCategoryFromMovieAndCollectionIdUri(mMovieCategoryAndCollectionIdUri)
             mMovieCollectionId = MovieMagicContract.MovieBasicInfo.getCollectionIdFromMovieAndCollectionIdUri(mMovieCategoryAndCollectionIdUri)
-            determineSubTitleShow(mMovieCategory)
+//            determineSubTitleShow(mMovieCategory)
             LogDisplay.callLog(LOG_TAG,"Grid Fragment arguments.Uri -> $mMovieCategoryAndCollectionIdUri",LogDisplay.GRID_MOVIE_FRAGMENT_LOG_FLAG)
             LogDisplay.callLog(LOG_TAG,"Grid Fragment arguments.Movie Category -> $mMovieCategory",LogDisplay.GRID_MOVIE_FRAGMENT_LOG_FLAG)
             LogDisplay.callLog(LOG_TAG,"Grid Fragment arguments.Collection ID -> $mMovieCollectionId",LogDisplay.GRID_MOVIE_FRAGMENT_LOG_FLAG)
@@ -275,6 +275,10 @@ class GridMovieFragment extends Fragment implements LoaderManager.LoaderCallback
         final MenuItem filterMenuItem = menu.getItem(2)
         mFilterDrawableIcon = filterMenuItem.getIcon()
         LogDisplay.callLog(LOG_TAG, "onCreateOptionsMenu: mSortDrawableIcon->$mSortDrawableIcon & mFilterDrawableIcon-> $mFilterDrawableIcon", LogDisplay.GRID_MOVIE_FRAGMENT_LOG_FLAG)
+        // Reset first so that if user moves to different screen without resetting it then it gets reset
+        setIconColor(mSortDrawableIcon, false)
+        setIconColor(mFilterDrawableIcon,false)
+
         // When restores then following logic ensure search or filter icon color is set properly
         if(mSortIsOn && mFilterIsOn) {
             setIconColor(mSortDrawableIcon, true)
@@ -308,7 +312,7 @@ class GridMovieFragment extends Fragment implements LoaderManager.LoaderCallback
                 setIconColor(mFilterDrawableIcon, false)
                 ((AppCompatActivity)getActivity()).getSupportActionBar().setSubtitle('')
                 // Check and set flag if we need to show the subtitle
-                determineSubTitleShow(mMovieCategory)
+//                determineSubTitleShow(mMovieCategory)
                 restartCursorLoader()
                 return true
                 break
@@ -534,6 +538,7 @@ class GridMovieFragment extends Fragment implements LoaderManager.LoaderCallback
     @Override
     void onLoadFinished(final Loader<Cursor> loader, final Cursor data) {
         LogDisplay.callLog(LOG_TAG,"onLoadFinished is called. Total record count -> ${data.getCount()}",LogDisplay.GRID_MOVIE_FRAGMENT_LOG_FLAG)
+        determineSubTitleShow(mMovieCategory)
         data.moveToLast()
         if(data.moveToFirst()) {
             mCurrentPage = getCurrentTmdbPage()
@@ -544,6 +549,7 @@ class GridMovieFragment extends Fragment implements LoaderManager.LoaderCallback
                 mCollectionGridFlag = false
             }
         } else {
+            ((AppCompatActivity)getActivity()).getSupportActionBar().setSubtitle((getString(R.string.user_local_and_tmdb_list_subtitle_no_movie_msg)))
             LogDisplay.callLog(LOG_TAG, 'Empty cursor returned by loader', LogDisplay.GRID_MOVIE_FRAGMENT_LOG_FLAG)
         }
           mGridRecyclerAdapter.swapCursor(data)
@@ -640,7 +646,7 @@ class GridMovieFragment extends Fragment implements LoaderManager.LoaderCallback
     private void sortAlertDialog() {
         LogDisplay.callLog(LOG_TAG, "sortAlertDialog: user list type->$mMovieListType", LogDisplay.MOVIE_MAGIC_MAIN_LOG_FLAG)
         mSortItemNumber = -1
-        final AlertDialog.Builder builder = new AlertDialog.Builder(getActivity())
+        final AlertDialog.Builder builder = new AlertDialog.Builder(getActivity(),R.style.AppCompatAlertDialogTheme)
         builder.setTitle(getString(R.string.sort_dialog_title))
         // Build the dialog items based on list type (for user list a new menu item is shown)
         if(mMovieListType == GlobalStaticVariables.MOVIE_LIST_TYPE_TMDB_PUBLIC ||
@@ -732,7 +738,7 @@ class GridMovieFragment extends Fragment implements LoaderManager.LoaderCallback
      */
     private void filterReleaseYearAlertDialog() {
         LogDisplay.callLog(LOG_TAG, "filterReleaseYearAlertDialog is called", LogDisplay.MOVIE_MAGIC_MAIN_LOG_FLAG)
-        final AlertDialog.Builder builder = new AlertDialog.Builder(getActivity())
+        final AlertDialog.Builder builder = new AlertDialog.Builder(getActivity(),R.style.AppCompatAlertDialogTheme)
         builder.setTitle(getString(R.string.filter_release_year_dialog_title))
         // Get the current year
         final Calendar calendar = Calendar.getInstance()

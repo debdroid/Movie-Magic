@@ -130,6 +130,8 @@ class Utility {
             } else {
                 dayName = 'on ' + dayOfWeek[(releaseCalendar.get(Calendar.DAY_OF_WEEK)) - 1]
             }
+        } else { // Fallback option
+            dayName = ''
         }
         return dayName
     }

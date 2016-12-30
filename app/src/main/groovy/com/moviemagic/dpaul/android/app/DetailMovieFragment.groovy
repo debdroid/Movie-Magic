@@ -1206,9 +1206,10 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
                     }
                 }
 
-                // When user selects reduce data usage option the Picasso call does not get called as Picasso just add a placeholder
+                // When user selects reduce data usage option or application is not ready to download then
+                // the Picasso call does not get called as Picasso just add a placeholder
                 // So ensure that the ImageButton color and accent color are properly set
-                if (Utility.isReducedDataOn(getActivity())) {
+                if (Utility.isReducedDataOn(getActivity()) || !Utility.isReadyToDownload(getActivity())) {
                     mPalleteAccentColor = ContextCompat.getColor(getActivity(), R.color.accent)
                     LogDisplay.callLog(LOG_TAG, 'calling setImageButtonColor position -> 3', LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
                     setImageButtonColor()
@@ -1726,9 +1727,9 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
 
     private static void setRatingStarColor(final Drawable drawable, @ColorInt final int color)
     {
-        if (Build.VERSION.SDK_INT >= 21) { // Version 21 -> Build.VERSION_CODES.LOLLIPOP
+        if (Build.VERSION.SDK_INT >= 23) { // Version 23 -> Marshmallow
             // Do nothing as it automatically uses the accent color
-            // Following lines again works 99& times but not using as it picks up accent color in Lollipop and above
+            // Following lines again works 99& times but not using as it picks up accent color in Marshmallow and above
 //            drawable = DrawableCompat.wrap(drawable)
 //            DrawableCompat.setTint(drawable, color)
         } else {
@@ -1849,7 +1850,7 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
      */
     void createDialogForTmdbRatingConfirmation(final float userRatingVal) {
         LogDisplay.callLog(LOG_TAG, 'createDialogForTmdbRatingConfirmation is called', LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
-        final AlertDialog.Builder builder = new AlertDialog.Builder(getActivity())
+        final AlertDialog.Builder builder = new AlertDialog.Builder(getActivity(),R.style.AppCompatAlertDialogTheme)
         builder.setTitle(R.string.tmdb_rating_dialog_title)
                 .setMessage(R.string.tmdb_rating_dialog_message)
 

@@ -477,7 +477,7 @@ public class MovieMagicMainActivity extends AppCompatActivity implements Navigat
      * Show a dialog when user is not connected to network
      */
     private void showNotConnectedErrorDialog() {
-        final AlertDialog.Builder builder = new AlertDialog.Builder(this)
+        final AlertDialog.Builder builder = new AlertDialog.Builder(this,R.style.AppCompatAlertDialogTheme)
         builder.setTitle(getString(R.string.not_connected_dialog_title))
                 .setMessage(getString(R.string.not_connected_dialog_message))
         builder.setPositiveButton(getString(R.string.not_connected_open_settings_button), new DialogInterface.OnClickListener() {
@@ -503,7 +503,7 @@ public class MovieMagicMainActivity extends AppCompatActivity implements Navigat
      * Show a dialog when user is online without WiFi and selected settings as to use only WiFi
      */
     private void showNotConnectedToWiFiErrorDialog() {
-        final AlertDialog.Builder builder = new AlertDialog.Builder(this)
+        final AlertDialog.Builder builder = new AlertDialog.Builder(this,R.style.AppCompatAlertDialogTheme)
         builder.setTitle(getString(R.string.not_wifi_connected_dialog_title))
                 .setMessage(getString(R.string.not_wifi_connected_dialog_message))
         builder.setPositiveButton(getString(R.string.not_wifi_connected_open_settings_button), new DialogInterface.OnClickListener() {
