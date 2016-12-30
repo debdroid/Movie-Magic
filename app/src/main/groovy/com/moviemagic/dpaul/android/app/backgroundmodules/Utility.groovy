@@ -124,6 +124,12 @@ class Utility {
             } else {
                 dayName = 'on ' + dayOfWeek[(releaseCalendar.get(Calendar.DAY_OF_WEEK)) - 1]
             }
+        } else if (currDateCalendar.isLeapYear(currDateCalendar.get(Calendar.YEAR)) && currentDayOfYear == 365) {
+            if (releaseDayOfYear == 366) {
+                dayName = ctx.getString(R.string.notification_day_name_tomorrow)
+            } else {
+                dayName = 'on ' + dayOfWeek[(releaseCalendar.get(Calendar.DAY_OF_WEEK)) - 1]
+            }
         } else if (currDateCalendar.isLeapYear(currDateCalendar.get(Calendar.YEAR)) && currentDayOfYear == 366) {
             if (releaseDayOfYear == 1) {
                 dayName = ctx.getString(R.string.notification_day_name_tomorrow)
