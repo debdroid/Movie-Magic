@@ -19,38 +19,24 @@ class GlobalStaticVariables {
 
     //Static variables for movie category
     public static final String MOVIE_CATEGORY_POPULAR = 'popular'  //tmdb popular category
-    public static final String MOVIE_CATEGORY_TOP_RATED = 'top_rated' //tmdb top_ratedcategory
+    public static final String MOVIE_CATEGORY_TOP_RATED = 'top_rated' //tmdb top_rated category
     public static final String MOVIE_CATEGORY_UPCOMING = 'upcoming' //tmdb upcoming category
-    public static final String MOVIE_CATEGORY_NOW_PLAYING = 'now_playing'
-    //tmdb now_playing category
-    public static final String MOVIE_CATEGORY_SIMILAR = 'similar_category'
-    //category to store similar movie, internal use only
-    public static final String MOVIE_CATEGORY_RECOMMENDATIONS = 'recommendations_category'
-    //category to store similar movie, internal use only
-    public static final String MOVIE_CATEGORY_COLLECTION = 'collection_category'
-    //category to store collection movie, internal use only
-    public static final String MOVIE_CATEGORY_PERSON = 'person_category'
-    //category to store person cast & crew movie, internal use only
-    public static final String MOVIE_CATEGORY_TMDB_USER_FAVOURITE = 'favorite'
-    //category to store tmdb user movies, internal use only
-    public static final String MOVIE_CATEGORY_TMDB_USER_WATCHLIST = 'watchlist'
-    //category to store tmdb user movies, internal use only
-    public static final String MOVIE_CATEGORY_TMDB_USER_RATED = 'rated'
-    //category to store tmdb user movies, internal use only
-    public static final String MOVIE_CATEGORY_LOCAL_USER_WATCHED = 'local_user_watched_category'
-    //category to store user wathced movies, internal use only
-    public static final String MOVIE_CATEGORY_LOCAL_USER_WISH_LIST = 'local_user_wish_list_category'
-    //category to store user wish list movies, internal use only
-    public static final String MOVIE_CATEGORY_LOCAL_USER_FAVOURITE = 'local_user_favourite_category'
-    //category to store user favourite movies, internal use only
-    public static final String MOVIE_CATEGORY_LOCAL_USER_COLLECTION = 'local_user_collection_category'
-    //category to store user collection movies, internal use only
-    public static final String MOVIE_CATEGORY_ORPHANED = 'orphaned_category'
-    //category for orphaned records (not needed user list movie)
-    public static final String MOVIE_CATEGORY_SEARCH = 'search_category'
-    //category for search movie records
+    public static final String MOVIE_CATEGORY_NOW_PLAYING = 'now_playing' //tmdb now_playing category
+    public static final String MOVIE_CATEGORY_SIMILAR = 'similar_category' //category to store similar movie, internal use only
+    public static final String MOVIE_CATEGORY_RECOMMENDATIONS = 'recommendations_category' //category to store similar movie, internal use only
+    public static final String MOVIE_CATEGORY_COLLECTION = 'collection_category' //category to store collection movie, internal use only
+    public static final String MOVIE_CATEGORY_PERSON = 'person_category' //category to store person cast & crew movie, internal use only
+    public static final String MOVIE_CATEGORY_TMDB_USER_FAVOURITE = 'favorite' //category to store tmdb user favourite movies, internal use only
+    public static final String MOVIE_CATEGORY_TMDB_USER_WATCHLIST = 'watchlist' //category to store tmdb user watchlist movies, internal use only
+    public static final String MOVIE_CATEGORY_TMDB_USER_RATED = 'rated' //category to store tmdb user rated movies, internal use only
+    public static final String MOVIE_CATEGORY_LOCAL_USER_WATCHED = 'local_user_watched_category' //category to store user watched movies, internal use only
+    public static final String MOVIE_CATEGORY_LOCAL_USER_WISH_LIST = 'local_user_wish_list_category' //category to store user wish list movies, internal use only
+    public static final String MOVIE_CATEGORY_LOCAL_USER_FAVOURITE = 'local_user_favourite_category' //category to store user favourite movies, internal use only
+    public static final String MOVIE_CATEGORY_LOCAL_USER_COLLECTION = 'local_user_collection_category' //category to store user collection movies, internal use only
+    public static final String MOVIE_CATEGORY_ORPHANED = 'orphaned_category' //category for orphaned records (not needed user list movie)
+    public static final String MOVIE_CATEGORY_SEARCH = 'search_category' //category for search movie records
 
-    //Static variables for TMDB URL and parameters
+    //Static variables for TMDb URL and parameters
     public static final String TMDB_MOVIE_BASE_URL = 'https://api.themoviedb.org/3/'
     public static final String TMDB_WEB_MOVIE_BASE_URL = 'https://www.themoviedb.org/movie/'
     public static final String TMDB_WEB_COLLECTION_BASE_URL = 'https://www.themoviedb.org/collection/'
@@ -59,7 +45,6 @@ class GlobalStaticVariables {
     public static final String TMDB_MOVIE_PAGE = 'page'
     public static final String TMDB_APPEND_TO_RESPONSE_KEY = 'append_to_response'
     public static final String TMDB_MOVIE_APPEND_TO_RESPONSE_PARAM = 'similar,credits,images,videos,release_dates,reviews,recommendations'
-
     public static final String TMDB_PERSON_APPEND_TO_RESPONSE_PARAM = 'movie_credits'
     public static final String TMDB_COLLECTION_PATH = 'collection'
     public static final String TMDB_PERSON_PATH = 'person'
@@ -81,7 +66,7 @@ class GlobalStaticVariables {
     public static final String TMDB_SEARCH_PATH = 'search'
     public static final String TMDB_PARAMETER_QUERY = 'query'
 
-    //Static variables for TMDB movie image url and parameters
+    //Static variables for TMDb movie image url and parameters
     public static final String TMDB_IMAGE_BASE_URL = 'http://image.tmdb.org/t/p/'
     public static final String TMDB_IMAGE_SIZE_W92 = 'w92'
     public static final String TMDB_IMAGE_SIZE_W185 = 'w185'
@@ -93,7 +78,7 @@ class GlobalStaticVariables {
     public static final String IMDB_BASE_MOVIE_TITLE_URL = 'http://www.imdb.com/title/'
     public static final String IMDB_BASE_PERSON_URL = 'http://www.imdb.com/name/'
 
-    //Static variables for user list
+    //Static variables for user movie list
     public static final String USER_LIST_WATCHED = 'watched'
     public static final String USER_LIST_WISH_LIST = 'wish_list'
     public static final String USER_LIST_FAVOURITE = 'favourite'

@@ -108,16 +108,6 @@ class HomeMovieFragment extends Fragment implements LoaderManager.LoaderCallback
     }
 
     @Override
-    public void onCreate(final Bundle savedInstanceState) {
-        LogDisplay.callLog(LOG_TAG, 'onCreate is called', LogDisplay.HOME_MOVIE_FRAGMENT_LOG_FLAG)
-        super.onCreate(savedInstanceState)
-        //Following line needed to let android know that Fragment has options menu
-        //If this line is not added then associated method (e.g. OnCreateOptionsMenu) does not get supported
-        //even in auto code completion
-//        setHasOptionsMenu(true)
-    }
-
-    @Override
     View onCreateView(final LayoutInflater inflater, final ViewGroup container, final Bundle savedInstanceState) {
         LogDisplay.callLog(LOG_TAG,'onCreateView is called',LogDisplay.HOME_MOVIE_FRAGMENT_LOG_FLAG)
         final View mRootView = inflater.inflate(R.layout.fragment_home_movie,container,false)

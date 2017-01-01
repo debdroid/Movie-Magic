@@ -136,7 +136,7 @@ class Utility {
             } else {
                 dayName = 'on ' + dayOfWeek[(releaseCalendar.get(Calendar.DAY_OF_WEEK)) - 1]
             }
-        } else { // Fallback option
+        } else { // Fallback option to ensure 'null' is not shown in the notification!
             dayName = ''
         }
         return dayName

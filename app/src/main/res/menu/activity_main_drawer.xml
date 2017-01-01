@@ -101,7 +101,7 @@
         <item
             android:id="@+id/nav_menu_rate_the_app"
             android:icon="@drawable/ic_drawer_thumbs_up_down"
-            android:title="@string/nav_menu_rate_the_app"/>
+            android:title="@string/drawer_menu_rate_the_app"/>
         <item
             android:id="@+id/nav_menu_contact_developer"
             android:icon="@drawable/ic_drawer_email"
@@ -109,6 +109,6 @@
         <item
             android:id="@+id/nav_menu_donate"
             android:icon="@drawable/ic_drawer_mood"
-            android:title="@string/nav_menu_donate"/>
+            android:title="@string/drawer_menu_donate"/>
     </group>
 </menu>

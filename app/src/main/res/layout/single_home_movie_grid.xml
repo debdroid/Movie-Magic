@@ -29,7 +29,6 @@
             android:gravity="center_horizontal"
             android:layout_alignTop="@id/home_movie_backdrop_image"
             android:fontFamily="sans-serif-condensed"
-            android:text="@string/home_movie_title"
             android:ellipsize="end"
             android:maxLines="1"
             android:background="@color/black_color_opacity_30"
@@ -64,7 +63,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_weight="1"
-                android:text="@string/movie_detail_genre"
                 android:fontFamily="sans-serif-condensed"
                 android:textAppearance="@style/TextAppearance.AppCompat.Medium"
                 android:textColor="@color/primary_text" />
@@ -72,7 +70,6 @@
                 android:id="@+id/home_movie_runtime"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/movie_detail_runtime"
                 android:fontFamily="sans-serif-condensed"
                 android:textAppearance="@style/TextAppearance.AppCompat.Medium"
                 android:textColor="@color/primary_text" />
@@ -94,7 +91,6 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="@string/home_movie_release_date"
                 android:fontFamily="sans-serif-condensed"
                 android:textAppearance="@style/TextAppearance.AppCompat.Medium"
                 android:textColor="@color/primary_text" />
@@ -102,7 +98,6 @@
                 android:id="@+id/home_movie_list_text_container"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/home_movie_list_text_container"
                 android:fontFamily="sans-serif-condensed"
                 android:textAppearance="@style/TextAppearance.AppCompat.Medium"
                 android:textColor="@color/primary_text" />

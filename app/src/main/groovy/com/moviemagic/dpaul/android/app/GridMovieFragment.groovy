@@ -117,7 +117,7 @@ class GridMovieFragment extends Fragment implements LoaderManager.LoaderCallback
         //Following line needed to let android know that Fragment has options menu
         //If this line is not added then associated method (e.g. OnCreateOptionsMenu) does not get supported
         //even in auto code completion
-//        setHasOptionsMenu(true)
+        setHasOptionsMenu(true)
     }
 
     @Override
@@ -129,7 +129,6 @@ class GridMovieFragment extends Fragment implements LoaderManager.LoaderCallback
             mMovieCategoryAndCollectionIdUri = args.getParcelable(GlobalStaticVariables.MOVIE_CATEGORY_AND_COLL_ID_URI) as Uri
             mMovieCategory = MovieMagicContract.MovieBasicInfo.getMovieCategoryFromMovieAndCollectionIdUri(mMovieCategoryAndCollectionIdUri)
             mMovieCollectionId = MovieMagicContract.MovieBasicInfo.getCollectionIdFromMovieAndCollectionIdUri(mMovieCategoryAndCollectionIdUri)
-//            determineSubTitleShow(mMovieCategory)
             LogDisplay.callLog(LOG_TAG,"Grid Fragment arguments.Uri -> $mMovieCategoryAndCollectionIdUri",LogDisplay.GRID_MOVIE_FRAGMENT_LOG_FLAG)
             LogDisplay.callLog(LOG_TAG,"Grid Fragment arguments.Movie Category -> $mMovieCategory",LogDisplay.GRID_MOVIE_FRAGMENT_LOG_FLAG)
             LogDisplay.callLog(LOG_TAG,"Grid Fragment arguments.Collection ID -> $mMovieCollectionId",LogDisplay.GRID_MOVIE_FRAGMENT_LOG_FLAG)
@@ -311,8 +310,6 @@ class GridMovieFragment extends Fragment implements LoaderManager.LoaderCallback
                 mFilterIsOn = false
                 setIconColor(mFilterDrawableIcon, false)
                 ((AppCompatActivity)getActivity()).getSupportActionBar().setSubtitle('')
-                // Check and set flag if we need to show the subtitle
-//                determineSubTitleShow(mMovieCategory)
                 restartCursorLoader()
                 return true
                 break
@@ -687,7 +684,7 @@ class GridMovieFragment extends Fragment implements LoaderManager.LoaderCallback
             }
         })
         // Since the alert dialog's cancel button is used as an action button, using neutral button as cancel
-        builder.setNeutralButton(getString(R.string.sort_dialog_cancel_button), new DialogInterface.OnClickListener() {
+        builder.setNeutralButton(getString(android.R.string.cancel), new DialogInterface.OnClickListener() {
             @Override
             void onClick(final DialogInterface dialog, final int which) {
                 LogDisplay.callLog(LOG_TAG, 'Dialog cancel is clicked. No action needed.', LogDisplay.MOVIE_MAGIC_MAIN_LOG_FLAG)
@@ -765,7 +762,7 @@ class GridMovieFragment extends Fragment implements LoaderManager.LoaderCallback
                 restartCursorLoader()
             }
         })
-        builder.setNegativeButton(getString(R.string.action_cancel), new DialogInterface.OnClickListener(){
+        builder.setNegativeButton(getString(android.R.string.cancel), new DialogInterface.OnClickListener(){
             @Override
             void onClick(final DialogInterface dialog, final int which) {
                 LogDisplay.callLog(LOG_TAG, 'Dialog filter cancel is clicked. No action needed.', LogDisplay.MOVIE_MAGIC_MAIN_LOG_FLAG)

@@ -22,7 +22,6 @@ import com.moviemagic.dpaul.android.app.contentprovider.MovieMagicContract.Movie
 
 //Since the json field is used dynamically, so this class is not compiled as CompileStatic
 //@CompileStatic
-@SuppressLint("all")
 class JsonParse {
     private static final String LOG_TAG = JsonParse.class.getSimpleName()
 

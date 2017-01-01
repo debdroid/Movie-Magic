@@ -201,7 +201,7 @@ class SearchActivity extends AppCompatActivity {
 
         protected List<ContentValues> downloadSearchMovies(final String queryString, final int page) {
             //TMDB api example
-            https://api.themoviedb.org/3/search/movie?api_key=key&query=<query_string>
+            // https://api.themoviedb.org/3/search/movie?api_key=key&query=<query_string>
 
             final List<ContentValues> movieList
 

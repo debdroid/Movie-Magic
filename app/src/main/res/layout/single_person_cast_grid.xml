@@ -1,67 +1,60 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:cardview="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/person_cast_grid_view"
+    android:id="@+id/person_cast_grid_card_view_element"
     android:layout_width="wrap_content"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:layout_gravity="center_horizontal"
+    cardview:cardBackgroundColor="@color/primary"
+    cardview:cardCornerRadius="@dimen/card_view_corner_radius"
+    cardview:cardElevation="@dimen/card_view_elevation"
+    cardview:cardUseCompatPadding="true">
 
-    <android.support.v7.widget.CardView
-        android:id="@+id/person_cast_grid_card_view_element"
+    <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        cardview:cardBackgroundColor="@color/primary"
-        cardview:cardCornerRadius="@dimen/card_view_corner_radius"
-        cardview:cardElevation="@dimen/card_view_elevation"
-        cardview:cardUseCompatPadding="true">
+        android:layout_gravity="center"
+        android:orientation="vertical">
 
-        <LinearLayout
+        <FrameLayout
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:orientation="vertical">
+            android:layout_height="wrap_content">
 
-            <FrameLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content">
-
-                <ImageView
-                    android:id="@+id/person_cast_grid_movie_image"
-                    android:layout_width="@dimen/grid_image_width"
-                    android:layout_height="@dimen/grid_image_height"
-                    android:scaleType="centerCrop"
-                    android:contentDescription="@string/person_cast_grid_movie_image_content_description"
-                    android:src="@drawable/image_place_holder" />
-                    <TextView
-                        android:id="@+id/person_cast_grid_char_name"
-                        android:layout_width="@dimen/grid_image_width"
-                        android:layout_height="wrap_content"
-                        android:ellipsize="end"
-                        android:fontFamily="sans-serif"
-                        android:maxLines="1"
-                        android:background="@color/primary"
-                        android:alpha="@string/movie_detail_crew_name_background_alpha"
-                        android:layout_gravity="bottom|center"
-                        android:gravity="center"
-                        android:text="@string/char_name"
-                        android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-                        android:textColor="@color/primary_text"
-                        android:textStyle="italic" />
-            </FrameLayout>
+            <ImageView
+                android:id="@+id/person_cast_grid_movie_image"
+                android:layout_width="@dimen/grid_image_width"
+                android:layout_height="@dimen/grid_image_height"
+                android:contentDescription="@string/person_cast_grid_movie_image_content_description"
+                android:scaleType="centerCrop"
+                android:src="@drawable/image_place_holder" />
 
             <TextView
-                android:id="@+id/person_cast_grid_movie_name"
-                android:layout_width="match_parent"
+                android:id="@+id/person_cast_grid_char_name"
+                android:layout_width="@dimen/grid_image_width"
                 android:layout_height="wrap_content"
-                android:padding="@dimen/grid_text_padding"
+                android:layout_gravity="bottom|center"
+                android:alpha="@string/movie_detail_crew_name_background_alpha"
                 android:background="@color/primary"
                 android:ellipsize="end"
                 android:fontFamily="sans-serif"
                 android:gravity="center"
                 android:maxLines="1"
-                android:text="@string/movie_name"
                 android:textAppearance="@style/TextAppearance.AppCompat.Body1"
                 android:textColor="@color/primary_text"
                 android:textStyle="italic" />
-        </LinearLayout>
-    </android.support.v7.widget.CardView>
-</FrameLayout>
+        </FrameLayout>
+
+        <TextView
+            android:id="@+id/person_cast_grid_movie_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/primary"
+            android:ellipsize="end"
+            android:fontFamily="sans-serif"
+            android:gravity="center"
+            android:maxLines="1"
+            android:padding="@dimen/grid_text_padding"
+            android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+            android:textColor="@color/primary_text"
+            android:textStyle="italic" />
+    </LinearLayout>
+</android.support.v7.widget.CardView>

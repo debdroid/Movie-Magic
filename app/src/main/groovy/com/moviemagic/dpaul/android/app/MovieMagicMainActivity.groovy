@@ -487,7 +487,7 @@ public class MovieMagicMainActivity extends AppCompatActivity implements Navigat
                 openSystemSettings()
             }
         })
-        builder.setNegativeButton(getString(R.string.action_cancel), new DialogInterface.OnClickListener(){
+        builder.setNegativeButton(getString(android.R.string.cancel), new DialogInterface.OnClickListener(){
             @Override
             void onClick(final DialogInterface dialog, final int which) {
                 LogDisplay.callLog(LOG_TAG, 'Dialog cancel is clicked. No action needed.', LogDisplay.MOVIE_MAGIC_MAIN_LOG_FLAG)
@@ -513,7 +513,7 @@ public class MovieMagicMainActivity extends AppCompatActivity implements Navigat
                 openSettingsActivity()
             }
         })
-        builder.setNegativeButton(getString(R.string.action_cancel), new DialogInterface.OnClickListener(){
+        builder.setNegativeButton(getString(android.R.string.cancel), new DialogInterface.OnClickListener(){
             @Override
             void onClick(final DialogInterface dialog, final int which) {
                 LogDisplay.callLog(LOG_TAG, 'Dialog cancel is clicked. No action needed.', LogDisplay.MOVIE_MAGIC_MAIN_LOG_FLAG)

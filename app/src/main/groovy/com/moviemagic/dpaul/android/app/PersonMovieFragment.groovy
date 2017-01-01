@@ -538,11 +538,6 @@ class PersonMovieFragment extends Fragment implements LoaderManager.LoaderCallba
                                     window.setStatusBarColor(mPalettePrimaryDarkColor)
                                 }
 
-//                                mHomePageButton.setBackgroundColor(mPalettePrimaryDarkColor)
-//                                mImdbLinkButton.setBackgroundColor(mPalettePrimaryDarkColor)
-//                                mHomePageButton.setTextColor(mPaletteBodyTextColor)
-//                                mImdbLinkButton.setTextColor(mPaletteBodyTextColor)
-
                                 //Apply color to adapter elements
                                 mPersonCastAdapter.changeColor(mPalettePrimaryDarkColor, mPaletteBodyTextColor)
                                 mPersonCrewAdapter.changeColor(mPalettePrimaryDarkColor, mPaletteBodyTextColor)

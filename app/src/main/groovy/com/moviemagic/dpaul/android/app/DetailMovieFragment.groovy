@@ -373,7 +373,6 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
         final int itemId = item.getItemId()
         switch (itemId) {
             case android.R.id.home:
-//                getActivity().finish()
                 if(getActivity().getSupportFragmentManager().getBackStackEntryCount() > 0) {
                     getActivity().getSupportFragmentManager().popBackStack()
                 } else {
@@ -831,8 +830,8 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
 
         mLocale = context.getResources().getConfiguration().locale.getCountry()
 //        mLocale = 'IN' // Testing line
-        // Currently program handles only 'GK' (i.e. UK and 'US' locales)
-        // If not any of the above then fall back to US locale
+        // Currently program handles only 'GB' (i.e. UK) and 'US' locales
+        // If not any of the above then fallback to US locale
         switch (mLocale) {
             case 'GB':
             case 'US':
@@ -1186,6 +1185,7 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
                                     initializeTitleAndColor()
                                     LogDisplay.callLog(LOG_TAG, 'calling setImageButtonColor position -> 1', LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
                                     setImageButtonColor()
+                                    setRatingStarColor()
                                     // Apply the color for all attached adapters
                                     mMovieCastAdapter.changeColor(mPalletePrimaryDarkColor, mPalleteBodyTextColor)
                                     mMovieCrewAdapter.changeColor(mPalletePrimaryDarkColor, mPalleteBodyTextColor)
@@ -1193,10 +1193,11 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
                                     mMovieReviewAdapter.changeColor(mPalletePrimaryColor, mPalleteTitleColor, mPalleteBodyTextColor)
                                 }
                             })
-                        } else { // To ensure ImageButton color is set for static theme
+                        } else { // To ensure ImageButton & rating star color is set for static theme
                             mPalleteAccentColor = ContextCompat.getColor(getActivity(), R.color.accent)
                             LogDisplay.callLog(LOG_TAG, 'calling setImageButtonColor position -> 2', LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
                             setImageButtonColor()
+                            setRatingStarColor()
                         }
                     }
 
@@ -1208,11 +1209,12 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
 
                 // When user selects reduce data usage option or application is not ready to download then
                 // the Picasso call does not get called as Picasso just add a placeholder
-                // So ensure that the ImageButton color and accent color are properly set
+                // So ensure that the ImageButton color, Rating star color and accent color are properly set
                 if (Utility.isReducedDataOn(getActivity()) || !Utility.isReadyToDownload(getActivity())) {
                     mPalleteAccentColor = ContextCompat.getColor(getActivity(), R.color.accent)
                     LogDisplay.callLog(LOG_TAG, 'calling setImageButtonColor position -> 3', LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
                     setImageButtonColor()
+                    setRatingStarColor()
                 }
 
                 //Pass the Picasso Callback and load the image
@@ -1234,7 +1236,9 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
                     mRevenueTextView.setText(getActivity().getString(R.string.movie_data_not_available))
                 }
                 if (data.getFloat(COL_MOVIE_BASIC_POPULARITY) > 0) {
-                    mPopularityTextView.setText(Float.toString(data.getFloat(COL_MOVIE_BASIC_POPULARITY)))
+                    final BigDecimal popularityBigDecimal = new BigDecimal(Float.toString(data.getFloat(COL_MOVIE_BASIC_POPULARITY)))
+                    popularityBigDecimal = popularityBigDecimal.setScale(2,BigDecimal.ROUND_HALF_UP)
+                    mPopularityTextView.setText(Float.toString(popularityBigDecimal as Float))
                 } else {
                     mPopularityTextView.setText(getActivity().getString(R.string.movie_data_not_available))
                 }
@@ -1485,7 +1489,6 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
             mBackdropViewPager.setAdapter(adapter)
             mBackdropViewPager.clearOnPageChangeListeners()
             final int dotsCount = adapter.getCount()
-//            final ImageButton[] dotsImage = new ImageButton[dotsCount]
             final AppCompatImageButton[] dotsImage = new AppCompatImageButton[dotsCount]
             mBackdropDotHolderLayout.removeAllViews()
             setBackDropViewPagerDots(dotsCount, dotsImage)
@@ -1696,22 +1699,6 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
         mTmdbImageButtonFavourite.setBackgroundColor(mPalletePrimaryDarkColor)
         mTmdbImageButtonRated.setBackgroundColor(mPalletePrimaryDarkColor)
 
-        //Set homepage & Imdb button color
-//        mHomePageButton.setBackgroundColor(mPalletePrimaryDarkColor)
-//        mImdbLinkButton.setBackgroundColor(mPalletePrimaryDarkColor)
-//        mHomePageButton.setTextColor(mPalleteBodyTextColor)
-//        mImdbLinkButton.setTextColor(mPalleteBodyTextColor)
-
-        //Set Ratingbar color.
-        final LayerDrawable tmdbRatingBarlayerDrawable = (LayerDrawable) mTmdbRatingBar.getProgressDrawable() as LayerDrawable
-        setRatingStarColor(tmdbRatingBarlayerDrawable.getDrawable(2), mPalleteAccentColor) // Filled stars
-        setRatingStarColor(tmdbRatingBarlayerDrawable.getDrawable(1), ContextCompat.getColor(getContext(), R.color.grey_600_color)) // Half filled stars
-        setRatingStarColor(tmdbRatingBarlayerDrawable.getDrawable(0), ContextCompat.getColor(getContext(), R.color.grey_600_color)) // Empty stars
-
-        final LayerDrawable userRatingBarlayerDrawable = mUserRatingBar.getProgressDrawable() as LayerDrawable
-        setRatingStarColor(userRatingBarlayerDrawable.getDrawable(2), mPalleteAccentColor) // Filled stars
-        setRatingStarColor(userRatingBarlayerDrawable.getDrawable(1), ContextCompat.getColor(getContext(), R.color.grey_600_color)) // Half filled stars
-        setRatingStarColor(userRatingBarlayerDrawable.getDrawable(0), ContextCompat.getColor(getContext(), R.color.grey_600_color)) // Empty stars
     }
 
     /**
@@ -1725,7 +1712,28 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
         mCollapsingToolbar.setCollapsedTitleTextColor(mPalleteTitleColor)
     }
 
-    private static void setRatingStarColor(final Drawable drawable, @ColorInt final int color)
+    /**
+     * This method is called to set the color to Rating star
+     */
+    protected void setRatingStarColor() {
+        //Set Ratingbar color.
+        final LayerDrawable tmdbRatingBarlayerDrawable = (LayerDrawable) mTmdbRatingBar.getProgressDrawable() as LayerDrawable
+        applyRatingStarColor(tmdbRatingBarlayerDrawable.getDrawable(2), mPalleteAccentColor) // Filled stars
+        applyRatingStarColor(tmdbRatingBarlayerDrawable.getDrawable(1), ContextCompat.getColor(getContext(), R.color.grey_600_color)) // Half filled stars
+        applyRatingStarColor(tmdbRatingBarlayerDrawable.getDrawable(0), ContextCompat.getColor(getContext(), R.color.grey_600_color)) // Empty stars
+
+        final LayerDrawable userRatingBarlayerDrawable = mUserRatingBar.getProgressDrawable() as LayerDrawable
+        applyRatingStarColor(userRatingBarlayerDrawable.getDrawable(2), mPalleteAccentColor) // Filled stars
+        applyRatingStarColor(userRatingBarlayerDrawable.getDrawable(1), ContextCompat.getColor(getContext(), R.color.grey_600_color)) // Half filled stars
+        applyRatingStarColor(userRatingBarlayerDrawable.getDrawable(0), ContextCompat.getColor(getContext(), R.color.grey_600_color)) // Empty stars
+    }
+
+    /**
+     * This method applies the color to rating star based on the build version
+     * @param drawable Rating drawable
+     * @param color The color to apply
+     */
+    private static void applyRatingStarColor(final Drawable drawable, @ColorInt final int color)
     {
         if (Build.VERSION.SDK_INT >= 23) { // Version 23 -> Marshmallow
             // Do nothing as it automatically uses the accent color
@@ -1778,14 +1786,6 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
         if (mUserTmdbListRatedFlag) {
             mTmdbImageButtonRated.setColorFilter(mPalleteAccentColor)
         }
-
-//        mUserListWatchedFlag = false
-//        mUserListWishListdFlag = false
-//        mUserListFavouriteFlag = false
-//        mUserListCollectionFlag = false
-//        mUserTmdbListWatchlistFlag = false
-//        mUserTmdbListFavouriteFlag = false
-//        mUserTmdbListRatedFlag = false
     }
 
     /**
@@ -1793,13 +1793,11 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
      * @param dotsCount Total number of dots to be created
      * @param dotsImage Array of Image Buttons
      */
-//    private void setBackDropViewPagerDots(final int dotsCount, final ImageButton[] dotsImage) {
     private void setBackDropViewPagerDots(final int dotsCount, final AppCompatImageButton[] dotsImage) {
         final LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(18,18)
         final ColorStateList whiteColorStateList = ColorStateList.valueOf(ContextCompat.getColor(getActivity(), R.color.white_color))
         layoutParams.setMargins(1,0,1,0)
         for(final i in 0..(dotsCount - 1)) {
-//            dotsImage[i] = new ImageButton(getActivity())
             dotsImage[i] = new AppCompatImageButton(getActivity())
             dotsImage[i].setBackgroundResource(R.drawable.view_pager_dot)
             dotsImage[i].setLayoutParams(layoutParams)
@@ -1854,7 +1852,7 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
         builder.setTitle(R.string.tmdb_rating_dialog_title)
                 .setMessage(R.string.tmdb_rating_dialog_message)
 
-        builder.setPositiveButton(R.string.tmdb_rating_dialog_ok_button, new DialogInterface.OnClickListener() {
+        builder.setPositiveButton(getString(android.R.string.ok), new DialogInterface.OnClickListener() {
             @Override
             void onClick(final DialogInterface dialog, final int which) {
                 LogDisplay.callLog(LOG_TAG, 'Dialog Ok is clicked, go and update the TMDb rating', LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
@@ -1871,7 +1869,7 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
             }
         })
 
-        builder.setNegativeButton(R.string.tmdb_rating_dialog_cancel_button, new DialogInterface.OnClickListener(){
+        builder.setNegativeButton(getString(android.R.string.cancel), new DialogInterface.OnClickListener(){
             @Override
             void onClick(final DialogInterface dialog, final int which) {
                 LogDisplay.callLog(LOG_TAG, 'Dialog cancel is clicked. No action needed.', LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
@@ -1913,7 +1911,7 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
         super.onDestroy()
     }
 
-//Overriding the animation for better performance
+    //Overriding the animation for better performance
     //Reference - http://daniel-codes.blogspot.co.uk/2013/09/smoothing-performance-on-fragment.html
     @Override
     Animation onCreateAnimation(final int transit, final boolean enter, final int nextAnim) {

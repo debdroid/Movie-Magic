@@ -25,10 +25,11 @@
     <!-- The following two arrays are inter related, so order of the items are important -->
     <string-array name="donate_header">
         <item>Indian Prime Minister\'s National Relief Fund (India)</item>
+        <item>Bharat Sevashram Sangha (India)</item>
+        <item>Bachpan Bachao Andolan (India)</item>
         <item>Give India (India)</item>
         <item>HelpAge India (India)</item>
         <item>Akshaya Patra (India)</item>
-        <item>Bachpan Bachao Andolan (India)</item>
         <item>The Hope Kolkata Foundation(India)</item>
         <item>unicef (Worldwide)</item>
         <item>Human Rights Watch (Worldwide)</item>
@@ -38,10 +39,11 @@
     </string-array>
     <string-array name="donate_link_address">
         <item>https://pmnrf.gov.in/payform.php</item>
+        <item>http://www.bharatsevashramsangha.net/</item>
+        <item>http://bba.org.in/</item>
         <item>http://www.giveindia.org/</item>
         <item>https://www.helpageindia.org/</item>
         <item>https://www.akshayapatra.org/onlinedonations</item>
-        <item>http://bba.org.in/</item>
         <item>http://www.hopechild.org/donate-online.aspx</item>
         <item>https://www.unicef.org/</item>
         <item>https://www.hrw.org/</item>
