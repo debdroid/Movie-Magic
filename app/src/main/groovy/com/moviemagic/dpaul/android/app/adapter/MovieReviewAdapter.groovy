@@ -84,11 +84,14 @@ class MovieReviewAdapter extends RecyclerView.Adapter<MovieReviewAdapter.MovieRe
         final String contentText = mCursor.getString(DetailMovieFragment.COL_MOVIE_REVIEW_CONTENT).replaceAll("(?m)^[ \t]*\r?\n", "")
         holder.movieReviewContent.setText(contentText)
         //Apply color only it has got a value
-        if(mPrimaryColor && mBodyTextColor && mTitleTextColor) {
-            holder.movieReviewAuthor.setBackgroundColor(mPrimaryColor)
+        if(mBodyTextColor && mTitleTextColor) {
             holder.movieReviewAuthor.setTextColor(mTitleTextColor)
-            holder.movieReviewContent.setBackgroundColor(mPrimaryColor)
             holder.movieReviewContent.setTextColor(mBodyTextColor)
+        }
+        //Apply color only it has got a non-zero value (Zero is passed from detail fragment for landscape mode)
+        if(mPrimaryColor != 0) {
+            holder.movieReviewAuthor.setBackgroundColor(mPrimaryColor)
+            holder.movieReviewContent.setBackgroundColor(mPrimaryColor)
         }
     }
 

@@ -634,7 +634,7 @@ public class MovieMagicMainActivity extends AppCompatActivity implements Navigat
         if (intent.resolveActivity(getPackageManager()) != null) {
             startActivity(intent)
         } else {
-            LogDisplay.callLog(LOG_TAG,'Google Playstore is not installed in this device',LogDisplay.MOVIE_MAGIC_MAIN_LOG_FLAG)
+            LogDisplay.callLog(LOG_TAG,'Google Play store is not installed in this device',LogDisplay.MOVIE_MAGIC_MAIN_LOG_FLAG)
         }
     }
 

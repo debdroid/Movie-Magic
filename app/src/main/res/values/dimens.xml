@@ -33,10 +33,12 @@
     <dimen name="poster_image_data_fields_margin">8dp</dimen>
 
     <!-- Misc parameter -->
+    <dimen name="home_page_youttube_fragment_top_margin">4dp</dimen>
     <dimen name="gridview_horizontal_vertical_spacing">2dp</dimen>
     <dimen name="gridview_column_width">115dp</dimen>
     <dimen name="poster_image_height_detail_view">320dp</dimen>
     <dimen name="backdrop_image_height_detail_view">280dp</dimen>
+    <dimen name="backdrop_image_height_detail_view_land">270dp</dimen>
     <dimen name="grid_image_height">160dp</dimen>
     <dimen name="grid_image_width">120dp</dimen>
     <dimen name="person_grid_image_height">210dp</dimen>
@@ -58,4 +60,8 @@
     <dimen name="donate_page_top_landscape_padding">20dp</dimen>
     <dimen name="login_page_top_landscape_padding">20dp</dimen>
     <item name="movie_detail_user_list_drawable_alpha_value_40_percent" format="float" type="dimen">0.4</item>
+    <dimen name="home_page_land_orientation_width">380dp</dimen>
+    <dimen name="detail_fragment_content_area_margin">48dp</dimen>
+    <dimen name="detail_fragment_content_area_width">450dp</dimen>
+    <dimen name="detail_fragment_content_area_margin_bottom">30dp</dimen>
 </resources>

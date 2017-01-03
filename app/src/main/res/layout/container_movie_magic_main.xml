@@ -17,6 +17,7 @@
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             android:background="?attr/colorPrimary"
+            app:layout_scrollFlags="snap"
             android:elevation="@dimen/m_design_toolbar_elevation"
             app:subtitleTextColor="@color/accent"
             app:popupTheme="@style/AppTheme.PopupOverlay"

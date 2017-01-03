@@ -10,7 +10,7 @@
     <!-- Activity Title -->
     <string name="title_activity_main_movie">Movie Main</string>
     <string name="title_activity_grid_movie">GridMovieActivity</string>
-    <string name="title_activity_detail_movie">Movie Detail</string>
+    <string name="title_activity_detail_movie">Movie Details</string>
     <string name="title_activity_person_movie">Person</string>
     <string name="title_activity_collection_movie">Collection</string>
     <string name="title_activity_image_viewer">Image Viewer</string>

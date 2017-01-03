@@ -405,26 +405,43 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
         fadeIn.setDuration(2000)
         mRootView.setAnimation(fadeIn)
 
-        mAppBarLayout = mRootView.findViewById(R.id.movie_detail_app_bar_layout) as AppBarLayout
-        //Show the title only when image is collapsed
-        mAppBarLayout.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
-            boolean isShow = false
-            int scrollRange = -1
+        mCollapsingToolbar = mRootView.findViewById(R.id.movie_detail_collapsing_toolbar) as CollapsingToolbarLayout
+        if (mCollapsingToolbar) {
+            //Just clear off to be on the safe side
+            mCollapsingToolbar.setTitle(" ")
+        }
 
-            @Override
-            void onOffsetChanged(final AppBarLayout appBarLayout, final int verticalOffset) {
-                if (scrollRange == -1) {
-                    scrollRange = appBarLayout.getTotalScrollRange()
+        final AppCompatActivity appCompatActivity = getActivity() as AppCompatActivity
+        mToolbar = mRootView.findViewById(R.id.movie_detail_toolbar) as Toolbar
+        if (mToolbar) {
+            appCompatActivity.setSupportActionBar(mToolbar)
+            //Enable back to home button
+            appCompatActivity.getSupportActionBar().setDisplayHomeAsUpEnabled(true)
+        }
+
+        mAppBarLayout = mRootView.findViewById(R.id.movie_detail_app_bar_layout) as AppBarLayout
+        //Do this only if the collapsing toolbar is available
+        if(mCollapsingToolbar) {
+            //Show the title only when image is collapsed
+            mAppBarLayout.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
+                boolean isShow = false
+                int scrollRange = -1
+
+                @Override
+                void onOffsetChanged(final AppBarLayout appBarLayout, final int verticalOffset) {
+                    if (scrollRange == -1) {
+                        scrollRange = appBarLayout.getTotalScrollRange()
+                    }
+                    if (scrollRange + verticalOffset == 0) {
+                        mCollapsingToolbar.setTitle(mMovieTitle)
+                        isShow = true
+                    } else if (isShow) {
+                        mCollapsingToolbar.setTitle(" ")
+                        isShow = false
+                    }
                 }
-                if (scrollRange + verticalOffset == 0) {
-                    mCollapsingToolbar.setTitle(mMovieTitle)
-                    isShow = true
-                } else if (isShow) {
-                    mCollapsingToolbar.setTitle(" ")
-                    isShow = false
-                }
-            }
-        })
+            })
+        }
 
         mBackdropViewPager = mRootView.findViewById(R.id.movie_detail_backdrop_viewpager) as ViewPager
         mBackdropDotHolderLayout = mRootView.findViewById(R.id.view_pager_dots_holder) as LinearLayout
@@ -672,6 +689,10 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
 
         //All the dynamic fields (data fields) & ratingbar
         mMovieTitleTextView = mRootView.findViewById(R.id.movie_detail_title) as TextView
+        // For land mode no need to display the title as that is already displayed as part of collapsing toolbar
+        if(getResources().getBoolean(R.bool.is_mobile_land)) {
+            mMovieTitleTextView.setVisibility(TextView.GONE)
+        }
         mMpaaRatingImageView = mRootView.findViewById(R.id.movie_detail_mpaa_image) as ImageView
         mGenreTextView = mRootView.findViewById(R.id.movie_detail_title_genre) as TextView
         mRunTimeTextView = mRootView.findViewById(R.id.movie_detail_title_runtime) as TextView
@@ -814,19 +835,19 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
         LogDisplay.callLog(LOG_TAG, 'onActivityCreated is called', LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
         super.onActivityCreated(savedInstanceState)
 
-        final AppCompatActivity appCompatActivity = getActivity() as AppCompatActivity
-        mToolbar = getView().findViewById(R.id.movie_detail_toolbar) as Toolbar
-        if (mToolbar) {
-            appCompatActivity.setSupportActionBar(mToolbar)
-            //Enable back to home button
-            appCompatActivity.getSupportActionBar().setDisplayHomeAsUpEnabled(true)
-        }
+//        final AppCompatActivity appCompatActivity = getActivity() as AppCompatActivity
+//        mToolbar = getView().findViewById(R.id.movie_detail_toolbar) as Toolbar
+//        if (mToolbar) {
+//            appCompatActivity.setSupportActionBar(mToolbar)
+//            //Enable back to home button
+//            appCompatActivity.getSupportActionBar().setDisplayHomeAsUpEnabled(true)
+//        }
 
-        mCollapsingToolbar = getView().findViewById(R.id.movie_detail_collapsing_toolbar) as CollapsingToolbarLayout
-        if (mCollapsingToolbar) {
-            //Just clear off to be on the safe side
-            mCollapsingToolbar.setTitle(" ")
-        }
+//        mCollapsingToolbar = getView().findViewById(R.id.movie_detail_collapsing_toolbar) as CollapsingToolbarLayout
+//        if (mCollapsingToolbar) {
+//            //Just clear off to be on the safe side
+//            mCollapsingToolbar.setTitle(" ")
+//        }
 
         mLocale = context.getResources().getConfiguration().locale.getCountry()
 //        mLocale = 'IN' // Testing line
@@ -1180,23 +1201,32 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
 //                                        mPalleteAccentColor = ContextCompat.getColor(getActivity(), R.color.accent)
 //                                    }
 //                                }
-                                    // Apply the color to the layouts & texts
-                                    changeLayoutAndTextColor()
+                                    // Apply the color based on orientation
+                                    if(!getResources().getBoolean(R.bool.is_mobile_land)) {
+                                        // Apply layout and text color only for portrait mode
+                                        changeLayoutAndTextColor()
+                                        // Apply the color for all attached adapters
+                                        mMovieCastAdapter.changeColor(mPalletePrimaryDarkColor, mPalleteBodyTextColor)
+                                        mMovieCrewAdapter.changeColor(mPalletePrimaryDarkColor, mPalleteBodyTextColor)
+                                        mSimilarMovieAdapter.changeColor(mPalletePrimaryDarkColor, mPalleteBodyTextColor)
+                                        mMovieReviewAdapter.changeColor(mPalletePrimaryColor, mPalleteTitleColor, mPalleteBodyTextColor)
+                                    } else {
+                                        mMovieCastAdapter.changeColor(mPalletePrimaryDarkColor, ContextCompat.getColor(getActivity(), R.color.primary_text))
+                                        mMovieCrewAdapter.changeColor(mPalletePrimaryDarkColor, ContextCompat.getColor(getActivity(), R.color.primary_text))
+                                        mSimilarMovieAdapter.changeColor(mPalletePrimaryDarkColor, ContextCompat.getColor(getActivity(), R.color.primary_text))
+                                        mMovieReviewAdapter.changeColor(0, ContextCompat.getColor(getActivity(), R.color.primary_text), ContextCompat.getColor(getActivity(), R.color.secondary_text))
+                                    }
+                                    setImageButtonBackgroundColor()
                                     initializeTitleAndColor()
-                                    LogDisplay.callLog(LOG_TAG, 'calling setImageButtonColor position -> 1', LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
-                                    setImageButtonColor()
+                                    LogDisplay.callLog(LOG_TAG, 'calling setActiveImageButtonColor position -> 1', LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
+                                    setActiveImageButtonColor()
                                     setRatingStarColor()
-                                    // Apply the color for all attached adapters
-                                    mMovieCastAdapter.changeColor(mPalletePrimaryDarkColor, mPalleteBodyTextColor)
-                                    mMovieCrewAdapter.changeColor(mPalletePrimaryDarkColor, mPalleteBodyTextColor)
-                                    mSimilarMovieAdapter.changeColor(mPalletePrimaryDarkColor, mPalleteBodyTextColor)
-                                    mMovieReviewAdapter.changeColor(mPalletePrimaryColor, mPalleteTitleColor, mPalleteBodyTextColor)
                                 }
                             })
                         } else { // To ensure ImageButton & rating star color is set for static theme
                             mPalleteAccentColor = ContextCompat.getColor(getActivity(), R.color.accent)
-                            LogDisplay.callLog(LOG_TAG, 'calling setImageButtonColor position -> 2', LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
-                            setImageButtonColor()
+                            LogDisplay.callLog(LOG_TAG, 'calling setActiveImageButtonColor position -> 2', LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
+                            setActiveImageButtonColor()
                             setRatingStarColor()
                         }
                     }
@@ -1212,8 +1242,8 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
                 // So ensure that the ImageButton color, Rating star color and accent color are properly set
                 if (Utility.isReducedDataOn(getActivity()) || !Utility.isReadyToDownload(getActivity())) {
                     mPalleteAccentColor = ContextCompat.getColor(getActivity(), R.color.accent)
-                    LogDisplay.callLog(LOG_TAG, 'calling setImageButtonColor position -> 3', LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
-                    setImageButtonColor()
+                    LogDisplay.callLog(LOG_TAG, 'calling setActiveImageButtonColor position -> 3', LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
+                    setActiveImageButtonColor()
                     setRatingStarColor()
                 }
 
@@ -1488,7 +1518,8 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
                     })
             mBackdropViewPager.setAdapter(adapter)
             mBackdropViewPager.clearOnPageChangeListeners()
-            final int dotsCount = adapter.getCount()
+//            final int dotsCount = adapter.getCount()
+            final int dotsCount = mBackdropList.size()
             final AppCompatImageButton[] dotsImage = new AppCompatImageButton[dotsCount]
             mBackdropDotHolderLayout.removeAllViews()
             setBackDropViewPagerDots(dotsCount, dotsImage)
@@ -1511,6 +1542,7 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
                             ViewCompat.setBackgroundTintList(dotsImage[position], accentColorStateList)
                         }
                     }
+                    LogDisplay.callLog(LOG_TAG, "position-> $position", LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
                     mBackdropViewPagerPos = position
                 }
 
@@ -1563,8 +1595,8 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
                 mUserRatingBar.setRating(data.getFloat(COL_MOVIE_USER_LIST_FLAG_USER_RATING))
             }
             // Now set the color
-            LogDisplay.callLog(LOG_TAG, 'calling setImageButtonColor position -> 4', LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
-            setImageButtonColor()
+            LogDisplay.callLog(LOG_TAG, 'calling setActiveImageButtonColor position -> 4', LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
+            setActiveImageButtonColor()
         }
     }
 
@@ -1627,8 +1659,8 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
                     }
                 }
                 // Now set the color
-                LogDisplay.callLog(LOG_TAG, 'calling setImageButtonColor position -> 5', LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
-                setImageButtonColor()
+                LogDisplay.callLog(LOG_TAG, 'calling setActiveImageButtonColor position -> 5', LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
+                setActiveImageButtonColor()
             } else {
                 LogDisplay.callLog(LOG_TAG, "This movie is not in any user Tmdb list", LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
             }
@@ -1687,7 +1719,12 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
         if(mMovieTrailerEmptyMsgTextView.getVisibility() == TextView.VISIBLE) {
             mMovieTrailerEmptyMsgTextView.setTextColor(mPalleteBodyTextColor)
         }
+    }
 
+    /**
+     * This method applies the color to imagebutton background
+     */
+    protected void setImageButtonBackgroundColor() {
         //Set user list ImageButton color
         mImageButtonWatched.setBackgroundColor(mPalletePrimaryDarkColor)
         mImageButtonWishList.setBackgroundColor(mPalletePrimaryDarkColor)
@@ -1698,7 +1735,6 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
         mTmdbImageButtonWatchlist.setBackgroundColor(mPalletePrimaryDarkColor)
         mTmdbImageButtonFavourite.setBackgroundColor(mPalletePrimaryDarkColor)
         mTmdbImageButtonRated.setBackgroundColor(mPalletePrimaryDarkColor)
-
     }
 
     /**
@@ -1748,10 +1784,10 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
     }
 
     /**
-     * This method is called to apply the color to image button (used for user list selection)
+     * This method is called to apply the accent color to the image button which is active (i.e. on)
      */
-    protected void setImageButtonColor() {
-        LogDisplay.callLog(LOG_TAG, 'setImageButtonColor is called', LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
+    protected void setActiveImageButtonColor() {
+        LogDisplay.callLog(LOG_TAG, 'setActiveImageButtonColor is called', LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
         LogDisplay.callLog(LOG_TAG, "mUserListWatchedFlag -> $mUserListWatchedFlag", LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
         LogDisplay.callLog(LOG_TAG, "mUserListWishListdFlag -> $mUserListWishListdFlag", LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
         LogDisplay.callLog(LOG_TAG, "mUserListFavouriteFlag -> $mUserListFavouriteFlag", LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
@@ -1804,7 +1840,12 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
             ViewCompat.setBackgroundTintList(dotsImage[i], whiteColorStateList)
             mBackdropDotHolderLayout.addView(dotsImage[i])
         }
-        // Set the first one's color & size
+        // Infrequently mBackdropViewPagerPos is going out of bound but very hard to replicate, so to avoid the failure
+        // following dirty fix is done
+        if(mBackdropViewPagerPos >= dotsImage.size()) {
+            mBackdropViewPagerPos = dotsImage.size() - 1
+        }
+        // Set the first one's / selected one's color & size
         dotsImage[mBackdropViewPagerPos].setLayoutParams(new LinearLayout.LayoutParams(30,30))
         final ColorStateList accentColorStateList = ColorStateList.valueOf(ContextCompat.getColor(getActivity(), R.color.accent))
         ViewCompat.setBackgroundTintList(dotsImage[mBackdropViewPagerPos], accentColorStateList)
