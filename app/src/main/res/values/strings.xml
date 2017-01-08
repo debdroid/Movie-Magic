@@ -261,6 +261,8 @@
     <string name="notification_day_name_today">Today</string>
     <string name="notification_day_name_tomorrow">Tomorrow</string>
     <string name="menu_counter_zero_value">0</string>
+    <string name="detail_movie_chooser_title">Share this movie via</string>
+    <string name="detail_movie_share_cannot_perform">Please try once the movie data is fully loaded</string>
 
     <!-- ImageView or ImageButton content description -->
     <string name="backdrop_viewpager_image_content_description">Movie backdrop image</string>

@@ -9,6 +9,7 @@ import android.support.v4.app.Fragment
 import android.support.v4.app.LoaderManager
 import android.support.v4.content.CursorLoader
 import android.support.v4.content.Loader
+import android.support.v7.app.AppCompatActivity
 import android.support.v7.preference.PreferenceManager
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
@@ -24,7 +25,7 @@ import com.moviemagic.dpaul.android.app.backgroundmodules.GlobalStaticVariables
 import com.moviemagic.dpaul.android.app.backgroundmodules.LogDisplay
 import com.moviemagic.dpaul.android.app.backgroundmodules.Utility
 import com.moviemagic.dpaul.android.app.contentprovider.MovieMagicContract
-import com.moviemagic.dpaul.android.app.youtube.MovieMagicYoutubeFragment;
+import com.moviemagic.dpaul.android.app.youtube.MovieMagicYoutubeFragment
 import groovy.transform.CompileStatic
 
 @CompileStatic
@@ -136,8 +137,8 @@ class HomeMovieFragment extends Fragment implements LoaderManager.LoaderCallback
         mInCinemaAdapter = new HomeMovieAdapter(getActivity(), mInCinemaRecyclerViewEmptyTextView,
                 new HomeMovieAdapter.HomeMovieAdapterOnClickHandler(){
                     @Override
-                    void onClick(final int movieId, final String movieCategory, final HomeMovieAdapter.HomeMovieAdapterViewHolder viewHolder) {
-                        mCallbackForHomeMovieClick.onHomeMovieItemSelected(movieId,movieCategory,viewHolder)
+                    void onClick(final int movieId, final String movieCategory) {
+                        mCallbackForHomeMovieClick.onHomeMovieItemSelected(movieId,movieCategory)
                     }
                 })
         mInCinemaRecyclerView.setAdapter(mInCinemaAdapter)
@@ -154,8 +155,8 @@ class HomeMovieFragment extends Fragment implements LoaderManager.LoaderCallback
         mComingSoonAdapter = new HomeMovieAdapter(getActivity(), mComingSoonRecyclerViewEmptyTextView,
                 new HomeMovieAdapter.HomeMovieAdapterOnClickHandler(){
                     @Override
-                    void onClick(final int movieId, final String movieCategory, final HomeMovieAdapter.HomeMovieAdapterViewHolder viewHolder) {
-                        mCallbackForHomeMovieClick.onHomeMovieItemSelected(movieId,movieCategory,viewHolder)
+                    void onClick(final int movieId, final String movieCategory) {
+                        mCallbackForHomeMovieClick.onHomeMovieItemSelected(movieId,movieCategory)
                     }
                 })
         mComingSoonRecyclerView.setAdapter(mComingSoonAdapter)
@@ -172,8 +173,8 @@ class HomeMovieFragment extends Fragment implements LoaderManager.LoaderCallback
         mRecentlyAddedUserListAdapter = new HomeMovieAdapter(getActivity(), mRecentlyAddedUserListRecyclerViewEmptyTextView,
                 new HomeMovieAdapter.HomeMovieAdapterOnClickHandler(){
                     @Override
-                    void onClick(final int movieId, final String movieCategory, final HomeMovieAdapter.HomeMovieAdapterViewHolder viewHolder) {
-                        mCallbackForHomeMovieClick.onHomeMovieItemSelected(movieId,movieCategory,viewHolder)
+                    void onClick(final int movieId, final String movieCategory) {
+                        mCallbackForHomeMovieClick.onHomeMovieItemSelected(movieId,movieCategory)
                     }
                 })
         mRecentlyAddedUserListRecyclerView.setAdapter(mRecentlyAddedUserListAdapter)
@@ -192,8 +193,8 @@ class HomeMovieFragment extends Fragment implements LoaderManager.LoaderCallback
         mRecommendationAdapter = new HomeMovieAdapter(getActivity(), mRecommendationRecyclerViewEmptyTextView,
                 new HomeMovieAdapter.HomeMovieAdapterOnClickHandler(){
                     @Override
-                    void onClick(final int movieId, final String movieCategory, final HomeMovieAdapter.HomeMovieAdapterViewHolder viewHolder) {
-                        mCallbackForHomeMovieClick.onHomeMovieItemSelected(movieId,movieCategory,viewHolder)
+                    void onClick(final int movieId, final String movieCategory) {
+                        mCallbackForHomeMovieClick.onHomeMovieItemSelected(movieId,movieCategory)
                     }
                 })
         mRecommendationRecyclerView.setAdapter(mRecommendationAdapter)
@@ -418,7 +419,7 @@ class HomeMovieFragment extends Fragment implements LoaderManager.LoaderCallback
     void recommendationOnLoadFinished(final Cursor data) {
         LogDisplay.callLog(LOG_TAG, "recommendationOnLoadFinished.Cursor rec count -> ${data.getCount()}", LogDisplay.HOME_MOVIE_FRAGMENT_LOG_FLAG)
         // Read the user's preference and show / hide recommended movies accordingly
-        final SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getActivity())
+        final SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getActivity().getApplicationContext())
         final boolean recommendedFlag = sharedPreferences.getBoolean(getString(R.string.pref_recommendation_key),false)
         if(recommendedFlag) {
             mRecommendationLayout.setVisibility(LinearLayout.VISIBLE)
@@ -437,6 +438,34 @@ class HomeMovieFragment extends Fragment implements LoaderManager.LoaderCallback
         super.onSaveInstanceState(outState)
     }
 
+    @Override
+    void onDestroy() {
+        super.onDestroy()
+        LogDisplay.callLog(LOG_TAG,'onDestroy is called',LogDisplay.HOME_MOVIE_FRAGMENT_LOG_FLAG)
+    }
+
+    @Override
+    void onDestroyView() {
+        LogDisplay.callLog(LOG_TAG,'onDestroyView is called',LogDisplay.HOME_MOVIE_FRAGMENT_LOG_FLAG)
+        // Destroy the loaders
+        getLoaderManager().destroyLoader(HOME_MOVIE_FRAGMENT_VIEW_PAGER_LOADER_ID)
+        getLoaderManager().destroyLoader(HOME_MOVIE_FRAGMENT_IN_CINEMA_LOADER_ID)
+        getLoaderManager().destroyLoader(HOME_MOVIE_FRAGMENT_COMING_SOON_LOADER_ID)
+        getLoaderManager().destroyLoader(HOME_MOVIE_FRAGMENT_RECENTLY_ADDED_USER_LIST_LOADER_ID)
+        getLoaderManager().destroyLoader(HOME_MOVIE_FRAGMENT_RECOMMENDATION_LOADER_ID)
+        // Set the adapters to null after loaders are destroyed
+        mInCinemaAdapter = null
+        mComingSoonAdapter= null
+        mRecentlyAddedUserListAdapter = null
+        mRecommendationAdapter = null
+        // Remove adapters from recycler views
+        mInCinemaRecyclerView.setAdapter(null)
+        mComingSoonRecyclerView.setAdapter(null)
+        mRecentlyAddedUserListRecyclerView.setAdapter(null)
+        mRecommendationRecyclerView.setAdapter(null)
+        // Call the super onDestroyView
+        super.onDestroyView()
+    }
 
     @Override
     public void onAttach(final Context context) {
@@ -445,7 +474,7 @@ class HomeMovieFragment extends Fragment implements LoaderManager.LoaderCallback
         // This makes sure that the container activity has implemented
         // the callback interface. If not, it throws an exception
         try {
-            if(context instanceof Activity) {
+            if(context instanceof AppCompatActivity) {
                 mCallbackForHomeMovieClick = (CallbackForHomeMovieClick) context
             }
         } catch (final ClassCastException e) {
@@ -453,13 +482,22 @@ class HomeMovieFragment extends Fragment implements LoaderManager.LoaderCallback
                     + " must implement CallbackForHomeMovieClick interface")
         }
         try {
-            if(context instanceof Activity) {
+            if(context instanceof AppCompatActivity) {
                 mCallbackForShowAllButtonClick = (CallbackForShowAllButtonClick) context
             }
         } catch (final ClassCastException e) {
             throw new ClassCastException(getActivity().toString()
                     + " must implement CallbackForShowAllButtonClick interface")
         }
+    }
+
+    @Override
+    void onDetach() {
+        LogDisplay.callLog(LOG_TAG,'onDetach is called',LogDisplay.HOME_MOVIE_FRAGMENT_LOG_FLAG)
+        // Detach the interface reference for GC
+        mCallbackForHomeMovieClick = null
+        mCallbackForShowAllButtonClick = null
+        super.onDetach()
     }
 
     /**
@@ -471,7 +509,7 @@ class HomeMovieFragment extends Fragment implements LoaderManager.LoaderCallback
         /**
          * HomeMovieFragmentCallback when a movie item has been clicked on home page
          */
-        public void onHomeMovieItemSelected(int movieId, String movieCategory, HomeMovieAdapter.HomeMovieAdapterViewHolder viewHolder)
+        public void onHomeMovieItemSelected(int movieId, String movieCategory)
     }
 
     /**

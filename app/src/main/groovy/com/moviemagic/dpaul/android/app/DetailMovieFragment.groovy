@@ -21,6 +21,7 @@ import android.support.design.widget.CollapsingToolbarLayout
 import android.support.design.widget.Snackbar
 import android.support.v17.leanback.widget.HorizontalGridView
 import android.support.v4.app.Fragment
+import android.support.v4.app.FragmentActivity
 import android.support.v4.app.LoaderManager
 import android.support.v4.content.ContextCompat
 import android.support.v4.content.CursorLoader
@@ -50,6 +51,7 @@ import android.view.animation.Animation
 import android.view.animation.AnimationUtils
 import android.view.animation.DecelerateInterpolator
 import android.widget.Button
+import android.widget.FrameLayout
 import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.LinearLayout
@@ -65,7 +67,8 @@ import groovy.transform.CompileStatic
 
 @CompileStatic
 class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
-    private static final String LOG_TAG = DetailMovieFragment.class.getSimpleName()
+//    private static final String LOG_TAG = DetailMovieFragment.class.getSimpleName()
+    private String LOG_TAG = DetailMovieFragment.class.getSimpleName()
 
     private TextView mMovieTitleTextView, mGenreTextView, mRunTimeTextView, mReleaseDateTextView, mBudgetTextView,
                      mRevenueTextView, mPopularityTextView, mTotalVoteCountTextView, mTaglineTextView, mSynopsisTextView,
@@ -119,14 +122,25 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
     private ViewPager mBackdropViewPager
 //    private final android.os.Handler mHandler = new android.os.Handler()
 //    private Runnable mRunnable
-    private GridLayoutManager mSimilarMovieGridLayoutManager
+    private GridLayoutManager mSimilarMovieGridLayoutManager, mCastGridLayoutManager, mCrewGridLayoutManager
+    private LayoutManager mReviewLinearLayoutManager
     private List<String> mBackdropList
     private CallbackForBackdropImageClick mCallbackForBackdropImageClick
     private int mBackdropViewPagerPos = 0
     private boolean firstTimeLocalRatingUpdateWithTmdbRating = true
-    private ShareActionProvider mShareActionProvider
+//    private ShareActionProvider mShareActionProvider
     private boolean mMoviDataLoaded = false
     private boolean mImageButtonClickForcedOnLoadFinished = false
+    private View mRootView
+//    private AppCompatActivity mAppCompatActivity
+    private CallbackForSimilarMovieClick mCallbackForSimilarMovieClick
+    private DetailFragmentPagerAdapter mDetailFragmentPagerAdapter
+    private AppBarLayout.OnOffsetChangedListener mAppbarOnOffsetChangeListener
+    private OnPageChangeListener mOnPageChangeListener
+    private SimilarMovieAdapter.SimilarMovieAdapterOnClickHandler mSimilarMovieAdapterOnClickHandler
+    private DetailFragmentPagerAdapter.DetailFragmentPagerAdapterOnClickHandler mDetailFragmentPagerAdapterOnClickHandler
+    //TODO leak testing
+    private boolean mOnRestoreOccurred = false
 
     private static final int MOVIE_DETAIL_FRAGMENT_BASIC_DATA_LOADER_ID = 0
     private static final int MOVIE_DETAIL_FRAGMENT_SIMILAR_MOVIE_LOADER_ID = 1
@@ -342,6 +356,31 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
     }
 
     @Override
+    public void onAttach(final Context context) {
+        LOG_TAG = LOG_TAG + '->Fragment#' + getActivity().getSupportFragmentManager().getBackStackEntryCount()
+        LogDisplay.callLog(LOG_TAG,'onAttach is called',LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
+        super.onAttach(context)
+        // This makes sure that the container activity has implemented
+        // the callback interface. If not, it throws an exception
+        try {
+            if(context instanceof AppCompatActivity) {
+                mCallbackForBackdropImageClick = (CallbackForBackdropImageClick) context
+            }
+        } catch (final ClassCastException e) {
+            throw new ClassCastException(getActivity().toString()
+                    + " must implement CallbackForBackdropImageClick interface")
+        }
+        try {
+            if(context instanceof AppCompatActivity) {
+                mCallbackForSimilarMovieClick = (CallbackForSimilarMovieClick) context
+            }
+        } catch (final ClassCastException e) {
+            throw new ClassCastException(getActivity().toString()
+                    + " must implement CallbackForSimilarMovieClick interface")
+        }
+    }
+
+    @Override
     public void onCreate(final Bundle savedInstanceState) {
         LogDisplay.callLog(LOG_TAG, 'onCreate is called', LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
         super.onCreate(savedInstanceState)
@@ -351,38 +390,21 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
         setHasOptionsMenu(true)
     }
 
-    @Override
-    public void onCreateOptionsMenu (final Menu menu, final MenuInflater inflater) {
-        LogDisplay.callLog(LOG_TAG, 'onCreateOptionsMenu is called', LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
-        // Inflate the menu, this adds items to the action bar if it is present.
-        inflater.inflate(R.menu.detail_fragment_menu, menu)
-        // Locate MenuItem with ShareActionProvider
-        final MenuItem item = menu.findItem(R.id.menu_action_share)
-        // Fetch and store ShareActionProvider
-        mShareActionProvider = (ShareActionProvider) MenuItemCompat.getActionProvider(item)
-        //Show share option if onLoadFinished is complete for movie_basic_info and we have data
-        if(mMoviDataLoaded) {
-            shareMovie()
-        } else {
-            LogDisplay.callLog(LOG_TAG,'onCreateOptionsMenu: movie detail data not yet loaded!',LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
-        }
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(final MenuItem item) {
-        final int itemId = item.getItemId()
-        switch (itemId) {
-            case android.R.id.home:
-                if(getActivity().getSupportFragmentManager().getBackStackEntryCount() > 0) {
-                    getActivity().getSupportFragmentManager().popBackStack()
-                } else {
-                    getActivity().finish()
-                }
-                return true
-            default:
-                return super.onOptionsItemSelected(item)
-        }
-    }
+//    @Override
+//    public boolean onOptionsItemSelected(final MenuItem item) {
+//        final int itemId = item.getItemId()
+//        switch (itemId) {
+//            case android.R.id.home:
+//                if(getActivity().getSupportFragmentManager().getBackStackEntryCount() > 0) {
+//                    getActivity().getSupportFragmentManager().popBackStack()
+//                } else {
+//                    getActivity().finish()
+//                }
+//                return true
+//            default:
+//                return super.onOptionsItemSelected(item)
+//        }
+//    }
 
     @Override
     public View onCreateView(final LayoutInflater inflater, final ViewGroup container, final Bundle savedInstanceState) {
@@ -398,12 +420,12 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
             LogDisplay.callLog(LOG_TAG, 'Could not parse fragment data', LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
         }
         //Inflate the view before referring any view using id
-        final View mRootView = inflater.inflate(R.layout.fragment_detail_movie, container, false)
-        //Set a fade animation
-        final Animation fadeIn = new AlphaAnimation(0, 1)
-        fadeIn.setInterpolator(new DecelerateInterpolator())
-        fadeIn.setDuration(2000)
-        mRootView.setAnimation(fadeIn)
+        mRootView = inflater.inflate(R.layout.fragment_detail_movie, container, false)
+//        // Create a fade animation
+//        final Animation fadeIn = new AlphaAnimation(0, 1)
+//        fadeIn.setInterpolator(new DecelerateInterpolator())
+//        fadeIn.setDuration(2000)
+//        mRootView.setAnimation(fadeIn)
 
         mCollapsingToolbar = mRootView.findViewById(R.id.movie_detail_collapsing_toolbar) as CollapsingToolbarLayout
         if (mCollapsingToolbar) {
@@ -411,37 +433,42 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
             mCollapsingToolbar.setTitle(" ")
         }
 
-        final AppCompatActivity appCompatActivity = getActivity() as AppCompatActivity
+//        final WeakReference<AppCompatActivity> appCompatActivity = new WeakReference<>(getActivity() as AppCompatActivity)
+//        mAppCompatActivity = getActivity() as AppCompatActivity
         mToolbar = mRootView.findViewById(R.id.movie_detail_toolbar) as Toolbar
         if (mToolbar) {
-            appCompatActivity.setSupportActionBar(mToolbar)
-            //Enable back to home button
-            appCompatActivity.getSupportActionBar().setDisplayHomeAsUpEnabled(true)
+            ((AppCompatActivity)getActivity()).setSupportActionBar(mToolbar)
+//            mAppCompatActivity.setSupportActionBar(mToolbar)
+//            //Enable back to home button
+            ((AppCompatActivity)getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true)
+//            mAppCompatActivity.getSupportActionBar().setDisplayHomeAsUpEnabled(true)
         }
 
         mAppBarLayout = mRootView.findViewById(R.id.movie_detail_app_bar_layout) as AppBarLayout
-        //Do this only if the collapsing toolbar is available
-        if(mCollapsingToolbar) {
-            //Show the title only when image is collapsed
-            mAppBarLayout.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
-                boolean isShow = false
-                int scrollRange = -1
-
-                @Override
-                void onOffsetChanged(final AppBarLayout appBarLayout, final int verticalOffset) {
-                    if (scrollRange == -1) {
-                        scrollRange = appBarLayout.getTotalScrollRange()
-                    }
-                    if (scrollRange + verticalOffset == 0) {
-                        mCollapsingToolbar.setTitle(mMovieTitle)
-                        isShow = true
-                    } else if (isShow) {
-                        mCollapsingToolbar.setTitle(" ")
-                        isShow = false
-                    }
-                }
-            })
-        }
+//        //Show the title only when image is collapsed
+//        //Do this only if the collapsing toolbar is available
+//        if(mCollapsingToolbar) {
+//            //Show the title only when image is collapsed
+//            mAppbarOnOffsetChangeListener = new AppBarLayout.OnOffsetChangedListener() {
+//                boolean isShow = false
+//                int scrollRange = -1
+//
+//                @Override
+//                void onOffsetChanged(final AppBarLayout appBarLayout, final int verticalOffset) {
+//                    if (scrollRange == -1) {
+//                        scrollRange = appBarLayout.getTotalScrollRange()
+//                    }
+//                    if (scrollRange + verticalOffset == 0) {
+//                        mCollapsingToolbar.setTitle(mMovieTitle)
+//                        isShow = true
+//                    } else if (isShow) {
+//                        mCollapsingToolbar.setTitle(" ")
+//                        isShow = false
+//                    }
+//                }
+//            }
+//            mAppBarLayout.addOnOffsetChangedListener(mAppbarOnOffsetChangeListener)
+//        }
 
         mBackdropViewPager = mRootView.findViewById(R.id.movie_detail_backdrop_viewpager) as ViewPager
         mBackdropDotHolderLayout = mRootView.findViewById(R.id.view_pager_dots_holder) as LinearLayout
@@ -542,7 +569,7 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
                             getString(R.string.cannot_perform_operation_msg), Snackbar.LENGTH_LONG).show()
                 }
             }
-        } as View.OnClickListener)
+        })
         mImageButtonFavourite = mRootView.findViewById(R.id.movie_detail_user_list_drawable_favourite) as ImageButton
         mImageButtonFavourite.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -574,7 +601,7 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
                             getString(R.string.cannot_perform_operation_msg), Snackbar.LENGTH_LONG).show()
                 }
             }
-        } as View.OnClickListener)
+        })
         mImageButtonCollection = mRootView.findViewById(R.id.movie_detail_user_list_drawable_collection) as ImageButton
         mImageButtonCollection.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -606,7 +633,7 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
                             getString(R.string.cannot_perform_operation_msg), Snackbar.LENGTH_LONG).show()
                 }
             }
-        } as View.OnClickListener)
+        })
         /**
          * User's TMDb list button handling
          */
@@ -616,7 +643,7 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
             void onClick(final View v) {
                 LogDisplay.callLog(LOG_TAG, 'Tmdb user watchlist button is clicked', LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
                 mImageButtonClickForcedOnLoadFinished = true
-                if(Utility.isReadyToDownload(getActivity())) {
+                if(Utility.isReadyToDownload(getActivity().getApplicationContext())) {
                     //If full opaque then already selected, so remove it
                     if (mTmdbImageButtonWatchlist.getAlpha() == GlobalStaticVariables.MOVIE_MAGIC_ALPHA_FULL_OPAQUE) {
                         new UploadTmdbRequest(getActivity(), GlobalStaticVariables.MOVIE_CATEGORY_TMDB_USER_WATCHLIST, 0,
@@ -632,14 +659,14 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
                     Snackbar.make(mUserTmdbListDrawableLayout, getString(R.string.no_internet_cannot_perform_operation_message), Snackbar.LENGTH_LONG).show()
                 }
             }
-        } as View.OnClickListener)
+        })
         mTmdbImageButtonFavourite = mRootView.findViewById(R.id.movie_detail_user_tmdb_list_drawable_favourite) as ImageButton
         mTmdbImageButtonFavourite.setOnClickListener(new View.OnClickListener() {
             @Override
             void onClick(final View v) {
                 LogDisplay.callLog(LOG_TAG, 'Tmdb user favourite button is clicked', LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
                 mImageButtonClickForcedOnLoadFinished = true
-                if(Utility.isReadyToDownload(getActivity())) {
+                if(Utility.isReadyToDownload(getActivity().getApplicationContext())) {
                     //If full opaque then already selected, so remove it
                     if (mTmdbImageButtonFavourite.getAlpha() == GlobalStaticVariables.MOVIE_MAGIC_ALPHA_FULL_OPAQUE) {
                         new UploadTmdbRequest(getActivity(), GlobalStaticVariables.MOVIE_CATEGORY_TMDB_USER_FAVOURITE, 0,
@@ -656,14 +683,14 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
                 }
 
             }
-        } as View.OnClickListener)
+        })
         mTmdbImageButtonRated = mRootView.findViewById(R.id.movie_detail_user_tmdb_list_drawable_rated) as ImageButton
         mTmdbImageButtonRated.setOnClickListener(new View.OnClickListener() {
             @Override
             void onClick(final View v) {
                 LogDisplay.callLog(LOG_TAG, 'Tmdb user rated button is clicked', LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
                 mImageButtonClickForcedOnLoadFinished = true
-                if(Utility.isReadyToDownload(getActivity())) {
+                if(Utility.isReadyToDownload(getActivity().getApplicationContext())) {
                     //If full opaque then already selected, so show user that they need to change the rating value
                     if (mTmdbImageButtonRated.getAlpha() == GlobalStaticVariables.MOVIE_MAGIC_ALPHA_FULL_OPAQUE) {
                         Snackbar.make(mTmdbImageButtonRated, getString(R.string.tmdb_rating_user_prompt_msg), Snackbar.LENGTH_LONG).show()
@@ -685,7 +712,7 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
                     Snackbar.make(mUserTmdbListDrawableLayout, getString(R.string.no_internet_cannot_perform_operation_message), Snackbar.LENGTH_LONG).show()
                 }
             }
-        } as View.OnClickListener)
+        })
 
         //All the dynamic fields (data fields) & ratingbar
         mMovieTitleTextView = mRootView.findViewById(R.id.movie_detail_title) as TextView
@@ -732,7 +759,7 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
                     }
                 }
             }
-        } as RatingBar.OnRatingBarChangeListener)
+        })
         mTotalVoteCountTextView = mRootView.findViewById(R.id.movie_detail_tmdb_rating_vote_count_val) as TextView
         mTaglineTextView = mRootView.findViewById(R.id.movie_detail_synopsis_tagline) as TextView
         mSynopsisTextView = mRootView.findViewById(R.id.movie_detail_synopsis) as TextView
@@ -746,27 +773,28 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
         mCollectionBackdropImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             void onClick(final View v) {
-                if(mCollectionId > 0) {
-                    LogDisplay.callLog(LOG_TAG, 'Collection backdrop image is clicked', LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
-                    //Create an intent for collection activity
-                    final Uri uri = MovieMagicContract.MovieCollection.buildMovieCollectionUriWithCollectionId(mCollectionId)
-                    final Intent intent = new Intent(getActivity(),CollectionMovieActivity.class)
-                    intent.setData(uri)
-                    getActivity().startActivity(intent)
-                    //Start the animation
-                    getActivity().overridePendingTransition(R.anim.slide_bottom_in_animation,0)
-                } else {
-                    LogDisplay.callLog(LOG_TAG, "Invalid collection id.id->$mCollectionId", LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
-                }
+                //TODO - need to uncomment once memory leak issue is solved
+//                if(mCollectionId > 0) {
+//                    LogDisplay.callLog(LOG_TAG, 'Collection backdrop image is clicked', LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
+//                    //Create an intent for collection activity
+//                    final Uri uri = MovieMagicContract.MovieCollection.buildMovieCollectionUriWithCollectionId(mCollectionId)
+//                    final Intent intent = new Intent(getActivity(),CollectionMovieActivity.class)
+//                    intent.setData(uri)
+//                    getActivity().startActivity(intent)
+//                    //Start the animation
+//                    getActivity().overridePendingTransition(R.anim.slide_bottom_in_animation,0)
+//                } else {
+//                    LogDisplay.callLog(LOG_TAG, "Invalid collection id.id->$mCollectionId", LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
+//                }
             }
-        } as View.OnClickListener)
+        })
         /**
          * Movie Cast Grid handling
          */
         mHorizontalMovieCastGridView = mRootView.findViewById(R.id.movie_detail_cast_grid) as HorizontalGridView
         mCastGridEmptyMsgTextView = mRootView.findViewById(R.id.movie_detail_cast_grid_empty_msg_text_view) as TextView
-        final GridLayoutManager castGridLayoutManager = new GridLayoutManager(getActivity(), 1, GridLayoutManager.HORIZONTAL, false)
-        mHorizontalMovieCastGridView.setLayoutManager(castGridLayoutManager)
+        mCastGridLayoutManager = new GridLayoutManager(getActivity(), 1, GridLayoutManager.HORIZONTAL, false)
+        mHorizontalMovieCastGridView.setLayoutManager(mCastGridLayoutManager)
         mMovieCastAdapter = new MovieCastAdapter(getActivity(), mCastGridEmptyMsgTextView)
         mHorizontalMovieCastGridView.setAdapter(mMovieCastAdapter)
 
@@ -775,8 +803,8 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
          */
         mHorizontalMovieCrewGridView = mRootView.findViewById(R.id.movie_detail_crew_grid) as HorizontalGridView
         mCrewGridEmptyMsgTextView = mRootView.findViewById(R.id.movie_detail_crew_grid_empty_msg_text_view) as TextView
-        final GridLayoutManager crewGridLayoutManager = new GridLayoutManager(getActivity(), 1, GridLayoutManager.HORIZONTAL, false)
-        mHorizontalMovieCrewGridView.setLayoutManager(crewGridLayoutManager)
+        mCrewGridLayoutManager = new GridLayoutManager(getActivity(), 1, GridLayoutManager.HORIZONTAL, false)
+        mHorizontalMovieCrewGridView.setLayoutManager(mCrewGridLayoutManager)
         mMovieCrewAdapter = new MovieCrewAdapter(getActivity(), mCrewGridEmptyMsgTextView)
         mHorizontalMovieCrewGridView.setAdapter(mMovieCrewAdapter)
 
@@ -787,7 +815,23 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
         mSimilarMovieGridEmptyMsgTextView = mRootView.findViewById(R.id.movie_detail_similar_movie_grid_empty_msg_text_view) as TextView
         mSimilarMovieGridLayoutManager = new GridLayoutManager(getActivity(), 1, GridLayoutManager.HORIZONTAL, false)
         mHorizontalSimilarMovieGridView.setLayoutManager(mSimilarMovieGridLayoutManager)
-        mSimilarMovieAdapter = new SimilarMovieAdapter(getActivity(), mSimilarMovieGridEmptyMsgTextView)
+        mSimilarMovieAdapterOnClickHandler = new SimilarMovieAdapter.SimilarMovieAdapterOnClickHandler(){
+            @Override
+            void onClick(int movieId) {
+                mCallbackForSimilarMovieClick.onSimilarMovieItemSelected(movieId)
+            }
+        }
+        //TODO leak testing
+        mSimilarMovieAdapter = new SimilarMovieAdapter(mSimilarMovieGridEmptyMsgTextView,
+//        mSimilarMovieAdapter = new SimilarMovieAdapter(getActivity(), mSimilarMovieGridEmptyMsgTextView,
+                mSimilarMovieAdapterOnClickHandler)
+//        mSimilarMovieAdapter = new SimilarMovieAdapter(getActivity(), mSimilarMovieGridEmptyMsgTextView,
+//                new SimilarMovieAdapter.SimilarMovieAdapterOnClickHandler(){
+//                    @Override
+//                    void onClick(int movieId) {
+//                        mCallbackForSimilarMovieClick.onSimilarMovieItemSelected(movieId)
+//                    }
+//                })
         mHorizontalSimilarMovieGridView.setAdapter(mSimilarMovieAdapter)
 
         /**
@@ -800,7 +844,7 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
                 LogDisplay.callLog(LOG_TAG, 'Home Page Button is clicked', LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
                 startHomePageIntent()
             }
-        } as View.OnClickListener)
+        })
         mImdbLinkButton = mRootView.findViewById(R.id.movie_detail_web_links_imdb_link_button) as Button
         mImdbLinkButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -808,18 +852,20 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
                 LogDisplay.callLog(LOG_TAG, 'IMDb Button is clicked', LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
                 startImdbIntent()
             }
-        } as View.OnClickListener)
+        })
         /**
          * Review recycler view handling
          */
         mMovieReviewRecyclerView = mRootView.findViewById(R.id.movie_detail_review_recycler_view) as RecyclerView
         //Set this to false for smooth scrolling of recyclerview
-        mMovieReviewRecyclerView.setNestedScrollingEnabled(false)
-        final LayoutManager linearLayoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false)
-        linearLayoutManager.setAutoMeasureEnabled(true)
-        mMovieReviewRecyclerView.setLayoutManager(linearLayoutManager)
-        mMovieReviewAdapter = new MovieReviewAdapter(getActivity(), mRecyclerViewEmptyMsgTextView)
-        mMovieReviewRecyclerView.setAdapter(mMovieReviewAdapter)
+        //TODO - part of leak testing
+//        mMovieReviewRecyclerView.setNestedScrollingEnabled(false)
+        mReviewLinearLayoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false)
+        mReviewLinearLayoutManager.setAutoMeasureEnabled(true)
+        mMovieReviewRecyclerView.setLayoutManager(mReviewLinearLayoutManager)
+        //TODO leak testing
+//        mMovieReviewAdapter = new MovieReviewAdapter(getActivity(), mRecyclerViewEmptyMsgTextView)
+//        mMovieReviewRecyclerView.setAdapter(mMovieReviewAdapter)
 
         /** If the user is not logged in to Tmdb account then hide the Tmdb user list layout **/
         if (MovieMagicMainActivity.isUserLoggedIn) {
@@ -849,6 +895,7 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
 //            mCollapsingToolbar.setTitle(" ")
 //        }
 
+        // Determine locale
         mLocale = context.getResources().getConfiguration().locale.getCountry()
 //        mLocale = 'IN' // Testing line
         // Currently program handles only 'GB' (i.e. UK) and 'US' locales
@@ -891,12 +938,13 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
             getLoaderManager().initLoader(MOVIE_DETAIL_FRAGMENT_MOVIE_REVIEW_LOADER_ID, null, this)
             getLoaderManager().initLoader(MOVIE_DETAIL_FRAGMENT_MOVIE_USER_LIST_FLAG_LOADER_ID, null, this)
             // Start Tmdb data loader only if user is logged in
+            //TODO this is not a good way to access variable, use Global class
             if(MovieMagicMainActivity.isUserLoggedIn) {
                 getLoaderManager().initLoader(MOVIE_DETAIL_FRAGMENT_BASIC_TMDB_DATA_LOADER_ID, null, this)
             }
         } else {
             mBackdropViewPagerPos = savedInstanceState.getInt(GlobalStaticVariables.DETAIL_BACKDROP_VIEWPAGER_POSITION,0)
-            LogDisplay.callLog(LOG_TAG, 'onActivityCreated:not first time, so restart loaders', LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
+            LogDisplay.callLog(LOG_TAG, 'onActivityCreated:restore case, so restart loaders', LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
             getLoaderManager().restartLoader(MOVIE_DETAIL_FRAGMENT_BASIC_DATA_LOADER_ID, null, this)
             getLoaderManager().restartLoader(MOVIE_DETAIL_FRAGMENT_SIMILAR_MOVIE_LOADER_ID, null, this)
             getLoaderManager().restartLoader(MOVIE_DETAIL_FRAGMENT_MOVIE_VIDEO_LOADER_ID, null, this)
@@ -916,24 +964,98 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
     @Override
     void onStart() {
         super.onStart()
+        LogDisplay.callLog(LOG_TAG, 'onStart is called', LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
         // Check if the user is online or not, if not then show a message
-        final boolean isOnline = Utility.isOnline(getActivity())
+        final boolean isOnline = Utility.isOnline(getActivity().getApplicationContext())
         if(!isOnline) {
             Snackbar.make(mAppBarLayout, getString(R.string.no_internet_connection_message), Snackbar.LENGTH_LONG).show()
-        } else if(Utility.isOnlyWifi(getActivity()) & !GlobalStaticVariables.WIFI_CONNECTED) {
+        } else if(Utility.isOnlyWifi(getActivity().getApplicationContext()) & !GlobalStaticVariables.WIFI_CONNECTED) {
             // If user has selected only WiFi but user is online without WiFi then show a dialog
              Snackbar.make(mAppBarLayout, getString(R.string.internet_connection_without_wifi_message), Snackbar.LENGTH_LONG).show()
         } else if (Utility.isReducedDataOn(getActivity())) {
             // If user has selected reduced data
             Snackbar.make(mAppBarLayout, getString(R.string.reduced_data_use_on_message), Snackbar.LENGTH_LONG).show()
         }
+
+        // Create a fade animation
+        final Animation fadeIn = new AlphaAnimation(0, 1)
+        fadeIn.setInterpolator(new DecelerateInterpolator())
+        fadeIn.setDuration(2000)
+        mRootView.setAnimation(fadeIn)
+
+//        // Determine locale
+//        mLocale = context.getResources().getConfiguration().locale.getCountry()
+////        mLocale = 'IN' // Testing line
+//        // Currently program handles only 'GB' (i.e. UK) and 'US' locales
+//        // If not any of the above then fallback to US locale
+//        switch (mLocale) {
+//            case 'GB':
+//            case 'US':
+//                // do nothing
+//                break
+//            default:
+//                mLocale = 'US'
+//        }
+
+        //Show the title only when image is collapsed
+        //Do this only if the collapsing toolbar is available
+        if(mCollapsingToolbar) {
+            //Show the title only when image is collapsed
+            mAppbarOnOffsetChangeListener = new AppBarLayout.OnOffsetChangedListener() {
+                boolean isShow = false
+                int scrollRange = -1
+
+                @Override
+                void onOffsetChanged(final AppBarLayout appBarLayout, final int verticalOffset) {
+                    if (scrollRange == -1) {
+                        scrollRange = appBarLayout.getTotalScrollRange()
+                    }
+                    if (scrollRange + verticalOffset == 0) {
+                        mCollapsingToolbar.setTitle(mMovieTitle)
+                        isShow = true
+                    } else if (isShow) {
+                        mCollapsingToolbar.setTitle(" ")
+                        isShow = false
+                    }
+                }
+            }
+            mAppBarLayout.addOnOffsetChangedListener(mAppbarOnOffsetChangeListener)
+        }
+        //TODO leak testing
+        mOnRestoreOccurred = true
     }
 
     @Override
-    void onSaveInstanceState(final Bundle outState) {
-        outState.putInt(GlobalStaticVariables.DETAIL_BACKDROP_VIEWPAGER_POSITION,mBackdropViewPagerPos)
-        // Now call the superclass so it can save the view hierarchy state
-        super.onSaveInstanceState(outState)
+    public void onCreateOptionsMenu (final Menu menu, final MenuInflater inflater) {
+        LogDisplay.callLog(LOG_TAG, 'onCreateOptionsMenu is called', LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
+        // Inflate the menu, this adds items to the action bar if it is present.
+        inflater.inflate(R.menu.detail_fragment_menu, menu)
+        // Locate MenuItem with ShareActionProvider
+//        final MenuItem item = menu.findItem(R.id.menu_action_share)
+        // Fetch and store ShareActionProvider
+//        mShareActionProvider = (ShareActionProvider) MenuItemCompat.getActionProvider(item)
+        // Show share option if onLoadFinished is complete for movie_basic_info and we have data
+        // Otherwise it will be called once the data is loaded
+//        if(mMoviDataLoaded) {
+//            shareMovie()
+//        } else {
+//            LogDisplay.callLog(LOG_TAG,'onCreateOptionsMenu: movie detail data not yet loaded!',LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
+//        }
+    }
+
+    @Override
+    boolean onOptionsItemSelected(MenuItem item) {
+        LogDisplay.callLog(LOG_TAG, 'onOptionsItemSelected is called', LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
+        if(item.getItemId() == R.id.menu_action_share) {
+            if(mMoviDataLoaded) {
+                shareMovie()
+            } else {
+                Snackbar.make(mAppBarLayout, getString(R.string.detail_movie_share_cannot_perform), Snackbar.LENGTH_LONG).show()
+                LogDisplay.callLog(LOG_TAG,'onOptionsItemSelected: movie detail data not yet loaded. Try again later!',LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
+            }
+            return true
+        }
+        return super.onOptionsItemSelected(item)
     }
 
     @Override
@@ -1087,11 +1209,14 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
     @Override
     void onLoaderReset(final Loader<Cursor> loader) {
         LogDisplay.callLog(LOG_TAG, 'onLoaderReset is called', LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
-        //Reset the adapters
-        mSimilarMovieAdapter.swapCursor(null)
-        mMovieCastAdapter.swapCursor(null)
-        mMovieCrewAdapter.swapCursor(null)
-        mMovieReviewAdapter.swapCursor(null)
+        // Reset the adapters
+        // Since the loaders and adapters are released manually in onStop, so the null check is done for all the adapters
+        // to ensure that app does not fail when onDestroy forces onLoaderReset call
+        if(mSimilarMovieAdapter) mSimilarMovieAdapter.swapCursor(null)
+        if(mMovieCastAdapter) mMovieCastAdapter.swapCursor(null)
+        if(mMovieCrewAdapter) mMovieCrewAdapter.swapCursor(null)
+        //TODO leak testing
+//        if(mMovieReviewAdapter) mMovieReviewAdapter.swapCursor(null)
     }
 
     /**
@@ -1209,12 +1334,14 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
                                         mMovieCastAdapter.changeColor(mPalletePrimaryDarkColor, mPalleteBodyTextColor)
                                         mMovieCrewAdapter.changeColor(mPalletePrimaryDarkColor, mPalleteBodyTextColor)
                                         mSimilarMovieAdapter.changeColor(mPalletePrimaryDarkColor, mPalleteBodyTextColor)
-                                        mMovieReviewAdapter.changeColor(mPalletePrimaryColor, mPalleteTitleColor, mPalleteBodyTextColor)
+                                        //TODO leak testing
+//                                        mMovieReviewAdapter.changeColor(mPalletePrimaryColor, mPalleteTitleColor, mPalleteBodyTextColor)
                                     } else {
                                         mMovieCastAdapter.changeColor(mPalletePrimaryDarkColor, ContextCompat.getColor(getActivity(), R.color.primary_text))
                                         mMovieCrewAdapter.changeColor(mPalletePrimaryDarkColor, ContextCompat.getColor(getActivity(), R.color.primary_text))
                                         mSimilarMovieAdapter.changeColor(mPalletePrimaryDarkColor, ContextCompat.getColor(getActivity(), R.color.primary_text))
-                                        mMovieReviewAdapter.changeColor(0, ContextCompat.getColor(getActivity(), R.color.primary_text), ContextCompat.getColor(getActivity(), R.color.secondary_text))
+                                        //TODO leak testing
+//                                        mMovieReviewAdapter.changeColor(0, ContextCompat.getColor(getActivity(), R.color.primary_text), ContextCompat.getColor(getActivity(), R.color.secondary_text))
                                     }
                                     setImageButtonBackgroundColor()
                                     initializeTitleAndColor()
@@ -1240,7 +1367,7 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
                 // When user selects reduce data usage option or application is not ready to download then
                 // the Picasso call does not get called as Picasso just add a placeholder
                 // So ensure that the ImageButton color, Rating star color and accent color are properly set
-                if (Utility.isReducedDataOn(getActivity()) || !Utility.isReadyToDownload(getActivity())) {
+                if (Utility.isReducedDataOn(getActivity()) || !Utility.isReadyToDownload(getActivity().getApplicationContext())) {
                     mPalleteAccentColor = ContextCompat.getColor(getActivity(), R.color.accent)
                     LogDisplay.callLog(LOG_TAG, 'calling setActiveImageButtonColor position -> 3', LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
                     setActiveImageButtonColor()
@@ -1248,7 +1375,8 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
                 }
 
                 //Pass the Picasso Callback and load the image
-                PicassoLoadImage.loadDetailFragmentPosterImage(getActivity(), posterPath, mPosterImageView, picassoPosterCallback)
+                //TODO leak testing
+//                PicassoLoadImage.loadDetailFragmentPosterImage(getActivity(), posterPath, mPosterImageView, picassoPosterCallback)
                 //Default date is 1900-01-01 which is less than Unix epoc 1st Jan 1970, so converted milliseconds is negative
                 if (data.getLong(COL_MOVIE_BASIC_RELEASE_DATE) > 0) {
                     mReleaseDateTextView.setText(Utility.formatMilliSecondsToDate(data.getLong(COL_MOVIE_BASIC_RELEASE_DATE)))
@@ -1301,13 +1429,13 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
                 mCollectionId = data.getInt(COL_MOVIE_BASIC_COLLECTION_ID)
                 if (mCollectionId > 0) {
                     mCollectionNameTextView.setText(data.getString(COL_MOVIE_BASIC_COLLECTION_NAME))
-                    mCollectionBackdropImageView.setVisibility(LinearLayout.VISIBLE)
+                    mCollectionBackdropImageView.setVisibility(ImageView.VISIBLE)
                     final String collectionBackdropPath = "$GlobalStaticVariables.TMDB_IMAGE_BASE_URL/$GlobalStaticVariables.TMDB_IMAGE_SIZE_W500" +
                             "${data.getString(COL_MOVIE_BASIC_COLLECTION_BACKDROP_PATH)}"
                     PicassoLoadImage.loadDetailFragmentCollectionBackdropImage(getActivity(), collectionBackdropPath, mCollectionBackdropImageView)
                 } else {
                     mCollectionNameTextView.setText(getActivity().getString(R.string.movie_data_not_available))
-                    mCollectionBackdropImageView.setVisibility(LinearLayout.GONE)
+                    mCollectionBackdropImageView.setVisibility(ImageView.GONE)
                 }
 
                 LogDisplay.callLog(LOG_TAG, "homePage:${data.getString(COL_MOVIE_BASIC_HOME_PAGE)}", LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
@@ -1358,7 +1486,7 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
                     isForHomeList.add(0, GlobalStaticVariables.MOVIE_MAGIC_FLAG_FALSE)
                     categoryFlag.add(0, GlobalStaticVariables.NULL_CATEGORY_FLAG)
                     final ArrayList<Integer>[] loadMovieDetailsArg = [movieIdList, movieRowIdList, isForHomeList, categoryFlag] as ArrayList<Integer>[]
-                    if (Utility.isReadyToDownload(getActivity())) {
+                    if (Utility.isReadyToDownload(getActivity().getApplicationContext())) {
                         new LoadMovieDetails(getActivity()).execute(loadMovieDetailsArg)
                     } else {
                         LogDisplay.callLog(LOG_TAG, '1-> Device is offline or connected to internet without WiFi and user selected download only on WiFi', LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
@@ -1368,12 +1496,12 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
                 }
                 mMoviDataLoaded = true
                 // If onCreateOptionsMenu already happened then do share this to share movie
-                if (mShareActionProvider) {
-                    shareMovie()
-                } else {
-                    LogDisplay.callLog(LOG_TAG, 'handleMovieBasicOnLoadFinished:mShareActionProvider is null because onCreateOptionsMenu is not' +
-                            ' yet called. shareMovie will be called from onCreateOptionsMenu.', LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
-                }
+//                if (mShareActionProvider) {
+//                    shareMovie()
+//                } else {
+//                    LogDisplay.callLog(LOG_TAG, 'handleMovieBasicOnLoadFinished:mShareActionProvider is null because onCreateOptionsMenu is not' +
+//                            ' yet called. shareMovie will be called from onCreateOptionsMenu.', LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
+//                }
             } else {
                 LogDisplay.callLog(LOG_TAG, "handleMovieBasicOnLoadFinished.Record not found, should reach here only when movie is clicked on person or search screen - Movie id:$mMovieId, Category:$mMovieCategory", LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
                 if (mMovieCategory == GlobalStaticVariables.MOVIE_CATEGORY_PERSON || GlobalStaticVariables.MOVIE_CATEGORY_SEARCH) {
@@ -1395,7 +1523,7 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
                         categoryFlag.add(0, GlobalStaticVariables.NULL_CATEGORY_FLAG)
                     }
                     final ArrayList<Integer>[] loadMovieDetailsArg = [movieIdList, movieRowIdList, isForHomeList, categoryFlag] as ArrayList<Integer>[]
-                    if (Utility.isReadyToDownload(getActivity())) {
+                    if (Utility.isReadyToDownload(getActivity().getApplicationContext())) {
                         new LoadMovieDetails(getActivity()).execute(loadMovieDetailsArg)
                     } else {
                         LogDisplay.callLog(LOG_TAG, '2-> Device is offline or connected to internet without WiFi and user selected download only on WiFi', LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
@@ -1507,23 +1635,31 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
                 data.moveToNext()
             }
             LogDisplay.callLog(LOG_TAG, "backdropImageArray-> $mBackdropList", LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
-            //This initialize ensures the pager is at position zero if the loader is executed due to change in data
-            final DetailFragmentPagerAdapter adapter = new DetailFragmentPagerAdapter(getActivity(), mBackdropList as String[],
-                    new DetailFragmentPagerAdapter.DetailFragmentPagerAdapterOnClickHandler() {
+            mDetailFragmentPagerAdapterOnClickHandler = new DetailFragmentPagerAdapter.DetailFragmentPagerAdapterOnClickHandler() {
                         @Override
                         void onClick(final int position) {
                             LogDisplay.callLog(LOG_TAG, "DetailFragmentPagerAdapter clicked.Position->$position", LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
                             mCallbackForBackdropImageClick.onBackdropImageClicked(mMovieTitle, position, mBackdropList as ArrayList<String>)
                         }
-                    })
-            mBackdropViewPager.setAdapter(adapter)
+                    }
+            mDetailFragmentPagerAdapter = new DetailFragmentPagerAdapter(getActivity(), mBackdropList as String[],
+                    mDetailFragmentPagerAdapterOnClickHandler)
+//            mDetailFragmentPagerAdapter = new DetailFragmentPagerAdapter(getActivity(), mBackdropList as String[],
+//                    new DetailFragmentPagerAdapter.DetailFragmentPagerAdapterOnClickHandler() {
+//                        @Override
+//                        void onClick(final int position) {
+//                            LogDisplay.callLog(LOG_TAG, "DetailFragmentPagerAdapter clicked.Position->$position", LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
+//                            mCallbackForBackdropImageClick.onBackdropImageClicked(mMovieTitle, position, mBackdropList as ArrayList<String>)
+//                        }
+//                    })
+            mBackdropViewPager.setAdapter(mDetailFragmentPagerAdapter)
             mBackdropViewPager.clearOnPageChangeListeners()
 //            final int dotsCount = adapter.getCount()
             final int dotsCount = mBackdropList.size()
             final AppCompatImageButton[] dotsImage = new AppCompatImageButton[dotsCount]
             mBackdropDotHolderLayout.removeAllViews()
             setBackDropViewPagerDots(dotsCount, dotsImage)
-            final OnPageChangeListener onPageChangeListener = new OnPageChangeListener() {
+            mOnPageChangeListener = new OnPageChangeListener() {
                 @Override
                 void onPageScrolled(final int position, final float positionOffset, final int positionOffsetPixels) {
                 }
@@ -1550,7 +1686,7 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
                 void onPageScrollStateChanged(final int state) {
                 }
             }
-            mBackdropViewPager.addOnPageChangeListener(onPageChangeListener)
+            mBackdropViewPager.addOnPageChangeListener(mOnPageChangeListener)
             mBackdropViewPager.setCurrentItem(mBackdropViewPagerPos)
         }
     }
@@ -1561,7 +1697,8 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
      */
     void handleMovieReviewOnLoadFinished(final Cursor data) {
         LogDisplay.callLog(LOG_TAG, "handleMovieReviewOnLoadFinished.Cursor rec count -> ${data.getCount()}", LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
-        mMovieReviewAdapter.swapCursor(data)
+        //TODO leak testing
+//        mMovieReviewAdapter.swapCursor(data)
     }
 
     /**
@@ -1880,7 +2017,13 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
         sendIntent.setAction(Intent.ACTION_SEND)
         sendIntent.putExtra(Intent.EXTRA_TEXT, "$mMovieTitle, TMDb link - $tmdbWebMovieUrl #${getString(R.string.app_name)} app")
         sendIntent.setType("text/plain")
-        mShareActionProvider.setShareIntent(sendIntent)
+        // Create intent to show the chooser dialog
+        final Intent chooser = Intent.createChooser(sendIntent, getString(R.string.detail_movie_chooser_title))
+//        mShareActionProvider.setShareIntent(sendIntent)
+        // Verify that the intent will resolve to an activity
+        if (sendIntent.resolveActivity(getActivity().getPackageManager()) != null) {
+            startActivity(chooser)
+        }
     }
 
     /**
@@ -1897,7 +2040,7 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
             @Override
             void onClick(final DialogInterface dialog, final int which) {
                 LogDisplay.callLog(LOG_TAG, 'Dialog Ok is clicked, go and update the TMDb rating', LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
-                if(Utility.isReadyToDownload(getActivity())) {
+                if(Utility.isReadyToDownload(getActivity().getApplicationContext())) {
                     mImageButtonClickForcedOnLoadFinished = true
                     new UploadTmdbRequest(getActivity(), GlobalStaticVariables.MOVIE_CATEGORY_TMDB_USER_RATED, userRatingVal,
                             false, mMovieCategory, mUserTmdbListDrawableLayout, mPalleteAccentColor).execute([mMovieId] as Integer[])
@@ -1920,36 +2063,6 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
         // Create the AlertDialog
         final AlertDialog dialog = builder.create()
         dialog.show()
-    }
-
-    @Override
-    void onResume() {
-        LogDisplay.callLog(LOG_TAG, 'onResume is called', LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
-        super.onResume()
-        // This is to ensure when user used share in collection then came back to detail and share movie
-        if(mMoviDataLoaded) {
-            shareMovie()
-        } else {
-            LogDisplay.callLog(LOG_TAG,'onCreateOptionsMenu: movie detail data not yet loaded!',LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
-        }
-//        mHandler.postDelayed(mRunnable,5000)
-    }
-
-    @Override
-    void onStop() {
-        LogDisplay.callLog(LOG_TAG, 'onStop is called', LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
-        super.onStop()
-//        if(mHandler) {
-//            mHandler.removeCallbacksAndMessages(null)
-//        }
-        //Cancel Picasso requests - required where callback (hard reference) is used
-        Picasso.with(getActivity()).cancelRequest(mPosterImageView)
-    }
-
-    @Override
-    void onDestroy() {
-        LogDisplay.callLog(LOG_TAG, 'onDestroy is called', LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
-        super.onDestroy()
     }
 
     //Overriding the animation for better performance
@@ -1982,20 +2095,170 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
         return animation
     }
 
+
     @Override
-    public void onAttach(final Context context) {
-        LogDisplay.callLog(LOG_TAG,'onAttach is called',LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
-        super.onAttach(context)
-        // This makes sure that the container activity has implemented
-        // the callback interface. If not, it throws an exception
-        try {
-            if(context instanceof Activity) {
-                mCallbackForBackdropImageClick = (CallbackForBackdropImageClick) context
-            }
-        } catch (final ClassCastException e) {
-            throw new ClassCastException(getActivity().toString()
-                    + " must implement CallbackForBackdropImageClick interface")
+    void onResume() {
+        LogDisplay.callLog(LOG_TAG, 'onResume is called', LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
+        super.onResume()
+        // This is to ensure when user used share in collection then came back to detail and share movie
+//        if(mMoviDataLoaded) {
+//            shareMovie()
+//        } else {
+//            LogDisplay.callLog(LOG_TAG,'onCreateOptionsMenu: movie detail data not yet loaded!',LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
+//        }
+//        mHandler.postDelayed(mRunnable,5000)
+    }
+
+    @Override
+    void onPause() {
+        super.onPause()
+        LogDisplay.callLog(LOG_TAG, 'onPause is called', LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
+    }
+
+
+    @Override
+    void onSaveInstanceState(final Bundle outState) {
+        LogDisplay.callLog(LOG_TAG, 'onSaveInstanceState is called', LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
+        outState.putInt(GlobalStaticVariables.DETAIL_BACKDROP_VIEWPAGER_POSITION,mBackdropViewPagerPos)
+        // Now call the superclass so it can save the view hierarchy state
+        super.onSaveInstanceState(outState)
+        //TODO leak testing
+        mOnRestoreOccurred = true
+        releaseResources()
+    }
+
+    @Override
+    void onStop() {
+        LogDisplay.callLog(LOG_TAG, 'onStop is called->Release all resources', LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
+        /** Release all the resources **/
+        //TODO leak testing
+        if(!mOnRestoreOccurred) {
+            releaseResources()
         }
+//        // Cancel picasso callback
+//        Picasso.with(getActivity()).cancelRequest(mPosterImageView)
+//        // Remove listeners
+//        mBackdropViewPager.removeOnPageChangeListener(mOnPageChangeListener)
+//        mAppBarLayout.removeOnOffsetChangedListener(mAppbarOnOffsetChangeListener)
+//        // Remove adapter from backdrop view pager
+//        mBackdropViewPager.setAdapter(null)
+//        // Set the pager adapter to null
+//        mDetailFragmentPagerAdapter = null
+//        // Delete the loaders
+//        getLoaderManager().destroyLoader(MOVIE_DETAIL_FRAGMENT_BASIC_DATA_LOADER_ID)
+//        getLoaderManager().destroyLoader(MOVIE_DETAIL_FRAGMENT_SIMILAR_MOVIE_LOADER_ID)
+//        getLoaderManager().destroyLoader(MOVIE_DETAIL_FRAGMENT_MOVIE_VIDEO_LOADER_ID)
+//        getLoaderManager().destroyLoader(MOVIE_DETAIL_FRAGMENT_MOVIE_CAST_LOADER_ID)
+//        getLoaderManager().destroyLoader(MOVIE_DETAIL_FRAGMENT_MOVIE_CREW_LOADER_ID)
+//        getLoaderManager().destroyLoader(MOVIE_DETAIL_FRAGMENT_MOVIE_RELEASE_INFO_LOADER_ID)
+//        getLoaderManager().destroyLoader(MOVIE_DETAIL_FRAGMENT_MOVIE_IMAGE_LOADER_ID)
+//        getLoaderManager().destroyLoader(MOVIE_DETAIL_FRAGMENT_MOVIE_REVIEW_LOADER_ID)
+//        getLoaderManager().destroyLoader(MOVIE_DETAIL_FRAGMENT_MOVIE_USER_LIST_FLAG_LOADER_ID)
+//        // Remove the adapters from horizontal grid views
+//        mHorizontalSimilarMovieGridView.setAdapter(null)
+//        mHorizontalMovieCastGridView.setAdapter(null)
+//        mHorizontalMovieCrewGridView.setAdapter(null)
+//        mMovieReviewRecyclerView.setAdapter(null)
+//        // Set the adapters to null
+//        mSimilarMovieAdapter = null
+//        mMovieCastAdapter = null
+//        mMovieCrewAdapter = null
+//        mMovieReviewAdapter = null
+//        // Set interface references to null
+//        mCallbackForBackdropImageClick = null
+//        mCallbackForSimilarMovieClick = null
+//        mSimilarMovieAdapterOnClickHandler = null
+//        mDetailFragmentPagerAdapterOnClickHandler = null
+//        //TODO - leak testing
+//        mSimilarMovieGridLayoutManager = null
+//        mHorizontalSimilarMovieGridView = null
+        super.onStop()
+    }
+
+    //TODO leak testing
+    protected void releaseResources() {
+        LogDisplay.callLog(LOG_TAG, 'releaseResources is called', LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
+        // Cancel picasso callback
+        Picasso.with(getActivity()).cancelRequest(mPosterImageView)
+        // Remove listeners
+        mBackdropViewPager.removeOnPageChangeListener(mOnPageChangeListener)
+        mAppBarLayout.removeOnOffsetChangedListener(mAppbarOnOffsetChangeListener)
+        // Remove adapter from backdrop view pager
+        mBackdropViewPager.setAdapter(null)
+        // Set the pager adapter to null
+        mDetailFragmentPagerAdapter = null
+        // Delete the loaders
+        getLoaderManager().destroyLoader(MOVIE_DETAIL_FRAGMENT_BASIC_DATA_LOADER_ID)
+        getLoaderManager().destroyLoader(MOVIE_DETAIL_FRAGMENT_SIMILAR_MOVIE_LOADER_ID)
+        getLoaderManager().destroyLoader(MOVIE_DETAIL_FRAGMENT_MOVIE_VIDEO_LOADER_ID)
+        getLoaderManager().destroyLoader(MOVIE_DETAIL_FRAGMENT_MOVIE_CAST_LOADER_ID)
+        getLoaderManager().destroyLoader(MOVIE_DETAIL_FRAGMENT_MOVIE_CREW_LOADER_ID)
+        getLoaderManager().destroyLoader(MOVIE_DETAIL_FRAGMENT_MOVIE_RELEASE_INFO_LOADER_ID)
+        getLoaderManager().destroyLoader(MOVIE_DETAIL_FRAGMENT_MOVIE_IMAGE_LOADER_ID)
+        getLoaderManager().destroyLoader(MOVIE_DETAIL_FRAGMENT_MOVIE_REVIEW_LOADER_ID)
+        getLoaderManager().destroyLoader(MOVIE_DETAIL_FRAGMENT_MOVIE_USER_LIST_FLAG_LOADER_ID)
+        // Remove the adapters from horizontal grid views
+        //TODO leak testing
+        if(!mOnRestoreOccurred) {
+            mHorizontalSimilarMovieGridView.setAdapter(null)
+            mHorizontalMovieCastGridView.setAdapter(null)
+            mHorizontalMovieCrewGridView.setAdapter(null)
+            mMovieReviewRecyclerView.setAdapter(null)
+        }
+        // Set the adapters to null
+        mSimilarMovieAdapter = null
+        mMovieCastAdapter = null
+        mMovieCrewAdapter = null
+        mMovieReviewAdapter = null
+        // Set interface references to null
+        mCallbackForBackdropImageClick = null
+        mCallbackForSimilarMovieClick = null
+        mSimilarMovieAdapterOnClickHandler = null
+        mDetailFragmentPagerAdapterOnClickHandler = null
+        //TODO - leak testing
+        mSimilarMovieGridLayoutManager = null
+        mCastGridLayoutManager = null
+        mCrewGridLayoutManager = null
+        mReviewLinearLayoutManager = null
+        mHorizontalSimilarMovieGridView.setLayoutManager(null)
+        mHorizontalMovieCastGridView.setLayoutManager(null)
+        mHorizontalMovieCrewGridView.setLayoutManager(null)
+        mMovieReviewRecyclerView.setLayoutManager(null)
+        mHorizontalSimilarMovieGridView = null
+        mHorizontalMovieCastGridView = null
+        mHorizontalMovieCrewGridView = null
+        mMovieReviewRecyclerView = null
+    }
+
+    @Override
+    void onDestroyView() {
+        LogDisplay.callLog(LOG_TAG, 'onDestroyView is called', LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
+//        mShareActionProvider.reset()
+//        mShareActionProvider = null
+        // Remove the hard reference so that it can be garbage collected
+        // Doing this in onStop is not working. Is it because this is attached to Toolbar which is part of Fragment layout??
+//        mAppCompatActivity = null
+        // Call the super onDestroyView
+        super.onDestroyView()
+    }
+
+    @Override
+    void onDestroy() {
+        LogDisplay.callLog(LOG_TAG, 'onDestroy is called', LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
+        super.onDestroy()
+        // Set the adapters to null
+//        mSimilarMovieAdapter = null
+//        mMovieCastAdapter = null
+//        mMovieCrewAdapter = null
+    }
+
+    @Override
+    void onDetach() {
+        LogDisplay.callLog(LOG_TAG,'onDetach is called',LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
+//        // Detach the interface references
+//        mCallbackForBackdropImageClick = null
+//        mCallbackForSimilarMovieClick = null
+        super.onDetach()
     }
 
     /**
@@ -2008,5 +2271,17 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
          * BackdropImageClickCallback when backdrop image switcher item is clicked
          */
         public void onBackdropImageClicked(String title, int position, ArrayList<String> backdropImageFilePath)
+    }
+
+    /**
+     * A callback interface that all activities containing this fragment must
+     * implement. This mechanism allows activities to be notified of home movie
+     * item click.
+     */
+    public interface CallbackForSimilarMovieClick {
+        /**
+         * HomeMovieFragmentCallback when a movie item has been clicked on home page
+         */
+        public void onSimilarMovieItemSelected(int movieId)
     }
 }

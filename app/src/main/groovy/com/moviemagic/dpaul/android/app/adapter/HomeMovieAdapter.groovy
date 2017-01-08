@@ -49,7 +49,6 @@ class HomeMovieAdapter extends RecyclerView.Adapter<HomeMovieAdapter.HomeMovieAd
         private final TextView movieReleaseDateTextView
         private final TextView movieUserListTextView
 
-
         public HomeMovieAdapterViewHolder(final View view) {
             super(view)
             movieBackdropImageView = view.findViewById(R.id.home_movie_backdrop_image) as ImageView
@@ -66,7 +65,7 @@ class HomeMovieAdapter extends RecyclerView.Adapter<HomeMovieAdapter.HomeMovieAd
             mCursor.moveToPosition(getAdapterPosition())
             final int movieId = mCursor.getInt(HomeMovieFragment.COL_MOVIE_BASIC_MOVIE_ID)
             final String movieCategory = mCursor.getString(HomeMovieFragment.COL_MOVIE_BASIC_MOVIE_CATEGORY)
-            mHomeMovieAdapterOnClickHandler.onClick(movieId, movieCategory, this)
+            mHomeMovieAdapterOnClickHandler.onClick(movieId, movieCategory)
         }
     }
 
@@ -181,6 +180,6 @@ class HomeMovieAdapter extends RecyclerView.Adapter<HomeMovieAdapter.HomeMovieAd
      * This is the interface which will be implemented by the host PersonMovieFragment
      */
     public interface HomeMovieAdapterOnClickHandler {
-        public void onClick(int movieId, String movieCategory, HomeMovieAdapterViewHolder viewHolder)
+        public void onClick(int movieId, String movieCategory)
     }
 }

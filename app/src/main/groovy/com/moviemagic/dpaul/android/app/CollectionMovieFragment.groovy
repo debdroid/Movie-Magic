@@ -188,10 +188,10 @@ class CollectionMovieFragment extends Fragment implements LoaderManager.LoaderCa
     void onStart() {
         super.onStart()
         // Check if the user is online or not, if not then show a message
-        final boolean isOnline = Utility.isOnline(getActivity())
+        final boolean isOnline = Utility.isOnline(getActivity().getApplicationContext())
         if(!isOnline) {
             Snackbar.make(mAppBarLayout, getString(R.string.no_internet_connection_message), Snackbar.LENGTH_LONG).show()
-        } else if(Utility.isOnlyWifi(getActivity()) & !GlobalStaticVariables.WIFI_CONNECTED) {
+        } else if(Utility.isOnlyWifi(getActivity().getApplicationContext()) & !GlobalStaticVariables.WIFI_CONNECTED) {
             // If user has selected only WiFi but user is online without WiFi then show a dialog
             Snackbar.make(mAppBarLayout, getString(R.string.internet_connection_without_wifi_message), Snackbar.LENGTH_LONG).show()
         } else if (Utility.isReducedDataOn(getActivity())) {
@@ -263,7 +263,7 @@ class CollectionMovieFragment extends Fragment implements LoaderManager.LoaderCa
 
             } else {
                 LogDisplay.callLog(LOG_TAG, "onLoadFinished.Collection movie flag is false for collection id $mCollectionId. So go clean up and re-load", LogDisplay.COLLECTION_MOVIE_FRAGMENT_LOG_FLAG)
-                if(Utility.isReadyToDownload(getActivity())) {
+                if(Utility.isReadyToDownload(getActivity().getApplicationContext())) {
                     new LoadCollectionData(getActivity()).execute([mCollectionId, GlobalStaticVariables.MOVIE_MAGIC_FLAG_TRUE] as Integer[])
                 } else {
                     LogDisplay.callLog(LOG_TAG, '1-> Device is offline or connected to internet without WiFi and user selected download only on WiFi', LogDisplay.COLLECTION_MOVIE_FRAGMENT_LOG_FLAG)
@@ -280,7 +280,7 @@ class CollectionMovieFragment extends Fragment implements LoaderManager.LoaderCa
         } else {
             //Load the collection details and associated movies
             LogDisplay.callLog(LOG_TAG, "onLoadFinished.Data not present for collection id $mCollectionId, go and fetch it", LogDisplay.COLLECTION_MOVIE_FRAGMENT_LOG_FLAG)
-            if(Utility.isReadyToDownload(getActivity())) {
+            if(Utility.isReadyToDownload(getActivity().getApplicationContext())) {
                 new LoadCollectionData(getActivity()).execute([mCollectionId, GlobalStaticVariables.MOVIE_MAGIC_FLAG_FALSE] as Integer[])
             } else {
                 LogDisplay.callLog(LOG_TAG, '2-> Device is offline or connected to internet without WiFi and user selected download only on WiFi', LogDisplay.COLLECTION_MOVIE_FRAGMENT_LOG_FLAG)

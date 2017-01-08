@@ -62,8 +62,8 @@ class SearchActivity extends AppCompatActivity {
         mGridRecyclerAdapter = new MovieGridRecyclerAdapter(this,
                 new MovieGridRecyclerAdapter.MovieGridRecyclerAdapterOnClickHandler(){
                     @Override
-                    void onClick(final int movieId, final MovieGridRecyclerAdapter.MovieGridRecyclerAdapterViewHolder viewHolder) {
-                        handleMovieClick(movieId, viewHolder)
+                    void onClick(final int movieId) {
+                        handleMovieClick(movieId)
                     }
                 })
         mRecyclerView.setAdapter(mGridRecyclerAdapter)
@@ -74,7 +74,7 @@ class SearchActivity extends AppCompatActivity {
             final String query = rawQuery.trim()
             LogDisplay.callLog(LOG_TAG,"Query string -> $query",LogDisplay.SEARCH_ACTIVITY_LOG_FLAG)
             // Check if the user is online or not, if not then show a message
-            final boolean isOnline = Utility.isOnline(this)
+            final boolean isOnline = Utility.isOnline(getApplicationContext())
             if(isOnline) {
                 new SearchMoviesOnline(this).execute([query] as String[])
             } else {
@@ -96,10 +96,10 @@ class SearchActivity extends AppCompatActivity {
     void onStart() {
         super.onStart()
         // Check if the user is online or not, if not then show a message
-        final boolean isOnline = Utility.isOnline(this)
+        final boolean isOnline = Utility.isOnline(getApplicationContext())
         if(!isOnline) {
             Snackbar.make(mRecyclerView, getString(R.string.no_internet_connection_message), Snackbar.LENGTH_LONG).show()
-        } else if(Utility.isOnlyWifi(this) & !GlobalStaticVariables.WIFI_CONNECTED) {
+        } else if(Utility.isOnlyWifi(getApplicationContext()) & !GlobalStaticVariables.WIFI_CONNECTED) {
             // If user has selected only WiFi but user is online without WiFi then show a dialog
             Snackbar.make(mRecyclerView, getString(R.string.internet_connection_without_wifi_message), Snackbar.LENGTH_LONG).show()
         } else if (Utility.isReducedDataOn(this)) {
@@ -108,7 +108,7 @@ class SearchActivity extends AppCompatActivity {
         }
     }
 
-    public void handleMovieClick(final int movieId, final MovieGridRecyclerAdapter.MovieGridRecyclerAdapterViewHolder viewHolder) {
+    public void handleMovieClick(final int movieId) {
         final Intent intent = new Intent(this, DetailMovieActivity.class)
         final Bundle bundle = new Bundle()
         bundle.putInt(GlobalStaticVariables.MOVIE_BASIC_INFO_MOVIE_ID,movieId)

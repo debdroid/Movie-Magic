@@ -349,10 +349,10 @@ class PersonMovieFragment extends Fragment implements LoaderManager.LoaderCallba
     void onStart() {
         super.onStart()
         // Check if the user is online or not, if not then show a message
-        final boolean isOnline = Utility.isOnline(getActivity())
+        final boolean isOnline = Utility.isOnline(getActivity().getApplicationContext())
         if(!isOnline) {
             Snackbar.make(mAppBarLayout, getString(R.string.no_internet_connection_message), Snackbar.LENGTH_LONG).show()
-        } else if(Utility.isOnlyWifi(getActivity()) & !GlobalStaticVariables.WIFI_CONNECTED) {
+        } else if(Utility.isOnlyWifi(getActivity().getApplicationContext()) & !GlobalStaticVariables.WIFI_CONNECTED) {
             // If user has selected only WiFi but user is online without WiFi then show a dialog
             Snackbar.make(mAppBarLayout, getString(R.string.internet_connection_without_wifi_message), Snackbar.LENGTH_LONG).show()
         } else if (Utility.isReducedDataOn(getActivity())) {
@@ -639,7 +639,7 @@ class PersonMovieFragment extends Fragment implements LoaderManager.LoaderCallba
         } else {
             //Load the person info and associated tables
             LogDisplay.callLog(LOG_TAG, "handlePersonInfoOnLoadFinished.Data not present for person id $mPersonId, go and fetch it", LogDisplay.PERSON_MOVIE_FRAGMENT_LOG_FLAG)
-            if(Utility.isReadyToDownload(getActivity())) {
+            if(Utility.isReadyToDownload(getActivity().getApplicationContext())) {
                 new LoadPersonData(getActivity()).execute([mPersonId] as Integer[])
             } else {
                 LogDisplay.callLog(LOG_TAG, 'Device is offline or connected to internet without WiFi and user selected download only on WiFi', LogDisplay.PERSON_MOVIE_FRAGMENT_LOG_FLAG)

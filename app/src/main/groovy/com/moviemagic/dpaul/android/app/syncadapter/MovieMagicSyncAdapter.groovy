@@ -100,7 +100,7 @@ class MovieMagicSyncAdapter extends AbstractThreadedSyncAdapter {
             final Account account, final Bundle extras, final String authority, final ContentProviderClient provider, final SyncResult syncResult) {
         LogDisplay.callLog(LOG_TAG,'onPerformSync is called',LogDisplay.MOVIE_MAGIC_SYNC_ADAPTER_LOG_FLAG)
 
-        if(Utility.isReadyToDownload(mContext)) {
+        if(Utility.isReadyToDownload(mContext.getApplicationContext())) {
             mDateTimeStamp = Utility.getTodayDate()
             List<ContentValues> contentValues = []
             //mTotalPage is set to 1 so that at least first page is downloaded in downloadMovieList

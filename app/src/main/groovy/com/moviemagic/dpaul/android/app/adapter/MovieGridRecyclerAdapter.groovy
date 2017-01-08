@@ -52,7 +52,7 @@ class MovieGridRecyclerAdapter extends RecyclerView.Adapter<MovieGridRecyclerAda
             final int adapterPosition = getAdapterPosition()
             mCursor.moveToPosition(adapterPosition)
             final int movieId = mCursor.getInt(GridMovieFragment.COL_MOVIE_ID)
-            mMovieGridRecyclerAdapterOnClickHandler.onClick(movieId, this)
+            mMovieGridRecyclerAdapterOnClickHandler.onClick(movieId)
         }
     }
 
@@ -108,6 +108,6 @@ class MovieGridRecyclerAdapter extends RecyclerView.Adapter<MovieGridRecyclerAda
      * This is the interface which will be implemented by the host GridMovieFragment
      */
     public interface MovieGridRecyclerAdapterOnClickHandler {
-        public void onClick(int movieId, MovieGridRecyclerAdapterViewHolder viewHolder)
+        public void onClick(int movieId)
     }
 }

@@ -4,6 +4,8 @@ import android.accounts.Account
 import android.accounts.AccountManager
 import android.accounts.AccountManagerCallback
 import android.accounts.AccountManagerFuture
+import android.content.ComponentCallbacks2
+import android.support.annotation.NonNull
 import android.support.v7.app.AlertDialog
 import android.app.SearchManager
 import android.content.Context
@@ -49,9 +51,11 @@ import com.moviemagic.dpaul.android.app.backgroundmodules.LogDisplay
 import groovy.transform.CompileStatic
 
 @CompileStatic
-public class MovieMagicMainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener,
+//public class MovieMagicMainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener,
+public class MovieMagicMainActivity extends AppCompatActivity implements
         GridMovieFragment.CallbackForGridItemClick, GridMovieFragment.CollectionColorChangeCallback,
-        HomeMovieFragment.CallbackForHomeMovieClick, HomeMovieFragment.CallbackForShowAllButtonClick {
+        HomeMovieFragment.CallbackForHomeMovieClick, HomeMovieFragment.CallbackForShowAllButtonClick,
+        ComponentCallbacks2 {
     private static final String LOG_TAG = MovieMagicMainActivity.class.getSimpleName()
     private static final String STATE_APP_TITLE = 'app_title'
     private NavigationView mNavigationView
@@ -60,6 +64,7 @@ public class MovieMagicMainActivity extends AppCompatActivity implements Navigat
     private AccountManager mAccountManager
     public static boolean isUserLoggedIn = false
     private NetworkReceiver networkReceiver
+    private AsyncTask mUpdateMenuCounterAsyncTask
 
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
@@ -76,7 +81,16 @@ public class MovieMagicMainActivity extends AppCompatActivity implements Navigat
         toggle.syncState()
 
         mNavigationView = findViewById(R.id.nav_view) as NavigationView
-        mNavigationView.setNavigationItemSelectedListener(this)
+//        mNavigationView.setNavigationItemSelectedListener(this)
+        mNavigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                LogDisplay.callLog(LOG_TAG, 'takeActionOnNavigationItemSelected is called.', LogDisplay.MOVIE_MAGIC_MAIN_LOG_FLAG)
+                takeActionOnNavigationItemSelected(item)
+                return true
+            }
+        })
+
         final View navigationHeader = mNavigationView.getHeaderView(0)
         mNavPanelUserNameTextView = navigationHeader.findViewById(R.id.nav_drawer_user_name) as TextView
         mNavPanelUserIdTextView = navigationHeader.findViewById(R.id.nav_drawer_user_id) as TextView
@@ -101,10 +115,10 @@ public class MovieMagicMainActivity extends AppCompatActivity implements Navigat
         }
 
         // Create an instance of AccountManager
-        mAccountManager = AccountManager.get(this)
+        mAccountManager = AccountManager.get(getApplicationContext())
 
         // Initialize the SyncAdapter
-        MovieMagicSyncAdapterUtility.initializeSyncAdapter(this)
+        MovieMagicSyncAdapterUtility.initializeSyncAdapter(getApplicationContext())
         //*** Comment before release **********************
         //MovieMagicSyncAdapterUtility.syncImmediately(this)
 
@@ -112,10 +126,10 @@ public class MovieMagicMainActivity extends AppCompatActivity implements Navigat
         // than declaring a <receiver> in the manifest to avoid not waking up the app when not in use (less battery usage)
         final IntentFilter filter = new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION)
         networkReceiver = new NetworkReceiver()
-        this.registerReceiver(networkReceiver, filter)
+        registerReceiver(networkReceiver, filter)
 
         // Set default values for Settings
-        PreferenceManager.setDefaultValues(this, R.xml.preference_xml, false)
+        PreferenceManager.setDefaultValues(getApplicationContext(), R.xml.preference_xml, false)
         
         // Check if user already logged in to TMDb account. If yes then perform the required steps
         checkUserLoginAndPerformAction()
@@ -123,10 +137,10 @@ public class MovieMagicMainActivity extends AppCompatActivity implements Navigat
         //Update the user list menu counter
         //Program fails if 'Void' is used for parameter, could be because of groovy compiler??
         //So to get rid of the problem a 'dummy' value is passed
-         new UpdateMenuCounter(this).execute(['dummy'] as String[])
+        mUpdateMenuCounterAsyncTask = new UpdateMenuCounter(this, mNavigationView).execute(['dummy'] as String[])
 
         //Check to ensure Youtube exists on the device
-        final YouTubeInitializationResult result = YouTubeApiServiceUtil.isYouTubeApiServiceAvailable(this)
+        final YouTubeInitializationResult result = YouTubeApiServiceUtil.isYouTubeApiServiceAvailable(getApplicationContext())
         if (result != YouTubeInitializationResult.SUCCESS) {
             //If there are any issues we can show an error dialog.
             result.getErrorDialog(this, 0).show()
@@ -146,7 +160,8 @@ public class MovieMagicMainActivity extends AppCompatActivity implements Navigat
         super.onStart()
         LogDisplay.callLog(LOG_TAG,'onStart is called',LogDisplay.MOVIE_MAGIC_MAIN_LOG_FLAG)
         // Check if the user is online or not, if not then open a dialog
-        final boolean isOnline = Utility.isOnline(this)
+        final boolean isOnline = Utility.isOnline(getApplicationContext())
+//        final boolean isOnline = true
         if(!isOnline) {
             LogDisplay.callLog(LOG_TAG,'Not connected to network!!',LogDisplay.MOVIE_MAGIC_MAIN_LOG_FLAG)
             showNotConnectedErrorDialog()
@@ -155,7 +170,7 @@ public class MovieMagicMainActivity extends AppCompatActivity implements Navigat
             LogDisplay.callLog(LOG_TAG,"WiFi connection flag: $GlobalStaticVariables.WIFI_CONNECTED",LogDisplay.MOVIE_MAGIC_MAIN_LOG_FLAG)
             LogDisplay.callLog(LOG_TAG,"Mobile connection flag: $GlobalStaticVariables.MOBILE_CONNECTED",LogDisplay.MOVIE_MAGIC_MAIN_LOG_FLAG)
             // If user has selected only WiFi but user is online without WiFi then show a dialog
-            if(Utility.isOnlyWifi(this) & !GlobalStaticVariables.WIFI_CONNECTED) {
+            if(Utility.isOnlyWifi(getApplicationContext()) & !GlobalStaticVariables.WIFI_CONNECTED) {
                 showNotConnectedToWiFiErrorDialog()
             }
         }
@@ -196,7 +211,7 @@ public class MovieMagicMainActivity extends AppCompatActivity implements Navigat
         //Update the user list menu counter
         //Program fails if 'Void' is used for parameter, could be because of groovy compiler??
         //So to get rid of the problem a 'dummy' value is passed
-        new UpdateMenuCounter(this).execute(['dummy'] as String[])
+        mUpdateMenuCounterAsyncTask = new UpdateMenuCounter(this, mNavigationView).execute(['dummy'] as String[])
     }
 
     @Override
@@ -207,12 +222,14 @@ public class MovieMagicMainActivity extends AppCompatActivity implements Navigat
 
     @Override
     protected void onDestroy() {
-        super.onDestroy()
         LogDisplay.callLog(LOG_TAG,'onDestroy is called',LogDisplay.MOVIE_MAGIC_MAIN_LOG_FLAG)
         // Unregisters BroadcastReceiver when app is destroyed.
         if(networkReceiver) {
-            this.unregisterReceiver(networkReceiver)
+            unregisterReceiver(networkReceiver)
         }
+        // Cancel the AsyncTask
+        mUpdateMenuCounterAsyncTask.cancel(true)
+        super.onDestroy()
     }
 
     @Override
@@ -255,9 +272,10 @@ public class MovieMagicMainActivity extends AppCompatActivity implements Navigat
         return super.onOptionsItemSelected(item)
     }
 
-    @Override
-    public boolean onNavigationItemSelected(final MenuItem item) {
-        LogDisplay.callLog(LOG_TAG, 'onNavigationItemSelected is called.', LogDisplay.MOVIE_MAGIC_MAIN_LOG_FLAG)
+
+//    @Override
+    public boolean takeActionOnNavigationItemSelected(final MenuItem item) {
+        LogDisplay.callLog(LOG_TAG, 'takeActionOnNavigationItemSelected is called.', LogDisplay.MOVIE_MAGIC_MAIN_LOG_FLAG)
         // Handle navigation view item clicks here.
         final int id = item.getItemId()
 
@@ -311,7 +329,7 @@ public class MovieMagicMainActivity extends AppCompatActivity implements Navigat
 
         final DrawerLayout drawer = findViewById(R.id.drawer_layout) as DrawerLayout
         drawer.closeDrawer(GravityCompat.START)
-        return true
+//        return true
     }
 
     /**
@@ -424,7 +442,7 @@ public class MovieMagicMainActivity extends AppCompatActivity implements Navigat
         // Set the name as application name
         mNavPanelUserNameTextView.setText(getString(R.string.app_name))
         // Now call this method so that a dummy account gets created and setup for sync adapter
-        MovieMagicSyncAdapterUtility.initializeSyncAdapter(this)
+        MovieMagicSyncAdapterUtility.initializeSyncAdapter(getApplicationContext())
         // Take the user to home screen
         setItemTitleAndSubTitle(getString(R.string.app_name))
         loadHomeFragment()
@@ -517,6 +535,7 @@ public class MovieMagicMainActivity extends AppCompatActivity implements Navigat
             @Override
             void onClick(final DialogInterface dialog, final int which) {
                 LogDisplay.callLog(LOG_TAG, 'Dialog cancel is clicked. No action needed.', LogDisplay.MOVIE_MAGIC_MAIN_LOG_FLAG)
+                dialog.dismiss()
             }
         })
         // Create the AlertDialog & show
@@ -593,7 +612,7 @@ public class MovieMagicMainActivity extends AppCompatActivity implements Navigat
      * @param viewHolder HomeMovieApterViewHolder
      */
     @Override
-    void onHomeMovieItemSelected(final int movieId, final String movieCategory, final HomeMovieAdapter.HomeMovieAdapterViewHolder viewHolder) {
+    void onHomeMovieItemSelected(final int movieId, final String movieCategory) {
         final Bundle bundle = new Bundle()
         bundle.putInt(GlobalStaticVariables.MOVIE_BASIC_INFO_MOVIE_ID,movieId)
         bundle.putString(GlobalStaticVariables.MOVIE_BASIC_INFO_CATEGORY,movieCategory)
@@ -683,19 +702,21 @@ public class MovieMagicMainActivity extends AppCompatActivity implements Navigat
      * Updating of menu counter is tightly coupled with main_activity_menu activity, so no separate class is
      * created for the AsyncTask
      */
-    protected class UpdateMenuCounter extends AsyncTask<String, Void, Integer[]> {
-        private final Context mContext
+    private static class UpdateMenuCounter extends AsyncTask<String, Void, Integer[]> {
+        private final Context context
+        private final NavigationView navigationView
 
-        public UpdateMenuCounter(final Context ctx) {
+        public UpdateMenuCounter(final Context context, final NavigationView navigationView) {
             LogDisplay.callLog(LOG_TAG,'UpdateMenuCounter constructor is called',LogDisplay.MOVIE_MAGIC_MAIN_LOG_FLAG)
-            mContext = ctx
+            this.context = context
+            this.navigationView = navigationView
         }
         @Override
         protected Integer[] doInBackground(final String... params) {
             final Integer[] result = new Integer[7]
             Cursor cursor
             //Get the count for watched
-            cursor = mContext.getContentResolver().query(
+            cursor = context.getContentResolver().query(
                     MovieMagicContract.MovieBasicInfo.CONTENT_URI,
                     null,
                     "$MovieMagicContract.MovieBasicInfo.COLUMN_MOVIE_CATEGORY = ? ",
@@ -705,7 +726,7 @@ public class MovieMagicMainActivity extends AppCompatActivity implements Navigat
             //Close the cursor
             if(cursor) cursor.close()
             //Get the count for wish list
-            cursor = mContext.getContentResolver().query(
+            cursor = context.getContentResolver().query(
                     MovieMagicContract.MovieBasicInfo.CONTENT_URI,
                     null,
                     "$MovieMagicContract.MovieBasicInfo.COLUMN_MOVIE_CATEGORY = ? ",
@@ -715,7 +736,7 @@ public class MovieMagicMainActivity extends AppCompatActivity implements Navigat
             //Close the cursor
             if(cursor) cursor.close()
             //Get the count for favourite
-            cursor = mContext.getContentResolver().query(
+            cursor = context.getContentResolver().query(
                     MovieMagicContract.MovieBasicInfo.CONTENT_URI,
                     null,
                     "$MovieMagicContract.MovieBasicInfo.COLUMN_MOVIE_CATEGORY = ? ",
@@ -725,7 +746,7 @@ public class MovieMagicMainActivity extends AppCompatActivity implements Navigat
             //Close the cursor
             if(cursor) cursor.close()
             //Get the count for wish list
-            cursor = mContext.getContentResolver().query(
+            cursor = context.getContentResolver().query(
                     MovieMagicContract.MovieBasicInfo.CONTENT_URI,
                     null,
                     "$MovieMagicContract.MovieBasicInfo.COLUMN_MOVIE_CATEGORY = ? ",
@@ -738,7 +759,7 @@ public class MovieMagicMainActivity extends AppCompatActivity implements Navigat
             // Set the counters for Tmdb List if user is logged in
             if(isUserLoggedIn) {
                 //Get the count for TMDb Watchlists
-                cursor = mContext.getContentResolver().query(
+                cursor = context.getContentResolver().query(
                         MovieMagicContract.MovieBasicInfo.CONTENT_URI,
                         null,
                         "$MovieMagicContract.MovieBasicInfo.COLUMN_MOVIE_CATEGORY = ? ",
@@ -748,7 +769,7 @@ public class MovieMagicMainActivity extends AppCompatActivity implements Navigat
                 //Close the cursor
                 if(cursor) cursor.close()
                 //Get the count for TMDb Favourites
-                cursor = mContext.getContentResolver().query(
+                cursor = context.getContentResolver().query(
                         MovieMagicContract.MovieBasicInfo.CONTENT_URI,
                         null,
                         "$MovieMagicContract.MovieBasicInfo.COLUMN_MOVIE_CATEGORY = ? ",
@@ -758,7 +779,7 @@ public class MovieMagicMainActivity extends AppCompatActivity implements Navigat
                 //Close the cursor
                 if(cursor) cursor.close()
                 //Get the count for TMDb Rated
-                cursor = mContext.getContentResolver().query(
+                cursor = context.getContentResolver().query(
                         MovieMagicContract.MovieBasicInfo.CONTENT_URI,
                         null,
                         "$MovieMagicContract.MovieBasicInfo.COLUMN_MOVIE_CATEGORY = ? ",
@@ -767,35 +788,39 @@ public class MovieMagicMainActivity extends AppCompatActivity implements Navigat
                 if(cursor.moveToFirst()) result[6] = cursor.getCount()
                 //Close the cursor
                 if(cursor) cursor.close()
+            } else {
+                result[4] = 0
+                result[5] = 0
+                result[6] = 0
             }
             return result
         }
 
         @Override
-        protected void onPostExecute(final Integer[] result) {
+        protected void onPostExecute(Integer[] result) {
             //Set the Watched counter
-            final TextView watchedView = (TextView) mNavigationView.getMenu().findItem(R.id.nav_user_watched).getActionView()
+            final TextView watchedView = (TextView) navigationView.getMenu().findItem(R.id.nav_user_watched).getActionView()
             watchedView.setText(result[0] > 0 ? String.valueOf(result[0]) : null)
             //Set the wish list counter
-            final TextView wishListView = (TextView) mNavigationView.getMenu().findItem(R.id.nav_user_wishlist).getActionView()
+            final TextView wishListView = (TextView) navigationView.getMenu().findItem(R.id.nav_user_wishlist).getActionView()
             wishListView.setText(result[1] > 0 ? String.valueOf(result[1]) : null)
             //Set the favourite counter
-            final TextView favouriteView = (TextView) mNavigationView.getMenu().findItem(R.id.nav_user_favourite).getActionView()
+            final TextView favouriteView = (TextView) navigationView.getMenu().findItem(R.id.nav_user_favourite).getActionView()
             favouriteView.setText(result[2] > 0 ? String.valueOf(result[2]) : null)
             //Set the collection counter
-            final TextView collectionView = (TextView) mNavigationView.getMenu().findItem(R.id.nav_user_collection).getActionView()
+            final TextView collectionView = (TextView) navigationView.getMenu().findItem(R.id.nav_user_collection).getActionView()
             collectionView.setText(result[3] > 0 ? String.valueOf(result[3]) : null)
 
             // Set the TMDb lists counter only if the user is logged in
             if(isUserLoggedIn) {
                 //Set the TMDb Watchlists counter
-                final TextView tmdbWatchlistView = (TextView) mNavigationView.getMenu().findItem(R.id.nav_tmdb_user_watchlist).getActionView()
+                final TextView tmdbWatchlistView = (TextView) navigationView.getMenu().findItem(R.id.nav_tmdb_user_watchlist).getActionView()
                 tmdbWatchlistView.setText(result[4] > 0 ? String.valueOf(result[4]) : null)
                 //Set the TMDb Favourites counter
-                final TextView tmdbFavouriteView = (TextView) mNavigationView.getMenu().findItem(R.id.nav_tmdb_user_favourite).getActionView()
+                final TextView tmdbFavouriteView = (TextView) navigationView.getMenu().findItem(R.id.nav_tmdb_user_favourite).getActionView()
                 tmdbFavouriteView.setText(result[5] > 0 ? String.valueOf(result[5]) : null)
                 //Set the TMDb Rated counter
-                final TextView tmdbRatedView = (TextView) mNavigationView.getMenu().findItem(R.id.nav_tmdb_user_rated).getActionView()
+                final TextView tmdbRatedView = (TextView) navigationView.getMenu().findItem(R.id.nav_tmdb_user_rated).getActionView()
                 tmdbRatedView.setText(result[6] > 0 ? String.valueOf(result[6]) : null)
             }
         }
@@ -804,7 +829,7 @@ public class MovieMagicMainActivity extends AppCompatActivity implements Navigat
     // Override the callback method of GridMovieFragment
     // Once an item is clicked then it will be called and it will launch the DetailMovie activity
     @Override
-    public void onMovieGridItemSelected(final int movieId, final String movieCategory, final MovieGridRecyclerAdapter.MovieGridRecyclerAdapterViewHolder viewHolder) {
+    public void onMovieGridItemSelected(final int movieId, final String movieCategory) {
         final Intent intent = new Intent(this, DetailMovieActivity.class)
         final Bundle bundle = new Bundle()
         bundle.putInt(GlobalStaticVariables.MOVIE_BASIC_INFO_MOVIE_ID,movieId)
@@ -819,5 +844,68 @@ public class MovieMagicMainActivity extends AppCompatActivity implements Navigat
     public void notifyCollectionColorChange() {
         //Do nothing. This is not called for main activity
         //Implemented, otherwise application will give error as GridFragment onAttach has check if it is implemented
+    }
+
+    /**
+     * Methods related to ComponentCallbacks2 - for memory monitoring
+     *
+     */
+    @Override
+    public void onTrimMemory(int level) {
+        LogDisplay.callLog(LOG_TAG,'TonTrimMemory is called',LogDisplay.MOVIE_MAGIC_MAIN_LOG_FLAG)
+
+        // Determine which lifecycle or system event was raised.
+        switch (level) {
+            /*
+                Release any UI objects that currently hold memory.
+                The user interface has moved to the background.
+            */
+            case ComponentCallbacks2.TRIM_MEMORY_UI_HIDDEN:
+                LogDisplay.callLog(LOG_TAG,'TRIM_MEMORY_UI_HIDDEN -> app moved to background',LogDisplay.MOVIE_MAGIC_MAIN_LOG_FLAG)
+                break
+
+            /*
+                Release any memory that your app doesn't need to run.
+                The device is running low on memory while the app is running.
+                The event raised indicates the severity of the memory-related event.
+                If the event is TRIM_MEMORY_RUNNING_CRITICAL, then the system will
+                begin killing background processes.
+            */
+            case ComponentCallbacks2.TRIM_MEMORY_RUNNING_MODERATE:
+                LogDisplay.callLog(LOG_TAG,'TRIM_MEMORY_RUNNING_MODERATE -> device is running low on memory while the app is running',LogDisplay.MOVIE_MAGIC_MAIN_LOG_FLAG)
+                break
+            case ComponentCallbacks2.TRIM_MEMORY_RUNNING_LOW:
+                LogDisplay.callLog(LOG_TAG,'TRIM_MEMORY_RUNNING_LOW -> device is running low on memory while the app is running',LogDisplay.MOVIE_MAGIC_MAIN_LOG_FLAG)
+                break
+            case ComponentCallbacks2.TRIM_MEMORY_RUNNING_CRITICAL:
+                LogDisplay.callLog(LOG_TAG,'TRIM_MEMORY_RUNNING_CRITICAL -> device is running low on memory while the app is running',LogDisplay.MOVIE_MAGIC_MAIN_LOG_FLAG)
+                break
+
+            /*
+                Release as much memory as the process can.
+                The app is on the LRU list and the system is running low on memory.
+                The event raised indicates where the app sits within the LRU list.
+                If the event is TRIM_MEMORY_COMPLETE, the process will be one of
+                the first to be terminated.
+            */
+            case ComponentCallbacks2.TRIM_MEMORY_BACKGROUND:
+                LogDisplay.callLog(LOG_TAG,'TRIM_MEMORY_BACKGROUND -> app is on the LRU list and the system is running low on memory',LogDisplay.MOVIE_MAGIC_MAIN_LOG_FLAG)
+                break
+            case ComponentCallbacks2.TRIM_MEMORY_MODERATE:
+                LogDisplay.callLog(LOG_TAG,'TRIM_MEMORY_BACKGROUND -> app is on the LRU list and the system is running low on memory',LogDisplay.MOVIE_MAGIC_MAIN_LOG_FLAG)
+                break
+            case ComponentCallbacks2.TRIM_MEMORY_COMPLETE:
+                LogDisplay.callLog(LOG_TAG,'TRIM_MEMORY_BACKGROUND -> app is on the LRU list and the system is running low on memory',LogDisplay.MOVIE_MAGIC_MAIN_LOG_FLAG)
+                break
+
+            default:
+                /*
+                  Release any non-critical data structures.
+                  The app received an unrecognized memory level value
+                  from the system. Treat this as a generic low-memory message.
+                */
+                LogDisplay.callLog(LOG_TAG,'The app received an unrecognized memory level value from the system. Treat this as a generic low-memory message.',LogDisplay.MOVIE_MAGIC_MAIN_LOG_FLAG)
+                break
+        }
     }
 }

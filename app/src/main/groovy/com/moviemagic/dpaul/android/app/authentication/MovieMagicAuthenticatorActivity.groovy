@@ -100,7 +100,7 @@ class MovieMagicAuthenticatorActivity extends AccountAuthenticatorActivity {
     void onStart() {
         super.onStart()
         // Check if the user is online or not, if not then show a message
-        isOnline = Utility.isOnline(this)
+        isOnline = Utility.isOnline(getApplicationContext())
         if(!isOnline) {
             Snackbar.make(mLoginFormView, getString(R.string.no_internet_connection_message), Snackbar.LENGTH_LONG).show()
         }

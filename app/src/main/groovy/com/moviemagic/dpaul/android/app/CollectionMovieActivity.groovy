@@ -46,7 +46,7 @@ class CollectionMovieActivity extends AppCompatActivity implements GridMovieFrag
     //Override the GridMovieFragment interface method
     @Override
     public void onMovieGridItemSelected(
-            final int movieId, final String movieCategory, final MovieGridRecyclerAdapter.MovieGridRecyclerAdapterViewHolder viewHolder) {
+            final int movieId, final String movieCategory) {
         LogDisplay.callLog(LOG_TAG, 'onItemSelected is called', LogDisplay.COLLECTION_MOVIE_FRAGMENT_LOG_FLAG)
         final Intent intent = new Intent(this, DetailMovieActivity.class)
         final Bundle bundle = new Bundle()

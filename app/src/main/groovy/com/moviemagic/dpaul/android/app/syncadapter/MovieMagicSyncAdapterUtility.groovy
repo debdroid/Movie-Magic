@@ -44,7 +44,8 @@ class MovieMagicSyncAdapterUtility {
         LogDisplay.callLog(LOG_TAG,'getSyncAccount is called',LogDisplay.MOVIE_MAGIC_SYNC_ADAPTER_UTILITY_LOG_FLAG)
         // Get an instance of the Android account manager
         final AccountManager accountManager =
-                (AccountManager) context.getSystemService(Context.ACCOUNT_SERVICE)
+//                (AccountManager) context.getSystemService(Context.ACCOUNT_SERVICE)
+                AccountManager.get(context)
 
         //Check if any account exists
         final Account[] accounts = accountManager.getAccountsByType(context.getString(R.string.authenticator_account_type))

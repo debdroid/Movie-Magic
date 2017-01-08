@@ -57,6 +57,9 @@
             android:name=".CollectionMovieActivity"
             android:label="@string/title_activity_collection_movie"
             android:theme="@style/AppTheme.MovieCollection">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".DetailMovieActivity" />
         </activity>
 
         <!-- Person movie Activity -->
@@ -64,6 +67,9 @@
             android:name=".PersonMovieActivity"
             android:label="@string/title_activity_person_movie"
             android:theme="@style/AppTheme.MoviePerson">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".DetailMovieActivity" />
         </activity>
 
         <!-- Image Viewer movie Activity -->

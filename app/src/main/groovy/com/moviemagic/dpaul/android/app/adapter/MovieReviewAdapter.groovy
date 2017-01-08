@@ -50,17 +50,18 @@ class MovieReviewAdapter extends RecyclerView.Adapter<MovieReviewAdapter.MovieRe
             mShowImageButton.setOnClickListener( new View.OnClickListener() {
                 @Override
                 void onClick(final View v) {
-                    mShowImageButton.setVisibility(Button.INVISIBLE)
-                    mHideImageButton.setVisibility(Button.VISIBLE)
+                    mShowImageButton.setVisibility(ImageButton.INVISIBLE)
+                    mHideImageButton.setVisibility(ImageButton.VISIBLE)
                     movieReviewContent.setMaxLines(Integer.MAX_VALUE)
                 }
             })
             mHideImageButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 void onClick(final View v) {
-                    mShowImageButton.setVisibility(Button.VISIBLE)
-                    mHideImageButton.setVisibility(Button.INVISIBLE)
-                    movieReviewContent.setMaxLines(mContext.getResources().getString(R.string.single_review_item_collapse_line_item_count) as Integer)
+                    mShowImageButton.setVisibility(ImageButton.VISIBLE)
+                    mHideImageButton.setVisibility(ImageButton.INVISIBLE)
+                    //TODO leak testing
+//                    movieReviewContent.setMaxLines(mContext.getResources().getString(R.string.single_review_item_collapse_line_item_count) as Integer)
                 }
             })
         }
@@ -69,7 +70,9 @@ class MovieReviewAdapter extends RecyclerView.Adapter<MovieReviewAdapter.MovieRe
     @Override
     MovieReviewAdapterViewHolder onCreateViewHolder(final ViewGroup parent, final int viewType) {
         LogDisplay.callLog(LOG_TAG, 'onCreateViewHolder is called', LogDisplay.MOVIE_REVIEW_ADAPTER_LOG_FLAG)
-        final View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.single_movie_review_item, parent, false)
+        //TODO leak testing
+//        final View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.single_movie_review_item, parent, false)
+        final View view = LayoutInflater.from(mContext).inflate(R.layout.single_movie_review_item, parent, false)
         view.setFocusable(true)
         return new MovieReviewAdapterViewHolder(view)
     }

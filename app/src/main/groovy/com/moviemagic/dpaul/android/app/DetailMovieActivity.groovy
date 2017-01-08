@@ -8,15 +8,18 @@ import com.moviemagic.dpaul.android.app.backgroundmodules.LogDisplay
 import groovy.transform.CompileStatic
 
 @CompileStatic
-class DetailMovieActivity extends AppCompatActivity implements DetailMovieFragment.CallbackForBackdropImageClick {
+class DetailMovieActivity extends AppCompatActivity implements DetailMovieFragment.CallbackForBackdropImageClick,
+                DetailMovieFragment.CallbackForSimilarMovieClick {
     private static final String LOG_TAG = DetailMovieActivity.class.getSimpleName()
 
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
+        LogDisplay.callLog(LOG_TAG, 'onCreate is called', LogDisplay.DETAIL_MOVIE_ACTIVITY_LOG_FLAG)
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_detail_movie)
 
         if (savedInstanceState == null) {
+            LogDisplay.callLog(LOG_TAG, 'onCreate: initial run', LogDisplay.DETAIL_MOVIE_ACTIVITY_LOG_FLAG)
             //Get the arguments from the intent
             final Bundle extras = getIntent().getExtras()
             if (extras) {
@@ -29,12 +32,34 @@ class DetailMovieActivity extends AppCompatActivity implements DetailMovieFragme
             } else {
                 LogDisplay.callLog(LOG_TAG, 'Could not parse intent data', LogDisplay.DETAIL_MOVIE_ACTIVITY_LOG_FLAG)
             }
+        } else {
+            LogDisplay.callLog(LOG_TAG, 'onCreate: restore case', LogDisplay.DETAIL_MOVIE_ACTIVITY_LOG_FLAG)
         }
+    }
+
+    @Override
+    protected void onResume() {
+        LogDisplay.callLog(LOG_TAG, 'onResume is called', LogDisplay.DETAIL_MOVIE_ACTIVITY_LOG_FLAG)
+        super.onResume()
+    }
+
+    @Override
+    protected void onPause() {
+        LogDisplay.callLog(LOG_TAG, 'onPause is called', LogDisplay.DETAIL_MOVIE_ACTIVITY_LOG_FLAG)
+        super.onPause()
     }
 
     @Override
     protected void onStop() {
         LogDisplay.callLog(LOG_TAG, 'onStop is called', LogDisplay.DETAIL_MOVIE_ACTIVITY_LOG_FLAG)
+        super.onStop()
+    }
+
+
+
+    @Override
+    protected void onDestroy() {
+        LogDisplay.callLog(LOG_TAG, 'onDestroy is called', LogDisplay.DETAIL_MOVIE_ACTIVITY_LOG_FLAG)
         super.onStop()
     }
 
@@ -46,6 +71,8 @@ class DetailMovieActivity extends AppCompatActivity implements DetailMovieFragme
         overridePendingTransition(0, R.anim.slide_bottom_out_animation)
     }
 
+    // Override the callback method of DetailMovieFragment
+    // Once an item is clicked then it will be called and it will launch the image viewer activity
     @Override
     void onBackdropImageClicked(final String title, final int position, final ArrayList<String> backdropImageFilePath) {
         final Bundle bundle = new Bundle()
@@ -58,5 +85,24 @@ class DetailMovieActivity extends AppCompatActivity implements DetailMovieFragme
         startActivity(intent)
         //Start the animation
         overridePendingTransition(R.anim.slide_bottom_in_animation,0)
+    }
+
+    // Override the callback method of DetailMovieFragment
+    // Once an item is clicked then it will be called and it will replace the fragment with the new movie
+    @Override
+    void onSimilarMovieItemSelected(int movieId) {
+        //Create an intent for DetailMovieActivity
+        final Bundle bundle = new Bundle()
+        bundle.putInt(GlobalStaticVariables.MOVIE_BASIC_INFO_MOVIE_ID,movieId)
+        bundle.putString(GlobalStaticVariables.MOVIE_BASIC_INFO_CATEGORY,GlobalStaticVariables.MOVIE_CATEGORY_SIMILAR)
+        final DetailMovieFragment movieDetailFragment = new DetailMovieFragment()
+        movieDetailFragment.setArguments(bundle)
+        getSupportFragmentManager().beginTransaction()
+        //Used the method enter,exit,popEnter,popExit custom animation. Our cases are enter & popExit
+                .setCustomAnimations(R.anim.slide_bottom_in_animation,0,0,R.anim.slide_bottom_out_animation)
+                .replace(R.id.detail_movie_fragment_container,movieDetailFragment)
+        //Add this transaction to the back stack
+                .addToBackStack(null) //Parameter is optional, so used null
+                .commit()
     }
 }
