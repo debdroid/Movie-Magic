@@ -2,6 +2,10 @@ package com.moviemagic.dpaul.android.app
 
 import android.content.Intent
 import android.os.Bundle
+import android.support.v17.leanback.media.PlaybackGlueHost
+import android.support.v4.app.Fragment
+import android.support.v4.app.FragmentManager
+import android.support.v4.app.LoaderManager
 import android.support.v7.app.AppCompatActivity
 import com.moviemagic.dpaul.android.app.backgroundmodules.GlobalStaticVariables
 import com.moviemagic.dpaul.android.app.backgroundmodules.LogDisplay
@@ -11,13 +15,13 @@ import groovy.transform.CompileStatic
 class DetailMovieActivity extends AppCompatActivity implements DetailMovieFragment.CallbackForBackdropImageClick,
                 DetailMovieFragment.CallbackForSimilarMovieClick {
     private static final String LOG_TAG = DetailMovieActivity.class.getSimpleName()
+    private final FragmentManager mFragmentManager = getSupportFragmentManager()
 
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
         LogDisplay.callLog(LOG_TAG, 'onCreate is called', LogDisplay.DETAIL_MOVIE_ACTIVITY_LOG_FLAG)
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_detail_movie)
-
         if (savedInstanceState == null) {
             LogDisplay.callLog(LOG_TAG, 'onCreate: initial run', LogDisplay.DETAIL_MOVIE_ACTIVITY_LOG_FLAG)
             //Get the arguments from the intent
@@ -25,9 +29,10 @@ class DetailMovieActivity extends AppCompatActivity implements DetailMovieFragme
             if (extras) {
                 final DetailMovieFragment detailMovieFragment = new DetailMovieFragment()
                 detailMovieFragment.setArguments(extras)
-                getSupportFragmentManager().beginTransaction()
+                mFragmentManager.beginTransaction()
+//                getSupportFragmentManager().beginTransaction()
                         .replace(R.id.detail_movie_fragment_container,detailMovieFragment)
-                        // No need to add the transaction to backstack as this is first transaction and activity will hold it
+                        .addToBackStack(null)
                         .commit()
             } else {
                 LogDisplay.callLog(LOG_TAG, 'Could not parse intent data', LogDisplay.DETAIL_MOVIE_ACTIVITY_LOG_FLAG)
@@ -55,20 +60,39 @@ class DetailMovieActivity extends AppCompatActivity implements DetailMovieFragme
         super.onStop()
     }
 
-
-
     @Override
     protected void onDestroy() {
         LogDisplay.callLog(LOG_TAG, 'onDestroy is called', LogDisplay.DETAIL_MOVIE_ACTIVITY_LOG_FLAG)
-        super.onStop()
+//        //TODO leak test
+//        final Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.detail_movie_fragment_container)
+//        Object fragmentHost
+//        if(fragment.getHost()) fragmentHost = fragment.getHost()
+//        if(fragmentHost) {
+//            LogDisplay.callLog(LOG_TAG, 'onDestroy->before super.onDestroy:Fragment host not null', LogDisplay.DETAIL_MOVIE_ACTIVITY_LOG_FLAG)
+//        } else {
+//            LogDisplay.callLog(LOG_TAG, 'onDestroy->before super.onDestroy:Fragment is null', LogDisplay.DETAIL_MOVIE_ACTIVITY_LOG_FLAG)
+//        }
+        super.onDestroy()
+//        if(fragmentHost) {
+//            LogDisplay.callLog(LOG_TAG, 'onDestroy->after super.onDestroy:Fragment host not null', LogDisplay.DETAIL_MOVIE_ACTIVITY_LOG_FLAG)
+//            fragmentHost = null
+//        } else {
+//            LogDisplay.callLog(LOG_TAG, 'onDestroy->after super.onDestroy:Fragment is null', LogDisplay.DETAIL_MOVIE_ACTIVITY_LOG_FLAG)
+//        }
+    }
+
+    @Override
+    Object onRetainCustomNonConfigurationInstance() {
+        LogDisplay.callLog(LOG_TAG, 'onRetainCustomNonConfigurationInstance is called', LogDisplay.DETAIL_MOVIE_ACTIVITY_LOG_FLAG)
+        return super.onRetainCustomNonConfigurationInstance()
     }
 
     @Override
     void onBackPressed() {
         LogDisplay.callLog(LOG_TAG, "onBackPressed is called.FragmentBackstackCount:${getSupportFragmentManager().getBackStackEntryCount()}", LogDisplay.DETAIL_MOVIE_ACTIVITY_LOG_FLAG)
-        super.onBackPressed()
         //Start the animation
         overridePendingTransition(0, R.anim.slide_bottom_out_animation)
+        super.onBackPressed()
     }
 
     // Override the callback method of DetailMovieFragment
@@ -97,7 +121,8 @@ class DetailMovieActivity extends AppCompatActivity implements DetailMovieFragme
         bundle.putString(GlobalStaticVariables.MOVIE_BASIC_INFO_CATEGORY,GlobalStaticVariables.MOVIE_CATEGORY_SIMILAR)
         final DetailMovieFragment movieDetailFragment = new DetailMovieFragment()
         movieDetailFragment.setArguments(bundle)
-        getSupportFragmentManager().beginTransaction()
+        mFragmentManager.beginTransaction()
+//        getSupportFragmentManager().beginTransaction()
         //Used the method enter,exit,popEnter,popExit custom animation. Our cases are enter & popExit
                 .setCustomAnimations(R.anim.slide_bottom_in_animation,0,0,R.anim.slide_bottom_out_animation)
                 .replace(R.id.detail_movie_fragment_container,movieDetailFragment)

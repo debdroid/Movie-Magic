@@ -32,10 +32,10 @@ class SimilarMovieAdapter extends RecyclerView.Adapter<SimilarMovieAdapter.Simil
         LogDisplay.callLog(LOG_TAG,'SimilarMovieAdapter empty constructor is called',LogDisplay.SIMILAR_MOVIE_ADAPTER_LOG_FLAG)
     }
     //TODO leak testing
-    public SimilarMovieAdapter(final TextView emptyView, final SimilarMovieAdapterOnClickHandler clickHandler){
-//    public SimilarMovieAdapter(final Context ctx, final TextView emptyView, final SimilarMovieAdapterOnClickHandler clickHandler){
+//    public SimilarMovieAdapter(final TextView emptyView, final SimilarMovieAdapterOnClickHandler clickHandler){
+    public SimilarMovieAdapter(final Context ctx, final TextView emptyView, final SimilarMovieAdapterOnClickHandler clickHandler){
         LogDisplay.callLog(LOG_TAG,'SimilarMovieAdapter non-empty constructor is called',LogDisplay.SIMILAR_MOVIE_ADAPTER_LOG_FLAG)
-//        mContext = ctx
+        mContext = ctx
         mSimilarMovieGridEmptyTextView = emptyView
         mSimilarMovieAdapterOnClickHandler = clickHandler
     }
@@ -93,7 +93,7 @@ class SimilarMovieAdapter extends RecyclerView.Adapter<SimilarMovieAdapter.Simil
         LogDisplay.callLog(LOG_TAG,'onBindViewHolder is called',LogDisplay.SIMILAR_MOVIE_ADAPTER_LOG_FLAG)
         final String posterPath = "$GlobalStaticVariables.TMDB_IMAGE_BASE_URL/$GlobalStaticVariables.TMDB_IMAGE_SIZE_W185" +
                 "${mCursor.getString(DetailMovieFragment.COL_SIMILAR_MOVIE_POSTER_PATH)}"
-//        PicassoLoadImage.loadMoviePosterImage(mContext,posterPath,holder.similarMovieImageView)
+        PicassoLoadImage.loadMoviePosterImage(mContext,posterPath,holder.similarMovieImageView)
         //TODO leak testing
 //        PicassoLoadImage.loadMoviePosterImage(mContext.getApplicationContext(),posterPath,holder.similarMovieImageView)
         holder.similarMovieTextView.setText(mCursor.getString(DetailMovieFragment.COL_SIMILAR_MOVIE_TITLE))

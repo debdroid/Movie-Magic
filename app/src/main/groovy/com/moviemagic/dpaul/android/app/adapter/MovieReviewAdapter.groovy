@@ -60,8 +60,7 @@ class MovieReviewAdapter extends RecyclerView.Adapter<MovieReviewAdapter.MovieRe
                 void onClick(final View v) {
                     mShowImageButton.setVisibility(ImageButton.VISIBLE)
                     mHideImageButton.setVisibility(ImageButton.INVISIBLE)
-                    //TODO leak testing
-//                    movieReviewContent.setMaxLines(mContext.getResources().getString(R.string.single_review_item_collapse_line_item_count) as Integer)
+                    movieReviewContent.setMaxLines(mContext.getResources().getString(R.string.single_review_item_collapse_line_item_count) as Integer)
                 }
             })
         }
@@ -71,8 +70,8 @@ class MovieReviewAdapter extends RecyclerView.Adapter<MovieReviewAdapter.MovieRe
     MovieReviewAdapterViewHolder onCreateViewHolder(final ViewGroup parent, final int viewType) {
         LogDisplay.callLog(LOG_TAG, 'onCreateViewHolder is called', LogDisplay.MOVIE_REVIEW_ADAPTER_LOG_FLAG)
         //TODO leak testing
-//        final View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.single_movie_review_item, parent, false)
-        final View view = LayoutInflater.from(mContext).inflate(R.layout.single_movie_review_item, parent, false)
+        final View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.single_movie_review_item, parent, false)
+//        final View view = LayoutInflater.from(mContext).inflate(R.layout.single_movie_review_item, parent, false)
         view.setFocusable(true)
         return new MovieReviewAdapterViewHolder(view)
     }

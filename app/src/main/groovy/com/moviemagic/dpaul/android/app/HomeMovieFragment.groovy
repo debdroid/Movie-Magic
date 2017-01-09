@@ -5,6 +5,7 @@ import android.content.Context
 import android.content.SharedPreferences
 import android.database.Cursor
 import android.os.Bundle
+import android.support.annotation.Nullable
 import android.support.v4.app.Fragment
 import android.support.v4.app.LoaderManager
 import android.support.v4.content.CursorLoader
@@ -106,6 +107,37 @@ class HomeMovieFragment extends Fragment implements LoaderManager.LoaderCallback
     //An empty constructor is needed so that lifecycle is properly handled
     public HomeMovieFragment(){
         LogDisplay.callLog(LOG_TAG,'HomeMovieFragment empty constructor is called',LogDisplay.HOME_MOVIE_FRAGMENT_LOG_FLAG)
+    }
+
+
+    @Override
+    public void onAttach(final Context context) {
+        LogDisplay.callLog(LOG_TAG,'onAttach is called',LogDisplay.HOME_MOVIE_FRAGMENT_LOG_FLAG)
+        super.onAttach(context)
+        // This makes sure that the container activity has implemented
+        // the callback interface. If not, it throws an exception
+        try {
+            if(context instanceof AppCompatActivity) {
+                mCallbackForHomeMovieClick = (CallbackForHomeMovieClick) context
+            }
+        } catch (final ClassCastException e) {
+            throw new ClassCastException(getActivity().toString()
+                    + " must implement CallbackForHomeMovieClick interface")
+        }
+        try {
+            if(context instanceof AppCompatActivity) {
+                mCallbackForShowAllButtonClick = (CallbackForShowAllButtonClick) context
+            }
+        } catch (final ClassCastException e) {
+            throw new ClassCastException(getActivity().toString()
+                    + " must implement CallbackForShowAllButtonClick interface")
+        }
+    }
+
+    @Override
+    void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState)
+        LogDisplay.callLog(LOG_TAG,'onCreate is called',LogDisplay.HOME_MOVIE_FRAGMENT_LOG_FLAG)
     }
 
     @Override
@@ -245,6 +277,12 @@ class HomeMovieFragment extends Fragment implements LoaderManager.LoaderCallback
             getLoaderManager().restartLoader(HOME_MOVIE_FRAGMENT_RECENTLY_ADDED_USER_LIST_LOADER_ID, null, this)
             getLoaderManager().restartLoader(HOME_MOVIE_FRAGMENT_RECOMMENDATION_LOADER_ID, null, this)
         }
+    }
+
+    @Override
+    void onStart() {
+        super.onStart()
+        LogDisplay.callLog(LOG_TAG,'onStart is called',LogDisplay.HOME_MOVIE_FRAGMENT_LOG_FLAG)
     }
 
     @Override
@@ -439,6 +477,12 @@ class HomeMovieFragment extends Fragment implements LoaderManager.LoaderCallback
     }
 
     @Override
+    void onStop() {
+        super.onStop()
+        LogDisplay.callLog(LOG_TAG,'onStop is called',LogDisplay.HOME_MOVIE_FRAGMENT_LOG_FLAG)
+    }
+
+    @Override
     void onDestroy() {
         super.onDestroy()
         LogDisplay.callLog(LOG_TAG,'onDestroy is called',LogDisplay.HOME_MOVIE_FRAGMENT_LOG_FLAG)
@@ -446,7 +490,7 @@ class HomeMovieFragment extends Fragment implements LoaderManager.LoaderCallback
 
     @Override
     void onDestroyView() {
-        LogDisplay.callLog(LOG_TAG,'onDestroyView is called',LogDisplay.HOME_MOVIE_FRAGMENT_LOG_FLAG)
+        LogDisplay.callLog(LOG_TAG,'onDestroyView is called.->Release the resources',LogDisplay.HOME_MOVIE_FRAGMENT_LOG_FLAG)
         // Destroy the loaders
         getLoaderManager().destroyLoader(HOME_MOVIE_FRAGMENT_VIEW_PAGER_LOADER_ID)
         getLoaderManager().destroyLoader(HOME_MOVIE_FRAGMENT_IN_CINEMA_LOADER_ID)
@@ -465,30 +509,6 @@ class HomeMovieFragment extends Fragment implements LoaderManager.LoaderCallback
         mRecommendationRecyclerView.setAdapter(null)
         // Call the super onDestroyView
         super.onDestroyView()
-    }
-
-    @Override
-    public void onAttach(final Context context) {
-        LogDisplay.callLog(LOG_TAG,'onAttach is called',LogDisplay.HOME_MOVIE_FRAGMENT_LOG_FLAG)
-        super.onAttach(context)
-        // This makes sure that the container activity has implemented
-        // the callback interface. If not, it throws an exception
-        try {
-            if(context instanceof AppCompatActivity) {
-                mCallbackForHomeMovieClick = (CallbackForHomeMovieClick) context
-            }
-        } catch (final ClassCastException e) {
-            throw new ClassCastException(getActivity().toString()
-                    + " must implement CallbackForHomeMovieClick interface")
-        }
-        try {
-            if(context instanceof AppCompatActivity) {
-                mCallbackForShowAllButtonClick = (CallbackForShowAllButtonClick) context
-            }
-        } catch (final ClassCastException e) {
-            throw new ClassCastException(getActivity().toString()
-                    + " must implement CallbackForShowAllButtonClick interface")
-        }
     }
 
     @Override

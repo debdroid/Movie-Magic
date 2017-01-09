@@ -819,7 +819,6 @@ class GridMovieFragment extends Fragment implements LoaderManager.LoaderCallback
         }
     }
 
-
     @Override
     void onSaveInstanceState(final Bundle outState) {
         LogDisplay.callLog(LOG_TAG, 'onSaveInstanceState is called', LogDisplay.GRID_MOVIE_FRAGMENT_LOG_FLAG)
@@ -840,7 +839,18 @@ class GridMovieFragment extends Fragment implements LoaderManager.LoaderCallback
     @Override
     void onStop() {
         super.onStop()
-        LogDisplay.callLog(LOG_TAG,'onStop is called->Release resources',LogDisplay.GRID_MOVIE_FRAGMENT_LOG_FLAG)
+        LogDisplay.callLog(LOG_TAG,'onStop is called',LogDisplay.GRID_MOVIE_FRAGMENT_LOG_FLAG)
+    }
+
+    @Override
+    void onDestroy() {
+        super.onDestroy()
+        LogDisplay.callLog(LOG_TAG,'onDestroy is called',LogDisplay.GRID_MOVIE_FRAGMENT_LOG_FLAG)
+    }
+
+    @Override
+    void onDestroyView() {
+        LogDisplay.callLog(LOG_TAG,'onDestroyView is called->Release the resources',LogDisplay.GRID_MOVIE_FRAGMENT_LOG_FLAG)
         // Destroy the loader
         getLoaderManager().destroyLoader(MOVIE_GRID_FRAGMENT_LOADER_ID)
         // Set the adapter to null after loaders are destroyed
@@ -857,17 +867,6 @@ class GridMovieFragment extends Fragment implements LoaderManager.LoaderCallback
         // Detach the interface reference for GC
         mCallbackForGridItemClick = null
         mCollectionColorChangeCallback = null
-    }
-
-    @Override
-    void onDestroy() {
-        super.onDestroy()
-        LogDisplay.callLog(LOG_TAG,'onDestroy is called',LogDisplay.GRID_MOVIE_FRAGMENT_LOG_FLAG)
-    }
-
-    @Override
-    void onDestroyView() {
-        LogDisplay.callLog(LOG_TAG,'onDestroyView is called',LogDisplay.GRID_MOVIE_FRAGMENT_LOG_FLAG)
         super.onDestroyView()
     }
 
