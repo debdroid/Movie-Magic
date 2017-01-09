@@ -929,20 +929,34 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
             mReleaseInfoArg = ['YYYYY', 'ZZZZZZ'] as String[]
             mMovieImageArg = ['YYYYY', 'ZZZZZZ'] as String[]
         }
-        WeakReference<LoaderManager> loaderManagerWeakReference = new WeakReference<>(getActivity().getSupportLoaderManager())
-        //init all the loaders for fresh start or restart (for restore cases)
+//        WeakReference<LoaderManager> loaderManagerWeakReference = new WeakReference<>(getActivity().getSupportLoaderManager())
+        /** Using of fragment loader (i.e. getLoaderManager() leaks memory when more than one fragment is loaded and
+         * orientation changes. So to fix it (a workaround) the activity's loader manager is used instead. But the
+         * drawback is that we always need to use restartLoader otherwise second fragment onwards the data will not be
+         * loaded because the LoaderManager will think that it's already initiated! another drawback is that no loader id
+         * of the fragment should clash with loader id of activity because it's same LoaderManager!! **/
+        LogDisplay.callLog(LOG_TAG, 'onActivityCreated:since we use activity loader.so always restart', LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
+        getActivity().getSupportLoaderManager().restartLoader(MOVIE_DETAIL_FRAGMENT_BASIC_DATA_LOADER_ID, null, this)
+        getActivity().getSupportLoaderManager().restartLoader(MOVIE_DETAIL_FRAGMENT_SIMILAR_MOVIE_LOADER_ID, null, this)
+        getActivity().getSupportLoaderManager().restartLoader(MOVIE_DETAIL_FRAGMENT_MOVIE_VIDEO_LOADER_ID, null, this)
+        getActivity().getSupportLoaderManager().restartLoader(MOVIE_DETAIL_FRAGMENT_MOVIE_CAST_LOADER_ID, null, this)
+        getActivity().getSupportLoaderManager().restartLoader(MOVIE_DETAIL_FRAGMENT_MOVIE_CREW_LOADER_ID, null, this)
+        getActivity().getSupportLoaderManager().restartLoader(MOVIE_DETAIL_FRAGMENT_MOVIE_RELEASE_INFO_LOADER_ID, null, this)
+        getActivity().getSupportLoaderManager().restartLoader(MOVIE_DETAIL_FRAGMENT_MOVIE_IMAGE_LOADER_ID, null, this)
+        getActivity().getSupportLoaderManager().restartLoader(MOVIE_DETAIL_FRAGMENT_MOVIE_REVIEW_LOADER_ID, null, this)
+        getActivity().getSupportLoaderManager().restartLoader(MOVIE_DETAIL_FRAGMENT_MOVIE_USER_LIST_FLAG_LOADER_ID, null, this)
         if (savedInstanceState == null) {
             mBackdropViewPagerPos = 0
-            LogDisplay.callLog(LOG_TAG, 'onActivityCreated:first time, so init loaders', LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
-            getActivity().getSupportLoaderManager().initLoader(MOVIE_DETAIL_FRAGMENT_BASIC_DATA_LOADER_ID, null, this)
-            getActivity().getSupportLoaderManager().initLoader(MOVIE_DETAIL_FRAGMENT_SIMILAR_MOVIE_LOADER_ID, null, this)
-            getActivity().getSupportLoaderManager().initLoader(MOVIE_DETAIL_FRAGMENT_MOVIE_VIDEO_LOADER_ID, null, this)
-            getActivity().getSupportLoaderManager().initLoader(MOVIE_DETAIL_FRAGMENT_MOVIE_CAST_LOADER_ID, null, this)
-            getActivity().getSupportLoaderManager().initLoader(MOVIE_DETAIL_FRAGMENT_MOVIE_CREW_LOADER_ID, null, this)
-            getActivity().getSupportLoaderManager().initLoader(MOVIE_DETAIL_FRAGMENT_MOVIE_RELEASE_INFO_LOADER_ID, null, this)
-            getActivity().getSupportLoaderManager().initLoader(MOVIE_DETAIL_FRAGMENT_MOVIE_IMAGE_LOADER_ID, null, this)
-            getActivity().getSupportLoaderManager().initLoader(MOVIE_DETAIL_FRAGMENT_MOVIE_REVIEW_LOADER_ID, null, this)
-            getActivity().getSupportLoaderManager().initLoader(MOVIE_DETAIL_FRAGMENT_MOVIE_USER_LIST_FLAG_LOADER_ID, null, this)
+//            LogDisplay.callLog(LOG_TAG, 'onActivityCreated:first time, so init loaders', LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
+//            getActivity().getSupportLoaderManager().initLoader(MOVIE_DETAIL_FRAGMENT_BASIC_DATA_LOADER_ID, null, this)
+//            getActivity().getSupportLoaderManager().initLoader(MOVIE_DETAIL_FRAGMENT_SIMILAR_MOVIE_LOADER_ID, null, this)
+//            getActivity().getSupportLoaderManager().initLoader(MOVIE_DETAIL_FRAGMENT_MOVIE_VIDEO_LOADER_ID, null, this)
+//            getActivity().getSupportLoaderManager().initLoader(MOVIE_DETAIL_FRAGMENT_MOVIE_CAST_LOADER_ID, null, this)
+//            getActivity().getSupportLoaderManager().initLoader(MOVIE_DETAIL_FRAGMENT_MOVIE_CREW_LOADER_ID, null, this)
+//            getActivity().getSupportLoaderManager().initLoader(MOVIE_DETAIL_FRAGMENT_MOVIE_RELEASE_INFO_LOADER_ID, null, this)
+//            getActivity().getSupportLoaderManager().initLoader(MOVIE_DETAIL_FRAGMENT_MOVIE_IMAGE_LOADER_ID, null, this)
+//            getActivity().getSupportLoaderManager().initLoader(MOVIE_DETAIL_FRAGMENT_MOVIE_REVIEW_LOADER_ID, null, this)
+//            getActivity().getSupportLoaderManager().initLoader(MOVIE_DETAIL_FRAGMENT_MOVIE_USER_LIST_FLAG_LOADER_ID, null, this)
             // Start Tmdb data loader only if user is logged in
             //TODO this is not a good way to access variable, use Global class
             if(MovieMagicMainActivity.isUserLoggedIn) {
@@ -950,16 +964,16 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
             }
         } else {
             mBackdropViewPagerPos = savedInstanceState.getInt(GlobalStaticVariables.DETAIL_BACKDROP_VIEWPAGER_POSITION,0)
-            LogDisplay.callLog(LOG_TAG, 'onActivityCreated:restore case, so restart loaders', LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
-            getActivity().getSupportLoaderManager().restartLoader(MOVIE_DETAIL_FRAGMENT_BASIC_DATA_LOADER_ID, null, this)
-            getActivity().getSupportLoaderManager().restartLoader(MOVIE_DETAIL_FRAGMENT_SIMILAR_MOVIE_LOADER_ID, null, this)
-            getActivity().getSupportLoaderManager().restartLoader(MOVIE_DETAIL_FRAGMENT_MOVIE_VIDEO_LOADER_ID, null, this)
-            getActivity().getSupportLoaderManager().restartLoader(MOVIE_DETAIL_FRAGMENT_MOVIE_CAST_LOADER_ID, null, this)
-            getActivity().getSupportLoaderManager().restartLoader(MOVIE_DETAIL_FRAGMENT_MOVIE_CREW_LOADER_ID, null, this)
-            getActivity().getSupportLoaderManager().restartLoader(MOVIE_DETAIL_FRAGMENT_MOVIE_RELEASE_INFO_LOADER_ID, null, this)
-            getActivity().getSupportLoaderManager().restartLoader(MOVIE_DETAIL_FRAGMENT_MOVIE_IMAGE_LOADER_ID, null, this)
-            getActivity().getSupportLoaderManager().restartLoader(MOVIE_DETAIL_FRAGMENT_MOVIE_REVIEW_LOADER_ID, null, this)
-            getActivity().getSupportLoaderManager().restartLoader(MOVIE_DETAIL_FRAGMENT_MOVIE_USER_LIST_FLAG_LOADER_ID, null, this)
+//            LogDisplay.callLog(LOG_TAG, 'onActivityCreated:restore case, so restart loaders', LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
+//            getActivity().getSupportLoaderManager().restartLoader(MOVIE_DETAIL_FRAGMENT_BASIC_DATA_LOADER_ID, null, this)
+//            getActivity().getSupportLoaderManager().restartLoader(MOVIE_DETAIL_FRAGMENT_SIMILAR_MOVIE_LOADER_ID, null, this)
+//            getActivity().getSupportLoaderManager().restartLoader(MOVIE_DETAIL_FRAGMENT_MOVIE_VIDEO_LOADER_ID, null, this)
+//            getActivity().getSupportLoaderManager().restartLoader(MOVIE_DETAIL_FRAGMENT_MOVIE_CAST_LOADER_ID, null, this)
+//            getActivity().getSupportLoaderManager().restartLoader(MOVIE_DETAIL_FRAGMENT_MOVIE_CREW_LOADER_ID, null, this)
+//            getActivity().getSupportLoaderManager().restartLoader(MOVIE_DETAIL_FRAGMENT_MOVIE_RELEASE_INFO_LOADER_ID, null, this)
+//            getActivity().getSupportLoaderManager().restartLoader(MOVIE_DETAIL_FRAGMENT_MOVIE_IMAGE_LOADER_ID, null, this)
+//            getActivity().getSupportLoaderManager().restartLoader(MOVIE_DETAIL_FRAGMENT_MOVIE_REVIEW_LOADER_ID, null, this)
+//            getActivity().getSupportLoaderManager().restartLoader(MOVIE_DETAIL_FRAGMENT_MOVIE_USER_LIST_FLAG_LOADER_ID, null, this)
             // Restart Tmdb loader only if user is logged in
             if(MovieMagicMainActivity.isUserLoggedIn) {
                 getActivity().getSupportLoaderManager().restartLoader(MOVIE_DETAIL_FRAGMENT_BASIC_TMDB_DATA_LOADER_ID, null, this)
