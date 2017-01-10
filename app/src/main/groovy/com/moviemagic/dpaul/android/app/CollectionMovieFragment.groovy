@@ -352,6 +352,12 @@ class CollectionMovieFragment extends Fragment implements LoaderManager.LoaderCa
         super.onDestroy()
     }
 
+    @Override
+    void onDetach() {
+        LogDisplay.callLog(LOG_TAG,'onDetach is called',LogDisplay.COLLECTION_MOVIE_FRAGMENT_LOG_FLAG)
+        super.onDetach()
+    }
+
     /**
      * This method is called from CollectionMovieActivity
      */

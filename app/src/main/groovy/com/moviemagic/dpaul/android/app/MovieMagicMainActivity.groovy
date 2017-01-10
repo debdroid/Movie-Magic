@@ -85,7 +85,6 @@ public class MovieMagicMainActivity extends AppCompatActivity implements
         mNavigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
             boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                LogDisplay.callLog(LOG_TAG, 'takeActionOnNavigationItemSelected is called.', LogDisplay.MOVIE_MAGIC_MAIN_LOG_FLAG)
                 takeActionOnNavigationItemSelected(item)
                 return true
             }

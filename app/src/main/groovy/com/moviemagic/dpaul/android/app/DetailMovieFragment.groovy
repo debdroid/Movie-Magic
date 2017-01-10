@@ -70,7 +70,7 @@ import java.lang.ref.WeakReference
 
 @CompileStatic
 class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
-//    private static final String LOG_TAG = DetailMovieFragment.class.getSimpleName()
+    //LOG_TAG is customised, so do not define this as static final
     private String LOG_TAG = DetailMovieFragment.class.getSimpleName()
 
     private TextView mMovieTitleTextView, mGenreTextView, mRunTimeTextView, mReleaseDateTextView, mBudgetTextView,
@@ -360,6 +360,8 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
 
     @Override
     public void onAttach(final Context context) {
+        // Modify the LOG_TAG for better debugging as the fragment use for multiple times,
+        // all subsequent log will now show fragment number
         LOG_TAG = LOG_TAG + '->Fragment#' + getActivity().getSupportFragmentManager().getBackStackEntryCount()
         LogDisplay.callLog(LOG_TAG,'onAttach is called',LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
         super.onAttach(context)

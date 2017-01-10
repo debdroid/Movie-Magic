@@ -163,6 +163,38 @@ class PersonMovieFragment extends Fragment implements LoaderManager.LoaderCallba
     }
 
     @Override
+    public void onAttach(final Context context) {
+        LogDisplay.callLog(LOG_TAG,'onAttach is called',LogDisplay.PERSON_MOVIE_FRAGMENT_LOG_FLAG)
+        super.onAttach(context)
+        // This makes sure that the container activity has implemented
+        // the callback interface. If not, it throws an exception
+        try {
+            if(context instanceof AppCompatActivity) {
+                mCallbackForCastClick = (CallbackForCastClick) context
+            }
+        } catch (final ClassCastException e) {
+            throw new ClassCastException(getActivity().toString()
+                    + " must implement CallbackForCastClick interface")
+        }
+        try {
+            if(context instanceof AppCompatActivity) {
+                mCallbackForCrewClick = (CallbackForCrewClick) context
+            }
+        } catch (final ClassCastException e) {
+            throw new ClassCastException(getActivity().toString()
+                    + " must implement CallbackForCrewClick interface")
+        }
+        try {
+            if(context instanceof AppCompatActivity) {
+                mCallbackForImageClick = (CallbackForImageClick) context
+            }
+        } catch (final ClassCastException e) {
+            throw new ClassCastException(getActivity().toString()
+                    + " must implement CallbackForImageClick interface")
+        }
+    }
+
+    @Override
     public void onCreate(final Bundle savedInstanceState) {
         LogDisplay.callLog(LOG_TAG, 'onCreate is called', LogDisplay.PERSON_MOVIE_FRAGMENT_LOG_FLAG)
         super.onCreate(savedInstanceState)
@@ -313,6 +345,7 @@ class PersonMovieFragment extends Fragment implements LoaderManager.LoaderCallba
 
     @Override
     void onActivityCreated(final Bundle savedInstanceState) {
+        LogDisplay.callLog(LOG_TAG, 'onActivityCreated is called', LogDisplay.PERSON_MOVIE_FRAGMENT_LOG_FLAG)
         super.onActivityCreated(savedInstanceState)
         final AppCompatActivity appCompatActivity = getActivity() as AppCompatActivity
         mToolbar = getView().findViewById(R.id.person_toolbar) as Toolbar
@@ -347,6 +380,7 @@ class PersonMovieFragment extends Fragment implements LoaderManager.LoaderCallba
 
     @Override
     void onStart() {
+        LogDisplay.callLog(LOG_TAG, 'onStart is called', LogDisplay.PERSON_MOVIE_FRAGMENT_LOG_FLAG)
         super.onStart()
         // Check if the user is online or not, if not then show a message
         final boolean isOnline = Utility.isOnline(getActivity().getApplicationContext())
@@ -705,6 +739,18 @@ class PersonMovieFragment extends Fragment implements LoaderManager.LoaderCallba
     }
 
     @Override
+    void onResume() {
+        LogDisplay.callLog(LOG_TAG, 'onResume is called', LogDisplay.PERSON_MOVIE_FRAGMENT_LOG_FLAG)
+        super.onResume()
+    }
+
+    @Override
+    void onPause() {
+        LogDisplay.callLog(LOG_TAG, 'onPause is called', LogDisplay.PERSON_MOVIE_FRAGMENT_LOG_FLAG)
+        super.onPause()
+    }
+
+    @Override
     void onStop() {
         LogDisplay.callLog(LOG_TAG, 'onStop is called', LogDisplay.PERSON_MOVIE_FRAGMENT_LOG_FLAG)
         super.onStop()
@@ -712,35 +758,21 @@ class PersonMovieFragment extends Fragment implements LoaderManager.LoaderCallba
     }
 
     @Override
-    public void onAttach(final Context context) {
-        LogDisplay.callLog(LOG_TAG,'onAttach is called',LogDisplay.PERSON_MOVIE_FRAGMENT_LOG_FLAG)
-        super.onAttach(context)
-        // This makes sure that the container activity has implemented
-        // the callback interface. If not, it throws an exception
-        try {
-            if(context instanceof Activity) {
-                mCallbackForCastClick = (CallbackForCastClick) context
-            }
-        } catch (final ClassCastException e) {
-            throw new ClassCastException(getActivity().toString()
-                    + " must implement CallbackForCastClick interface")
-        }
-        try {
-            if(context instanceof Activity) {
-                mCallbackForCrewClick = (CallbackForCrewClick) context
-            }
-        } catch (final ClassCastException e) {
-            throw new ClassCastException(getActivity().toString()
-                    + " must implement CallbackForCrewClick interface")
-        }
-        try {
-            if(context instanceof Activity) {
-                mCallbackForImageClick = (CallbackForImageClick) context
-            }
-        } catch (final ClassCastException e) {
-            throw new ClassCastException(getActivity().toString()
-                    + " must implement CallbackForImageClick interface")
-        }
+    void onDestroyView() {
+        LogDisplay.callLog(LOG_TAG, 'onDestroyView is called', LogDisplay.PERSON_MOVIE_FRAGMENT_LOG_FLAG)
+        super.onDestroyView()
+    }
+
+    @Override
+    void onDestroy() {
+        LogDisplay.callLog(LOG_TAG, 'onDestroy is called', LogDisplay.PERSON_MOVIE_FRAGMENT_LOG_FLAG)
+        super.onDestroy()
+    }
+
+    @Override
+    void onDetach() {
+        LogDisplay.callLog(LOG_TAG,'onDetach is called',LogDisplay.PERSON_MOVIE_FRAGMENT_LOG_FLAG)
+        super.onDetach()
     }
 
     /**

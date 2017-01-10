@@ -36,7 +36,8 @@ import groovy.transform.CompileStatic
 
 @CompileStatic
 class GridMovieFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
-    private static final String LOG_TAG = GridMovieFragment.class.getSimpleName()
+    //LOG_TAG is customised, so do not define this as static final
+    private String LOG_TAG = GridMovieFragment.class.getSimpleName()
     private int mCurrentPage = 0
     //To hold the previous count of the total records
     private int mPreviousRecordCount = 0
@@ -139,6 +140,9 @@ class GridMovieFragment extends Fragment implements LoaderManager.LoaderCallback
             LogDisplay.callLog(LOG_TAG,"Grid Fragment arguments.Collection ID -> $mMovieCollectionId",LogDisplay.GRID_MOVIE_FRAGMENT_LOG_FLAG)
         }
 
+        // Modify the LOG_TAG for better debugging as the fragment use for multiple movie categories,
+        // all subsequent log will now show category this grid is handling
+        LOG_TAG = "$LOG_TAG->$mMovieCategory"
         //Inflate the view before referring any view using id
         final View mRootView = inflater.inflate(R.layout.fragment_grid_movie,container,false)
         mRecyclerView = mRootView.findViewById(R.id.auto_grid_recycler_view) as RecyclerView
@@ -221,7 +225,6 @@ class GridMovieFragment extends Fragment implements LoaderManager.LoaderCallback
         return mRootView
     }
 
-
     @Override
     void onActivityCreated(final Bundle savedInstanceState) {
         LogDisplay.callLog(LOG_TAG, 'onActivityCreated is called', LogDisplay.GRID_MOVIE_FRAGMENT_LOG_FLAG)
@@ -268,7 +271,6 @@ class GridMovieFragment extends Fragment implements LoaderManager.LoaderCallback
             }
         }
     }
-
 
     @Override
     void onStart() {
@@ -834,6 +836,18 @@ class GridMovieFragment extends Fragment implements LoaderManager.LoaderCallback
         outState.putString(CURSOR_SORT_CRITERIA,mSortParam)
         // Now call the superclass so it can save the view hierarchy state
         super.onSaveInstanceState(outState)
+    }
+
+    @Override
+    void onResume() {
+        LogDisplay.callLog(LOG_TAG, 'onResume is called', LogDisplay.GRID_MOVIE_FRAGMENT_LOG_FLAG)
+        super.onResume()
+    }
+
+    @Override
+    void onPause() {
+        LogDisplay.callLog(LOG_TAG, 'onPause is called', LogDisplay.GRID_MOVIE_FRAGMENT_LOG_FLAG)
+        super.onPause()
     }
 
     @Override
