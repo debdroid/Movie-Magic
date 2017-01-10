@@ -70,7 +70,7 @@ class CollectionMovieFragment extends Fragment implements LoaderManager.LoaderCa
     private NestedScrollView mNestedScrollView
     private boolean mCollectionDataLoadSuccessFlag = false
     private String mCollectionBackdropPath
-    private ShareActionProvider mShareActionProvider
+//    private ShareActionProvider mShareActionProvider
     private boolean mCollectionDataLoaded = false
     private String mCollectionName
 
@@ -106,35 +106,6 @@ class CollectionMovieFragment extends Fragment implements LoaderManager.LoaderCa
     }
 
     @Override
-    public void onCreateOptionsMenu (final Menu menu, final MenuInflater inflater) {
-        LogDisplay.callLog(LOG_TAG, 'onCreateOptionsMenu is called', LogDisplay.COLLECTION_MOVIE_FRAGMENT_LOG_FLAG)
-        // Inflate the menu, this adds items to the action bar if it is present.
-        inflater.inflate(R.menu.collection_fragment_menu, menu)
-        // Locate MenuItem with ShareActionProvider
-        final MenuItem item = menu.findItem(R.id.menu_action_share)
-        // Fetch and store ShareActionProvider
-        mShareActionProvider = (ShareActionProvider) MenuItemCompat.getActionProvider(item)
-        //Show share option if onLoadFinished is complete and we have data
-        if(mCollectionDataLoaded) {
-            shareCollection()
-        } else {
-            LogDisplay.callLog(LOG_TAG,'onCreateOptionsMenu: collection data not yet loaded!',LogDisplay.COLLECTION_MOVIE_FRAGMENT_LOG_FLAG)
-        }
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(final MenuItem item) {
-        final int itemId = item.getItemId()
-        switch (itemId) {
-            case android.R.id.home:
-                getActivity().finish()
-                return true
-            default:
-                return super.onOptionsItemSelected(item)
-        }
-    }
-
-    @Override
     public View onCreateView(final LayoutInflater inflater, final ViewGroup container, final Bundle savedInstanceState) {
         LogDisplay.callLog(LOG_TAG, 'onCreateView is called', LogDisplay.COLLECTION_MOVIE_FRAGMENT_LOG_FLAG)
         //Get the bundle from the Fragment
@@ -160,6 +131,7 @@ class CollectionMovieFragment extends Fragment implements LoaderManager.LoaderCa
 
     @Override
     void onActivityCreated(final Bundle savedInstanceState) {
+        LogDisplay.callLog(LOG_TAG, 'onActivityCreated is called', LogDisplay.COLLECTION_MOVIE_FRAGMENT_LOG_FLAG)
         super.onActivityCreated(savedInstanceState)
         final AppCompatActivity appCompatActivity = getActivity() as AppCompatActivity
         mToolbar = getView().findViewById(R.id.collection_toolbar) as Toolbar
@@ -186,6 +158,7 @@ class CollectionMovieFragment extends Fragment implements LoaderManager.LoaderCa
 
     @Override
     void onStart() {
+        LogDisplay.callLog(LOG_TAG, 'onStart is called', LogDisplay.COLLECTION_MOVIE_FRAGMENT_LOG_FLAG)
         super.onStart()
         // Check if the user is online or not, if not then show a message
         final boolean isOnline = Utility.isOnline(getActivity().getApplicationContext())
@@ -197,6 +170,44 @@ class CollectionMovieFragment extends Fragment implements LoaderManager.LoaderCa
         } else if (Utility.isReducedDataOn(getActivity())) {
             // If user has selected reduced data
             Snackbar.make(mAppBarLayout, getString(R.string.reduced_data_use_on_message), Snackbar.LENGTH_LONG).show()
+        }
+    }
+
+    @Override
+    public void onCreateOptionsMenu (final Menu menu, final MenuInflater inflater) {
+        LogDisplay.callLog(LOG_TAG, 'onCreateOptionsMenu is called', LogDisplay.COLLECTION_MOVIE_FRAGMENT_LOG_FLAG)
+        // Inflate the menu, this adds items to the action bar if it is present.
+        inflater.inflate(R.menu.collection_fragment_menu, menu)
+//        // Locate MenuItem with ShareActionProvider
+//        final MenuItem item = menu.findItem(R.id.menu_action_share)
+//        // Fetch and store ShareActionProvider
+//        mShareActionProvider = (ShareActionProvider) MenuItemCompat.getActionProvider(item)
+//        //Show share option if onLoadFinished is complete and we have data
+//        if(mCollectionDataLoaded) {
+//            shareCollection()
+//        } else {
+//            LogDisplay.callLog(LOG_TAG,'onCreateOptionsMenu: collection data not yet loaded!',LogDisplay.COLLECTION_MOVIE_FRAGMENT_LOG_FLAG)
+//        }
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(final MenuItem item) {
+        LogDisplay.callLog(LOG_TAG, 'onOptionsItemSelected is called', LogDisplay.COLLECTION_MOVIE_FRAGMENT_LOG_FLAG)
+        final int itemId = item.getItemId()
+        switch (itemId) {
+            case R.id.menu_action_share:
+                if(mCollectionDataLoaded) {
+                    shareCollection()
+                } else {
+                    Snackbar.make(mAppBarLayout, getString(R.string.collection_share_cannot_perform), Snackbar.LENGTH_LONG).show()
+                    LogDisplay.callLog(LOG_TAG,'onOptionsItemSelected: collection data not yet loaded. Try again later!',LogDisplay.COLLECTION_MOVIE_FRAGMENT_LOG_FLAG)
+                }
+                return true
+            case android.R.id.home:
+                getActivity().finish()
+                return true
+            default:
+                return super.onOptionsItemSelected(item)
         }
     }
 
@@ -271,12 +282,12 @@ class CollectionMovieFragment extends Fragment implements LoaderManager.LoaderCa
             }
             mCollectionDataLoaded = true
             // If onCreateOptionsMenu already happened then do share this to share collection
-            if(mShareActionProvider) {
-                shareCollection()
-            } else {
-                LogDisplay.callLog(LOG_TAG, 'onLoadFinished:mShareActionProvider is null because onCreateOptionsMenu is not' +
-                        ' yet called. shareCollection will be called from onCreateOptionsMenu.', LogDisplay.COLLECTION_MOVIE_FRAGMENT_LOG_FLAG)
-            }
+//            if(mShareActionProvider) {
+//                shareCollection()
+//            } else {
+//                LogDisplay.callLog(LOG_TAG, 'onLoadFinished:mShareActionProvider is null because onCreateOptionsMenu is not' +
+//                        ' yet called. shareCollection will be called from onCreateOptionsMenu.', LogDisplay.COLLECTION_MOVIE_FRAGMENT_LOG_FLAG)
+//            }
         } else {
             //Load the collection details and associated movies
             LogDisplay.callLog(LOG_TAG, "onLoadFinished.Data not present for collection id $mCollectionId, go and fetch it", LogDisplay.COLLECTION_MOVIE_FRAGMENT_LOG_FLAG)
@@ -290,6 +301,7 @@ class CollectionMovieFragment extends Fragment implements LoaderManager.LoaderCa
 
     @Override
     void onLoaderReset(final Loader<Cursor> loader) {
+        LogDisplay.callLog(LOG_TAG, 'onLoaderReset is called', LogDisplay.COLLECTION_MOVIE_FRAGMENT_LOG_FLAG)
         //Do nothing
     }
 
@@ -308,10 +320,42 @@ class CollectionMovieFragment extends Fragment implements LoaderManager.LoaderCa
         fragmentTransaction.commit()
     }
 
+    @Override
+    void onResume() {
+        LogDisplay.callLog(LOG_TAG, 'onResume is called', LogDisplay.COLLECTION_MOVIE_FRAGMENT_LOG_FLAG)
+        super.onResume()
+    }
+
+    @Override
+    void onPause() {
+        LogDisplay.callLog(LOG_TAG, 'onPause is called', LogDisplay.COLLECTION_MOVIE_FRAGMENT_LOG_FLAG)
+        super.onPause()
+    }
+
+    @Override
+    void onStop() {
+        LogDisplay.callLog(LOG_TAG, 'onStop is called', LogDisplay.COLLECTION_MOVIE_FRAGMENT_LOG_FLAG)
+        super.onStop()
+        //Cancel Picasso requests - required where callback (hard reference) is used
+        Picasso.with(getActivity()).cancelRequest(mBackdropImageView)
+    }
+
+    @Override
+    void onDestroyView() {
+        LogDisplay.callLog(LOG_TAG, 'onDestroyView is called', LogDisplay.COLLECTION_MOVIE_FRAGMENT_LOG_FLAG)
+        super.onDestroyView()
+    }
+
+    @Override
+    void onDestroy() {
+        LogDisplay.callLog(LOG_TAG, 'onDestroy is called', LogDisplay.COLLECTION_MOVIE_FRAGMENT_LOG_FLAG)
+        super.onDestroy()
+    }
+
     /**
      * This method is called from CollectionMovieActivity
      */
-    void loadCollBackdropAndchangeCollectionMovieGridColor() {
+    void loadCollBackdropAndChangeCollectionMovieGridColor() {
         if(mCollectionDataLoadSuccessFlag) {
             final Callback picassoCollectionImageCallback = new Callback() {
                 @Override
@@ -323,15 +367,15 @@ class CollectionMovieFragment extends Fragment implements LoaderManager.LoaderCa
                         Palette.from(bitmapPoster).generate(new Palette.PaletteAsyncListener() {
                             @Override
                             public void onGenerated(final Palette p) {
-                                // This is to ensure that when collection adds movies to movie_basic_info and loader of detail fragment is
-                                // loaded with data and call shareMovie then this overrides detail fragment shareMovie because it's called from
-                                // CollectionActivity which is a callback of GridFragmentMovie which is called when collection movie are inserted
-                                //(i.e. Detail Fragment's onLoadFinished is called (this is kind of obvious because onGenerate will take sometime!)
-                                if(mCollectionDataLoaded) {
-                                    shareCollection()
-                                } else {
-                                    LogDisplay.callLog(LOG_TAG,'loadCollBackdropAndchangeCollectionMovieGridColor: collection data not yet loaded!',LogDisplay.COLLECTION_MOVIE_FRAGMENT_LOG_FLAG)
-                                }
+//                                // This is to ensure that when collection adds movies to movie_basic_info and loader of detail fragment is
+//                                // loaded with data and call shareMovie then this overrides detail fragment shareMovie because it's called from
+//                                // CollectionActivity which is a callback of GridFragmentMovie which is called when collection movie are inserted
+//                                //(i.e. Detail Fragment's onLoadFinished is called (this is kind of obvious because onGenerate will take sometime!)
+//                                if(mCollectionDataLoaded) {
+//                                    shareCollection()
+//                                } else {
+//                                    LogDisplay.callLog(LOG_TAG,'loadCollBackdropAndChangeCollectionMovieGridColor: collection data not yet loaded!',LogDisplay.COLLECTION_MOVIE_FRAGMENT_LOG_FLAG)
+//                                }
                                 LogDisplay.callLog(LOG_TAG, 'onGenerated is called', LogDisplay.COLLECTION_MOVIE_FRAGMENT_LOG_FLAG)
                                 final Palette.Swatch vibrantSwatch = p.getVibrantSwatch()
                                 final Palette.Swatch lightVibrantSwatch = p.getLightVibrantSwatch()
@@ -425,20 +469,6 @@ class CollectionMovieFragment extends Fragment implements LoaderManager.LoaderCa
         mCollectionDataLoadSuccessFlag = false
     }
 
-    @Override
-    void onPause() {
-        LogDisplay.callLog(LOG_TAG, 'onPause is called', LogDisplay.COLLECTION_MOVIE_FRAGMENT_LOG_FLAG)
-        super.onPause()
-    }
-
-    @Override
-    void onStop() {
-        LogDisplay.callLog(LOG_TAG, 'onStop is called', LogDisplay.COLLECTION_MOVIE_FRAGMENT_LOG_FLAG)
-        super.onStop()
-        //Cancel Picasso requests - required where callback (hard reference) is used
-        Picasso.with(getActivity()).cancelRequest(mBackdropImageView)
-    }
-
     /**
      * Share the collection
      */
@@ -450,10 +480,16 @@ class CollectionMovieFragment extends Fragment implements LoaderManager.LoaderCa
         sendIntent.setAction(Intent.ACTION_SEND)
         sendIntent.putExtra(Intent.EXTRA_TEXT, "$mCollectionName, TMDb link - $tmdbWebCollectionUrl #${getString(R.string.app_name)} app")
         sendIntent.setType("text/plain")
-        if(mShareActionProvider) {
-            mShareActionProvider.setShareIntent(sendIntent)
-        } else {
-            LogDisplay.callLog(LOG_TAG, 'shareCollection:mShareActionProvider is null', LogDisplay.COLLECTION_MOVIE_FRAGMENT_LOG_FLAG)
+//        if(mShareActionProvider) {
+//            mShareActionProvider.setShareIntent(sendIntent)
+//        } else {
+//            LogDisplay.callLog(LOG_TAG, 'shareCollection:mShareActionProvider is null', LogDisplay.COLLECTION_MOVIE_FRAGMENT_LOG_FLAG)
+//        }
+        // Create intent to show the chooser dialog
+        final Intent chooser = Intent.createChooser(sendIntent, getString(R.string.collection_chooser_title))
+        // Verify that the intent will resolve to an activity
+        if (sendIntent.resolveActivity(getActivity().getPackageManager()) != null) {
+            startActivity(chooser)
         }
     }
 }

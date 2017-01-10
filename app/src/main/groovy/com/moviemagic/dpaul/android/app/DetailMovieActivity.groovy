@@ -92,7 +92,12 @@ class DetailMovieActivity extends AppCompatActivity implements DetailMovieFragme
         LogDisplay.callLog(LOG_TAG, "onBackPressed is called.FragmentBackstackCount:${getSupportFragmentManager().getBackStackEntryCount()}", LogDisplay.DETAIL_MOVIE_ACTIVITY_LOG_FLAG)
         //Start the animation
         overridePendingTransition(0, R.anim.slide_bottom_out_animation)
-        super.onBackPressed()
+        //If this is the last fragment then finish the activity
+        if(getSupportFragmentManager().getBackStackEntryCount() == 1) {
+            finish()
+        } else {
+            super.onBackPressed()
+        }
     }
 
     // Override the callback method of DetailMovieFragment

@@ -4,7 +4,6 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
-import com.moviemagic.dpaul.android.app.adapter.MovieGridRecyclerAdapter
 import com.moviemagic.dpaul.android.app.backgroundmodules.GlobalStaticVariables
 import com.moviemagic.dpaul.android.app.backgroundmodules.LogDisplay
 import groovy.transform.CompileStatic
@@ -64,7 +63,7 @@ class CollectionMovieActivity extends AppCompatActivity implements GridMovieFrag
         LogDisplay.callLog(LOG_TAG, 'notifyCollectionColorChange is called', LogDisplay.COLLECTION_MOVIE_FRAGMENT_LOG_FLAG)
         final CollectionMovieFragment fragment = (CollectionMovieFragment)getSupportFragmentManager().findFragmentByTag(GlobalStaticVariables.COLLECTION_MOVIE_FRAGMENT_TAG)
         if(CollectionMovieFragment) {
-            fragment.loadCollBackdropAndchangeCollectionMovieGridColor()
+            fragment.loadCollBackdropAndChangeCollectionMovieGridColor()
         } else {
             LogDisplay.callLog(LOG_TAG, 'notifyCollectionColorChange: CollectionMovieFragment reference is null', LogDisplay.COLLECTION_MOVIE_FRAGMENT_LOG_FLAG)
         }
