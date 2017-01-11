@@ -242,7 +242,7 @@ class PersonMovieFragment extends Fragment implements LoaderManager.LoaderCallba
         mDobTextView = mRootView.findViewById(R.id.person_dob) as TextView
         mBirthPlaceHdrTextView = mRootView.findViewById(R.id.person_place_of_birth_header) as TextView
         mBirthPlaceTextView = mRootView.findViewById(R.id.person_place_of_birth) as TextView
-        mAlsoKnownAsDivider = mRootView.findViewById(R.id.person_also_known_as_header) as View
+        mAlsoKnownAsDivider = mRootView.findViewById(R.id.person_also_known_as_devider) as View
         mAlsoKnownAsHdrTextView = mRootView.findViewById(R.id.person_also_known_as_header) as TextView
         mAlsoKnownAsTextView = mRootView.findViewById(R.id.person_also_known_as) as TextView
         mDeathDayHdrTextView = mRootView.findViewById(R.id.person_death_day_header) as TextView

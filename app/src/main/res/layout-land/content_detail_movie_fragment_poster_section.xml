@@ -25,7 +25,6 @@
             android:id="@+id/movie_detail_poster_release_date_header"
             android:layout_width="@dimen/movie_detail_poster_section_land_element_width"
             android:layout_height="wrap_content"
-            android:paddingStart="@dimen/poster_image_data_fields_margin"
             android:paddingEnd="@dimen/m_design_screen_edge_left_right_margin"
             android:fontFamily="sans-serif-condensed"
             android:text="@string/movie_detail_release_date"
@@ -36,7 +35,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_toRightOf="@+id/movie_detail_poster_release_date_header"
-            android:paddingStart="@dimen/poster_image_data_fields_margin"
             android:paddingEnd="@dimen/m_design_screen_edge_left_right_margin"
             android:fontFamily="sans-serif-condensed"
             android:textAppearance="@style/TextAppearance.AppCompat.Medium"
@@ -46,7 +44,6 @@
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:layout_marginStart="@dimen/poster_image_data_fields_margin"
             android:background="@color/divider_color" />
     <RelativeLayout
         android:layout_width="match_parent"
@@ -55,7 +52,6 @@
             android:id="@+id/movie_detail_poster_budget_header"
             android:layout_width="@dimen/movie_detail_poster_section_land_element_width"
             android:layout_height="wrap_content"
-            android:paddingStart="@dimen/poster_image_data_fields_margin"
             android:paddingEnd="@dimen/m_design_screen_edge_left_right_margin"
             android:fontFamily="sans-serif-condensed"
             android:text="@string/movie_detail_budget"
@@ -66,7 +62,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_toRightOf="@+id/movie_detail_poster_budget_header"
-            android:paddingStart="@dimen/poster_image_data_fields_margin"
             android:paddingEnd="@dimen/m_design_screen_edge_left_right_margin"
             android:fontFamily="sans-serif-condensed"
             android:textAppearance="@style/TextAppearance.AppCompat.Medium"
@@ -76,7 +71,6 @@
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:layout_marginStart="@dimen/poster_image_data_fields_margin"
             android:background="@color/divider_color" />
     <RelativeLayout
         android:layout_width="match_parent"
@@ -85,7 +79,6 @@
             android:id="@+id/movie_detail_poster_revenue_header"
             android:layout_width="@dimen/movie_detail_poster_section_land_element_width"
             android:layout_height="wrap_content"
-            android:paddingStart="@dimen/poster_image_data_fields_margin"
             android:paddingEnd="@dimen/m_design_screen_edge_left_right_margin"
             android:fontFamily="sans-serif-condensed"
             android:text="@string/movie_detail_revenue"
@@ -96,7 +89,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_toRightOf="@+id/movie_detail_poster_revenue_header"
-            android:paddingStart="@dimen/poster_image_data_fields_margin"
             android:paddingEnd="@dimen/m_design_screen_edge_left_right_margin"
             android:fontFamily="sans-serif-condensed"
             android:textAppearance="@style/TextAppearance.AppCompat.Medium"
@@ -106,7 +98,6 @@
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:layout_marginStart="@dimen/poster_image_data_fields_margin"
             android:background="@color/divider_color" />
     <RelativeLayout
         android:layout_width="match_parent"
@@ -115,7 +106,6 @@
             android:id="@+id/movie_detail_poster_popularity_header"
             android:layout_width="@dimen/movie_detail_poster_section_land_element_width"
             android:layout_height="wrap_content"
-            android:paddingStart="@dimen/poster_image_data_fields_margin"
             android:paddingEnd="@dimen/m_design_screen_edge_left_right_margin"
             android:fontFamily="sans-serif-condensed"
             android:text="@string/person_popularity"
@@ -126,7 +116,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_toRightOf="@+id/movie_detail_poster_popularity_header"
-            android:paddingStart="@dimen/poster_image_data_fields_margin"
             android:paddingEnd="@dimen/m_design_screen_edge_left_right_margin"
             android:fontFamily="sans-serif-condensed"
             android:textAppearance="@style/TextAppearance.AppCompat.Medium"
@@ -136,6 +125,5 @@
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:layout_marginStart="@dimen/poster_image_data_fields_margin"
             android:background="@color/divider_color" />
 </LinearLayout>

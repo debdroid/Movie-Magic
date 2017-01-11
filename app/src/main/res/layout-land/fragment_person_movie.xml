@@ -35,7 +35,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@color/black_color_opacity_40"
+            android:background="@color/black_color_opacity_30"
             android:fitsSystemWindows="true"
             android:orientation="vertical" />
             <android.support.v7.widget.Toolbar

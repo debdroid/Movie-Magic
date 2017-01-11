@@ -26,7 +26,6 @@
                 android:layout_height="wrap_content"
                 android:fontFamily="sans-serif-condensed"
                 android:paddingEnd="@dimen/m_design_screen_edge_left_right_margin"
-                android:paddingStart="@dimen/poster_image_data_fields_margin"
                 android:text="@string/person_name"
                 android:textAppearance="@style/TextAppearance.AppCompat.Title"
                 android:textColor="@color/primary_text" />
@@ -38,7 +37,6 @@
                 android:layout_toRightOf="@+id/person_name_header"
                 android:fontFamily="sans-serif-condensed"
                 android:paddingEnd="@dimen/m_design_screen_edge_left_right_margin"
-                android:paddingStart="@dimen/poster_image_data_fields_margin"
                 android:textAppearance="@style/TextAppearance.AppCompat.Medium"
                 android:textColor="@color/secondary_text"
                 android:textIsSelectable="true" />
@@ -47,7 +45,6 @@
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:layout_marginStart="@dimen/poster_image_data_fields_margin"
             android:background="@color/divider_color" />
 
         <RelativeLayout
@@ -60,7 +57,6 @@
                 android:layout_height="wrap_content"
                 android:fontFamily="sans-serif-condensed"
                 android:paddingEnd="@dimen/m_design_screen_edge_left_right_margin"
-                android:paddingStart="@dimen/poster_image_data_fields_margin"
                 android:text="@string/person_dob"
                 android:textAppearance="@style/TextAppearance.AppCompat.Title"
                 android:textColor="@color/primary_text" />
@@ -72,7 +68,6 @@
                 android:layout_toRightOf="@+id/person_dob_header"
                 android:fontFamily="sans-serif-condensed"
                 android:paddingEnd="@dimen/m_design_screen_edge_left_right_margin"
-                android:paddingStart="@dimen/poster_image_data_fields_margin"
                 android:textAppearance="@style/TextAppearance.AppCompat.Medium"
                 android:textColor="@color/secondary_text"
                 android:textIsSelectable="true" />
@@ -81,7 +76,6 @@
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:layout_marginStart="@dimen/poster_image_data_fields_margin"
             android:background="@color/divider_color" />
 
         <RelativeLayout
@@ -94,7 +88,6 @@
                 android:layout_height="wrap_content"
                 android:fontFamily="sans-serif-condensed"
                 android:paddingEnd="@dimen/m_design_screen_edge_left_right_margin"
-                android:paddingStart="@dimen/poster_image_data_fields_margin"
                 android:text="@string/person_place_of_birth"
                 android:textAppearance="@style/TextAppearance.AppCompat.Title"
                 android:textColor="@color/primary_text" />
@@ -106,7 +99,6 @@
                 android:layout_toRightOf="@+id/person_place_of_birth_header"
                 android:fontFamily="sans-serif-condensed"
                 android:paddingEnd="@dimen/m_design_screen_edge_left_right_margin"
-                android:paddingStart="@dimen/poster_image_data_fields_margin"
                 android:textAppearance="@style/TextAppearance.AppCompat.Medium"
                 android:textColor="@color/secondary_text"
                 android:textIsSelectable="true" />
@@ -115,7 +107,6 @@
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:layout_marginStart="@dimen/poster_image_data_fields_margin"
             android:background="@color/divider_color" />
 
         <RelativeLayout
@@ -128,7 +119,6 @@
                 android:layout_height="wrap_content"
                 android:fontFamily="sans-serif-condensed"
                 android:paddingEnd="@dimen/m_design_screen_edge_left_right_margin"
-                android:paddingStart="@dimen/poster_image_data_fields_margin"
                 android:text="@string/person_also_known_as"
                 android:textAppearance="@style/TextAppearance.AppCompat.Title"
                 android:textColor="@color/primary_text" />
@@ -140,7 +130,6 @@
                 android:layout_toRightOf="@id/person_also_known_as_header"
                 android:fontFamily="sans-serif-condensed"
                 android:paddingEnd="@dimen/m_design_screen_edge_left_right_margin"
-                android:paddingStart="@dimen/poster_image_data_fields_margin"
                 android:textAppearance="@style/TextAppearance.AppCompat.Medium"
                 android:textColor="@color/secondary_text"
                 android:textIsSelectable="true" />
@@ -150,7 +139,6 @@
             android:id="@+id/person_also_known_as_devider"
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:layout_marginStart="@dimen/poster_image_data_fields_margin"
             android:background="@color/divider_color" />
 
         <RelativeLayout
@@ -163,7 +151,6 @@
                 android:layout_height="wrap_content"
                 android:fontFamily="sans-serif-condensed"
                 android:paddingEnd="@dimen/m_design_screen_edge_left_right_margin"
-                android:paddingStart="@dimen/poster_image_data_fields_margin"
                 android:text="@string/person_death_day"
                 android:textAppearance="@style/TextAppearance.AppCompat.Title"
                 android:textColor="@color/primary_text" />
@@ -175,7 +162,6 @@
                 android:layout_toRightOf="@id/person_death_day_header"
                 android:fontFamily="sans-serif-condensed"
                 android:paddingEnd="@dimen/m_design_screen_edge_left_right_margin"
-                android:paddingStart="@dimen/poster_image_data_fields_margin"
                 android:textAppearance="@style/TextAppearance.AppCompat.Medium"
                 android:textColor="@color/secondary_text"
                 android:textIsSelectable="true" />
@@ -185,7 +171,6 @@
             android:id="@+id/person_death_day_devider"
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:layout_marginStart="@dimen/poster_image_data_fields_margin"
             android:background="@color/divider_color" />
 
         <RelativeLayout
@@ -198,7 +183,6 @@
                 android:layout_height="wrap_content"
                 android:fontFamily="sans-serif-condensed"
                 android:paddingEnd="@dimen/m_design_screen_edge_left_right_margin"
-                android:paddingStart="@dimen/poster_image_data_fields_margin"
                 android:text="@string/person_popularity"
                 android:textAppearance="@style/TextAppearance.AppCompat.Title"
                 android:textColor="@color/primary_text" />
@@ -210,7 +194,6 @@
                 android:layout_toRightOf="@id/person_popularity_header"
                 android:fontFamily="sans-serif-condensed"
                 android:paddingEnd="@dimen/m_design_screen_edge_left_right_margin"
-                android:paddingStart="@dimen/poster_image_data_fields_margin"
                 android:textAppearance="@style/TextAppearance.AppCompat.Medium"
                 android:textColor="@color/secondary_text"
                 android:textIsSelectable="true" />
