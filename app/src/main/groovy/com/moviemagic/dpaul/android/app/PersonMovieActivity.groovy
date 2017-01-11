@@ -22,18 +22,20 @@ class PersonMovieActivity extends AppCompatActivity implements PersonMovieFragme
         setContentView(R.layout.activity_person_movie)
         if (savedInstanceState == null) {
             //Get the arguments from the intent
-            final Uri uri = getIntent().getData()
-            if (uri) {
-                LogDisplay.callLog(LOG_TAG, "Intent Data->${uri.toString()}", LogDisplay.PERSON_MOVIE_ACTIVITY_LOG_FLAG)
-                final Bundle bundle = new Bundle()
-                bundle.putParcelable(GlobalStaticVariables.MOVIE_PERSON_URI,uri)
+//            final Uri uri = getIntent().getData()
+            final Bundle bundle = getIntent().getExtras()
+//            if (uri) {
+            if (bundle) {
+//                LogDisplay.callLog(LOG_TAG, "Intent Data->${uri.toString()}", LogDisplay.PERSON_MOVIE_ACTIVITY_LOG_FLAG)
+//                final Bundle bundle = new Bundle()
+//                bundle.putParcelable(GlobalStaticVariables.MOVIE_PERSON_URI,uri)
                 final PersonMovieFragment personMovieFragment = new PersonMovieFragment()
                 personMovieFragment.setArguments(bundle)
                 getSupportFragmentManager().beginTransaction()
                         .replace(R.id.person_fragment_container, personMovieFragment)
                         .commit()
             } else {
-                LogDisplay.callLog(LOG_TAG, 'Could not parse intent data.', LogDisplay.PERSON_MOVIE_ACTIVITY_LOG_FLAG)
+                LogDisplay.callLog(LOG_TAG, 'Could not parse intent data sent by DetailMovieFragment.', LogDisplay.PERSON_MOVIE_ACTIVITY_LOG_FLAG)
             }
         }
     }

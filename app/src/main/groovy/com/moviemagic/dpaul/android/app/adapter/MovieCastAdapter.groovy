@@ -29,16 +29,19 @@ class MovieCastAdapter extends RecyclerView.Adapter<MovieCastAdapter.MovieCastAd
     private final Context mContext
     private final TextView mCastGridEmptyTextView
     private int mPrimaryDarkColor, mBodyTextColor
+    private final MovieCastAdapterOnClickHandler mMovieCastAdapterOnClickHandler
+
 
     //Empty constructor
     public MovieCastAdapter() {
         LogDisplay.callLog(LOG_TAG, 'MovieCastAdapter empty constructor is called', LogDisplay.MOVIE_CAST_ADAPTER_LOG_FLAG)
     }
 
-    public MovieCastAdapter(final Context ctx, final TextView emptyView) {
+    public MovieCastAdapter(final Context ctx, final TextView emptyView, final MovieCastAdapterOnClickHandler clickHandler) {
         LogDisplay.callLog(LOG_TAG, 'MovieCastAdapter non-empty constructor is called', LogDisplay.MOVIE_CAST_ADAPTER_LOG_FLAG)
         mContext = ctx
         mCastGridEmptyTextView = emptyView
+        mMovieCastAdapterOnClickHandler = clickHandler
     }
 
     public class MovieCastAdapterViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
@@ -62,11 +65,12 @@ class MovieCastAdapter extends RecyclerView.Adapter<MovieCastAdapter.MovieCastAd
             mCursor.moveToPosition(getAdapterPosition())
             final int personId = mCursor.getInt(DetailMovieFragment.COL_MOVIE_CAST_PERSON_ID)
             LogDisplay.callLog(LOG_TAG,"Person id is $personId",LogDisplay.MOVIE_CAST_ADAPTER_LOG_FLAG)
-            final Uri moviePersonInfoIdUri = MovieMagicContract.MoviePersonInfo.buildMoviePersonInfoUriWithPersonId(personId)
-            final Intent mIntent = new Intent(mContext, PersonMovieActivity.class).setData(moviePersonInfoIdUri)
-            //Set the animation
-            final Bundle bundle = ActivityOptions.makeCustomAnimation(mContext,R.anim.slide_bottom_in_animation,0).toBundle()
-            mContext.startActivity(mIntent,bundle)
+//            final Uri moviePersonInfoIdUri = MovieMagicContract.MoviePersonInfo.buildMoviePersonInfoUriWithPersonId(personId)
+//            final Intent mIntent = new Intent(mContext, PersonMovieActivity.class).setData(moviePersonInfoIdUri)
+//            //Set the animation
+//            final Bundle bundle = ActivityOptions.makeCustomAnimation(mContext,R.anim.slide_bottom_in_animation,0).toBundle()
+//            mContext.startActivity(mIntent,bundle)
+            mMovieCastAdapterOnClickHandler.onClick(personId)
         }
     }
 
@@ -128,5 +132,12 @@ class MovieCastAdapter extends RecyclerView.Adapter<MovieCastAdapter.MovieCastAd
         } else {
             notifyDataSetChanged()
         }
+    }
+
+    /**
+     * This is the interface which will be implemented by the host DetailMovieFragment
+     */
+    public interface MovieCastAdapterOnClickHandler {
+        public void onClick(int personId)
     }
 }

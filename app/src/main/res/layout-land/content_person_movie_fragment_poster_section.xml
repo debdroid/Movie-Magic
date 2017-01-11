@@ -1,0 +1,219 @@
+<!-- Person poster section -->
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/person_poster_layout"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingBottom="@dimen/m_design_space_between_content_area"
+    android:paddingStart="@dimen/m_design_screen_edge_left_right_margin"
+    android:paddingTop="@dimen/m_design_space_between_content_area"
+    tools:ignore="RtlSymmetry">
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_toEndOf="@+id/person_poster_image"
+        android:orientation="vertical">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/person_name_header"
+                android:layout_width="@dimen/person_poster_section_land_element_width"
+                android:layout_height="wrap_content"
+                android:fontFamily="sans-serif-condensed"
+                android:paddingEnd="@dimen/m_design_screen_edge_left_right_margin"
+                android:paddingStart="@dimen/poster_image_data_fields_margin"
+                android:text="@string/person_name"
+                android:textAppearance="@style/TextAppearance.AppCompat.Title"
+                android:textColor="@color/primary_text" />
+
+            <TextView
+                android:id="@+id/person_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toRightOf="@+id/person_name_header"
+                android:fontFamily="sans-serif-condensed"
+                android:paddingEnd="@dimen/m_design_screen_edge_left_right_margin"
+                android:paddingStart="@dimen/poster_image_data_fields_margin"
+                android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                android:textColor="@color/secondary_text"
+                android:textIsSelectable="true" />
+        </RelativeLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginStart="@dimen/poster_image_data_fields_margin"
+            android:background="@color/divider_color" />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/person_dob_header"
+                android:layout_width="@dimen/person_poster_section_land_element_width"
+                android:layout_height="wrap_content"
+                android:fontFamily="sans-serif-condensed"
+                android:paddingEnd="@dimen/m_design_screen_edge_left_right_margin"
+                android:paddingStart="@dimen/poster_image_data_fields_margin"
+                android:text="@string/person_dob"
+                android:textAppearance="@style/TextAppearance.AppCompat.Title"
+                android:textColor="@color/primary_text" />
+
+            <TextView
+                android:id="@+id/person_dob"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toRightOf="@+id/person_dob_header"
+                android:fontFamily="sans-serif-condensed"
+                android:paddingEnd="@dimen/m_design_screen_edge_left_right_margin"
+                android:paddingStart="@dimen/poster_image_data_fields_margin"
+                android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                android:textColor="@color/secondary_text"
+                android:textIsSelectable="true" />
+        </RelativeLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginStart="@dimen/poster_image_data_fields_margin"
+            android:background="@color/divider_color" />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/person_place_of_birth_header"
+                android:layout_width="@dimen/person_poster_section_land_element_width"
+                android:layout_height="wrap_content"
+                android:fontFamily="sans-serif-condensed"
+                android:paddingEnd="@dimen/m_design_screen_edge_left_right_margin"
+                android:paddingStart="@dimen/poster_image_data_fields_margin"
+                android:text="@string/person_place_of_birth"
+                android:textAppearance="@style/TextAppearance.AppCompat.Title"
+                android:textColor="@color/primary_text" />
+
+            <TextView
+                android:id="@+id/person_place_of_birth"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toRightOf="@+id/person_place_of_birth_header"
+                android:fontFamily="sans-serif-condensed"
+                android:paddingEnd="@dimen/m_design_screen_edge_left_right_margin"
+                android:paddingStart="@dimen/poster_image_data_fields_margin"
+                android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                android:textColor="@color/secondary_text"
+                android:textIsSelectable="true" />
+        </RelativeLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginStart="@dimen/poster_image_data_fields_margin"
+            android:background="@color/divider_color" />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/person_also_known_as_header"
+                android:layout_width="@dimen/person_poster_section_land_element_width"
+                android:layout_height="wrap_content"
+                android:fontFamily="sans-serif-condensed"
+                android:paddingEnd="@dimen/m_design_screen_edge_left_right_margin"
+                android:paddingStart="@dimen/poster_image_data_fields_margin"
+                android:text="@string/person_also_known_as"
+                android:textAppearance="@style/TextAppearance.AppCompat.Title"
+                android:textColor="@color/primary_text" />
+
+            <TextView
+                android:id="@+id/person_also_known_as"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toRightOf="@id/person_also_known_as_header"
+                android:fontFamily="sans-serif-condensed"
+                android:paddingEnd="@dimen/m_design_screen_edge_left_right_margin"
+                android:paddingStart="@dimen/poster_image_data_fields_margin"
+                android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                android:textColor="@color/secondary_text"
+                android:textIsSelectable="true" />
+        </RelativeLayout>
+
+        <View
+            android:id="@+id/person_also_known_as_devider"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginStart="@dimen/poster_image_data_fields_margin"
+            android:background="@color/divider_color" />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/person_death_day_header"
+                android:layout_width="@dimen/person_poster_section_land_element_width"
+                android:layout_height="wrap_content"
+                android:fontFamily="sans-serif-condensed"
+                android:paddingEnd="@dimen/m_design_screen_edge_left_right_margin"
+                android:paddingStart="@dimen/poster_image_data_fields_margin"
+                android:text="@string/person_death_day"
+                android:textAppearance="@style/TextAppearance.AppCompat.Title"
+                android:textColor="@color/primary_text" />
+
+            <TextView
+                android:id="@+id/person_death_day"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toRightOf="@id/person_death_day_header"
+                android:fontFamily="sans-serif-condensed"
+                android:paddingEnd="@dimen/m_design_screen_edge_left_right_margin"
+                android:paddingStart="@dimen/poster_image_data_fields_margin"
+                android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                android:textColor="@color/secondary_text"
+                android:textIsSelectable="true" />
+        </RelativeLayout>
+
+        <View
+            android:id="@+id/person_death_day_devider"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginStart="@dimen/poster_image_data_fields_margin"
+            android:background="@color/divider_color" />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/person_popularity_header"
+                android:layout_width="@dimen/person_poster_section_land_element_width"
+                android:layout_height="wrap_content"
+                android:fontFamily="sans-serif-condensed"
+                android:paddingEnd="@dimen/m_design_screen_edge_left_right_margin"
+                android:paddingStart="@dimen/poster_image_data_fields_margin"
+                android:text="@string/person_popularity"
+                android:textAppearance="@style/TextAppearance.AppCompat.Title"
+                android:textColor="@color/primary_text" />
+
+            <TextView
+                android:id="@+id/person_popularity"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toRightOf="@id/person_popularity_header"
+                android:fontFamily="sans-serif-condensed"
+                android:paddingEnd="@dimen/m_design_screen_edge_left_right_margin"
+                android:paddingStart="@dimen/poster_image_data_fields_margin"
+                android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                android:textColor="@color/secondary_text"
+                android:textIsSelectable="true" />
+        </RelativeLayout>
+    </LinearLayout>
+</RelativeLayout>

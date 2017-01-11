@@ -277,6 +277,7 @@
     <string name="similar_movie_grid_image_content_description">Similar movie poster image</string>
     <string name="person_image_grid_movie_image_content_description">Person image</string>
     <string name="collection_backdrop_image_content_description">Collection backdrop image</string>
+    <string name="person_land_backdrop_image_content_description">Person backdrop image</string>
     <string name="movie_cast_grid_image_content_description">Movie cast poster image</string>
     <string name="movie_crew_grid_image_content_description">Movie crew poster image</string>
     <string name="person_cast_grid_movie_image_content_description">Person cast poster image</string>

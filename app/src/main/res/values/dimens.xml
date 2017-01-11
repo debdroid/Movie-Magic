@@ -27,7 +27,7 @@
     <dimen name="movie_detail_poster_fields_margin">16dp</dimen>
     <dimen name="movie_detail_backdrop_height">280dp</dimen>
 
-    <!-- Movie Poster Layout parameters -->
+    <!-- Movie Person Layout parameters -->
     <dimen name="person_poster_width">200dp</dimen>
     <dimen name="person_poster_height">280dp</dimen>
     <dimen name="poster_image_data_fields_margin">8dp</dimen>
@@ -60,8 +60,4 @@
     <dimen name="donate_page_top_landscape_padding">20dp</dimen>
     <dimen name="login_page_top_landscape_padding">20dp</dimen>
     <item name="movie_detail_user_list_drawable_alpha_value_40_percent" format="float" type="dimen">0.4</item>
-    <dimen name="home_page_land_orientation_width">380dp</dimen>
-    <dimen name="detail_fragment_content_area_margin">48dp</dimen>
-    <dimen name="detail_fragment_content_area_width">450dp</dimen>
-    <dimen name="detail_fragment_content_area_margin_bottom">30dp</dimen>
 </resources>

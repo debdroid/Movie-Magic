@@ -1,6 +1,7 @@
 package com.moviemagic.dpaul.android.app
 
 import android.content.Intent
+import android.content.res.Configuration
 import android.database.Cursor
 import android.graphics.Bitmap
 import android.graphics.Color
@@ -20,6 +21,7 @@ import android.support.v4.content.ContextCompat
 import android.support.v4.content.CursorLoader
 import android.support.v4.content.Loader
 import android.support.v4.view.MenuItemCompat
+import android.support.v4.view.ViewCompat
 import android.support.v4.widget.NestedScrollView
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.graphics.Palette
@@ -59,6 +61,7 @@ class CollectionMovieFragment extends Fragment implements LoaderManager.LoaderCa
     private TextView mCollectionTitleTextView
     private TextView mCollectionOverviewTextViewHeader
     private TextView mCollectionOverviewTextView
+    private View mCollectionTitleDividerView
     private static final int COLLECTION_MOVIE_FRAGMENT_LOADER_ID = 0
     private int mPalletePrimaryColor
     private int mPalletePrimaryDarkColor
@@ -68,11 +71,12 @@ class CollectionMovieFragment extends Fragment implements LoaderManager.LoaderCa
     private LinearLayout mCollectionDetailLayout
     private CoordinatorLayout mCollectionCoordLayout
     private NestedScrollView mNestedScrollView
-    private boolean mCollectionDataLoadSuccessFlag = false
+//    private boolean mCollectionDataLoadSuccessFlag = false
     private String mCollectionBackdropPath
 //    private ShareActionProvider mShareActionProvider
     private boolean mCollectionDataLoaded = false
     private String mCollectionName
+    private AppBarLayout.OnOffsetChangedListener mAppbarOnOffsetChangeListener
 
     //Columns to fetch from movie_collection table for similar movies
     private static final String[] COLLECTION_MOVIE_COLUMNS = [MovieMagicContract.MovieCollection._ID,
@@ -125,6 +129,7 @@ class CollectionMovieFragment extends Fragment implements LoaderManager.LoaderCa
         mNestedScrollView = mRootView.findViewById(R.id.collection_nested_scroll) as NestedScrollView
         mAppBarLayout = mRootView.findViewById(R.id.collection_app_bar_layout) as AppBarLayout
         mCollectionCoordLayout = mRootView.findViewById(R.id.collection_coordinator_layout) as CoordinatorLayout
+        mCollectionTitleDividerView = mRootView.findViewById(R.id.movie_collection_title_divider) as View
 
         return mRootView
     }
@@ -163,13 +168,35 @@ class CollectionMovieFragment extends Fragment implements LoaderManager.LoaderCa
         // Check if the user is online or not, if not then show a message
         final boolean isOnline = Utility.isOnline(getActivity().getApplicationContext())
         if(!isOnline) {
-            Snackbar.make(mAppBarLayout, getString(R.string.no_internet_connection_message), Snackbar.LENGTH_LONG).show()
+            Snackbar.make(mNestedScrollView, getString(R.string.no_internet_connection_message), Snackbar.LENGTH_LONG).show()
         } else if(Utility.isOnlyWifi(getActivity().getApplicationContext()) & !GlobalStaticVariables.WIFI_CONNECTED) {
             // If user has selected only WiFi but user is online without WiFi then show a dialog
-            Snackbar.make(mAppBarLayout, getString(R.string.internet_connection_without_wifi_message), Snackbar.LENGTH_LONG).show()
+            Snackbar.make(mNestedScrollView, getString(R.string.internet_connection_without_wifi_message), Snackbar.LENGTH_LONG).show()
         } else if (Utility.isReducedDataOn(getActivity())) {
             // If user has selected reduced data
-            Snackbar.make(mAppBarLayout, getString(R.string.reduced_data_use_on_message), Snackbar.LENGTH_LONG).show()
+            Snackbar.make(mNestedScrollView, getString(R.string.reduced_data_use_on_message), Snackbar.LENGTH_LONG).show()
+        }
+
+        //Show the title only when image is collapsed
+        mAppbarOnOffsetChangeListener = new AppBarLayout.OnOffsetChangedListener() {
+            boolean isShow = false
+            int scrollRange = -1
+            @Override
+            void onOffsetChanged(final AppBarLayout appBarLayout, final int verticalOffset) {
+                LogDisplay.callLog(LOG_TAG, 'onOffsetChanged is called', LogDisplay.COLLECTION_MOVIE_FRAGMENT_LOG_FLAG)
+                if (scrollRange == -1) {
+                    scrollRange = appBarLayout.getTotalScrollRange()
+                }
+                LogDisplay.callLog(LOG_TAG, "scrollRange + verticalOffset:$scrollRange & $verticalOffset", LogDisplay.COLLECTION_MOVIE_FRAGMENT_LOG_FLAG)
+                if (scrollRange + verticalOffset == 0) {
+                    mCollapsingToolbar.setTitle(mCollectionName)
+//                    mCollapsingToolbar.setTitle(data.getString(COL_COLLECTION_MOVIE_COLLECTION_NAME))
+                    isShow = true
+                } else if (isShow) {
+                    mCollapsingToolbar.setTitle(" ")
+                    isShow = false
+                }
+            }
         }
     }
 
@@ -199,7 +226,7 @@ class CollectionMovieFragment extends Fragment implements LoaderManager.LoaderCa
                 if(mCollectionDataLoaded) {
                     shareCollection()
                 } else {
-                    Snackbar.make(mAppBarLayout, getString(R.string.collection_share_cannot_perform), Snackbar.LENGTH_LONG).show()
+                    Snackbar.make(mNestedScrollView, getString(R.string.collection_share_cannot_perform), Snackbar.LENGTH_LONG).show()
                     LogDisplay.callLog(LOG_TAG,'onOptionsItemSelected: collection data not yet loaded. Try again later!',LogDisplay.COLLECTION_MOVIE_FRAGMENT_LOG_FLAG)
                 }
                 return true
@@ -234,12 +261,17 @@ class CollectionMovieFragment extends Fragment implements LoaderManager.LoaderCa
         if(data.moveToFirst()) {
             LogDisplay.callLog(LOG_TAG, "onLoadFinished.Data present for collection id $mCollectionId", LogDisplay.COLLECTION_MOVIE_FRAGMENT_LOG_FLAG)
             LogDisplay.callLog(LOG_TAG, "onLoadFinished.collection movie flag ${data.getInt(COL_COLLECTION_MOVIE_PRESENT_FLAG)}", LogDisplay.COLLECTION_MOVIE_FRAGMENT_LOG_FLAG)
-            mCollectionDataLoadSuccessFlag = true
+//            mCollectionDataLoadSuccessFlag = true
             mCollectionBackdropPath = "$GlobalStaticVariables.TMDB_IMAGE_BASE_URL/$GlobalStaticVariables.TMDB_IMAGE_SIZE_W500" +
                     "${data.getString(COL_COLLECTION_MOVIE_COLLECTION_BACKDROP_PATH)}"
             mCollectionName = data.getString(COL_COLLECTION_MOVIE_COLLECTION_NAME)
             mCollectionTitleTextView.setText(mCollectionName)
             mCollectionOverviewTextView.setText(data.getString(COL_COLLECTION_MOVIE_COLLECTION_OVERVIEW))
+            // If in landscape mode then hide the collection title and associated divider
+            if(getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
+                mCollectionTitleTextView.setVisibility(TextView.GONE)
+                mCollectionTitleDividerView.setVisibility(View.GONE)
+            }
             if(data.getInt(COL_COLLECTION_MOVIE_PRESENT_FLAG) == GlobalStaticVariables.MOVIE_MAGIC_FLAG_TRUE) {
                 //Fragment transaction cannot be done inside onnLoadFinished, so work around is to use a handler as per
                 //stackoverflow http://stackoverflow.com/questions/22788684/can-not-perform-this-action-inside-of-onloadfinished
@@ -250,27 +282,57 @@ class CollectionMovieFragment extends Fragment implements LoaderManager.LoaderCa
                         if(msg.what == WHAT) loadFragment()
                     }
                 }
-                handler.sendEmptyMessage(WHAT)
-                //Show the title only when image is collapsed
-                mAppBarLayout.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
-                    boolean isShow = false
-                    int scrollRange = -1
-                    @Override
-                    void onOffsetChanged(final AppBarLayout appBarLayout, final int verticalOffset) {
+                final boolean handlerFlag = handler.sendEmptyMessage(WHAT)
+                if(!handlerFlag) {
+                    LogDisplay.callLog(LOG_TAG,'Handler could not post the message',LogDisplay.COLLECTION_MOVIE_FRAGMENT_LOG_FLAG)
+                }
+//                //Show the title only when image is collapsed
+//                mAppbarOnOffsetChangeListener = new AppBarLayout.OnOffsetChangedListener() {
+//                    boolean isShow = false
+//                    int scrollRange = -1
+//                    @Override
+//                    void onOffsetChanged(final AppBarLayout appBarLayout, final int verticalOffset) {
 //                LogDisplay.callLog(LOG_TAG, 'onOffsetChanged is called', LogDisplay.COLLECTION_MOVIE_FRAGMENT_LOG_FLAG)
-                        if (scrollRange == -1) {
-                            scrollRange = appBarLayout.getTotalScrollRange()
-                        }
+//                        if (scrollRange == -1) {
+//                            scrollRange = appBarLayout.getTotalScrollRange()
+//                        }
 //                LogDisplay.callLog(LOG_TAG, "scrollRange + verticalOffset:$scrollRange & $verticalOffset", LogDisplay.COLLECTION_MOVIE_FRAGMENT_LOG_FLAG)
-                        if (scrollRange + verticalOffset == 0) {
-                            mCollapsingToolbar.setTitle(data.getString(COL_COLLECTION_MOVIE_COLLECTION_NAME))
-                            isShow = true
-                        } else if (isShow) {
-                            mCollapsingToolbar.setTitle(" ")
-                            isShow = false
-                        }
-                    }
-                })
+//                        if (scrollRange + verticalOffset == 0) {
+//                            mCollapsingToolbar.setTitle(data.getString(COL_COLLECTION_MOVIE_COLLECTION_NAME))
+//                            isShow = true
+//                        } else if (isShow) {
+//                            mCollapsingToolbar.setTitle(" ")
+//                            isShow = false
+//                        }
+//                    }
+//                }
+                // Set the listener if in portrait mode or show the title in Toolbar for landscape
+                if(getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
+                    mAppBarLayout.addOnOffsetChangedListener(mAppbarOnOffsetChangeListener)
+                } else {
+                    mCollapsingToolbar.setTitleEnabled(false)
+                    mToolbar.setTitle(data.getString(COL_COLLECTION_MOVIE_COLLECTION_NAME))
+                }
+
+//                mAppBarLayout.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
+//                    boolean isShow = false
+//                    int scrollRange = -1
+//                    @Override
+//                    void onOffsetChanged(final AppBarLayout appBarLayout, final int verticalOffset) {
+////                LogDisplay.callLog(LOG_TAG, 'onOffsetChanged is called', LogDisplay.COLLECTION_MOVIE_FRAGMENT_LOG_FLAG)
+//                        if (scrollRange == -1) {
+//                            scrollRange = appBarLayout.getTotalScrollRange()
+//                        }
+////                LogDisplay.callLog(LOG_TAG, "scrollRange + verticalOffset:$scrollRange & $verticalOffset", LogDisplay.COLLECTION_MOVIE_FRAGMENT_LOG_FLAG)
+//                        if (scrollRange + verticalOffset == 0) {
+//                            mCollapsingToolbar.setTitle(data.getString(COL_COLLECTION_MOVIE_COLLECTION_NAME))
+//                            isShow = true
+//                        } else if (isShow) {
+//                            mCollapsingToolbar.setTitle(" ")
+//                            isShow = false
+//                        }
+//                    }
+//                })
 
             } else {
                 LogDisplay.callLog(LOG_TAG, "onLoadFinished.Collection movie flag is false for collection id $mCollectionId. So go clean up and re-load", LogDisplay.COLLECTION_MOVIE_FRAGMENT_LOG_FLAG)
@@ -343,6 +405,8 @@ class CollectionMovieFragment extends Fragment implements LoaderManager.LoaderCa
     @Override
     void onDestroyView() {
         LogDisplay.callLog(LOG_TAG, 'onDestroyView is called', LogDisplay.COLLECTION_MOVIE_FRAGMENT_LOG_FLAG)
+        // Remove listeners
+        mAppBarLayout.removeOnOffsetChangedListener(mAppbarOnOffsetChangeListener)
         super.onDestroyView()
     }
 
@@ -362,7 +426,8 @@ class CollectionMovieFragment extends Fragment implements LoaderManager.LoaderCa
      * This method is called from CollectionMovieActivity
      */
     void loadCollBackdropAndChangeCollectionMovieGridColor() {
-        if(mCollectionDataLoadSuccessFlag) {
+        LogDisplay.callLog(LOG_TAG, 'loadCollBackdropAndChangeCollectionMovieGridColor is called', LogDisplay.COLLECTION_MOVIE_FRAGMENT_LOG_FLAG)
+//        if(mCollectionDataLoadSuccessFlag) {
             final Callback picassoCollectionImageCallback = new Callback() {
                 @Override
                 void onSuccess() {
@@ -439,23 +504,32 @@ class CollectionMovieFragment extends Fragment implements LoaderManager.LoaderCa
                                         mPalleteAccentColor = ContextCompat.getColor(getActivity(), R.color.accent)
                                     }
                                 }
-                                //Change the color only if we are able to get hold of recyclerview, otherwise use default color
+                                // Change the color only if it's portrait mode and we are able to get hold of recyclerview,
+                                // otherwise use default color
                                 final View view = getView()
                                 final AutoGridRecyclerView autoGridRecyclerView = view.findViewById(R.id.auto_grid_recycler_view) as AutoGridRecyclerView
                                 if (autoGridRecyclerView) {
-                                    LogDisplay.callLog(LOG_TAG, 'onGenerated:recycler view is NOT null', LogDisplay.COLLECTION_MOVIE_FRAGMENT_LOG_FLAG)
-                                    autoGridRecyclerView.setBackgroundColor(mPalletePrimaryColor)
-                                    mCollectionDetailLayout.setBackgroundColor(mPalletePrimaryColor)
-                                    mCollectionCoordLayout.setBackgroundColor(mPalletePrimaryColor)
-                                    mCollectionTitleTextView.setTextColor(mPalleteBodyTextColor)
-                                    mCollectionTitleTextView.setTextColor(mPalleteTitleColor)
-                                    mCollectionOverviewTextView.setTextColor(mPalleteBodyTextColor)
-                                    mCollectionOverviewTextViewHeader.setTextColor(mPalleteTitleColor)
-                                    mCollapsingToolbar.setStatusBarScrimColor(mPalletePrimaryDarkColor)
-                                    mCollapsingToolbar.setContentScrimColor(mPalletePrimaryColor)
-                                    mCollapsingToolbar.setBackgroundColor(mPalletePrimaryColor)
-                                    mCollapsingToolbar.setCollapsedTitleTextColor(mPalleteBodyTextColor)
+                                    LogDisplay.callLog(LOG_TAG, 'onGenerated:recycler view is NOT null!', LogDisplay.COLLECTION_MOVIE_FRAGMENT_LOG_FLAG)
+                                    if(getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
+                                        LogDisplay.callLog(LOG_TAG, 'onGenerated:portrait mode, so change color', LogDisplay.COLLECTION_MOVIE_FRAGMENT_LOG_FLAG)
+                                        autoGridRecyclerView.setBackgroundColor(mPalletePrimaryColor)
+                                        mCollectionDetailLayout.setBackgroundColor(mPalletePrimaryColor)
+                                        mCollectionCoordLayout.setBackgroundColor(mPalletePrimaryColor)
+                                        mCollectionTitleTextView.setTextColor(mPalleteBodyTextColor)
+                                        mCollectionTitleTextView.setTextColor(mPalleteTitleColor)
+                                        mCollectionOverviewTextView.setTextColor(mPalleteBodyTextColor)
+                                        mCollectionOverviewTextViewHeader.setTextColor(mPalleteTitleColor)
+                                        mCollapsingToolbar.setStatusBarScrimColor(mPalletePrimaryDarkColor)
+                                        mCollapsingToolbar.setContentScrimColor(mPalletePrimaryColor)
+                                        mCollapsingToolbar.setBackgroundColor(mPalletePrimaryColor)
+                                        mCollapsingToolbar.setCollapsedTitleTextColor(mPalleteBodyTextColor)
+                                    } else {
+                                        LogDisplay.callLog(LOG_TAG, 'onGenerated:landscape mode, so do not change color', LogDisplay.COLLECTION_MOVIE_FRAGMENT_LOG_FLAG)
+                                        // Override the bodyTextColor, so that GridFragment uses this
+                                        mPalleteBodyTextColor = ContextCompat.getColor(getActivity(), R.color.primary_text)
+                                    }
                                     final MovieGridRecyclerAdapter movieGridRecyclerAdapter = autoGridRecyclerView.getAdapter() as MovieGridRecyclerAdapter
+                                    // Grid color is changed irrespective of portrait or landscape
                                     movieGridRecyclerAdapter.changeColor(mPalletePrimaryDarkColor, mPalleteBodyTextColor)
                                 } else {
                                     LogDisplay.callLog(LOG_TAG, 'onGenerated:recycler view is null, so use default color', LogDisplay.COLLECTION_MOVIE_FRAGMENT_LOG_FLAG)
@@ -463,16 +537,20 @@ class CollectionMovieFragment extends Fragment implements LoaderManager.LoaderCa
                             }
                         })
                     }
+//                    mCollectionDataLoadSuccessFlag = false
                 }
 
                 @Override
                 void onError() {
                     LogDisplay.callLog(LOG_TAG, 'Picasso onError is called', LogDisplay.COLLECTION_MOVIE_FRAGMENT_LOG_FLAG)
+//                    mCollectionDataLoadSuccessFlag = false
                 }
             }
             PicassoLoadImage.loadCollectionBackdropImage(getActivity(), mCollectionBackdropPath, mBackdropImageView, picassoCollectionImageCallback)
-        }
-        mCollectionDataLoadSuccessFlag = false
+//        } else {
+//            LogDisplay.callLog(LOG_TAG, 'mCollectionDataLoadSuccessFlag is false, so skip color change', LogDisplay.COLLECTION_MOVIE_FRAGMENT_LOG_FLAG)
+//        }
+//        mCollectionDataLoadSuccessFlag = false
     }
 
     /**

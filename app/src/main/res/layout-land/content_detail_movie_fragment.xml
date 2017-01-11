@@ -1,0 +1,21 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/fragment_detail_movie_layout"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    tools:ignore="Overdraw">
+    <!-- Layout for title, genre & run time -->
+    <include layout="@layout/content_detail_movie_fragment_title_section"/>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/divider_color"/>
+
+    <!-- Layout for movie poster, release date, budget, revenue & popularity -->
+    <include layout="@layout/content_detail_movie_fragment_poster_section"/>
+
+    <!-- Layout for rest -->
+    <include layout="@layout/content_detail_movie_fragment_rest_section"/>
+</LinearLayout>

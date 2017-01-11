@@ -31,6 +31,7 @@ import android.support.v4.view.MenuItemCompat
 import android.support.v4.view.ViewCompat
 import android.support.v4.view.ViewPager
 import android.support.v4.view.ViewPager.OnPageChangeListener
+import android.support.v4.widget.NestedScrollView
 import android.support.v7.app.AlertDialog
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.graphics.Palette
@@ -90,6 +91,7 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
     private ImageButton mTmdbImageButtonWatchlist, mTmdbImageButtonFavourite, mTmdbImageButtonRated
     private RatingBar mTmdbRatingBar, mUserRatingBar
     private Button mHomePageButton, mImdbLinkButton
+    private NestedScrollView mNestedScrollView
     private int _ID_movie_basic_info
     private int mMovieId
     private int mCollectionId
@@ -482,6 +484,7 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
         mDetailMovieLayout = mRootView.findViewById(R.id.fragment_detail_movie_layout) as LinearLayout
         mUserListDrawableLayout = mRootView.findViewById(R.id.movie_detail_user_list_drawable_layout) as LinearLayout
         mUserTmdbListDrawableLayout = mRootView.findViewById(R.id.movie_detail_user_tmdb_list_drawable_layout) as LinearLayout
+        mNestedScrollView = mRootView.findViewById(R.id.movie_detail_scroll) as NestedScrollView
 
         //All the header (fixed text) fields & buttons
         mReleaseDateHeaderTextView = mRootView.findViewById(R.id.movie_detail_poster_release_date_header) as TextView
@@ -538,7 +541,7 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
                         mUserListWatchedFlag = true
                     }
                 } else {
-                    Snackbar.make(mRootView.findViewById(R.id.movie_detail_user_list_drawable_layout),
+                    Snackbar.make(mNestedScrollView.findViewById(R.id.movie_detail_user_list_drawable_layout),
                             getString(R.string.cannot_perform_operation_msg), Snackbar.LENGTH_LONG).show()
                 }
             }
@@ -570,7 +573,7 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
                         mUserListWishListdFlag = true
                     }
                 } else {
-                    Snackbar.make(mRootView.findViewById(R.id.movie_detail_user_list_drawable_layout),
+                    Snackbar.make(mNestedScrollView.findViewById(R.id.movie_detail_user_list_drawable_layout),
                             getString(R.string.cannot_perform_operation_msg), Snackbar.LENGTH_LONG).show()
                 }
             }
@@ -602,7 +605,7 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
                         mUserListFavouriteFlag = true
                     }
                 } else {
-                    Snackbar.make(mRootView.findViewById(R.id.movie_detail_user_list_drawable_layout),
+                    Snackbar.make(mNestedScrollView.findViewById(R.id.movie_detail_user_list_drawable_layout),
                             getString(R.string.cannot_perform_operation_msg), Snackbar.LENGTH_LONG).show()
                 }
             }
@@ -634,7 +637,7 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
                         mUserListCollectionFlag = true
                     }
                 } else {
-                    Snackbar.make(mRootView.findViewById(R.id.movie_detail_user_list_drawable_layout),
+                    Snackbar.make(mNestedScrollView.findViewById(R.id.movie_detail_user_list_drawable_layout),
                             getString(R.string.cannot_perform_operation_msg), Snackbar.LENGTH_LONG).show()
                 }
             }
@@ -661,7 +664,7 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
                         mUserTmdbListWatchlistFlag = true
                     }
                 } else {
-                    Snackbar.make(mUserTmdbListDrawableLayout, getString(R.string.no_internet_cannot_perform_operation_message), Snackbar.LENGTH_LONG).show()
+                    Snackbar.make(mNestedScrollView, getString(R.string.no_internet_cannot_perform_operation_message), Snackbar.LENGTH_LONG).show()
                 }
             }
         })
@@ -684,7 +687,7 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
                         mUserTmdbListFavouriteFlag = true
                     }
                 } else {
-                    Snackbar.make(mUserTmdbListDrawableLayout, getString(R.string.no_internet_cannot_perform_operation_message), Snackbar.LENGTH_LONG).show()
+                    Snackbar.make(mNestedScrollView, getString(R.string.no_internet_cannot_perform_operation_message), Snackbar.LENGTH_LONG).show()
                 }
 
             }
@@ -698,7 +701,7 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
                 if(Utility.isReadyToDownload(getActivity().getApplicationContext())) {
                     //If full opaque then already selected, so show user that they need to change the rating value
                     if (mTmdbImageButtonRated.getAlpha() == GlobalStaticVariables.MOVIE_MAGIC_ALPHA_FULL_OPAQUE) {
-                        Snackbar.make(mTmdbImageButtonRated, getString(R.string.tmdb_rating_user_prompt_msg), Snackbar.LENGTH_LONG).show()
+                        Snackbar.make(mNestedScrollView, getString(R.string.tmdb_rating_user_prompt_msg), Snackbar.LENGTH_LONG).show()
                     } else { //If 40% opaque then not selected, so add the movie to TMDb list
                         LogDisplay.callLog(LOG_TAG, 'User wants to add to TMDb Rated, try for that..', LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
                         final float userRatingVal = mUserRatingBar.getRating()
@@ -709,12 +712,12 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
                                     true, mMovieCategory, mUserTmdbListDrawableLayout, mPalleteAccentColor).execute([mMovieId] as Integer[])
                             mUserTmdbListRatedFlag = true
                         } else {
-                            Snackbar.make(mUserTmdbListDrawableLayout, getString(R.string.tmdb_rating_user_prompt_empty_msg), Snackbar.LENGTH_LONG).show()
+                            Snackbar.make(mNestedScrollView, getString(R.string.tmdb_rating_user_prompt_empty_msg), Snackbar.LENGTH_LONG).show()
                             mUserTmdbListRatedFlag = false
                         }
                     }
                 } else {
-                    Snackbar.make(mUserTmdbListDrawableLayout, getString(R.string.no_internet_cannot_perform_operation_message), Snackbar.LENGTH_LONG).show()
+                    Snackbar.make(mNestedScrollView, getString(R.string.no_internet_cannot_perform_operation_message), Snackbar.LENGTH_LONG).show()
                 }
             }
         })
@@ -722,7 +725,8 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
         //All the dynamic fields (data fields) & ratingbar
         mMovieTitleTextView = mRootView.findViewById(R.id.movie_detail_title) as TextView
         // For land mode no need to display the title as that is already displayed as part of collapsing toolbar
-        if(getResources().getBoolean(R.bool.is_mobile_land)) {
+        if(getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
+//        if(getResources().getBoolean(R.bool.is_mobile_land)) {
             mMovieTitleTextView.setVisibility(TextView.GONE)
         }
         mMpaaRatingImageView = mRootView.findViewById(R.id.movie_detail_mpaa_image) as ImageView
@@ -800,7 +804,13 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
         mCastGridEmptyMsgTextView = mRootView.findViewById(R.id.movie_detail_cast_grid_empty_msg_text_view) as TextView
         mCastGridLayoutManager = new GridLayoutManager(getActivity(), 1, GridLayoutManager.HORIZONTAL, false)
         mHorizontalMovieCastGridView.setLayoutManager(mCastGridLayoutManager)
-        mMovieCastAdapter = new MovieCastAdapter(getActivity(), mCastGridEmptyMsgTextView)
+        mMovieCastAdapter = new MovieCastAdapter(getActivity(), mCastGridEmptyMsgTextView,
+                        new MovieCastAdapter.MovieCastAdapterOnClickHandler(){
+                            @Override
+                            void onClick(int personId) {
+                                launchPersonActivity(personId)
+                            }
+                        })
         mHorizontalMovieCastGridView.setAdapter(mMovieCastAdapter)
 
         /**
@@ -810,7 +820,13 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
         mCrewGridEmptyMsgTextView = mRootView.findViewById(R.id.movie_detail_crew_grid_empty_msg_text_view) as TextView
         mCrewGridLayoutManager = new GridLayoutManager(getActivity(), 1, GridLayoutManager.HORIZONTAL, false)
         mHorizontalMovieCrewGridView.setLayoutManager(mCrewGridLayoutManager)
-        mMovieCrewAdapter = new MovieCrewAdapter(getActivity(), mCrewGridEmptyMsgTextView)
+        mMovieCrewAdapter = new MovieCrewAdapter(getActivity(), mCrewGridEmptyMsgTextView,
+                new MovieCrewAdapter.MovieCrewAdapterOnClickHandler(){
+                    @Override
+                    void onClick(int personId) {
+                        launchPersonActivity(personId)
+                    }
+                })
         mHorizontalMovieCrewGridView.setAdapter(mMovieCrewAdapter)
 
         /**
@@ -990,13 +1006,13 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
         // Check if the user is online or not, if not then show a message
         final boolean isOnline = Utility.isOnline(getActivity().getApplicationContext())
         if(!isOnline) {
-            Snackbar.make(mAppBarLayout, getString(R.string.no_internet_connection_message), Snackbar.LENGTH_LONG).show()
+            Snackbar.make(mNestedScrollView, getString(R.string.no_internet_connection_message), Snackbar.LENGTH_LONG).show()
         } else if(Utility.isOnlyWifi(getActivity().getApplicationContext()) & !GlobalStaticVariables.WIFI_CONNECTED) {
             // If user has selected only WiFi but user is online without WiFi then show a dialog
-             Snackbar.make(mAppBarLayout, getString(R.string.internet_connection_without_wifi_message), Snackbar.LENGTH_LONG).show()
+             Snackbar.make(mNestedScrollView, getString(R.string.internet_connection_without_wifi_message), Snackbar.LENGTH_LONG).show()
         } else if (Utility.isReducedDataOn(getActivity())) {
             // If user has selected reduced data
-            Snackbar.make(mAppBarLayout, getString(R.string.reduced_data_use_on_message), Snackbar.LENGTH_LONG).show()
+            Snackbar.make(mNestedScrollView, getString(R.string.reduced_data_use_on_message), Snackbar.LENGTH_LONG).show()
         }
 
         // Create a fade animation
@@ -1041,7 +1057,7 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
                     }
                 }
             }
-            mAppBarLayout.addOnOffsetChangedListener(mAppbarOnOffsetChangeListener)
+//            mAppBarLayout.addOnOffsetChangedListener(mAppbarOnOffsetChangeListener)
         }
         //TODO leak testing
 //        mOnRestoreOccurred = true
@@ -1072,7 +1088,7 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
             if(mMoviDataLoaded) {
                 shareMovie()
             } else {
-                Snackbar.make(mAppBarLayout, getString(R.string.detail_movie_share_cannot_perform), Snackbar.LENGTH_LONG).show()
+                Snackbar.make(mNestedScrollView, getString(R.string.detail_movie_share_cannot_perform), Snackbar.LENGTH_LONG).show()
                 LogDisplay.callLog(LOG_TAG,'onOptionsItemSelected: movie detail data not yet loaded. Try again later!',LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
             }
             return true
@@ -1349,7 +1365,8 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
 //                                    }
 //                                }
                                     // Apply the color based on orientation
-                                    if(!getResources().getBoolean(R.bool.is_mobile_land)) {
+                                    if(getResources().getConfiguration().orientation != Configuration.ORIENTATION_LANDSCAPE) {
+//                                    if(!getResources().getBoolean(R.bool.is_mobile_land)) {
                                         // Apply layout and text color only for portrait mode
                                         changeLayoutAndTextColor()
                                         // Apply the color for all attached adapters
@@ -1394,6 +1411,14 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
                     LogDisplay.callLog(LOG_TAG, 'calling setActiveImageButtonColor position -> 3', LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
                     setActiveImageButtonColor()
                     setRatingStarColor()
+                }
+
+                // Set the listener if in portrait mode or show the title in Toolbar for landscape
+                if(getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
+                    mAppBarLayout.addOnOffsetChangedListener(mAppbarOnOffsetChangeListener)
+                } else {
+                    mCollapsingToolbar.setTitleEnabled(false)
+                    mToolbar.setTitle(mMovieTitle)
                 }
 
                 //Pass the Picasso Callback and load the image
@@ -2030,6 +2055,21 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
     }
 
     /**
+     * Intent to start the person activity
+     */
+    void launchPersonActivity(int personId) {
+        // Start Person activity
+        final Bundle bundle = new Bundle()
+        bundle.putInt(GlobalStaticVariables.MOVIE_PERSON_ID,personId)
+        bundle.putString(GlobalStaticVariables.MOVIE_PERSON_BACKDROP_PATH,mOriginalBackdropPath)
+        final Intent intent = new Intent(getActivity(), PersonMovieActivity.class)
+        intent.putExtras(bundle)
+        startActivity(intent)
+        //Start the animation
+        getActivity().overridePendingTransition(R.anim.slide_bottom_in_animation,0)
+    }
+
+    /**
      * Share the detail movie
      */
     protected void shareMovie() {
@@ -2070,7 +2110,7 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
                         mUserTmdbListRatedFlag = false
                     }
                 } else {
-                    Snackbar.make(mUserTmdbListDrawableLayout, getString(R.string.no_internet_cannot_perform_operation_message), Snackbar.LENGTH_LONG).show()
+                    Snackbar.make(mNestedScrollView, getString(R.string.no_internet_cannot_perform_operation_message), Snackbar.LENGTH_LONG).show()
                 }
             }
         })

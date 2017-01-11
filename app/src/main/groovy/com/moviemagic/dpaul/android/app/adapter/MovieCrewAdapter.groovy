@@ -27,6 +27,7 @@ class MovieCrewAdapter extends RecyclerView.Adapter<MovieCrewAdapter.MovieCrewAd
     private final Context mContext
     private final TextView mCrewGridEmptyTextView
     private int mPrimaryDarkColor, mBodyTextColor
+    private final MovieCrewAdapterOnClickHandler mMovieCrewAdapterOnClickHandler
 
 
     //Empty constructor
@@ -34,10 +35,11 @@ class MovieCrewAdapter extends RecyclerView.Adapter<MovieCrewAdapter.MovieCrewAd
         LogDisplay.callLog(LOG_TAG,'MovieCrewAdapter empty constructor is called',LogDisplay.MOVIE_CREW_ADAPTER_LOG_FLAG)
     }
 
-    public MovieCrewAdapter(final Context ctx, final TextView emptyView){
+    public MovieCrewAdapter(final Context ctx, final TextView emptyView, final MovieCrewAdapterOnClickHandler clickHandler){
         LogDisplay.callLog(LOG_TAG,'MovieCrewAdapter non-empty constructor is called',LogDisplay.MOVIE_CREW_ADAPTER_LOG_FLAG)
         mContext = ctx
         mCrewGridEmptyTextView = emptyView
+        mMovieCrewAdapterOnClickHandler = clickHandler
     }
 
     public class MovieCrewAdapterViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
@@ -59,9 +61,10 @@ class MovieCrewAdapter extends RecyclerView.Adapter<MovieCrewAdapter.MovieCrewAd
             mCursor.moveToPosition(getAdapterPosition())
             final int personId = mCursor.getInt(DetailMovieFragment.COL_MOVIE_CREW_PERSON_ID)
             LogDisplay.callLog(LOG_TAG,"Person id is $personId",LogDisplay.MOVIE_CREW_ADAPTER_LOG_FLAG)
-            final Uri moviePersonInfoIdUri = MovieMagicContract.MoviePersonInfo.buildMoviePersonInfoUriWithPersonId(personId)
-            final Intent mIntent = new Intent(mContext, PersonMovieActivity.class).setData(moviePersonInfoIdUri)
-            mContext.startActivity(mIntent)
+//            final Uri moviePersonInfoIdUri = MovieMagicContract.MoviePersonInfo.buildMoviePersonInfoUriWithPersonId(personId)
+//            final Intent mIntent = new Intent(mContext, PersonMovieActivity.class).setData(moviePersonInfoIdUri)
+//            mContext.startActivity(mIntent)
+            mMovieCrewAdapterOnClickHandler.onClick(personId)
         }
     }
     @Override
@@ -118,5 +121,12 @@ class MovieCrewAdapter extends RecyclerView.Adapter<MovieCrewAdapter.MovieCrewAd
         } else {
             notifyDataSetChanged()
         }
+    }
+
+    /**
+     * This is the interface which will be implemented by the host DetailMovieFragment
+     */
+    public interface MovieCrewAdapterOnClickHandler {
+        public void onClick(int personId)
     }
 }

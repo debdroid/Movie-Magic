@@ -1,0 +1,22 @@
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/person_info_layout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:ignore="Overdraw">
+
+    <!-- Person poster section -->
+    <include layout="@layout/content_person_movie_fragment_poster_section"/>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/divider_color" />
+
+    <!-- Person biography section -->
+    <include layout="@layout/content_person_movie_fragment_rest_section"/>
+    <!-- Person biography section -->
+
+</LinearLayout>

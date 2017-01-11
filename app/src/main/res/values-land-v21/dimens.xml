@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="detail_fragment_content_area_margin">72dp</dimen>
+    <dimen name="detail_fragment_content_area_width">450dp</dimen>
+    <dimen name="collection_fragment_content_area_margin">72dp</dimen>
+    <dimen name="person_fragment_content_area_margin">72dp</dimen>
+    <dimen name="person_fragment_content_area_width">450dp</dimen>
+</resources>

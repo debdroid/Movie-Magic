@@ -3,6 +3,7 @@ package com.moviemagic.dpaul.android.app
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
+import android.content.res.Configuration
 import android.database.Cursor
 import android.graphics.Bitmap
 import android.graphics.Color
@@ -11,6 +12,7 @@ import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.support.design.widget.AppBarLayout
+import android.support.design.widget.CollapsingToolbarLayout
 import android.support.design.widget.Snackbar
 import android.support.v17.leanback.widget.HorizontalGridView
 import android.support.v4.app.Fragment
@@ -68,6 +70,7 @@ class PersonMovieFragment extends Fragment implements LoaderManager.LoaderCallba
     private CallbackForCrewClick mCallbackForCrewClick
     private CallbackForImageClick mCallbackForImageClick
     private String mPersonName
+    private String mPersonBackdropImage
 
     private static final int PERSON_MOVIE_FRAGMENT_PERSON_INFO_LOADER_ID = 0
     private static final int PERSON_MOVIE_FRAGMENT_PERSON_CAST_LOADER_ID = 1
@@ -219,9 +222,14 @@ class PersonMovieFragment extends Fragment implements LoaderManager.LoaderCallba
         // Get the bundle from the Fragment
         final Bundle args = getArguments()
         if (args) {
-            mPersonInfoUri = args.getParcelable(GlobalStaticVariables.MOVIE_PERSON_URI) as Uri
-            LogDisplay.callLog(LOG_TAG, "Person Fragment arguments.Uri -> $mPersonInfoUri", LogDisplay.PERSON_MOVIE_FRAGMENT_LOG_FLAG)
-            mPersonId = MovieMagicContract.MoviePersonInfo.getPersonIdFromMoviePersonInfoUri(mPersonInfoUri)
+            mPersonId = args.getInt(GlobalStaticVariables.MOVIE_PERSON_ID)
+            mPersonBackdropImage = args.getString(GlobalStaticVariables.MOVIE_PERSON_BACKDROP_PATH)
+//            mPersonInfoUri = args.getParcelable(GlobalStaticVariables.MOVIE_PERSON_URI) as Uri
+//            LogDisplay.callLog(LOG_TAG, "Person Fragment arguments.Uri -> $mPersonInfoUri", LogDisplay.PERSON_MOVIE_FRAGMENT_LOG_FLAG)
+            LogDisplay.callLog(LOG_TAG, "Person Fragment arguments.Person id -> $mPersonId", LogDisplay.PERSON_MOVIE_FRAGMENT_LOG_FLAG)
+            LogDisplay.callLog(LOG_TAG, "Person Fragment arguments.Backdrop Image -> $mPersonBackdropImage", LogDisplay.PERSON_MOVIE_FRAGMENT_LOG_FLAG)
+//            mPersonId = MovieMagicContract.MoviePersonInfo.getPersonIdFromMoviePersonInfoUri(mPersonInfoUri)
+            mPersonInfoUri = MovieMagicContract.MoviePersonInfo.buildMoviePersonInfoUriWithPersonId(mPersonId)
         }
         // Inflate the view before referring any view using id
         final View mRootView = inflater.inflate(R.layout.fragment_person_movie, container, false)
@@ -524,7 +532,7 @@ class PersonMovieFragment extends Fragment implements LoaderManager.LoaderCallba
                                     mPalettePrimaryDarkColor = Color.HSVToColor(primaryHsl)
                                     pickSwatchColorFlag = true
                                 } else { //Fallback to default
-                                    LogDisplay.callLog(LOG_TAG, 'onGenerated:not able to pick color, so fallback', LogDisplay.COLLECTION_MOVIE_FRAGMENT_LOG_FLAG)
+                                    LogDisplay.callLog(LOG_TAG, 'onGenerated:not able to pick color, so fallback', LogDisplay.PERSON_MOVIE_FRAGMENT_LOG_FLAG)
                                     mPalettePrimaryColor = ContextCompat.getColor(getActivity(), R.color.primary)
                                     mPalettePrimaryDarkColor = ContextCompat.getColor(getActivity(), R.color.primary_dark)
                                     mPaletteTitleColor = ContextCompat.getColor(getActivity(), R.color.primary_text)
@@ -544,35 +552,54 @@ class PersonMovieFragment extends Fragment implements LoaderManager.LoaderCallba
                                         mPaletteAccentColor = ContextCompat.getColor(getActivity(), R.color.accent)
                                     }
                                 }
-                                //Apply color to fields
-                                mPersonLinLayout.setBackgroundColor(mPalettePrimaryColor)
-                                mNameHdrTextView.setTextColor(mPaletteTitleColor)
-                                mNameTextView.setTextColor(mPaletteBodyTextColor)
-                                mDobHdrTextView.setTextColor(mPaletteTitleColor)
-                                mDobTextView.setTextColor(mPaletteBodyTextColor)
-                                mBirthPlaceHdrTextView.setTextColor(mPaletteTitleColor)
-                                mBirthPlaceTextView.setTextColor(mPaletteBodyTextColor)
-                                mAlsoKnownAsHdrTextView.setTextColor(mPaletteTitleColor)
-                                mAlsoKnownAsTextView.setTextColor(mPaletteBodyTextColor)
-                                mDeathDayHdrTextView.setTextColor(mPaletteTitleColor)
-                                mDeathDayTextView.setTextColor(mPaletteBodyTextColor)
-                                mPopularityHdrTextView.setTextColor(mPaletteTitleColor)
-                                mPopularityTextView.setTextColor(mPaletteBodyTextColor)
-                                mBiographyHdrTextView.setTextColor(mPaletteTitleColor)
-                                mBiographyTextView.setTextColor(mPaletteBodyTextColor)
-                                mCastGridHdrTextView.setTextColor(mPaletteTitleColor)
-                                mCrewGridHdrTextView.setTextColor(mPaletteTitleColor)
-                                mImageGridHdrTextView.setTextColor(mPaletteTitleColor)
-                                mWebLinksHdrTextView.setTextColor(mPaletteTitleColor)
-                                //Apply color to toolbar and status bar
-                                mToolbar.setBackgroundColor(mPalettePrimaryColor)
-                                mToolbar.setTitleTextColor(mPaletteTitleColor)
-                                if (Build.VERSION.SDK_INT >= 21) {
-                                    final Window window = getActivity().getWindow()
-                                    window.setStatusBarColor(mPalettePrimaryDarkColor)
+                                //Apply color to fields in potrait mode
+                                if(getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
+                                    mPersonLinLayout.setBackgroundColor(mPalettePrimaryColor)
+                                    mNameHdrTextView.setTextColor(mPaletteTitleColor)
+                                    mNameTextView.setTextColor(mPaletteBodyTextColor)
+                                    mDobHdrTextView.setTextColor(mPaletteTitleColor)
+                                    mDobTextView.setTextColor(mPaletteBodyTextColor)
+                                    mBirthPlaceHdrTextView.setTextColor(mPaletteTitleColor)
+                                    mBirthPlaceTextView.setTextColor(mPaletteBodyTextColor)
+                                    mAlsoKnownAsHdrTextView.setTextColor(mPaletteTitleColor)
+                                    mAlsoKnownAsTextView.setTextColor(mPaletteBodyTextColor)
+                                    mDeathDayHdrTextView.setTextColor(mPaletteTitleColor)
+                                    mDeathDayTextView.setTextColor(mPaletteBodyTextColor)
+                                    mPopularityHdrTextView.setTextColor(mPaletteTitleColor)
+                                    mPopularityTextView.setTextColor(mPaletteBodyTextColor)
+                                    mBiographyHdrTextView.setTextColor(mPaletteTitleColor)
+                                    mBiographyTextView.setTextColor(mPaletteBodyTextColor)
+                                    mCastGridHdrTextView.setTextColor(mPaletteTitleColor)
+                                    mCrewGridHdrTextView.setTextColor(mPaletteTitleColor)
+                                    mImageGridHdrTextView.setTextColor(mPaletteTitleColor)
+                                    mWebLinksHdrTextView.setTextColor(mPaletteTitleColor)
+                                    //Apply color to toolbar and status bar
+                                    mToolbar.setBackgroundColor(mPalettePrimaryColor)
+                                    mToolbar.setTitleTextColor(mPaletteTitleColor)
+                                    if (Build.VERSION.SDK_INT >= 21) {
+                                        final Window window = getActivity().getWindow()
+                                        window.setStatusBarColor(mPalettePrimaryDarkColor)
+                                    }
+                                } else {
+                                    // Remove the Collapsing toolbar title
+                                    final CollapsingToolbarLayout collapsingToolbarLayout = getView().findViewById(R.id.person_collapsing_toolbar) as CollapsingToolbarLayout
+                                    collapsingToolbarLayout.setTitleEnabled(false)
+                                    // Set a bigger text size & White color for Toolbar in landscape mode
+                                    mToolbar.setTitleTextAppearance(getActivity(),R.style.TextAppearance_AppCompat_Headline)
+                                    mToolbar.setTitleTextColor(ContextCompat.getColor(getContext(), R.color.primary_text))
+                                    // Set the backdrop image
+                                    final ImageView imageView = getView().findViewById(R.id.person_backdrop_image) as ImageView
+                                    if(mPersonBackdropImage) {
+                                        final String imagePath = "$GlobalStaticVariables.TMDB_IMAGE_BASE_URL/$GlobalStaticVariables.TMDB_IMAGE_SIZE_W500" +
+                                                "$mPersonBackdropImage"
+                                        LogDisplay.callLog(LOG_TAG, "Person backdrop imagePath-> $imagePath", LogDisplay.PERSON_MOVIE_FRAGMENT_LOG_FLAG)
+                                        PicassoLoadImage.loadDetailFragmentPagerAdapterImage(getActivity(), imagePath, imageView)
+                                    } else {
+                                        LogDisplay.callLog(LOG_TAG, 'Person backdrop image path is null', LogDisplay.PERSON_MOVIE_FRAGMENT_LOG_FLAG)
+                                    }
                                 }
 
-                                //Apply color to adapter elements
+                                //Apply color to adapter elements irrespective of portrait or landscape mode
                                 mPersonCastAdapter.changeColor(mPalettePrimaryDarkColor, mPaletteBodyTextColor)
                                 mPersonCrewAdapter.changeColor(mPalettePrimaryDarkColor, mPaletteBodyTextColor)
                                 mPersonImageAdapter.changeColor(mPalettePrimaryDarkColor, mPaletteBodyTextColor)

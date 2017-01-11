@@ -4,7 +4,6 @@
     android:id="@+id/movie_detail_collection_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/primary_background"
     android:orientation="vertical"
     tools:ignore="Overdraw">
 <LinearLayout
@@ -29,6 +28,7 @@
         android:textColor="@color/primary_text"
         android:textIsSelectable="true" />
     <View
+        android:id="@+id/movie_collection_title_divider"
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:background="@color/divider_color" />
