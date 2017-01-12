@@ -1,6 +1,7 @@
 package com.moviemagic.dpaul.android.app.adapter
 
 import android.content.Context
+import android.content.res.Configuration
 import android.database.Cursor
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
@@ -126,7 +127,9 @@ class MovieReviewAdapter extends RecyclerView.Adapter<MovieReviewAdapter.MovieRe
         mTitleTextColor = titleTextColor
         mBodyTextColor = bodyTextColor
         if (getItemCount() == 0) {
-            mRecyclerviewEmptyTextView.setTextColor(mBodyTextColor)
+            if(mContext.getResources().getConfiguration().orientation != Configuration.ORIENTATION_LANDSCAPE) {
+                mRecyclerviewEmptyTextView.setTextColor(mBodyTextColor)
+            }
         } else {
             notifyDataSetChanged()
         }

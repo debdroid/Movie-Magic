@@ -1,6 +1,7 @@
 package com.moviemagic.dpaul.android.app.adapter
 
 import android.content.Context
+import android.content.res.Configuration
 import android.database.Cursor
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
@@ -129,7 +130,9 @@ class SimilarMovieAdapter extends RecyclerView.Adapter<SimilarMovieAdapter.Simil
         mPrimaryDarkColor = primaryDarkColor
         mBodyTextColor = bodyTextColor
         if (getItemCount() == 0) {
-            mSimilarMovieGridEmptyTextView.setTextColor(mBodyTextColor)
+            if(mContext.getResources().getConfiguration().orientation != Configuration.ORIENTATION_LANDSCAPE) {
+                mSimilarMovieGridEmptyTextView.setTextColor(mBodyTextColor)
+            }
         } else {
             notifyDataSetChanged()
         }

@@ -287,12 +287,12 @@ class PersonMovieFragment extends Fragment implements LoaderManager.LoaderCallba
         //Create a new interface member variable for PersonCastAdapterOnClickHandler and the same is passed as
         //parameter to Adapter, this onClick method is called whenever onClick is called from PersonCastAdapter
         mPersonCastAdapter = new PersonCastAdapter(getActivity(),mCastGridEmptyMsgTextView,
-            new PersonCastAdapter.PersonCastAdapterOnClickHandler(){
-                @Override
-                void onClick(final int movieId, final PersonCastAdapter.PersonCastAdapterViewHolder viewHolder) {
-                    mCallbackForCastClick.onCastMovieItemSelected(movieId,viewHolder)
-                }
-            })
+                new PersonCastAdapter.PersonCastAdapterOnClickHandler(){
+                    @Override
+                    void onClick(final int movieId, final PersonCastAdapter.PersonCastAdapterViewHolder viewHolder) {
+                        mCallbackForCastClick.onCastMovieItemSelected(movieId,viewHolder)
+                    }
+                })
         mCastGridView.setAdapter(mPersonCastAdapter)
         /**
          * Person Crew Grid handling
@@ -303,12 +303,12 @@ class PersonMovieFragment extends Fragment implements LoaderManager.LoaderCallba
         mCrewGridLayoutManager = new GridLayoutManager(getActivity(), 1, GridLayoutManager.HORIZONTAL, false)
         mCrewGridView.setLayoutManager(mCrewGridLayoutManager)
         mPersonCrewAdapter = new PersonCrewAdapter(getActivity(), mCrewGridEmptyMsgTextView,
-            new PersonCrewAdapter.PersonCrewAdapterOnClickHandler(){
-                @Override
-                void onClick(final int movieId, final PersonCrewAdapter.PersonCrewAdapterViewHolder viewHolder) {
-                    mCallbackForCrewClick.onCrewMovieItemSelected(movieId,viewHolder)
-                }
-            })
+                new PersonCrewAdapter.PersonCrewAdapterOnClickHandler(){
+                    @Override
+                    void onClick(final int movieId, final PersonCrewAdapter.PersonCrewAdapterViewHolder viewHolder) {
+                        mCallbackForCrewClick.onCrewMovieItemSelected(movieId,viewHolder)
+                    }
+                })
         mCrewGridView.setAdapter(mPersonCrewAdapter)
         /**
          * Person Image Grid handling

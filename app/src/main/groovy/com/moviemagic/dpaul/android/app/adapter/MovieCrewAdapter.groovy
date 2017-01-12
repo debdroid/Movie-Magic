@@ -2,6 +2,7 @@ package com.moviemagic.dpaul.android.app.adapter
 
 import android.content.Context
 import android.content.Intent
+import android.content.res.Configuration
 import android.database.Cursor
 import android.net.Uri
 import android.support.v7.widget.RecyclerView
@@ -117,7 +118,9 @@ class MovieCrewAdapter extends RecyclerView.Adapter<MovieCrewAdapter.MovieCrewAd
         mPrimaryDarkColor = primaryDarkColor
         mBodyTextColor = bodyTextColor
         if (getItemCount() == 0) {
-            mCrewGridEmptyTextView.setTextColor(mBodyTextColor)
+            if(mContext.getResources().getConfiguration().orientation != Configuration.ORIENTATION_LANDSCAPE) {
+                mCrewGridEmptyTextView.setTextColor(mBodyTextColor)
+            }
         } else {
             notifyDataSetChanged()
         }

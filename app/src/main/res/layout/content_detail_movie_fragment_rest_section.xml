@@ -10,8 +10,6 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:paddingEnd="@dimen/m_design_screen_edge_left_right_margin"
-        android:paddingLeft="@dimen/m_design_screen_edge_left_right_margin"
-        android:paddingRight="@dimen/m_design_screen_edge_left_right_margin"
         android:paddingStart="@dimen/m_design_screen_edge_left_right_margin">
         <LinearLayout
             android:layout_width="match_parent"
@@ -311,6 +309,7 @@
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
+        android:layout_marginStart="@dimen/mobile_portrait_divider_start_margin"
         android:background="@color/divider_color"/>
     <!-- Layout for movie trailer (i.e. youtube fragment) -->
     <LinearLayout
@@ -355,6 +354,7 @@
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
+        android:layout_marginStart="@dimen/mobile_portrait_divider_start_margin"
         android:background="@color/divider_color"/>
     <!-- Layout for production company and countries -->
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
@@ -410,6 +410,7 @@
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
+        android:layout_marginStart="@dimen/mobile_portrait_divider_start_margin"
         android:background="@color/divider_color"/>
     <!-- Layout for movie cast grid -->
     <LinearLayout
@@ -458,6 +459,7 @@
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
+        android:layout_marginStart="@dimen/mobile_portrait_divider_start_margin"
         android:background="@color/divider_color"/>
     <!-- Layout for movie crew grid -->
     <LinearLayout
@@ -506,8 +508,8 @@
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:background="@color/divider_color"
-        tools:ignore="TooManyViews" />
+        android:layout_marginStart="@dimen/mobile_portrait_divider_start_margin"
+        android:background="@color/divider_color"/>
     <!-- Layout for similar movie grid -->
     <LinearLayout
         android:id="@+id/movie_detail_similar_movie_header_layout"
@@ -555,6 +557,7 @@
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
+        android:layout_marginStart="@dimen/mobile_portrait_divider_start_margin"
         android:background="@color/divider_color"/>
     <!-- Layout for movie ic_drawer_user_collection -->
     <LinearLayout
@@ -602,6 +605,7 @@
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
+        android:layout_marginStart="@dimen/mobile_portrait_divider_start_margin"
         android:background="@color/divider_color"/>
     <!-- Layout for movie ic_drawer_home page and IMDb links -->
     <LinearLayout
@@ -665,6 +669,7 @@
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
+        android:layout_marginStart="@dimen/mobile_portrait_divider_start_margin"
         android:background="@color/divider_color"/>
     <!-- Layout for review -->
     <LinearLayout

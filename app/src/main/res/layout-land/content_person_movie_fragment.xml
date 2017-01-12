@@ -13,6 +13,7 @@
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
+        android:layout_marginStart="@dimen/mobile_portrait_divider_start_margin"
         android:background="@color/divider_color" />
 
     <!-- Person biography section -->

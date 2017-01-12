@@ -3,6 +3,7 @@ package com.moviemagic.dpaul.android.app.adapter
 import android.app.ActivityOptions
 import android.content.Context
 import android.content.Intent
+import android.content.res.Configuration
 import android.database.Cursor
 import android.net.Uri
 import android.os.Bundle
@@ -128,7 +129,9 @@ class MovieCastAdapter extends RecyclerView.Adapter<MovieCastAdapter.MovieCastAd
         mPrimaryDarkColor = primaryDarkColor
         mBodyTextColor = bodyTextColor
         if (getItemCount() == 0) {
-            mCastGridEmptyTextView.setTextColor(mBodyTextColor)
+            if(mContext.getResources().getConfiguration().orientation != Configuration.ORIENTATION_LANDSCAPE) {
+                mCastGridEmptyTextView.setTextColor(mBodyTextColor)
+            }
         } else {
             notifyDataSetChanged()
         }

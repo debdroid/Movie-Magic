@@ -15,8 +15,6 @@
         android:orientation="vertical"
         android:paddingBottom="@dimen/m_design_space_between_content_area"
         android:paddingEnd="@dimen/m_design_screen_edge_left_right_margin"
-        android:paddingLeft="@dimen/m_design_screen_edge_left_right_margin"
-        android:paddingRight="@dimen/m_design_screen_edge_left_right_margin"
         android:paddingStart="@dimen/m_design_screen_edge_left_right_margin"
         android:paddingTop="@dimen/m_design_space_between_content_area">
         <TextView
@@ -69,6 +67,7 @@
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
+        android:layout_marginStart="@dimen/mobile_portrait_divider_start_margin"
         android:background="@color/divider_color" />
 
     <!-- Person images grid view section -->
@@ -119,6 +118,7 @@
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
+        android:layout_marginStart="@dimen/mobile_portrait_divider_start_margin"
         android:background="@color/divider_color" />
 
     <!-- Person as actor grid view section -->
@@ -168,6 +168,7 @@
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
+        android:layout_marginStart="@dimen/mobile_portrait_divider_start_margin"
         android:background="@color/divider_color" />
 
     <!-- Person as crew grid view section -->
@@ -218,6 +219,7 @@
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
+        android:layout_marginStart="@dimen/mobile_portrait_divider_start_margin"
         android:background="@color/divider_color" />
 
     <!-- Person external web links (ic_drawer_home page & imdb link) section -->
@@ -257,6 +259,8 @@
                 android:text="@string/person_web_links_home_page"
                 android:gravity="center"
                 android:background="@color/accent"
+                android:clickable="false"
+                android:alpha="0.4"
                 android:textAppearance="@style/TextAppearance.AppCompat.Title"
                 android:textColor="@color/primary_text"
                 tools:ignore="ButtonStyle" />
@@ -271,6 +275,8 @@
                 android:text="@string/detail_web_links_imdb_link"
                 android:gravity="center"
                 android:background="@color/accent"
+                android:clickable="false"
+                android:alpha="0.4"
                 android:textAppearance="@style/TextAppearance.AppCompat.Title"
                 android:textColor="@color/primary_text"
                 tools:ignore="ButtonStyle" />

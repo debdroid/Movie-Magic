@@ -33,6 +33,7 @@
     <dimen name="poster_image_data_fields_margin">8dp</dimen>
 
     <!-- Misc parameter -->
+    <dimen name="mobile_portrait_divider_start_margin">0dp</dimen>
     <dimen name="home_page_youttube_fragment_top_margin">4dp</dimen>
     <dimen name="gridview_horizontal_vertical_spacing">2dp</dimen>
     <dimen name="gridview_column_width">115dp</dimen>

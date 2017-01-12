@@ -55,7 +55,7 @@
 </android.support.design.widget.CoordinatorLayout>
     <android.support.v4.widget.NestedScrollView
         android:id="@+id/collection_nested_scroll"
-        android:layout_marginTop="@dimen/collection_fragment_content_area_margin"
+        android:layout_marginTop="@dimen/mobile_landscape_content_area_top_margin"
         android:layout_marginStart="@dimen/m_design_screen_edge_left_right_margin"
         android:layout_marginEnd="@dimen/m_design_screen_edge_left_right_margin"
         android:layout_width="match_parent"

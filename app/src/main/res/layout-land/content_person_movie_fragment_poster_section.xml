@@ -5,7 +5,6 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:paddingBottom="@dimen/m_design_space_between_content_area"
-    android:paddingStart="@dimen/m_design_screen_edge_left_right_margin"
     android:paddingTop="@dimen/m_design_space_between_content_area"
     tools:ignore="RtlSymmetry">
 
@@ -18,7 +17,9 @@
 
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:paddingStart="@dimen/m_design_screen_edge_left_right_margin"
+            android:paddingEnd="@dimen/m_design_screen_edge_left_right_margin">
 
             <TextView
                 android:id="@+id/person_name_header"
@@ -45,11 +46,14 @@
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
+            android:layout_marginStart="@dimen/mobile_portrait_divider_start_margin"
             android:background="@color/divider_color" />
 
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:paddingStart="@dimen/m_design_screen_edge_left_right_margin"
+            android:paddingEnd="@dimen/m_design_screen_edge_left_right_margin">
 
             <TextView
                 android:id="@+id/person_dob_header"
@@ -76,11 +80,14 @@
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
+            android:layout_marginStart="@dimen/mobile_portrait_divider_start_margin"
             android:background="@color/divider_color" />
 
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:paddingStart="@dimen/m_design_screen_edge_left_right_margin"
+            android:paddingEnd="@dimen/m_design_screen_edge_left_right_margin">
 
             <TextView
                 android:id="@+id/person_place_of_birth_header"
@@ -107,11 +114,14 @@
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
+            android:layout_marginStart="@dimen/mobile_portrait_divider_start_margin"
             android:background="@color/divider_color" />
 
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:paddingStart="@dimen/m_design_screen_edge_left_right_margin"
+            android:paddingEnd="@dimen/m_design_screen_edge_left_right_margin">
 
             <TextView
                 android:id="@+id/person_also_known_as_header"
@@ -139,11 +149,14 @@
             android:id="@+id/person_also_known_as_devider"
             android:layout_width="match_parent"
             android:layout_height="1dp"
+            android:layout_marginStart="@dimen/mobile_portrait_divider_start_margin"
             android:background="@color/divider_color" />
 
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:paddingStart="@dimen/m_design_screen_edge_left_right_margin"
+            android:paddingEnd="@dimen/m_design_screen_edge_left_right_margin">
 
             <TextView
                 android:id="@+id/person_death_day_header"
@@ -171,11 +184,14 @@
             android:id="@+id/person_death_day_devider"
             android:layout_width="match_parent"
             android:layout_height="1dp"
+            android:layout_marginStart="@dimen/mobile_portrait_divider_start_margin"
             android:background="@color/divider_color" />
 
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:paddingStart="@dimen/m_design_screen_edge_left_right_margin"
+            android:paddingEnd="@dimen/m_design_screen_edge_left_right_margin">
 
             <TextView
                 android:id="@+id/person_popularity_header"

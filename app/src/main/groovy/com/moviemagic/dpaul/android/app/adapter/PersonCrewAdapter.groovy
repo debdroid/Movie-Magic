@@ -1,6 +1,7 @@
 package com.moviemagic.dpaul.android.app.adapter
 
 import android.content.Context
+import android.content.res.Configuration
 import android.database.Cursor
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
@@ -112,7 +113,9 @@ class PersonCrewAdapter extends RecyclerView.Adapter<PersonCrewAdapter.PersonCre
         mPrimaryDarkColor = primaryDarkColor
         mBodyTextColor = bodyTextColor
         if (getItemCount() == 0) {
-            mPersonCrewGridEmptyTextView.setTextColor(mBodyTextColor)
+            if(mContext.getResources().getConfiguration().orientation != Configuration.ORIENTATION_LANDSCAPE) {
+                mPersonCrewGridEmptyTextView.setTextColor(mBodyTextColor)
+            }
         } else {
             notifyDataSetChanged()
         }
