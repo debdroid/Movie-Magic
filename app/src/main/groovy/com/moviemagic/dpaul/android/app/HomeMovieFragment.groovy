@@ -136,7 +136,7 @@ class HomeMovieFragment extends Fragment implements LoaderManager.LoaderCallback
     }
 
     @Override
-    void onCreate(@Nullable Bundle savedInstanceState) {
+    void onCreate(@Nullable final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState)
         LogDisplay.callLog(LOG_TAG,'onCreate is called',LogDisplay.HOME_MOVIE_FRAGMENT_LOG_FLAG)
     }

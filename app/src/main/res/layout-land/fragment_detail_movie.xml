@@ -76,7 +76,6 @@
         android:layout_marginEnd="@dimen/m_design_space_between_content_area"
         android:layout_marginTop="@dimen/mobile_landscape_content_area_top_margin"
         android:scaleType="centerCrop"
-        android:layout_alignBaseline="@+id/person_nested_scroll"
         android:elevation="@dimen/cardview_default_elevation"
         android:contentDescription="@string/movie_detail_poster_image_content_description"
         android:src="@drawable/image_place_holder"

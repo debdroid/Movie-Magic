@@ -40,7 +40,8 @@
                 android:maxLines="1"
                 android:textAppearance="@style/TextAppearance.AppCompat.Body1"
                 android:textColor="@color/primary_text"
-                android:textStyle="italic" />
+                android:textStyle="italic"
+                android:textIsSelectable="true" />
         </FrameLayout>
 
         <TextView
@@ -56,6 +57,7 @@
             android:padding="@dimen/grid_text_padding"
             android:textAppearance="@style/TextAppearance.AppCompat.Body1"
             android:textColor="@color/primary_text"
-            android:textStyle="italic" />
+            android:textStyle="italic"
+            android:textIsSelectable="true" />
     </RelativeLayout>
 </android.support.v7.widget.CardView>

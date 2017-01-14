@@ -737,7 +737,8 @@
                 android:gravity="start"
                 android:textAppearance="@style/TextAppearance.AppCompat.Medium"
                 android:textColor="@color/secondary_text"
-                android:text="@string/movie_data_not_available"/>
+                android:text="@string/movie_data_not_available"
+                tools:ignore="TooManyViews" />
         </FrameLayout>
     </RelativeLayout>
 </RelativeLayout>

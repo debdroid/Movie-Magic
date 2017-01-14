@@ -30,35 +30,43 @@
         android:paddingBottom="@dimen/m_design_space_between_content_area"
         android:paddingTop="@dimen/m_design_space_between_content_area">
 
-        <TextView
-            android:id="@+id/home_movie_in_cinema_header"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:id="@+id/home_movie_in_cinema_header_section"
+            android:layout_alignParentTop="true"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_alignParentStart="true"
-            android:fontFamily="sans-serif-condensed"
-            android:gravity="start"
-            android:paddingStart="@dimen/m_design_screen_edge_left_right_margin"
             android:paddingBottom="@dimen/m_design_space_between_content_area"
-            android:text="@string/home_movie_in_cinema_title"
-            android:textAppearance="@style/TextAppearance.AppCompat.Headline"
-            android:textColor="@color/primary_text" />
+            android:orientation="horizontal">
 
-        <Button
-            android:id="@+id/show_all_in_cinema_button"
-            style="?android:attr/borderlessButtonStyle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignBaseline="@+id/home_movie_in_cinema_header"
-            android:layout_alignParentEnd="true"
-            android:text="@string/show_all_button_text"
-            android:textColor="@color/primary_text"
-            android:textStyle="bold" />
+            <TextView
+                android:id="@+id/home_movie_in_cinema_header"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="3"
+                android:fontFamily="sans-serif-condensed"
+                android:gravity="start"
+                android:paddingEnd="@dimen/m_design_screen_edge_left_right_margin"
+                android:paddingStart="@dimen/m_design_screen_edge_left_right_margin"
+                android:text="@string/home_movie_in_cinema_title"
+                android:textAppearance="@style/TextAppearance.AppCompat.Headline"
+                android:textColor="@color/primary_text" />
+
+            <Button
+                android:id="@+id/show_all_in_cinema_button"
+                style="?android:attr/borderlessButtonStyle"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/show_all_button_text"
+                android:textColor="@color/primary_text"
+                android:textStyle="bold" />
+        </LinearLayout>
 
         <FrameLayout
             android:id="@+id/home_movie_in_cinema_recycler_view_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/home_movie_in_cinema_header"
+            android:layout_below="@id/home_movie_in_cinema_header_section"
             android:paddingBottom="@dimen/m_design_space_between_content_area">
 
             <android.support.v7.widget.RecyclerView
@@ -96,36 +104,43 @@
         android:paddingBottom="@dimen/m_design_space_between_content_area"
         android:paddingTop="@dimen/m_design_space_between_content_area">
 
-        <TextView
-            android:id="@+id/home_movie_coming_soon_header"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:id="@+id/home_movie_coming_soon_header_section"
+            android:layout_alignParentTop="true"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_alignParentStart="true"
-            android:fontFamily="sans-serif-condensed"
-            android:gravity="start"
-            android:paddingStart="@dimen/m_design_screen_edge_left_right_margin"
             android:paddingBottom="@dimen/m_design_space_between_content_area"
-            android:text="@string/home_movie_coming_soon_title"
-            android:textAppearance="@style/TextAppearance.AppCompat.Headline"
-            android:textColor="@color/primary_text" />
+            android:orientation="horizontal">
 
-        <Button
-            android:id="@+id/show_all_coming_soon_button"
-            style="?android:attr/borderlessButtonStyle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignBottom="@id/home_movie_coming_soon_header"
-            android:layout_alignParentEnd="true"
-            android:layout_alignBaseline="@id/home_movie_coming_soon_header"
-            android:text="@string/show_all_button_text"
-            android:textColor="@color/primary_text"
-            android:textStyle="bold" />
+            <TextView
+                android:id="@+id/home_movie_coming_soon_header"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="3"
+                android:fontFamily="sans-serif-condensed"
+                android:gravity="start"
+                android:paddingEnd="@dimen/m_design_screen_edge_left_right_margin"
+                android:paddingStart="@dimen/m_design_screen_edge_left_right_margin"
+                android:text="@string/home_movie_coming_soon_title"
+                android:textAppearance="@style/TextAppearance.AppCompat.Headline"
+                android:textColor="@color/primary_text" />
+
+            <Button
+                android:id="@+id/show_all_coming_soon_button"
+                style="?android:attr/borderlessButtonStyle"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/show_all_button_text"
+                android:textColor="@color/primary_text"
+                android:textStyle="bold" />
+        </LinearLayout>
 
         <FrameLayout
             android:id="@+id/home_movie_coming_soon_recycler_view_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/home_movie_coming_soon_header"
+            android:layout_below="@id/home_movie_coming_soon_header_section"
             android:paddingBottom="@dimen/m_design_space_between_content_area">
 
             <android.support.v7.widget.RecyclerView
@@ -171,6 +186,7 @@
             android:fontFamily="sans-serif-condensed"
             android:gravity="start"
             android:paddingStart="@dimen/m_design_screen_edge_left_right_margin"
+            android:paddingEnd="@dimen/m_design_screen_edge_left_right_margin"
             android:paddingBottom="@dimen/m_design_space_between_content_area"
             android:text="@string/home_movie_recommendation_title"
             android:textAppearance="@style/TextAppearance.AppCompat.Headline"
@@ -195,6 +211,7 @@
                 android:layout_height="match_parent"
                 android:gravity="start"
                 android:paddingStart="@dimen/m_design_screen_edge_left_right_margin"
+                android:paddingEnd="@dimen/m_design_screen_edge_left_right_margin"
                 android:paddingBottom="@dimen/m_design_space_between_content_area"
                 android:text="@string/movie_data_not_available"
                 android:textAppearance="@style/TextAppearance.AppCompat.Medium"
@@ -226,6 +243,7 @@
             android:fontFamily="sans-serif-condensed"
             android:gravity="start"
             android:paddingStart="@dimen/m_design_screen_edge_left_right_margin"
+            android:paddingEnd="@dimen/m_design_screen_edge_left_right_margin"
             android:paddingBottom="@dimen/m_design_space_between_content_area"
             android:text="@string/home_movie_recently_added_title"
             android:textAppearance="@style/TextAppearance.AppCompat.Headline"

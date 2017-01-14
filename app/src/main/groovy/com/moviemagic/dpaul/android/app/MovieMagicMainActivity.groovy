@@ -84,7 +84,7 @@ public class MovieMagicMainActivity extends AppCompatActivity implements
 //        mNavigationView.setNavigationItemSelectedListener(this)
         mNavigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
-            boolean onNavigationItemSelected(@NonNull MenuItem item) {
+            boolean onNavigationItemSelected(@NonNull final MenuItem item) {
                 takeActionOnNavigationItemSelected(item)
                 return true
             }
@@ -796,7 +796,7 @@ public class MovieMagicMainActivity extends AppCompatActivity implements
         }
 
         @Override
-        protected void onPostExecute(Integer[] result) {
+        protected void onPostExecute(final Integer[] result) {
             //Set the Watched counter
             final TextView watchedView = (TextView) navigationView.getMenu().findItem(R.id.nav_user_watched).getActionView()
             watchedView.setText(result[0] > 0 ? String.valueOf(result[0]) : null)
@@ -850,7 +850,7 @@ public class MovieMagicMainActivity extends AppCompatActivity implements
      *
      */
     @Override
-    public void onTrimMemory(int level) {
+    public void onTrimMemory(final int level) {
         LogDisplay.callLog(LOG_TAG,'TonTrimMemory is called',LogDisplay.MOVIE_MAGIC_MAIN_LOG_FLAG)
 
         // Determine which lifecycle or system event was raised.

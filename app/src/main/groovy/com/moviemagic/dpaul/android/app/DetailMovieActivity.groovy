@@ -119,7 +119,7 @@ class DetailMovieActivity extends AppCompatActivity implements DetailMovieFragme
     // Override the callback method of DetailMovieFragment
     // Once an item is clicked then it will be called and it will replace the fragment with the new movie
     @Override
-    void onSimilarMovieItemSelected(int movieId) {
+    void onSimilarMovieItemSelected(final int movieId) {
         //Create an intent for DetailMovieActivity
         final Bundle bundle = new Bundle()
         bundle.putInt(GlobalStaticVariables.MOVIE_BASIC_INFO_MOVIE_ID,movieId)

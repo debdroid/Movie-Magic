@@ -16,7 +16,8 @@
             android:layout_gravity="start"
             android:fontFamily="sans-serif-condensed"
             android:textAppearance="@style/TextAppearance.AppCompat.Title"
-            android:textColor="@color/primary_text" />
+            android:textColor="@color/primary_text"
+            android:textIsSelectable="true" />
 
         <TextView
             android:id="@+id/single_review_item_review_content"
@@ -28,7 +29,8 @@
             android:fontFamily="sans-serif-condensed"
             android:maxLines="@string/single_review_item_collapse_line_item_count"
             android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-            android:textColor="@color/secondary_text" />
+            android:textColor="@color/secondary_text"
+            android:textIsSelectable="true" />
     </RelativeLayout>
 
     <ImageButton

@@ -809,7 +809,7 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
         mMovieCastAdapter = new MovieCastAdapter(getActivity(), mCastGridEmptyMsgTextView,
                         new MovieCastAdapter.MovieCastAdapterOnClickHandler(){
                             @Override
-                            void onClick(int personId) {
+                            void onClick(final int personId) {
                                 launchPersonActivity(personId)
                             }
                         })
@@ -825,7 +825,7 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
         mMovieCrewAdapter = new MovieCrewAdapter(getActivity(), mCrewGridEmptyMsgTextView,
                 new MovieCrewAdapter.MovieCrewAdapterOnClickHandler(){
                     @Override
-                    void onClick(int personId) {
+                    void onClick(final int personId) {
                         launchPersonActivity(personId)
                     }
                 })
@@ -840,7 +840,7 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
         mHorizontalSimilarMovieGridView.setLayoutManager(mSimilarMovieGridLayoutManager)
         mSimilarMovieAdapterOnClickHandler = new SimilarMovieAdapter.SimilarMovieAdapterOnClickHandler(){
             @Override
-            void onClick(int movieId) {
+            void onClick(final int movieId) {
                 mCallbackForSimilarMovieClick.onSimilarMovieItemSelected(movieId)
             }
         }
@@ -1084,7 +1084,7 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
     }
 
     @Override
-    boolean onOptionsItemSelected(MenuItem item) {
+    boolean onOptionsItemSelected(final MenuItem item) {
         LogDisplay.callLog(LOG_TAG, 'onOptionsItemSelected is called', LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
         if(item.getItemId() == R.id.menu_action_share) {
             if(mMoviDataLoaded) {
@@ -2059,7 +2059,7 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
     /**
      * Intent to start the person activity
      */
-    void launchPersonActivity(int personId) {
+    void launchPersonActivity(final int personId) {
         // Start Person activity
         final Bundle bundle = new Bundle()
         bundle.putInt(GlobalStaticVariables.MOVIE_PERSON_ID,personId)
@@ -2274,7 +2274,7 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
     }
 
     @Override
-    void onConfigurationChanged(Configuration newConfig) {
+    void onConfigurationChanged(final Configuration newConfig) {
         LogDisplay.callLog(LOG_TAG,'onConfigurationChanged is called',LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
         super.onConfigurationChanged(newConfig)
     }
