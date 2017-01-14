@@ -1,6 +1,5 @@
 package com.moviemagic.dpaul.android.app
 
-import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.content.res.Configuration
@@ -52,7 +51,7 @@ class PersonMovieFragment extends Fragment implements LoaderManager.LoaderCallba
     private HorizontalGridView mCastGridView, mCrewGridView, mImageGridView
     private Button mHomePageButton, mImdbLinkButton
     private ImageButton mShowBiographyImageButton, mHideBiographyImageButton
-    private LinearLayout mPersonLinLayout
+    private RelativeLayout mPersonLinLayout
     private PersonCastAdapter mPersonCastAdapter
     private PersonCrewAdapter mPersonCrewAdapter
     private PersonImageAdapter mPersonImageAdapter
@@ -234,7 +233,7 @@ class PersonMovieFragment extends Fragment implements LoaderManager.LoaderCallba
         // Inflate the view before referring any view using id
         final View mRootView = inflater.inflate(R.layout.fragment_person_movie, container, false)
         mAppBarLayout = mRootView.findViewById(R.id.person_app_bar_layout) as AppBarLayout
-        mPersonLinLayout = mRootView.findViewById(R.id.person_info_layout) as LinearLayout
+        mPersonLinLayout = mRootView.findViewById(R.id.person_info_layout) as RelativeLayout
         mPosterImageView = mRootView.findViewById(R.id.person_poster_image) as ImageView
         mNameHdrTextView = mRootView.findViewById(R.id.person_name_header) as TextView
         mNameTextView = mRootView.findViewById(R.id.person_name) as TextView
@@ -242,12 +241,12 @@ class PersonMovieFragment extends Fragment implements LoaderManager.LoaderCallba
         mDobTextView = mRootView.findViewById(R.id.person_dob) as TextView
         mBirthPlaceHdrTextView = mRootView.findViewById(R.id.person_place_of_birth_header) as TextView
         mBirthPlaceTextView = mRootView.findViewById(R.id.person_place_of_birth) as TextView
-        mAlsoKnownAsDivider = mRootView.findViewById(R.id.person_also_known_as_devider) as View
+        mAlsoKnownAsDivider = mRootView.findViewById(R.id.person_also_known_as_divider) as View
         mAlsoKnownAsHdrTextView = mRootView.findViewById(R.id.person_also_known_as_header) as TextView
         mAlsoKnownAsTextView = mRootView.findViewById(R.id.person_also_known_as) as TextView
         mDeathDayHdrTextView = mRootView.findViewById(R.id.person_death_day_header) as TextView
         mDeathDayTextView = mRootView.findViewById(R.id.person_death_day) as TextView
-        mDeathDayDivider = mRootView.findViewById(R.id.person_death_day_devider) as View
+        mDeathDayDivider = mRootView.findViewById(R.id.person_death_day_divider) as View
         mPopularityHdrTextView = mRootView.findViewById(R.id.person_popularity_header) as TextView
         mPopularityTextView = mRootView.findViewById(R.id.person_popularity) as TextView
         mBiographyHdrTextView = mRootView.findViewById(R.id.person_biography_header) as TextView

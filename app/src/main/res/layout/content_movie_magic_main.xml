@@ -6,8 +6,6 @@
     android:layout_height="match_parent"
     android:background="@color/primary_background"
     android:paddingEnd="@dimen/m_design_grid_list_padding"
-    android:paddingLeft="@dimen/m_design_grid_list_padding"
-    android:paddingRight="@dimen/m_design_grid_list_padding"
     android:paddingStart="@dimen/m_design_grid_list_padding"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:ignore="Overdraw">

@@ -9,18 +9,12 @@
     cardview:cardElevation="@dimen/card_view_elevation"
     cardview:cardUseCompatPadding="true">
 
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+    <ImageView
+        android:id="@+id/person_image_grid_movie_image"
+        android:layout_width="@dimen/person_grid_image_width"
+        android:layout_height="@dimen/person_grid_image_height"
         android:layout_gravity="center"
-        android:orientation="vertical">
-
-        <ImageView
-            android:id="@+id/person_image_grid_movie_image"
-            android:layout_width="@dimen/person_grid_image_width"
-            android:layout_height="@dimen/person_grid_image_height"
-            android:contentDescription="@string/person_image_grid_movie_image_content_description"
-            android:scaleType="centerCrop"
-            android:src="@drawable/image_place_holder" />
-    </LinearLayout>
+        android:contentDescription="@string/person_image_grid_movie_image_content_description"
+        android:scaleType="centerCrop"
+        android:src="@drawable/image_place_holder" />
 </android.support.v7.widget.CardView>

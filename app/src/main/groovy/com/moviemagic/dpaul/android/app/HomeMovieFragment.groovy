@@ -20,6 +20,7 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.FrameLayout
 import android.widget.LinearLayout
+import android.widget.RelativeLayout
 import android.widget.TextView
 import com.moviemagic.dpaul.android.app.adapter.HomeMovieAdapter
 import com.moviemagic.dpaul.android.app.backgroundmodules.GlobalStaticVariables
@@ -51,7 +52,7 @@ class HomeMovieFragment extends Fragment implements LoaderManager.LoaderCallback
     private String[] mMovieVideoArg
     private CallbackForHomeMovieClick mCallbackForHomeMovieClick
     private CallbackForShowAllButtonClick mCallbackForShowAllButtonClick
-    private LinearLayout mRecommendationLayout
+    private RelativeLayout mRecommendationLayout
     private View mRecommendationDivider
     private FrameLayout mYouTubeFragmentContainer
 
@@ -213,7 +214,7 @@ class HomeMovieFragment extends Fragment implements LoaderManager.LoaderCallback
         /**
          * Recommendation Recycler View
          */
-        mRecommendationLayout = mRootView.findViewById(R.id.home_movie_recommendation_layout) as LinearLayout
+        mRecommendationLayout = mRootView.findViewById(R.id.home_movie_recommendation_layout) as RelativeLayout
         mRecommendationDivider = mRootView.findViewById(R.id.home_movie_recommendation_divider) as View
         final RecyclerView.LayoutManager recommendationLinearLayoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false)
         recommendationLinearLayoutManager.setAutoMeasureEnabled(true)
@@ -460,11 +461,11 @@ class HomeMovieFragment extends Fragment implements LoaderManager.LoaderCallback
         final SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getActivity().getApplicationContext())
         final boolean recommendedFlag = sharedPreferences.getBoolean(getString(R.string.pref_recommendation_key),false)
         if(recommendedFlag) {
-            mRecommendationLayout.setVisibility(LinearLayout.VISIBLE)
+            mRecommendationLayout.setVisibility(RelativeLayout.VISIBLE)
             mRecommendationDivider.setVisibility(View.VISIBLE)
             mRecommendationAdapter.swapCursor(data)
         } else {
-            mRecommendationLayout.setVisibility(LinearLayout.GONE)
+            mRecommendationLayout.setVisibility(RelativeLayout.GONE)
             mRecommendationDivider.setVisibility(View.GONE)
             mRecommendationAdapter.swapCursor(null)
         }

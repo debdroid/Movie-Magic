@@ -1,18 +1,17 @@
-<LinearLayout
+<RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/person_info_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
     tools:ignore="Overdraw">
 
     <!-- Person biography section -->
     <RelativeLayout
         android:id="@+id/person_biography_layout"
+        android:layout_alignParentTop="true"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
         android:paddingBottom="@dimen/m_design_space_between_content_area"
         android:paddingEnd="@dimen/m_design_screen_edge_left_right_margin"
         android:paddingStart="@dimen/m_design_screen_edge_left_right_margin"
@@ -65,25 +64,26 @@
 
 
     <View
+        android:id="@+id/person_biography_layout_divider"
+        android:layout_below="@id/person_biography_layout"
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:layout_marginStart="@dimen/mobile_portrait_divider_start_margin"
         android:background="@color/divider_color" />
 
     <!-- Person images grid view section -->
-    <LinearLayout
+    <RelativeLayout
         android:id="@+id/person_image_grid_layout"
+        android:layout_below="@id/person_biography_layout_divider"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
         android:paddingBottom="@dimen/m_design_space_between_content_area"
         android:paddingEnd="@dimen/m_design_screen_edge_left_right_margin"
-        android:paddingLeft="@dimen/m_design_screen_edge_left_right_margin"
-        android:paddingRight="@dimen/m_design_screen_edge_left_right_margin"
         android:paddingStart="@dimen/m_design_screen_edge_left_right_margin"
         android:paddingTop="@dimen/m_design_space_between_content_area">
         <TextView
             android:id="@+id/person_image_grid_header"
+            android:layout_alignParentTop="true"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
@@ -94,6 +94,7 @@
             android:textAppearance="@style/TextAppearance.AppCompat.Title"
             android:textColor="@color/primary_text" />
         <FrameLayout
+            android:layout_below="@id/person_image_grid_header"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
@@ -113,28 +114,29 @@
                 android:textColor="@color/secondary_text"
                 android:text="@string/movie_data_not_available"/>
         </FrameLayout>
-    </LinearLayout>
+    </RelativeLayout>
 
     <View
+        android:id="@+id/person_image_grid_layout_divider"
+        android:layout_below="@id/person_image_grid_layout"
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:layout_marginStart="@dimen/mobile_portrait_divider_start_margin"
         android:background="@color/divider_color" />
 
     <!-- Person as actor grid view section -->
-    <LinearLayout
+    <RelativeLayout
         android:id="@+id/person_actor_grid_layout"
+        android:layout_below="@id/person_image_grid_layout_divider"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
         android:paddingBottom="@dimen/m_design_space_between_content_area"
         android:paddingEnd="@dimen/m_design_screen_edge_left_right_margin"
-        android:paddingLeft="@dimen/m_design_screen_edge_left_right_margin"
-        android:paddingRight="@dimen/m_design_screen_edge_left_right_margin"
         android:paddingStart="@dimen/m_design_screen_edge_left_right_margin"
         android:paddingTop="@dimen/m_design_space_between_content_area">
         <TextView
             android:id="@+id/person_cast_grid_header"
+            android:layout_alignParentTop="true"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
@@ -145,6 +147,7 @@
             android:textAppearance="@style/TextAppearance.AppCompat.Title"
             android:textColor="@color/primary_text" />
         <FrameLayout
+            android:layout_below="@id/person_cast_grid_header"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
@@ -164,27 +167,28 @@
                 android:textColor="@color/secondary_text"
                 android:text="@string/movie_data_not_available"/>
         </FrameLayout>
-    </LinearLayout>
+    </RelativeLayout>
     <View
+        android:id="@+id/person_actor_grid_layout_divider"
+        android:layout_below="@id/person_actor_grid_layout"
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:layout_marginStart="@dimen/mobile_portrait_divider_start_margin"
         android:background="@color/divider_color" />
 
     <!-- Person as crew grid view section -->
-    <LinearLayout
+    <RelativeLayout
         android:id="@+id/person_crew_grid_layout"
+        android:layout_below="@id/person_actor_grid_layout_divider"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
         android:paddingBottom="@dimen/m_design_space_between_content_area"
         android:paddingEnd="@dimen/m_design_screen_edge_left_right_margin"
-        android:paddingLeft="@dimen/m_design_screen_edge_left_right_margin"
-        android:paddingRight="@dimen/m_design_screen_edge_left_right_margin"
         android:paddingStart="@dimen/m_design_screen_edge_left_right_margin"
         android:paddingTop="@dimen/m_design_space_between_content_area">
         <TextView
             android:id="@+id/person_crew_grid_header"
+            android:layout_alignParentTop="true"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
@@ -195,6 +199,7 @@
             android:textAppearance="@style/TextAppearance.AppCompat.Title"
             android:textColor="@color/primary_text" />
         <FrameLayout
+            android:layout_below="@id/person_crew_grid_header"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
@@ -214,28 +219,29 @@
                 android:textColor="@color/secondary_text"
                 android:text="@string/movie_data_not_available"/>
         </FrameLayout>
-    </LinearLayout>
+    </RelativeLayout>
 
     <View
+        android:id="@+id/person_crew_grid_layout_divider"
+        android:layout_below="@id/person_crew_grid_layout"
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:layout_marginStart="@dimen/mobile_portrait_divider_start_margin"
         android:background="@color/divider_color" />
 
     <!-- Person external web links (ic_drawer_home page & imdb link) section -->
-    <LinearLayout
+    <RelativeLayout
         android:id="@+id/person_web_links_layout"
+        android:layout_below="@id/person_crew_grid_layout_divider"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
         android:paddingBottom="@dimen/m_design_space_between_content_area"
         android:paddingEnd="@dimen/m_design_screen_edge_left_right_margin"
-        android:paddingLeft="@dimen/m_design_screen_edge_left_right_margin"
-        android:paddingRight="@dimen/m_design_screen_edge_left_right_margin"
         android:paddingStart="@dimen/m_design_screen_edge_left_right_margin"
         android:paddingTop="@dimen/m_design_space_between_content_area">
         <TextView
             android:id="@+id/person_web_links_header"
+            android:layout_alignParentTop="true"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:paddingBottom="@dimen/m_design_space_between_content_area"
@@ -245,6 +251,7 @@
             android:textAppearance="@style/TextAppearance.AppCompat.Title"
             android:textColor="@color/primary_text" />
         <LinearLayout
+            android:layout_below="@id/person_web_links_header"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal">
@@ -281,5 +288,5 @@
                 android:textColor="@color/primary_text"
                 tools:ignore="ButtonStyle" />
         </LinearLayout>
-    </LinearLayout>
-</LinearLayout>
+    </RelativeLayout>
+</RelativeLayout>

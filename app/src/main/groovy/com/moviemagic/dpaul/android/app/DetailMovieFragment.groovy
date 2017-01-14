@@ -58,6 +58,7 @@ import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.RatingBar
+import android.widget.RelativeLayout
 import android.widget.TextView
 import com.moviemagic.dpaul.android.app.adapter.*
 import com.moviemagic.dpaul.android.app.backgroundmodules.*
@@ -86,7 +87,8 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
                      mUserListDrawableTitle, mUserTmdbListDrawableTitle, mCastGridEmptyMsgTextView, mCrewGridEmptyMsgTextView,
                      mSimilarMovieGridEmptyMsgTextView, mMovieTrailerEmptyMsgTextView
     private ImageView mMpaaRatingImageView, mPosterImageView, mCollectionBackdropImageView
-    private LinearLayout mDetailMovieLayout, mBackdropDotHolderLayout, mUserListDrawableLayout, mUserTmdbListDrawableLayout
+    private RelativeLayout mUserListDrawableLayout, mUserTmdbListDrawableLayout, mDetailMovieLayout
+    private LinearLayout mBackdropDotHolderLayout
     private ImageButton mImageButtonWatched, mImageButtonWishList, mImageButtonFavourite, mImageButtonCollection
     private ImageButton mTmdbImageButtonWatchlist, mTmdbImageButtonFavourite, mTmdbImageButtonRated
     private RatingBar mTmdbRatingBar, mUserRatingBar
@@ -481,9 +483,9 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
         mBackdropDotHolderLayout = mRootView.findViewById(R.id.view_pager_dots_holder) as LinearLayout
 
         //All the layouts
-        mDetailMovieLayout = mRootView.findViewById(R.id.fragment_detail_movie_layout) as LinearLayout
-        mUserListDrawableLayout = mRootView.findViewById(R.id.movie_detail_user_list_drawable_layout) as LinearLayout
-        mUserTmdbListDrawableLayout = mRootView.findViewById(R.id.movie_detail_user_tmdb_list_drawable_layout) as LinearLayout
+        mDetailMovieLayout = mRootView.findViewById(R.id.fragment_detail_movie_layout) as RelativeLayout
+        mUserListDrawableLayout = mRootView.findViewById(R.id.movie_detail_user_list_drawable_layout) as RelativeLayout
+        mUserTmdbListDrawableLayout = mRootView.findViewById(R.id.movie_detail_user_tmdb_list_drawable_layout) as RelativeLayout
         mNestedScrollView = mRootView.findViewById(R.id.movie_detail_scroll) as NestedScrollView
 
         //All the header (fixed text) fields & buttons
@@ -890,9 +892,9 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
 
         /** If the user is not logged in to Tmdb account then hide the Tmdb user list layout **/
         if (MovieMagicMainActivity.isUserLoggedIn) {
-            mUserTmdbListDrawableLayout.setVisibility(LinearLayout.VISIBLE)
+            mUserTmdbListDrawableLayout.setVisibility(RelativeLayout.VISIBLE)
         } else {
-            mUserTmdbListDrawableLayout.setVisibility(LinearLayout.GONE)
+            mUserTmdbListDrawableLayout.setVisibility(RelativeLayout.GONE)
         }
         return mRootView
     }

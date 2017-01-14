@@ -87,7 +87,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/mobile_landscape_content_area_top_margin"
         android:layout_marginBottom="@dimen/detail_fragment_content_area_bottom_margin"
-        android:layout_toRightOf="@+id/movie_detail_poster_image"
+        android:layout_toEndOf="@+id/movie_detail_poster_image"
         android:layout_alignParentEnd="true"
         android:fitsSystemWindows="false"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">

@@ -19,6 +19,8 @@
     <dimen name="m_design_grid_list_text_size">16sp</dimen>
     <dimen name="m_design_icon_size">48dp</dimen>
     <dimen name="m_design_space_between_words">4dp</dimen>
+    <dimen name="m_design_button_height">36dp</dimen>
+    <dimen name="m_design_button_width">88dp</dimen>
 
 
     <!-- Movie Detail Layout parameters -->
@@ -34,7 +36,7 @@
 
     <!-- Misc parameter -->
     <dimen name="mobile_portrait_divider_start_margin">0dp</dimen>
-    <dimen name="home_page_youttube_fragment_top_margin">4dp</dimen>
+    <dimen name="home_page_youtube_fragment_top_margin">4dp</dimen>
     <dimen name="gridview_horizontal_vertical_spacing">2dp</dimen>
     <dimen name="gridview_column_width">115dp</dimen>
     <dimen name="poster_image_height_detail_view">320dp</dimen>

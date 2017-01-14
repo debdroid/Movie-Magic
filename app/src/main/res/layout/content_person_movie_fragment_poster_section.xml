@@ -19,14 +19,14 @@
     android:contentDescription="@string/person_poster_image_content_description"
     android:src="@drawable/image_place_holder"
     tools:ignore="UnusedAttribute" />
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
-        android:layout_toEndOf="@+id/person_poster_image"
-        android:orientation="vertical">
+        android:layout_toEndOf="@+id/person_poster_image">
         <TextView
             android:id="@+id/person_name_header"
+            android:layout_alignParentTop="true"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:paddingStart="@dimen/poster_image_data_fields_margin"
@@ -37,6 +37,7 @@
             android:textColor="@color/primary_text" />
         <TextView
             android:id="@+id/person_name"
+            android:layout_below="@id/person_name_header"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:paddingStart="@dimen/poster_image_data_fields_margin"
@@ -46,12 +47,15 @@
             android:textColor="@color/secondary_text"
             android:textIsSelectable="true" />
         <View
+            android:id="@+id/person_name_divider"
+            android:layout_below="@id/person_name"
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:layout_marginStart="@dimen/poster_image_data_fields_margin"
             android:background="@color/divider_color" />
         <TextView
             android:id="@+id/person_dob_header"
+            android:layout_below="@id/person_name_divider"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:paddingStart="@dimen/poster_image_data_fields_margin"
@@ -62,6 +66,7 @@
             android:textColor="@color/primary_text" />
         <TextView
             android:id="@+id/person_dob"
+            android:layout_below="@id/person_dob_header"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:paddingStart="@dimen/poster_image_data_fields_margin"
@@ -71,12 +76,15 @@
             android:textColor="@color/secondary_text"
             android:textIsSelectable="true" />
         <View
+            android:id="@+id/person_dob_divider"
+            android:layout_below="@id/person_dob"
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:layout_marginStart="@dimen/poster_image_data_fields_margin"
             android:background="@color/divider_color" />
         <TextView
             android:id="@+id/person_place_of_birth_header"
+            android:layout_below="@id/person_dob_divider"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:paddingStart="@dimen/poster_image_data_fields_margin"
@@ -87,6 +95,7 @@
             android:textColor="@color/primary_text" />
         <TextView
             android:id="@+id/person_place_of_birth"
+            android:layout_below="@id/person_place_of_birth_header"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:paddingStart="@dimen/poster_image_data_fields_margin"
@@ -96,12 +105,15 @@
             android:textColor="@color/secondary_text"
             android:textIsSelectable="true" />
         <View
+            android:id="@+id/person_place_of_birth_divider"
+            android:layout_below="@id/person_place_of_birth"
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:layout_marginStart="@dimen/poster_image_data_fields_margin"
             android:background="@color/divider_color" />
         <TextView
             android:id="@+id/person_also_known_as_header"
+            android:layout_below="@id/person_place_of_birth_divider"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:paddingStart="@dimen/poster_image_data_fields_margin"
@@ -112,6 +124,7 @@
             android:textColor="@color/primary_text" />
         <TextView
             android:id="@+id/person_also_known_as"
+            android:layout_below="@id/person_also_known_as_header"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:paddingStart="@dimen/poster_image_data_fields_margin"
@@ -121,13 +134,15 @@
             android:textColor="@color/secondary_text"
             android:textIsSelectable="true" />
         <View
-            android:id="@+id/person_also_known_as_devider"
+            android:id="@+id/person_also_known_as_divider"
+            android:layout_below="@id/person_also_known_as"
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:layout_marginStart="@dimen/poster_image_data_fields_margin"
             android:background="@color/divider_color" />
         <TextView
             android:id="@+id/person_death_day_header"
+            android:layout_below="@id/person_also_known_as_divider"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:paddingStart="@dimen/poster_image_data_fields_margin"
@@ -138,6 +153,7 @@
             android:textColor="@color/primary_text" />
         <TextView
             android:id="@+id/person_death_day"
+            android:layout_below="@id/person_death_day_header"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:paddingStart="@dimen/poster_image_data_fields_margin"
@@ -147,13 +163,15 @@
             android:textColor="@color/secondary_text"
             android:textIsSelectable="true" />
         <View
-            android:id="@+id/person_death_day_devider"
+            android:id="@+id/person_death_day_divider"
+            android:layout_below="@id/person_death_day"
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:layout_marginStart="@dimen/poster_image_data_fields_margin"
             android:background="@color/divider_color" />
         <TextView
             android:id="@+id/person_popularity_header"
+            android:layout_below="@id/person_death_day_divider"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:paddingStart="@dimen/poster_image_data_fields_margin"
@@ -164,6 +182,7 @@
             android:textColor="@color/primary_text" />
         <TextView
             android:id="@+id/person_popularity"
+            android:layout_below="@id/person_popularity_header"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:paddingStart="@dimen/poster_image_data_fields_margin"
@@ -172,5 +191,5 @@
             android:textAppearance="@style/TextAppearance.AppCompat.Medium"
             android:textColor="@color/secondary_text"
             android:textIsSelectable="true" />
-    </LinearLayout>
+    </RelativeLayout>
 </RelativeLayout>

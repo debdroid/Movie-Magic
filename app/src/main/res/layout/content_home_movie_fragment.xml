@@ -1,69 +1,64 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
     <!-- this is to display a message when no movie trailer to show -->
     <TextView
         android:id="@+id/home_youtube_fragment_empty_msg"
+        android:layout_alignParentTop="true"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:gravity="start"
+        android:paddingBottom="@dimen/m_design_space_between_content_area"
+        android:paddingTop="@dimen/home_page_youtube_fragment_top_margin"
         android:textAppearance="@style/TextAppearance.AppCompat.Medium"
         android:textColor="@color/secondary_text"
-        android:paddingTop="@dimen/home_page_youttube_fragment_top_margin"
-        android:paddingBottom="@dimen/m_design_space_between_content_area"
-        android:visibility="gone"/>
+        android:visibility="gone" />
     <!-- line divider -->
     <View
         android:id="@+id/home_youtube_fragment_divider"
         android:layout_width="match_parent"
         android:layout_height="1dp"
+        android:layout_below="@id/home_youtube_fragment_empty_msg"
         android:background="@color/divider_color"
         android:paddingTop="@dimen/m_design_space_between_content_area" />
     <!-- Layout for In Cinemas movies -->
-    <LinearLayout
+    <RelativeLayout
         android:id="@+id/home_movie_in_cinema_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
+        android:layout_below="@id/home_youtube_fragment_divider"
         android:paddingBottom="@dimen/m_design_space_between_content_area"
         android:paddingTop="@dimen/m_design_space_between_content_area">
 
-        <LinearLayout
-            android:layout_width="match_parent"
+        <TextView
+            android:id="@+id/home_movie_in_cinema_header"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:layout_alignParentStart="true"
+            android:fontFamily="sans-serif-condensed"
+            android:gravity="start"
+            android:paddingStart="@dimen/m_design_screen_edge_left_right_margin"
+            android:paddingBottom="@dimen/m_design_space_between_content_area"
+            android:text="@string/home_movie_in_cinema_title"
+            android:textAppearance="@style/TextAppearance.AppCompat.Headline"
+            android:textColor="@color/primary_text" />
 
-            <TextView
-                android:id="@+id/home_movie_in_cinema_header"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="3"
-                android:fontFamily="sans-serif-condensed"
-                android:gravity="start"
-                android:paddingEnd="@dimen/m_design_screen_edge_left_right_margin"
-                android:paddingLeft="@dimen/m_design_screen_edge_left_right_margin"
-                android:paddingRight="@dimen/m_design_screen_edge_left_right_margin"
-                android:paddingStart="@dimen/m_design_screen_edge_left_right_margin"
-                android:text="@string/home_movie_in_cinema_title"
-                android:textAppearance="@style/TextAppearance.AppCompat.Headline"
-                android:textColor="@color/primary_text" />
-
-            <Button
-                android:id="@+id/show_all_in_cinema_button"
-                style="?android:attr/borderlessButtonStyle"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="@string/show_all_button_text"
-                android:textColor="@color/primary_text"
-                android:textStyle="bold" />
-        </LinearLayout>
+        <Button
+            android:id="@+id/show_all_in_cinema_button"
+            style="?android:attr/borderlessButtonStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBaseline="@+id/home_movie_in_cinema_header"
+            android:layout_alignParentEnd="true"
+            android:text="@string/show_all_button_text"
+            android:textColor="@color/primary_text"
+            android:textStyle="bold" />
 
         <FrameLayout
             android:id="@+id/home_movie_in_cinema_recycler_view_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_below="@id/home_movie_in_cinema_header"
             android:paddingBottom="@dimen/m_design_space_between_content_area">
 
             <android.support.v7.widget.RecyclerView
@@ -78,64 +73,59 @@
                 android:layout_height="match_parent"
                 android:gravity="start"
                 android:paddingEnd="@dimen/m_design_screen_edge_left_right_margin"
-                android:paddingLeft="@dimen/m_design_screen_edge_left_right_margin"
-                android:paddingRight="@dimen/m_design_screen_edge_left_right_margin"
                 android:paddingStart="@dimen/m_design_screen_edge_left_right_margin"
                 android:text="@string/movie_data_not_available"
                 android:textAppearance="@style/TextAppearance.AppCompat.Medium"
                 android:textColor="@color/secondary_text" />
         </FrameLayout>
-    </LinearLayout>
+    </RelativeLayout>
     <!-- line divider -->
     <View
+        android:id="@+id/home_movie_in_cinema_layout_divider"
         android:layout_width="match_parent"
         android:layout_height="1dp"
+        android:layout_below="@id/home_movie_in_cinema_layout"
         android:background="@color/divider_color"
         android:paddingTop="@dimen/m_design_space_between_content_area" />
     <!-- Layout for Coming Soon movies -->
-    <LinearLayout
+    <RelativeLayout
         android:id="@+id/home_movie_coming_soon_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
+        android:layout_below="@id/home_movie_in_cinema_layout_divider"
         android:paddingBottom="@dimen/m_design_space_between_content_area"
         android:paddingTop="@dimen/m_design_space_between_content_area">
 
-        <LinearLayout
-            android:layout_width="match_parent"
+        <TextView
+            android:id="@+id/home_movie_coming_soon_header"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:layout_alignParentStart="true"
+            android:fontFamily="sans-serif-condensed"
+            android:gravity="start"
+            android:paddingStart="@dimen/m_design_screen_edge_left_right_margin"
+            android:paddingBottom="@dimen/m_design_space_between_content_area"
+            android:text="@string/home_movie_coming_soon_title"
+            android:textAppearance="@style/TextAppearance.AppCompat.Headline"
+            android:textColor="@color/primary_text" />
 
-            <TextView
-                android:id="@+id/home_movie_coming_soon_header"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="3"
-                android:fontFamily="sans-serif-condensed"
-                android:gravity="start"
-                android:paddingEnd="@dimen/m_design_screen_edge_left_right_margin"
-                android:paddingLeft="@dimen/m_design_screen_edge_left_right_margin"
-                android:paddingRight="@dimen/m_design_screen_edge_left_right_margin"
-                android:paddingStart="@dimen/m_design_screen_edge_left_right_margin"
-                android:text="@string/home_movie_coming_soon_title"
-                android:textAppearance="@style/TextAppearance.AppCompat.Headline"
-                android:textColor="@color/primary_text" />
-
-            <Button
-                android:id="@+id/show_all_coming_soon_button"
-                style="?android:attr/borderlessButtonStyle"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="@string/show_all_button_text"
-                android:textColor="@color/primary_text"
-                android:textStyle="bold" />
-        </LinearLayout>
+        <Button
+            android:id="@+id/show_all_coming_soon_button"
+            style="?android:attr/borderlessButtonStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@id/home_movie_coming_soon_header"
+            android:layout_alignParentEnd="true"
+            android:layout_alignBaseline="@id/home_movie_coming_soon_header"
+            android:text="@string/show_all_button_text"
+            android:textColor="@color/primary_text"
+            android:textStyle="bold" />
 
         <FrameLayout
             android:id="@+id/home_movie_coming_soon_recycler_view_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_below="@id/home_movie_coming_soon_header"
             android:paddingBottom="@dimen/m_design_space_between_content_area">
 
             <android.support.v7.widget.RecyclerView
@@ -150,26 +140,26 @@
                 android:layout_height="match_parent"
                 android:gravity="start"
                 android:paddingEnd="@dimen/m_design_screen_edge_left_right_margin"
-                android:paddingLeft="@dimen/m_design_screen_edge_left_right_margin"
-                android:paddingRight="@dimen/m_design_screen_edge_left_right_margin"
                 android:paddingStart="@dimen/m_design_screen_edge_left_right_margin"
                 android:text="@string/movie_data_not_available"
                 android:textAppearance="@style/TextAppearance.AppCompat.Medium"
                 android:textColor="@color/secondary_text" />
         </FrameLayout>
-    </LinearLayout>
+    </RelativeLayout>
     <!-- line divider -->
     <View
+        android:id="@+id/home_movie_coming_soon_layout_divider"
         android:layout_width="match_parent"
         android:layout_height="1dp"
+        android:layout_below="@id/home_movie_coming_soon_layout"
         android:background="@color/divider_color"
         android:paddingTop="@dimen/m_design_space_between_content_area" />
     <!-- Layout for recommendation movies -->
-    <LinearLayout
+    <RelativeLayout
         android:id="@+id/home_movie_recommendation_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
+        android:layout_below="@id/home_movie_coming_soon_layout_divider"
         android:paddingBottom="@dimen/m_design_space_between_content_area"
         android:paddingTop="@dimen/m_design_space_between_content_area">
 
@@ -177,12 +167,11 @@
             android:id="@+id/home_movie_recommendation_header"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
             android:fontFamily="sans-serif-condensed"
             android:gravity="start"
-            android:paddingEnd="@dimen/m_design_screen_edge_left_right_margin"
-            android:paddingLeft="@dimen/m_design_screen_edge_left_right_margin"
-            android:paddingRight="@dimen/m_design_screen_edge_left_right_margin"
             android:paddingStart="@dimen/m_design_screen_edge_left_right_margin"
+            android:paddingBottom="@dimen/m_design_space_between_content_area"
             android:text="@string/home_movie_recommendation_title"
             android:textAppearance="@style/TextAppearance.AppCompat.Headline"
             android:textColor="@color/primary_text" />
@@ -191,6 +180,7 @@
             android:id="@+id/home_movie_recommendation_recycler_view_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_below="@id/home_movie_recommendation_header"
             android:paddingBottom="@dimen/m_design_space_between_content_area">
 
             <android.support.v7.widget.RecyclerView
@@ -204,28 +194,27 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:gravity="start"
-                android:paddingEnd="@dimen/m_design_screen_edge_left_right_margin"
-                android:paddingLeft="@dimen/m_design_screen_edge_left_right_margin"
-                android:paddingRight="@dimen/m_design_screen_edge_left_right_margin"
                 android:paddingStart="@dimen/m_design_screen_edge_left_right_margin"
+                android:paddingBottom="@dimen/m_design_space_between_content_area"
                 android:text="@string/movie_data_not_available"
                 android:textAppearance="@style/TextAppearance.AppCompat.Medium"
                 android:textColor="@color/secondary_text" />
         </FrameLayout>
-    </LinearLayout>
+    </RelativeLayout>
     <!-- line divider -->
     <View
         android:id="@+id/home_movie_recommendation_divider"
         android:layout_width="match_parent"
         android:layout_height="1dp"
+        android:layout_below="@id/home_movie_recommendation_layout"
         android:background="@color/divider_color"
         android:paddingTop="@dimen/m_design_space_between_content_area" />
     <!-- Layout for recently added movies -->
-    <LinearLayout
+    <RelativeLayout
         android:id="@+id/home_movie_recently_added_layout"
+        android:layout_below="@id/home_movie_recommendation_divider"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
         android:paddingBottom="@dimen/m_design_space_between_content_area"
         android:paddingTop="@dimen/m_design_space_between_content_area">
 
@@ -233,12 +222,11 @@
             android:id="@+id/home_movie_recently_added_header"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
             android:fontFamily="sans-serif-condensed"
             android:gravity="start"
-            android:paddingEnd="@dimen/m_design_screen_edge_left_right_margin"
-            android:paddingLeft="@dimen/m_design_screen_edge_left_right_margin"
-            android:paddingRight="@dimen/m_design_screen_edge_left_right_margin"
             android:paddingStart="@dimen/m_design_screen_edge_left_right_margin"
+            android:paddingBottom="@dimen/m_design_space_between_content_area"
             android:text="@string/home_movie_recently_added_title"
             android:textAppearance="@style/TextAppearance.AppCompat.Headline"
             android:textColor="@color/primary_text" />
@@ -247,6 +235,7 @@
             android:id="@+id/home_movie_recently_added_recycler_view_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_below="@id/home_movie_recently_added_header"
             android:paddingBottom="@dimen/m_design_space_between_content_area">
 
             <android.support.v7.widget.RecyclerView
@@ -261,12 +250,10 @@
                 android:layout_height="match_parent"
                 android:gravity="start"
                 android:paddingEnd="@dimen/m_design_screen_edge_left_right_margin"
-                android:paddingLeft="@dimen/m_design_screen_edge_left_right_margin"
-                android:paddingRight="@dimen/m_design_screen_edge_left_right_margin"
                 android:paddingStart="@dimen/m_design_screen_edge_left_right_margin"
                 android:text="@string/movie_data_not_available"
                 android:textAppearance="@style/TextAppearance.AppCompat.Medium"
                 android:textColor="@color/secondary_text" />
         </FrameLayout>
-    </LinearLayout>
-</LinearLayout>
+    </RelativeLayout>
+</RelativeLayout>

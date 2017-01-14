@@ -11,6 +11,7 @@ import android.net.Uri
 import android.os.AsyncTask
 import android.support.design.widget.Snackbar
 import android.widget.LinearLayout
+import android.widget.RelativeLayout
 import com.moviemagic.dpaul.android.app.R
 import com.moviemagic.dpaul.android.app.contentprovider.MovieMagicContract
 import groovy.transform.CompileStatic
@@ -20,7 +21,7 @@ class UpdateUserListChoiceAndRating extends AsyncTask<String, Void, Integer> {
     private static final String LOG_TAG = UpdateUserListChoiceAndRating.class.getSimpleName()
     private final ContentResolver mContentResolver
     private final Context mContext
-    private final LinearLayout mUserDrawableLayout
+    private final RelativeLayout mUserDrawableLayout
     private final int mMovieId
     private final String mMovieTitle
     private String mUserListMsg
@@ -47,7 +48,7 @@ class UpdateUserListChoiceAndRating extends AsyncTask<String, Void, Integer> {
     private final static int COL_MOVIE_USER_LIST_FLAG_USER_RATING = 6
 
     public UpdateUserListChoiceAndRating(
-            final Context ctx, final LinearLayout userDrawableLayout, final int movieId, final String movieTitle,
+            final Context ctx, final RelativeLayout userDrawableLayout, final int movieId, final String movieTitle,
             final boolean showNotification) {
         mContext = ctx
         mContentResolver = mContext.getContentResolver()

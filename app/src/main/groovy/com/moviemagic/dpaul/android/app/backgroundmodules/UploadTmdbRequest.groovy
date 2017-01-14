@@ -15,6 +15,7 @@ import android.support.design.widget.Snackbar
 import android.util.Log
 import android.widget.ImageButton
 import android.widget.LinearLayout
+import android.widget.RelativeLayout
 import com.moviemagic.dpaul.android.app.BuildConfig
 import com.moviemagic.dpaul.android.app.R
 import com.moviemagic.dpaul.android.app.contentprovider.MovieMagicContract
@@ -35,13 +36,13 @@ class UploadTmdbRequest extends AsyncTask<Integer, Void, String> {
     private final String mMovieCategory
     private float mTmdbRatingValue
     private final ProgressDialog mProgressDialog
-    private final LinearLayout mTmdbUserDrawableLayout
+    private final RelativeLayout mTmdbUserDrawableLayout
     private final int mAccentColor
     private boolean mSuccessPostFlag = false
 
     public UploadTmdbRequest(
             final Context ctx, final String movieType, final float ratingVal, final boolean addOrDelete,
-            final String movieCategory, final LinearLayout tmdbUserDrawableLayout, final int accentColor) {
+            final String movieCategory, final RelativeLayout tmdbUserDrawableLayout, final int accentColor) {
         mContext = ctx
         mContentResolver = mContext.getContentResolver()
         mTmdbMovieType = movieType

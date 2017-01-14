@@ -35,6 +35,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.LinearLayout
+import android.widget.RelativeLayout
 import android.widget.TextView
 import com.moviemagic.dpaul.android.app.adapter.MovieGridRecyclerAdapter
 import com.moviemagic.dpaul.android.app.backgroundmodules.AutoGridRecyclerView
@@ -68,7 +69,7 @@ class CollectionMovieFragment extends Fragment implements LoaderManager.LoaderCa
     private int mPalleteTitleColor
     private int mPalleteBodyTextColor
     private int mPalleteAccentColor
-    private LinearLayout mCollectionDetailLayout
+    private RelativeLayout mCollectionDetailLayout
     private CoordinatorLayout mCollectionCoordLayout
     private NestedScrollView mNestedScrollView
 //    private boolean mCollectionDataLoadSuccessFlag = false
@@ -125,7 +126,7 @@ class CollectionMovieFragment extends Fragment implements LoaderManager.LoaderCa
         mCollectionTitleTextView = mRootView.findViewById(R.id.movie_collection_title) as TextView
         mCollectionOverviewTextViewHeader = mRootView.findViewById(R.id.collection_overview_header) as TextView
         mCollectionOverviewTextView = mRootView.findViewById(R.id.collection_overview) as TextView
-        mCollectionDetailLayout = mRootView.findViewById(R.id.movie_detail_collection_layout) as LinearLayout
+        mCollectionDetailLayout = mRootView.findViewById(R.id.movie_detail_collection_layout) as RelativeLayout
         mNestedScrollView = mRootView.findViewById(R.id.collection_nested_scroll) as NestedScrollView
         mAppBarLayout = mRootView.findViewById(R.id.collection_app_bar_layout) as AppBarLayout
         mCollectionCoordLayout = mRootView.findViewById(R.id.collection_coordinator_layout) as CoordinatorLayout
