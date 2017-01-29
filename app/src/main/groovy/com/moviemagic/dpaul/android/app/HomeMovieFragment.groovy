@@ -1,6 +1,5 @@
 package com.moviemagic.dpaul.android.app
 
-import android.app.Activity
 import android.content.Context
 import android.content.SharedPreferences
 import android.database.Cursor
@@ -12,14 +11,13 @@ import android.support.v4.content.CursorLoader
 import android.support.v4.content.Loader
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.preference.PreferenceManager
-import android.support.v7.widget.LinearLayoutManager
+import android.support.v7.widget.GridLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.FrameLayout
-import android.widget.LinearLayout
 import android.widget.RelativeLayout
 import android.widget.TextView
 import com.moviemagic.dpaul.android.app.adapter.HomeMovieAdapter
@@ -55,6 +53,8 @@ class HomeMovieFragment extends Fragment implements LoaderManager.LoaderCallback
     private RelativeLayout mRecommendationLayout
     private View mRecommendationDivider
     private FrameLayout mYouTubeFragmentContainer
+    private RecyclerView.LayoutManager mInCinemaGridLayoutManager, mComingSoonGridLayoutManager,
+                                       mRecentlyAddedUserListGridLayoutManager, mRecommendationGridLayoutManager
 
     private static final int HOME_MOVIE_FRAGMENT_VIEW_PAGER_LOADER_ID = 0
     private static final int HOME_MOVIE_FRAGMENT_IN_CINEMA_LOADER_ID = 1
@@ -161,9 +161,14 @@ class HomeMovieFragment extends Fragment implements LoaderManager.LoaderCallback
         /**
          * In Cinema Recycler View
          */
-        final RecyclerView.LayoutManager inCinemaLinearLayoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false)
-        inCinemaLinearLayoutManager.setAutoMeasureEnabled(true)
-        mInCinemaRecyclerView.setLayoutManager(inCinemaLinearLayoutManager)
+//        final RecyclerView.LayoutManager inCinemaLinearLayoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false)
+        if(getResources().getBoolean(R.bool.is_tablet_land)) {
+            mInCinemaGridLayoutManager = new GridLayoutManager(getActivity(), 2, GridLayoutManager.VERTICAL, false)
+        } else {
+            mInCinemaGridLayoutManager = new GridLayoutManager(getActivity(), 1, GridLayoutManager.VERTICAL, false)
+        }
+        mInCinemaGridLayoutManager.setAutoMeasureEnabled(true)
+        mInCinemaRecyclerView.setLayoutManager(mInCinemaGridLayoutManager)
         //Set this to false for smooth scrolling of recyclerview
         mInCinemaRecyclerView.setNestedScrollingEnabled(false)
         mInCinemaRecyclerView.setFocusable(false)
@@ -178,9 +183,14 @@ class HomeMovieFragment extends Fragment implements LoaderManager.LoaderCallback
         /**
          * Coming Soon Recycler View
          */
-        final RecyclerView.LayoutManager comingSoonLinearLayoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false)
-        comingSoonLinearLayoutManager.setAutoMeasureEnabled(true)
-        mComingSoonRecyclerView.setLayoutManager(comingSoonLinearLayoutManager)
+//        final RecyclerView.LayoutManager comingSoonLinearLayoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false)
+        if(getResources().getBoolean(R.bool.is_tablet_land)) {
+            mComingSoonGridLayoutManager = new GridLayoutManager(getActivity(), 2, GridLayoutManager.VERTICAL, false)
+        } else {
+            mComingSoonGridLayoutManager = new GridLayoutManager(getActivity(), 1, GridLayoutManager.VERTICAL, false)
+        }
+        mComingSoonGridLayoutManager.setAutoMeasureEnabled(true)
+        mComingSoonRecyclerView.setLayoutManager(mComingSoonGridLayoutManager)
         //Set this to false for smooth scrolling of recyclerview
         mComingSoonRecyclerView.setNestedScrollingEnabled(false)
         //Set this to false so that activity starts the page from the beginning
@@ -196,9 +206,14 @@ class HomeMovieFragment extends Fragment implements LoaderManager.LoaderCallback
         /**
          * Recently Added User List Recycler View
          */
-        final RecyclerView.LayoutManager recentlyAddedUserListLinearLayoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false)
-        recentlyAddedUserListLinearLayoutManager.setAutoMeasureEnabled(true)
-        mRecentlyAddedUserListRecyclerView.setLayoutManager(recentlyAddedUserListLinearLayoutManager)
+//        final RecyclerView.LayoutManager recentlyAddedUserListLinearLayoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false)
+        if(getResources().getBoolean(R.bool.is_tablet_land)) {
+            mRecentlyAddedUserListGridLayoutManager = new GridLayoutManager(getActivity(), 2, GridLayoutManager.VERTICAL, false)
+        } else {
+            mRecentlyAddedUserListGridLayoutManager = new GridLayoutManager(getActivity(), 1, GridLayoutManager.VERTICAL, false)
+        }
+        mRecentlyAddedUserListGridLayoutManager.setAutoMeasureEnabled(true)
+        mRecentlyAddedUserListRecyclerView.setLayoutManager(mRecentlyAddedUserListGridLayoutManager)
         //Set this to false for smooth scrolling of recyclerview
         mRecentlyAddedUserListRecyclerView.setNestedScrollingEnabled(false)
         //Set this to false so that activity starts the page from the beginning
@@ -216,9 +231,14 @@ class HomeMovieFragment extends Fragment implements LoaderManager.LoaderCallback
          */
         mRecommendationLayout = mRootView.findViewById(R.id.home_movie_recommendation_layout) as RelativeLayout
         mRecommendationDivider = mRootView.findViewById(R.id.home_movie_recommendation_divider) as View
-        final RecyclerView.LayoutManager recommendationLinearLayoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false)
-        recommendationLinearLayoutManager.setAutoMeasureEnabled(true)
-        mRecommendationRecyclerView.setLayoutManager(recommendationLinearLayoutManager)
+//        final RecyclerView.LayoutManager recommendationLinearLayoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false)
+        if(getResources().getBoolean(R.bool.is_tablet_land)) {
+            mRecommendationGridLayoutManager = new GridLayoutManager(getActivity(), 2, GridLayoutManager.VERTICAL, false)
+        } else {
+            mRecommendationGridLayoutManager = new GridLayoutManager(getActivity(), 1, GridLayoutManager.VERTICAL, false)
+        }
+        mRecommendationGridLayoutManager.setAutoMeasureEnabled(true)
+        mRecommendationRecyclerView.setLayoutManager(mRecommendationGridLayoutManager)
         //Set this to false for smooth scrolling of recyclerview
         mRecommendationRecyclerView.setNestedScrollingEnabled(false)
         //Set this to false so that activity starts the page from the beginning

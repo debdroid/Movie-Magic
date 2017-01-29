@@ -29,8 +29,7 @@
             android:fontFamily="sans-serif-condensed"
             android:maxLines="@string/single_review_item_collapse_line_item_count"
             android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-            android:textColor="@color/secondary_text"
-            android:textIsSelectable="true" />
+            android:textColor="@color/secondary_text"/>
     </RelativeLayout>
 
     <ImageButton

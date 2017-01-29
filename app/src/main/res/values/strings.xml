@@ -123,8 +123,8 @@
     <string name="collection_data_not_available">Not part of any collection</string>
     <string name="single_review_item_collapse_line_item_count">2</string>
     <string name="movie_detail_web_links_header">External Links</string>
-    <string name="movie_detail_user_list_drawable_title_value">My Local Lists</string>
-    <string name="movie_detail_user_tmdb_list_drawable_title_value">My TMDb Lists</string>
+    <string name="movie_detail_user_list_drawable_title_value">My Local Lists (Tap to Add / Remove)</string>
+    <string name="movie_detail_user_tmdb_list_drawable_title_value">My TMDb Lists (Tap to Add / Remove)</string>
 
     <!-- String for person page -->
     <string name="person_name">Name</string>

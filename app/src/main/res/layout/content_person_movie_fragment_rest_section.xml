@@ -34,8 +34,7 @@
             android:ellipsize="end"
             android:maxLines="@string/person_biography_collapse_line_item_count"
             android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-            android:textColor="@color/secondary_text"
-            android:textIsSelectable="true" />
+            android:textColor="@color/secondary_text"/>
         <ImageButton
             android:id="@+id/person_biography_show_button"
             android:layout_width="@dimen/person_biography_collapse_icon_size"

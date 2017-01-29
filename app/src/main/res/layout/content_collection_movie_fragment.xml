@@ -70,6 +70,8 @@
     <FrameLayout
         android:id="@+id/collection_movie_grid"
         android:layout_below="@id/collection_overview_divider"
+        android:paddingEnd="@dimen/m_design_screen_edge_left_right_margin"
+        android:paddingStart="@dimen/m_design_screen_edge_left_right_margin"
         android:layout_alignParentBottom="true"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

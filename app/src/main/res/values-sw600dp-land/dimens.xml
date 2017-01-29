@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Material Design Specification for tablet-->
+    <dimen name="m_design_screen_edge_left_right_margin">24dp</dimen>
+
+    <dimen name="home_movie_backdrop_image_height">270dp</dimen>
+    <dimen name="home_movie_poster_image_width">140dp</dimen>
+    <dimen name="home_movie_poster_image_height">190dp</dimen>
+
+
+</resources>

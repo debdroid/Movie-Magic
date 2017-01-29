@@ -35,7 +35,6 @@
             android:padding="@dimen/grid_text_padding"
             android:textAppearance="@style/TextAppearance.AppCompat.Body1"
             android:textColor="@color/primary_text"
-            android:textStyle="italic"
-            android:textIsSelectable="true" />
+            android:textStyle="italic" />
     </RelativeLayout>
 </android.support.v7.widget.CardView>

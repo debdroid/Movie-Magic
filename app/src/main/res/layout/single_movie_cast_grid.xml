@@ -40,8 +40,7 @@
                 android:maxLines="1"
                 android:textAppearance="@style/TextAppearance.AppCompat.Body1"
                 android:textColor="@color/primary_text"
-                android:textStyle="italic"
-                android:textIsSelectable="true" />
+                android:textStyle="italic"/>
         </FrameLayout>
 
         <TextView
@@ -50,10 +49,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@color/primary"
-            android:ellipsize="end"
             android:fontFamily="sans-serif"
             android:gravity="center"
-            android:maxLines="1"
             android:text="@string/as_text_value"
             android:textAppearance="@style/TextAppearance.AppCompat.Body1"
             android:textColor="@color/primary_text"
@@ -71,7 +68,6 @@
             android:maxLines="1"
             android:textAppearance="@style/TextAppearance.AppCompat.Body1"
             android:textColor="@color/primary_text"
-            android:textStyle="italic"
-            android:textIsSelectable="true" />
+            android:textStyle="italic"/>
     </RelativeLayout>
 </android.support.v7.widget.CardView>

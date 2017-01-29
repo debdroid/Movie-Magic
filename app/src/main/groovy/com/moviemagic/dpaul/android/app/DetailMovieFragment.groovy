@@ -94,6 +94,8 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
     private RatingBar mTmdbRatingBar, mUserRatingBar
     private Button mHomePageButton, mImdbLinkButton
     private NestedScrollView mNestedScrollView
+    private RelativeLayout mTabletPortRelativeLayout
+//    private View mTabletPortDummyView
     private int _ID_movie_basic_info
     private int mMovieId
     private int mCollectionId
@@ -487,6 +489,8 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
         mUserListDrawableLayout = mRootView.findViewById(R.id.movie_detail_user_list_drawable_layout) as RelativeLayout
         mUserTmdbListDrawableLayout = mRootView.findViewById(R.id.movie_detail_user_tmdb_list_drawable_layout) as RelativeLayout
         mNestedScrollView = mRootView.findViewById(R.id.movie_detail_scroll) as NestedScrollView
+        mTabletPortRelativeLayout = mRootView.findViewById(R.id.movie_detail_tablet_port_relative_layout) as RelativeLayout
+//        mTabletPortDummyView = mRootView.findViewById(R.id.content_detail_movie_fragment_tablet_port_dummy_view) as View
 
         //All the header (fixed text) fields & buttons
         mReleaseDateHeaderTextView = mRootView.findViewById(R.id.movie_detail_poster_release_date_header) as TextView
@@ -727,7 +731,8 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
         //All the dynamic fields (data fields) & ratingbar
         mMovieTitleTextView = mRootView.findViewById(R.id.movie_detail_title) as TextView
         // For land mode no need to display the title as that is already displayed as part of collapsing toolbar
-        if(getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
+        if((getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) ||
+                (getResources().getBoolean(R.bool.is_tablet_port))) {
 //        if(getResources().getBoolean(R.bool.is_mobile_land)) {
             mMovieTitleTextView.setVisibility(TextView.GONE)
         }
@@ -1415,8 +1420,9 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
                     setRatingStarColor()
                 }
 
-                // Set the listener if in portrait mode or show the title in Toolbar for landscape
-                if(getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
+                // Set the listener if in portrait mode pf mobile or show the title in Toolbar for landscape
+                if((getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) &&
+                        !getResources().getBoolean(R.bool.is_tablet_port)) {
                     mAppBarLayout.addOnOffsetChangedListener(mAppbarOnOffsetChangeListener)
                 } else {
                     mCollapsingToolbar.setTitleEnabled(false)
@@ -1861,6 +1867,10 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
     protected void changeLayoutAndTextColor() {
         //Change color for all the layouts
         mDetailMovieLayout.setBackgroundColor(mPalletePrimaryColor)
+        if(getResources().getBoolean(R.bool.is_tablet_port)) {
+            mTabletPortRelativeLayout.setBackgroundColor(mPalletePrimaryDarkColor)
+//            mTabletPortDummyView.setBackgroundColor(0)
+        }
 
         //Change color for header text fields
         mReleaseDateHeaderTextView.setTextColor(mPalleteTitleColor)

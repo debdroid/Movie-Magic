@@ -313,6 +313,7 @@ class CollectionMovieFragment extends Fragment implements LoaderManager.LoaderCa
                 } else {
                     mCollapsingToolbar.setTitleEnabled(false)
                     mToolbar.setTitle(data.getString(COL_COLLECTION_MOVIE_COLLECTION_NAME))
+                    ((AppCompatActivity)getActivity()).getSupportActionBar().setSubtitle('')
                 }
 
 //                mAppBarLayout.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
