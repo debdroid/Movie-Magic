@@ -30,7 +30,7 @@
             android:layout_height="match_parent"
             android:scaleType="centerCrop"
             android:fitsSystemWindows="true"
-            android:contentDescription="@string/collection_backdrop_image_content_description"
+            android:contentDescription="@string/person_poster_image_content_description"
             android:src="@drawable/image_place_holder" />
         <LinearLayout
             android:layout_width="match_parent"

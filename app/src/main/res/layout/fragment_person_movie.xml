@@ -11,7 +11,7 @@
         android:id="@+id/person_app_bar_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:elevation="0dp"
+        android:elevation="@dimen/m_design_toolbar_elevation"
         app:theme="@style/AppTheme.AppBarOverlay"
         tools:ignore="UnusedAttribute">
         <!-- setting itsSystemWindows="true" for toolbar moves ic_drawer_home up and setting buttons to status bar -->
@@ -19,7 +19,7 @@
                 android:id="@+id/person_toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
-                android:elevation="0dp"
+                android:elevation="@dimen/m_design_toolbar_elevation"
                 app:layout_scrollFlags="snap"
                 app:popupTheme="@style/AppTheme.PopupOverlay"
                 tools:ignore="UnusedAttribute" />

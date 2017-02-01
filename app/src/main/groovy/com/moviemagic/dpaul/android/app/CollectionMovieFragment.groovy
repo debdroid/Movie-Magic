@@ -516,7 +516,13 @@ class CollectionMovieFragment extends Fragment implements LoaderManager.LoaderCa
                                         LogDisplay.callLog(LOG_TAG, 'onGenerated:portrait mode, so change color', LogDisplay.COLLECTION_MOVIE_FRAGMENT_LOG_FLAG)
                                         autoGridRecyclerView.setBackgroundColor(mPalletePrimaryColor)
                                         mCollectionDetailLayout.setBackgroundColor(mPalletePrimaryColor)
-                                        mCollectionCoordLayout.setBackgroundColor(mPalletePrimaryColor)
+                                        // For tablet paint with dark color as we use material card like UI
+                                        // otherwise paint with primary color
+                                        if(getResources().getBoolean(R.bool.is_tablet_port)) {
+                                            mCollectionCoordLayout.setBackgroundColor(mPalletePrimaryDarkColor)
+                                        } else {
+                                            mCollectionCoordLayout.setBackgroundColor(mPalletePrimaryColor)
+                                        }
                                         mCollectionTitleTextView.setTextColor(mPalleteBodyTextColor)
                                         mCollectionTitleTextView.setTextColor(mPalleteTitleColor)
                                         mCollectionOverviewTextView.setTextColor(mPalleteBodyTextColor)

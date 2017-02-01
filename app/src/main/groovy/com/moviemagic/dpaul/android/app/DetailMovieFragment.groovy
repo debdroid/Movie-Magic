@@ -19,6 +19,7 @@ import android.os.Bundle
 import android.support.annotation.ColorInt
 import android.support.design.widget.AppBarLayout
 import android.support.design.widget.CollapsingToolbarLayout
+import android.support.design.widget.CoordinatorLayout
 import android.support.design.widget.Snackbar
 import android.support.v17.leanback.widget.HorizontalGridView
 import android.support.v4.app.Fragment
@@ -94,7 +95,7 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
     private RatingBar mTmdbRatingBar, mUserRatingBar
     private Button mHomePageButton, mImdbLinkButton
     private NestedScrollView mNestedScrollView
-    private RelativeLayout mTabletPortRelativeLayout
+    private CoordinatorLayout mCoordinatorLayout
 //    private View mTabletPortDummyView
     private int _ID_movie_basic_info
     private int mMovieId
@@ -489,7 +490,7 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
         mUserListDrawableLayout = mRootView.findViewById(R.id.movie_detail_user_list_drawable_layout) as RelativeLayout
         mUserTmdbListDrawableLayout = mRootView.findViewById(R.id.movie_detail_user_tmdb_list_drawable_layout) as RelativeLayout
         mNestedScrollView = mRootView.findViewById(R.id.movie_detail_scroll) as NestedScrollView
-        mTabletPortRelativeLayout = mRootView.findViewById(R.id.movie_detail_tablet_port_relative_layout) as RelativeLayout
+        mCoordinatorLayout = mRootView.findViewById(R.id.movie_detail_coordinator_layout) as CoordinatorLayout
 //        mTabletPortDummyView = mRootView.findViewById(R.id.content_detail_movie_fragment_tablet_port_dummy_view) as View
 
         //All the header (fixed text) fields & buttons
@@ -731,8 +732,9 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
         //All the dynamic fields (data fields) & ratingbar
         mMovieTitleTextView = mRootView.findViewById(R.id.movie_detail_title) as TextView
         // For land mode no need to display the title as that is already displayed as part of collapsing toolbar
-        if((getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) ||
-                (getResources().getBoolean(R.bool.is_tablet_port))) {
+        if(getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
+//        if((getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) ||
+//                (getResources().getBoolean(R.bool.is_tablet_port))) {
 //        if(getResources().getBoolean(R.bool.is_mobile_land)) {
             mMovieTitleTextView.setVisibility(TextView.GONE)
         }
@@ -1421,8 +1423,9 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
                 }
 
                 // Set the listener if in portrait mode pf mobile or show the title in Toolbar for landscape
-                if((getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) &&
-                        !getResources().getBoolean(R.bool.is_tablet_port)) {
+                if(getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
+//                if((getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) &&
+//                        !getResources().getBoolean(R.bool.is_tablet_port)) {
                     mAppBarLayout.addOnOffsetChangedListener(mAppbarOnOffsetChangeListener)
                 } else {
                     mCollapsingToolbar.setTitleEnabled(false)
@@ -1868,7 +1871,7 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
         //Change color for all the layouts
         mDetailMovieLayout.setBackgroundColor(mPalletePrimaryColor)
         if(getResources().getBoolean(R.bool.is_tablet_port)) {
-            mTabletPortRelativeLayout.setBackgroundColor(mPalletePrimaryDarkColor)
+            mCoordinatorLayout.setBackgroundColor(mPalletePrimaryDarkColor)
 //            mTabletPortDummyView.setBackgroundColor(0)
         }
 
@@ -2051,19 +2054,23 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
      * Intent to open a web browser when user clicks on movie home page button
      */
     void startHomePageIntent() {
-        final Intent intent = new Intent(Intent.ACTION_VIEW)
-        intent.setData(Uri.parse(mMovieHomePageUrl))
-        startActivity(intent)
+        if(mMovieHomePageUrl) {
+            final Intent intent = new Intent(Intent.ACTION_VIEW)
+            intent.setData(Uri.parse(mMovieHomePageUrl))
+            startActivity(intent)
+        }
     }
 
     /**
      * Intent to open the movie in IMDb app(if installed) or in web browser when user clicks on Imdb button
      */
     void startImdbIntent() {
-        final String imdbUrl = "$GlobalStaticVariables.IMDB_BASE_MOVIE_TITLE_URL$mMovieImdbId/"
-        final Intent intent = new Intent(Intent.ACTION_VIEW)
-        intent.setData(Uri.parse(imdbUrl))
-        startActivity(intent)
+        if(mMovieImdbId) {
+            final String imdbUrl = "$GlobalStaticVariables.IMDB_BASE_MOVIE_TITLE_URL$mMovieImdbId/"
+            final Intent intent = new Intent(Intent.ACTION_VIEW)
+            intent.setData(Uri.parse(imdbUrl))
+            startActivity(intent)
+        }
     }
 
     /**

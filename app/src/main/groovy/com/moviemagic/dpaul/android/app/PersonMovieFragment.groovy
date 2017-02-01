@@ -12,6 +12,7 @@ import android.os.Build
 import android.os.Bundle
 import android.support.design.widget.AppBarLayout
 import android.support.design.widget.CollapsingToolbarLayout
+import android.support.design.widget.CoordinatorLayout
 import android.support.design.widget.Snackbar
 import android.support.v17.leanback.widget.HorizontalGridView
 import android.support.v4.app.Fragment
@@ -51,7 +52,7 @@ class PersonMovieFragment extends Fragment implements LoaderManager.LoaderCallba
     private HorizontalGridView mCastGridView, mCrewGridView, mImageGridView
     private Button mHomePageButton, mImdbLinkButton
     private ImageButton mShowBiographyImageButton, mHideBiographyImageButton
-    private RelativeLayout mPersonLinLayout
+    private RelativeLayout mPersonRelLayout, mPersonTabletPortPosterDataRelLayout
     private PersonCastAdapter mPersonCastAdapter
     private PersonCrewAdapter mPersonCrewAdapter
     private PersonImageAdapter mPersonImageAdapter
@@ -70,6 +71,12 @@ class PersonMovieFragment extends Fragment implements LoaderManager.LoaderCallba
     private CallbackForImageClick mCallbackForImageClick
     private String mPersonName
     private String mPersonBackdropImage
+    private CoordinatorLayout mCoordinatorLayout
+    private RelativeLayout mTabletPortImageHolder
+    private View mTabletPortImageBase
+    private AppBarLayout.OnOffsetChangedListener mAppbarOnOffsetChangeListener
+    private CollapsingToolbarLayout mCollapsingToolbar
+
 
     private static final int PERSON_MOVIE_FRAGMENT_PERSON_INFO_LOADER_ID = 0
     private static final int PERSON_MOVIE_FRAGMENT_PERSON_CAST_LOADER_ID = 1
@@ -233,7 +240,11 @@ class PersonMovieFragment extends Fragment implements LoaderManager.LoaderCallba
         // Inflate the view before referring any view using id
         final View mRootView = inflater.inflate(R.layout.fragment_person_movie, container, false)
         mAppBarLayout = mRootView.findViewById(R.id.person_app_bar_layout) as AppBarLayout
-        mPersonLinLayout = mRootView.findViewById(R.id.person_info_layout) as RelativeLayout
+        mPersonRelLayout = mRootView.findViewById(R.id.person_info_layout) as RelativeLayout
+        mPersonTabletPortPosterDataRelLayout = mRootView.findViewById(R.id.person_poster_data_section) as RelativeLayout
+        mCoordinatorLayout = mRootView.findViewById(R.id.person_coordinator_layout) as CoordinatorLayout
+        mTabletPortImageHolder = mRootView.findViewById(R.id.person_poster_image_section) as RelativeLayout
+        mTabletPortImageBase = mRootView.findViewById(R.id.person_poster_tablet_port_image_base) as View
         mPosterImageView = mRootView.findViewById(R.id.person_poster_image) as ImageView
         mNameHdrTextView = mRootView.findViewById(R.id.person_name_header) as TextView
         mNameTextView = mRootView.findViewById(R.id.person_name) as TextView
@@ -362,6 +373,12 @@ class PersonMovieFragment extends Fragment implements LoaderManager.LoaderCallba
             appCompatActivity.getSupportActionBar().setDisplayHomeAsUpEnabled(true)
         }
 
+        mCollapsingToolbar = getView().findViewById(R.id.person_collapsing_toolbar) as CollapsingToolbarLayout
+        if (mCollapsingToolbar) {
+            //Just clear off to be on the safe side
+            mCollapsingToolbar.setTitle(" ")
+        }
+
         if (mPersonId) {
             mPersonIdArg = [Integer.toString(mPersonId)] as String[]
         } else {
@@ -399,6 +416,28 @@ class PersonMovieFragment extends Fragment implements LoaderManager.LoaderCallba
         } else if (Utility.isReducedDataOn(getActivity())) {
             // If user has selected reduced data
             Snackbar.make(mAppBarLayout, getString(R.string.reduced_data_use_on_message), Snackbar.LENGTH_LONG).show()
+        }
+
+        //Show the title only when image is collapsed
+        mAppbarOnOffsetChangeListener = new AppBarLayout.OnOffsetChangedListener() {
+            boolean isShow = false
+            int scrollRange = -1
+            @Override
+            void onOffsetChanged(final AppBarLayout appBarLayout, final int verticalOffset) {
+                LogDisplay.callLog(LOG_TAG, 'onOffsetChanged is called', LogDisplay.PERSON_MOVIE_FRAGMENT_LOG_FLAG)
+                if (scrollRange == -1) {
+                    scrollRange = appBarLayout.getTotalScrollRange()
+                }
+                LogDisplay.callLog(LOG_TAG, "scrollRange + verticalOffset:$scrollRange & $verticalOffset", LogDisplay.PERSON_MOVIE_FRAGMENT_LOG_FLAG)
+                if (scrollRange + verticalOffset == 0) {
+//                    mCollapsingToolbar.setTitle("test")
+                    mCollapsingToolbar.setTitle(mPersonName)
+                    isShow = true
+                } else if (isShow) {
+                    mCollapsingToolbar.setTitle(" ")
+                    isShow = false
+                }
+            }
         }
     }
 
@@ -551,9 +590,9 @@ class PersonMovieFragment extends Fragment implements LoaderManager.LoaderCallba
                                         mPaletteAccentColor = ContextCompat.getColor(getActivity(), R.color.accent)
                                     }
                                 }
-                                //Apply color to fields in potrait mode
+                                //Apply color to fields in portrait mode only
                                 if(getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
-                                    mPersonLinLayout.setBackgroundColor(mPalettePrimaryColor)
+                                    mPersonRelLayout.setBackgroundColor(mPalettePrimaryColor)
                                     mNameHdrTextView.setTextColor(mPaletteTitleColor)
                                     mNameTextView.setTextColor(mPaletteBodyTextColor)
                                     mDobHdrTextView.setTextColor(mPaletteTitleColor)
@@ -572,30 +611,59 @@ class PersonMovieFragment extends Fragment implements LoaderManager.LoaderCallba
                                     mCrewGridHdrTextView.setTextColor(mPaletteTitleColor)
                                     mImageGridHdrTextView.setTextColor(mPaletteTitleColor)
                                     mWebLinksHdrTextView.setTextColor(mPaletteTitleColor)
-                                    //Apply color to toolbar and status bar
-                                    mToolbar.setBackgroundColor(mPalettePrimaryColor)
-                                    mToolbar.setTitleTextColor(mPaletteTitleColor)
-                                    if (Build.VERSION.SDK_INT >= 21) {
-                                        final Window window = getActivity().getWindow()
-                                        window.setStatusBarColor(mPalettePrimaryDarkColor)
+//                                    //Apply color to toolbar and status bar
+//                                    mToolbar.setBackgroundColor(mPalettePrimaryColor)
+//                                    mToolbar.setTitleTextColor(mPaletteTitleColor)
+//                                    if (Build.VERSION.SDK_INT >= 21) {
+//                                        final Window window = getActivity().getWindow()
+//                                        window.setStatusBarColor(mPalettePrimaryDarkColor)
+//                                    }
+                                    // Apply required color for tablet
+                                    if(getResources().getBoolean(R.bool.is_tablet_port)) {
+                                        mCoordinatorLayout.setBackgroundColor(mPalettePrimaryDarkColor)
+//                                        mTabletPortImageHolder.setBackgroundColor(Color.TRANSPARENT)
+                                        mTabletPortImageBase.setBackgroundColor(mPalettePrimaryColor)
+                                        mPersonTabletPortPosterDataRelLayout.setBackgroundColor(mPalettePrimaryColor)
+                                        mCollapsingToolbar.setStatusBarScrimColor(mPalettePrimaryDarkColor)
+                                        mCollapsingToolbar.setContentScrimColor(mPalettePrimaryColor)
+                                        mCollapsingToolbar.setBackgroundColor(mPalettePrimaryColor)
+                                        mCollapsingToolbar.setCollapsedTitleTextColor(mPaletteBodyTextColor)
+//                                        // Set the backdrop image
+//                                        final ImageView imageView = getView().findViewById(R.id.person_backdrop_image) as ImageView
+//                                        if(mPersonBackdropImage) {
+//                                            final String imagePath = "$GlobalStaticVariables.TMDB_IMAGE_BASE_URL/$GlobalStaticVariables.TMDB_IMAGE_SIZE_W500" +
+//                                                    "$mPersonBackdropImage"
+//                                            LogDisplay.callLog(LOG_TAG, "Person backdrop imagePath-> $imagePath", LogDisplay.PERSON_MOVIE_FRAGMENT_LOG_FLAG)
+//                                            PicassoLoadImage.loadDetailFragmentPagerAdapterImage(getActivity(), imagePath, imageView)
+//                                        } else {
+//                                            LogDisplay.callLog(LOG_TAG, 'Person backdrop image path is null', LogDisplay.PERSON_MOVIE_FRAGMENT_LOG_FLAG)
+//                                        }
+                                    } else { // For mobile portrait, apply color to the required fields
+                                        //Apply color to toolbar and status bar
+                                        mToolbar.setBackgroundColor(mPalettePrimaryColor)
+                                        mToolbar.setTitleTextColor(mPaletteTitleColor)
+                                        if (Build.VERSION.SDK_INT >= 21) {
+                                            final Window window = getActivity().getWindow()
+                                            window.setStatusBarColor(mPalettePrimaryDarkColor)
+                                        }
                                     }
-                                } else {
-                                    // Remove the Collapsing toolbar title
-                                    final CollapsingToolbarLayout collapsingToolbarLayout = getView().findViewById(R.id.person_collapsing_toolbar) as CollapsingToolbarLayout
-                                    collapsingToolbarLayout.setTitleEnabled(false)
-                                    // Set a bigger text size & White color for Toolbar in landscape mode
-                                    mToolbar.setTitleTextAppearance(getActivity(),R.style.TextAppearance_AppCompat_Headline)
-                                    mToolbar.setTitleTextColor(ContextCompat.getColor(getContext(), R.color.primary_text))
-                                    // Set the backdrop image
-                                    final ImageView imageView = getView().findViewById(R.id.person_backdrop_image) as ImageView
-                                    if(mPersonBackdropImage) {
-                                        final String imagePath = "$GlobalStaticVariables.TMDB_IMAGE_BASE_URL/$GlobalStaticVariables.TMDB_IMAGE_SIZE_W500" +
-                                                "$mPersonBackdropImage"
-                                        LogDisplay.callLog(LOG_TAG, "Person backdrop imagePath-> $imagePath", LogDisplay.PERSON_MOVIE_FRAGMENT_LOG_FLAG)
-                                        PicassoLoadImage.loadDetailFragmentPagerAdapterImage(getActivity(), imagePath, imageView)
-                                    } else {
-                                        LogDisplay.callLog(LOG_TAG, 'Person backdrop image path is null', LogDisplay.PERSON_MOVIE_FRAGMENT_LOG_FLAG)
-                                    }
+//                                } else {
+//                                    // Remove the Collapsing toolbar title
+//                                    final CollapsingToolbarLayout collapsingToolbarLayout = getView().findViewById(R.id.person_collapsing_toolbar) as CollapsingToolbarLayout
+//                                    collapsingToolbarLayout.setTitleEnabled(false)
+//                                    // Set a bigger text size & White color for Toolbar in landscape mode
+//                                    mToolbar.setTitleTextAppearance(getActivity(),R.style.TextAppearance_AppCompat_Headline)
+//                                    mToolbar.setTitleTextColor(ContextCompat.getColor(getContext(), R.color.primary_text))
+//                                    // Set the backdrop image
+//                                    final ImageView imageView = getView().findViewById(R.id.person_backdrop_image) as ImageView
+//                                    if(mPersonBackdropImage) {
+//                                        final String imagePath = "$GlobalStaticVariables.TMDB_IMAGE_BASE_URL/$GlobalStaticVariables.TMDB_IMAGE_SIZE_W500" +
+//                                                "$mPersonBackdropImage"
+//                                        LogDisplay.callLog(LOG_TAG, "Person backdrop imagePath-> $imagePath", LogDisplay.PERSON_MOVIE_FRAGMENT_LOG_FLAG)
+//                                        PicassoLoadImage.loadDetailFragmentPagerAdapterImage(getActivity(), imagePath, imageView)
+//                                    } else {
+//                                        LogDisplay.callLog(LOG_TAG, 'Person backdrop image path is null', LogDisplay.PERSON_MOVIE_FRAGMENT_LOG_FLAG)
+//                                    }
                                 }
 
                                 //Apply color to adapter elements irrespective of portrait or landscape mode
@@ -613,9 +681,55 @@ class PersonMovieFragment extends Fragment implements LoaderManager.LoaderCallba
                 }
             }
             PicassoLoadImage.loadDetailFragmentPosterImage(getActivity(),posterPath,mPosterImageView,picassoPosterCallback)
-            mNameTextView.setText(data.getString(COL_PERSON_INFO_PERSON_NAME))
-            mToolbar.setTitle(data.getString(COL_PERSON_INFO_PERSON_NAME))
             mPersonName = data.getString(COL_PERSON_INFO_PERSON_NAME)
+
+            // Handle toolbar/collapsing toolbar for mobile & tablet and portrait & landscape
+            if(getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) { // Portrait
+                if(getResources().getBoolean(R.bool.is_tablet_port)) { // Tablet portrait
+                    // Set the backdrop image
+                    final ImageView imageView = getView().findViewById(R.id.person_backdrop_image) as ImageView
+                    if(mPersonBackdropImage) {
+                        final String imagePath = "$GlobalStaticVariables.TMDB_IMAGE_BASE_URL/$GlobalStaticVariables.TMDB_IMAGE_SIZE_W500" +
+                                "$mPersonBackdropImage"
+                        LogDisplay.callLog(LOG_TAG, "Person backdrop imagePath-> $imagePath", LogDisplay.PERSON_MOVIE_FRAGMENT_LOG_FLAG)
+                        PicassoLoadImage.loadDetailFragmentPagerAdapterImage(getActivity(), imagePath, imageView)
+                    } else {
+                        LogDisplay.callLog(LOG_TAG, 'Person backdrop image path is null', LogDisplay.PERSON_MOVIE_FRAGMENT_LOG_FLAG)
+                    }
+                    // Set the onscroll listener
+                    mAppBarLayout.addOnOffsetChangedListener(mAppbarOnOffsetChangeListener)
+                    // Remove the color from overlapping area of the person image
+//                    mTabletPortImageHolder.setBackgroundColor(Color.TRANSPARENT)
+                } else { // Mobile portrait
+//                    mCollapsingToolbar.setTitleEnabled(false)
+                    mToolbar.setTitle(mPersonName)
+                }
+            } else { // Landscape
+                // Remove the Collapsing toolbar title
+//                final CollapsingToolbarLayout collapsingToolbarLayout = getView().findViewById(R.id.person_collapsing_toolbar) as CollapsingToolbarLayout
+                mCollapsingToolbar.setTitleEnabled(false)
+                mToolbar.setTitle(mPersonName)
+                // Set a bigger text size & White color for Toolbar in landscape mode
+                mToolbar.setTitleTextAppearance(getActivity(),R.style.TextAppearance_AppCompat_Headline)
+                mToolbar.setTitleTextColor(ContextCompat.getColor(getContext(), R.color.primary_text))
+                // Set the backdrop image
+                final ImageView imageView = getView().findViewById(R.id.person_backdrop_image) as ImageView
+                if(mPersonBackdropImage) {
+                    final String imagePath = "$GlobalStaticVariables.TMDB_IMAGE_BASE_URL/$GlobalStaticVariables.TMDB_IMAGE_SIZE_W500" +
+                            "$mPersonBackdropImage"
+                    LogDisplay.callLog(LOG_TAG, "Person backdrop imagePath-> $imagePath", LogDisplay.PERSON_MOVIE_FRAGMENT_LOG_FLAG)
+                    PicassoLoadImage.loadDetailFragmentPagerAdapterImage(getActivity(), imagePath, imageView)
+                } else {
+                    LogDisplay.callLog(LOG_TAG, 'Person backdrop image path is null', LogDisplay.PERSON_MOVIE_FRAGMENT_LOG_FLAG)
+                }
+
+//                if(getResources().getBoolean(R.bool.is_tablet_port)) { // Tablet landscape
+//                } else {// Mobile landscape
+//                }
+            }
+
+            mNameTextView.setText(data.getString(COL_PERSON_INFO_PERSON_NAME))
+//            mToolbar.setTitle(data.getString(COL_PERSON_INFO_PERSON_NAME))
             if(data.getString(COL_PERSON_INFO_PERSON_BIRTHDAY)) {
                 mDobTextView.setText(Utility.formatFriendlyDate(data.getString(COL_PERSON_INFO_PERSON_BIRTHDAY)))
             } else {
@@ -749,19 +863,23 @@ class PersonMovieFragment extends Fragment implements LoaderManager.LoaderCallba
      * Intent to open a web browser when user clicks on person home page button
      */
     void startHomePageIntent() {
-        final Intent intent = new Intent(Intent.ACTION_VIEW)
-        intent.setData(Uri.parse(mPersonHomePageUrl))
-        startActivity(intent)
+        if(mPersonHomePageUrl) {
+            final Intent intent = new Intent(Intent.ACTION_VIEW)
+            intent.setData(Uri.parse(mPersonHomePageUrl))
+            startActivity(intent)
+        }
     }
 
     /**
      * Intent to open the movie in imdb app(if installed) or in web browser when user clicks on imdb button
      */
     void startImdbIntent() {
-        final String imdbUrl = "$GlobalStaticVariables.IMDB_BASE_PERSON_URL$mPersonImdbId/"
-        final Intent intent = new Intent(Intent.ACTION_VIEW)
-        intent.setData(Uri.parse(imdbUrl))
-        startActivity(intent)
+        if(mPersonImdbId) {
+            final String imdbUrl = "$GlobalStaticVariables.IMDB_BASE_PERSON_URL$mPersonImdbId/"
+            final Intent intent = new Intent(Intent.ACTION_VIEW)
+            intent.setData(Uri.parse(imdbUrl))
+            startActivity(intent)
+        }
     }
 
     @Override
@@ -786,6 +904,8 @@ class PersonMovieFragment extends Fragment implements LoaderManager.LoaderCallba
     @Override
     void onDestroyView() {
         LogDisplay.callLog(LOG_TAG, 'onDestroyView is called', LogDisplay.PERSON_MOVIE_FRAGMENT_LOG_FLAG)
+        // Remove listeners
+        mAppBarLayout.removeOnOffsetChangedListener(mAppbarOnOffsetChangeListener)
         super.onDestroyView()
     }
 
