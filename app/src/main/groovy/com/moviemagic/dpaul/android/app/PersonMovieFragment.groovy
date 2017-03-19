@@ -244,7 +244,7 @@ class PersonMovieFragment extends Fragment implements LoaderManager.LoaderCallba
         mPersonTabletPortPosterDataRelLayout = mRootView.findViewById(R.id.person_poster_data_section) as RelativeLayout
         mCoordinatorLayout = mRootView.findViewById(R.id.person_coordinator_layout) as CoordinatorLayout
         mTabletPortImageHolder = mRootView.findViewById(R.id.person_poster_image_section) as RelativeLayout
-        mTabletPortImageBase = mRootView.findViewById(R.id.person_poster_tablet_port_image_base) as View
+        mTabletPortImageBase = mRootView.findViewById(R.id.person_poster_port_image_base) as View
         mPosterImageView = mRootView.findViewById(R.id.person_poster_image) as ImageView
         mNameHdrTextView = mRootView.findViewById(R.id.person_name_header) as TextView
         mNameTextView = mRootView.findViewById(R.id.person_name) as TextView
@@ -618,8 +618,9 @@ class PersonMovieFragment extends Fragment implements LoaderManager.LoaderCallba
 //                                        final Window window = getActivity().getWindow()
 //                                        window.setStatusBarColor(mPalettePrimaryDarkColor)
 //                                    }
+                                    // Apply required color for collapsing toolbar
                                     // Apply required color for tablet
-                                    if(getResources().getBoolean(R.bool.is_tablet_port)) {
+//                                    if(getResources().getBoolean(R.bool.is_tablet_port)) {
                                         mCoordinatorLayout.setBackgroundColor(mPalettePrimaryDarkColor)
 //                                        mTabletPortImageHolder.setBackgroundColor(Color.TRANSPARENT)
                                         mTabletPortImageBase.setBackgroundColor(mPalettePrimaryColor)
@@ -638,15 +639,15 @@ class PersonMovieFragment extends Fragment implements LoaderManager.LoaderCallba
 //                                        } else {
 //                                            LogDisplay.callLog(LOG_TAG, 'Person backdrop image path is null', LogDisplay.PERSON_MOVIE_FRAGMENT_LOG_FLAG)
 //                                        }
-                                    } else { // For mobile portrait, apply color to the required fields
-                                        //Apply color to toolbar and status bar
-                                        mToolbar.setBackgroundColor(mPalettePrimaryColor)
-                                        mToolbar.setTitleTextColor(mPaletteTitleColor)
-                                        if (Build.VERSION.SDK_INT >= 21) {
-                                            final Window window = getActivity().getWindow()
-                                            window.setStatusBarColor(mPalettePrimaryDarkColor)
-                                        }
-                                    }
+//                                    } else { // For mobile portrait, apply color to the required fields
+//                                        //Apply color to toolbar and status bar
+//                                        mToolbar.setBackgroundColor(mPalettePrimaryColor)
+//                                        mToolbar.setTitleTextColor(mPaletteTitleColor)
+//                                        if (Build.VERSION.SDK_INT >= 21) {
+//                                            final Window window = getActivity().getWindow()
+//                                            window.setStatusBarColor(mPalettePrimaryDarkColor)
+//                                        }
+//                                    }
 //                                } else {
 //                                    // Remove the Collapsing toolbar title
 //                                    final CollapsingToolbarLayout collapsingToolbarLayout = getView().findViewById(R.id.person_collapsing_toolbar) as CollapsingToolbarLayout
@@ -684,8 +685,8 @@ class PersonMovieFragment extends Fragment implements LoaderManager.LoaderCallba
             mPersonName = data.getString(COL_PERSON_INFO_PERSON_NAME)
 
             // Handle toolbar/collapsing toolbar for mobile & tablet and portrait & landscape
-            if(getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) { // Portrait
-                if(getResources().getBoolean(R.bool.is_tablet_port)) { // Tablet portrait
+//            if(getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) { // Portrait
+//                if(getResources().getBoolean(R.bool.is_tablet_port)) { // Tablet portrait
                     // Set the backdrop image
                     final ImageView imageView = getView().findViewById(R.id.person_backdrop_image) as ImageView
                     if(mPersonBackdropImage) {
@@ -696,14 +697,15 @@ class PersonMovieFragment extends Fragment implements LoaderManager.LoaderCallba
                     } else {
                         LogDisplay.callLog(LOG_TAG, 'Person backdrop image path is null', LogDisplay.PERSON_MOVIE_FRAGMENT_LOG_FLAG)
                     }
+                if(getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) { // Portrait
                     // Set the onscroll listener
                     mAppBarLayout.addOnOffsetChangedListener(mAppbarOnOffsetChangeListener)
                     // Remove the color from overlapping area of the person image
 //                    mTabletPortImageHolder.setBackgroundColor(Color.TRANSPARENT)
-                } else { // Mobile portrait
-//                    mCollapsingToolbar.setTitleEnabled(false)
-                    mToolbar.setTitle(mPersonName)
-                }
+//                } else { // Mobile portrait
+////                    mCollapsingToolbar.setTitleEnabled(false)
+//                    mToolbar.setTitle(mPersonName)
+//                }
             } else { // Landscape
                 // Remove the Collapsing toolbar title
 //                final CollapsingToolbarLayout collapsingToolbarLayout = getView().findViewById(R.id.person_collapsing_toolbar) as CollapsingToolbarLayout
@@ -713,15 +715,15 @@ class PersonMovieFragment extends Fragment implements LoaderManager.LoaderCallba
                 mToolbar.setTitleTextAppearance(getActivity(),R.style.TextAppearance_AppCompat_Headline)
                 mToolbar.setTitleTextColor(ContextCompat.getColor(getContext(), R.color.primary_text))
                 // Set the backdrop image
-                final ImageView imageView = getView().findViewById(R.id.person_backdrop_image) as ImageView
-                if(mPersonBackdropImage) {
-                    final String imagePath = "$GlobalStaticVariables.TMDB_IMAGE_BASE_URL/$GlobalStaticVariables.TMDB_IMAGE_SIZE_W500" +
-                            "$mPersonBackdropImage"
-                    LogDisplay.callLog(LOG_TAG, "Person backdrop imagePath-> $imagePath", LogDisplay.PERSON_MOVIE_FRAGMENT_LOG_FLAG)
-                    PicassoLoadImage.loadDetailFragmentPagerAdapterImage(getActivity(), imagePath, imageView)
-                } else {
-                    LogDisplay.callLog(LOG_TAG, 'Person backdrop image path is null', LogDisplay.PERSON_MOVIE_FRAGMENT_LOG_FLAG)
-                }
+//                final ImageView imageView = getView().findViewById(R.id.person_backdrop_image) as ImageView
+//                if(mPersonBackdropImage) {
+//                    final String imagePath = "$GlobalStaticVariables.TMDB_IMAGE_BASE_URL/$GlobalStaticVariables.TMDB_IMAGE_SIZE_W500" +
+//                            "$mPersonBackdropImage"
+//                    LogDisplay.callLog(LOG_TAG, "Person backdrop imagePath-> $imagePath", LogDisplay.PERSON_MOVIE_FRAGMENT_LOG_FLAG)
+//                    PicassoLoadImage.loadDetailFragmentPagerAdapterImage(getActivity(), imagePath, imageView)
+//                } else {
+//                    LogDisplay.callLog(LOG_TAG, 'Person backdrop image path is null', LogDisplay.PERSON_MOVIE_FRAGMENT_LOG_FLAG)
+//                }
 
 //                if(getResources().getBoolean(R.bool.is_tablet_port)) { // Tablet landscape
 //                } else {// Mobile landscape

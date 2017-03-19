@@ -346,8 +346,7 @@
             android:id="@+id/youtube_fragment_container"
             android:layout_below="@id/movie_detail_trailer_header"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:visibility="visible" />
+            android:layout_height="wrap_content">
         <!-- this is to display a message when the movie trailer is empty -->
         <TextView
             android:id="@+id/movie_detail_trailer_empty_msg_text_view"
@@ -357,6 +356,7 @@
             android:textAppearance="@style/TextAppearance.AppCompat.Medium"
             android:textColor="@color/secondary_text"
             android:text="@string/movie_data_not_available"/>
+        </FrameLayout>
     </RelativeLayout>
     <!-- line divider -->
     <View
