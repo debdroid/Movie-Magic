@@ -151,6 +151,9 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
     private DetailFragmentPagerAdapter.DetailFragmentPagerAdapterOnClickHandler mDetailFragmentPagerAdapterOnClickHandler
     //TODO leak testing
 //    private boolean mOnRestoreOccurred = false
+    private String DETAIL_YOUTUBE_FRAGMENT_TAG = ''
+//    private static final String DETAIL_YOUTUBE_FRAGMENT_TAG = 'detail_youtube_fragment'
+
 
     private static final int MOVIE_DETAIL_FRAGMENT_BASIC_DATA_LOADER_ID = 0
     private static final int MOVIE_DETAIL_FRAGMENT_SIMILAR_MOVIE_LOADER_ID = 1
@@ -370,6 +373,7 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
         // Modify the LOG_TAG for better debugging as the fragment use for multiple times,
         // all subsequent log will now show fragment number
         LOG_TAG = LOG_TAG + '->Fragment#' + getActivity().getSupportFragmentManager().getBackStackEntryCount()
+        DETAIL_YOUTUBE_FRAGMENT_TAG = 'detail_youtube_fragment' + getActivity().getSupportFragmentManager().getBackStackEntryCount()
         LogDisplay.callLog(LOG_TAG,'onAttach is called',LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
         super.onAttach(context)
         // This makes sure that the container activity has implemented
@@ -1642,11 +1646,16 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
             }
             if(youtubeVideoKey.size() > 0 && !Utility.isReducedDataOn(getActivity())) {
                 mMovieTrailerEmptyMsgTextView.setVisibility(TextView.INVISIBLE)
-                final MovieMagicYoutubeFragment movieMagicYoutubeFragment = MovieMagicYoutubeFragment
-                        .createMovieMagicYouTubeFragment(youtubeVideoKey)
-                getChildFragmentManager().beginTransaction()
-                        .replace(R.id.youtube_fragment_container, movieMagicYoutubeFragment)
-                        .commit()
+                if(!getChildFragmentManager().findFragmentByTag(DETAIL_YOUTUBE_FRAGMENT_TAG)) {
+                    LogDisplay.callLog(LOG_TAG, "initiateYouTubeVideo:Youtube fragment does not exists, so create a new one with tag->$DETAIL_YOUTUBE_FRAGMENT_TAG", LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
+                    final MovieMagicYoutubeFragment movieMagicYoutubeFragment = MovieMagicYoutubeFragment
+                            .createMovieMagicYouTubeFragment(youtubeVideoKey)
+                    getChildFragmentManager().beginTransaction()
+                            .replace(R.id.youtube_fragment_container, movieMagicYoutubeFragment, DETAIL_YOUTUBE_FRAGMENT_TAG)
+                            .commit()
+                } else {
+                    LogDisplay.callLog(LOG_TAG, "initiateYouTubeVideo:Youtube fragment already exists for the tag $DETAIL_YOUTUBE_FRAGMENT_TAG, so no need to create a new one!", LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
+                }
             } else {
                 mMovieTrailerEmptyMsgTextView.setVisibility(TextView.VISIBLE)
                 LogDisplay.callLog(LOG_TAG, 'Youtube video id is null or user selected reduced data use', LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)

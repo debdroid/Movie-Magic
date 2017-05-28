@@ -165,7 +165,7 @@
 
     <!-- Strings related to Donate -->
     <string name="donate_header">Make an Impact</string>
-    <string name="donate_body">The app is absolutely free and contains no add. If you like this app and would want to give the developer a big thumbs up then do so by making a small donation by visiting any of the sites from the below list or any other charity or NGO you wish. Please do not forget to mention your donation in the comment section of the Google Play Store, it will motivate the developer to develop more free apps and surely inspire others to donate. Thanks for your donation.</string>
+    <string name="donate_body">The app is absolutely free and contains no Ad. If you like this app and would want to give the developer a big thumbs up then do so by making a small donation by visiting any of the sites from the below list or any other charity or NGO you wish. Please do not forget to mention your donation in the comment section of the Google Play Store, it will motivate the developer to develop more free apps and surely inspire others to donate. Thanks for your donation.</string>
     <string name="donate_item_header">Donate Item Header</string>
     <string name="single_donate_item_link_address">hhtps://www.donateitemlink.com</string>
     <string name="single_donate_item_donate_button">Donate</string>

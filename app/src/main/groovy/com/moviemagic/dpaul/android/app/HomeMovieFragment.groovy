@@ -55,6 +55,7 @@ class HomeMovieFragment extends Fragment implements LoaderManager.LoaderCallback
     private FrameLayout mYouTubeFragmentContainer
     private RecyclerView.LayoutManager mInCinemaGridLayoutManager, mComingSoonGridLayoutManager,
                                        mRecentlyAddedUserListGridLayoutManager, mRecommendationGridLayoutManager
+    private static final String HOME_YOUTUBE_FRAGMENT_TAG = 'home_youtube_fragment'
 
     private static final int HOME_MOVIE_FRAGMENT_VIEW_PAGER_LOADER_ID = 0
     private static final int HOME_MOVIE_FRAGMENT_IN_CINEMA_LOADER_ID = 1
@@ -428,11 +429,16 @@ class HomeMovieFragment extends Fragment implements LoaderManager.LoaderCallback
             if (!Utility.isReducedDataOn(getActivity())) {
                 mYouTubeFragmentEmptyTextView.setVisibility(TextView.GONE)
                 mYouTubeFragmentContainer.setVisibility(FrameLayout.VISIBLE)
-                final MovieMagicYoutubeFragment movieMagicYoutubeFragment = MovieMagicYoutubeFragment
-                        .createMovieMagicYouTubeFragment(youtubeVideoKey)
-                getChildFragmentManager().beginTransaction()
-                        .replace(R.id.home_youtube_fragment_container, movieMagicYoutubeFragment)
-                        .commit()
+                if(!getChildFragmentManager().findFragmentByTag(HOME_YOUTUBE_FRAGMENT_TAG)) {
+                    LogDisplay.callLog(LOG_TAG, 'handleTrailerOnLoadFinished:Youtube fragment does not exists, so create a new one...', LogDisplay.HOME_MOVIE_FRAGMENT_LOG_FLAG)
+                    final MovieMagicYoutubeFragment movieMagicYoutubeFragment = MovieMagicYoutubeFragment
+                            .createMovieMagicYouTubeFragment(youtubeVideoKey)
+                    getChildFragmentManager().beginTransaction()
+                            .replace(R.id.home_youtube_fragment_container, movieMagicYoutubeFragment, HOME_YOUTUBE_FRAGMENT_TAG)
+                            .commit()
+                } else {
+                    LogDisplay.callLog(LOG_TAG, 'handleTrailerOnLoadFinished:Youtube fragment already exists, so no need to create a new one!', LogDisplay.HOME_MOVIE_FRAGMENT_LOG_FLAG)
+                }
             } else {
                 LogDisplay.callLog(LOG_TAG, 'User selected reduced data use', LogDisplay.HOME_MOVIE_FRAGMENT_LOG_FLAG)
                 mYouTubeFragmentContainer.setVisibility(FrameLayout.GONE)

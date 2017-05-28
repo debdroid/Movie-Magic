@@ -140,6 +140,7 @@ public class MovieMagicMainActivity extends AppCompatActivity implements
 
         //Check to ensure Youtube exists on the device
         final YouTubeInitializationResult result = YouTubeApiServiceUtil.isYouTubeApiServiceAvailable(getApplicationContext())
+//        final YouTubeInitializationResult result = YouTubeApiServiceUtil.isYouTubeApiServiceAvailable(getBaseContext())
         if (result != YouTubeInitializationResult.SUCCESS) {
             //If there are any issues we can show an error dialog.
             result.getErrorDialog(this, 0).show()
@@ -150,7 +151,7 @@ public class MovieMagicMainActivity extends AppCompatActivity implements
             LogDisplay.callLog(LOG_TAG,'This is first time, so load homeFragment..',LogDisplay.MOVIE_MAGIC_MAIN_LOG_FLAG)
             loadHomeFragment()
         } else {
-            LogDisplay.callLog(LOG_TAG,'This is restore scenario..so need to load as is',LogDisplay.MOVIE_MAGIC_MAIN_LOG_FLAG)
+            LogDisplay.callLog(LOG_TAG,'This is restore scenario..so need to load homeFragment as is',LogDisplay.MOVIE_MAGIC_MAIN_LOG_FLAG)
         }
     }
 
