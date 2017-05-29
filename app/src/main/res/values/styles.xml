@@ -28,6 +28,7 @@
     </style>
 
     <!-- Styles for each activity -->
+    <style name="AppTheme.Splash" parent="Theme.AppCompat.DayNight.NoActionBar"/>
     <style name="AppTheme.MovieMain" parent="@style/AppTheme"/>
     <style name="AppTheme.MovieGrid" parent="@style/AppTheme"/>
     <style name="AppTheme.MovieDetail" parent="@style/AppTheme"/>

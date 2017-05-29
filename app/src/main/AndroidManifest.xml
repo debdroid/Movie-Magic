@@ -30,15 +30,22 @@
 
         <meta-data android:name="android.app.default_searchable" android:value=".SearchActivity"/>
 
+        <!-- SplashScreen Activity -->
+        <activity
+            android:name=".SplashScreen"
+            android:label="@string/app_name"
+            android:theme="@style/AppTheme.Splash">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
         <!-- Main Activity -->
         <activity
             android:name=".MovieMagicMainActivity"
             android:label="@string/app_name"
             android:theme="@style/AppTheme.MovieMain">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
 
         <!-- Detail movie Activity -->

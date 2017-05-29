@@ -298,5 +298,6 @@
     <string name="movie_detail_user_tmdb_list_drawable_favourite_content_description">User Tmdb favourite image button</string>
     <string name="movie_detail_user_tmdb_list_drawable_rated_content_description">User Tmdb rated image button</string>
     <string name="movie_detail_collection_image_content_description">Collection backdrop image</string>
+    <string name="splash_screen_logo_content_description">Application logo on splash screen</string>
 
 </resources>
