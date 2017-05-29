@@ -66,11 +66,6 @@ class MovieCastAdapter extends RecyclerView.Adapter<MovieCastAdapter.MovieCastAd
             mCursor.moveToPosition(getAdapterPosition())
             final int personId = mCursor.getInt(DetailMovieFragment.COL_MOVIE_CAST_PERSON_ID)
             LogDisplay.callLog(LOG_TAG,"Person id is $personId",LogDisplay.MOVIE_CAST_ADAPTER_LOG_FLAG)
-//            final Uri moviePersonInfoIdUri = MovieMagicContract.MoviePersonInfo.buildMoviePersonInfoUriWithPersonId(personId)
-//            final Intent mIntent = new Intent(mContext, PersonMovieActivity.class).setData(moviePersonInfoIdUri)
-//            //Set the animation
-//            final Bundle bundle = ActivityOptions.makeCustomAnimation(mContext,R.anim.slide_bottom_in_animation,0).toBundle()
-//            mContext.startActivity(mIntent,bundle)
             mMovieCastAdapterOnClickHandler.onClick(personId)
         }
     }

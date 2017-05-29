@@ -10,7 +10,6 @@ import android.database.DatabaseUtils
 import android.net.Uri
 import android.os.AsyncTask
 import android.support.design.widget.Snackbar
-import android.widget.LinearLayout
 import android.widget.RelativeLayout
 import com.moviemagic.dpaul.android.app.R
 import com.moviemagic.dpaul.android.app.contentprovider.MovieMagicContract

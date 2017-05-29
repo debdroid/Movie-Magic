@@ -1,6 +1,5 @@
 package com.moviemagic.dpaul.android.app
 
-import android.app.Activity
 import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
@@ -23,12 +22,10 @@ import android.support.design.widget.CoordinatorLayout
 import android.support.design.widget.Snackbar
 import android.support.v17.leanback.widget.HorizontalGridView
 import android.support.v4.app.Fragment
-import android.support.v4.app.FragmentActivity
 import android.support.v4.app.LoaderManager
 import android.support.v4.content.ContextCompat
 import android.support.v4.content.CursorLoader
 import android.support.v4.content.Loader
-import android.support.v4.view.MenuItemCompat
 import android.support.v4.view.ViewCompat
 import android.support.v4.view.ViewPager
 import android.support.v4.view.ViewPager.OnPageChangeListener
@@ -36,31 +33,14 @@ import android.support.v4.widget.NestedScrollView
 import android.support.v7.app.AlertDialog
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.graphics.Palette
-import android.support.v7.widget.AppCompatImageButton
-import android.support.v7.widget.GridLayoutManager
-import android.support.v7.widget.LinearLayoutManager
-import android.support.v7.widget.RecyclerView
+import android.support.v7.widget.*
 import android.support.v7.widget.RecyclerView.LayoutManager
-import android.support.v7.widget.ShareActionProvider
-import android.support.v7.widget.Toolbar
-import android.view.LayoutInflater
-import android.view.Menu
-import android.view.MenuInflater
-import android.view.MenuItem
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import android.view.animation.AlphaAnimation
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
 import android.view.animation.DecelerateInterpolator
-import android.widget.Button
-import android.widget.FrameLayout
-import android.widget.ImageButton
-import android.widget.ImageView
-import android.widget.LinearLayout
-import android.widget.RatingBar
-import android.widget.RelativeLayout
-import android.widget.TextView
+import android.widget.*
 import com.moviemagic.dpaul.android.app.adapter.*
 import com.moviemagic.dpaul.android.app.backgroundmodules.*
 import com.moviemagic.dpaul.android.app.contentprovider.MovieMagicContract
@@ -68,8 +48,6 @@ import com.moviemagic.dpaul.android.app.youtube.MovieMagicYoutubeFragment
 import com.squareup.picasso.Callback
 import com.squareup.picasso.Picasso
 import groovy.transform.CompileStatic
-
-import java.lang.ref.WeakReference
 
 @CompileStatic
 class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
@@ -96,7 +74,6 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
     private Button mHomePageButton, mImdbLinkButton
     private NestedScrollView mNestedScrollView
     private CoordinatorLayout mCoordinatorLayout
-//    private View mTabletPortDummyView
     private int _ID_movie_basic_info
     private int mMovieId
     private int mCollectionId
@@ -130,30 +107,22 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
     private Toolbar mToolbar
     private AppBarLayout mAppBarLayout
     private ViewPager mBackdropViewPager
-//    private final android.os.Handler mHandler = new android.os.Handler()
-//    private Runnable mRunnable
     private GridLayoutManager mSimilarMovieGridLayoutManager, mCastGridLayoutManager, mCrewGridLayoutManager
     private LayoutManager mReviewLinearLayoutManager
     private List<String> mBackdropList
     private CallbackForBackdropImageClick mCallbackForBackdropImageClick
     private int mBackdropViewPagerPos = 0
     private boolean firstTimeLocalRatingUpdateWithTmdbRating = true
-//    private ShareActionProvider mShareActionProvider
     private boolean mMoviDataLoaded = false
     private boolean mImageButtonClickForcedOnLoadFinished = false
     private View mRootView
-//    private AppCompatActivity mAppCompatActivity
     private CallbackForSimilarMovieClick mCallbackForSimilarMovieClick
     private DetailFragmentPagerAdapter mDetailFragmentPagerAdapter
     private AppBarLayout.OnOffsetChangedListener mAppbarOnOffsetChangeListener
     private OnPageChangeListener mOnPageChangeListener
     private SimilarMovieAdapter.SimilarMovieAdapterOnClickHandler mSimilarMovieAdapterOnClickHandler
     private DetailFragmentPagerAdapter.DetailFragmentPagerAdapterOnClickHandler mDetailFragmentPagerAdapterOnClickHandler
-    //TODO leak testing
-//    private boolean mOnRestoreOccurred = false
     private String DETAIL_YOUTUBE_FRAGMENT_TAG = ''
-//    private static final String DETAIL_YOUTUBE_FRAGMENT_TAG = 'detail_youtube_fragment'
-
 
     private static final int MOVIE_DETAIL_FRAGMENT_BASIC_DATA_LOADER_ID = 0
     private static final int MOVIE_DETAIL_FRAGMENT_SIMILAR_MOVIE_LOADER_ID = 1
@@ -406,22 +375,6 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
         setHasOptionsMenu(true)
     }
 
-//    @Override
-//    public boolean onOptionsItemSelected(final MenuItem item) {
-//        final int itemId = item.getItemId()
-//        switch (itemId) {
-//            case android.R.id.home:
-//                if(getActivity().getSupportFragmentManager().getBackStackEntryCount() > 0) {
-//                    getActivity().getSupportFragmentManager().popBackStack()
-//                } else {
-//                    getActivity().finish()
-//                }
-//                return true
-//            default:
-//                return super.onOptionsItemSelected(item)
-//        }
-//    }
-
     @Override
     public View onCreateView(final LayoutInflater inflater, final ViewGroup container, final Bundle savedInstanceState) {
         LogDisplay.callLog(LOG_TAG, 'onCreateView is called', LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
@@ -437,11 +390,6 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
         }
         //Inflate the view before referring any view using id
         mRootView = inflater.inflate(R.layout.fragment_detail_movie, container, false)
-//        // Create a fade animation
-//        final Animation fadeIn = new AlphaAnimation(0, 1)
-//        fadeIn.setInterpolator(new DecelerateInterpolator())
-//        fadeIn.setDuration(2000)
-//        mRootView.setAnimation(fadeIn)
 
         mCollapsingToolbar = mRootView.findViewById(R.id.movie_detail_collapsing_toolbar) as CollapsingToolbarLayout
         if (mCollapsingToolbar) {
@@ -449,42 +397,14 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
             mCollapsingToolbar.setTitle(" ")
         }
 
-//        final WeakReference<AppCompatActivity> appCompatActivity = new WeakReference<>(getActivity() as AppCompatActivity)
-//        mAppCompatActivity = getActivity() as AppCompatActivity
         mToolbar = mRootView.findViewById(R.id.movie_detail_toolbar) as Toolbar
         if (mToolbar) {
             ((AppCompatActivity)getActivity()).setSupportActionBar(mToolbar)
-//            mAppCompatActivity.setSupportActionBar(mToolbar)
 //            //Enable back to home button
             ((AppCompatActivity)getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true)
-//            mAppCompatActivity.getSupportActionBar().setDisplayHomeAsUpEnabled(true)
         }
 
         mAppBarLayout = mRootView.findViewById(R.id.movie_detail_app_bar_layout) as AppBarLayout
-//        //Show the title only when image is collapsed
-//        //Do this only if the collapsing toolbar is available
-//        if(mCollapsingToolbar) {
-//            //Show the title only when image is collapsed
-//            mAppbarOnOffsetChangeListener = new AppBarLayout.OnOffsetChangedListener() {
-//                boolean isShow = false
-//                int scrollRange = -1
-//
-//                @Override
-//                void onOffsetChanged(final AppBarLayout appBarLayout, final int verticalOffset) {
-//                    if (scrollRange == -1) {
-//                        scrollRange = appBarLayout.getTotalScrollRange()
-//                    }
-//                    if (scrollRange + verticalOffset == 0) {
-//                        mCollapsingToolbar.setTitle(mMovieTitle)
-//                        isShow = true
-//                    } else if (isShow) {
-//                        mCollapsingToolbar.setTitle(" ")
-//                        isShow = false
-//                    }
-//                }
-//            }
-//            mAppBarLayout.addOnOffsetChangedListener(mAppbarOnOffsetChangeListener)
-//        }
 
         mBackdropViewPager = mRootView.findViewById(R.id.movie_detail_backdrop_viewpager) as ViewPager
         mBackdropDotHolderLayout = mRootView.findViewById(R.id.view_pager_dots_holder) as LinearLayout
@@ -495,7 +415,6 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
         mUserTmdbListDrawableLayout = mRootView.findViewById(R.id.movie_detail_user_tmdb_list_drawable_layout) as RelativeLayout
         mNestedScrollView = mRootView.findViewById(R.id.movie_detail_scroll) as NestedScrollView
         mCoordinatorLayout = mRootView.findViewById(R.id.movie_detail_coordinator_layout) as CoordinatorLayout
-//        mTabletPortDummyView = mRootView.findViewById(R.id.content_detail_movie_fragment_tablet_port_dummy_view) as View
 
         //All the header (fixed text) fields & buttons
         mReleaseDateHeaderTextView = mRootView.findViewById(R.id.movie_detail_poster_release_date_header) as TextView
@@ -737,9 +656,6 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
         mMovieTitleTextView = mRootView.findViewById(R.id.movie_detail_title) as TextView
         // For land mode no need to display the title as that is already displayed as part of collapsing toolbar
         if(getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
-//        if((getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) ||
-//                (getResources().getBoolean(R.bool.is_tablet_port))) {
-//        if(getResources().getBoolean(R.bool.is_mobile_land)) {
             mMovieTitleTextView.setVisibility(TextView.GONE)
         }
         mMpaaRatingImageView = mRootView.findViewById(R.id.movie_detail_mpaa_image) as ImageView
@@ -855,17 +771,9 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
                 mCallbackForSimilarMovieClick.onSimilarMovieItemSelected(movieId)
             }
         }
-        //TODO leak testing
-//        mSimilarMovieAdapter = new SimilarMovieAdapter(mSimilarMovieGridEmptyMsgTextView,
+
         mSimilarMovieAdapter = new SimilarMovieAdapter(getActivity(), mSimilarMovieGridEmptyMsgTextView,
                 mSimilarMovieAdapterOnClickHandler)
-//        mSimilarMovieAdapter = new SimilarMovieAdapter(getActivity(), mSimilarMovieGridEmptyMsgTextView,
-//                new SimilarMovieAdapter.SimilarMovieAdapterOnClickHandler(){
-//                    @Override
-//                    void onClick(int movieId) {
-//                        mCallbackForSimilarMovieClick.onSimilarMovieItemSelected(movieId)
-//                    }
-//                })
         mHorizontalSimilarMovieGridView.setAdapter(mSimilarMovieAdapter)
 
         /**
@@ -892,12 +800,10 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
          */
         mMovieReviewRecyclerView = mRootView.findViewById(R.id.movie_detail_review_recycler_view) as RecyclerView
         //Set this to false for smooth scrolling of recyclerview
-        //TODO - part of leak testing
         mMovieReviewRecyclerView.setNestedScrollingEnabled(false)
         mReviewLinearLayoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false)
         mReviewLinearLayoutManager.setAutoMeasureEnabled(true)
         mMovieReviewRecyclerView.setLayoutManager(mReviewLinearLayoutManager)
-        //TODO leak testing
         mMovieReviewAdapter = new MovieReviewAdapter(getActivity(), mRecyclerViewEmptyMsgTextView)
         mMovieReviewRecyclerView.setAdapter(mMovieReviewAdapter)
 
@@ -915,23 +821,7 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
         LogDisplay.callLog(LOG_TAG, 'onActivityCreated is called', LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
         super.onActivityCreated(savedInstanceState)
 
-//        final AppCompatActivity appCompatActivity = getActivity() as AppCompatActivity
-//        mToolbar = getView().findViewById(R.id.movie_detail_toolbar) as Toolbar
-//        if (mToolbar) {
-//            appCompatActivity.setSupportActionBar(mToolbar)
-//            //Enable back to home button
-//            appCompatActivity.getSupportActionBar().setDisplayHomeAsUpEnabled(true)
-//        }
-
-//        mCollapsingToolbar = getView().findViewById(R.id.movie_detail_collapsing_toolbar) as CollapsingToolbarLayout
-//        if (mCollapsingToolbar) {
-//            //Just clear off to be on the safe side
-//            mCollapsingToolbar.setTitle(" ")
-//        }
-
         // Determine locale
-        //TODO Leak test
-//        mLocale = 'UK'
         mLocale = context.getResources().getConfiguration().locale.getCountry()
 //        mLocale = 'IN' // Testing line
         // Currently program handles only 'GB' (i.e. UK) and 'US' locales
@@ -960,7 +850,7 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
             mReleaseInfoArg = ['YYYYY', 'ZZZZZZ'] as String[]
             mMovieImageArg = ['YYYYY', 'ZZZZZZ'] as String[]
         }
-//        WeakReference<LoaderManager> loaderManagerWeakReference = new WeakReference<>(getActivity().getSupportLoaderManager())
+
         /** Using of fragment loader (i.e. getLoaderManager() leaks memory when more than one fragment is loaded and
          * orientation changes. So to fix it (a workaround) the activity's loader manager is used instead. But the
          * drawback is that we always need to use restartLoader otherwise second fragment onwards the data will not be
@@ -978,16 +868,6 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
         getActivity().getSupportLoaderManager().restartLoader(MOVIE_DETAIL_FRAGMENT_MOVIE_USER_LIST_FLAG_LOADER_ID, null, this)
         if (savedInstanceState == null) {
             mBackdropViewPagerPos = 0
-//            LogDisplay.callLog(LOG_TAG, 'onActivityCreated:first time, so init loaders', LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
-//            getActivity().getSupportLoaderManager().initLoader(MOVIE_DETAIL_FRAGMENT_BASIC_DATA_LOADER_ID, null, this)
-//            getActivity().getSupportLoaderManager().initLoader(MOVIE_DETAIL_FRAGMENT_SIMILAR_MOVIE_LOADER_ID, null, this)
-//            getActivity().getSupportLoaderManager().initLoader(MOVIE_DETAIL_FRAGMENT_MOVIE_VIDEO_LOADER_ID, null, this)
-//            getActivity().getSupportLoaderManager().initLoader(MOVIE_DETAIL_FRAGMENT_MOVIE_CAST_LOADER_ID, null, this)
-//            getActivity().getSupportLoaderManager().initLoader(MOVIE_DETAIL_FRAGMENT_MOVIE_CREW_LOADER_ID, null, this)
-//            getActivity().getSupportLoaderManager().initLoader(MOVIE_DETAIL_FRAGMENT_MOVIE_RELEASE_INFO_LOADER_ID, null, this)
-//            getActivity().getSupportLoaderManager().initLoader(MOVIE_DETAIL_FRAGMENT_MOVIE_IMAGE_LOADER_ID, null, this)
-//            getActivity().getSupportLoaderManager().initLoader(MOVIE_DETAIL_FRAGMENT_MOVIE_REVIEW_LOADER_ID, null, this)
-//            getActivity().getSupportLoaderManager().initLoader(MOVIE_DETAIL_FRAGMENT_MOVIE_USER_LIST_FLAG_LOADER_ID, null, this)
             // Start Tmdb data loader only if user is logged in
             //TODO this is not a good way to access variable, use Global class
             if(MovieMagicMainActivity.isUserLoggedIn) {
@@ -995,16 +875,6 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
             }
         } else {
             mBackdropViewPagerPos = savedInstanceState.getInt(GlobalStaticVariables.DETAIL_BACKDROP_VIEWPAGER_POSITION,0)
-//            LogDisplay.callLog(LOG_TAG, 'onActivityCreated:restore case, so restart loaders', LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
-//            getActivity().getSupportLoaderManager().restartLoader(MOVIE_DETAIL_FRAGMENT_BASIC_DATA_LOADER_ID, null, this)
-//            getActivity().getSupportLoaderManager().restartLoader(MOVIE_DETAIL_FRAGMENT_SIMILAR_MOVIE_LOADER_ID, null, this)
-//            getActivity().getSupportLoaderManager().restartLoader(MOVIE_DETAIL_FRAGMENT_MOVIE_VIDEO_LOADER_ID, null, this)
-//            getActivity().getSupportLoaderManager().restartLoader(MOVIE_DETAIL_FRAGMENT_MOVIE_CAST_LOADER_ID, null, this)
-//            getActivity().getSupportLoaderManager().restartLoader(MOVIE_DETAIL_FRAGMENT_MOVIE_CREW_LOADER_ID, null, this)
-//            getActivity().getSupportLoaderManager().restartLoader(MOVIE_DETAIL_FRAGMENT_MOVIE_RELEASE_INFO_LOADER_ID, null, this)
-//            getActivity().getSupportLoaderManager().restartLoader(MOVIE_DETAIL_FRAGMENT_MOVIE_IMAGE_LOADER_ID, null, this)
-//            getActivity().getSupportLoaderManager().restartLoader(MOVIE_DETAIL_FRAGMENT_MOVIE_REVIEW_LOADER_ID, null, this)
-//            getActivity().getSupportLoaderManager().restartLoader(MOVIE_DETAIL_FRAGMENT_MOVIE_USER_LIST_FLAG_LOADER_ID, null, this)
             // Restart Tmdb loader only if user is logged in
             if(MovieMagicMainActivity.isUserLoggedIn) {
                 getActivity().getSupportLoaderManager().restartLoader(MOVIE_DETAIL_FRAGMENT_BASIC_TMDB_DATA_LOADER_ID, null, this)
@@ -1034,20 +904,6 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
         fadeIn.setDuration(2000)
         mRootView.setAnimation(fadeIn)
 
-//        // Determine locale
-//        mLocale = context.getResources().getConfiguration().locale.getCountry()
-////        mLocale = 'IN' // Testing line
-//        // Currently program handles only 'GB' (i.e. UK) and 'US' locales
-//        // If not any of the above then fallback to US locale
-//        switch (mLocale) {
-//            case 'GB':
-//            case 'US':
-//                // do nothing
-//                break
-//            default:
-//                mLocale = 'US'
-//        }
-
         //Show the title only when image is collapsed
         //Do this only if the collapsing toolbar is available
         if(mCollapsingToolbar) {
@@ -1070,10 +926,7 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
                     }
                 }
             }
-//            mAppBarLayout.addOnOffsetChangedListener(mAppbarOnOffsetChangeListener)
         }
-        //TODO leak testing
-//        mOnRestoreOccurred = true
     }
 
     @Override
@@ -1081,17 +934,6 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
         LogDisplay.callLog(LOG_TAG, 'onCreateOptionsMenu is called', LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
         // Inflate the menu, this adds items to the action bar if it is present.
         inflater.inflate(R.menu.detail_fragment_menu, menu)
-        // Locate MenuItem with ShareActionProvider
-//        final MenuItem item = menu.findItem(R.id.menu_action_share)
-        // Fetch and store ShareActionProvider
-//        mShareActionProvider = (ShareActionProvider) MenuItemCompat.getActionProvider(item)
-        // Show share option if onLoadFinished is complete for movie_basic_info and we have data
-        // Otherwise it will be called once the data is loaded
-//        if(mMoviDataLoaded) {
-//            shareMovie()
-//        } else {
-//            LogDisplay.callLog(LOG_TAG,'onCreateOptionsMenu: movie detail data not yet loaded!',LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
-//        }
     }
 
     @Override
@@ -1114,7 +956,7 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
         LogDisplay.callLog(LOG_TAG, "onCreateLoader.loader id->$id", LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
         switch (id) {
             case MOVIE_DETAIL_FRAGMENT_BASIC_DATA_LOADER_ID:
-                //** Warning ** -> this cursor can return more than one row for similar movies
+                /** Warning ** -> this cursor can return more than one row for similar movies **/
                 return new CursorLoader(
                         getActivity(),                                                        //Parent Activity Context
                         MovieMagicContract.MovieBasicInfo.CONTENT_URI,                        //Table to query
@@ -1266,7 +1108,6 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
         if(mSimilarMovieAdapter) mSimilarMovieAdapter.swapCursor(null)
         if(mMovieCastAdapter) mMovieCastAdapter.swapCursor(null)
         if(mMovieCrewAdapter) mMovieCrewAdapter.swapCursor(null)
-        //TODO leak testing
         if(mMovieReviewAdapter) mMovieReviewAdapter.swapCursor(null)
     }
 
@@ -1366,33 +1207,20 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
                                     /** Didn't cleanup the lines of code where accent color is applied, so there will be some
                                      * redundant lines of code but kept it as is in case those are needed in future **/
                                     mPalleteAccentColor = ContextCompat.getColor(getActivity(), R.color.accent)
-//                                if (pickSwatchColorFlag) {
-//                                    if (mutedSwatch) {
-//                                        mPalleteAccentColor = mutedSwatch.getRgb()
-//                                    } else if (mutedLightSwatch) { //Try another swatch
-//                                        mPalleteAccentColor = mutedLightSwatch.getRgb()
-//                                    } else if (mutedDarkSwatch) { //Try last swatch
-//                                        mPalleteAccentColor = mutedDarkSwatch.getRgb()
-//                                    } else { //Fallback to default
-//                                        mPalleteAccentColor = ContextCompat.getColor(getActivity(), R.color.accent)
-//                                    }
-//                                }
+
                                     // Apply the color based on orientation
                                     if(getResources().getConfiguration().orientation != Configuration.ORIENTATION_LANDSCAPE) {
-//                                    if(!getResources().getBoolean(R.bool.is_mobile_land)) {
                                         // Apply layout and text color only for portrait mode
                                         changeLayoutAndTextColor()
                                         // Apply the color for all attached adapters
                                         mMovieCastAdapter.changeColor(mPalletePrimaryDarkColor, mPalleteBodyTextColor)
                                         mMovieCrewAdapter.changeColor(mPalletePrimaryDarkColor, mPalleteBodyTextColor)
                                         mSimilarMovieAdapter.changeColor(mPalletePrimaryDarkColor, mPalleteBodyTextColor)
-                                        //TODO leak testing
                                         mMovieReviewAdapter.changeColor(mPalletePrimaryColor, mPalleteTitleColor, mPalleteBodyTextColor)
                                     } else {
                                         mMovieCastAdapter.changeColor(mPalletePrimaryDarkColor, ContextCompat.getColor(getActivity(), R.color.primary_text))
                                         mMovieCrewAdapter.changeColor(mPalletePrimaryDarkColor, ContextCompat.getColor(getActivity(), R.color.primary_text))
                                         mSimilarMovieAdapter.changeColor(mPalletePrimaryDarkColor, ContextCompat.getColor(getActivity(), R.color.primary_text))
-                                        //TODO leak testing
                                         mMovieReviewAdapter.changeColor(0, ContextCompat.getColor(getActivity(), R.color.primary_text), ContextCompat.getColor(getActivity(), R.color.secondary_text))
                                     }
                                     setImageButtonBackgroundColor()
@@ -1428,8 +1256,6 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
 
                 // Set the listener if in portrait mode pf mobile or show the title in Toolbar for landscape
                 if(getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
-//                if((getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) &&
-//                        !getResources().getBoolean(R.bool.is_tablet_port)) {
                     mAppBarLayout.addOnOffsetChangedListener(mAppbarOnOffsetChangeListener)
                 } else {
                     mCollapsingToolbar.setTitleEnabled(false)
@@ -1437,7 +1263,6 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
                 }
 
                 //Pass the Picasso Callback and load the image
-                //TODO leak testing
                 PicassoLoadImage.loadDetailFragmentPosterImage(getActivity(), posterPath, mPosterImageView, picassoPosterCallback)
                 //Default date is 1900-01-01 which is less than Unix epoc 1st Jan 1970, so converted milliseconds is negative
                 if (data.getLong(COL_MOVIE_BASIC_RELEASE_DATE) > 0) {
@@ -1557,13 +1382,6 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
                     LogDisplay.callLog(LOG_TAG, 'handleMovieBasicOnLoadFinished.Additional movie data already present', LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
                 }
                 mMoviDataLoaded = true
-                // If onCreateOptionsMenu already happened then do share this to share movie
-//                if (mShareActionProvider) {
-//                    shareMovie()
-//                } else {
-//                    LogDisplay.callLog(LOG_TAG, 'handleMovieBasicOnLoadFinished:mShareActionProvider is null because onCreateOptionsMenu is not' +
-//                            ' yet called. shareMovie will be called from onCreateOptionsMenu.', LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
-//                }
             } else {
                 LogDisplay.callLog(LOG_TAG, "handleMovieBasicOnLoadFinished.Record not found, should reach here only when movie is clicked on person or search screen - Movie id:$mMovieId, Category:$mMovieCategory", LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
                 if (mMovieCategory == GlobalStaticVariables.MOVIE_CATEGORY_PERSON || GlobalStaticVariables.MOVIE_CATEGORY_SEARCH) {
@@ -1711,17 +1529,8 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
                     }
             mDetailFragmentPagerAdapter = new DetailFragmentPagerAdapter(getActivity(), mBackdropList as String[],
                     mDetailFragmentPagerAdapterOnClickHandler)
-//            mDetailFragmentPagerAdapter = new DetailFragmentPagerAdapter(getActivity(), mBackdropList as String[],
-//                    new DetailFragmentPagerAdapter.DetailFragmentPagerAdapterOnClickHandler() {
-//                        @Override
-//                        void onClick(final int position) {
-//                            LogDisplay.callLog(LOG_TAG, "DetailFragmentPagerAdapter clicked.Position->$position", LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
-//                            mCallbackForBackdropImageClick.onBackdropImageClicked(mMovieTitle, position, mBackdropList as ArrayList<String>)
-//                        }
-//                    })
             mBackdropViewPager.setAdapter(mDetailFragmentPagerAdapter)
             mBackdropViewPager.clearOnPageChangeListeners()
-//            final int dotsCount = adapter.getCount()
             final int dotsCount = mBackdropList.size()
             final AppCompatImageButton[] dotsImage = new AppCompatImageButton[dotsCount]
             mBackdropDotHolderLayout.removeAllViews()
@@ -1881,7 +1690,6 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
         mDetailMovieLayout.setBackgroundColor(mPalletePrimaryColor)
         if(getResources().getBoolean(R.bool.is_tablet_port)) {
             mCoordinatorLayout.setBackgroundColor(mPalletePrimaryDarkColor)
-//            mTabletPortDummyView.setBackgroundColor(0)
         }
 
         //Change color for header text fields
@@ -1981,9 +1789,6 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
     {
         if (Build.VERSION.SDK_INT >= 23) { // Version 23 -> Marshmallow
             // Do nothing as it automatically uses the accent color
-            // Following lines again works 99& times but not using as it picks up accent color in Marshmallow and above
-//            drawable = DrawableCompat.wrap(drawable)
-//            DrawableCompat.setTint(drawable, color)
         } else {
             // This works 99% times in pre lollipop but there are cases where it's still bit buggy
             // but does the job most of the times, so keeping it
@@ -2109,7 +1914,6 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
         sendIntent.setType("text/plain")
         // Create intent to show the chooser dialog
         final Intent chooser = Intent.createChooser(sendIntent, getString(R.string.detail_movie_chooser_title))
-//        mShareActionProvider.setShareIntent(sendIntent)
         // Verify that the intent will resolve to an activity
         if (sendIntent.resolveActivity(getActivity().getPackageManager()) != null) {
             startActivity(chooser)
@@ -2190,13 +1994,6 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
     void onResume() {
         LogDisplay.callLog(LOG_TAG, 'onResume is called', LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
         super.onResume()
-        // This is to ensure when user used share in collection then came back to detail and share movie
-//        if(mMoviDataLoaded) {
-//            shareMovie()
-//        } else {
-//            LogDisplay.callLog(LOG_TAG,'onCreateOptionsMenu: movie detail data not yet loaded!',LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
-//        }
-//        mHandler.postDelayed(mRunnable,5000)
     }
 
     @Override
@@ -2212,10 +2009,6 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
         outState.putInt(GlobalStaticVariables.DETAIL_BACKDROP_VIEWPAGER_POSITION,mBackdropViewPagerPos)
         // Now call the superclass so it can save the view hierarchy state
         super.onSaveInstanceState(outState)
-        //TODO leak testing
-//        mOnRestoreOccurred = true
-//        releaseResources()
-//        mOnRestoreOccurred = false
     }
 
     @Override
@@ -2223,60 +2016,15 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
         LogDisplay.callLog(LOG_TAG, 'onStop is called', LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
         // Cancel picasso callback
         Picasso.with(getActivity()).cancelRequest(mPosterImageView)
-        //TODO leak testing
-//        if(!mOnRestoreOccurred) {
-//            releaseResources()
-//        }
-//        // Cancel picasso callback
-//        Picasso.with(getActivity()).cancelRequest(mPosterImageView)
-//        // Remove listeners
-//        mBackdropViewPager.removeOnPageChangeListener(mOnPageChangeListener)
-//        mAppBarLayout.removeOnOffsetChangedListener(mAppbarOnOffsetChangeListener)
-//        // Remove adapter from backdrop view pager
-//        mBackdropViewPager.setAdapter(null)
-//        // Set the pager adapter to null
-//        mDetailFragmentPagerAdapter = null
-//        // Delete the loaders
-//        getActivity().getSupportLoaderManager().destroyLoader(MOVIE_DETAIL_FRAGMENT_BASIC_DATA_LOADER_ID)
-//        getActivity().getSupportLoaderManager().destroyLoader(MOVIE_DETAIL_FRAGMENT_SIMILAR_MOVIE_LOADER_ID)
-//        getActivity().getSupportLoaderManager().destroyLoader(MOVIE_DETAIL_FRAGMENT_MOVIE_VIDEO_LOADER_ID)
-//        getActivity().getSupportLoaderManager().destroyLoader(MOVIE_DETAIL_FRAGMENT_MOVIE_CAST_LOADER_ID)
-//        getActivity().getSupportLoaderManager().destroyLoader(MOVIE_DETAIL_FRAGMENT_MOVIE_CREW_LOADER_ID)
-//        getActivity().getSupportLoaderManager().destroyLoader(MOVIE_DETAIL_FRAGMENT_MOVIE_RELEASE_INFO_LOADER_ID)
-//        getActivity().getSupportLoaderManager().destroyLoader(MOVIE_DETAIL_FRAGMENT_MOVIE_IMAGE_LOADER_ID)
-//        getActivity().getSupportLoaderManager().destroyLoader(MOVIE_DETAIL_FRAGMENT_MOVIE_REVIEW_LOADER_ID)
-//        getActivity().getSupportLoaderManager().destroyLoader(MOVIE_DETAIL_FRAGMENT_MOVIE_USER_LIST_FLAG_LOADER_ID)
-//        // Remove the adapters from horizontal grid views
-//        mHorizontalSimilarMovieGridView.setAdapter(null)
-//        mHorizontalMovieCastGridView.setAdapter(null)
-//        mHorizontalMovieCrewGridView.setAdapter(null)
-//        mMovieReviewRecyclerView.setAdapter(null)
-//        // Set the adapters to null
-//        mSimilarMovieAdapter = null
-//        mMovieCastAdapter = null
-//        mMovieCrewAdapter = null
-//        mMovieReviewAdapter = null
-//        // Set interface references to null
-//        mCallbackForBackdropImageClick = null
-//        mCallbackForSimilarMovieClick = null
-//        mSimilarMovieAdapterOnClickHandler = null
-//        mDetailFragmentPagerAdapterOnClickHandler = null
-//        //TODO - leak testing
-//        mSimilarMovieGridLayoutManager = null
-//        mHorizontalSimilarMovieGridView = null
         super.onStop()
     }
 
     @Override
     void onDestroyView() {
         LogDisplay.callLog(LOG_TAG, 'onDestroyView is called.->Release resources', LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
-//        mShareActionProvider.reset()
-//        mShareActionProvider = null
-        // Remove the hard reference so that it can be garbage collected
-        // Doing this in onStop is not working. Is it because this is attached to Toolbar which is part of Fragment layout??
-//        mAppCompatActivity = null
-        // Call the super onDestroyView
+        // Release resources
         releaseResources()
+        // Call the super onDestroyView
         super.onDestroyView()
     }
 
@@ -2284,10 +2032,6 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
     void onDestroy() {
         LogDisplay.callLog(LOG_TAG, 'onDestroy is called', LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
         super.onDestroy()
-        // Set the adapters to null
-//        mSimilarMovieAdapter = null
-//        mMovieCastAdapter = null
-//        mMovieCrewAdapter = null
     }
 
     @Override
@@ -2305,7 +2049,6 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
         super.onConfigurationChanged(newConfig)
     }
 
-//TODO leak testing
     protected void releaseResources() {
         LogDisplay.callLog(LOG_TAG, 'releaseResources is called', LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
         // Remove listeners
@@ -2315,35 +2058,18 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
         mBackdropViewPager.setAdapter(null)
         // Set the pager adapter to null
         mDetailFragmentPagerAdapter = null
-        // Delete the loaders
-//        getActivity().getSupportLoaderManager().destroyLoader(MOVIE_DETAIL_FRAGMENT_BASIC_DATA_LOADER_ID)
-//        getActivity().getSupportLoaderManager().destroyLoader(MOVIE_DETAIL_FRAGMENT_SIMILAR_MOVIE_LOADER_ID)
-//        getActivity().getSupportLoaderManager().destroyLoader(MOVIE_DETAIL_FRAGMENT_MOVIE_VIDEO_LOADER_ID)
-//        getActivity().getSupportLoaderManager().destroyLoader(MOVIE_DETAIL_FRAGMENT_MOVIE_CAST_LOADER_ID)
-//        getActivity().getSupportLoaderManager().destroyLoader(MOVIE_DETAIL_FRAGMENT_MOVIE_CREW_LOADER_ID)
-//        getActivity().getSupportLoaderManager().destroyLoader(MOVIE_DETAIL_FRAGMENT_MOVIE_RELEASE_INFO_LOADER_ID)
-//        getActivity().getSupportLoaderManager().destroyLoader(MOVIE_DETAIL_FRAGMENT_MOVIE_IMAGE_LOADER_ID)
-//        getActivity().getSupportLoaderManager().destroyLoader(MOVIE_DETAIL_FRAGMENT_MOVIE_REVIEW_LOADER_ID)
-//        getActivity().getSupportLoaderManager().destroyLoader(MOVIE_DETAIL_FRAGMENT_MOVIE_USER_LIST_FLAG_LOADER_ID)
-        // Remove the adapters from horizontal grid views
-        //TODO leak testing
-//        if(!mOnRestoreOccurred) {
         mHorizontalSimilarMovieGridView.setAdapter(null)
         mHorizontalMovieCastGridView.setAdapter(null)
         mHorizontalMovieCrewGridView.setAdapter(null)
         mMovieReviewRecyclerView.setAdapter(null)
-//        }
         // Set the adapters to null
         mSimilarMovieAdapter = null
         mMovieCastAdapter = null
         mMovieCrewAdapter = null
         mMovieReviewAdapter = null
-        // Set interface references to null
-//        mCallbackForBackdropImageClick = null
-//        mCallbackForSimilarMovieClick = null
+
         mSimilarMovieAdapterOnClickHandler = null
         mDetailFragmentPagerAdapterOnClickHandler = null
-        //TODO - leak testing
         mSimilarMovieGridLayoutManager = null
         mCastGridLayoutManager = null
         mCrewGridLayoutManager = null
@@ -2356,7 +2082,6 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
         mHorizontalMovieCastGridView = null
         mHorizontalMovieCrewGridView = null
         mMovieReviewRecyclerView = null
-//        getActivity().finish()
         mRootView = null
     }
 

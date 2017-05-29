@@ -1,6 +1,6 @@
 package com.moviemagic.dpaul.android.app.authentication
 
-import android.os.Bundle;
+import android.os.Bundle
 import groovy.transform.CompileStatic
 
 @CompileStatic

@@ -20,33 +20,19 @@ import android.support.v4.app.LoaderManager
 import android.support.v4.content.ContextCompat
 import android.support.v4.content.CursorLoader
 import android.support.v4.content.Loader
-import android.support.v4.view.MenuItemCompat
-import android.support.v4.view.ViewCompat
 import android.support.v4.widget.NestedScrollView
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.graphics.Palette
-import android.support.v7.widget.ShareActionProvider
 import android.support.v7.widget.Toolbar
-import android.view.LayoutInflater
-import android.view.Menu
-import android.view.MenuInflater
-import android.view.MenuItem
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import android.widget.ImageView
-import android.widget.LinearLayout
 import android.widget.RelativeLayout
 import android.widget.TextView
 import com.moviemagic.dpaul.android.app.adapter.MovieGridRecyclerAdapter
-import com.moviemagic.dpaul.android.app.backgroundmodules.AutoGridRecyclerView
-import com.moviemagic.dpaul.android.app.backgroundmodules.GlobalStaticVariables
-import com.moviemagic.dpaul.android.app.backgroundmodules.LoadCollectionData
-import com.moviemagic.dpaul.android.app.backgroundmodules.LogDisplay
-import com.moviemagic.dpaul.android.app.backgroundmodules.PicassoLoadImage
-import com.moviemagic.dpaul.android.app.backgroundmodules.Utility
+import com.moviemagic.dpaul.android.app.backgroundmodules.*
 import com.moviemagic.dpaul.android.app.contentprovider.MovieMagicContract
 import com.squareup.picasso.Callback
-import com.squareup.picasso.Picasso;
+import com.squareup.picasso.Picasso
 import groovy.transform.CompileStatic
 
 @CompileStatic
@@ -72,9 +58,7 @@ class CollectionMovieFragment extends Fragment implements LoaderManager.LoaderCa
     private RelativeLayout mCollectionDetailLayout
     private CoordinatorLayout mCollectionCoordLayout
     private NestedScrollView mNestedScrollView
-//    private boolean mCollectionDataLoadSuccessFlag = false
     private String mCollectionBackdropPath
-//    private ShareActionProvider mShareActionProvider
     private boolean mCollectionDataLoaded = false
     private String mCollectionName
     private AppBarLayout.OnOffsetChangedListener mAppbarOnOffsetChangeListener
@@ -191,7 +175,6 @@ class CollectionMovieFragment extends Fragment implements LoaderManager.LoaderCa
                 LogDisplay.callLog(LOG_TAG, "scrollRange + verticalOffset:$scrollRange & $verticalOffset", LogDisplay.COLLECTION_MOVIE_FRAGMENT_LOG_FLAG)
                 if (scrollRange + verticalOffset == 0) {
                     mCollapsingToolbar.setTitle(mCollectionName)
-//                    mCollapsingToolbar.setTitle(data.getString(COL_COLLECTION_MOVIE_COLLECTION_NAME))
                     isShow = true
                 } else if (isShow) {
                     mCollapsingToolbar.setTitle(" ")
@@ -206,16 +189,6 @@ class CollectionMovieFragment extends Fragment implements LoaderManager.LoaderCa
         LogDisplay.callLog(LOG_TAG, 'onCreateOptionsMenu is called', LogDisplay.COLLECTION_MOVIE_FRAGMENT_LOG_FLAG)
         // Inflate the menu, this adds items to the action bar if it is present.
         inflater.inflate(R.menu.collection_fragment_menu, menu)
-//        // Locate MenuItem with ShareActionProvider
-//        final MenuItem item = menu.findItem(R.id.menu_action_share)
-//        // Fetch and store ShareActionProvider
-//        mShareActionProvider = (ShareActionProvider) MenuItemCompat.getActionProvider(item)
-//        //Show share option if onLoadFinished is complete and we have data
-//        if(mCollectionDataLoaded) {
-//            shareCollection()
-//        } else {
-//            LogDisplay.callLog(LOG_TAG,'onCreateOptionsMenu: collection data not yet loaded!',LogDisplay.COLLECTION_MOVIE_FRAGMENT_LOG_FLAG)
-//        }
     }
 
     @Override
@@ -262,7 +235,6 @@ class CollectionMovieFragment extends Fragment implements LoaderManager.LoaderCa
         if(data.moveToFirst()) {
             LogDisplay.callLog(LOG_TAG, "onLoadFinished.Data present for collection id $mCollectionId", LogDisplay.COLLECTION_MOVIE_FRAGMENT_LOG_FLAG)
             LogDisplay.callLog(LOG_TAG, "onLoadFinished.collection movie flag ${data.getInt(COL_COLLECTION_MOVIE_PRESENT_FLAG)}", LogDisplay.COLLECTION_MOVIE_FRAGMENT_LOG_FLAG)
-//            mCollectionDataLoadSuccessFlag = true
             mCollectionBackdropPath = "$GlobalStaticVariables.TMDB_IMAGE_BASE_URL/$GlobalStaticVariables.TMDB_IMAGE_SIZE_W500" +
                     "${data.getString(COL_COLLECTION_MOVIE_COLLECTION_BACKDROP_PATH)}"
             mCollectionName = data.getString(COL_COLLECTION_MOVIE_COLLECTION_NAME)
@@ -287,26 +259,7 @@ class CollectionMovieFragment extends Fragment implements LoaderManager.LoaderCa
                 if(!handlerFlag) {
                     LogDisplay.callLog(LOG_TAG,'Handler could not post the message',LogDisplay.COLLECTION_MOVIE_FRAGMENT_LOG_FLAG)
                 }
-//                //Show the title only when image is collapsed
-//                mAppbarOnOffsetChangeListener = new AppBarLayout.OnOffsetChangedListener() {
-//                    boolean isShow = false
-//                    int scrollRange = -1
-//                    @Override
-//                    void onOffsetChanged(final AppBarLayout appBarLayout, final int verticalOffset) {
-//                LogDisplay.callLog(LOG_TAG, 'onOffsetChanged is called', LogDisplay.COLLECTION_MOVIE_FRAGMENT_LOG_FLAG)
-//                        if (scrollRange == -1) {
-//                            scrollRange = appBarLayout.getTotalScrollRange()
-//                        }
-//                LogDisplay.callLog(LOG_TAG, "scrollRange + verticalOffset:$scrollRange & $verticalOffset", LogDisplay.COLLECTION_MOVIE_FRAGMENT_LOG_FLAG)
-//                        if (scrollRange + verticalOffset == 0) {
-//                            mCollapsingToolbar.setTitle(data.getString(COL_COLLECTION_MOVIE_COLLECTION_NAME))
-//                            isShow = true
-//                        } else if (isShow) {
-//                            mCollapsingToolbar.setTitle(" ")
-//                            isShow = false
-//                        }
-//                    }
-//                }
+
                 // Set the listener if in portrait mode or show the title in Toolbar for landscape
                 if(getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
                     mAppBarLayout.addOnOffsetChangedListener(mAppbarOnOffsetChangeListener)
@@ -315,26 +268,6 @@ class CollectionMovieFragment extends Fragment implements LoaderManager.LoaderCa
                     mToolbar.setTitle(data.getString(COL_COLLECTION_MOVIE_COLLECTION_NAME))
                     ((AppCompatActivity)getActivity()).getSupportActionBar().setSubtitle('')
                 }
-
-//                mAppBarLayout.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
-//                    boolean isShow = false
-//                    int scrollRange = -1
-//                    @Override
-//                    void onOffsetChanged(final AppBarLayout appBarLayout, final int verticalOffset) {
-////                LogDisplay.callLog(LOG_TAG, 'onOffsetChanged is called', LogDisplay.COLLECTION_MOVIE_FRAGMENT_LOG_FLAG)
-//                        if (scrollRange == -1) {
-//                            scrollRange = appBarLayout.getTotalScrollRange()
-//                        }
-////                LogDisplay.callLog(LOG_TAG, "scrollRange + verticalOffset:$scrollRange & $verticalOffset", LogDisplay.COLLECTION_MOVIE_FRAGMENT_LOG_FLAG)
-//                        if (scrollRange + verticalOffset == 0) {
-//                            mCollapsingToolbar.setTitle(data.getString(COL_COLLECTION_MOVIE_COLLECTION_NAME))
-//                            isShow = true
-//                        } else if (isShow) {
-//                            mCollapsingToolbar.setTitle(" ")
-//                            isShow = false
-//                        }
-//                    }
-//                })
 
             } else {
                 LogDisplay.callLog(LOG_TAG, "onLoadFinished.Collection movie flag is false for collection id $mCollectionId. So go clean up and re-load", LogDisplay.COLLECTION_MOVIE_FRAGMENT_LOG_FLAG)
@@ -345,13 +278,6 @@ class CollectionMovieFragment extends Fragment implements LoaderManager.LoaderCa
                 }
             }
             mCollectionDataLoaded = true
-            // If onCreateOptionsMenu already happened then do share this to share collection
-//            if(mShareActionProvider) {
-//                shareCollection()
-//            } else {
-//                LogDisplay.callLog(LOG_TAG, 'onLoadFinished:mShareActionProvider is null because onCreateOptionsMenu is not' +
-//                        ' yet called. shareCollection will be called from onCreateOptionsMenu.', LogDisplay.COLLECTION_MOVIE_FRAGMENT_LOG_FLAG)
-//            }
         } else {
             //Load the collection details and associated movies
             LogDisplay.callLog(LOG_TAG, "onLoadFinished.Data not present for collection id $mCollectionId, go and fetch it", LogDisplay.COLLECTION_MOVIE_FRAGMENT_LOG_FLAG)
@@ -429,7 +355,6 @@ class CollectionMovieFragment extends Fragment implements LoaderManager.LoaderCa
      */
     void loadCollBackdropAndChangeCollectionMovieGridColor() {
         LogDisplay.callLog(LOG_TAG, 'loadCollBackdropAndChangeCollectionMovieGridColor is called', LogDisplay.COLLECTION_MOVIE_FRAGMENT_LOG_FLAG)
-//        if(mCollectionDataLoadSuccessFlag) {
             final Callback picassoCollectionImageCallback = new Callback() {
                 @Override
                 void onSuccess() {
@@ -440,15 +365,6 @@ class CollectionMovieFragment extends Fragment implements LoaderManager.LoaderCa
                         Palette.from(bitmapPoster).generate(new Palette.PaletteAsyncListener() {
                             @Override
                             public void onGenerated(final Palette p) {
-//                                // This is to ensure that when collection adds movies to movie_basic_info and loader of detail fragment is
-//                                // loaded with data and call shareMovie then this overrides detail fragment shareMovie because it's called from
-//                                // CollectionActivity which is a callback of GridFragmentMovie which is called when collection movie are inserted
-//                                //(i.e. Detail Fragment's onLoadFinished is called (this is kind of obvious because onGenerate will take sometime!)
-//                                if(mCollectionDataLoaded) {
-//                                    shareCollection()
-//                                } else {
-//                                    LogDisplay.callLog(LOG_TAG,'loadCollBackdropAndChangeCollectionMovieGridColor: collection data not yet loaded!',LogDisplay.COLLECTION_MOVIE_FRAGMENT_LOG_FLAG)
-//                                }
                                 LogDisplay.callLog(LOG_TAG, 'onGenerated is called', LogDisplay.COLLECTION_MOVIE_FRAGMENT_LOG_FLAG)
                                 final Palette.Swatch vibrantSwatch = p.getVibrantSwatch()
                                 final Palette.Swatch lightVibrantSwatch = p.getLightVibrantSwatch()
@@ -545,20 +461,14 @@ class CollectionMovieFragment extends Fragment implements LoaderManager.LoaderCa
                             }
                         })
                     }
-//                    mCollectionDataLoadSuccessFlag = false
                 }
 
                 @Override
                 void onError() {
                     LogDisplay.callLog(LOG_TAG, 'Picasso onError is called', LogDisplay.COLLECTION_MOVIE_FRAGMENT_LOG_FLAG)
-//                    mCollectionDataLoadSuccessFlag = false
                 }
             }
             PicassoLoadImage.loadCollectionBackdropImage(getActivity(), mCollectionBackdropPath, mBackdropImageView, picassoCollectionImageCallback)
-//        } else {
-//            LogDisplay.callLog(LOG_TAG, 'mCollectionDataLoadSuccessFlag is false, so skip color change', LogDisplay.COLLECTION_MOVIE_FRAGMENT_LOG_FLAG)
-//        }
-//        mCollectionDataLoadSuccessFlag = false
     }
 
     /**
@@ -572,11 +482,6 @@ class CollectionMovieFragment extends Fragment implements LoaderManager.LoaderCa
         sendIntent.setAction(Intent.ACTION_SEND)
         sendIntent.putExtra(Intent.EXTRA_TEXT, "$mCollectionName, TMDb link - $tmdbWebCollectionUrl #${getString(R.string.app_name)} app")
         sendIntent.setType("text/plain")
-//        if(mShareActionProvider) {
-//            mShareActionProvider.setShareIntent(sendIntent)
-//        } else {
-//            LogDisplay.callLog(LOG_TAG, 'shareCollection:mShareActionProvider is null', LogDisplay.COLLECTION_MOVIE_FRAGMENT_LOG_FLAG)
-//        }
         // Create intent to show the chooser dialog
         final Intent chooser = Intent.createChooser(sendIntent, getString(R.string.collection_chooser_title))
         // Verify that the intent will resolve to an activity

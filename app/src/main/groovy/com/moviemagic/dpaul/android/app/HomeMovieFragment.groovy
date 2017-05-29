@@ -162,7 +162,6 @@ class HomeMovieFragment extends Fragment implements LoaderManager.LoaderCallback
         /**
          * In Cinema Recycler View
          */
-//        final RecyclerView.LayoutManager inCinemaLinearLayoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false)
         if(getResources().getBoolean(R.bool.is_tablet_land)) {
             mInCinemaGridLayoutManager = new GridLayoutManager(getActivity(), 2, GridLayoutManager.VERTICAL, false)
         } else {
@@ -184,7 +183,6 @@ class HomeMovieFragment extends Fragment implements LoaderManager.LoaderCallback
         /**
          * Coming Soon Recycler View
          */
-//        final RecyclerView.LayoutManager comingSoonLinearLayoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false)
         if(getResources().getBoolean(R.bool.is_tablet_land)) {
             mComingSoonGridLayoutManager = new GridLayoutManager(getActivity(), 2, GridLayoutManager.VERTICAL, false)
         } else {
@@ -207,7 +205,6 @@ class HomeMovieFragment extends Fragment implements LoaderManager.LoaderCallback
         /**
          * Recently Added User List Recycler View
          */
-//        final RecyclerView.LayoutManager recentlyAddedUserListLinearLayoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false)
         if(getResources().getBoolean(R.bool.is_tablet_land)) {
             mRecentlyAddedUserListGridLayoutManager = new GridLayoutManager(getActivity(), 2, GridLayoutManager.VERTICAL, false)
         } else {
@@ -232,7 +229,6 @@ class HomeMovieFragment extends Fragment implements LoaderManager.LoaderCallback
          */
         mRecommendationLayout = mRootView.findViewById(R.id.home_movie_recommendation_layout) as RelativeLayout
         mRecommendationDivider = mRootView.findViewById(R.id.home_movie_recommendation_divider) as View
-//        final RecyclerView.LayoutManager recommendationLinearLayoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false)
         if(getResources().getBoolean(R.bool.is_tablet_land)) {
             mRecommendationGridLayoutManager = new GridLayoutManager(getActivity(), 2, GridLayoutManager.VERTICAL, false)
         } else {

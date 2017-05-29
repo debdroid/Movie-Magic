@@ -57,38 +57,3 @@
         <include layout="@layout/content_person_movie_fragment" />
     </android.support.v4.widget.NestedScrollView>
 </android.support.design.widget.CoordinatorLayout>
-<!--<android.support.design.widget.CoordinatorLayout-->
-    <!--xmlns:android="http://schemas.android.com/apk/res/android"-->
-    <!--xmlns:app="http://schemas.android.com/apk/res-auto"-->
-    <!--xmlns:tools="http://schemas.android.com/tools"-->
-    <!--android:id="@+id/person_coordinator_layout"-->
-    <!--android:fitsSystemWindows="true"-->
-    <!--android:layout_width="match_parent"-->
-    <!--android:layout_height="match_parent">-->
-
-    <!--<android.support.design.widget.AppBarLayout-->
-        <!--android:id="@+id/person_app_bar_layout"-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:elevation="@dimen/m_design_toolbar_elevation"-->
-        <!--app:theme="@style/AppTheme.AppBarOverlay"-->
-        <!--tools:ignore="UnusedAttribute">-->
-        <!--&lt;!&ndash; setting itsSystemWindows="true" for toolbar moves ic_drawer_home up and setting buttons to status bar &ndash;&gt;-->
-        <!--<android.support.v7.widget.Toolbar-->
-                <!--android:id="@+id/person_toolbar"-->
-                <!--android:layout_width="match_parent"-->
-                <!--android:layout_height="?attr/actionBarSize"-->
-                <!--android:elevation="@dimen/m_design_toolbar_elevation"-->
-                <!--app:layout_scrollFlags="snap"-->
-                <!--app:popupTheme="@style/AppTheme.PopupOverlay"-->
-                <!--tools:ignore="UnusedAttribute" />-->
-        <!--&lt;!&ndash;</android.support.design.widget.CollapsingToolbarLayout>&ndash;&gt;-->
-    <!--</android.support.design.widget.AppBarLayout>-->
-    <!--<android.support.v4.widget.NestedScrollView-->
-        <!--android:id="@+id/person_nested_scroll"-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="match_parent"-->
-        <!--app:layout_behavior="@string/appbar_scrolling_view_behavior">-->
-        <!--<include layout="@layout/content_person_movie_fragment" />-->
-    <!--</android.support.v4.widget.NestedScrollView>-->
-<!--</android.support.design.widget.CoordinatorLayout>-->

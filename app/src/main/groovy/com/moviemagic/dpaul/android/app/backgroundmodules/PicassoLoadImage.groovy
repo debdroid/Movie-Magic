@@ -4,8 +4,6 @@ import android.content.Context
 import android.widget.ImageView
 import com.moviemagic.dpaul.android.app.R
 import com.squareup.picasso.Callback
-import com.squareup.picasso.MemoryPolicy
-import com.squareup.picasso.NetworkPolicy
 import com.squareup.picasso.Picasso
 import groovy.transform.CompileStatic
 
@@ -21,8 +19,6 @@ class PicassoLoadImage {
                     .fit()
                     .placeholder(R.drawable.image_place_holder)
                     .error(R.drawable.image_download_error)
-//                    .memoryPolicy(MemoryPolicy.NO_STORE, MemoryPolicy.NO_CACHE)
-//                    .networkPolicy(NetworkPolicy.NO_STORE, NetworkPolicy.NO_CACHE)
                     .into(imageView)
         } else {
             Picasso.with(context)
@@ -39,8 +35,6 @@ class PicassoLoadImage {
                     .fit()
                     .placeholder(R.drawable.image_place_holder)
                     .error(R.drawable.image_download_error)
-//                    .memoryPolicy(MemoryPolicy.NO_STORE, MemoryPolicy.NO_CACHE)
-//                    .networkPolicy(NetworkPolicy.NO_STORE, NetworkPolicy.NO_CACHE)
                     .into(imageView)
         } else {
             Picasso.with(context)
@@ -58,8 +52,6 @@ class PicassoLoadImage {
                     .fit()
                     .placeholder(R.drawable.image_place_holder)
                     .error(R.drawable.image_download_error)
-//                    .memoryPolicy(MemoryPolicy.NO_STORE, MemoryPolicy.NO_CACHE)
-//                    .networkPolicy(NetworkPolicy.NO_STORE, NetworkPolicy.NO_CACHE)
                     .into(imageView, callback)
         } else {
             Picasso.with(context)
@@ -78,8 +70,6 @@ class PicassoLoadImage {
                     .fit()
                     .placeholder(R.drawable.image_place_holder)
                     .error(R.drawable.image_download_error)
-//                    .memoryPolicy(MemoryPolicy.NO_STORE, MemoryPolicy.NO_CACHE)
-//                    .networkPolicy(NetworkPolicy.NO_STORE, NetworkPolicy.NO_CACHE)
                     .into(imageView)
         } else {
             Picasso.with(context)
@@ -96,8 +86,6 @@ class PicassoLoadImage {
                     .fit()
                     .placeholder(R.drawable.image_place_holder)
                     .error(R.drawable.image_download_error)
-//                    .memoryPolicy(MemoryPolicy.NO_STORE, MemoryPolicy.NO_CACHE)
-//                    .networkPolicy(NetworkPolicy.NO_STORE, NetworkPolicy.NO_CACHE)
                     .into(imageView)
         } else {
             Picasso.with(context)
@@ -115,8 +103,6 @@ class PicassoLoadImage {
                     .fit()
                     .placeholder(R.drawable.image_place_holder)
                     .error(R.drawable.image_download_error)
-//                    .memoryPolicy(MemoryPolicy.NO_STORE, MemoryPolicy.NO_CACHE)
-//                    .networkPolicy(NetworkPolicy.NO_STORE, NetworkPolicy.NO_CACHE)
                     .into(imageView, callback)
         } else {
             Picasso.with(context)
@@ -132,8 +118,6 @@ class PicassoLoadImage {
                     .load(imagePath)
                     .placeholder(R.drawable.image_place_holder)
                     .error(R.drawable.image_download_error)
-//                    .memoryPolicy(MemoryPolicy.NO_STORE, MemoryPolicy.NO_CACHE)
-//                    .networkPolicy(NetworkPolicy.NO_STORE, NetworkPolicy.NO_CACHE)
                     .into(imageView)
         } else {
             Picasso.with(context)

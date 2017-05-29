@@ -80,7 +80,6 @@ class SearchActivity extends AppCompatActivity {
             } else {
                 LogDisplay.callLog(LOG_TAG,'No internet connection, cannot perform search',LogDisplay.SEARCH_ACTIVITY_LOG_FLAG)
             }
-//            doMySearch(query)
         }
     }
 

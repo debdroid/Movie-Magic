@@ -40,7 +40,6 @@ import android.widget.TextView
 import android.widget.Toast
 import com.google.android.youtube.player.YouTubeApiServiceUtil
 import com.google.android.youtube.player.YouTubeInitializationResult
-import com.moviemagic.dpaul.android.app.adapter.HomeMovieAdapter
 import com.moviemagic.dpaul.android.app.adapter.MovieGridRecyclerAdapter
 import com.moviemagic.dpaul.android.app.backgroundmodules.NetworkReceiver
 import com.moviemagic.dpaul.android.app.backgroundmodules.Utility
@@ -81,7 +80,6 @@ public class MovieMagicMainActivity extends AppCompatActivity implements
         toggle.syncState()
 
         mNavigationView = findViewById(R.id.nav_view) as NavigationView
-//        mNavigationView.setNavigationItemSelectedListener(this)
         mNavigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
             boolean onNavigationItemSelected(@NonNull final MenuItem item) {
@@ -118,7 +116,7 @@ public class MovieMagicMainActivity extends AppCompatActivity implements
 
         // Initialize the SyncAdapter
         MovieMagicSyncAdapterUtility.initializeSyncAdapter(getApplicationContext())
-        //*** Comment before release **********************
+        //TODO *** Comment before release **********************
         //MovieMagicSyncAdapterUtility.syncImmediately(this)
 
         // Registers BroadcastReceiver to track network connection changes. This is more lightweight
@@ -140,7 +138,6 @@ public class MovieMagicMainActivity extends AppCompatActivity implements
 
         //Check to ensure Youtube exists on the device
         final YouTubeInitializationResult result = YouTubeApiServiceUtil.isYouTubeApiServiceAvailable(getApplicationContext())
-//        final YouTubeInitializationResult result = YouTubeApiServiceUtil.isYouTubeApiServiceAvailable(getBaseContext())
         if (result != YouTubeInitializationResult.SUCCESS) {
             //If there are any issues we can show an error dialog.
             result.getErrorDialog(this, 0).show()
@@ -161,7 +158,6 @@ public class MovieMagicMainActivity extends AppCompatActivity implements
         LogDisplay.callLog(LOG_TAG,'onStart is called',LogDisplay.MOVIE_MAGIC_MAIN_LOG_FLAG)
         // Check if the user is online or not, if not then open a dialog
         final boolean isOnline = Utility.isOnline(getApplicationContext())
-//        final boolean isOnline = true
         if(!isOnline) {
             LogDisplay.callLog(LOG_TAG,'Not connected to network!!',LogDisplay.MOVIE_MAGIC_MAIN_LOG_FLAG)
             showNotConnectedErrorDialog()
@@ -329,7 +325,6 @@ public class MovieMagicMainActivity extends AppCompatActivity implements
 
         final DrawerLayout drawer = findViewById(R.id.drawer_layout) as DrawerLayout
         drawer.closeDrawer(GravityCompat.START)
-//        return true
     }
 
     /**
@@ -863,7 +858,6 @@ public class MovieMagicMainActivity extends AppCompatActivity implements
             case ComponentCallbacks2.TRIM_MEMORY_UI_HIDDEN:
                 LogDisplay.callLog(LOG_TAG,'TRIM_MEMORY_UI_HIDDEN -> app moved to background',LogDisplay.MOVIE_MAGIC_MAIN_LOG_FLAG)
                 break
-
             /*
                 Release any memory that your app doesn't need to run.
                 The device is running low on memory while the app is running.
@@ -880,7 +874,6 @@ public class MovieMagicMainActivity extends AppCompatActivity implements
             case ComponentCallbacks2.TRIM_MEMORY_RUNNING_CRITICAL:
                 LogDisplay.callLog(LOG_TAG,'TRIM_MEMORY_RUNNING_CRITICAL -> device is running low on memory while the app is running',LogDisplay.MOVIE_MAGIC_MAIN_LOG_FLAG)
                 break
-
             /*
                 Release as much memory as the process can.
                 The app is on the LRU list and the system is running low on memory.

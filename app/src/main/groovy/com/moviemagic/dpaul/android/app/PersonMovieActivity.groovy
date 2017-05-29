@@ -1,7 +1,6 @@
 package com.moviemagic.dpaul.android.app
 
 import android.content.Intent
-import android.net.Uri
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import com.moviemagic.dpaul.android.app.adapter.PersonCastAdapter
@@ -22,13 +21,8 @@ class PersonMovieActivity extends AppCompatActivity implements PersonMovieFragme
         setContentView(R.layout.activity_person_movie)
         if (savedInstanceState == null) {
             //Get the arguments from the intent
-//            final Uri uri = getIntent().getData()
             final Bundle bundle = getIntent().getExtras()
-//            if (uri) {
             if (bundle) {
-//                LogDisplay.callLog(LOG_TAG, "Intent Data->${uri.toString()}", LogDisplay.PERSON_MOVIE_ACTIVITY_LOG_FLAG)
-//                final Bundle bundle = new Bundle()
-//                bundle.putParcelable(GlobalStaticVariables.MOVIE_PERSON_URI,uri)
                 final PersonMovieFragment personMovieFragment = new PersonMovieFragment()
                 personMovieFragment.setArguments(bundle)
                 getSupportFragmentManager().beginTransaction()

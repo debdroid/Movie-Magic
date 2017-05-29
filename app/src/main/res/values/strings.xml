@@ -257,7 +257,7 @@
     <string name="filter_release_year_dialog_title">Select Release Year</string>
     <string name="filter_no_movie_msg">No movie met filter criteria</string>
     <string name="user_local_and_tmdb_list_subtitle_no_movie_msg">List is empty</string>
-    <string name="developer_email_id">send2deb@gmail.com</string>
+    <string name="developer_email_id">mymoviesfeedback@gmail.com</string>
     <string name="notification_day_name_today">Today</string>
     <string name="notification_day_name_tomorrow">Tomorrow</string>
     <string name="menu_counter_zero_value">0</string>

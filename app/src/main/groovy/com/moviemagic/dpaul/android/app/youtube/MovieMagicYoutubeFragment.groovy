@@ -53,9 +53,7 @@ class MovieMagicYoutubeFragment extends YouTubePlayerSupportFragment implements 
         } else if (arguments != null && arguments.containsKey(YOUTUBE_VIDEO_ID_KEY)) { // First start
             LogDisplay.callLog(LOG_TAG,'onCreate: first initial case..',LogDisplay.MOVIE_MAGIC_YOUTUBE_FRAGMENT_LOG_FLAG)
             mVideoIds = arguments.getStringArrayList(YOUTUBE_VIDEO_ID_KEY)
-//            initialize(BuildConfig.YOUTUBE_API_KEY, this)
         }
-//        initialize(BuildConfig.YOUTUBE_API_KEY, this)
     }
 
     @Override
@@ -71,11 +69,10 @@ class MovieMagicYoutubeFragment extends YouTubePlayerSupportFragment implements 
         } else {
             LogDisplay.callLog(LOG_TAG,'onStart: mYouTubePlayer is null',LogDisplay.MOVIE_MAGIC_YOUTUBE_FRAGMENT_LOG_FLAG)
         }
-        /** Testing **/
         initialize(BuildConfig.YOUTUBE_API_KEY, this)
     }
 
-/**
+    /**
      * Set the video ids and initialize the player
      * This can be used when including the Fragment in an XML layout
      * @param videoIds The IDs of the YouTube videos to play
@@ -92,14 +89,11 @@ class MovieMagicYoutubeFragment extends YouTubePlayerSupportFragment implements 
         LogDisplay.callLog(LOG_TAG,"onInitializationSuccess is called. mVideoIds -> $mVideoIds",LogDisplay.MOVIE_MAGIC_YOUTUBE_FRAGMENT_LOG_FLAG)
         //This flag tells the player to switch to landscape when in fullscreen, it will also return to portrait
         //when leaving fullscreen
-        /** Testing flags **/
         youTubePlayer.setFullscreenControlFlags(YouTubePlayer.FULLSCREEN_FLAG_CONTROL_ORIENTATION)
-//        youTubePlayer.setFullscreenControlFlags(YouTubePlayer.FULLSCREEN_FLAG_ALWAYS_FULLSCREEN_IN_LANDSCAPE)
 
         //This flag controls the system UI such as the status and navigation bar, hiding and showing them
         //alongside the player UI
         youTubePlayer.addFullscreenControlFlag(YouTubePlayer.FULLSCREEN_FLAG_CONTROL_SYSTEM_UI)
-//        youTubePlayer.setFullscreenControlFlags(YouTubePlayer.FULLSCREEN_FLAG_CONTROL_SYSTEM_UI)
 
         //Set FullscreenListener
         youTubePlayer.setOnFullscreenListener(this)
@@ -107,9 +101,7 @@ class MovieMagicYoutubeFragment extends YouTubePlayerSupportFragment implements 
         if (mVideoIds) {
             if (restored) {
                 youTubePlayer.play()
-//                youTubePlayer.release()
             } else {
-//                youTubePlayer.loadVideos(mVideoIds)
                 youTubePlayer.cueVideos(mVideoIds)
             }
         }

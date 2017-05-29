@@ -1,10 +1,8 @@
 package com.moviemagic.dpaul.android.app.adapter
 
 import android.content.Context
-import android.content.Intent
 import android.content.res.Configuration
 import android.database.Cursor
-import android.net.Uri
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
@@ -12,12 +10,10 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import com.moviemagic.dpaul.android.app.DetailMovieFragment
-import com.moviemagic.dpaul.android.app.PersonMovieActivity
 import com.moviemagic.dpaul.android.app.R
 import com.moviemagic.dpaul.android.app.backgroundmodules.GlobalStaticVariables
 import com.moviemagic.dpaul.android.app.backgroundmodules.LogDisplay
 import com.moviemagic.dpaul.android.app.backgroundmodules.PicassoLoadImage
-import com.moviemagic.dpaul.android.app.contentprovider.MovieMagicContract
 import groovy.transform.CompileStatic
 
 @CompileStatic
@@ -62,9 +58,6 @@ class MovieCrewAdapter extends RecyclerView.Adapter<MovieCrewAdapter.MovieCrewAd
             mCursor.moveToPosition(getAdapterPosition())
             final int personId = mCursor.getInt(DetailMovieFragment.COL_MOVIE_CREW_PERSON_ID)
             LogDisplay.callLog(LOG_TAG,"Person id is $personId",LogDisplay.MOVIE_CREW_ADAPTER_LOG_FLAG)
-//            final Uri moviePersonInfoIdUri = MovieMagicContract.MoviePersonInfo.buildMoviePersonInfoUriWithPersonId(personId)
-//            final Intent mIntent = new Intent(mContext, PersonMovieActivity.class).setData(moviePersonInfoIdUri)
-//            mContext.startActivity(mIntent)
             mMovieCrewAdapterOnClickHandler.onClick(personId)
         }
     }

@@ -14,7 +14,6 @@ import android.os.AsyncTask
 import android.support.design.widget.Snackbar
 import android.util.Log
 import android.widget.ImageButton
-import android.widget.LinearLayout
 import android.widget.RelativeLayout
 import com.moviemagic.dpaul.android.app.BuildConfig
 import com.moviemagic.dpaul.android.app.R
@@ -22,7 +21,7 @@ import com.moviemagic.dpaul.android.app.contentprovider.MovieMagicContract
 import groovy.json.JsonException
 import groovy.json.JsonOutput
 import groovy.json.JsonParserType
-import groovy.json.JsonSlurper;
+import groovy.json.JsonSlurper
 import groovy.transform.CompileStatic
 
 @CompileStatic

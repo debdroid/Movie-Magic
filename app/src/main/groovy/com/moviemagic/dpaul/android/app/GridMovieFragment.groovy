@@ -1,6 +1,5 @@
 package com.moviemagic.dpaul.android.app
 
-import android.app.Activity
 import android.content.Context
 import android.content.DialogInterface
 import android.content.SharedPreferences

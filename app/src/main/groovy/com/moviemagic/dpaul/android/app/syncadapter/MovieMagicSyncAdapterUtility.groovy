@@ -16,9 +16,9 @@ class MovieMagicSyncAdapterUtility {
     private static final String LOG_TAG = MovieMagicSyncAdapterUtility.class.getSimpleName()
 
     // Interval at which to sync with the movie data, in milliseconds.
-    // 60 seconds (1 minute) * 360 = 6 hours
+    // 60 seconds (1 minute) * 1440 = 24 hours
     private static final int SECONDS_PER_MINUTE = 60
-    private static final int SYNC_INTERVAL_IN_MINUTES = 360
+    private static final int SYNC_INTERVAL_IN_MINUTES = 1440
     private static final int SYNC_INTERVAL = SECONDS_PER_MINUTE * SYNC_INTERVAL_IN_MINUTES
     private static final int SYNC_FLEXTIME = SECONDS_PER_MINUTE * 120
 
@@ -44,7 +44,6 @@ class MovieMagicSyncAdapterUtility {
         LogDisplay.callLog(LOG_TAG,'getSyncAccount is called',LogDisplay.MOVIE_MAGIC_SYNC_ADAPTER_UTILITY_LOG_FLAG)
         // Get an instance of the Android account manager
         final AccountManager accountManager =
-//                (AccountManager) context.getSystemService(Context.ACCOUNT_SERVICE)
                 AccountManager.get(context)
 
         //Check if any account exists

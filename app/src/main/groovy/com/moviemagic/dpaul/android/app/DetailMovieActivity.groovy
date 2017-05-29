@@ -2,10 +2,7 @@ package com.moviemagic.dpaul.android.app
 
 import android.content.Intent
 import android.os.Bundle
-import android.support.v17.leanback.media.PlaybackGlueHost
-import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentManager
-import android.support.v4.app.LoaderManager
 import android.support.v7.app.AppCompatActivity
 import com.moviemagic.dpaul.android.app.backgroundmodules.GlobalStaticVariables
 import com.moviemagic.dpaul.android.app.backgroundmodules.LogDisplay
@@ -30,7 +27,6 @@ class DetailMovieActivity extends AppCompatActivity implements DetailMovieFragme
                 final DetailMovieFragment detailMovieFragment = new DetailMovieFragment()
                 detailMovieFragment.setArguments(extras)
                 mFragmentManager.beginTransaction()
-//                getSupportFragmentManager().beginTransaction()
                         .replace(R.id.detail_movie_fragment_container,detailMovieFragment)
                         .addToBackStack(null)
                         .commit()
@@ -63,22 +59,7 @@ class DetailMovieActivity extends AppCompatActivity implements DetailMovieFragme
     @Override
     protected void onDestroy() {
         LogDisplay.callLog(LOG_TAG, 'onDestroy is called', LogDisplay.DETAIL_MOVIE_ACTIVITY_LOG_FLAG)
-//        //TODO leak test
-//        final Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.detail_movie_fragment_container)
-//        Object fragmentHost
-//        if(fragment.getHost()) fragmentHost = fragment.getHost()
-//        if(fragmentHost) {
-//            LogDisplay.callLog(LOG_TAG, 'onDestroy->before super.onDestroy:Fragment host not null', LogDisplay.DETAIL_MOVIE_ACTIVITY_LOG_FLAG)
-//        } else {
-//            LogDisplay.callLog(LOG_TAG, 'onDestroy->before super.onDestroy:Fragment is null', LogDisplay.DETAIL_MOVIE_ACTIVITY_LOG_FLAG)
-//        }
         super.onDestroy()
-//        if(fragmentHost) {
-//            LogDisplay.callLog(LOG_TAG, 'onDestroy->after super.onDestroy:Fragment host not null', LogDisplay.DETAIL_MOVIE_ACTIVITY_LOG_FLAG)
-//            fragmentHost = null
-//        } else {
-//            LogDisplay.callLog(LOG_TAG, 'onDestroy->after super.onDestroy:Fragment is null', LogDisplay.DETAIL_MOVIE_ACTIVITY_LOG_FLAG)
-//        }
     }
 
     @Override
@@ -127,7 +108,6 @@ class DetailMovieActivity extends AppCompatActivity implements DetailMovieFragme
         final DetailMovieFragment movieDetailFragment = new DetailMovieFragment()
         movieDetailFragment.setArguments(bundle)
         mFragmentManager.beginTransaction()
-//        getSupportFragmentManager().beginTransaction()
         //Used the method enter,exit,popEnter,popExit custom animation. Our cases are enter & popExit
                 .setCustomAnimations(R.anim.slide_bottom_in_animation,0,0,R.anim.slide_bottom_out_animation)
                 .replace(R.id.detail_movie_fragment_container,movieDetailFragment)

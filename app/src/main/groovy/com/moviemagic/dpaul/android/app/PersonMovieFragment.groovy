@@ -230,11 +230,8 @@ class PersonMovieFragment extends Fragment implements LoaderManager.LoaderCallba
         if (args) {
             mPersonId = args.getInt(GlobalStaticVariables.MOVIE_PERSON_ID)
             mPersonBackdropImage = args.getString(GlobalStaticVariables.MOVIE_PERSON_BACKDROP_PATH)
-//            mPersonInfoUri = args.getParcelable(GlobalStaticVariables.MOVIE_PERSON_URI) as Uri
-//            LogDisplay.callLog(LOG_TAG, "Person Fragment arguments.Uri -> $mPersonInfoUri", LogDisplay.PERSON_MOVIE_FRAGMENT_LOG_FLAG)
             LogDisplay.callLog(LOG_TAG, "Person Fragment arguments.Person id -> $mPersonId", LogDisplay.PERSON_MOVIE_FRAGMENT_LOG_FLAG)
             LogDisplay.callLog(LOG_TAG, "Person Fragment arguments.Backdrop Image -> $mPersonBackdropImage", LogDisplay.PERSON_MOVIE_FRAGMENT_LOG_FLAG)
-//            mPersonId = MovieMagicContract.MoviePersonInfo.getPersonIdFromMoviePersonInfoUri(mPersonInfoUri)
             mPersonInfoUri = MovieMagicContract.MoviePersonInfo.buildMoviePersonInfoUriWithPersonId(mPersonId)
         }
         // Inflate the view before referring any view using id
@@ -430,7 +427,6 @@ class PersonMovieFragment extends Fragment implements LoaderManager.LoaderCallba
                 }
                 LogDisplay.callLog(LOG_TAG, "scrollRange + verticalOffset:$scrollRange & $verticalOffset", LogDisplay.PERSON_MOVIE_FRAGMENT_LOG_FLAG)
                 if (scrollRange + verticalOffset == 0) {
-//                    mCollapsingToolbar.setTitle("test")
                     mCollapsingToolbar.setTitle(mPersonName)
                     isShow = true
                 } else if (isShow) {
@@ -611,60 +607,13 @@ class PersonMovieFragment extends Fragment implements LoaderManager.LoaderCallba
                                     mCrewGridHdrTextView.setTextColor(mPaletteTitleColor)
                                     mImageGridHdrTextView.setTextColor(mPaletteTitleColor)
                                     mWebLinksHdrTextView.setTextColor(mPaletteTitleColor)
-//                                    //Apply color to toolbar and status bar
-//                                    mToolbar.setBackgroundColor(mPalettePrimaryColor)
-//                                    mToolbar.setTitleTextColor(mPaletteTitleColor)
-//                                    if (Build.VERSION.SDK_INT >= 21) {
-//                                        final Window window = getActivity().getWindow()
-//                                        window.setStatusBarColor(mPalettePrimaryDarkColor)
-//                                    }
-                                    // Apply required color for collapsing toolbar
-                                    // Apply required color for tablet
-//                                    if(getResources().getBoolean(R.bool.is_tablet_port)) {
-                                        mCoordinatorLayout.setBackgroundColor(mPalettePrimaryDarkColor)
-//                                        mTabletPortImageHolder.setBackgroundColor(Color.TRANSPARENT)
-                                        mTabletPortImageBase.setBackgroundColor(mPalettePrimaryColor)
-                                        mPersonTabletPortPosterDataRelLayout.setBackgroundColor(mPalettePrimaryColor)
-                                        mCollapsingToolbar.setStatusBarScrimColor(mPalettePrimaryDarkColor)
-                                        mCollapsingToolbar.setContentScrimColor(mPalettePrimaryColor)
-                                        mCollapsingToolbar.setBackgroundColor(mPalettePrimaryColor)
-                                        mCollapsingToolbar.setCollapsedTitleTextColor(mPaletteBodyTextColor)
-//                                        // Set the backdrop image
-//                                        final ImageView imageView = getView().findViewById(R.id.person_backdrop_image) as ImageView
-//                                        if(mPersonBackdropImage) {
-//                                            final String imagePath = "$GlobalStaticVariables.TMDB_IMAGE_BASE_URL/$GlobalStaticVariables.TMDB_IMAGE_SIZE_W500" +
-//                                                    "$mPersonBackdropImage"
-//                                            LogDisplay.callLog(LOG_TAG, "Person backdrop imagePath-> $imagePath", LogDisplay.PERSON_MOVIE_FRAGMENT_LOG_FLAG)
-//                                            PicassoLoadImage.loadDetailFragmentPagerAdapterImage(getActivity(), imagePath, imageView)
-//                                        } else {
-//                                            LogDisplay.callLog(LOG_TAG, 'Person backdrop image path is null', LogDisplay.PERSON_MOVIE_FRAGMENT_LOG_FLAG)
-//                                        }
-//                                    } else { // For mobile portrait, apply color to the required fields
-//                                        //Apply color to toolbar and status bar
-//                                        mToolbar.setBackgroundColor(mPalettePrimaryColor)
-//                                        mToolbar.setTitleTextColor(mPaletteTitleColor)
-//                                        if (Build.VERSION.SDK_INT >= 21) {
-//                                            final Window window = getActivity().getWindow()
-//                                            window.setStatusBarColor(mPalettePrimaryDarkColor)
-//                                        }
-//                                    }
-//                                } else {
-//                                    // Remove the Collapsing toolbar title
-//                                    final CollapsingToolbarLayout collapsingToolbarLayout = getView().findViewById(R.id.person_collapsing_toolbar) as CollapsingToolbarLayout
-//                                    collapsingToolbarLayout.setTitleEnabled(false)
-//                                    // Set a bigger text size & White color for Toolbar in landscape mode
-//                                    mToolbar.setTitleTextAppearance(getActivity(),R.style.TextAppearance_AppCompat_Headline)
-//                                    mToolbar.setTitleTextColor(ContextCompat.getColor(getContext(), R.color.primary_text))
-//                                    // Set the backdrop image
-//                                    final ImageView imageView = getView().findViewById(R.id.person_backdrop_image) as ImageView
-//                                    if(mPersonBackdropImage) {
-//                                        final String imagePath = "$GlobalStaticVariables.TMDB_IMAGE_BASE_URL/$GlobalStaticVariables.TMDB_IMAGE_SIZE_W500" +
-//                                                "$mPersonBackdropImage"
-//                                        LogDisplay.callLog(LOG_TAG, "Person backdrop imagePath-> $imagePath", LogDisplay.PERSON_MOVIE_FRAGMENT_LOG_FLAG)
-//                                        PicassoLoadImage.loadDetailFragmentPagerAdapterImage(getActivity(), imagePath, imageView)
-//                                    } else {
-//                                        LogDisplay.callLog(LOG_TAG, 'Person backdrop image path is null', LogDisplay.PERSON_MOVIE_FRAGMENT_LOG_FLAG)
-//                                    }
+                                    mCoordinatorLayout.setBackgroundColor(mPalettePrimaryDarkColor)
+                                    mTabletPortImageBase.setBackgroundColor(mPalettePrimaryColor)
+                                    mPersonTabletPortPosterDataRelLayout.setBackgroundColor(mPalettePrimaryColor)
+                                    mCollapsingToolbar.setStatusBarScrimColor(mPalettePrimaryDarkColor)
+                                    mCollapsingToolbar.setContentScrimColor(mPalettePrimaryColor)
+                                    mCollapsingToolbar.setBackgroundColor(mPalettePrimaryColor)
+                                    mCollapsingToolbar.setCollapsedTitleTextColor(mPaletteBodyTextColor)
                                 }
 
                                 //Apply color to adapter elements irrespective of portrait or landscape mode
@@ -683,55 +632,29 @@ class PersonMovieFragment extends Fragment implements LoaderManager.LoaderCallba
             }
             PicassoLoadImage.loadDetailFragmentPosterImage(getActivity(),posterPath,mPosterImageView,picassoPosterCallback)
             mPersonName = data.getString(COL_PERSON_INFO_PERSON_NAME)
-
-            // Handle toolbar/collapsing toolbar for mobile & tablet and portrait & landscape
-//            if(getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) { // Portrait
-//                if(getResources().getBoolean(R.bool.is_tablet_port)) { // Tablet portrait
-                    // Set the backdrop image
-                    final ImageView imageView = getView().findViewById(R.id.person_backdrop_image) as ImageView
-                    if(mPersonBackdropImage) {
-                        final String imagePath = "$GlobalStaticVariables.TMDB_IMAGE_BASE_URL/$GlobalStaticVariables.TMDB_IMAGE_SIZE_W500" +
-                                "$mPersonBackdropImage"
+            // Set the backdrop image
+            final ImageView imageView = getView().findViewById(R.id.person_backdrop_image) as ImageView
+            if(mPersonBackdropImage) {
+                final String imagePath = "$GlobalStaticVariables.TMDB_IMAGE_BASE_URL/$GlobalStaticVariables.TMDB_IMAGE_SIZE_W500" +
+                        "$mPersonBackdropImage"
                         LogDisplay.callLog(LOG_TAG, "Person backdrop imagePath-> $imagePath", LogDisplay.PERSON_MOVIE_FRAGMENT_LOG_FLAG)
                         PicassoLoadImage.loadDetailFragmentPagerAdapterImage(getActivity(), imagePath, imageView)
-                    } else {
+            } else {
                         LogDisplay.callLog(LOG_TAG, 'Person backdrop image path is null', LogDisplay.PERSON_MOVIE_FRAGMENT_LOG_FLAG)
                     }
-                if(getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) { // Portrait
+            if(getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) { // Portrait
                     // Set the onscroll listener
                     mAppBarLayout.addOnOffsetChangedListener(mAppbarOnOffsetChangeListener)
-                    // Remove the color from overlapping area of the person image
-//                    mTabletPortImageHolder.setBackgroundColor(Color.TRANSPARENT)
-//                } else { // Mobile portrait
-////                    mCollapsingToolbar.setTitleEnabled(false)
-//                    mToolbar.setTitle(mPersonName)
-//                }
             } else { // Landscape
                 // Remove the Collapsing toolbar title
-//                final CollapsingToolbarLayout collapsingToolbarLayout = getView().findViewById(R.id.person_collapsing_toolbar) as CollapsingToolbarLayout
                 mCollapsingToolbar.setTitleEnabled(false)
                 mToolbar.setTitle(mPersonName)
                 // Set a bigger text size & White color for Toolbar in landscape mode
                 mToolbar.setTitleTextAppearance(getActivity(),R.style.TextAppearance_AppCompat_Headline)
                 mToolbar.setTitleTextColor(ContextCompat.getColor(getContext(), R.color.primary_text))
-                // Set the backdrop image
-//                final ImageView imageView = getView().findViewById(R.id.person_backdrop_image) as ImageView
-//                if(mPersonBackdropImage) {
-//                    final String imagePath = "$GlobalStaticVariables.TMDB_IMAGE_BASE_URL/$GlobalStaticVariables.TMDB_IMAGE_SIZE_W500" +
-//                            "$mPersonBackdropImage"
-//                    LogDisplay.callLog(LOG_TAG, "Person backdrop imagePath-> $imagePath", LogDisplay.PERSON_MOVIE_FRAGMENT_LOG_FLAG)
-//                    PicassoLoadImage.loadDetailFragmentPagerAdapterImage(getActivity(), imagePath, imageView)
-//                } else {
-//                    LogDisplay.callLog(LOG_TAG, 'Person backdrop image path is null', LogDisplay.PERSON_MOVIE_FRAGMENT_LOG_FLAG)
-//                }
-
-//                if(getResources().getBoolean(R.bool.is_tablet_port)) { // Tablet landscape
-//                } else {// Mobile landscape
-//                }
             }
 
             mNameTextView.setText(data.getString(COL_PERSON_INFO_PERSON_NAME))
-//            mToolbar.setTitle(data.getString(COL_PERSON_INFO_PERSON_NAME))
             if(data.getString(COL_PERSON_INFO_PERSON_BIRTHDAY)) {
                 mDobTextView.setText(Utility.formatFriendlyDate(data.getString(COL_PERSON_INFO_PERSON_BIRTHDAY)))
             } else {
