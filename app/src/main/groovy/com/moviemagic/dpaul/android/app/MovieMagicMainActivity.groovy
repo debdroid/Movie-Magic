@@ -116,7 +116,7 @@ public class MovieMagicMainActivity extends AppCompatActivity implements
 
         // Initialize the SyncAdapter
         MovieMagicSyncAdapterUtility.initializeSyncAdapter(getApplicationContext())
-        //TODO *** Comment before release **********************
+        //*** Comment before release **********************
         //MovieMagicSyncAdapterUtility.syncImmediately(this)
 
         // Registers BroadcastReceiver to track network connection changes. This is more lightweight

@@ -254,6 +254,7 @@
     <string name="sort_dialog_title">Sort list by..</string>
     <string name="sort_dialog_ascending_button">Ascending</string>
     <string name="sort_dialog_descending_button">Descending</string>
+    <string name="sort_dialog_reset_button">Reset</string>
     <string name="filter_release_year_dialog_title">Select Release Year</string>
     <string name="filter_no_movie_msg">No movie met filter criteria</string>
     <string name="user_local_and_tmdb_list_subtitle_no_movie_msg">List is empty</string>
@@ -299,5 +300,6 @@
     <string name="movie_detail_user_tmdb_list_drawable_rated_content_description">User Tmdb rated image button</string>
     <string name="movie_detail_collection_image_content_description">Collection backdrop image</string>
     <string name="splash_screen_logo_content_description">Application logo on splash screen</string>
+    <string name="movie_genre_user_notification_msg">This filter only considers movies for which details have been browsed and viewed</string>
 
 </resources>

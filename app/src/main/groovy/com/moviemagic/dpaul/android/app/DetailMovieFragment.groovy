@@ -711,7 +711,6 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
         mCollectionBackdropImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             void onClick(final View v) {
-                //TODO - need to uncomment once memory leak issue is solved
                 if(mCollectionId > 0) {
                     LogDisplay.callLog(LOG_TAG, 'Collection backdrop image is clicked', LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
                     //Create an intent for collection activity
@@ -869,7 +868,6 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
         if (savedInstanceState == null) {
             mBackdropViewPagerPos = 0
             // Start Tmdb data loader only if user is logged in
-            //TODO this is not a good way to access variable, use Global class
             if(MovieMagicMainActivity.isUserLoggedIn) {
                 getActivity().getSupportLoaderManager().initLoader(MOVIE_DETAIL_FRAGMENT_BASIC_TMDB_DATA_LOADER_ID, null, this)
             }
@@ -1573,7 +1571,6 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
      */
     void handleMovieReviewOnLoadFinished(final Cursor data) {
         LogDisplay.callLog(LOG_TAG, "handleMovieReviewOnLoadFinished.Cursor rec count -> ${data.getCount()}", LogDisplay.DETAIL_MOVIE_FRAGMENT_LOG_FLAG)
-        //TODO leak testing
         mMovieReviewAdapter.swapCursor(data)
     }
 

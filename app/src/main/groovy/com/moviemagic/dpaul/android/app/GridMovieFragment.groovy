@@ -24,6 +24,7 @@ import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import com.moviemagic.dpaul.android.app.adapter.MovieGridRecyclerAdapter
 import com.moviemagic.dpaul.android.app.backgroundmodules.Utility
 import com.moviemagic.dpaul.android.app.contentprovider.MovieMagicContract
@@ -347,6 +348,7 @@ class GridMovieFragment extends Fragment implements LoaderManager.LoaderCallback
             case R.id.menu_action_filter_genre:
                 // First level under filter, so set the selection clause here
                 mQuerySelectionClause = "$MovieMagicContract.MovieBasicInfo.COLUMN_GENRE  like ?"
+                Toast.makeText(getContext(), getString(R.string.movie_genre_user_notification_msg), Toast.LENGTH_LONG).show()
                 return true
                 break
             case R.id.menu_action_filter_genre_action:
@@ -681,6 +683,9 @@ class GridMovieFragment extends Fragment implements LoaderManager.LoaderCallback
                 mSortIsOn = true
                 mSortParam = "${determineSortType()} ASC"
                 restartCursorLoader()
+
+                // Dismiss the dialog
+                dialog.dismiss()
             }
         })
         // Doing a bit of hacking to use alert dialog's cancel button as an action button
@@ -691,16 +696,29 @@ class GridMovieFragment extends Fragment implements LoaderManager.LoaderCallback
                 mSortIsOn = true
                 mSortParam = "${determineSortType()} DESC"
                 restartCursorLoader()
-            }
-        })
-        // Since the alert dialog's cancel button is used as an action button, using neutral button as cancel
-        builder.setNeutralButton(getString(android.R.string.cancel), new DialogInterface.OnClickListener() {
-            @Override
-            void onClick(final DialogInterface dialog, final int which) {
-                LogDisplay.callLog(LOG_TAG, 'Dialog cancel is clicked. No action needed.', LogDisplay.GRID_MOVIE_FRAGMENT_LOG_FLAG)
+
+                // Dismiss the dialog
                 dialog.dismiss()
             }
         })
+
+        //Show the reset button only if the sort is on
+        if(mSortIsOn) {
+            builder.setNeutralButton(getString(R.string.sort_dialog_reset_button), new DialogInterface.OnClickListener() {
+                @Override
+                void onClick(final DialogInterface dialog, final int which) {
+                    LogDisplay.callLog(LOG_TAG, 'Dialog reset is clicked. Reset the list.', LogDisplay.GRID_MOVIE_FRAGMENT_LOG_FLAG)
+                    // Reset the sort
+                    mSortParam = "$MovieMagicContract.MovieBasicInfo._ID ASC"
+                    mSortIsOn = false
+                    setIconColor(mSortDrawableIcon, false)
+                    restartCursorLoader()
+
+                    // Dismiss the dialog
+                    dialog.dismiss()
+                }
+            })
+        }
 
         // Create the AlertDialog & show
         final AlertDialog dialog = builder.create()
@@ -714,26 +732,22 @@ class GridMovieFragment extends Fragment implements LoaderManager.LoaderCallback
     protected String determineSortType() {
         String sortField = null
         switch (mSortItemNumber) {
-            case 0: // This is the reset scenario
-                mSortParam = "$MovieMagicContract.MovieBasicInfo._ID ASC"
-                mSortIsOn = false
-                setIconColor(mSortDrawableIcon, false)
-                break
-            case 1:
+            case 0:
                 sortField = MovieMagicContract.MovieBasicInfo.COLUMN_TITLE
                 break
-            case 2:
+            case 1:
                 sortField = MovieMagicContract.MovieBasicInfo.COLUMN_RELEASE_DATE
                 break
-            case 3:
+            case 2:
                 sortField = MovieMagicContract.MovieBasicInfo.COLUMN_VOTE_AVG
                 break
-            case 4: // This one is for user local list only
+            case 3: // This one is for user local list only
                 sortField = MovieMagicContract.MovieBasicInfo.COLUMN_CREATE_TIMESTAMP
                 break
             default:
                 mValidMenuSelection = false
                 mSortIsOn = false
+                setIconColor(mSortDrawableIcon, false)
                 Snackbar.make(mRecyclerView,getString(R.string.no_sort_selection_msg),Snackbar.LENGTH_LONG).show()
                 LogDisplay.callLog(LOG_TAG, "Unknwon item number -> $mSortItemNumber", LogDisplay.GRID_MOVIE_FRAGMENT_LOG_FLAG)
         }
