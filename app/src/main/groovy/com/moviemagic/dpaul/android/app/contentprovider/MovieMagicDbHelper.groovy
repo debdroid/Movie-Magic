@@ -13,11 +13,8 @@ import groovy.transform.CompileStatic
 @CompileStatic
 class MovieMagicDbHelper extends SQLiteOpenHelper {
     private static final String LOG_TAG = MovieMagicDbHelper.class.getSimpleName()
-    // Increment the database version if the schema gets changed
-    //TODO:In my nexus4, somehow the database does not get deleted while uninstalling, so every change in db
-    //TODO: is forcing me to upgrade the database.
-    //TODO:Need to change before release
-    private static final int DATABASE_VERSION = 2
+
+    private static final int DATABASE_VERSION = 1
 
     //Define as public as used by TestMovieMagicDatabase.groovy
     public static final String DATABASE_NAME = 'movie_magic.db'
@@ -348,7 +345,6 @@ class MovieMagicDbHelper extends SQLiteOpenHelper {
                 " which will destroy all old data",LogDisplay.MOVIE_MAGIC_DB_HELPER_LOG_FLAG)
 
         //Drop all the tables
-        //TODO: Currently just dropping the tables in case of DB upgrade but need to find out a different way for future
         sqLiteDatabase.execSQL("DROP TABLE IF EXISTS $MovieMagicContract.MovieBasicInfo.TABLE_NAME")
         sqLiteDatabase.execSQL("DROP TABLE IF EXISTS $MovieMagicContract.MovieCast.TABLE_NAME")
         sqLiteDatabase.execSQL("DROP TABLE IF EXISTS $MovieMagicContract.MovieCrew.TABLE_NAME")

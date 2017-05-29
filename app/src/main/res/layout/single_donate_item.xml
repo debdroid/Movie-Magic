@@ -10,7 +10,7 @@
         android:layout_alignParentStart="true"
         android:layout_gravity="center"
         android:layout_toStartOf="@+id/single_donate_item_donate_button"
-        android:paddingStart="@dimen/m_design_space_between_content_area">
+        android:paddingStart="@dimen/m_design_space_between_content_area"
         android:paddingEnd="@dimen/m_design_space_between_content_area">
 
         <TextView
