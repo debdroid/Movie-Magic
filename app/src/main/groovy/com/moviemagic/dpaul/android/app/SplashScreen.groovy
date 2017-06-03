@@ -19,6 +19,8 @@ class SplashScreen extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_splash_screen)
+
+
         // Make the splash screen full screen
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,WindowManager.LayoutParams.FLAG_FULLSCREEN)
         imageView = findViewById(R.id.splash_screen_logo) as ImageView

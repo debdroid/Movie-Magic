@@ -70,6 +70,10 @@ public class MovieMagicMainActivity extends AppCompatActivity implements
         super.onCreate(savedInstanceState)
         LogDisplay.callLog(LOG_TAG,'onCreate is called',LogDisplay.MOVIE_MAGIC_MAIN_LOG_FLAG)
         setContentView(R.layout.activity_movie_magic_main)
+
+        // Show the EULA - first install or any update to the software
+        new MyMoviesEULA(this).show()
+
         final Toolbar toolbar = findViewById(R.id.main_activity_toolbar) as Toolbar
         setSupportActionBar(toolbar)
 

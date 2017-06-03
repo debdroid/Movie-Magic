@@ -399,7 +399,7 @@ class DetailMovieFragment extends Fragment implements LoaderManager.LoaderCallba
 
         mToolbar = mRootView.findViewById(R.id.movie_detail_toolbar) as Toolbar
         if (mToolbar) {
-            ((AppCompatActivity)getActivity()).setSupportActionBar(mToolbar)
+            ((AppCompatActivity)getActivity()).setSupportActionBar(mToolbar as android.support.v7.widget.Toolbar)
 //            //Enable back to home button
             ((AppCompatActivity)getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true)
         }
