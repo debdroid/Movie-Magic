@@ -18,8 +18,10 @@ class MovieMagicYoutubeFragment extends YouTubePlayerSupportFragment implements 
     //Error dialog id
     private static final int RECOVERY_ERROR_DIALOG_ID = 1
     public static final String YOUTUBE_VIDEO_ID_KEY = 'youtube_video_id_key'
+//    public static final String YOUTUBE_IS_PLAYING_FLAG = 'youtube_is_playing_key'
     private List<String> mVideoIds
     private YouTubePlayer mYouTubePlayer
+//    private boolean mIsPlayingFlag = false
 
     //Empty constructor, to be used by the system while creating the fragment when embedded in XML
     MovieMagicYoutubeFragment () {
@@ -100,7 +102,7 @@ class MovieMagicYoutubeFragment extends YouTubePlayerSupportFragment implements 
 
         if (mVideoIds) {
             if (restored) {
-                youTubePlayer.play()
+//                Let Youtube handle it automatically
             } else {
                 youTubePlayer.cueVideos(mVideoIds)
             }

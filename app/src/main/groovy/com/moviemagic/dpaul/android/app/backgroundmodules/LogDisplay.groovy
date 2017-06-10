@@ -14,7 +14,7 @@ import groovy.transform.CompileStatic
  */
 
 class LogDisplay {
-    private static final boolean SHOW_ALL_LOG_FLAG = true
+    private static final boolean SHOW_ALL_LOG_FLAG = false
 
     public static final boolean MOVIE_MAGIC_CONTRACT_LOG_FLAG = false
     public static final boolean MOVIE_MAGIC_DB_HELPER_LOG_FLAG = false

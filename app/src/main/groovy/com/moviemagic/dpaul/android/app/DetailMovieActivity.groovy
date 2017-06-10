@@ -12,7 +12,6 @@ import groovy.transform.CompileStatic
 class DetailMovieActivity extends AppCompatActivity implements DetailMovieFragment.CallbackForBackdropImageClick,
                 DetailMovieFragment.CallbackForSimilarMovieClick {
     private static final String LOG_TAG = DetailMovieActivity.class.getSimpleName()
-    private final FragmentManager mFragmentManager = getSupportFragmentManager()
 
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
@@ -26,7 +25,7 @@ class DetailMovieActivity extends AppCompatActivity implements DetailMovieFragme
             if (extras) {
                 final DetailMovieFragment detailMovieFragment = new DetailMovieFragment()
                 detailMovieFragment.setArguments(extras)
-                mFragmentManager.beginTransaction()
+                getSupportFragmentManager().beginTransaction()
                         .replace(R.id.detail_movie_fragment_container,detailMovieFragment)
                         .addToBackStack(null)
                         .commit()
@@ -107,7 +106,7 @@ class DetailMovieActivity extends AppCompatActivity implements DetailMovieFragme
         bundle.putString(GlobalStaticVariables.MOVIE_BASIC_INFO_CATEGORY,GlobalStaticVariables.MOVIE_CATEGORY_SIMILAR)
         final DetailMovieFragment movieDetailFragment = new DetailMovieFragment()
         movieDetailFragment.setArguments(bundle)
-        mFragmentManager.beginTransaction()
+        getSupportFragmentManager().beginTransaction()
         //Used the method enter,exit,popEnter,popExit custom animation. Our cases are enter & popExit
                 .setCustomAnimations(R.anim.slide_bottom_in_animation,0,0,R.anim.slide_bottom_out_animation)
                 .replace(R.id.detail_movie_fragment_container,movieDetailFragment)

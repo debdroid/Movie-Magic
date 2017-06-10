@@ -157,8 +157,8 @@ class HomeMovieFragment extends Fragment implements LoaderManager.LoaderCallback
         mRecommendationRecyclerViewEmptyTextView = mRootView.findViewById(R.id.home_movie_recommendation_recycler_view_empty_msg_text_view) as TextView
         mYouTubeFragmentContainer = mRootView.findViewById(R.id.home_youtube_fragment_container) as FrameLayout
         //Set this to false so that activity starts the page from the beginning
-        mComingSoonRecyclerView.setFocusable(false)
-        mRecentlyAddedUserListRecyclerView.setNestedScrollingEnabled(false)
+//        mComingSoonRecyclerView.setFocusable(false)
+//        mRecentlyAddedUserListRecyclerView.setNestedScrollingEnabled(false)
         /**
          * In Cinema Recycler View
          */
@@ -171,7 +171,9 @@ class HomeMovieFragment extends Fragment implements LoaderManager.LoaderCallback
         mInCinemaRecyclerView.setLayoutManager(mInCinemaGridLayoutManager)
         //Set this to false for smooth scrolling of recyclerview
         mInCinemaRecyclerView.setNestedScrollingEnabled(false)
+        //Set this to false so that activity starts the page from the beginning
         mInCinemaRecyclerView.setFocusable(false)
+        mInCinemaRecyclerView.setHasFixedSize(true)
         mInCinemaAdapter = new HomeMovieAdapter(getActivity(), mInCinemaRecyclerViewEmptyTextView,
                 new HomeMovieAdapter.HomeMovieAdapterOnClickHandler(){
                     @Override
@@ -194,6 +196,7 @@ class HomeMovieFragment extends Fragment implements LoaderManager.LoaderCallback
         mComingSoonRecyclerView.setNestedScrollingEnabled(false)
         //Set this to false so that activity starts the page from the beginning
         mComingSoonRecyclerView.setFocusable(false)
+        mComingSoonRecyclerView.setHasFixedSize(true)
         mComingSoonAdapter = new HomeMovieAdapter(getActivity(), mComingSoonRecyclerViewEmptyTextView,
                 new HomeMovieAdapter.HomeMovieAdapterOnClickHandler(){
                     @Override
@@ -216,6 +219,7 @@ class HomeMovieFragment extends Fragment implements LoaderManager.LoaderCallback
         mRecentlyAddedUserListRecyclerView.setNestedScrollingEnabled(false)
         //Set this to false so that activity starts the page from the beginning
         mRecentlyAddedUserListRecyclerView.setFocusable(false)
+//        mRecentlyAddedUserListRecyclerView.setHasFixedSize(true) //- this count may vary, so not required
         mRecentlyAddedUserListAdapter = new HomeMovieAdapter(getActivity(), mRecentlyAddedUserListRecyclerViewEmptyTextView,
                 new HomeMovieAdapter.HomeMovieAdapterOnClickHandler(){
                     @Override
@@ -240,6 +244,7 @@ class HomeMovieFragment extends Fragment implements LoaderManager.LoaderCallback
         mRecommendationRecyclerView.setNestedScrollingEnabled(false)
         //Set this to false so that activity starts the page from the beginning
         mRecommendationRecyclerView.setFocusable(false)
+//        mRecommendationRecyclerView.setHasFixedSize(true) //- this count may vary, so not required
         mRecommendationAdapter = new HomeMovieAdapter(getActivity(), mRecommendationRecyclerViewEmptyTextView,
                 new HomeMovieAdapter.HomeMovieAdapterOnClickHandler(){
                     @Override

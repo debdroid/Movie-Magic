@@ -1,7 +1,7 @@
 package com.moviemagic.dpaul.android.app
 
 import android.app.Activity
-import android.app.Dialog
+import android.content.Context
 import android.content.DialogInterface
 import android.content.SharedPreferences
 import android.content.pm.ActivityInfo
@@ -14,17 +14,17 @@ import groovy.transform.CompileStatic
 @CompileStatic
 class MyMoviesEULA {
     private String EULA_PREFIX = "eula_"
-    private Activity mActivity
+    private Context mContext
 
-    public MyMoviesEULA(Activity context) {
-        mActivity = context
+    public MyMoviesEULA(Context context) {
+        mContext = context
     }
 
     // Get the package info
     private PackageInfo getPackageInfo() {
         PackageInfo pi = null
         try {
-            pi = mActivity.getPackageManager().getPackageInfo(mActivity.getPackageName(), PackageManager.GET_ACTIVITIES)
+            pi = mContext.getPackageManager().getPackageInfo(mContext.getPackageName(), PackageManager.GET_ACTIVITIES)
         } catch (PackageManager.NameNotFoundException e) {
             e.printStackTrace()
         }
@@ -36,24 +36,24 @@ class MyMoviesEULA {
 
         // the eulaKey changes every time you increment the version number in the AndroidManifest.xml
         final String eulaKey = EULA_PREFIX + versionInfo.versionCode
-        final SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(mActivity)
+        final SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(mContext)
         boolean hasBeenShown = prefs.getBoolean(eulaKey, false)
         if(hasBeenShown == false){
 
             // Show the Eula
-            String title = mActivity.getString(R.string.app_name) + " v" + versionInfo.versionName
+            String title = mContext.getString(R.string.app_name) + " v" + versionInfo.versionName
 
             //Includes the updates as well so users know what changed.
-            String message = mActivity.getString(R.string.app_update_detail) + "\n\n" + mActivity.getString(R.string.eula_detail)
+            String message = mContext.getString(R.string.app_update_detail) + "\n\n" + mContext.getString(R.string.eula_detail)
 
             // Disable orientation changes, to prevent parent activity
             // reinitialization
-            mActivity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT)
+            ((Activity)mContext).setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT)
 
-            AlertDialog.Builder builder = new AlertDialog.Builder(mActivity)
+            AlertDialog.Builder builder = new AlertDialog.Builder(mContext)
                     .setTitle(title)
                     .setMessage(message)
-                    .setPositiveButton(mActivity.getString(R.string.eula_accept), new DialogInterface.OnClickListener() {
+                    .setPositiveButton(mContext.getString(R.string.eula_accept), new DialogInterface.OnClickListener() {
 
                 @Override
                 public void onClick(DialogInterface dialogInterface, int i) {
@@ -63,17 +63,17 @@ class MyMoviesEULA {
                     editor.commit()
                     dialogInterface.dismiss()
                     // Enable orientation changes based on device's sensor
-                    mActivity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR)
+                    ((Activity)mContext).setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR)
                 }
             })
-                    .setNegativeButton(mActivity.getString(R.string.eula_decline), new DialogInterface.OnClickListener() {
+                    .setNegativeButton(mContext.getString(R.string.eula_decline), new DialogInterface.OnClickListener() {
 
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
                     // Close the activity as they have declined the EULA
-                    mActivity.finish()
+                    ((Activity)mContext).finish()
                     // Enable orientation changes based on device's sensor
-                    mActivity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR)
+                    ((Activity)mContext).setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR)
                 }
 
             })

@@ -33,8 +33,6 @@ class SplashScreen extends AppCompatActivity {
 
             @Override
             void onAnimationEnd(Animation animation) {
-                // Finish the current activity
-                finish()
                 startMainActivity()
             }
 
@@ -45,7 +43,9 @@ class SplashScreen extends AppCompatActivity {
     }
 
     void startMainActivity() {
-        final Intent intent = new Intent(getApplicationContext(), MovieMagicMainActivity.class)
+        final Intent intent = new Intent(this, MovieMagicMainActivity.class)
         startActivity(intent)
+        // Finish the current activity
+        finish()
     }
 }
