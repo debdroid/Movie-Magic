@@ -58,7 +58,6 @@ public class MovieMagicMainActivity extends AppCompatActivity implements
     private static final String LOG_TAG = MovieMagicMainActivity.class.getSimpleName()
     private static final String STATE_APP_TITLE = 'app_title'
     private static final String GRID_FRAGMENT_FLAG = 'grid_fragment_flag'
-    private static final String NAV_ITME_MENU_ID = 'nav_item_menu_id'
     private NavigationView mNavigationView
     private TextView mNavPanelUserNameTextView, mNavPanelUserIdTextView
     private Button mNavPanelLoginButton
@@ -67,7 +66,6 @@ public class MovieMagicMainActivity extends AppCompatActivity implements
     private NetworkReceiver networkReceiver
     private AsyncTask mUpdateMenuCounterAsyncTask
     private boolean mIsGridFragment = false
-    private int mCurrentNavMenuItem = -1
 
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
@@ -154,7 +152,6 @@ public class MovieMagicMainActivity extends AppCompatActivity implements
         //Load the Home Fragment
         if(savedInstanceState == null) {
             LogDisplay.callLog(LOG_TAG,'This is first time, so load homeFragment..',LogDisplay.MOVIE_MAGIC_MAIN_LOG_FLAG)
-            mCurrentNavMenuItem = R.id.nav_home
             loadHomeFragment()
         } else {
             LogDisplay.callLog(LOG_TAG,'This is restore scenario..so need to load homeFragment as is',LogDisplay.MOVIE_MAGIC_MAIN_LOG_FLAG)
@@ -186,7 +183,6 @@ public class MovieMagicMainActivity extends AppCompatActivity implements
         LogDisplay.callLog(LOG_TAG,'onSaveInstanceState is called',LogDisplay.MOVIE_MAGIC_MAIN_LOG_FLAG)
         outState.putString(STATE_APP_TITLE,getSupportActionBar().getTitle().toString())
         outState.putBoolean(GRID_FRAGMENT_FLAG,mIsGridFragment)
-        outState.putInt(NAV_ITME_MENU_ID,mCurrentNavMenuItem)
         // Now call the superclass so it can save the view hierarchy state
         super.onSaveInstanceState(outState)
     }
@@ -198,9 +194,6 @@ public class MovieMagicMainActivity extends AppCompatActivity implements
         super.onRestoreInstanceState(savedInstanceState)
         getSupportActionBar().setTitle(savedInstanceState.getCharSequence(STATE_APP_TITLE,'error'))
         mIsGridFragment = savedInstanceState.getBoolean(GRID_FRAGMENT_FLAG,false)
-        mCurrentNavMenuItem = savedInstanceState.getInt(NAV_ITME_MENU_ID,-1)
-        // Set the nav menu item
-        setNavItemMenu()
     }
 
     @Override
@@ -223,8 +216,6 @@ public class MovieMagicMainActivity extends AppCompatActivity implements
         //Program fails if 'Void' is used for parameter, could be because of groovy compiler??
         //So to get rid of the problem a 'dummy' value is passed
         mUpdateMenuCounterAsyncTask = new UpdateMenuCounter(this, mNavigationView).execute(['dummy'] as String[])
-        // Set the nav menu item
-        setNavItemMenu()
     }
 
     @Override
@@ -304,71 +295,71 @@ public class MovieMagicMainActivity extends AppCompatActivity implements
         final int id = item.getItemId()
 
         if (id == R.id.nav_home) {
-            mCurrentNavMenuItem = id
             setItemTitleAndSubTitle(getString(R.string.app_name))
             loadHomeFragment()
         } else if (id == R.id.nav_tmdb_popular) {
-            mCurrentNavMenuItem = id
             setItemTitleAndSubTitle(getString(R.string.drawer_menu_tmdb_popular))
             loadGridFragment(GlobalStaticVariables.MOVIE_CATEGORY_POPULAR)
         } else if (id == R.id.nav_tmdb_toprated) {
-            mCurrentNavMenuItem = id
             setItemTitleAndSubTitle(getString(R.string.drawer_menu_tmdb_toprated))
             loadGridFragment(GlobalStaticVariables.MOVIE_CATEGORY_TOP_RATED)
         } else if (id == R.id.nav_tmdb_nowplaying) {
-            mCurrentNavMenuItem = id
             setItemTitleAndSubTitle(getString(R.string.drawer_menu_tmdb_nowplaying))
             loadGridFragment(GlobalStaticVariables.MOVIE_CATEGORY_NOW_PLAYING)
         } else if (id == R.id.nav_tmdb_upcoming) {
-            mCurrentNavMenuItem = id
             setItemTitleAndSubTitle(getString(R.string.drawer_menu_tmdb_upcoming))
             loadGridFragment(GlobalStaticVariables.MOVIE_CATEGORY_UPCOMING)
         } else if (id == R.id.nav_user_watched) {
-            mCurrentNavMenuItem = id
             setItemTitleAndSubTitle(getString(R.string.drawer_menu_user_watched))
             loadGridFragment(GlobalStaticVariables.MOVIE_CATEGORY_LOCAL_USER_WATCHED)
         } else if (id == R.id.nav_user_wishlist) {
-            mCurrentNavMenuItem = id
             setItemTitleAndSubTitle(getString(R.string.drawer_menu_user_wishlist))
             loadGridFragment(GlobalStaticVariables.MOVIE_CATEGORY_LOCAL_USER_WISH_LIST)
         } else if (id == R.id.nav_user_favourite) {
-            mCurrentNavMenuItem = id
             setItemTitleAndSubTitle(getString(R.string.drawer_menu_user_favourite))
             loadGridFragment(GlobalStaticVariables.MOVIE_CATEGORY_LOCAL_USER_FAVOURITE)
         } else if (id == R.id.nav_user_collection) {
-            mCurrentNavMenuItem = id
             setItemTitleAndSubTitle(getString(R.string.drawer_menu_user_collection))
             loadGridFragment(GlobalStaticVariables.MOVIE_CATEGORY_LOCAL_USER_COLLECTION)
         } else if (id == R.id.nav_tmdb_user_watchlist) {
-            mCurrentNavMenuItem = id
             setItemTitleAndSubTitle(getString(R.string.drawer_menu_tmdb_user_watchlist) +" (TMDb)")
             loadGridFragment(GlobalStaticVariables.MOVIE_CATEGORY_TMDB_USER_WATCHLIST)
         } else if (id == R.id.nav_tmdb_user_favourite) {
-            mCurrentNavMenuItem = id
             setItemTitleAndSubTitle(getString(R.string.drawer_menu_tmdb_user_favourite) +" (TMDb)")
             loadGridFragment(GlobalStaticVariables.MOVIE_CATEGORY_TMDB_USER_FAVOURITE)
         } else if (id == R.id.nav_tmdb_user_rated) {
-            mCurrentNavMenuItem = id
             setItemTitleAndSubTitle(getString(R.string.drawer_menu_tmdb_user_rated) +" (TMDb)")
             loadGridFragment(GlobalStaticVariables.MOVIE_CATEGORY_TMDB_USER_RATED)
         } else if (id == R.id.nav_menu_settings) {
+            // Disable checkable behaviour
+            item.setCheckable(false)
             openSettingsActivity()
         } else if (id == R.id.nav_menu_logout) {
             logoutFromTmdbAccount()
         } else if(id == R.id.nav_menu_rate_the_app) {
+            // Disable checkable behaviour
+            item.setCheckable(false)
             launchGooglePlayForRatingAndFeedback()
         } else if(id == R.id.nav_menu_contact_developer) {
+            // Disable checkable behaviour
+            item.setCheckable(false)
             contactDeveloperAction()
         } else if(id == R.id.nav_menu_developer_website) {
+            // Disable checkable behaviour
+            item.setCheckable(false)
             openDeveloperWebsite()
         } else if(id == R.id.nav_menu_privacy_policy) {
+            // Disable checkable behaviour
+            item.setCheckable(false)
             openPrivacyPolicy()
         } else if(id == R.id.nav_menu_eula) {
+            // Disable checkable behaviour
+            item.setCheckable(false)
             // Show the EULA to user
             new MyMoviesEULA(this).showEula(false)
-            // Set the nav item menu
-            setNavItemMenu()
         } else if(id == R.id.nav_menu_donate) {
+            // Disable checkable behaviour
+            item.setCheckable(false)
             openDonateActivity()
         }
 
@@ -657,20 +648,6 @@ public class MovieMagicMainActivity extends AppCompatActivity implements
         getSupportActionBar().setTitle(title)
         // Filter menu of GridFragment can set the subtitle, so reset it
         getSupportActionBar().setSubtitle('')
-    }
-
-
-    /**
-     * This method select the correct nave menu item in case of restart (i.e. activity restarted after returning from other
-     * activity like settings, donate, detail, rate and comment, etc)
-     */
-    private void setNavItemMenu() {
-        LogDisplay.callLog(LOG_TAG,'setNavItemMenu is called',LogDisplay.MOVIE_MAGIC_MAIN_LOG_FLAG)
-        if(mCurrentNavMenuItem != -1) {
-            mNavigationView.setCheckedItem(mCurrentNavMenuItem)
-        } else {
-            LogDisplay.callLog(LOG_TAG,'Invalid menu item, could not set the item',LogDisplay.MOVIE_MAGIC_MAIN_LOG_FLAG)
-        }
     }
 
     /**

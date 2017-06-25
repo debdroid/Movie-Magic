@@ -7,6 +7,7 @@ import android.content.SharedPreferences
 import android.content.pm.ActivityInfo
 import android.content.pm.PackageInfo
 import android.content.pm.PackageManager
+import android.content.res.Configuration
 import android.support.v7.app.AlertDialog
 import android.support.v7.preference.PreferenceManager;
 import groovy.transform.CompileStatic
@@ -54,11 +55,16 @@ class MyMoviesEULA {
 
         // Disable orientation changes, to prevent parent activity
         // reinitialization
-        ((Activity)mContext).setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT)
+        if(((Activity)mContext).getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
+            ((Activity) mContext).setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT)
+        } else {
+            ((Activity)mContext).setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE)
+        }
 
         AlertDialog.Builder builder = new AlertDialog.Builder(mContext)
                 .setTitle(title)
                 .setMessage(message)
+                .setCancelable(false) // Set this to ensure user cannot dismiss dialog by pressing back button or clicking outside
                 .setPositiveButton(mContext.getString(R.string.eula_accept), new DialogInterface.OnClickListener() {
 
             @Override

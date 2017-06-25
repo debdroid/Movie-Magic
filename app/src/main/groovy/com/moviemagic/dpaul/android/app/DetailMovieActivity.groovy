@@ -18,6 +18,11 @@ class DetailMovieActivity extends AppCompatActivity implements DetailMovieFragme
         LogDisplay.callLog(LOG_TAG, 'onCreate is called', LogDisplay.DETAIL_MOVIE_ACTIVITY_LOG_FLAG)
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_detail_movie)
+
+        // Show the EULA - first install or any update to the software
+        // This is to ensure that if user declined and tried to view movie detail from notification menu
+        new MyMoviesEULA(this).checkAndShowEula()
+
         if (savedInstanceState == null) {
             LogDisplay.callLog(LOG_TAG, 'onCreate: initial run', LogDisplay.DETAIL_MOVIE_ACTIVITY_LOG_FLAG)
             //Get the arguments from the intent
