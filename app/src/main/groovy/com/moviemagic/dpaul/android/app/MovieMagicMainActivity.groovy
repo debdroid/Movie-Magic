@@ -57,6 +57,8 @@ public class MovieMagicMainActivity extends AppCompatActivity implements
         ComponentCallbacks2 {
     private static final String LOG_TAG = MovieMagicMainActivity.class.getSimpleName()
     private static final String STATE_APP_TITLE = 'app_title'
+    private static final String GRID_FRAGMENT_FLAG = 'grid_fragment_flag'
+    private static final String NAV_ITME_MENU_ID = 'nav_item_menu_id'
     private NavigationView mNavigationView
     private TextView mNavPanelUserNameTextView, mNavPanelUserIdTextView
     private Button mNavPanelLoginButton
@@ -64,6 +66,8 @@ public class MovieMagicMainActivity extends AppCompatActivity implements
     public static boolean isUserLoggedIn = false
     private NetworkReceiver networkReceiver
     private AsyncTask mUpdateMenuCounterAsyncTask
+    private boolean mIsGridFragment = false
+    private int mCurrentNavMenuItem = -1
 
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
@@ -72,7 +76,7 @@ public class MovieMagicMainActivity extends AppCompatActivity implements
         setContentView(R.layout.activity_movie_magic_main)
 
         // Show the EULA - first install or any update to the software
-        new MyMoviesEULA(this).show()
+        new MyMoviesEULA(this).checkAndShowEula()
 
         final Toolbar toolbar = findViewById(R.id.main_activity_toolbar) as Toolbar
         setSupportActionBar(toolbar)
@@ -150,6 +154,7 @@ public class MovieMagicMainActivity extends AppCompatActivity implements
         //Load the Home Fragment
         if(savedInstanceState == null) {
             LogDisplay.callLog(LOG_TAG,'This is first time, so load homeFragment..',LogDisplay.MOVIE_MAGIC_MAIN_LOG_FLAG)
+            mCurrentNavMenuItem = R.id.nav_home
             loadHomeFragment()
         } else {
             LogDisplay.callLog(LOG_TAG,'This is restore scenario..so need to load homeFragment as is',LogDisplay.MOVIE_MAGIC_MAIN_LOG_FLAG)
@@ -180,6 +185,8 @@ public class MovieMagicMainActivity extends AppCompatActivity implements
     protected void onSaveInstanceState(final Bundle outState) {
         LogDisplay.callLog(LOG_TAG,'onSaveInstanceState is called',LogDisplay.MOVIE_MAGIC_MAIN_LOG_FLAG)
         outState.putString(STATE_APP_TITLE,getSupportActionBar().getTitle().toString())
+        outState.putBoolean(GRID_FRAGMENT_FLAG,mIsGridFragment)
+        outState.putInt(NAV_ITME_MENU_ID,mCurrentNavMenuItem)
         // Now call the superclass so it can save the view hierarchy state
         super.onSaveInstanceState(outState)
     }
@@ -190,6 +197,10 @@ public class MovieMagicMainActivity extends AppCompatActivity implements
         // Always call the superclass first, so that Bundle is retrieved properly
         super.onRestoreInstanceState(savedInstanceState)
         getSupportActionBar().setTitle(savedInstanceState.getCharSequence(STATE_APP_TITLE,'error'))
+        mIsGridFragment = savedInstanceState.getBoolean(GRID_FRAGMENT_FLAG,false)
+        mCurrentNavMenuItem = savedInstanceState.getInt(NAV_ITME_MENU_ID,-1)
+        // Set the nav menu item
+        setNavItemMenu()
     }
 
     @Override
@@ -212,6 +223,8 @@ public class MovieMagicMainActivity extends AppCompatActivity implements
         //Program fails if 'Void' is used for parameter, could be because of groovy compiler??
         //So to get rid of the problem a 'dummy' value is passed
         mUpdateMenuCounterAsyncTask = new UpdateMenuCounter(this, mNavigationView).execute(['dummy'] as String[])
+        // Set the nav menu item
+        setNavItemMenu()
     }
 
     @Override
@@ -234,11 +247,23 @@ public class MovieMagicMainActivity extends AppCompatActivity implements
 
     @Override
     public void onBackPressed() {
+        LogDisplay.callLog(LOG_TAG,'onBackPressed is called',LogDisplay.MOVIE_MAGIC_MAIN_LOG_FLAG)
         final DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout)
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START)
         } else {
-            super.onBackPressed()
+            final int fargmentCount = getFragmentManager().getBackStackEntryCount()
+            LogDisplay.callLog(LOG_TAG,"onBackPressed:Fragment count->$fargmentCount",LogDisplay.MOVIE_MAGIC_MAIN_LOG_FLAG)
+
+            // If it's Grid fragment then go back to home Fragment
+            if(mIsGridFragment) {
+                // Set the title of home page
+                setItemTitleAndSubTitle(getString(R.string.app_name))
+                // Now load the home fragment
+                loadHomeFragment()
+            } else { // Otherwise call super method and exit
+                super.onBackPressed()
+            }
         }
     }
 
@@ -273,46 +298,57 @@ public class MovieMagicMainActivity extends AppCompatActivity implements
     }
 
 
-//    @Override
     public boolean takeActionOnNavigationItemSelected(final MenuItem item) {
         LogDisplay.callLog(LOG_TAG, 'takeActionOnNavigationItemSelected is called.', LogDisplay.MOVIE_MAGIC_MAIN_LOG_FLAG)
         // Handle navigation view item clicks here.
         final int id = item.getItemId()
 
         if (id == R.id.nav_home) {
+            mCurrentNavMenuItem = id
             setItemTitleAndSubTitle(getString(R.string.app_name))
             loadHomeFragment()
         } else if (id == R.id.nav_tmdb_popular) {
+            mCurrentNavMenuItem = id
             setItemTitleAndSubTitle(getString(R.string.drawer_menu_tmdb_popular))
             loadGridFragment(GlobalStaticVariables.MOVIE_CATEGORY_POPULAR)
         } else if (id == R.id.nav_tmdb_toprated) {
+            mCurrentNavMenuItem = id
             setItemTitleAndSubTitle(getString(R.string.drawer_menu_tmdb_toprated))
             loadGridFragment(GlobalStaticVariables.MOVIE_CATEGORY_TOP_RATED)
         } else if (id == R.id.nav_tmdb_nowplaying) {
+            mCurrentNavMenuItem = id
             setItemTitleAndSubTitle(getString(R.string.drawer_menu_tmdb_nowplaying))
             loadGridFragment(GlobalStaticVariables.MOVIE_CATEGORY_NOW_PLAYING)
         } else if (id == R.id.nav_tmdb_upcoming) {
+            mCurrentNavMenuItem = id
             setItemTitleAndSubTitle(getString(R.string.drawer_menu_tmdb_upcoming))
             loadGridFragment(GlobalStaticVariables.MOVIE_CATEGORY_UPCOMING)
         } else if (id == R.id.nav_user_watched) {
+            mCurrentNavMenuItem = id
             setItemTitleAndSubTitle(getString(R.string.drawer_menu_user_watched))
             loadGridFragment(GlobalStaticVariables.MOVIE_CATEGORY_LOCAL_USER_WATCHED)
         } else if (id == R.id.nav_user_wishlist) {
+            mCurrentNavMenuItem = id
             setItemTitleAndSubTitle(getString(R.string.drawer_menu_user_wishlist))
             loadGridFragment(GlobalStaticVariables.MOVIE_CATEGORY_LOCAL_USER_WISH_LIST)
         } else if (id == R.id.nav_user_favourite) {
+            mCurrentNavMenuItem = id
             setItemTitleAndSubTitle(getString(R.string.drawer_menu_user_favourite))
             loadGridFragment(GlobalStaticVariables.MOVIE_CATEGORY_LOCAL_USER_FAVOURITE)
         } else if (id == R.id.nav_user_collection) {
+            mCurrentNavMenuItem = id
             setItemTitleAndSubTitle(getString(R.string.drawer_menu_user_collection))
             loadGridFragment(GlobalStaticVariables.MOVIE_CATEGORY_LOCAL_USER_COLLECTION)
         } else if (id == R.id.nav_tmdb_user_watchlist) {
+            mCurrentNavMenuItem = id
             setItemTitleAndSubTitle(getString(R.string.drawer_menu_tmdb_user_watchlist) +" (TMDb)")
             loadGridFragment(GlobalStaticVariables.MOVIE_CATEGORY_TMDB_USER_WATCHLIST)
         } else if (id == R.id.nav_tmdb_user_favourite) {
+            mCurrentNavMenuItem = id
             setItemTitleAndSubTitle(getString(R.string.drawer_menu_tmdb_user_favourite) +" (TMDb)")
             loadGridFragment(GlobalStaticVariables.MOVIE_CATEGORY_TMDB_USER_FAVOURITE)
         } else if (id == R.id.nav_tmdb_user_rated) {
+            mCurrentNavMenuItem = id
             setItemTitleAndSubTitle(getString(R.string.drawer_menu_tmdb_user_rated) +" (TMDb)")
             loadGridFragment(GlobalStaticVariables.MOVIE_CATEGORY_TMDB_USER_RATED)
         } else if (id == R.id.nav_menu_settings) {
@@ -323,6 +359,15 @@ public class MovieMagicMainActivity extends AppCompatActivity implements
             launchGooglePlayForRatingAndFeedback()
         } else if(id == R.id.nav_menu_contact_developer) {
             contactDeveloperAction()
+        } else if(id == R.id.nav_menu_developer_website) {
+            openDeveloperWebsite()
+        } else if(id == R.id.nav_menu_privacy_policy) {
+            openPrivacyPolicy()
+        } else if(id == R.id.nav_menu_eula) {
+            // Show the EULA to user
+            new MyMoviesEULA(this).showEula(false)
+            // Set the nav item menu
+            setNavItemMenu()
         } else if(id == R.id.nav_menu_donate) {
             openDonateActivity()
         }
@@ -568,8 +613,15 @@ public class MovieMagicMainActivity extends AppCompatActivity implements
         final HomeMovieFragment homeMovieFragment = new HomeMovieFragment()
         final FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction()
         //Set the custom animation
+        fragmentTransaction.setCustomAnimations(R.anim.slide_bottom_in_animation,0)
         fragmentTransaction.replace(R.id.content_movie_magic_main_layout, homeMovieFragment)
         fragmentTransaction.commit()
+
+        // Set the mIsGridFragment to false
+        mIsGridFragment = false
+
+        // Set the nave menu item as checked
+        mNavigationView.setCheckedItem(R.id.nav_home)
     }
 
     /**
@@ -577,6 +629,7 @@ public class MovieMagicMainActivity extends AppCompatActivity implements
      * @param category Movie category
      */
     private void loadGridFragment(final String category) {
+        LogDisplay.callLog(LOG_TAG, 'loadGridFragment is called.', LogDisplay.MOVIE_MAGIC_MAIN_LOG_FLAG)
         //Set this flag as false so that theme primaryDark color is used in the grid
         MovieGridRecyclerAdapter.collectionGridFlag = false
         final Bundle bundle = new Bundle()
@@ -590,6 +643,9 @@ public class MovieMagicMainActivity extends AppCompatActivity implements
         fragmentTransaction.setCustomAnimations(R.anim.slide_bottom_in_animation,0)
         fragmentTransaction.replace(R.id.content_movie_magic_main_layout, gridMovieFragment)
         fragmentTransaction.commit()
+
+        // Set the mIsGridFragment to true
+        mIsGridFragment = true
     }
 
     /**
@@ -600,9 +656,21 @@ public class MovieMagicMainActivity extends AppCompatActivity implements
         LogDisplay.callLog(LOG_TAG,"The drawer menu $title is called",LogDisplay.MOVIE_MAGIC_MAIN_LOG_FLAG)
         getSupportActionBar().setTitle(title)
         // Filter menu of GridFragment can set the subtitle, so reset it
-        getSupportActionBar().setTitle(title)
-        // Filter menu of GridFragment can set the subtitle, so reset it
         getSupportActionBar().setSubtitle('')
+    }
+
+
+    /**
+     * This method select the correct nave menu item in case of restart (i.e. activity restarted after returning from other
+     * activity like settings, donate, detail, rate and comment, etc)
+     */
+    private void setNavItemMenu() {
+        LogDisplay.callLog(LOG_TAG,'setNavItemMenu is called',LogDisplay.MOVIE_MAGIC_MAIN_LOG_FLAG)
+        if(mCurrentNavMenuItem != -1) {
+            mNavigationView.setCheckedItem(mCurrentNavMenuItem)
+        } else {
+            LogDisplay.callLog(LOG_TAG,'Invalid menu item, could not set the item',LogDisplay.MOVIE_MAGIC_MAIN_LOG_FLAG)
+        }
     }
 
     /**
@@ -685,6 +753,26 @@ public class MovieMagicMainActivity extends AppCompatActivity implements
         } else {
             LogDisplay.callLog(LOG_TAG,'No email client installed in this device',LogDisplay.MOVIE_MAGIC_MAIN_LOG_FLAG)
         }
+    }
+
+    /**
+     * Launch the Developer's website
+     */
+    protected void openDeveloperWebsite() {
+        final String url = getString(R.string.developer_web_address)
+        Intent i = new Intent(Intent.ACTION_VIEW)
+        i.setData(Uri.parse(url))
+        startActivity(i)
+    }
+
+    /**
+     * Launch the Developer's website
+     */
+    protected void openPrivacyPolicy() {
+        final String url = getString(R.string.application_privacy_policy)
+        Intent i = new Intent(Intent.ACTION_VIEW)
+        i.setData(Uri.parse(url))
+        startActivity(i)
     }
 
     /**

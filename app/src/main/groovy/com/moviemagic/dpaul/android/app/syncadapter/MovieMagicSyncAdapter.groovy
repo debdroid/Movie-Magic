@@ -353,17 +353,19 @@ class MovieMagicSyncAdapter extends AbstractThreadedSyncAdapter {
         Cursor movieDataCursor
         final ArrayList<Integer> mMovieIdList = new ArrayList<>()
         final ArrayList<Integer> mMovieRowIdList = new ArrayList<>()
+        final String todayDate = Long.toString(MovieMagicContract.convertMovieReleaseDate(Utility.getSimpleTodayDate()))
         //First finalise the data to be loaded for now playing
         movieDataCursor = mContentResolver.query(
                 MovieMagicContract.MovieBasicInfo.CONTENT_URI,
                 MOVIE_BASIC_INFO_COLUMNS,
-                /**The conditions used here are same as what used in Home Fragment loader (except COLUMN_CREATE_TIMESTAMP which is used to consider they new data only).
-                   If that changes then change this **/
+                /**The conditions used here are same as what used in Home Fragment loader (except COLUMN_CREATE_TIMESTAMP
+                 * which is used to consider the new data only). If that changes then change this **/
                 """$MovieMagicContract.MovieBasicInfo.COLUMN_MOVIE_CATEGORY = ? and
+                   $MovieMagicContract.MovieBasicInfo.COLUMN_RELEASE_DATE <= ? and
                    $MovieMagicContract.MovieBasicInfo.COLUMN_POSTER_PATH <> ? and
                    $MovieMagicContract.MovieBasicInfo.COLUMN_BACKDROP_PATH <> ? and
                    $MovieMagicContract.MovieBasicInfo.COLUMN_CREATE_TIMESTAMP >= ? """,
-                [GlobalStaticVariables.MOVIE_CATEGORY_NOW_PLAYING, '', '', mDateTimeStamp] as String[],
+                [GlobalStaticVariables.MOVIE_CATEGORY_NOW_PLAYING, todayDate, '', '', mDateTimeStamp] as String[],
                 "$MovieMagicContract.MovieBasicInfo.COLUMN_RELEASE_DATE desc limit $GlobalStaticVariables.HOME_PAGE_MAX_MOVIE_SHOW_COUNTER")
 
         if(movieDataCursor.moveToFirst()) {
@@ -384,13 +386,14 @@ class MovieMagicSyncAdapter extends AbstractThreadedSyncAdapter {
         movieDataCursor = mContentResolver.query(
                 MovieMagicContract.MovieBasicInfo.CONTENT_URI,
                 MOVIE_BASIC_INFO_COLUMNS,
-                /**The conditions used here are same as what used in Home Fragment loader (except COLUMN_CREATE_TIMESTAMP which is used to consider they new data only).
-                   If that changes then change this **/
+                /**The conditions used here are same as what used in Home Fragment loader (except COLUMN_CREATE_TIMESTAMP
+                 * which is used to consider they new data only). If that changes then change this **/
                 """$MovieMagicContract.MovieBasicInfo.COLUMN_MOVIE_CATEGORY = ? and
+                   $MovieMagicContract.MovieBasicInfo.COLUMN_RELEASE_DATE > ? and
                    $MovieMagicContract.MovieBasicInfo.COLUMN_POSTER_PATH <> ? and
                    $MovieMagicContract.MovieBasicInfo.COLUMN_BACKDROP_PATH <> ? and
                    $MovieMagicContract.MovieBasicInfo.COLUMN_CREATE_TIMESTAMP >= ? """,
-                   [GlobalStaticVariables.MOVIE_CATEGORY_UPCOMING, '', '', mDateTimeStamp] as String[],
+                   [GlobalStaticVariables.MOVIE_CATEGORY_UPCOMING, todayDate, '', '', mDateTimeStamp] as String[],
                   "$MovieMagicContract.MovieBasicInfo.COLUMN_RELEASE_DATE desc limit $GlobalStaticVariables.HOME_PAGE_MAX_MOVIE_SHOW_COUNTER")
 
         if(movieDataCursor.moveToFirst()) {

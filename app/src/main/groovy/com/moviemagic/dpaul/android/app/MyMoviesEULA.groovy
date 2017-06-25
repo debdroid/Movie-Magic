@@ -15,9 +15,15 @@ import groovy.transform.CompileStatic
 class MyMoviesEULA {
     private String EULA_PREFIX = "eula_"
     private Context mContext
+    private PackageInfo mVersionInfo
+    private String mEulaKey
+    private SharedPreferences mPrefs
 
     public MyMoviesEULA(Context context) {
         mContext = context
+        mVersionInfo = getPackageInfo()
+        mEulaKey = EULA_PREFIX + mVersionInfo.versionCode
+        mPrefs = PreferenceManager.getDefaultSharedPreferences(mContext)
     }
 
     // Get the package info
@@ -31,53 +37,58 @@ class MyMoviesEULA {
         return pi
     }
 
-    public void show() {
-        PackageInfo versionInfo = getPackageInfo()
-
+    public void checkAndShowEula() {
         // the eulaKey changes every time you increment the version number in the AndroidManifest.xml
-        final String eulaKey = EULA_PREFIX + versionInfo.versionCode
-        final SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(mContext)
-        boolean hasBeenShown = prefs.getBoolean(eulaKey, false)
+        boolean hasBeenShown = mPrefs.getBoolean(mEulaKey, false)
         if(hasBeenShown == false){
-
-            // Show the Eula
-            String title = mContext.getString(R.string.app_name) + " v" + versionInfo.versionName
-
-            //Includes the updates as well so users know what changed.
-            String message = mContext.getString(R.string.app_update_detail) + "\n\n" + mContext.getString(R.string.eula_detail)
-
-            // Disable orientation changes, to prevent parent activity
-            // reinitialization
-            ((Activity)mContext).setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT)
-
-            AlertDialog.Builder builder = new AlertDialog.Builder(mContext)
-                    .setTitle(title)
-                    .setMessage(message)
-                    .setPositiveButton(mContext.getString(R.string.eula_accept), new DialogInterface.OnClickListener() {
-
-                @Override
-                public void onClick(DialogInterface dialogInterface, int i) {
-                    // Mark this version as read.
-                    SharedPreferences.Editor editor = prefs.edit()
-                    editor.putBoolean(eulaKey, true)
-                    editor.commit()
-                    dialogInterface.dismiss()
-                    // Enable orientation changes based on device's sensor
-                    ((Activity)mContext).setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR)
-                }
-            })
-                    .setNegativeButton(mContext.getString(R.string.eula_decline), new DialogInterface.OnClickListener() {
-
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    // Close the activity as they have declined the EULA
-                    ((Activity)mContext).finish()
-                    // Enable orientation changes based on device's sensor
-                    ((Activity)mContext).setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR)
-                }
-
-            })
-            builder.create().show()
+            showEula(true)
         }
+    }
+
+    public void showEula(boolean firstTime) {
+        // Show the Eula
+        String title = mContext.getString(R.string.app_name) + " v" + mVersionInfo.versionName
+
+        //Includes the updates as well so users know what changed.
+        String message = mContext.getString(R.string.app_update_detail) + "\n\n" + mContext.getString(R.string.eula_detail)
+
+        // Disable orientation changes, to prevent parent activity
+        // reinitialization
+        ((Activity)mContext).setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT)
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(mContext)
+                .setTitle(title)
+                .setMessage(message)
+                .setPositiveButton(mContext.getString(R.string.eula_accept), new DialogInterface.OnClickListener() {
+
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                // Mark this version as read.
+                SharedPreferences.Editor editor = mPrefs.edit()
+                editor.putBoolean(mEulaKey, true)
+                editor.commit()
+                dialogInterface.dismiss()
+                // Enable orientation changes based on device's sensor
+                ((Activity)mContext).setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR)
+            }
+        })
+                .setNegativeButton(mContext.getString(R.string.eula_decline), new DialogInterface.OnClickListener() {
+
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                if(!firstTime) {
+                    // Mark this version as not accepted because saw it but didn't accept it
+                    SharedPreferences.Editor editor = mPrefs.edit()
+                    editor.putBoolean(mEulaKey, false)
+                    editor.commit()
+                }
+                // Close the activity as the user declined the EULA
+                ((Activity)mContext).finish()
+                // Enable orientation changes based on device's sensor
+                ((Activity)mContext).setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR)
+            }
+
+        })
+        builder.create().show()
     }
 }

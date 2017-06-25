@@ -263,6 +263,7 @@ class CollectionMovieFragment extends Fragment implements LoaderManager.LoaderCa
                 // Set the listener if in portrait mode or show the title in Toolbar for landscape
                 if(getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
                     mAppBarLayout.addOnOffsetChangedListener(mAppbarOnOffsetChangeListener)
+                    ((AppCompatActivity)getActivity()).getSupportActionBar().setSubtitle('')
                 } else {
                     mCollapsingToolbar.setTitleEnabled(false)
                     mToolbar.setTitle(data.getString(COL_COLLECTION_MOVIE_COLLECTION_NAME))

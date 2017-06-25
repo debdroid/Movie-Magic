@@ -67,6 +67,9 @@
     <dimen name="person_poster_image_base_overlap">160dp</dimen>
     <dimen name="person_poster_section_data_header_width">140dp</dimen>
     <item  name="movie_detail_user_list_drawable_alpha_value_40_percent" format="float" type="dimen">0.4</item>
-    <dimen name="splash_logo_height_width">180dp</dimen>
+    <dimen name="splash_logo_height_width">150dp</dimen>
     <dimen name="splash_screen_app_name_bottom_margin">15dp</dimen>
+    <dimen name="splash_screen_powered_by_image_width">180dp</dimen>
+    <dimen name="splash_screen_powered_by_image_height">50dp</dimen>
+    <dimen name="splash_screen_powered_by_image_top_margin">5dp</dimen>
 </resources>

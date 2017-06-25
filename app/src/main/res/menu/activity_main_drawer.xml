@@ -107,6 +107,18 @@
             android:icon="@drawable/ic_drawer_email"
             android:title="@string/drawer_menu_contact_developer"/>
         <item
+            android:id="@+id/nav_menu_developer_website"
+            android:icon="@drawable/ic_drawer_web"
+            android:title="@string/drawer_menu_developer_website"/>
+        <item
+            android:id="@+id/nav_menu_privacy_policy"
+            android:icon="@drawable/ic_drawer_privacy"
+            android:title="@string/drawer_menu_privacy_policy"/>
+        <item
+            android:id="@+id/nav_menu_eula"
+            android:icon="@drawable/ic_drawer_eula"
+            android:title="@string/drawer_menu_eula"/>
+        <item
             android:id="@+id/nav_menu_donate"
             android:icon="@drawable/ic_drawer_mood"
             android:title="@string/drawer_menu_donate"/>

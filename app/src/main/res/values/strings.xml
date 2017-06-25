@@ -37,6 +37,9 @@
     <string name="drawer_menu_settings">Settings</string>
     <string name="drawer_menu_logout">Logout</string>
     <string name="drawer_menu_contact_developer">Contact Developer</string>
+    <string name="drawer_menu_developer_website">Developer\'s Website</string>
+    <string name="drawer_menu_privacy_policy">Privacy Policy</string>
+    <string name="drawer_menu_eula">End user license</string>
     <string name="drawer_menu_donate">Donate</string>
     <string name="drawer_menu_rate_the_app">Rate and Comment</string>
     <string name="nav_drawer_log_in">Login</string>
@@ -167,7 +170,7 @@
     <string name="donate_header">Make an Impact</string>
     <string name="donate_body">The app is absolutely free and contains no Ad. If you like this app and would want to give the developer a big thumbs up then do so by making a small donation by visiting any of the sites from the below list or any other charity or NGO you wish. Please do not forget to mention your donation in the comment section of the Google Play Store, it will motivate the developer to develop more free apps and surely inspire others to donate. Thanks for your donation.</string>
     <string name="donate_item_header">Donate Item Header</string>
-    <string name="single_donate_item_link_address">hhtps://www.donateitemlink.com</string>
+    <!--<string name="single_donate_item_link_address">hhtps://www.donateitemlink.com</string>-->
     <string name="single_donate_item_donate_button">Donate</string>
 
     <!-- Formatted string for display -->
@@ -301,6 +304,9 @@
     <string name="movie_detail_collection_image_content_description">Collection backdrop image</string>
     <string name="splash_screen_logo_content_description">Application logo on splash screen</string>
     <string name="movie_genre_user_notification_msg">This filter only considers movies for which details have been browsed and viewed</string>
+    <string name="splash_screen_powered_by_tmdb">(Powered by TMDb)</string>
+    <string name="developer_web_address">http://www.debdroid.com</string>
+    <string name="application_privacy_policy">http://www.debdroid.com/apps/my-movies/privacy-policy/</string>
 
     <!-- Section for showing updates to user and EULA -->
     <string name="eula_accept">Accept</string>

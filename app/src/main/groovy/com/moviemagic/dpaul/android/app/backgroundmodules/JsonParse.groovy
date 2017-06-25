@@ -147,8 +147,27 @@ class JsonParse {
                     }
                     editor.commit()
                 }
-                //add to the list
-                movieList << movieValue
+
+                // Add a filter to add data correctly for now_playing and upcoming lists
+                switch (category) {
+                    case GlobalStaticVariables.MOVIE_CATEGORY_NOW_PLAYING:
+                        // Add the movie only if the release date matches - TMDb does send incorrect data
+                        if(MovieMagicContract.convertMovieReleaseDate(movieValue.get(MovieBasicInfo.COLUMN_RELEASE_DATE))
+                            <= MovieMagicContract.convertMovieReleaseDate(Utility.getSimpleTodayDate())) {
+                            movieList << movieValue
+                        }
+                        break
+                    case GlobalStaticVariables.MOVIE_CATEGORY_UPCOMING:
+                        // Add the movie only if the release date matches - TMDb does send incorrect data
+                        if(MovieMagicContract.convertMovieReleaseDate(movieValue.get(MovieBasicInfo.COLUMN_RELEASE_DATE))
+                                > MovieMagicContract.convertMovieReleaseDate(Utility.getSimpleTodayDate())) {
+                            movieList << movieValue
+                        }
+                        break
+                    default:
+                        //add to the list - this is for other category
+                        movieList << movieValue
+                }
             }
         }
         if(movieList)

@@ -20,5 +20,6 @@
     <dimen name="person_poster_image_base_overlap">320dp</dimen>
     <dimen name="tablet_port_movie_backdrop_height">400dp</dimen>
     <dimen name="tablet_port_nested_scroll_layout_person_top_overlap">150dp</dimen>
+    <dimen name="splash_logo_height_width">500dp</dimen>
 
 </resources>

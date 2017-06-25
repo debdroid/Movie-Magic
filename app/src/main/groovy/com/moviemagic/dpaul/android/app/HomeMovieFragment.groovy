@@ -156,9 +156,7 @@ class HomeMovieFragment extends Fragment implements LoaderManager.LoaderCallback
         mRecommendationRecyclerView = mRootView.findViewById(R.id.home_movie_recommendation_recycler_view) as RecyclerView
         mRecommendationRecyclerViewEmptyTextView = mRootView.findViewById(R.id.home_movie_recommendation_recycler_view_empty_msg_text_view) as TextView
         mYouTubeFragmentContainer = mRootView.findViewById(R.id.home_youtube_fragment_container) as FrameLayout
-        //Set this to false so that activity starts the page from the beginning
-//        mComingSoonRecyclerView.setFocusable(false)
-//        mRecentlyAddedUserListRecyclerView.setNestedScrollingEnabled(false)
+
         /**
          * In Cinema Recycler View
          */
@@ -311,6 +309,7 @@ class HomeMovieFragment extends Fragment implements LoaderManager.LoaderCallback
     @Override
     Loader<Cursor> onCreateLoader(final int id, final Bundle args) {
         LogDisplay.callLog(LOG_TAG, "onCreateLoader.loader id->$id", LogDisplay.HOME_MOVIE_FRAGMENT_LOG_FLAG)
+        final String todayDate = Long.toString(MovieMagicContract.convertMovieReleaseDate(Utility.getSimpleTodayDate()))
         switch (id) {
             case HOME_MOVIE_FRAGMENT_VIEW_PAGER_LOADER_ID:
                 return new CursorLoader(
@@ -331,8 +330,10 @@ class HomeMovieFragment extends Fragment implements LoaderManager.LoaderCallback
                         // The conditions used here are same as what used in loadMovieDetailsForHomePageItems
                         // method of MovieMagicSyncAdapter . If this changes then change that
                         """$MovieMagicContract.MovieBasicInfo.COLUMN_MOVIE_CATEGORY = ? and
+                        $MovieMagicContract.MovieBasicInfo.COLUMN_RELEASE_DATE <= ? and
+                        $MovieMagicContract.MovieBasicInfo.COLUMN_POSTER_PATH <> ? and
                         $MovieMagicContract.MovieBasicInfo.COLUMN_BACKDROP_PATH <> ? """,       //Selection Clause
-                        [GlobalStaticVariables.MOVIE_CATEGORY_NOW_PLAYING, ''] as String[],     //Selection Arg
+                        [GlobalStaticVariables.MOVIE_CATEGORY_NOW_PLAYING, todayDate, '', ''] as String[], //Selection Arg
                         "$MovieMagicContract.MovieBasicInfo.COLUMN_RELEASE_DATE desc limit $GlobalStaticVariables.HOME_PAGE_MAX_MOVIE_SHOW_COUNTER") //Sorted on release date
 
             case HOME_MOVIE_FRAGMENT_COMING_SOON_LOADER_ID:
@@ -343,9 +344,10 @@ class HomeMovieFragment extends Fragment implements LoaderManager.LoaderCallback
                         // The conditions used here are same as what used in loadMovieDetailsForHomePageItems
                         // method of MovieMagicSyncAdapter . If this changes then change that
                         """$MovieMagicContract.MovieBasicInfo.COLUMN_MOVIE_CATEGORY = ? and
+                        $MovieMagicContract.MovieBasicInfo.COLUMN_RELEASE_DATE > ? and
                         $MovieMagicContract.MovieBasicInfo.COLUMN_POSTER_PATH <> ? and
-                        $MovieMagicContract.MovieBasicInfo.COLUMN_BACKDROP_PATH <> ? """,       //Selection Clause
-                        [GlobalStaticVariables.MOVIE_CATEGORY_UPCOMING, '', ''] as String[],    //Selection Arg
+                        $MovieMagicContract.MovieBasicInfo.COLUMN_BACKDROP_PATH <> ? """,     //Selection Clause
+                        [GlobalStaticVariables.MOVIE_CATEGORY_UPCOMING, todayDate, '', ''] as String[],  //Selection Arg
                         "$MovieMagicContract.MovieBasicInfo.COLUMN_RELEASE_DATE desc limit $GlobalStaticVariables.HOME_PAGE_MAX_MOVIE_SHOW_COUNTER") //Sorted on release date
 
             case HOME_MOVIE_FRAGMENT_RECENTLY_ADDED_USER_LIST_LOADER_ID:

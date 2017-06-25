@@ -902,7 +902,7 @@ class GridMovieFragment extends Fragment implements LoaderManager.LoaderCallback
         LogDisplay.callLog(LOG_TAG,'onDetach is called',LogDisplay.GRID_MOVIE_FRAGMENT_LOG_FLAG)
         super.onDetach()
     }
-    
+
     /**
      * A callback interface that all activities containing this fragment must
      * implement. This mechanism allows activities to be notified of item
