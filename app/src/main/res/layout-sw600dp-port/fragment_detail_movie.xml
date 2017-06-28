@@ -26,6 +26,7 @@
             <android.support.v4.view.ViewPager
                 android:id="@+id/movie_detail_backdrop_viewpager"
                 android:fitsSystemWindows="true"
+                android:background="@drawable/backdrop_image_place_holder"
                 app:layout_collapseMode="parallax"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent" >
