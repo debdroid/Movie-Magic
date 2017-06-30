@@ -1,3 +1,19 @@
+/*
+ * Copyright 2017 Debashis Paul
+
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package com.moviemagic.dpaul.android.app.javamodule;
 
 import android.database.ContentObserver;
@@ -43,7 +59,7 @@ public class TestContentObserverUtilities {
             // Note: The PollingCheck class is taken from the Android CTS (Compatibility Test Suite).
             // It's useful to look at the Android CTS source for ideas on how to test your Android
             // applications.  The reason that PollingCheck works is that, by default, the JUnit
-            // testing framework is not running on the main Android application thread.
+            // testing framework is not running on the main_activity_menu Android application thread.
             new PollingCheck(5000) {
                 @Override
                 protected boolean check() {
