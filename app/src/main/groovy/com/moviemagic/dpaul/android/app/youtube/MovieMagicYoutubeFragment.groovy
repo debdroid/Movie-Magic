@@ -1,3 +1,19 @@
+/*
+ * Copyright 2017 Debashis Paul
+
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package com.moviemagic.dpaul.android.app.youtube
 
 import android.os.Bundle
@@ -10,6 +26,11 @@ import com.moviemagic.dpaul.android.app.R
 import com.moviemagic.dpaul.android.app.backgroundmodules.LogDisplay
 import groovy.transform.CompileStatic
 
+/**
+ * This YouTube fragment is built based on a blog post written by Scott Cooper. Many thanks to Scott Cooper.
+ * (reference http://createdineden.com/blog/post/android-tutorial-how-to-integrate-youtube-videos-into-your-app/)
+ */
+
 @CompileStatic
 class MovieMagicYoutubeFragment extends YouTubePlayerSupportFragment implements YouTubePlayer.OnInitializedListener,
                    YouTubePlayer.OnFullscreenListener {
@@ -18,10 +39,8 @@ class MovieMagicYoutubeFragment extends YouTubePlayerSupportFragment implements 
     //Error dialog id
     private static final int RECOVERY_ERROR_DIALOG_ID = 1
     public static final String YOUTUBE_VIDEO_ID_KEY = 'youtube_video_id_key'
-//    public static final String YOUTUBE_IS_PLAYING_FLAG = 'youtube_is_playing_key'
     private List<String> mVideoIds
     private YouTubePlayer mYouTubePlayer
-//    private boolean mIsPlayingFlag = false
 
     //Empty constructor, to be used by the system while creating the fragment when embedded in XML
     MovieMagicYoutubeFragment () {

@@ -1,3 +1,19 @@
+/*
+ * Copyright 2017 Debashis Paul
+
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package com.moviemagic.dpaul.android.app.authentication
 
 import android.accounts.AbstractAccountAuthenticator
@@ -18,6 +34,11 @@ import groovy.transform.CompileStatic
  * The SyncAdapter framework requires an authenticator object. The SyncAdapter is designed in a way that
  * if it manages to find authToken it will use that to download TMDb user lists otherwise ignores it.
  * SyncAdapter will not prompt user to login if it does not find valid authToken
+ */
+
+/**
+ * The Authentication logic is built based on a blog post written by Udi Cohen. Many thanks to Udi Cohen.
+ * (reference http://blog.udinic.com/2013/04/24/write-your-own-android-authenticator/)
  */
 
 @CompileStatic

@@ -313,25 +313,32 @@
     <string name="eula_decline">Decline</string>
     <string name="app_update_detail"></string>
     <string name="eula_detail">My Movies 1.0
-        \nCopyright (c) 2017 Debashis Paul
+
+        \n\nCopyright (c) 2017 Debashis Paul
 
         \n\n*** END USER LICENSE AGREEMENT ***
 
-        \n\nIMPORTANT: PLEASE READ THIS LICENSE CAREFULLY BEFORE USING THIS ANDROID SOFTWARE.
+        \n\nIMPORTANT: PLEASE READ THIS LICENSE AGREEMENT CAREFULLY BEFORE USING THIS ANDROID APP (SOFTWARE).
 
         \n\n1. LICENSE
 
-        \n\nBy receiving, opening the file package, installing and/or using My Movies 1.0("Software") containing this software, you agree that this End User License Agreement(EULA) is a legally binding and valid contract and agree to be bound by it. You agree to abide by the intellectual property laws and all of the terms and conditions of this Agreement.
+        \n\nBy receiving, opening the file package, installing and/or using My Movies 1.0 ("Software") containing this software, you agree that this End User License Agreement (EULA) is a legally binding and valid contract and agree to be bound by it. You agree to abide by the intellectual property laws and all of the terms and conditions of this Agreement.
 
         \n\nUnless you have a different license agreement signed by Debashis Paul your use of My Movies 1.0 indicates your acceptance of this license agreement and warranty.
 
         \n\nSubject to the terms of this Agreement, Debashis Paul grants to you a limited, non-exclusive, non-transferable license, without right to sub-license, to use My Movies 1.0 in accordance with this Agreement and any other written agreement with Debashis Paul. Debashis Paul does not transfer the title of My Movies 1.0 to you; the license granted to you is not a sale. This agreement is a binding legal agreement between Debashis Paul and the purchasers or users of My Movies 1.0.
 
+        \n\nMy Movies 1.0 uses the following third party API Services. By agreeing to this End User License Agreement you are agreeing to be bound by the \'Terms of Service\' or \'Terms of Use\' of all of the following third parties.
+
+        \n\n  - YouTube API Services. The link of \'Terms of Service\' of YouTube is https://www.youtube.com/t/terms. The link of Google Privacy Policy is http://www.google.com/policies/privacy.
+
+        \n\n  - TMDb API Services. The link of \'Terms of Use\' of TMDb is https://www.themoviedb.org/terms-of-use.
+
         \n\nIf you do not agree to be bound by this agreement, remove My Movies 1.0 from your device now and, if applicable, promptly return to Debashis Paul by mail any copies of My Movies 1.0 and related documentation and packaging in your possession.
 
         \n\n2. DISTRIBUTION
 
-        \n\nMy Movies 1.0 and the license herein granted shall not be copied, shared, distributed, re-sold, offered for re-sale, transferred or sub-licensed in whole or in part except that you may make one copy for archive purposes only.For information about redistribution of My Movies 1.0 contact Debashis Paul.
+        \n\nMy Movies 1.0 and the license herein granted shall not be copied, shared, distributed, re-sold, offered for re-sale, transferred or sub-licensed in whole or in part except that you may make one copy for archive purposes only. For information about redistribution of My Movies 1.0 contact Debashis Paul.
 
         \n\n3. USER AGREEMENT
 
@@ -357,9 +364,9 @@
 
         \n\n3.4 Limitation of Responsibility
 
-        \n\nYou will indemnify, hold harmless, and defend Debashis Paul , its employees, agents and distributors against any and all claims, proceedings, demand and costs resulting from or in any way connected with your use of Debashis Paul\'s Software.
+        \n\nYou will indemnify, hold harmless, and defend Debashis Paul , his team members, agents and distributors against any and all claims, proceedings, demand and costs resulting from or in any way connected with your use of Debashis Paul\'s Software.
 
-        \n\nIn no event (including, without limitation, in the event of negligence) will Debashis Paul , its employees, agents or distributors be liable for any consequential, incidental, indirect, special or punitive damages whatsoever (including, without limitation, damages for loss of profits, loss of use, business interruption, loss of information or data, or pecuniary loss), in connection with or arising out of or related to this Agreement, My Movies 1.0 or the use or inability to use My Movies 1.0 or the furnishing, performance or use of any other matters hereunder whether based upon contract, tort or any other theory including negligence.
+        \n\nIn no event (including, without limitation, in the event of negligence) will Debashis Paul , his team members, agents or distributors be liable for any consequential, incidental, indirect, special or punitive damages whatsoever (including, without limitation, damages for loss of profits, loss of use, business interruption, loss of information or data, or pecuniary loss), in connection with or arising out of or related to this Agreement, My Movies 1.0 or the use or inability to use My Movies 1.0 or the furnishing, performance or use of any other matters hereunder whether based upon contract, tort or any other theory including negligence.
 
         \n\n3.5 Warranties
 
@@ -367,7 +374,7 @@
 
         \n\n3.6 Governing Law
 
-        \n\nThis Agreement shall be governed by the law of the India applicable therein. You hereby irrevocably attorn and submit to the non-exclusive jurisdiction of the courts of India therefrom. If any provision shall be considered unlawful, void or otherwise unenforceable, then that provision shall be deemed severable from this License and not affect the validity and enforceability of any other provisions.
+        \n\nThis Agreement shall be governed by the law of the West Bengal, India applicable therein. You hereby irrevocably attorn and submit to the non-exclusive jurisdiction of the courts of West Bengal, India therefrom. If any provision shall be considered unlawful, void or otherwise unenforceable, then that provision shall be deemed severable from this License and not affect the validity and enforceability of any other provisions.
 
         \n\n3.7 Termination
 
@@ -380,6 +387,10 @@
         \n\n5. CONSENT OF USE OF DATA
 
         \n\nYou agree that Debashis Paul may collect and use information gathered in any manner as part of the product support services provided to you, if any, related to My Movies 1.0.Debashis Paul may also use this information to provide notices to you which may be of use or interest to you.
+
+        \n\n6. AMENDMENT OF THIS END USER LICENSE AGREEMENT
+
+        \n\nDebashis Paul may amend this End User License Agreement without sending a specific notice to you but will be distribute the updated End User License Agreement via app update and you must agree to the amended End User License Agreement to use My Movies 1.0. The latest copy of the End User License Agreement will be available at http://debdroid.com/apps/my-movies/eula.
     </string>
 
 </resources>
