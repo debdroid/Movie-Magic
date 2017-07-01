@@ -66,6 +66,7 @@ import com.moviemagic.dpaul.android.app.backgroundmodules.LogDisplay
 import groovy.transform.CompileStatic
 
 @CompileStatic
+//test github
 public class MovieMagicMainActivity extends AppCompatActivity implements
         GridMovieFragment.CallbackForGridItemClick, GridMovieFragment.CollectionColorChangeCallback,
         HomeMovieFragment.CallbackForHomeMovieClick, HomeMovieFragment.CallbackForShowAllButtonClick,
