@@ -66,7 +66,6 @@ import com.moviemagic.dpaul.android.app.backgroundmodules.LogDisplay
 import groovy.transform.CompileStatic
 
 @CompileStatic
-//public class MovieMagicMainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener,
 public class MovieMagicMainActivity extends AppCompatActivity implements
         GridMovieFragment.CallbackForGridItemClick, GridMovieFragment.CollectionColorChangeCallback,
         HomeMovieFragment.CallbackForHomeMovieClick, HomeMovieFragment.CallbackForShowAllButtonClick,
